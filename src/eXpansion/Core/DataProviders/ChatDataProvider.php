@@ -7,11 +7,6 @@ use eXpansion\Core\DataProviders\Listener\ChatDataListenerInterface;
 
 class ChatDataProvider extends AbstractDataProvider
 {
-    public function getCompatibleInterface()
-    {
-        return ChatDataListenerInterface::class;
-    }
-
     public function onPlayerChat($playerUid, $login, $text, $isRegisteredCmd = false)
     {
         if (!$isRegisteredCmd) {

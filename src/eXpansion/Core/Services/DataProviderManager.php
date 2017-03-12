@@ -4,6 +4,7 @@ namespace eXpansion\Core\Services;
 
 
 use eXpansion\Core\DataProviders\AbstractDataProvider;
+use eXpansion\Core\Exceptions\DataProvider\UncompatibleException;
 use eXpansion\Core\Model\ProviderListner;
 use eXpansion\Core\Plugins\StatusAwarePluginInterface;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
@@ -26,6 +27,7 @@ class DataProviderManager
     protected $providersByCompatibility = [];
 
     protected $providerById = [];
+    protected $providerInterfaces = [];
 
     /** @var ProviderListner[][] */
     protected $providerListeners = [];
@@ -70,28 +72,19 @@ class DataProviderManager
         }
     }
 
-    public function registerDataProvider($id, $provider, $title, $mode, $script)
+    public function registerDataProvider($id, $provider, $interface, $compatibilities, $listeners)
     {
-        if (empty($title)) {
-            $title = self::COMPATIBLE_ALL;
-        }
-        if (empty($mode)) {
-            $mode = self::COMPATIBLE_ALL;
-        }
-        if (empty($script)) {
-            $script = self::COMPATIBLE_ALL;
+        foreach ($compatibilities as $compatibility) {
+            $this->providersByCompatibility[$provider][$compatibility['title']][$compatibility['mode']][$compatibility['script']] = $id;
         }
 
-        $this->providersByCompatibility[$provider][$title][$mode][$script] = $id;
+        foreach ($listeners as $eventName => $method) {
+            $this->providerListeners[$id][] = new ProviderListner($eventName, $provider, $method);
+        }
+        $this->providerInterfaces[$provider] = $interface;
         $this->providerById[$id] = $provider;
     }
 
-    public function registerDataProviderListener($id, $eventName, $method)
-    {
-        $provider = $this->providerById[$id];
-
-        $this->providerListeners[$id][] = new ProviderListner($eventName, $provider, $method);
-    }
 
     public function isProviderCompatible($provider, $title, $mode, $script)
     {
@@ -101,10 +94,10 @@ class DataProviderManager
     public function getCompatibleProviderId($provider, $title, $mode, $script)
     {
         $parameters = [
-            [$provider, self::COMPATIBLE_ALL, self::COMPATIBLE_ALL, self::COMPATIBLE_ALL],
-            [$provider, $title, self::COMPATIBLE_ALL, self::COMPATIBLE_ALL],
+            [$provider, $title, $mode, $script],
             [$provider, $title, $mode, self::COMPATIBLE_ALL],
-            [$provider, $title, $mode, $script]
+            [$provider, $title, self::COMPATIBLE_ALL, self::COMPATIBLE_ALL],
+            [$provider, self::COMPATIBLE_ALL, self::COMPATIBLE_ALL, self::COMPATIBLE_ALL],
         ];
 
         foreach ($parameters as $parameter) {
@@ -122,8 +115,13 @@ class DataProviderManager
         /** @var AbstractDataProvider $providerService */
         $providerService = $this->container->get($this->getCompatibleProviderId($provider, $title, $mode, $script));
         $pluginService = $this->container->get($pluginId);
+        $interface = $this->providerInterfaces[$provider];
 
-        $providerService->registerPlugin($pluginId, $pluginService);
+        if ($pluginService instanceof $interface) {
+            $providerService->registerPlugin($pluginId, $pluginService);
+        } else {
+            throw new UncompatibleException("Plugin $pluginId isn't compatible with $provider. Should be instance of $interface");
+        }
     }
 
     public function dispatch($eventName, $params)

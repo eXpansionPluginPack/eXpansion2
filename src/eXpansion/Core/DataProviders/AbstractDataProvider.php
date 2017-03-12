@@ -13,17 +13,8 @@ abstract class AbstractDataProvider
 {
     protected $plugins = [];
 
-    abstract public function getCompatibleInterface();
-
     public function registerPlugin($pluginId, $pluginService)
     {
-        // @TODO move this logic to tags.
-        $interface = $this->getCompatibleInterface();
-        if (!$pluginService instanceof $interface) {
-            // @TODO create custom exceptions.
-            throw new \Exception("Un compatible plugin tries to use data provider");
-        }
-
         $this->plugins[$pluginId] = $pluginService;
     }
 

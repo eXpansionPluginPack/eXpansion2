@@ -2,6 +2,7 @@
 
 namespace eXpansion\Core\DependencyInjection\Compiler;
 
+use eXpansion\Core\Services\DataProviderManager;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -21,36 +22,47 @@ class DataProviderPass implements CompilerPassInterface
         // Get the data provider manager service definition to register plugins into.
         $definition = $container->getDefinition('expansion.core.services.data_provider_manager');
 
-        // Find all Data Provider services.
-        $dataProviders = $container
-            ->findTaggedServiceIds('expansion.data_provider');
+        $providerData = [];
 
+        // Get Procider service names.
+        $dataProviders = $container->findTaggedServiceIds('expansion.data_provider');
         foreach ($dataProviders as $id => $tags) {
             foreach ($tags as $attributes) {
-                $definition->addMethodCall('registerDataProvider', [
-                        $id,
-                        $attributes['provider'],
-                        isset($attributes['title']) ? $attributes['title'] : '',
-                        isset($attributes['mode']) ? $attributes['mode'] : '',
-                        isset($attributes['script']) ? $attributes['script'] : '',
-                    ]
-                );
+                $providerData[$id]['provider'] = $attributes['provider'];
+                $providerData[$id]['interface'] = $attributes['interface'];
             }
         }
 
-        // Find all Data Provider services.
-        $dataProviders = $container
-            ->findTaggedServiceIds('expansion.data_listener');
-
+        // Get compatibility information for each provider
+        $dataProviders = $container->findTaggedServiceIds('expansion.data_provider.compatibility');
         foreach ($dataProviders as $id => $tags) {
             foreach ($tags as $attributes) {
-                $definition->addMethodCall('registerDataProviderListener', [
-                        $id,
-                        $attributes['event_name'],
-                        $attributes['method'],
-                    ]
-                );
+                $providerData[$id]['compatibility'][] = [
+                    'title' => isset($attributes['title']) ? $attributes['title'] : DataProviderManager::COMPATIBLE_ALL,
+                    'mode' => isset($attributes['mode']) ? $attributes['mode'] : DataProviderManager::COMPATIBLE_ALL,
+                    'script' => isset($attributes['script']) ? $attributes['script'] : DataProviderManager::COMPATIBLE_ALL,
+                ];
             }
+        }
+
+        $dataProviders = $container->findTaggedServiceIds('expansion.data_provider.listener');
+        foreach ($dataProviders as $id => $tags) {
+            foreach ($tags as $attributes) {
+                $providerData[$id]['listener'][$attributes['event_name']] =  $attributes['method'];
+            }
+        }
+
+        var_dump($providerData);
+
+        foreach ($providerData as $id => $data) {
+            $definition->addMethodCall('registerDataProvider', [
+                    $id,
+                    $data['provider'],
+                    $data['interface'],
+                    $data['compatibility'],
+                    $data['listener'],
+                ]
+            );
         }
     }
 }
