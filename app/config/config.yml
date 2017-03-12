@@ -8,6 +8,12 @@ imports:
 parameters:
     locale: en
 
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    secret: ThisTokenIsNotSoSecretChangeIt
+
 framework:
     #esi: ~
     #translator: { fallbacks: ['%locale%'] }

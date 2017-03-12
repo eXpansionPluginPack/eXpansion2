@@ -1,14 +1,33 @@
 parameters:
+    expansion.core.services.dedicated_connection.class: Maniaplanet\DedicatedServer\Connection
+    expansion.core.services.dedicated_connection.factory.class: eXpansion\Core\Services\DedicatedConnection\Factory
+
+
+
     expansion.core.services.application.class: eXpansion\Core\Services\Application
     expansion.core.services.plugin_manager.class: eXpansion\Core\Services\PluginManager
     expansion.core.services.data_provider_manager.class: eXpansion\Core\Services\DataProviderManager
 
 services:
+    expansion.core.services.dedicated_connection.factory:
+        class: "%expansion.core.services.dedicated_connection.factory.class%"
+        arguments:
+            - "%dedicated_host%"
+            - "%dedicated_port%"
+            - "%dedicated_timeout%"
+            - "%dedicated_user%"
+            - "%dedicated_password%"
+
+    expansion.core.services.dedicated_connection:
+        class: "%expansion.core.services.dedicated_connection.class%"
+        factory: "expansion.core.services.dedicated_connection.factory:createConnection"
+
     expansion.core.services.application:
         class: "%expansion.core.services.application.class%"
         arguments:
             - '@expansion.core.services.plugin_manager'
             - '@expansion.core.services.data_provider_manager'
+            - '@expansion.core.services.dedicated_connection'
 
     expansion.core.services.plugin_manager:
         class: "%expansion.core.services.plugin_manager.class%"

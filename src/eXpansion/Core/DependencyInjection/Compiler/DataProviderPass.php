@@ -52,8 +52,6 @@ class DataProviderPass implements CompilerPassInterface
             }
         }
 
-        var_dump($providerData);
-
         foreach ($providerData as $id => $data) {
             $definition->addMethodCall('registerDataProvider', [
                     $id,

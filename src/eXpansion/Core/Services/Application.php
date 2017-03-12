@@ -14,8 +14,6 @@ use Maniaplanet\DedicatedServer\Connection;
 class Application
 {
     /**
-     * @TODO use DI to inject this.
-     *
      * @var  Connection
      */
     protected $connection;
@@ -30,20 +28,19 @@ class Application
      * Application constructor.
      * @param $pluginManager
      */
-    public function __construct(PluginManager $pluginManager, DataProviderManager $dataProviderManager)
+    public function __construct(
+        PluginManager $pluginManager,
+        DataProviderManager $dataProviderManager,
+        Connection $connection
+    )
     {
         $this->pluginManager = $pluginManager;
+        $this->connection = $connection;
         $this->dataProviderManager = $dataProviderManager;
     }
 
     public function init()
     {
-        $this->connection = Connection::factory(
-            "localhost",
-            5000,
-            3600
-        );
-
         $this->pluginManager->init();
         $this->dataProviderManager->init();
 
