@@ -54,7 +54,7 @@ class DataProviderPass implements CompilerPassInterface
         $dataProviders = $container->findTaggedServiceIds('expansion.data_provider.listener');
         foreach ($dataProviders as $id => $tags) {
             foreach ($tags as $attributes) {
-                $providerData[$id]['listener'][$attributes['event_name']] =  $attributes['method'];
+                $providerData[$id]['listener'][$attributes['event_name']] = $attributes['method'];
             }
         }
 

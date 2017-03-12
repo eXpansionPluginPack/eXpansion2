@@ -56,7 +56,7 @@ class PluginManager
         foreach ($this->plugins as $pluginId => $providers) {
             $isCompatible = true;
             foreach ($providers as $provider) {
-                if(!$this->dataProviderManager->isProviderCompatible($provider, $title, $mode, $script)) {
+                if (!$this->dataProviderManager->isProviderCompatible($provider, $title, $mode, $script)) {
                     $isCompatible = false;
                     break;
                 }
@@ -86,7 +86,7 @@ class PluginManager
 
         foreach ($this->plugins[$pluginId] as $provider)
         {
-            $this->dataProviderManager->registerPlugin($provider, $pluginId,  $title, $mode, $script);
+            $this->dataProviderManager->registerPlugin($provider, $pluginId, $title, $mode, $script);
         }
     }
 

@@ -428,7 +428,7 @@ class Player
     }
 
     /**
-     * @return \string[]
+     * @return string[]
      */
     public function getAllies()
     {
@@ -460,7 +460,7 @@ class Player
     }
 
     /**
-     * @return \int[]
+     * @return integer[]
      */
     public function getBestCheckpoints()
     {
@@ -506,7 +506,7 @@ class Player
      */
     function merge(\Maniaplanet\DedicatedServer\Structures\Player $data)
     {
-        foreach($data as $key => $value) {
+        foreach ($data as $key => $value) {
             $this->$key = $value;
         }
 
