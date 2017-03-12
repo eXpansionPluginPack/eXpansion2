@@ -16,7 +16,8 @@ class RunCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
-        $this->setName('eXpansion:run');
+        $this->setName('eXpansion:run')
+            ->setDescription("Run eXpansion on your server.");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

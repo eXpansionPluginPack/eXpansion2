@@ -13,7 +13,6 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader;
 
-
 class eXpansionCoreExtension extends Extension
 {
 
@@ -30,6 +29,7 @@ class eXpansionCoreExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('data_providers.yml');
+        $loader->load('storage.yml');
 
         // Temporary for the prototype.
         $loader->load('plugins.yml');

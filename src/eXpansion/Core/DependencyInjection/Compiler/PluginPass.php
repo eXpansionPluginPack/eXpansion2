@@ -5,6 +5,11 @@ namespace eXpansion\Core\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * PluginPass to register all plugins to the plugin manager.
+ *
+ * @package eXpansion\Core\DependencyInjection\Compiler
+ */
 class PluginPass implements CompilerPassInterface
 {
     /**
@@ -25,6 +30,7 @@ class PluginPass implements CompilerPassInterface
         $plugins = $container
             ->findTaggedServiceIds('expansion.plugin');
 
+        // Finally register all the plugins.
         foreach ($plugins as $id => $tags) {
             foreach ($tags as $attributes) {
                 $definition->addMethodCall('registerPlugin', [

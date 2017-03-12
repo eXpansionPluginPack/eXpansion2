@@ -8,20 +8,28 @@
 
 namespace eXpansion\Core\Model;
 
-
+/**
+ * Class ProviderListner
+ *
+ * @package eXpansion\Core\Model
+ */
 class ProviderListner
 {
+    /** @var string */
     protected $eventName;
 
+    /** @var string */
     protected $provider;
 
+    /** @var string */
     protected $method;
 
     /**
-     * Model constructor.
-     * @param $eventName
-     * @param $provider
-     * @param $method
+     * ProviderListner constructor.
+     *
+     * @param string $eventName
+     * @param string $provider
+     * @param string $method
      */
     public function __construct($eventName, $provider, $method)
     {
@@ -77,5 +85,4 @@ class ProviderListner
     {
         $this->method = $method;
     }
-
 }

@@ -1,0 +1,10 @@
+parameters:
+    expansion.core.storage.player.class: eXpansion\Core\Storage\PlayerStorage
+
+services:
+    expansion.core.storage.player:
+        class: "%expansion.core.storage.player.class%"
+        arguments:
+            - "@expansion.core.services.dedicated_connection"
+        tags:
+             - {name: expansion.plugin, data_provider: expansion.player_data}

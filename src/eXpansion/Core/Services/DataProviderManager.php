@@ -13,33 +13,38 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class DataProviderManager
+ * Class DataProviderManager handles all the data providers.
  *
- * @TODO check, comments exceptions...
+ * @TODO handle gamemode change.
  *
  * @package eXpansion\Core\Services
  */
 class DataProviderManager
 {
-
+    /** For compatibility with every title/mode/script */
     const COMPATIBLE_ALL = "ALL";
 
+    /** @var int[][][][]  List of providers by compatibility. */
     protected $providersByCompatibility = [];
 
+    /** @var string[] Name of the provider for a service Id. */
     protected $providerById = [];
+
+    /** @var string[] Interface a plugin needs extend/implement to be used by a provider. */
     protected $providerInterfaces = [];
 
-    /** @var ProviderListner[][] */
+    /** @var ProviderListner[][] Providers that listen a certain event. */
     protected $providerListeners = [];
 
-    /** @var ProviderListner[][] */
+    /** @var ProviderListner[][] Enabled providers that listen to certain events. */
     protected $enabledProviderListeners = [];
 
-    /** @var  ContainerInterface */
+    /** @var ContainerInterface */
     protected $container;
 
     /**
      * DataProviderManager constructor.
+     *
      * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
@@ -47,11 +52,12 @@ class DataProviderManager
         $this->container = $container;
     }
 
-
+    /**
+     * Initialize all the providers properly.
+     */
     public function init()
     {
         // TODO run check in order not  to have same providers multiple times.
-
         // TODO get this data from the dedicated!
         $title = 'TMStadium@nadeo';
         $mode = 'script';
@@ -72,6 +78,15 @@ class DataProviderManager
         }
     }
 
+    /**
+     * Register a provider.
+     *
+     * @param string $id
+     * @param string $provider
+     * @param string $interface
+     * @param string[][] $compatibilities
+     * @param string[] $listeners
+     */
     public function registerDataProvider($id, $provider, $interface, $compatibilities, $listeners)
     {
         foreach ($compatibilities as $compatibility) {
@@ -85,12 +100,29 @@ class DataProviderManager
         $this->providerById[$id] = $provider;
     }
 
-
+    /**
+     * Checl of a provider is compatible
+     *
+     * @param string $provider
+     * @param string $title
+     * @param string $mode
+     * @param string $script
+     *
+     * @return bool
+     */
     public function isProviderCompatible($provider, $title, $mode, $script)
     {
         return !is_null($this->getCompatibleProviderId($provider, $title, $mode, $script));
     }
 
+    /**
+     * @param string $provider
+     * @param string $title
+     * @param string $mode
+     * @param string $script
+     *
+     * @return string|null
+     */
     public function getCompatibleProviderId($provider, $title, $mode, $script)
     {
         $parameters = [
@@ -110,6 +142,17 @@ class DataProviderManager
         return null;
     }
 
+    /**
+     * Register a plugin to the DataProviders.
+     *
+     * @param string $provider The provider to register the plugin to.
+     * @param string $pluginId The id of the plugin to be registered.
+     * @param string $title The title to register it for.
+     * @param string $mode The mode to register it for.
+     * @param string $script The script to register it for.
+     *
+     * @throws UncompatibleException
+     */
     public function registerPlugin($provider, $pluginId,  $title, $mode, $script)
     {
         /** @var AbstractDataProvider $providerService */
@@ -124,6 +167,12 @@ class DataProviderManager
         }
     }
 
+    /**
+     * Dispatch event to the data providers.
+     *
+     * @param $eventName
+     * @param $params
+     */
     public function dispatch($eventName, $params)
     {
         if (isset($this->enabledProviderListeners[$eventName])) {

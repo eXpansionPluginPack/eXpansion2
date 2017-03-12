@@ -8,24 +8,38 @@
 
 namespace eXpansion\Core\Services\DedicatedConnection;
 
-
 use Maniaplanet\DedicatedServer\Connection;
 
+/**
+ * Service factory to create connection to the dedicated server.
+ *
+ * @package eXpansion\Core\Services\DedicatedConnection
+ */
 class Factory
 {
+    /** @var string The name/ip of the host */
     protected $host;
+
+    /** @var int */
     protected $port;
+
+    /** @var int */
     protected $timeout;
+
+    /** @var string */
     protected $user;
+
+    /** @var string */
     protected $password;
 
     /**
      * Factory constructor.
-     * @param $host
-     * @param $port
-     * @param $timeout
-     * @param $user
-     * @param $password
+     *
+     * @param string $host
+     * @param int $port
+     * @param int $timeout
+     * @param string $user
+     * @param string $password
      */
     public function __construct($host, $port, $timeout, $user, $password)
     {

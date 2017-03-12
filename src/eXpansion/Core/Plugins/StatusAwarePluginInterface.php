@@ -8,7 +8,11 @@
 
 namespace eXpansion\Core\Plugins;
 
-
+/**
+ * Interface StatusAwarePluginInterface is to be implemented by plugins that needs to be aware of their status.
+ *
+ * @package eXpansion\Core\Plugins
+ */
 interface StatusAwarePluginInterface
 {
     /**

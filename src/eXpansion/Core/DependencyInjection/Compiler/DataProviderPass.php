@@ -6,6 +6,11 @@ use eXpansion\Core\Services\DataProviderManager;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * DataProviderPass Register all data providers to the Manager.
+ *
+ * @package eXpansion\Core\DependencyInjection\Compiler
+ */
 class DataProviderPass implements CompilerPassInterface
 {
     /**
@@ -45,6 +50,7 @@ class DataProviderPass implements CompilerPassInterface
             }
         }
 
+        // Get base events the data provider needs to listen to.
         $dataProviders = $container->findTaggedServiceIds('expansion.data_provider.listener');
         foreach ($dataProviders as $id => $tags) {
             foreach ($tags as $attributes) {
@@ -52,13 +58,14 @@ class DataProviderPass implements CompilerPassInterface
             }
         }
 
+        // Finally register collected data.
         foreach ($providerData as $id => $data) {
             $definition->addMethodCall('registerDataProvider', [
                     $id,
                     $data['provider'],
                     $data['interface'],
                     $data['compatibility'],
-                    $data['listener'],
+                    !empty($data['listener']) ? $data['listener'] : [],
                 ]
             );
         }

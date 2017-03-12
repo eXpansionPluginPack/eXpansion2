@@ -1,16 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: olive
- * Date: 12/03/2017
- * Time: 12:17
- */
 
 namespace eXpansion\Core\Services;
 
-
 use Maniaplanet\DedicatedServer\Connection;
 
+/**
+ * eXpansion Application main routine.
+ *
+ * @package eXpansion\Core\Services
+ */
 class Application
 {
     /**
@@ -24,16 +22,22 @@ class Application
     /** @var  DataProviderManager */
     protected $dataProviderManager;
 
+    /** Base eXpansion callbacks. */
+    const EVENT_RUN = "expansion.run";
+    const EVENT_PRE_LOOP = "expansion.pre_loop";
+    const EVENT_POST_LOOP = "expansion.post_loop";
+
     /**
      * Application constructor.
-     * @param $pluginManager
+     * @param PluginManager $pluginManager
+     * @param DataProviderManager $dataProviderManager
+     * @param Connection $connection
      */
     public function __construct(
         PluginManager $pluginManager,
         DataProviderManager $dataProviderManager,
         Connection $connection
-    )
-    {
+    ) {
         $this->pluginManager = $pluginManager;
         $this->connection = $connection;
         $this->dataProviderManager = $dataProviderManager;
@@ -55,8 +59,12 @@ class Application
         $nextCycleStart = $startTime;
         $cycleTime = 1 / 60;
 
+        $this->dataProviderManager->dispatch(self::EVENT_RUN, []);
+
         while(true)
         {
+            $this->dataProviderManager->dispatch(self::EVENT_PRE_LOOP, []);
+
             $calls = $this->connection->executeCallbacks();
             if(!empty($calls))
             {
@@ -69,6 +77,7 @@ class Application
                 }
             }
             $this->connection->executeMulticall();
+            $this->dataProviderManager->dispatch(self::EVENT_POST_LOOP, []);
 
 
             $endCycleTime = microtime(true) + $cycleTime / 10;
@@ -80,5 +89,4 @@ class Application
             @time_sleep_until($nextCycleStart);
         }
     }
-
 }

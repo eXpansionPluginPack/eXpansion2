@@ -1,15 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: olive
- * Date: 12/03/2017
- * Time: 15:25
- */
 
 namespace eXpansion\Core\Exceptions\DataProvider;
 
-
+/**
+ * UncompatibleException is thrown when a plugin tries to use a DataProvider it can't use.
+ *
+ * @package eXpansion\Core\Exceptions\DataProvider
+ */
 class UncompatibleException extends \Exception
 {
-
 }

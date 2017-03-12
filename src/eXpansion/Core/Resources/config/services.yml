@@ -2,8 +2,6 @@ parameters:
     expansion.core.services.dedicated_connection.class: Maniaplanet\DedicatedServer\Connection
     expansion.core.services.dedicated_connection.factory.class: eXpansion\Core\Services\DedicatedConnection\Factory
 
-
-
     expansion.core.services.application.class: eXpansion\Core\Services\Application
     expansion.core.services.plugin_manager.class: eXpansion\Core\Services\PluginManager
     expansion.core.services.data_provider_manager.class: eXpansion\Core\Services\DataProviderManager

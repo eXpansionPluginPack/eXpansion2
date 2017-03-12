@@ -2,11 +2,26 @@ parameters:
     expansion.core.data_providers.chat_data_provider.class: eXpansion\Core\DataProviders\ChatDataProvider
     expansion.core.data_providers.chat_data_provider.interface: eXpansion\Core\DataProviders\Listener\ChatDataListenerInterface
 
+    expansion.core.data_providers.player_data_provider.class: eXpansion\Core\DataProviders\PlayerDataProvider
+    expansion.core.data_providers.player_data_provider.interface: eXpansion\Core\DataProviders\Listener\PlayerDataListenerInterface
+
 services:
     expansion.core.data_providers.chat_data_provider:
         class: "%expansion.core.data_providers.chat_data_provider.class%"
+        arguments:
+            - "@expansion.core.storage.player"
         tags:
             - {name: expansion.data_provider, provider: "expansion.chat_data", interface: "%expansion.core.data_providers.chat_data_provider.interface%"}
-            - {name: expansion.data_provider.compatibility, title: "TMStadium@nadeo", mode: 'script'}
-            - {name: expansion.data_provider.compatibility, title: SM}
+            - {name: expansion.data_provider.compatibility, title: ALL}
             - {name: expansion.data_provider.listener, event_name: PlayerChat, method: onPlayerChat}
+
+    expansion.core.data_providers.player_data_provider:
+        class: "%expansion.core.data_providers.player_data_provider.class%"
+        arguments:
+            - "@expansion.core.storage.player"
+            - "@expansion.core.services.dedicated_connection"
+        tags:
+            - {name: expansion.data_provider, provider: "expansion.player_data", interface: "%expansion.core.data_providers.player_data_provider.interface%"}
+            - {name: expansion.data_provider.compatibility, title: ALL}
+            - {name: expansion.data_provider.listener, event_name: expansion.run, method: onRun}
+            - {name: expansion.data_provider.listener, event_name: PlayerConnect, method: onPlayerConnect}
