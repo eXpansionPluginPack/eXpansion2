@@ -78,12 +78,12 @@ class Application
 
         $output->writeln("And takeoff");
 
-        while(true) {
+        while (true) {
             $this->dataProviderManager->dispatch(self::EVENT_PRE_LOOP, []);
 
             $calls = $this->connection->executeCallbacks();
-            if(!empty($calls)) {
-                foreach($calls as $call) {
+            if (!empty($calls)) {
+                foreach ($calls as $call) {
                     $method = preg_replace('/^[[:alpha:]]+\./', '', $call[0]); // remove trailing "Whatever."
                     $params = (array) $call[1];
 
@@ -98,7 +98,7 @@ class Application
             do {
                 $nextCycleStart += $cycleTime;
             }
-            while($nextCycleStart < $endCycleTime);
+            while ($nextCycleStart < $endCycleTime);
             @time_sleep_until($nextCycleStart);
         }
     }
