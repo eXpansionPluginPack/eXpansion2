@@ -3,6 +3,7 @@
 namespace eXpansion\Core\Services;
 
 use Maniaplanet\DedicatedServer\Connection;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * eXpansion Application main routine.
@@ -43,15 +44,27 @@ class Application
         $this->dataProviderManager = $dataProviderManager;
     }
 
-    public function init()
+    /**
+     * Initialize eXpansion.
+     *
+     * @param OutputInterface $output
+     * @return $this
+     */
+    public function init(OutputInterface $output)
     {
+        $output->writeln("eXpansion is starting...");
         $this->pluginManager->init();
         $this->dataProviderManager->init();
 
         return $this;
     }
 
-    public function run()
+    /**
+     * Run eXpansion
+     *
+     * @param OutputInterface $output
+     */
+    public function run(OutputInterface $output)
     {
         $this->connection->enableCallbacks(true);
 
@@ -59,17 +72,18 @@ class Application
         $nextCycleStart = $startTime;
         $cycleTime = 1 / 60;
 
+        $output->writeln("Running preflight checks...");
+
         $this->dataProviderManager->dispatch(self::EVENT_RUN, []);
 
-        while(true)
-        {
+        $output->writeln("And takeoff");
+
+        while(true) {
             $this->dataProviderManager->dispatch(self::EVENT_PRE_LOOP, []);
 
             $calls = $this->connection->executeCallbacks();
-            if(!empty($calls))
-            {
-                foreach($calls as $call)
-                {
+            if(!empty($calls)) {
+                foreach($calls as $call) {
                     $method = preg_replace('/^[[:alpha:]]+\./', '', $call[0]); // remove trailing "Whatever."
                     $params = (array) $call[1];
 
@@ -81,8 +95,7 @@ class Application
 
 
             $endCycleTime = microtime(true) + $cycleTime / 10;
-            do
-            {
+            do {
                 $nextCycleStart += $cycleTime;
             }
             while($nextCycleStart < $endCycleTime);
