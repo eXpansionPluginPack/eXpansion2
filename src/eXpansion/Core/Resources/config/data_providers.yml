@@ -1,0 +1,10 @@
+parameters:
+    expansion.core.data_providers.chat_data_provider.class: eXpansion\Core\DataProviders\ChatDataProvider
+
+services:
+    expansion.core.data_providers.chat_data_provider:
+        class: "%expansion.core.data_providers.chat_data_provider.class%"
+        tags:
+            - {name: expansion.data_provider, provider: "expansion.chat_data", title: "TMStadium@nadeo", mode: 'script'}
+            - {name: expansion.data_provider, provider: "expansion.chat_data", title: SM}
+            - {name: expansion.data_listener, event_name: PlayerChat, method: onPlayerChat}

@@ -1,0 +1,5 @@
+services:
+    expansion.core.plugins.totot:
+        class: eXpansion\Core\Plugins\TotoPlugin
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.chat_data}

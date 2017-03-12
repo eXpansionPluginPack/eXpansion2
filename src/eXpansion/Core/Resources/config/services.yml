@@ -1,0 +1,22 @@
+parameters:
+    expansion.core.services.application.class: eXpansion\Core\Services\Application
+    expansion.core.services.plugin_manager.class: eXpansion\Core\Services\PluginManager
+    expansion.core.services.data_provider_manager.class: eXpansion\Core\Services\DataProviderManager
+
+services:
+    expansion.core.services.application:
+        class: "%expansion.core.services.application.class%"
+        arguments:
+            - '@expansion.core.services.plugin_manager'
+            - '@expansion.core.services.data_provider_manager'
+
+    expansion.core.services.plugin_manager:
+        class: "%expansion.core.services.plugin_manager.class%"
+        arguments:
+            - '@service_container'
+            - '@expansion.core.services.data_provider_manager'
+
+    expansion.core.services.data_provider_manager:
+        class: "%expansion.core.services.data_provider_manager.class%"
+        arguments:
+            - '@service_container'
