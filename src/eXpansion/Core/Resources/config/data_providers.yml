@@ -25,3 +25,6 @@ services:
             - {name: expansion.data_provider.compatibility, title: ALL}
             - {name: expansion.data_provider.listener, event_name: expansion.run, method: onRun}
             - {name: expansion.data_provider.listener, event_name: PlayerConnect, method: onPlayerConnect}
+            - {name: expansion.data_provider.listener, event_name: PlayerDisconnect, method: onPlayerDisconnect}
+            - {name: expansion.data_provider.listener, event_name: PlayerInfoChanged, method: onPlayerInfoChanged}
+            - {name: expansion.data_provider.listener, event_name: PlayerAlliesChanged, method: onPlayerAlliesChanged}

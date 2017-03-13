@@ -11,4 +11,10 @@ use eXpansion\Core\Storage\Data\Player;
 interface PlayerDataListenerInterface
 {
     public function onPlayerConnect(Player $player);
+
+    public function onPlayerDisconnect(Player $player, $disconnectionReason);
+
+    public function onPlayerInfoChanged(Player $oldPlayer, Player $player);
+
+    public function onPlayerAlliesChanged(Player $oldPlayer, Player $player);
 }

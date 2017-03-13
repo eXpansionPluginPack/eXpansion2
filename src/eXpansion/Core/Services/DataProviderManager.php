@@ -2,7 +2,6 @@
 
 namespace eXpansion\Core\Services;
 
-
 use eXpansion\Core\DataProviders\AbstractDataProvider;
 use eXpansion\Core\Exceptions\DataProvider\UncompatibleException;
 use eXpansion\Core\Model\ProviderListner;
