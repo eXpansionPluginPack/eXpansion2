@@ -82,7 +82,6 @@ class Application
     /**
      * Run eXpansion
      *
-     * @param OutputInterface $output
      */
     public function run()
     {

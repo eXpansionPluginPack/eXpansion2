@@ -24,6 +24,6 @@ class TotoPlugin implements ChatDataListenerInterface
     public function onPlayerChat(Player $player, $text)
     {
         $text = trim($text);
-        $this->console->writeln('$ff0[' . trim($player->getNickName()) . '$ff0] ' . $text);
+        $this->console->writeln('$ff0['.trim($player->getNickName()).'$ff0] '.$text);
     }
 }
