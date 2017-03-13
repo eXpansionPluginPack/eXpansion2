@@ -3,6 +3,7 @@
 namespace eXpansion\Core\Plugins;
 
 use eXpansion\Core\DataProviders\Listener\ChatDataListenerInterface;
+use eXpansion\Core\Services\Console;
 use eXpansion\Core\Storage\Data\Player;
 
 /**
@@ -12,7 +13,17 @@ use eXpansion\Core\Storage\Data\Player;
  */
 class TotoPlugin implements ChatDataListenerInterface
 {
-    public function onPlayerChat(Player $player, $text) {
-        echo "[{$player->getNickName()}]$text\n";
+
+    public $console;
+
+    function __construct(Console $console)
+    {
+        $this->console = $console;
+    }
+
+    public function onPlayerChat(Player $player, $text)
+    {
+        $text = trim($text);
+        $this->console->writeln('$ff0[' . trim($player->getNickName()) . '$ff0] ' . $text);
     }
 }

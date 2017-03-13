@@ -5,6 +5,7 @@ parameters:
     expansion.core.services.application.class: eXpansion\Core\Services\Application
     expansion.core.services.plugin_manager.class: eXpansion\Core\Services\PluginManager
     expansion.core.services.data_provider_manager.class: eXpansion\Core\Services\DataProviderManager
+    expansion.core.services.console.class: eXpansion\Core\Services\Console
 
 services:
     expansion.core.services.dedicated_connection.factory:
@@ -26,6 +27,7 @@ services:
             - '@expansion.core.services.plugin_manager'
             - '@expansion.core.services.data_provider_manager'
             - '@expansion.core.services.dedicated_connection'
+            - '@expansion.core.services.console'
 
     expansion.core.services.plugin_manager:
         class: "%expansion.core.services.plugin_manager.class%"
@@ -37,3 +39,8 @@ services:
         class: "%expansion.core.services.data_provider_manager.class%"
         arguments:
             - '@service_container'
+
+    expansion.core.services.console:
+        class: "%expansion.core.services.console.class%"
+        arguments:
+            - '%color_enabled%'

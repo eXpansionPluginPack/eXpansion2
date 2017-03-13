@@ -23,7 +23,7 @@ class RunCommand extends ContainerAwareCommand
     {
         $this->getContainer()->get('expansion.core.services.application')
             ->init($output)
-            ->run($output);
+            ->run();
     }
 
 
