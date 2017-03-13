@@ -42,3 +42,5 @@ services:
 
     expansion.core.services.console:
         class: "%expansion.core.services.console.class%"
+        arguments:
+            - '%color_enabled%'

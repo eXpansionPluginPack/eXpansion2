@@ -2,10 +2,15 @@
 
 namespace eXpansion\Core\Services;
 
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 
-class Console implements OutputInterface
+/**
+ * Class Console to print in the console.
+ *
+ * @package eXpansion\Core\Services
+ * @author Reaby
+ */
+class Console
 {
 
     const black = "\e[0;30m";
@@ -42,6 +47,20 @@ class Console implements OutputInterface
     /** @var ConsoleOutputInterface */
     protected $consoleOutput;
 
+    /** @var boolean Color console enabled */
+    protected $colorEnabled;
+
+    /**
+     * Console constructor.
+     *
+     * @param bool $colorEnabled
+     */
+    public function __construct($colorEnabled)
+    {
+        $this->colorEnabled = $colorEnabled;
+    }
+
+
     /**
      * Initialize service with the console output.
      *
@@ -65,59 +84,63 @@ class Console implements OutputInterface
      */
     public function write($string, $newline = false)
     {
-        $array = array("000" => self::b_black,
-            "100" => self::red,
-            "010" => self::green,
-            "110" => self::yellow,
-            "001" => self::blue,
-            "011" => self::magenta,
-            "101" => self::cyan,
-            "111" => self::white,
-            "200" => self::b_red,
-            "211" => self::red,
-            "121" => self::green,
-            "020" => self::b_green,
-            "021" => self::green,
-            "012" => self::cyan,
-            "221" => self::b_yellow,
-            "220" => self::b_yellow,
-            "120" => self::green,
-            "210" => self::yellow,
-            "112" => self::b_blue,
-            "002" => self::b_blue,
-            "122" => self::b_cyan,
-            "022" => self::b_cyan,
-            "202" => self::b_magenta,
-            "212" => self::b_magenta,
-            "102" => self::magenta,
-            "201" => self::b_red,
-            "222" => self::b_white,
-        );
-        $matches = array();
-        preg_match_all("/\\$[A-Fa-f0-9]{3}/", $string, $matches);
-        $split = preg_split("/\\$[A-Fa-f0-9]{3}/", $string);
+        if ($this->colorEnabled && $this->consoleOutput->isDecorated()) {
+            $array = array("000" => self::b_black,
+                "100" => self::red,
+                "010" => self::green,
+                "110" => self::yellow,
+                "001" => self::blue,
+                "011" => self::magenta,
+                "101" => self::cyan,
+                "111" => self::white,
+                "200" => self::b_red,
+                "211" => self::red,
+                "121" => self::green,
+                "020" => self::b_green,
+                "021" => self::green,
+                "012" => self::cyan,
+                "221" => self::b_yellow,
+                "220" => self::b_yellow,
+                "120" => self::green,
+                "210" => self::yellow,
+                "112" => self::b_blue,
+                "002" => self::b_blue,
+                "122" => self::b_cyan,
+                "022" => self::b_cyan,
+                "202" => self::b_magenta,
+                "212" => self::b_magenta,
+                "102" => self::magenta,
+                "201" => self::b_red,
+                "222" => self::b_white,
+            );
+            $matches = array();
+            preg_match_all("/\\$[A-Fa-f0-9]{3}/", $string, $matches);
+            $split = preg_split("/\\$[A-Fa-f0-9]{3}/", $string);
 
-        $out = "";
-        foreach ($matches[0] as $i => $rgb) {
-            $code = $this->fixColors(hexdec($rgb[1]), hexdec($rgb[2]), hexdec($rgb[3]));
-            if (array_key_exists($code, $array)) {
-                $out .= $array[$code] . $this->stripStyles($split[$i + 1]);
-            } else {
-                $out .= self::white . $this->stripStyles($split[$i + 1]);
+            $out = "";
+            foreach ($matches[0] as $i => $rgb) {
+                $code = $this->fixColors(hexdec($rgb[1]), hexdec($rgb[2]), hexdec($rgb[3]));
+                if (array_key_exists($code, $array)) {
+                    $out .= $array[$code] . $this->stripStyles($split[$i + 1]);
+                } else {
+                    $out .= self::white . $this->stripStyles($split[$i + 1]);
+                }
+                $end = $this->stripStyles($split[$i + 1]);
             }
-            $end = $this->stripStyles($split[$i + 1]);
-        }
 
 
-        if (!empty($end)) {
-            if ($end == $this->stripStyles(end($split))) {
+            if (!empty($end)) {
+                if ($end == $this->stripStyles(end($split))) {
+                    $end = "";
+                }
+            } else {
                 $end = "";
             }
-        } else {
-            $end = "";
-        }
 
-        $out = self::white . $this->stripStyles(reset($split)) . $out . $end;
+            $out = self::white . $this->stripStyles(reset($split)) . $out . $end;
+        } else {
+            $out = $this->stripStyles($string);
+        }
 
         $this->ansiOut($out, $newline);
     }
@@ -131,7 +154,7 @@ class Console implements OutputInterface
      */
     protected function ansiOut($msg, $newline)
     {
-        $this->consoleOutput->write($msg, $newline, ConsoleOutput::OUTPUT_RAW);
+        $this->consoleOutput->write($msg, $newline, ConsoleOutputInterface::OUTPUT_RAW);
     }
 
     /**

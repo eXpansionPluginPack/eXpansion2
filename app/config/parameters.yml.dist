@@ -13,3 +13,5 @@ parameters:
     dedicated_timeout: 5
     dedicated_user: SuperAdmin
     dedicated_password: SuperAdmin
+
+    color_enabled: true
