@@ -4,10 +4,8 @@ namespace eXpansion\Core\Services;
 
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-
-class Console
+class Console implements OutputInterface
 {
 
     const black = "\e[0;30m";
@@ -40,29 +38,32 @@ class Console
     const normal = self::white;
     const bold = self::b_white;
 
-    /** @var ContainerInterface */
-    protected $container;
 
-
-    /** @var ConsoleOutput */
+    /** @var ConsoleOutputInterface */
     protected $consoleOutput;
 
-    function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
-
-    function init(ConsoleOutputInterface $consoleOutput)
+    /**
+     * Initialize service with the console output.
+     *
+     * @param ConsoleOutputInterface $consoleOutput
+     */
+    public function init(ConsoleOutputInterface $consoleOutput)
     {
         $this->consoleOutput = $consoleOutput;
     }
 
-    function writeln($string)
+    /**
+     * @inheritdoc
+     */
+    public function writeln($string)
     {
         $this->write($string, true);
     }
 
-    function write($string, $newline = false)
+    /**
+     * @inheritdoc
+     */
+    public function write($string, $newline = false)
     {
         $array = array("000" => self::b_black,
             "100" => self::red,
@@ -98,7 +99,7 @@ class Console
 
         $out = "";
         foreach ($matches[0] as $i => $rgb) {
-            $code = $this->fix(hexdec($rgb[1]), hexdec($rgb[2]), hexdec($rgb[3]));
+            $code = $this->fixColors(hexdec($rgb[1]), hexdec($rgb[2]), hexdec($rgb[3]));
             if (array_key_exists($code, $array)) {
                 $out .= $array[$code] . $this->stripStyles($split[$i + 1]);
             } else {
@@ -121,27 +122,41 @@ class Console
         $this->ansiOut($out, $newline);
     }
 
-
-    private function ansiOut($msg, $newline)
+    /**
+     * Outoyt brute text.
+     *
+     * @param string $msg
+     * @param boolean $newline
+     *
+     */
+    protected function ansiOut($msg, $newline)
     {
-        /*if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            $msg = str_replace("\e", "", $msg);
-            $msg = preg_replace("/\[(\d{1,2}\;){0,1}\d{1,2}m/", "", $msg);
-        } */
-
         $this->consoleOutput->write($msg, $newline, ConsoleOutput::OUTPUT_RAW);
     }
 
-
-    private function stripStyles($string)
+    /**
+     * Strip styles from a string.
+     *
+     * @param $string
+     *
+     * @return mixed
+     */
+    protected function stripStyles($string)
     {
-
         $string = preg_replace('/(?<!\$)((?:\$\$)*)\$[^$0-9a-hlp]/iu', '$1', $string);
         return preg_replace('/(?<!\$)((?:\$\$)*)\$(?:g|[0-9a-f][^\$]{0,2})/iu', '$1', $string);
     }
 
-
-    public function fix($r, $g, $b)
+    /**
+     * Fix the color codes from MP standard to world standard
+     *
+     * @param string $r
+     * @param string $g
+     * @param string $b
+     *
+     * @return string
+     */
+    public function fixColors($r, $g, $b)
     {
         $out = "111";
         // black/gray/white
@@ -161,6 +176,13 @@ class Console
         return $out;
     }
 
+    /**
+     * Convert.
+     *
+     * @param int $number
+     *
+     * @return string
+     */
     public function convert($number)
     {
         $out = "0";
@@ -176,6 +198,4 @@ class Console
         }
         return $out;
     }
-
-
 }

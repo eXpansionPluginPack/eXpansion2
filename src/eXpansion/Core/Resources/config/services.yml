@@ -42,5 +42,3 @@ services:
 
     expansion.core.services.console:
         class: "%expansion.core.services.console.class%"
-        arguments:
-            - '@service_container'
