@@ -118,6 +118,7 @@ class Application
             do {
                 $nextCycleStart += $cycleTime;
             } while ($nextCycleStart < $endCycleTime);
+          
             @time_sleep_until($nextCycleStart);
         }
     }
