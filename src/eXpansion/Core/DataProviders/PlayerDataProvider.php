@@ -4,13 +4,10 @@ namespace eXpansion\Core\DataProviders;
 
 use eXpansion\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
+use Maniaplanet\DedicatedServer\Structures\PlayerInfo;
 
 /**
  * Class PlayerDataProvider provides information to plugins about what is going on with players.
- *
- * @TODO handle disconnect
- * @TODO handle info changes.
- * @TODO handle allies changes.
  *
  * @package eXpansion\Core\DataProviders
  */
@@ -61,5 +58,44 @@ class PlayerDataProvider extends AbstractDataProvider
         } catch (\Exception $e) {
             // TODO log that player disconnected very fast.
         }
+    }
+
+    /**
+     * Called when a player disconnects
+     *
+     * @param $login
+     * @param $disconnectionReason
+     */
+    public function onPlayerDisconnect($login, $disconnectionReason)
+    {
+        $playerData = $this->playerStorage->getPlayerInfo($login);
+        $this->dispatch(__FUNCTION__, [$playerData, $disconnectionReason]);
+    }
+
+    /**
+     * When user information changes (changes from spec to player...)
+     *
+     * @param PlayerInfo $playerInfo
+     */
+    public function onPlayerInfoChanged($playerInfo)
+    {
+        $playerData = $this->playerStorage->getPlayerInfo($playerInfo['Login']);
+
+        $newPlayerData = clone $playerData;
+        $newPlayerData->merge($playerInfo);
+
+        $this->dispatch(__FUNCTION__, [$playerData, $newPlayerData]);
+    }
+
+    /**
+     * When player changes allies.
+     *
+     * @param PlayerInfo $playerInfo
+     */
+    public function onPlayerAlliesChanged($login)
+    {
+        $newPlayerData = $this->playerStorage->getPlayerInfo($login, true);
+        $playerData = $this->playerStorage->getPlayerInfo($login);
+        $this->dispatch(__FUNCTION__, [$playerData, $newPlayerData]);
     }
 }

@@ -1,21 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: olive
- * Date: 12/03/2017
- * Time: 16:12
- */
 
 namespace eXpansion\Core\Storage;
 
 use eXpansion\Core\DataProviders\Listener\PlayerDataListenerInterface;
 use eXpansion\Core\Storage\Data\Player;
+use eXpansion\Core\Storage\Data\PlayerFactory;
 use Maniaplanet\DedicatedServer\Connection;
 
 /**
  * PlayerStorage keeps in storage player data in order to minimize amounts of calls done to the dedicated server.
- *
- * @TODO handle different situations.
  *
  * @package eXpansion\Core\Storage
  */
@@ -24,8 +17,11 @@ class PlayerStorage implements PlayerDataListenerInterface
     /** @var  Connection */
     protected $connection;
 
+    /** @var PlayerFactory  */
+    protected $playerFactory;
+
     /** @var Player[] List of all the players on the server. */
-    protected $onlinePlayers = [];
+    protected $online = [];
 
     /** @var Player[] List of all the players playing on the server. */
     protected $players = [];
@@ -38,9 +34,10 @@ class PlayerStorage implements PlayerDataListenerInterface
      *
      * @param Connection $connection
      */
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, PlayerFactory $playerFactory)
     {
         $this->connection = $connection;
+        $this->playerFactory = $playerFactory;
     }
 
     /**
@@ -50,37 +47,68 @@ class PlayerStorage implements PlayerDataListenerInterface
      *
      * @return Player
      */
-    public function getPlayerInfo($login)
+    public function getPlayerInfo($login, $forceNew = false)
     {
-        if (!isset($this->onlinePlayers[$login])) {
+        if (!isset($this->online[$login]) || $forceNew) {
             $playerInformation = $this->connection->getPlayerInfo($login);
             $playerDetails = $this->connection->getDetailedPlayerInfo($login);
 
-            $playerData = new Player();
-            $playerData->merge($playerInformation)
-                ->merge($playerDetails);
-
-            return $playerData;
+            return $this->playerFactory->createPlayer($playerInformation, $playerDetails);
         }
 
-        return $this->onlinePlayers[$login];
+        return $this->online[$login];
     }
 
     /**
-     * @inheritdoc
-     *
      * Fetch player data & store it when player connects.
+     *
+     * @inheritdoc
      */
     public function onPlayerConnect(Player $playerData)
     {
         $login = $playerData->getLogin();
 
-        $this->onlinePlayers[$login] = $playerData;
+        $this->online[$login] = $playerData;
 
         if ($playerData->isSpectator()) {
             $this->spectators[$login] = $playerData;
         } else {
             $this->players[$login] = $playerData;
         }
+    }
+
+    /**
+     * Remove player data when he disconnects.
+     *
+     * @inheritdoc
+     */
+    public function onPlayerDisconnect(Player $playerData, $disconnectionReason)
+    {
+        unset($this->online[$playerData->getLogin()]);
+        unset($this->spectators[$playerData->getLogin()]);
+        unset($this->players[$playerData->getLogin()]);
+    }
+
+    /**
+     * Change the status of the players.
+     *
+     * @inheritdoc
+     */
+    public function onPlayerInfoChanged(Player $oldPlayer, Player $player)
+    {
+        unset($this->players[$player->getLogin()]);
+        unset($this->spectators[$player->getLogin()]);
+
+        $this->onPlayerConnect($player);
+    }
+
+    /**
+     * Modify the player object.
+     *
+     * @inheritdoc
+     */
+    public function onPlayerAlliesChanged(Player $oldPlayer, Player $player)
+    {
+        $this->onPlayerConnect($player);
     }
 }

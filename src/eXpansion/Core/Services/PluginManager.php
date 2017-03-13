@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: olive
- * Date: 12/03/2017
- * Time: 10:46
- */
 
 namespace eXpansion\Core\Services;
 
