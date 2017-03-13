@@ -500,11 +500,11 @@ class Player
     }
 
     /**
-     * @param \Maniaplanet\DedicatedServer\Structures\Player $data
+     * @param \Maniaplanet\DedicatedServer\Structures\Player|array $data
      *
      * @return $this
      */
-    function merge(\Maniaplanet\DedicatedServer\Structures\Player $data)
+    function merge($data)
     {
         foreach ($data as $key => $value) {
             $this->$key = $value;
