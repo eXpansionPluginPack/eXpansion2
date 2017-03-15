@@ -75,7 +75,7 @@ class PluginManager
             // If parent product isn't compatible then this plugin needs disabling.
             // if not check all children plugins to see which ones needs enabling.
             if ($isCompatible && $this->isPluginCompatible($plugin, $title, $mode, $script)) {
-                $this->enablePlugin($plugin,  $title, $mode, $script);
+                $this->enablePlugin($plugin, $title, $mode, $script);
 
                 if (!empty($plugin->getChildrens())) {
                     $this->enableDisablePlugins($plugin->getChildrens(), $title, $mode, $script, true);
@@ -128,7 +128,7 @@ class PluginManager
         }
 
         foreach ($plugin->getDataProviders() as $provider) {
-            $this->dataProviderManager->registerPlugin($provider, $plugin->getPluginId(),  $title, $mode, $script);
+            $this->dataProviderManager->registerPlugin($provider, $plugin->getPluginId(), $title, $mode, $script);
         }
     }
 
@@ -138,7 +138,7 @@ class PluginManager
      * @param PluginDescription $plugin
      *
      */
-    protected function disablePlugin(PluginDescription $plugin){
+    protected function disablePlugin(PluginDescription $plugin) {
         $plugin->setIsEnabled(false);
 
         foreach ($plugin->getDataProviders() as $provider) {
@@ -154,7 +154,7 @@ class PluginManager
         // Inverse order so that we have get childrends from the plugins.
         $toRemove = [];
         foreach ($this->plugins as $plugin) {
-            if(!empty($plugin->getParents())) {
+            if (!empty($plugin->getParents())) {
                 foreach ($plugin->getParents() as $parentId) {
                     if ($this->plugins[$parentId]) {
                         $this->plugins[$parentId]->addChildren($plugin);
