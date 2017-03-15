@@ -33,6 +33,7 @@ services:
         class: "%expansion.core.services.plugin_manager.class%"
         arguments:
             - '@service_container'
+            - '@expansion.core.services.model.plugin.plugin_description_factory'
             - '@expansion.core.services.data_provider_manager'
 
     expansion.core.services.data_provider_manager:
@@ -44,3 +45,8 @@ services:
         class: "%expansion.core.services.console.class%"
         arguments:
             - '%color_enabled%'
+
+    expansion.core.services.model.plugin.plugin_description_factory:
+        class: 'eXpansion\Core\Model\Plugin\PluginDescriptionFactory'
+        arguments:
+            - 'eXpansion\Core\Model\Plugin\PluginDescription'

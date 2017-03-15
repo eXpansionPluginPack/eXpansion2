@@ -23,22 +23,35 @@ class PluginPass implements CompilerPassInterface
             return;
         }
 
+        $pluginsData = [];
+
+        // Find all Data Provider services.
+        $plugins = $container->findTaggedServiceIds('expansion.plugin');
+        foreach ($plugins as $id => $tags) {
+            foreach ($tags as $attributes) {
+                $pluginsData[$id]['dataProviders'][] = $attributes['data_provider'];
+            }
+        }
+
+        // FInd the parent services.
+        $plugins = $container->findTaggedServiceIds('expansion.plugin.parent');
+        foreach ($plugins as $id => $tags) {
+            foreach ($tags as $attributes) {
+                $pluginsData[$id]['parent'][] = $attributes['parent'];
+            }
+        }
+
         // Get the data provider manager service definition to register data providers into.
         $definition = $container->getDefinition('expansion.core.services.plugin_manager');
 
-        // Find all Data Provider services.
-        $plugins = $container
-            ->findTaggedServiceIds('expansion.plugin');
-
-        // Finally register all the plugins.
-        foreach ($plugins as $id => $tags) {
-            foreach ($tags as $attributes) {
-                $definition->addMethodCall('registerPlugin', [
-                        $id,
-                        $attributes['data_provider'],
-                    ]
-                );
-            }
+        foreach ($pluginsData as $pluginId => $data)
+        {
+            $definition->addMethodCall('registerPlugin', [
+                    $pluginId,
+                    empty($data['dataProviders']) ? [] : $data['dataProviders'],
+                    empty($data['parent']) ? [] : $data['parent'],
+                ]
+            );
         }
     }
 }
