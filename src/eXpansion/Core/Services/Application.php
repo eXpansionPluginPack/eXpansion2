@@ -82,7 +82,6 @@ class Application
     /**
      * Run eXpansion
      *
-     * @param OutputInterface $output
      */
     public function run()
     {
@@ -105,7 +104,7 @@ class Application
             if (!empty($calls)) {
                 foreach ($calls as $call) {
                     $method = preg_replace('/^[[:alpha:]]+\./', '', $call[0]); // remove trailing "Whatever."
-                    $params = (array)$call[1];
+                    $params = (array) $call[1];
 
                     $this->dataProviderManager->dispatch($method, $params);
                 }
@@ -118,6 +117,7 @@ class Application
             do {
                 $nextCycleStart += $cycleTime;
             } while ($nextCycleStart < $endCycleTime);
+          
             @time_sleep_until($nextCycleStart);
         }
     }

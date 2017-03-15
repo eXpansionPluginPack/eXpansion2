@@ -2,8 +2,6 @@
 
 namespace eXpansion\Core\Services;
 
-use eXpansion\Core\Model\Plugin\PluginDescription;
-use eXpansion\Core\Model\Plugin\PluginDescriptionFactory;
 use eXpansion\Core\Plugins\StatusAwarePluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

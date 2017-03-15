@@ -90,7 +90,6 @@ class PlayerDataProvider extends AbstractDataProvider
     /**
      * When player changes allies.
      *
-     * @param PlayerInfo $playerInfo
      */
     public function onPlayerAlliesChanged($login)
     {

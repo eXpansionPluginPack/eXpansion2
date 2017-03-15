@@ -152,7 +152,7 @@ class DataProviderManager
      *
      * @throws UncompatibleException
      */
-    public function registerPlugin($provider, $pluginId,  $title, $mode, $script)
+    public function registerPlugin($provider, $pluginId, $title, $mode, $script)
     {
         /** @var AbstractDataProvider $providerService */
         $providerService = $this->container->get($this->getCompatibleProviderId($provider, $title, $mode, $script));
