@@ -160,9 +160,29 @@ class DataProviderManager
         $interface = $this->providerInterfaces[$provider];
 
         if ($pluginService instanceof $interface) {
+            $this->deletePlugin($provider, $pluginId);
             $providerService->registerPlugin($pluginId, $pluginService);
         } else {
             throw new UncompatibleException("Plugin $pluginId isn't compatible with $provider. Should be instance of $interface");
+        }
+    }
+
+    /**
+     * Provider to delete a plugin from.
+     *
+     * @param $provider
+     * @param $pluginId
+     *
+     */
+    public function deletePlugin($provider, $pluginId)
+    {
+        foreach ($this->providersByCompatibility[$provider] as $titleProviders) {
+            foreach ($titleProviders as $modeProviders) {
+                foreach ($modeProviders as $providerId) {
+                    $providerService = $this->container->get($providerId);
+                    $providerService->deletePlugin($pluginId);
+                }
+            }
         }
     }
 

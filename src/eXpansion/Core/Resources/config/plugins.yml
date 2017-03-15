@@ -1,7 +1,8 @@
 services:
     expansion.core.plugins.totot:
         class: eXpansion\Core\Plugins\TotoPlugin
-        tags:
-            - {name: expansion.plugin, data_provider: expansion.chat_data}
         arguments:
             - '@expansion.core.services.console'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.chat_data}
+            - {name: expansion.plugin.parent, parent: expansion.core.storage.player}

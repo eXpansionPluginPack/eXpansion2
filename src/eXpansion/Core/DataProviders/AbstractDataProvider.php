@@ -30,6 +30,19 @@ abstract class AbstractDataProvider
     }
 
     /**
+     * Remove a plugin so that it won't be handled anymore.
+     *
+     * @param $pluginId
+     *
+     */
+    public function deletePlugin($pluginId)
+    {
+        if (isset($this->plugins[$pluginId])) {
+            unset($this->plugins[$pluginId]);
+        }
+    }
+
+    /**
      * Dispatch method call to all plugins.
      *
      * @param string $method method to call.
