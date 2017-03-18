@@ -25,6 +25,4 @@ class RunCommand extends ContainerAwareCommand
             ->init($output)
             ->run();
     }
-
-
 }

@@ -111,4 +111,28 @@ class PlayerStorage implements PlayerDataListenerInterface
     {
         $this->onPlayerConnect($player);
     }
+
+    /**
+     * @return Player[]
+     */
+    public function getOnline()
+    {
+        return $this->online;
+    }
+
+    /**
+     * @return Player[]
+     */
+    public function getPlayers()
+    {
+        return $this->players;
+    }
+
+    /**
+     * @return Player[]
+     */
+    public function getSpectators()
+    {
+        return $this->spectators;
+    }
 }

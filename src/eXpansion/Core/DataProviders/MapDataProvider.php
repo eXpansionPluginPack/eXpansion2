@@ -67,7 +67,8 @@ class MapDataProvider extends AbstractDataProvider
             }
 
             $start += self::BATCH_SIZE;
-        } while(count($maps) != self::BATCH_SIZE);
+
+        } while(count($maps) == self::BATCH_SIZE);
     }
 
     /**
@@ -99,9 +100,9 @@ class MapDataProvider extends AbstractDataProvider
         }
 
         $nextMap = $this->mapStorage->getMap($nextMapIndex);
-        if ($this->mapStorage->getNexMap()->uId != $nextMapIndex) {
-            $previousNextMap = $this->mapStorage->getNexMap();
-            $this->mapStorage->setNexMap($nextMap);
+        if ($this->mapStorage->getNextMap()->uId != $nextMapIndex) {
+            $previousNextMap = $this->mapStorage->getNextMap();
+            $this->mapStorage->setNextMap($nextMap);
 
             $this->dispatch('onExpansionNextMapChange', [$nextMap, $previousNextMap]);
         }

@@ -7,6 +7,7 @@ use eXpansion\Core\DataProviders\Listener\ChatDataListenerInterface;
 use eXpansion\Core\DataProviders\Listener\PlayerDataListenerInterface;
 use eXpansion\Core\DataProviders\PlayerDataProvider;
 use eXpansion\Core\Storage\Data\Player;
+use eXpansion\Core\Storage\PlayerStorage;
 use Tests\eXpansion\Core\TestCore;
 use Maniaplanet\DedicatedServer\Structures\PlayerInfo;
 
@@ -38,7 +39,6 @@ class PlayerDataProviderTest extends TestCore
             ->method('onPlayerConnect')
             ->withConsecutive([$player]);
 
-
         /** @var PlayerDataProvider $dataProvider */
         $dataProvider = $this->container->get('expansion.core.data_providers.player_data_provider');
         $dataProvider->registerPlugin('p1', $plugin);
@@ -56,6 +56,26 @@ class PlayerDataProviderTest extends TestCore
             ->method('onPlayerConnect')
             ->withConsecutive([$player]);
 
+
+        /** @var PlayerDataProvider $dataProvider */
+        $dataProvider = $this->container->get('expansion.core.data_providers.player_data_provider');
+        $dataProvider->registerPlugin('p1', $plugin);
+
+        $dataProvider->onPlayerConnect('test', false);
+    }
+
+    public function testOnPlayerConnectDisconnectFast()
+    {
+        $playerStorage = $this->getMockBuilder(PlayerStorage::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $playerStorage->method('getPlayerInfo')
+            ->willThrowException(new \Exception());
+        $this->container->set('expansion.core.storage.player',$playerStorage);
+
+        $plugin = $this->createMock(PlayerDataListenerInterface::class);
+        $plugin->expects($this->never())
+            ->method('onPlayerConnect');
 
         /** @var PlayerDataProvider $dataProvider */
         $dataProvider = $this->container->get('expansion.core.data_providers.player_data_provider');

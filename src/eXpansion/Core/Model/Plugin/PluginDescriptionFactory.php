@@ -27,7 +27,7 @@ class PluginDescriptionFactory
      *
      * @param $pluginId
      *
-     * @return mixed
+     * @return PluginDescription
      */
     public function create($pluginId)
     {

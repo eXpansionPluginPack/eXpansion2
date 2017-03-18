@@ -13,9 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class Application
 {
-    /**
-     * @var  Connection
-     */
+    /** @var  Connection */
     protected $connection;
 
     /** @var  PluginManager */
@@ -26,6 +24,8 @@ class Application
 
     /** @var Console */
     protected $console;
+
+    protected $isRunning = false;
 
     /** Base eXpansion callbacks. */
     const EVENT_RUN = "expansion.run";
@@ -97,7 +97,7 @@ class Application
 
         $this->console->writeln("And takeoff");
 
-        while (true) {
+        do {
             $this->dataProviderManager->dispatch(self::EVENT_PRE_LOOP, []);
 
             $calls = $this->connection->executeCallbacks();
@@ -119,6 +119,14 @@ class Application
             } while ($nextCycleStart < $endCycleTime);
           
             @time_sleep_until($nextCycleStart);
-        }
+        } while($this->isRunning);
+    }
+
+    /**
+     * Stop eXpansion.
+     */
+    public function stopApplication()
+    {
+        $this->isRunning = false;
     }
 }

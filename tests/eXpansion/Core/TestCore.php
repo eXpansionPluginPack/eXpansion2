@@ -6,6 +6,7 @@ use eXpansion\Core\DataProviders\ChatDataProvider;
 use eXpansion\Core\DataProviders\Listener\ChatDataListenerInterface;
 use eXpansion\Core\Storage\Data\Player;
 use eXpansion\Core\Storage\PlayerStorage;
+use Maniaplanet\DedicatedServer\Xmlrpc\FaultException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -20,6 +21,9 @@ class TestCore extends KernelTestCase
     protected function setUp()
     {
         parent::setUp();
+
+        // Loading this to force composer autoload to load all possible eXceptions.
+        new FaultException('test');
 
         //start the symfony kernel
         $kernel = static::createKernel();
