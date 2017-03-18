@@ -68,7 +68,7 @@ class MapDataProvider extends AbstractDataProvider
 
             $start += self::BATCH_SIZE;
 
-        } while(count($maps) == self::BATCH_SIZE);
+        } while (count($maps) == self::BATCH_SIZE);
     }
 
     /**
