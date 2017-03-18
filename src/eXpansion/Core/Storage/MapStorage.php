@@ -20,7 +20,7 @@ class MapStorage
     protected $currentMap;
 
     /** @var Map Next map to be played. */
-    protected $nexMap;
+    protected $nextMap;
 
     /**
      * Add a map to the current map list.
@@ -88,18 +88,18 @@ class MapStorage
      *
      * @return Map
      */
-    public function getNexMap()
+    public function getNextMap()
     {
-        return $this->nexMap;
+        return $this->nextMap;
     }
 
     /**
      * Set the next map that is going to be played.
      *
-     * @param Map $nexMap
+     * @param Map $nextMap
      */
-    public function setNexMap($nexMap)
+    public function setNextMap($nextMap)
     {
-        $this->nexMap = $nexMap;
+        $this->nextMap = $nextMap;
     }
 }
