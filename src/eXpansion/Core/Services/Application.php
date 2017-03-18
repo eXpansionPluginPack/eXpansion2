@@ -119,7 +119,7 @@ class Application
             } while ($nextCycleStart < $endCycleTime);
           
             @time_sleep_until($nextCycleStart);
-        } while($this->isRunning);
+        } while ($this->isRunning);
     }
 
     /**
