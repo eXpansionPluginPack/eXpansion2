@@ -3,14 +3,16 @@
 
 namespace Tests\eXpansion\Core\Storage;
 
-use eXpansion\Core\Storage\Data\Player;
 use eXpansion\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Structures\PlayerDetailedInfo;
 use Maniaplanet\DedicatedServer\Structures\PlayerInfo;
 use Tests\eXpansion\Core\TestCore;
+use Tests\eXpansion\Core\TestHelpers\PlayerDataTrait;
 
 class PlayerStorageTest extends TestCore
 {
+    use PlayerDataTrait;
+
     public function testGetPlayerInfo()
     {
         $playerI = new PlayerInfo();
@@ -102,23 +104,6 @@ class PlayerStorageTest extends TestCore
         $this->getPlayerStorage()->onPlayerAlliesChanged($playerOld, $player2);
 
         $this->assertEquals($player2, $this->getPlayerStorage()->getPlayerInfo('test-2'));
-    }
-
-    protected function getPlayer($login, $spectator)
-    {
-        $playerI = new PlayerInfo();
-        $playerI->isServer = false;
-        $playerI->spectator = $spectator;
-        $playerD = new PlayerDetailedInfo();
-        $playerD->login = $login;
-        $playerD->clientVersion = 'client-test';
-        $playerD->nickName = '$fff' . $login;
-
-        $player = new Player();
-        $player->merge($playerI);
-        $player->merge($playerD);
-
-        return $player;
     }
 
     /**
