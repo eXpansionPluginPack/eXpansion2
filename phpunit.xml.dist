@@ -25,6 +25,9 @@
                 <directory>src/*/Resources</directory>
                 <directory>src/*/*/Resources</directory>
                 <directory>src/*/*/*/Resources</directory>
+                <directory>src/*/DependencyInjection</directory>
+                <directory>src/*/*/DependencyInjection</directory>
+                <directory>src/*/*/*/DependencyInjection</directory>
             </exclude>
         </whitelist>
     </filter>
