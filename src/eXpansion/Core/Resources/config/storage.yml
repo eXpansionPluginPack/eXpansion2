@@ -1,5 +1,6 @@
 parameters:
     expansion.core.storage.player.class: eXpansion\Core\Storage\PlayerStorage
+    expansion.core.storage.map.class: eXpansion\Core\Storage\MapStorage
 
     expansion.core.storage.data.player.class: eXpansion\Core\Storage\Data\Player
     expansion.core.storage.data.player.factory: eXpansion\Core\Storage\Data\PlayerFactory
@@ -12,6 +13,11 @@ services:
             - "@expansion.core.storage.data.player.factory"
         tags:
              - {name: expansion.plugin, data_provider: expansion.player_data}
+
+    expansion.core.storage.map:
+        class: "%expansion.core.storage.map.class%"
+        arguments:
+            - "@expansion.core.services.dedicated_connection"
 
     expansion.core.storage.data.player.factory:
         class: "%expansion.core.storage.data.player.factory%"
