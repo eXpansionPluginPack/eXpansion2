@@ -11,8 +11,6 @@ services:
         arguments:
             - "@expansion.core.services.dedicated_connection"
             - "@expansion.core.storage.data.player.factory"
-        tags:
-             - {name: expansion.plugin, data_provider: expansion.player_data}
 
     expansion.core.storage.map:
         class: "%expansion.core.storage.map.class%"
