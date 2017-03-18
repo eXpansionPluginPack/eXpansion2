@@ -54,10 +54,13 @@ class PlayerDataProvider extends AbstractDataProvider
     {
         try {
             $playerData = $this->playerStorage->getPlayerInfo($login);
-            $this->dispatch(__FUNCTION__, [$playerData]);
         } catch (\Exception $e) {
             // TODO log that player disconnected very fast.
+            return;
         }
+
+        $this->playerStorage->onPlayerConnect($playerData);
+        $this->dispatch(__FUNCTION__, [$playerData]);
     }
 
     /**
@@ -69,6 +72,8 @@ class PlayerDataProvider extends AbstractDataProvider
     public function onPlayerDisconnect($login, $disconnectionReason)
     {
         $playerData = $this->playerStorage->getPlayerInfo($login);
+        $this->playerStorage->onPlayerDisconnect($playerData, $disconnectionReason);
+
         $this->dispatch(__FUNCTION__, [$playerData, $disconnectionReason]);
     }
 
@@ -84,6 +89,7 @@ class PlayerDataProvider extends AbstractDataProvider
         $newPlayerData = clone $playerData;
         $newPlayerData->merge($playerInfo);
 
+        $this->playerStorage->onPlayerInfoChanged($playerData, $newPlayerData);
         $this->dispatch(__FUNCTION__, [$playerData, $newPlayerData]);
     }
 
@@ -95,6 +101,8 @@ class PlayerDataProvider extends AbstractDataProvider
     {
         $newPlayerData = $this->playerStorage->getPlayerInfo($login, true);
         $playerData = $this->playerStorage->getPlayerInfo($login);
+
+        $this->playerStorage->onPlayerAlliesChanged($playerData, $newPlayerData);
         $this->dispatch(__FUNCTION__, [$playerData, $newPlayerData]);
     }
 }

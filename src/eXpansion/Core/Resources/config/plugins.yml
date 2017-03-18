@@ -5,4 +5,3 @@ services:
             - '@expansion.core.services.console'
         tags:
             - {name: expansion.plugin, data_provider: expansion.chat_data}
-            - {name: expansion.plugin.parent, parent: expansion.core.storage.player}
