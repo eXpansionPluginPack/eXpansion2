@@ -96,9 +96,6 @@ class MapDataProvider extends AbstractDataProvider
         }
 
         $currentMap = $this->mapStorage->getMapByIndex($curMapIndex);
-        echo "maps:" . Console::b_green . count($this->mapStorage->getMaps()) . Console::normal . "\n";
-        var_dump($currentMap);
-
         if ($this->mapStorage->getCurrentMap()->uId != $currentMap->uId) {
             $previousMap = $this->mapStorage->getCurrentMap();
             $this->mapStorage->setCurrentMap($currentMap);

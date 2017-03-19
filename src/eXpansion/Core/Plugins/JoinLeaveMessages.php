@@ -11,7 +11,7 @@ class JoinLeaveMessages implements PlayerDataListenerInterface
 {
     protected $connection;
     protected $console;
-    private $enabled = false;
+    private $enabled = true;
 
     function __construct(Connection $connection, Console $console)
     {
@@ -19,6 +19,7 @@ class JoinLeaveMessages implements PlayerDataListenerInterface
         $this->console = $console;
     }
 
+    // @todo make this callback work!
     public function onRun()
     {
         $this->enabled = true;
