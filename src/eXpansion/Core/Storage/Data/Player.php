@@ -8,6 +8,8 @@
 
 namespace eXpansion\Core\Storage\Data;
 
+use eXpansion\Core\Exceptions\Storage\NotFoundException;
+
 /**
  * All data related to a player/spectator on the server.
  *
