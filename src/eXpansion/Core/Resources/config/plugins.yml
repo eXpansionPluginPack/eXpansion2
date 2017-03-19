@@ -5,6 +5,7 @@ services:
             - '@expansion.core.services.console'
         tags:
             - {name: expansion.plugin, data_provider: expansion.chat_data}
+
     expansion.core.plugins.joinleave:
         class: eXpansion\Core\Plugins\JoinLeaveMessages
         arguments:
@@ -12,3 +13,4 @@ services:
             - '@expansion.core.services.console'
         tags:
             - {name: expansion.plugin, data_provider: expansion.player_data}
+

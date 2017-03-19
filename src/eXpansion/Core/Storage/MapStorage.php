@@ -78,7 +78,7 @@ class MapStorage
      *
      * @param Map $currentMap
      */
-    public function setCurrentMap($currentMap)
+    public function setCurrentMap(Map $currentMap)
     {
         $this->currentMap = $currentMap;
     }

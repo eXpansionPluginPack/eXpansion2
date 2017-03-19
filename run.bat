@@ -1,1 +1,1 @@
-php bin\console eXpansion:run
+php bin\console eXpansion:run -vvv

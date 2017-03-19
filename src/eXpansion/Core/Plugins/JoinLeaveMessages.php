@@ -11,6 +11,7 @@ class JoinLeaveMessages implements PlayerDataListenerInterface
 {
     protected $connection;
     protected $console;
+    private $enabled = false;
 
     function __construct(Connection $connection, Console $console)
     {
@@ -18,18 +19,24 @@ class JoinLeaveMessages implements PlayerDataListenerInterface
         $this->console = $console;
     }
 
+    public function onRun()
+    {
+        $this->enabled = true;
+    }
+
     public function onPlayerConnect(Player $player)
     {
         $msg = '$fffHello, ' . $player->getNickName() . '  $n$fff($888' . $player->getLogin() . '$fff)';
-
-        $this->connection->chatSendServerMessage($msg);
+        if ($this->enabled)
+            $this->connection->chatSendServerMessage($msg);
         // $this->console->writeln("Connect from " . $player->getPath() . "> " . $msg);
     }
 
     public function onPlayerDisconnect(Player $player, $disconnectionReason)
     {
         $msg = '$fffSee you, ' . $player->getNickName() . '  $n$fff($888' . $player->getLogin() . '$fff)';
-        $this->connection->chatSendServerMessage($msg);
+        if ($this->enabled)
+            $this->connection->chatSendServerMessage($msg);
         // $this->console->writeln("Disconnect from " . $player->getPath() . " > " . $msg);
     }
 

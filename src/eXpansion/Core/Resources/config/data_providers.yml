@@ -8,6 +8,9 @@ parameters:
     expansion.core.data_providers.map_data_provider.class: eXpansion\Core\DataProviders\MapDataProvider
     expansion.core.data_providers.map_data_provider.interface: eXpansion\Core\DataProviders\Listener\MapDataListenerInterface
 
+    expansion.core.data_providers.match_data_provider.class: eXpansion\Core\DataProviders\MatchDataProvider
+    expansion.core.data_providers.match_data_provider.interface: eXpansion\Core\DataProviders\Listener\MatchDataListenerInterface
+
 services:
     expansion.core.data_providers.chat_data_provider:
         class: "%expansion.core.data_providers.chat_data_provider.class%"
@@ -42,3 +45,22 @@ services:
             - {name: expansion.data_provider.compatibility, title: ALL}
             - {name: expansion.data_provider.listener, event_name: expansion.run, method: onRun}
             - {name: expansion.data_provider.listener, event_name: MapListModified, method: onMapListModified}
+
+    expansion.core.data_providers.match_data_provider:
+        class: "%expansion.core.data_providers.match_data_provider.class%"
+        arguments:
+            - "@expansion.core.storage.player"
+            - "@expansion.core.services.dedicated_connection"
+        tags:
+            - {name: expansion.data_provider, provider: "expansion.match_data", interface: "%expansion.core.data_providers.player_data_provider.interface%"}
+            - {name: expansion.data_provider.compatibility, title: ALL}
+            - {name: expansion.data_provider.listener, event_name: expansion.run, method: onRun}
+            - {name: expansion.data_provider.listener, event_name: BeginMap, method: onBeginMap}
+            - {name: expansion.data_provider.listener, event_name: EndMap, method: onEndMap}
+            - {name: expansion.data_provider.listener, event_name: BeginMatch, method: onBeginMatch}
+            - {name: expansion.data_provider.listener, event_name: EndMatch, method: onEndMatch}
+            - {name: expansion.data_provider.listener, event_name: BeginRound, method: onBeginRound}
+            - {name: expansion.data_provider.listener, event_name: EndRound, method: onEndRound}
+            - {name: expansion.data_provider.listener, event_name: PlayerCheckpoint, method: onPlayerCheckpoint}
+            - {name: expansion.data_provider.listener, event_name: PlayerFinish, method: onPlayerFinish}
+

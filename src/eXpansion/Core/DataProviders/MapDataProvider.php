@@ -44,7 +44,8 @@ class MapDataProvider extends AbstractDataProvider
     public function onRun()
     {
         $this->updateMapList();
-
+        $this->mapStorage->setCurrentMap($this->connection->getCurrentMapInfo());
+        $this->mapStorage->setNextMap($this->connection->getNextMapInfo());
     }
 
     /**
@@ -68,7 +69,7 @@ class MapDataProvider extends AbstractDataProvider
 
             $start += self::BATCH_SIZE;
 
-        } while(count($maps) == self::BATCH_SIZE);
+        } while (count($maps) == self::BATCH_SIZE);
     }
 
     /**
