@@ -56,6 +56,20 @@ class MapStorage
     }
 
     /**
+     * Get a map.
+     *
+     * @param integer $index the index number of the map to fetch
+     *
+     * @return Map|null
+     */
+    public function getMapByIndex($index)
+    {
+        $map = array_slice($this->maps, (int)$index, 1, false);
+        return end($map);
+    }
+
+
+    /**
      * Reset map data.
      */
     public function resetMapData()

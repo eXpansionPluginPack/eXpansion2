@@ -2,6 +2,7 @@
 
 namespace eXpansion\Core\DataProviders;
 
+use eXpansion\Core\Services\Console;
 use eXpansion\Core\Storage\MapStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Xmlrpc\IndexOutOfBoundException;
@@ -87,21 +88,26 @@ class MapDataProvider extends AbstractDataProvider
 
             $this->mapStorage->resetMapData();
             $this->updateMapList();
+            $this->mapStorage->setCurrentMap($this->mapStorage->getMapByIndex($curMapIndex));
+            $this->mapStorage->setNextMap($this->mapStorage->getMapByIndex($nextMapIndex));
 
             // We will dispatch even only when list is modified. If not we dispatch specific events.
             $this->dispatch(__FUNCTION__, [$oldMaps, $curMapIndex, $nextMapIndex]);
         }
 
-        $currentMap = $this->mapStorage->getMap($curMapIndex);
-        if ($this->mapStorage->getCurrentMap()->uId != $curMapIndex) {
+        $currentMap = $this->mapStorage->getMapByIndex($curMapIndex);
+        echo "maps:" . Console::b_green . count($this->mapStorage->getMaps()) . Console::normal . "\n";
+        var_dump($currentMap);
+
+        if ($this->mapStorage->getCurrentMap()->uId != $currentMap->uId) {
             $previousMap = $this->mapStorage->getCurrentMap();
             $this->mapStorage->setCurrentMap($currentMap);
 
             $this->dispatch('onExpansionMapChange', [$currentMap, $previousMap]);
         }
 
-        $nextMap = $this->mapStorage->getMap($nextMapIndex);
-        if ($this->mapStorage->getNextMap()->uId != $nextMapIndex) {
+        $nextMap = $this->mapStorage->getMapByIndex($nextMapIndex);
+        if ($this->mapStorage->getNextMap()->uId != $nextMap->uId) {
             $previousNextMap = $this->mapStorage->getNextMap();
             $this->mapStorage->setNextMap($nextMap);
 
