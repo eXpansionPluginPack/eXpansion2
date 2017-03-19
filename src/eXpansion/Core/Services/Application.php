@@ -25,7 +25,7 @@ class Application
     /** @var Console */
     protected $console;
 
-    protected $isRunning = false;
+    protected $isRunning = true;
 
     /** Base eXpansion callbacks. */
     const EVENT_RUN = "expansion.run";
