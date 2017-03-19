@@ -25,7 +25,7 @@ class Application
     /** @var Console */
     protected $console;
 
-    protected $isRunning = false;
+    protected $isRunning = true;
 
     /** Base eXpansion callbacks. */
     const EVENT_RUN = "expansion.run";
@@ -34,18 +34,18 @@ class Application
 
     /**
      * Application constructor.
+     *
      * @param PluginManager $pluginManager
      * @param DataProviderManager $dataProviderManager
      * @param Connection $connection
-     * @param ConsoleOutputInterface $output
+     * @param Console $output
      */
     public function __construct(
         PluginManager $pluginManager,
         DataProviderManager $dataProviderManager,
         Connection $connection,
         Console $output
-    )
-    {
+    ) {
         $this->pluginManager = $pluginManager;
         $this->connection = $connection;
         $this->dataProviderManager = $dataProviderManager;
@@ -111,7 +111,6 @@ class Application
             }
             $this->connection->executeMulticall();
             $this->dataProviderManager->dispatch(self::EVENT_POST_LOOP, []);
-
 
             $endCycleTime = microtime(true) + $cycleTime / 10;
             do {

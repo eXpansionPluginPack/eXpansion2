@@ -1,0 +1,41 @@
+parameters:
+    expansion.core.model.user_groups.group.class: eXpansion\Core\Model\UserGroups\Group
+
+services:
+    # Defining core user groups.
+    expansion.core.user_groups.all_players:
+        class: '%expansion.core.model.user_groups.group.class%'
+        arguments:
+            - 'all_players'
+
+    expansion.core.user_groups.players:
+        class: '%expansion.core.model.user_groups.group.class%'
+        arguments:
+            - 'players'
+
+    expansion.core.user_groups.spectators:
+        class: '%expansion.core.model.user_groups.group.class%'
+        arguments:
+            - 'spectators'
+
+    # Defining plugins to keep groups up to date. You normally never need these services.
+    expansion.core.plugins.user_group.all_players:
+        class: eXpansion\Core\Plugins\UserGroups\AllPlayers
+        arguments:
+            - '@expansion.core.user_groups.all_players'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.player_data}
+
+    expansion.core.plugins.user_group.players:
+        class: eXpansion\Core\Plugins\UserGroups\Players
+        arguments:
+            - '@expansion.core.user_groups.players'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.player_data}
+
+    expansion.core.plugins.user_group.spectators:
+        class: eXpansion\Core\Plugins\UserGroups\Spectators
+        arguments:
+            - '@expansion.core.user_groups.spectators'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.player_data}

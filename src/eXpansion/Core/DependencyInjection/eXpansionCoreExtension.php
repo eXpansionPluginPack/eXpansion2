@@ -30,6 +30,7 @@ class eXpansionCoreExtension extends Extension
         $loader->load('services.yml');
         $loader->load('data_providers.yml');
         $loader->load('storage.yml');
+        $loader->load('user_groups.yml');
 
         // Temporary for the prototype.
         $loader->load('plugins.yml');
