@@ -52,7 +52,7 @@ services:
             - "@expansion.core.storage.player"
             - "@expansion.core.services.dedicated_connection"
         tags:
-            - {name: expansion.data_provider, provider: "expansion.match_data", interface: "%expansion.core.data_providers.player_data_provider.interface%"}
+            - {name: expansion.data_provider, provider: "expansion.match_data", interface: "%expansion.core.data_providers.match_data_provider.interface%"}
             - {name: expansion.data_provider.compatibility, title: ALL}
             - {name: expansion.data_provider.listener, event_name: expansion.run, method: onRun}
             - {name: expansion.data_provider.listener, event_name: BeginMap, method: onBeginMap}

@@ -3,6 +3,7 @@ namespace eXpansion\Core\DataProviders\Listener;
 
 use eXpansion\Core\DataProviders\PlayerDataProvider;
 use eXpansion\Core\Storage\Data\Player;
+use Maniaplanet\DedicatedServer\Structures\Map;
 
 /**
  * Interface MatchDataListenerInterface for plugins using the MatchDataProvider data provider.
@@ -15,9 +16,13 @@ interface MatchDataListenerInterface
 
     public function onEndMatch();
 
-    public function onBeginMap();
+    public function onBeginRound();
 
-    public function onEndMap();
+    public function onEndRound();
+
+    public function onBeginMap(Map $map);
+
+    public function onEndMap(Map $map);
 
     /**
      * Callback when player passes checkpoint.
@@ -28,10 +33,11 @@ interface MatchDataListenerInterface
      * @param $index
      * @return mixed
      */
-    public function onCheckpoint(Player $player, $time, $lap, $index);
+    public function onPlayerCheckpoint(Player $player, $time, $lap, $index);
 
     /**
      * Callback when player retire or finish
+     *
      * @param Player $player
      * @param $time 0 if retire, > 0 if finish
      * @return mixed

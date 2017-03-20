@@ -4,6 +4,7 @@ namespace eXpansion\Core\DataProviders;
 
 use eXpansion\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
+use Maniaplanet\DedicatedServer\Structures\Map;
 
 /**
  * ChatDataProvider provides chat information to plugins.
@@ -23,6 +24,7 @@ class MatchDataProvider extends AbstractDataProvider
      * MatchDataProvider constructor.
      *
      * @param PlayerStorage $playerStorage
+     * @param Connection $connection
      */
     public function __construct(PlayerStorage $playerStorage, Connection $connection)
     {
@@ -30,7 +32,8 @@ class MatchDataProvider extends AbstractDataProvider
         $this->connection = $connection;
     }
 
-    public function onRun() {
+    public function onRun()
+    {
 
     }
 
@@ -44,14 +47,15 @@ class MatchDataProvider extends AbstractDataProvider
         $this->dispatch(__FUNCTION__, []);
     }
 
-    public function onBeginMap()
+    public function onBeginMap($map)
     {
-        $this->dispatch(__FUNCTION__, []);
+        $this->dispatch(__FUNCTION__, [Map::fromArray($map)]);
     }
 
-    public function onEndMap()
+    public function onEndMap($map)
     {
-        $this->dispatch(__FUNCTION__, []);
+
+        $this->dispatch(__FUNCTION__, [Map::fromArray($map)]);
     }
 
     public function onBeginRound()
