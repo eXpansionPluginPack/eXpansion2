@@ -33,6 +33,7 @@ class MapDataProviderTest extends TestCore
         $mapPack1 = $this->getMaps(500, 0);
         $mapPack2 = $this->getMaps(500, 500);
         $allMaps = array_merge($mapPack1, $mapPack2);
+        $maps = array_values($allMaps);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $connectionMock */
         $connectionMock = $this->container->get('expansion.core.services.dedicated_connection');
@@ -44,6 +45,12 @@ class MapDataProviderTest extends TestCore
             ->expects($this->at(2))
             ->method('getMapList')
             ->willThrowException(new IndexOutOfBoundException('test'));
+        $connectionMock
+            ->method('getCurrentMapInfo')
+            ->willReturn($maps[0]);
+        $connectionMock
+            ->method('getNextMapInfo')
+            ->willReturn($maps[1]);
 
         $mapStorageMock = $this->createMock(MapStorage::class);
         $mapStorageMock->expects($this->exactly(count($allMaps)))
@@ -68,15 +75,21 @@ class MapDataProviderTest extends TestCore
             ->method('getMapList')
             ->withConsecutive([500, 0], [500, 0])
             ->willReturn($mapPack1, $mapPack2);
+        $connectionMock
+            ->method('getCurrentMapInfo')
+            ->willReturn($mapPack1[$uids1[0]]);
+        $connectionMock
+            ->method('getNextMapInfo')
+            ->willReturn($mapPack1[$uids1[1]]);
 
         $mapStorageMock = $this->createMock(MapStorage::class);
         $mapStorageMock->method('getMaps')->willReturn($mapPack1);
         $mapStorageMock->method('getCurrentMap')->willReturn($mapPack1[$uids1[0]]);
         $mapStorageMock->method('getNextMap')->willReturn($mapPack1[$uids1[1]]);
         $mapStorageMock->expects($this->exactly(20))->method('addMap');
-        $mapStorageMock->method('getMap')->willReturn($mapPack2[$uids2[0]], $mapPack2[$uids2[1]]);
-        $mapStorageMock->expects($this->once())->method('setCurrentMap');
-        $mapStorageMock->expects($this->once())->method('setNextMap');
+        $mapStorageMock->method('getMapByIndex')->willReturn($mapPack2[$uids2[0]], $mapPack2[$uids2[1]]);
+        $mapStorageMock->expects($this->exactly(2))->method('setCurrentMap');
+        $mapStorageMock->expects($this->exactly(2))->method('setNextMap');
 
         $this->container->set('expansion.core.storage.map', $mapStorageMock);
 

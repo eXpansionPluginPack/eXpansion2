@@ -88,8 +88,6 @@ class MapDataProvider extends AbstractDataProvider
 
             $this->mapStorage->resetMapData();
             $this->updateMapList();
-            $this->mapStorage->setCurrentMap($this->mapStorage->getMapByIndex($curMapIndex));
-            $this->mapStorage->setNextMap($this->mapStorage->getMapByIndex($nextMapIndex));
 
             // We will dispatch even only when list is modified. If not we dispatch specific events.
             $this->dispatch(__FUNCTION__, [$oldMaps, $curMapIndex, $nextMapIndex]);
