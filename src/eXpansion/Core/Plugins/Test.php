@@ -17,14 +17,10 @@ class Test implements MatchDataListenerInterface, TimerDataListenerInterface
     /** @var Console */
     protected $console;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $time = 0;
 
-    /**
-     * @var float|int
-     */
+    /** @var float|int */
     private $previousMemoryValue = 0;
 
     function __construct(Connection $connection, Console $console)
@@ -60,7 +56,6 @@ class Test implements MatchDataListenerInterface, TimerDataListenerInterface
      * @param $time
      * @param $lap
      * @param $index
-     * @return mixed
      */
     public function onPlayerCheckpoint(Player $player, $time, $lap, $index)
     {
@@ -72,7 +67,6 @@ class Test implements MatchDataListenerInterface, TimerDataListenerInterface
      * Callback when player retire or finish
      * @param Player $player
      * @param $time 0 if retire, > 0 if finish
-     * @return mixed
      */
     public function onPlayerFinish(Player $player, $time)
     {
