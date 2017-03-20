@@ -1,6 +1,6 @@
 <?php
 
-namespace eXpansion\Core\Plugins;
+namespace eXpansion\Bundle\JoinLeaveMessages\Plugins;
 
 use eXpansion\Core\DataProviders\Listener\PlayerDataListenerInterface;
 use eXpansion\Core\Services\Console;
@@ -9,45 +9,67 @@ use Maniaplanet\DedicatedServer\Connection;
 
 class JoinLeaveMessages implements PlayerDataListenerInterface
 {
+    /** @var Connection  */
     protected $connection;
+    /** @var Console  */
     protected $console;
+    /** @var bool  */
     private $enabled = true;
 
+    /**
+     * JoinLeaveMessages constructor.
+     *
+     * @param Connection $connection
+     * @param Console $console
+     */
     function __construct(Connection $connection, Console $console)
     {
         $this->connection = $connection;
         $this->console = $console;
     }
 
-    // @todo make this callback work!
+    /**
+     * @inheritdoc
+     */
     public function onRun()
     {
+        // @todo make this callback work!
         $this->enabled = true;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function onPlayerConnect(Player $player)
     {
         $msg = '$fffHello, ' . $player->getNickName() . '  $n$fff($888' . $player->getLogin() . '$fff)';
-        if ($this->enabled)
+        if ($this->enabled) {
             $this->connection->chatSendServerMessage($msg);
-        // $this->console->writeln("Connect from " . $player->getPath() . "> " . $msg);
+        }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function onPlayerDisconnect(Player $player, $disconnectionReason)
     {
         $msg = '$fffSee you, ' . $player->getNickName() . '  $n$fff($888' . $player->getLogin() . '$fff)';
-        if ($this->enabled)
+        if ($this->enabled) {
             $this->connection->chatSendServerMessage($msg);
-        // $this->console->writeln("Disconnect from " . $player->getPath() . " > " . $msg);
+        }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function onPlayerInfoChanged(Player $oldPlayer, Player $player)
     {
-        // TODO: Implement onPlayerInfoChanged() method.
     }
 
+    /**
+     * @inheritdoc
+     */
     public function onPlayerAlliesChanged(Player $oldPlayer, Player $player)
     {
-        // TODO: Implement onPlayerAlliesChanged() method.
     }
 }

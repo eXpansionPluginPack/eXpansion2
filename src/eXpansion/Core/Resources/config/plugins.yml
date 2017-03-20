@@ -6,14 +6,6 @@ services:
         tags:
             - {name: expansion.plugin, data_provider: expansion.chat_data}
 
-    expansion.core.plugins.joinleave:
-        class: eXpansion\Core\Plugins\JoinLeaveMessages
-        arguments:
-            - '@expansion.core.services.dedicated_connection'
-            - '@expansion.core.services.console'
-        tags:
-            - {name: expansion.plugin, data_provider: expansion.player_data}
-
     expansion.core.plugins.test:
         class: eXpansion\Core\Plugins\Test
         arguments:
