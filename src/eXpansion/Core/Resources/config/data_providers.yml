@@ -11,6 +11,10 @@ parameters:
     expansion.core.data_providers.match_data_provider.class: eXpansion\Core\DataProviders\MatchDataProvider
     expansion.core.data_providers.match_data_provider.interface: eXpansion\Core\DataProviders\Listener\MatchDataListenerInterface
 
+    expansion.core.data_providers.timer_data_provider.class: eXpansion\Core\DataProviders\TimerDataProvider
+    expansion.core.data_providers.timer_data_provider.interface: eXpansion\Core\DataProviders\Listener\TimerDataListenerInterface
+
+
 services:
     expansion.core.data_providers.chat_data_provider:
         class: "%expansion.core.data_providers.chat_data_provider.class%"
@@ -26,6 +30,7 @@ services:
         arguments:
             - "@expansion.core.storage.player"
             - "@expansion.core.services.dedicated_connection"
+            - "@expansion.core.services.application"
         tags:
             - {name: expansion.data_provider, provider: "expansion.player_data", interface: "%expansion.core.data_providers.player_data_provider.interface%"}
             - {name: expansion.data_provider.compatibility, title: ALL}
@@ -63,4 +68,14 @@ services:
             - {name: expansion.data_provider.listener, event_name: EndRound, method: onEndRound}
             - {name: expansion.data_provider.listener, event_name: PlayerCheckpoint, method: onPlayerCheckpoint}
             - {name: expansion.data_provider.listener, event_name: PlayerFinish, method: onPlayerFinish}
+
+    expansion.core.data_providers.timer_data_provider:
+        class: "%expansion.core.data_providers.timer_data_provider.class%"
+        tags:
+            - {name: expansion.data_provider, provider: "expansion.timer_data", interface: "%expansion.core.data_providers.timer_data_provider.interface%"}
+            - {name: expansion.data_provider.compatibility, title: ALL}
+            - {name: expansion.data_provider.listener, event_name: expansion.run, method: onRun}
+            - {name: expansion.data_provider.listener, event_name: expansion.pre_loop, method: onPreLoop}
+            - {name: expansion.data_provider.listener, event_name: expansion.post_loop, method: onPostLoop}
+
 

@@ -2,6 +2,7 @@
 
 namespace eXpansion\Core\DataProviders;
 
+use eXpansion\Core\Services\Application;
 use eXpansion\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\PlayerInfo;
@@ -23,14 +24,18 @@ class PlayerDataProvider extends AbstractDataProvider
      */
     protected $connection;
 
+    /** @var Application */
+    protected $application;
+
     /**
      * PlayerDataProvider constructor.
      * @param $playerStorage
      */
-    public function __construct(PlayerStorage $playerStorage, Connection $connection)
+    public function __construct(PlayerStorage $playerStorage, Connection $connection, Application $application)
     {
         $this->playerStorage = $playerStorage;
         $this->connection = $connection;
+        $this->application = $application;
     }
 
     /**
@@ -72,8 +77,15 @@ class PlayerDataProvider extends AbstractDataProvider
     public function onPlayerDisconnect($login, $disconnectionReason)
     {
         $playerData = $this->playerStorage->getPlayerInfo($login);
-        $this->playerStorage->onPlayerDisconnect($playerData, $disconnectionReason);
 
+        // dedicated server sends disconnect for server itself when it's closed...
+        // so it's time to stop application gracefully.
+        if ($playerData->getPlayerId() == 0) {
+            $this->application->stopApplication();
+            return;
+        }
+
+        $this->playerStorage->onPlayerDisconnect($playerData, $disconnectionReason);
         $this->dispatch(__FUNCTION__, [$playerData, $disconnectionReason]);
     }
 
