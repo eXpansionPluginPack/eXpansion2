@@ -2,7 +2,6 @@
 
 namespace eXpansion\Core\DataProviders;
 
-use eXpansion\Core\Services\Console;
 use eXpansion\Core\Storage\MapStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Xmlrpc\IndexOutOfBoundException;

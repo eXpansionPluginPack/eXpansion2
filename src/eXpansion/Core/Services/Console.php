@@ -121,9 +121,9 @@ class Console
             foreach ($matches[0] as $i => $rgb) {
                 $code = $this->fixColors(hexdec($rgb[1]), hexdec($rgb[2]), hexdec($rgb[3]));
                 if (array_key_exists($code, $array)) {
-                    $out .= $array[$code] . $this->stripStyles($split[$i + 1]);
+                    $out .= $array[$code].$this->stripStyles($split[$i + 1]);
                 } else {
-                    $out .= self::white . $this->stripStyles($split[$i + 1]);
+                    $out .= self::white.$this->stripStyles($split[$i + 1]);
                 }
                 $end = $this->stripStyles($split[$i + 1]);
             }
@@ -137,7 +137,7 @@ class Console
                 $end = "";
             }
 
-            $out = self::white . $this->stripStyles(reset($split)) . $out . $end;
+            $out = self::white.$this->stripStyles(reset($split)).$out.$end;
         } else {
             $out = $this->stripStyles($string);
         }
@@ -156,9 +156,11 @@ class Console
     {
         // $this->consoleOutput->write($msg . self::normal, $newline, ConsoleOutputInterface::OUTPUT_RAW);
         $nl = "";
-        if ($newline) $nl = "\n";
+        if ($newline) {
+            $nl = "\n";
+        }
 
-        echo $msg . self::normal . $nl;
+        echo $msg.self::normal.$nl;
     }
 
     /**
@@ -198,7 +200,7 @@ class Console
                 $out = "222";
             }
         } else {
-            $out = $this->convert($r) . $this->convert($g) . $this->convert($b);
+            $out = $this->convert($r).$this->convert($g).$this->convert($b);
         }
         return $out;
     }
