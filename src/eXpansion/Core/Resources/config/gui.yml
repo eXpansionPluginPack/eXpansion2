@@ -1,0 +1,10 @@
+parameters:
+    expansion.core.model.hui.manialink.class: 'eXpansion\Core\Model\Gui\Manialink'
+
+services:
+    expansion.core.gui.manialink.test:
+        class: 'eXpansion\Core\Plugins\Gui\ManialinkFactory'
+        arguments:
+            - "@expansion.core.services.gui_handler"
+            - "test-manialink"
+            - "%expansion.core.model.hui.manialink.class%"

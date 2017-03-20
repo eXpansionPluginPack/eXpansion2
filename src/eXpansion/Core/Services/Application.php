@@ -25,6 +25,10 @@ class Application
     /** @var Console */
     protected $console;
 
+    /** @var GuiHandler  */
+    protected $guiHandler;
+
+    /** @var bool  */
     protected $isRunning = true;
 
     /** Base eXpansion callbacks. */
@@ -44,12 +48,14 @@ class Application
         PluginManager $pluginManager,
         DataProviderManager $dataProviderManager,
         Connection $connection,
+        GuiHandler $guiHandler,
         Console $output
     ) {
         $this->pluginManager = $pluginManager;
         $this->connection = $connection;
         $this->dataProviderManager = $dataProviderManager;
         $this->console = $output;
+        $this->guiHandler = $guiHandler;
     }
 
     /**
@@ -111,6 +117,8 @@ class Application
             }
             $this->connection->executeMulticall();
             $this->dataProviderManager->dispatch(self::EVENT_POST_LOOP, []);
+
+            $this->guiHandler->displayManialinks();
 
             $endCycleTime = microtime(true) + $cycleTime / 10;
             do {
