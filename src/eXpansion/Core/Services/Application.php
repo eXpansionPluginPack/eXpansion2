@@ -104,9 +104,9 @@ class Application
             if (!empty($calls)) {
                 foreach ($calls as $call) {
                     $method = preg_replace('/^[[:alpha:]]+\./', '', $call[0]); // remove trailing "Whatever."
-                    $params = (array)$call[1];
-                    $this->console->writeln('$fffCallback: $070' . $method);
-                    $this->console->writeln('$ff0Params: $777' . print_r($params, true));
+                    $params = (array) $call[1];
+                    $this->console->writeln('$fffCallback: $070'.$method);
+                    $this->console->writeln('$ff0Params: $777'.print_r($params, true));
 
                     $this->dataProviderManager->dispatch($method, $params);
                 }

@@ -19,8 +19,8 @@ class Time
         $time = intval($time);
         $ms = "";
         if ($milliseconds) {
-            $ms = ":" . str_pad(($time % 1000), 3, '0', STR_PAD_LEFT);
+            $ms = ":".str_pad(($time % 1000), 3, '0', STR_PAD_LEFT);
         }
-        return gmdate("i:s", $time / 1000) . $ms;
+        return gmdate("i:s", $time / 1000).$ms;
     }
 }

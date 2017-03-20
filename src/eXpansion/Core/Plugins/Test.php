@@ -45,12 +45,12 @@ class Test implements MatchDataListenerInterface, TimerDataListenerInterface
 
     public function onBeginMap(Map $map)
     {
-        $this->console->writeln('$0f0Begin Map: $fff' . $map->name);
+        $this->console->writeln('$0f0Begin Map: $fff'.$map->name);
     }
 
     public function onEndMap(Map $map)
     {
-        $this->console->writeln('$0f0End Map: $fff' . $map->name);
+        $this->console->writeln('$0f0End Map: $fff'.$map->name);
     }
 
     /**
@@ -64,7 +64,7 @@ class Test implements MatchDataListenerInterface, TimerDataListenerInterface
      */
     public function onPlayerCheckpoint(Player $player, $time, $lap, $index)
     {
-        $this->console->writeln('$0f0Checkpoint $ff0' . $index . ': $fff' . Time::TMtoMS($time, true) . ' $777' . $player->getNickName());
+        $this->console->writeln('$0f0Checkpoint $ff0'.$index.': $fff'.Time::TMtoMS($time, true).' $777'.$player->getNickName());
 
     }
 
@@ -77,9 +77,9 @@ class Test implements MatchDataListenerInterface, TimerDataListenerInterface
     public function onPlayerFinish(Player $player, $time)
     {
         if ($time > 0) {
-            $this->console->writeln('$777' . $player->getNickName() . ' $0f0Finished with time: $fff' . Time::TMtoMS($time, true));
+            $this->console->writeln('$777'.$player->getNickName().' $0f0Finished with time: $fff'.Time::TMtoMS($time, true));
         } else {
-            $this->console->writeln('$777' . $player->getNickName() . ' $f00Retired');
+            $this->console->writeln('$777'.$player->getNickName().' $f00Retired');
         }
     }
 
@@ -109,12 +109,12 @@ class Test implements MatchDataListenerInterface, TimerDataListenerInterface
         if ($this->previousMemoryValue != $mem) {
 
             $diff = ($mem - $this->previousMemoryValue);
-            $msg = '$fff> Memory: $ff0' . $mem . "kb ";
+            $msg = '$fff> Memory: $ff0'.$mem."kb ";
 
             if ($this->previousMemoryValue < $mem) {
-                $msg .= ' $f00+' . $diff . "kb";
+                $msg .= ' $f00+'.$diff."kb";
             } else {
-                $msg .= ' $0f0-' . $diff . "kb";
+                $msg .= ' $0f0-'.$diff."kb";
             }
             $this->console->writeln($msg);
 

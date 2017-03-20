@@ -64,7 +64,7 @@ class MapStorage
      */
     public function getMapByIndex($index)
     {
-        $map = array_slice($this->maps, (int)$index, 1, false);
+        $map = array_slice($this->maps, (int) $index, 1, false);
         return end($map);
     }
 

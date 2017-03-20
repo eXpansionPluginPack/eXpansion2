@@ -75,7 +75,7 @@ class MatchDataProvider extends AbstractDataProvider
      */
     public function onPlayerFinish($uid, $login, $data)
     {
-        $this->dispatch(__FUNCTION__, [$this->playerStorage->getPlayerInfo($login), (float)$data]);
+        $this->dispatch(__FUNCTION__, [$this->playerStorage->getPlayerInfo($login), (float) $data]);
     }
 
     /**
@@ -87,7 +87,7 @@ class MatchDataProvider extends AbstractDataProvider
      */
     public function onPlayerCheckpoint($uid, $login, $time, $currentLap, $index)
     {
-        $this->dispatch(__FUNCTION__, [$this->playerStorage->getPlayerInfo($login), (float)$time, (int)$currentLap, (int)$index]);
+        $this->dispatch(__FUNCTION__, [$this->playerStorage->getPlayerInfo($login), (float) $time, (int) $currentLap, (int) $index]);
     }
 
 

@@ -28,6 +28,6 @@ class TotoPlugin implements ChatDataListenerInterface
         if ($player->getPlayerId() === 0) {
             $from = '$777Console';
         }
-        $this->console->writeln('$ff0[' . $from . '$ff0] ' . $text);
+        $this->console->writeln('$ff0['.$from.'$ff0] '.$text);
     }
 }
