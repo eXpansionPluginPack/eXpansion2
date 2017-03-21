@@ -10,10 +10,13 @@ use eXpansion\Core\Storage\Data\Player;
 use eXpansion\Core\Storage\PlayerStorage;
 use Tests\eXpansion\Core\TestCore;
 use Maniaplanet\DedicatedServer\Structures\PlayerInfo;
+use Tests\eXpansion\Core\TestHelpers\PlayerDataTrait;
 
 
 class PlayerDataProviderTest extends TestCore
 {
+    use PlayerDataTrait;
+
     protected $player;
 
     protected function setUp()
@@ -48,7 +51,7 @@ class PlayerDataProviderTest extends TestCore
 
     public function testOnPlayerConnect()
     {
-        $player = new Player();
+        $player = $this->getPlayer('test', false);
         $this->container->set('expansion.core.storage.player', $this->getMockPlayerStorage($player));
 
         $plugin = $this->createMock(PlayerDataListenerInterface::class);
@@ -86,14 +89,13 @@ class PlayerDataProviderTest extends TestCore
 
     public function testOnPlayerDisconnect()
     {
-        $player = new Player();
+        $player = $this->getPlayer('test', false);
         $this->container->set('expansion.core.storage.player', $this->getMockPlayerStorage($player));
 
         $plugin = $this->createMock(PlayerDataListenerInterface::class);
         $plugin->expects($this->once())
             ->method('onPlayerDisconnect')
             ->withConsecutive([$player]);
-
 
         /** @var PlayerDataProvider $dataProvider */
         $dataProvider = $this->container->get('expansion.core.data_providers.player_data_provider');
@@ -104,7 +106,7 @@ class PlayerDataProviderTest extends TestCore
 
     public function testOnPlayerInfoChanged()
     {
-        $player = new Player();
+        $player = $this->getPlayer('test', false);
         $this->container->set('expansion.core.storage.player', $this->getMockPlayerStorage($player));
 
         $plugin = $this->createMock(PlayerDataListenerInterface::class);
@@ -122,7 +124,7 @@ class PlayerDataProviderTest extends TestCore
 
     public function testOnPlayerAlliesChanged()
     {
-        $player = new Player();
+        $player = $this->getPlayer('test', false);
         $this->container->set('expansion.core.storage.player', $this->getMockPlayerStorage($player));
 
         $plugin = $this->createMock(PlayerDataListenerInterface::class);

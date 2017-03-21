@@ -70,8 +70,8 @@ class Application
         $this->console->writeln('$fff8PP"""""""    ,8P  Y8,  $fff  88       d8 $0d0   a8P\'      ');
         $this->console->writeln('$fff"8b,   ,aa   d8\'    `8b$fff   88b,   ,a8" $0d0  d8"         ');
         $this->console->writeln('$fff `"Ybbd8"\'  8P        Y8$fff  88`YbbdP"\'  $0d0  88888888888');
-        $this->console->writeln('$fff                         $fff 88          $0d0                ');
-        $this->console->writeln('$777  eXpansion v.2.0.0.0    $fff 88          $0d0               ');
+        $this->console->writeln('$fff                        $fff  88          $0d0                ');
+        $this->console->writeln('$777  eXpansion v.2.0.0.0   $fff  88          $0d0               ');
 
         $this->pluginManager->init();
         $this->dataProviderManager->init();
@@ -93,6 +93,9 @@ class Application
 
         $this->console->writeln("Running preflight checks...");
 
+        // need to send this for scripts to start callback handling
+        $this->connection->triggerModeScriptEvent("XmlRpc.EnableCallbacks", ["True"]);
+
         $this->dataProviderManager->dispatch(self::EVENT_RUN, []);
 
         $this->console->writeln("And takeoff");
@@ -105,6 +108,8 @@ class Application
                 foreach ($calls as $call) {
                     $method = preg_replace('/^[[:alpha:]]+\./', '', $call[0]); // remove trailing "Whatever."
                     $params = (array) $call[1];
+                    $this->console->writeln('$fffCallback: $070'.$method);
+                    $this->console->writeln('$ff0Params: $777'.print_r($params, true));
 
                     $this->dataProviderManager->dispatch($method, $params);
                 }
@@ -116,7 +121,7 @@ class Application
             do {
                 $nextCycleStart += $cycleTime;
             } while ($nextCycleStart < $endCycleTime);
-          
+
             @time_sleep_until($nextCycleStart);
         } while ($this->isRunning);
     }

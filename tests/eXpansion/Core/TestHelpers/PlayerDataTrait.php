@@ -13,9 +13,11 @@ trait PlayerDataTrait
     protected function getPlayer($login, $spectator)
     {
         $playerI = new PlayerInfo();
+        $playerI->playerId = 1;
         $playerI->isServer = false;
         $playerI->spectator = $spectator;
         $playerD = new PlayerDetailedInfo();
+        $playerD->playerId = 1;
         $playerD->login = $login;
         $playerD->clientVersion = 'client-test';
         $playerD->nickName = '$fff' . $login;

@@ -40,7 +40,7 @@ class Console
     // define aliases for colors
     const error = "\e[37;1m\e[41m";
     const success = self::b_green;
-    const normal = self::white;
+    const normal = "\e[0m";
     const bold = self::b_white;
 
 
@@ -154,7 +154,13 @@ class Console
      */
     protected function ansiOut($msg, $newline)
     {
-        $this->consoleOutput->write($msg, $newline, ConsoleOutputInterface::OUTPUT_RAW);
+        // $this->consoleOutput->write($msg . self::normal, $newline, ConsoleOutputInterface::OUTPUT_RAW);
+        $nl = "";
+        if ($newline) {
+            $nl = "\n";
+        }
+
+        echo $msg.self::normal.$nl;
     }
 
     /**

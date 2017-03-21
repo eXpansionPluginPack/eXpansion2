@@ -44,7 +44,8 @@ class MapDataProvider extends AbstractDataProvider
     public function onRun()
     {
         $this->updateMapList();
-
+        $this->mapStorage->setCurrentMap($this->connection->getCurrentMapInfo());
+        $this->mapStorage->setNextMap($this->connection->getNextMapInfo());
     }
 
     /**
@@ -91,16 +92,16 @@ class MapDataProvider extends AbstractDataProvider
             $this->dispatch(__FUNCTION__, [$oldMaps, $curMapIndex, $nextMapIndex]);
         }
 
-        $currentMap = $this->mapStorage->getMap($curMapIndex);
-        if ($this->mapStorage->getCurrentMap()->uId != $curMapIndex) {
+        $currentMap = $this->mapStorage->getMapByIndex($curMapIndex);
+        if ($this->mapStorage->getCurrentMap()->uId != $currentMap->uId) {
             $previousMap = $this->mapStorage->getCurrentMap();
             $this->mapStorage->setCurrentMap($currentMap);
 
             $this->dispatch('onExpansionMapChange', [$currentMap, $previousMap]);
         }
 
-        $nextMap = $this->mapStorage->getMap($nextMapIndex);
-        if ($this->mapStorage->getNextMap()->uId != $nextMapIndex) {
+        $nextMap = $this->mapStorage->getMapByIndex($nextMapIndex);
+        if ($this->mapStorage->getNextMap()->uId != $nextMap->uId) {
             $previousNextMap = $this->mapStorage->getNextMap();
             $this->mapStorage->setNextMap($nextMap);
 

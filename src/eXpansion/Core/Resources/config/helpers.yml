@@ -1,0 +1,3 @@
+services:
+    expansion.core.helpers.time.factory:
+        class: "eXpansion\Core\Helpers\time"
