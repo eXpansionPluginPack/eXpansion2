@@ -49,6 +49,12 @@
             "@symfony-scripts"
         ]
     },
+    "config": {
+        "platform": {
+            "php": "5.6.25"
+        },
+        "sort-packages": true
+    },
     "extra": {
         "symfony-app-dir": "app",
         "symfony-bin-dir": "bin",
