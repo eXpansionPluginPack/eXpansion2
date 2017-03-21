@@ -55,7 +55,6 @@ class Application
     /**
      * Initialize eXpansion.
      *
-     * @param OutputInterface $output
      * @return $this
      */
     public function init(ConsoleOutputInterface $console)
