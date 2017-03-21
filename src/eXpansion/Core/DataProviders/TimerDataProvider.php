@@ -7,11 +7,6 @@ class TimerDataProvider extends AbstractDataProvider
 
     protected $time = 0;
 
-    public function onRun()
-    {
-
-    }
-
     public function onPreLoop()
     {
         $this->dispatch(__FUNCTION__, []);

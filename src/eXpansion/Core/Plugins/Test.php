@@ -14,19 +14,21 @@ class Test implements MatchDataListenerInterface, TimerDataListenerInterface
 {
     /** @var Connection */
     protected $connection;
+
     /** @var Console */
     protected $console;
 
-    /** @var int */
-    private $time = 0;
+    /** @var Time */
+    protected $time;
 
     /** @var float|int */
     private $previousMemoryValue = 0;
 
-    function __construct(Connection $connection, Console $console)
+    function __construct(Connection $connection, Console $console, Time $time)
     {
         $this->connection = $connection;
         $this->console = $console;
+        $this->time = $time;
     }
 
     public function onBeginMatch()
@@ -59,7 +61,7 @@ class Test implements MatchDataListenerInterface, TimerDataListenerInterface
      */
     public function onPlayerCheckpoint(Player $player, $time, $lap, $index)
     {
-        $this->console->writeln('$0f0Checkpoint $ff0'.$index.': $fff'.Time::TMtoMS($time, true).' $777'.$player->getNickName());
+        $this->console->writeln('$0f0Checkpoint $ff0'.$index.': $fff'.$this->time->milisecondsToTrackmania($time, true).' $777'.$player->getNickName());
 
     }
 
@@ -71,7 +73,7 @@ class Test implements MatchDataListenerInterface, TimerDataListenerInterface
     public function onPlayerFinish(Player $player, $time)
     {
         if ($time > 0) {
-            $this->console->writeln('$777'.$player->getNickName().' $0f0Finished with time: $fff'.Time::TMtoMS($time, true));
+            $this->console->writeln('$777'.$player->getNickName().' $0f0Finished with time: $fff'.$this->time->milisecondsToTrackmania($time, true));
         } else {
             $this->console->writeln('$777'.$player->getNickName().' $f00Retired');
         }

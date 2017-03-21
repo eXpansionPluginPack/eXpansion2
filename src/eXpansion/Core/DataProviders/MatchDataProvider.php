@@ -32,11 +32,6 @@ class MatchDataProvider extends AbstractDataProvider
         $this->connection = $connection;
     }
 
-    public function onRun()
-    {
-
-    }
-
     public function onBeginMatch()
     {
         $this->dispatch(__FUNCTION__, []);
