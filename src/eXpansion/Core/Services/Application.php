@@ -94,7 +94,7 @@ class Application
         $this->console->writeln("Running preflight checks...");
 
         // need to send this for scripts to start callback handling
-        $this->connection->triggerModeScriptEventArray("XmlRpc.EnableCallbacks", ["True"]);
+        $this->connection->triggerModeScriptEvent("XmlRpc.EnableCallbacks", ["True"]);
 
         $this->dataProviderManager->dispatch(self::EVENT_RUN, []);
 
