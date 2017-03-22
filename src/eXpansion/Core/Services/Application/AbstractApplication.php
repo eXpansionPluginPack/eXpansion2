@@ -6,6 +6,7 @@ namespace eXpansion\Core\Services\Application;
 use eXpansion\Core\Services\Console;
 use Maniaplanet\DedicatedServer\Connection;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class AbstractApplication implements RunInterface
 {
@@ -48,7 +49,7 @@ abstract class AbstractApplication implements RunInterface
      *
      * @return $this
      */
-    public function init(ConsoleOutputInterface $console)
+    public function init(OutputInterface $console)
     {
         $this->console->init($console);
         $this->dispatcher->init();

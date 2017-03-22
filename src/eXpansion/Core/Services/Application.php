@@ -4,6 +4,7 @@ namespace eXpansion\Core\Services;
 
 use eXpansion\Core\Services\Application\AbstractApplication;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * eXpansion Application main routine.
@@ -23,7 +24,7 @@ class Application extends AbstractApplication {
      *
      * @return $this
      */
-    public function init(ConsoleOutputInterface $console)
+    public function init(OutputInterface $console)
     {
         parent::init($console);
 
