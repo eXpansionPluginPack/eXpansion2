@@ -93,19 +93,25 @@ class MapDataProvider extends AbstractDataProvider
         }
 
         $currentMap = $this->mapStorage->getMapByIndex($curMapIndex);
-        if ($this->mapStorage->getCurrentMap()->uId != $currentMap->uId) {
-            $previousMap = $this->mapStorage->getCurrentMap();
-            $this->mapStorage->setCurrentMap($currentMap);
+        // current map can be false if map by index is not found..
+        if ($currentMap) {
+            if ($this->mapStorage->getCurrentMap()->uId != $currentMap->uId) {
+                $previousMap = $this->mapStorage->getCurrentMap();
+                $this->mapStorage->setCurrentMap($currentMap);
 
-            $this->dispatch('onExpansionMapChange', [$currentMap, $previousMap]);
+                $this->dispatch('onExpansionMapChange', [$currentMap, $previousMap]);
+            }
         }
 
         $nextMap = $this->mapStorage->getMapByIndex($nextMapIndex);
-        if ($this->mapStorage->getNextMap()->uId != $nextMap->uId) {
-            $previousNextMap = $this->mapStorage->getNextMap();
-            $this->mapStorage->setNextMap($nextMap);
+        // next map can be false if map by index is not found..
+        if ($nextMap) {
+            if ($this->mapStorage->getNextMap()->uId != $nextMap->uId) {
+                $previousNextMap = $this->mapStorage->getNextMap();
+                $this->mapStorage->setNextMap($nextMap);
 
-            $this->dispatch('onExpansionNextMapChange', [$nextMap, $previousNextMap]);
+                $this->dispatch('onExpansionNextMapChange', [$nextMap, $previousNextMap]);
+            }
         }
     }
 }

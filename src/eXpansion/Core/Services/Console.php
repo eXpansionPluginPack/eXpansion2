@@ -160,7 +160,6 @@ class Console
         if ($newline) {
             $nl = "\n";
         }
-
         echo $msg.self::normal.$nl;
     }
 
@@ -207,7 +206,7 @@ class Console
     }
 
     /**
-     * Convert.
+     * Convert from number to numeric string
      *
      * @param int $number
      *
@@ -216,7 +215,6 @@ class Console
     public function convert($number)
     {
         $out = "0";
-
         if ($number >= 9 && $number <= 16) {
             $out = "2";
         }
