@@ -3,6 +3,7 @@
 namespace eXpansion\Core\Services;
 
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class Console to print in the console.
@@ -226,5 +227,15 @@ class Console
             $out = "0";
         }
         return $out;
+    }
+
+    /**
+     * Get symfony console.
+     *
+     * @return OutputInterface
+     */
+    public function getConsoleOutput()
+    {
+        return $this->consoleOutput;
     }
 }
