@@ -13,7 +13,7 @@ interface MapDataListenerInterface
 {
     public function onMapListModified($oldMaps, $currentMapUid, $nextMapUid);
 
-    public function onExpansionMapChange($currentMap, $reviousMap);
+    public function onExpansionMapChange($currentMap, $previousMap);
 
     public function onExpansionNextMapChange($nextMap, $previousNextMap);
 }

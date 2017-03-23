@@ -7,3 +7,12 @@ services:
             - '@expansion.core.user_groups.players'
         tags:
             - {name: expansion.plugin, data_provider: expansion.chat_data}
+
+    expansion.core.plugins.test:
+        class: eXpansion\Core\Plugins\Test
+        arguments:
+            - '@expansion.core.services.dedicated_connection'
+            - '@expansion.core.services.console'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.match_data}
+            - {name: expansion.plugin, data_provider: expansion.timer_data}

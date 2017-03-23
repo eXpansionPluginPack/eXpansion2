@@ -44,7 +44,8 @@ class MapDataProvider extends AbstractDataProvider
     public function onRun()
     {
         $this->updateMapList();
-
+        $this->mapStorage->setCurrentMap($this->connection->getCurrentMapInfo());
+        $this->mapStorage->setNextMap($this->connection->getNextMapInfo());
     }
 
     /**
@@ -68,7 +69,7 @@ class MapDataProvider extends AbstractDataProvider
 
             $start += self::BATCH_SIZE;
 
-        } while(count($maps) == self::BATCH_SIZE);
+        } while (count($maps) == self::BATCH_SIZE);
     }
 
     /**
@@ -91,20 +92,26 @@ class MapDataProvider extends AbstractDataProvider
             $this->dispatch(__FUNCTION__, [$oldMaps, $curMapIndex, $nextMapIndex]);
         }
 
-        $currentMap = $this->mapStorage->getMap($curMapIndex);
-        if ($this->mapStorage->getCurrentMap()->uId != $curMapIndex) {
-            $previousMap = $this->mapStorage->getCurrentMap();
-            $this->mapStorage->setCurrentMap($currentMap);
+        $currentMap = $this->mapStorage->getMapByIndex($curMapIndex);
+        // current map can be false if map by index is not found..
+        if ($currentMap) {
+            if ($this->mapStorage->getCurrentMap()->uId != $currentMap->uId) {
+                $previousMap = $this->mapStorage->getCurrentMap();
+                $this->mapStorage->setCurrentMap($currentMap);
 
-            $this->dispatch('onExpansionMapChange', [$currentMap, $previousMap]);
+                $this->dispatch('onExpansionMapChange', [$currentMap, $previousMap]);
+            }
         }
 
-        $nextMap = $this->mapStorage->getMap($nextMapIndex);
-        if ($this->mapStorage->getNextMap()->uId != $nextMapIndex) {
-            $previousNextMap = $this->mapStorage->getNextMap();
-            $this->mapStorage->setNextMap($nextMap);
+        $nextMap = $this->mapStorage->getMapByIndex($nextMapIndex);
+        // next map can be false if map by index is not found..
+        if ($nextMap) {
+            if ($this->mapStorage->getNextMap()->uId != $nextMap->uId) {
+                $previousNextMap = $this->mapStorage->getNextMap();
+                $this->mapStorage->setNextMap($nextMap);
 
-            $this->dispatch('onExpansionNextMapChange', [$nextMap, $previousNextMap]);
+                $this->dispatch('onExpansionNextMapChange', [$nextMap, $previousNextMap]);
+            }
         }
     }
 }

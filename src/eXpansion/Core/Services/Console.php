@@ -3,6 +3,7 @@
 namespace eXpansion\Core\Services;
 
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class Console to print in the console.
@@ -40,7 +41,7 @@ class Console
     // define aliases for colors
     const error = "\e[37;1m\e[41m";
     const success = self::b_green;
-    const normal = self::white;
+    const normal = "\e[0m";
     const bold = self::b_white;
 
 
@@ -154,7 +155,12 @@ class Console
      */
     protected function ansiOut($msg, $newline)
     {
-        $this->consoleOutput->write($msg, $newline, ConsoleOutputInterface::OUTPUT_RAW);
+        // $this->consoleOutput->write($msg . self::normal, $newline, ConsoleOutputInterface::OUTPUT_RAW);
+        $nl = "";
+        if ($newline) {
+            $nl = "\n";
+        }
+        echo $msg.self::normal.$nl;
     }
 
     /**
@@ -200,7 +206,7 @@ class Console
     }
 
     /**
-     * Convert.
+     * Convert from number to numeric string
      *
      * @param int $number
      *
@@ -209,7 +215,6 @@ class Console
     public function convert($number)
     {
         $out = "0";
-
         if ($number >= 9 && $number <= 16) {
             $out = "2";
         }
@@ -220,5 +225,15 @@ class Console
             $out = "0";
         }
         return $out;
+    }
+
+    /**
+     * Get symfony console.
+     *
+     * @return OutputInterface
+     */
+    public function getConsoleOutput()
+    {
+        return $this->consoleOutput;
     }
 }

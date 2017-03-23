@@ -7,6 +7,7 @@ use eXpansion\Core\DataProviders\Listener\ChatDataListenerInterface;
 use eXpansion\Core\Storage\Data\Player;
 use eXpansion\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Xmlrpc\FaultException;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -14,6 +15,9 @@ class TestCore extends KernelTestCase
 {
     /** @var ContainerInterface */
     protected $container;
+
+    /** @var  Application */
+    protected $consoleApplication;
 
     /**
      * @inheritdoc
@@ -30,6 +34,8 @@ class TestCore extends KernelTestCase
         $kernel->boot();
 
         $this->container = $kernel->getContainer();
+
+        $this->consoleApplication = new Application($kernel);
 
         $dedicatedConnectionMock = $this->getMockBuilder('Maniaplanet\DedicatedServer\Connection')
             ->disableOriginalConstructor()
