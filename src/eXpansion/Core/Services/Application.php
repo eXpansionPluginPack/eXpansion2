@@ -13,9 +13,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class Application extends AbstractApplication {
 
-    /** @var GuiHandler  */
-    protected $guiHandler;
-
     /** Base eXpansion callbacks. */
     const EVENT_PRE_LOOP = "expansion.pre_loop";
     const EVENT_POST_LOOP = "expansion.post_loop";
@@ -59,7 +56,6 @@ class Application extends AbstractApplication {
                 $this->dispatcher->dispatch($method, $params);
             }
         }
-        $this->guiHandler->displayManialinks();
 
         $this->connection->executeMulticall();
         $this->dispatcher->dispatch(self::EVENT_POST_LOOP, []);

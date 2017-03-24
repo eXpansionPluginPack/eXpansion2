@@ -4,21 +4,20 @@
 namespace eXpansion\Core\Plugins\Gui;
 
 
+use eXpansion\Core\DataProviders\Listener\UserGroupDataListenerInterface;
 use eXpansion\Core\Model\Gui\ManialinkInerface;
 use eXpansion\Core\Model\UserGroups\Group;
-use eXpansion\Core\Services\GuiHandler;
+use eXpansion\Core\Plugins\GuiHandler;
 
 /**
  * Class ManialiveFactory
  *
  * @TODO handle update on single player.
- * @TODO handle update when group changes.
- * @TODO handle group delete when groups are emptied. or no manialinks remains.
  *
  * @package eXpansion\Core\Plugins\Gui
  * @author Oliver de Cramer
  */
-class ManialinkFactory
+class GroupManialinkFactory implements UserGroupDataListenerInterface
 {
     /** @var  GuiHandler */
     protected $guiHandler;
@@ -52,7 +51,6 @@ class ManialinkFactory
     public function create(Group $group)
     {
         $this->manialinks[$group->getName()] = $this->createManialink($group);
-        $this->groups[$group->getName()] = $group;
 
         $this->guiHandler->addToDisplay($this->manialinks[$group->getName()]);
     }
@@ -68,5 +66,20 @@ class ManialinkFactory
     {
         $className = $this->className;
         return new $className($group, $this->name);
+    }
+
+    public function onExpansionGroupDestroy(Group $group, $lastLogin)
+    {
+        if (isset($this->manialinks[$group->getName()])) {
+            unset($this->manialinks[$group->getName()]);
+        }
+    }
+
+    public function onExpansionGroupAddUser(Group $group, $loginAdded)
+    {
+    }
+
+    public function onExpansionGroupRemoveUser(Group $group, $loginRemoved)
+    {
     }
 }

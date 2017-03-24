@@ -26,7 +26,6 @@ services:
         arguments:
             - '@expansion.core.services.application.dispatcher'
             - '@expansion.core.services.dedicated_connection'
-            - '@expansion.core.services.gui_handler'
             - '@expansion.core.services.console'
 
     expansion.core.services.application_debug:

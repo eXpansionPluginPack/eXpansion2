@@ -3,8 +3,10 @@ parameters:
 
 services:
     expansion.core.gui.manialink.test:
-        class: 'eXpansion\Core\Plugins\Gui\ManialinkFactory'
+        class: 'eXpansion\Core\Plugins\Gui\GroupManialinkFactory'
         arguments:
-            - "@expansion.core.services.gui_handler"
+            - "@expansion.core.plugins.gui_handler"
             - "test-manialink"
             - "%expansion.core.model.hui.manialink.class%"
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.user_group}

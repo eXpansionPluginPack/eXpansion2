@@ -17,9 +17,10 @@ services:
             - {name: expansion.plugin, data_provider: expansion.match_data}
             - {name: expansion.plugin, data_provider: expansion.timer_data}
 
-    expansion.core.services.gui_handler:
+    expansion.core.plugins.gui_handler:
         class: 'eXpansion\Core\Plugins\GuiHandler'
         arguments:
             - "@expansion.core.services.dedicated_connection"
         tags:
             - {name: expansion.plugin, data_provider: expansion.timer_data}
+            - {name: expansion.plugin, data_provider: expansion.user_group}
