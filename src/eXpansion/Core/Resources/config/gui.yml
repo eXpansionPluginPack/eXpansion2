@@ -7,6 +7,7 @@ services:
         arguments:
             - "@expansion.core.plugins.gui_handler"
             - "test-manialink"
-            - "%expansion.core.model.hui.manialink.class%"
+            - 2.5
+            - 2.5
         tags:
             - {name: expansion.plugin, data_provider: expansion.user_group}

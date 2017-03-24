@@ -5,6 +5,7 @@ namespace eXpansion\Core\Plugins\Gui;
 
 
 use eXpansion\Core\DataProviders\Listener\UserGroupDataListenerInterface;
+use eXpansion\Core\Model\Gui\Manialink;
 use eXpansion\Core\Model\Gui\ManialinkInerface;
 use eXpansion\Core\Model\UserGroups\Group;
 use eXpansion\Core\Plugins\GuiHandler;
@@ -34,17 +35,53 @@ class GroupManialinkFactory implements UserGroupDataListenerInterface
     /** @var Group[] */
     protected $groups = [];
 
+    /** @var float */
+    protected $sizeX;
+
+    /** @var float */
+    protected $sizeY;
+
+    /** @var float */
+    protected $posX;
+
+    /** @var float */
+    protected $posY;
+
     /**
-     * ManialiveFactory constructor.
+     * GroupManialinkFactory constructor.
      *
      * @param GuiHandler $guiHandler
+     * @param $name
+     * @param $sizeX
+     * @param $sizeY
+     * @param null $posX
+     * @param null $posY
      * @param string $className
      */
-    public function __construct(GuiHandler $guiHandler, $name, $className)
-    {
+    public function __construct(
+        GuiHandler $guiHandler,
+        $name,
+        $sizeX,
+        $sizeY,
+        $posX = null,
+        $posY = null,
+        $className = Manialink::class
+    ) {
+        if (is_null($posX)) {
+            $posX = $sizeX/-2;
+        }
+
+        if (is_null($posY)) {
+            $posY = $sizeY/2;
+        }
+
         $this->guiHandler = $guiHandler;
         $this->name = $name;
         $this->className = $className;
+        $this->sizeX = $sizeX;
+        $this->sizeY = $sizeY;
+        $this->posX = $posX;
+        $this->posY = $posY;
     }
 
 
@@ -65,7 +102,7 @@ class GroupManialinkFactory implements UserGroupDataListenerInterface
     protected function createManialink(Group $group)
     {
         $className = $this->className;
-        return new $className($group, $this->name);
+        return new $className($group, $this->name, $this->sizeX, $this->sizeY, $this->posX, $this->posY);
     }
 
     public function onExpansionGroupDestroy(Group $group, $lastLogin)

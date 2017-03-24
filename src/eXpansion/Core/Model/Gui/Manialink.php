@@ -15,14 +15,36 @@ class Manialink implements ManialinkInerface
     /** @var  Group */
     protected $group;
 
+    /** @var float */
+    protected $sizeX;
+
+    /** @var float */
+    protected $sizeY;
+
+    /** @var float */
+    protected $posX;
+
+    /** @var float */
+    protected $posY;
+
     /**
      * Manialive constructor.
      * @param Group $group
      */
-    public function __construct(Group $group, $name)
-    {
+    public function __construct(
+        Group $group,
+        $name,
+        $sizeX,
+        $sizeY,
+        $posX = null,
+        $posY = null
+    ) {
         $this->group = $group;
         $this->name = $name;
+        $this->sizeX = $sizeX;
+        $this->sizeY = $sizeY;
+        $this->posX = $posX;
+        $this->posY = $posY;
         $this->id = spl_object_hash($this);
     }
 

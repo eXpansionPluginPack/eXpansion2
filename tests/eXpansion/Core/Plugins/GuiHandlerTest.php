@@ -178,7 +178,7 @@ class GuiHandlerTest extends TestCore
             $group->addLogin($login);
         }
 
-        $manialink = new Manialink($group, 'test');
+        $manialink = new Manialink($group, 'test', 1, 1,1,1);
 
         return $manialink;
     }
