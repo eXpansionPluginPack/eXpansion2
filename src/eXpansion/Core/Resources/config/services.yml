@@ -21,11 +21,6 @@ services:
         class: "%expansion.core.services.dedicated_connection.class%"
         factory: "expansion.core.services.dedicated_connection.factory:createConnection"
 
-    expansion.core.services.gui_handler:
-        class: 'eXpansion\Core\Services\GuiHandler'
-        arguments:
-            - "@expansion.core.services.dedicated_connection"
-
     expansion.core.services.application:
         class: "%expansion.core.services.application.class%"
         arguments:
