@@ -23,10 +23,13 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
     protected $connection;
 
     /** @var ManialinkInerface[][] */
+    protected $displayQueu = [];
+
+    /** @var ManialinkInerface[][] */
     protected $individualQueu = [];
 
     /** @var ManialinkInerface[][] */
-    protected $displayQueu = [];
+    protected $displayeds = [];
 
     /** @var ManialinkInerface[][] */
     protected $hideQueu = [];
@@ -73,6 +76,10 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
             unset($this->displayQueu[$userGroup][$manialink->getId()]);
         }
 
+        if (AssociativeArray::getFromKey($this->displayeds, [$userGroup, $manialink->getId()])) {
+            unset($this->displayeds[$userGroup][$manialink->getId()]);
+        }
+
         $this->hideQueu[$userGroup][$manialink->getId()] = $manialink;
     }
 
@@ -82,11 +89,13 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
     protected function displayManialinks()
     {
         // TODO Use multi calls.
-
-        foreach ($this->displayQueu as $manialinks) {
+        foreach ($this->displayQueu as $groupName => $manialinks) {
             foreach ($manialinks as $id => $manialink) {
                 $logins = $manialink->getUserGroup()->getLogins();
-                $this->connection->sendDisplayManialinkPage($logins, $manialink->getXml());
+                if (!empty($logins)) {
+                    $this->connection->sendDisplayManialinkPage($logins, $manialink->getXml());
+                }
+                $this->displayeds[$groupName][$id] = $manialink;
             }
         }
 
@@ -100,7 +109,9 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
         foreach ($this->hideQueu as $manialinks) {
             foreach ($manialinks as $id => $manialink) {
                 $logins = $manialink->getUserGroup()->getLogins();
-                $this->connection->sendDisplayManialinkPage($logins, '<manialink id="' . $id . '" />');
+                if (!empty($logins)) {
+                    $this->connection->sendDisplayManialinkPage($logins, '<manialink id="' . $id . '" />');
+                }
             }
         }
 
@@ -109,6 +120,7 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
                 $this->connection->sendDisplayManialinkPage($login, '<manialink id="' . $id . '" />');
             }
         }
+
 
         // Reset the queues.
         $this->displayQueu = [];
@@ -147,9 +159,9 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
         $group = $group->getName();
 
         // User was added to group, need to display all manialinks of the group to this user
-        if (isset($this->displayQueu[$group])) {
-            foreach ($this->displayQueu[$group] as $mlId => $manialink) {
-                $this->individualQueu[$loginAdded] = $manialink;
+        if (isset($this->displayeds[$group])) {
+            foreach ($this->displayeds[$group] as $mlId => $manialink) {
+                $this->individualQueu[$loginAdded][$mlId] = $manialink;
             }
         }
     }
@@ -162,9 +174,9 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
         $group = $group->getName();
 
         // User was added to group, need to hide all manialinks of the group to this user
-        if (isset($this->displayQueu[$group])) {
-            foreach ($this->displayQueu[$group] as $mlId => $manialink) {
-                $this->hideIndividualQueu[$loginRemoved] = $manialink;
+        if (isset($this->displayeds[$group])) {
+            foreach ($this->displayeds[$group] as $mlId => $manialink) {
+                $this->hideIndividualQueu[$loginRemoved][$mlId] = $manialink;
             }
         }
     }
@@ -174,6 +186,18 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
      */
     public function onExpansionGroupDestroy(Group $group, $lastLogin)
     {
-        // @TODO check need to unset anything?
+       if (isset($this->displayeds[$group->getName()])) {
+           unset($this->displayeds[$group->getName()]);
+       }
+    }
+
+    /**
+     * List of all manialinks that are currentyl displayed.
+     *
+     * @return \eXpansion\Core\Model\Gui\ManialinkInerface[][]
+     */
+    public function getDisplayeds()
+    {
+        return $this->displayeds;
     }
 }
