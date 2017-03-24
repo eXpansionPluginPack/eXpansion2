@@ -14,6 +14,9 @@ parameters:
     expansion.core.data_providers.timer_data_provider.class: eXpansion\Core\DataProviders\TimerDataProvider
     expansion.core.data_providers.timer_data_provider.interface: eXpansion\Core\DataProviders\Listener\TimerDataListenerInterface
 
+    expansion.core.data_providers.user_group_data_provider.class: eXpansion\Core\DataProviders\UserGroupDataProvider
+    expansion.core.data_providers.user_group_data_provider.interface: eXpansion\Core\DataProviders\Listener\UserGroupDataListenerInterface
+
 
 services:
     expansion.core.data_providers.chat_data_provider:
@@ -76,4 +79,12 @@ services:
             - {name: expansion.data_provider.listener, event_name: expansion.pre_loop, method: onPreLoop}
             - {name: expansion.data_provider.listener, event_name: expansion.post_loop, method: onPostLoop}
 
+    expansion.core.data_providers.user_group_provider:
+        class: "%expansion.core.data_providers.user_group_data_provider.class%"
+        tags:
+            - {name: expansion.data_provider, provider: "expansion.user_group", interface: "%expansion.core.data_providers.user_group_data_provider.interface%"}
+            - {name: expansion.data_provider.compatibility, title: ALL}
+            - {name: expansion.data_provider.listener, event_name: expansion.user_groups.user_add, method: onExpansionGroupAddUser}
+            - {name: expansion.data_provider.listener, event_name: expansion.user_groups.user_remove, method: onExpansionGroupRemoveUser}
+            - {name: expansion.data_provider.listener, event_name: expansion.user_groups.group_desroy, method: onExpansionGroupDestroy}
 
