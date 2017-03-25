@@ -22,6 +22,8 @@ services:
         class: 'eXpansion\Core\Plugins\GuiHandler'
         arguments:
             - "@expansion.core.services.dedicated_connection"
+            - "@logger"
+            - "@expansion.core.services.console"
         tags:
             - {name: expansion.plugin, data_provider: expansion.timer_data}
             - {name: expansion.plugin, data_provider: expansion.user_group}

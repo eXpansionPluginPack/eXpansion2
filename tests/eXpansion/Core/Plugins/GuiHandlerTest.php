@@ -162,6 +162,55 @@ class GuiHandlerTest extends TestCore
         $this->assertEmpty($guiHanlder->getDisplayeds());
     }
 
+    public function testExtreme()
+    {
+        /** @var \PHPUnit_Framework_MockObject_MockObject $dedicatedConnection */
+        $dedicatedConnection = $this->container->get('expansion.core.services.dedicated_connection');
+        $dedicatedConnection->expects($this->exactly(2))
+            ->method('sendDisplayManialinkPage')
+            ->withAnyParameters();
+        $dedicatedConnection->expects($this->exactly(2))
+            ->method('executeMulticall')
+            ->withAnyParameters();
+        $logins = ['test1', 'test2'];
+
+        $guiHanlder = $this->container->get('expansion.core.plugins.gui_handler');
+        $guiHanlder->setCharLimit(160);
+
+        for ($i = 0; $i < 2; $i++) {
+            $manialink = $this->getManialink($logins);
+            $guiHanlder->addToDisplay($manialink);
+        }
+
+        $guiHanlder->onPostLoop();
+    }
+
+    public function testError()
+    {
+        /** @var \PHPUnit_Framework_MockObject_MockObject $dedicatedConnection */
+        $dedicatedConnection = $this->container->get('expansion.core.services.dedicated_connection');
+        $dedicatedConnection->expects($this->exactly(2))
+            ->method('sendDisplayManialinkPage')
+            ->withAnyParameters();
+        $dedicatedConnection->method('executeMulticall')
+            ->will($this->throwException(new \Exception));
+        $logins = ['test1', 'test2'];
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject $loggerMock */
+        $loggerMock = $this->container->get('expansion.core.services.console');
+        $loggerMock->expects($this->exactly(2))->method('writeln');
+
+        $guiHanlder = $this->container->get('expansion.core.plugins.gui_handler');
+        $guiHanlder->setCharLimit(160);
+
+        for ($i = 0; $i < 2; $i++) {
+            $manialink = $this->getManialink($logins);
+            $guiHanlder->addToDisplay($manialink);
+        }
+
+        $guiHanlder->onPostLoop();
+    }
+
     public function testEmptyMethods()
     {
         /** @var GuiHandler $guiHanlder */

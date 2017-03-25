@@ -6,21 +6,31 @@ use eXpansion\Core\DataProviders\Listener\TimerDataListenerInterface;
 use eXpansion\Core\DataProviders\Listener\UserGroupDataListenerInterface;
 use eXpansion\Core\Model\Gui\ManialinkInerface;
 use eXpansion\Core\Model\UserGroups\Group;
+use eXpansion\Core\Services\Console;
 use Maniaplanet\DedicatedServer\Connection;
+use Maniaplanet\DedicatedServer\Xmlrpc\GbxRemote;
+use Monolog\Logger;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
 
 /**
- * Class GuiHandler
- *
- * @TODO handle better update for a manialink for a single player.
+ * Class GuiHandler will send manialinks to player as needed.
  *
  * @package eXpansion\Core\Plugins\Gui
  * @author Oliver de Cramer
  */
 class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInterface
 {
-    /** @var  Connection */
+    /** @var Connection */
     protected $connection;
+
+    /** @var Logger */
+    protected $logger;
+
+    /** @var Console */
+    protected $console;
+
+    /** @var int */
+    protected $charLimit;
 
     /** @var ManialinkInerface[][] */
     protected $displayQueu = [];
@@ -42,11 +52,15 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
      *
      * @param Connection $connection
      */
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, Logger $logger, Console $console, $charLimit = 262144)
     {
         $this->connection = $connection;
 
         $this->connection->sendHideManialinkPage(null);
+
+        $this->logger = $logger;
+        $this->console = $console;
+        $this->charLimit = $charLimit;
     }
 
 
@@ -91,21 +105,64 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
      */
     protected function displayManialinks()
     {
-        // TODO Use multi calls.
+        $size = 0;
+        foreach ($this->getManialinksToDisplay() as $mlData) {
+            $currentSize = $size;
+            $size += strlen($mlData['ml']);
+
+            if ($currentSize != 0 && $size > $this->charLimit) {
+                $this->executeMultiCall();
+                $size = strlen($mlData['ml']);
+            }
+
+            $this->connection->sendDisplayManialinkPage($mlData['logins'], $mlData['ml'], 0, false, true);
+        }
+
+        if ($size > 0) {
+            $this->executeMultiCall();
+        }
+
+        // Reset the queues.
+        $this->displayQueu = [];
+        $this->individualQueu = [];
+        $this->hideQueu = [];
+        $this->hideIndividualQueu = [];
+    }
+
+    /**
+     * Execute multicall & handle error.
+     */
+    protected function executeMultiCall()
+    {
+        try {
+            $this->connection->executeMulticall();
+        } catch (\Exception $e) {
+            $this->logger->addError("Couldn't deliver all manialinks : " . $e->getMessage(), ['exception' => $e]);
+            $this->console->writeln('$F00ERROR - Couldn\'t deliver all manialinks : ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Get list of all manialinks that needs to be displayed
+     *
+     * @return \Generator
+     */
+    protected function getManialinksToDisplay()
+    {
         foreach ($this->displayQueu as $groupName => $manialinks) {
             foreach ($manialinks as $id => $manialink) {
                 $logins = $manialink->getUserGroup()->getLogins();
                 if (!empty($logins)) {
-                    $this->connection->sendDisplayManialinkPage($logins, $manialink->getXml());
+                    yield ['logins' => $logins, 'ml' => $manialink->getXml()];
+                    $this->displayeds[$groupName][$id] = $manialink;
                 }
-                $this->displayeds[$groupName][$id] = $manialink;
             }
         }
 
         foreach ($this->individualQueu as $login => $manialinks) {
             foreach ($manialinks as $id => $manialink) {
                 $xml = $manialink->getXml();
-                $this->connection->sendDisplayManialinkPage($login, $xml);
+                yield ['logins' => $login, 'ml' => $xml];
             }
         }
 
@@ -113,23 +170,16 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
             foreach ($manialinks as $id => $manialink) {
                 $logins = $manialink->getUserGroup()->getLogins();
                 if (!empty($logins)) {
-                    $this->connection->sendDisplayManialinkPage($logins, '<manialink id="' . $id . '" />');
+                    yield ['logins' => $logins, 'ml' => '<manialink id="' . $id . '" />'];
                 }
             }
         }
 
         foreach ($this->hideIndividualQueu as $login => $manialinks) {
             foreach ($manialinks as $id => $manialink) {
-                $this->connection->sendDisplayManialinkPage($login, '<manialink id="' . $id . '" />');
+                yield ['logins' => $login, 'ml' => '<manialink id="' . $id . '" />'];
             }
         }
-
-
-        // Reset the queues.
-        $this->displayQueu = [];
-        $this->individualQueu = [];
-        $this->hideQueu = [];
-        $this->hideIndividualQueu = [];
     }
 
     /**
@@ -202,5 +252,13 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
     public function getDisplayeds()
     {
         return $this->displayeds;
+    }
+
+    /**
+     * @param int $charLimit
+     */
+    public function setCharLimit($charLimit)
+    {
+        $this->charLimit = $charLimit;
     }
 }

@@ -4,6 +4,7 @@ namespace Tests\eXpansion\Core;
 
 use eXpansion\Core\DataProviders\ChatDataProvider;
 use eXpansion\Core\DataProviders\Listener\ChatDataListenerInterface;
+use eXpansion\Core\Services\Console;
 use eXpansion\Core\Storage\Data\Player;
 use eXpansion\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Xmlrpc\FaultException;
@@ -41,6 +42,11 @@ class TestCore extends KernelTestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->container->set('expansion.core.services.dedicated_connection', $dedicatedConnectionMock);
+
+        $dedicatedConnectionMock = $this->getMockBuilder(Console::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->container->set('expansion.core.services.console', $dedicatedConnectionMock);
     }
 
     protected function getMockPlayerStorage($player)
