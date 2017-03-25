@@ -18,7 +18,10 @@ class Players extends Spectators
 
     public function onPlayerInfoChanged(Player $oldPlayer, Player $player)
     {
-        $this->userGroup->removeLogin($player->getLogin());
-        $this->onPlayerConnect($player);
+        if ($player->getSpectatorStatus() == 0) {
+            $this->userGroup->addLogin($player->getLogin());
+        } else {
+            $this->userGroup->removeLogin($player->getLogin());
+        }
     }
 }

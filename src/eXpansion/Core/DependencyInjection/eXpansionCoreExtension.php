@@ -32,6 +32,7 @@ class eXpansionCoreExtension extends Extension
         $loader->load('storage.yml');
         $loader->load('user_groups.yml');
         $loader->load('gui.yml');
+        $loader->load('helpers.yml');
 
         // Temporary for the prototype.
         $loader->load('plugins.yml');

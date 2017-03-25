@@ -12,9 +12,9 @@ use eXpansion\Core\Services\Application\DispatcherInterface;
  */
 class Group
 {
-    const EVENT_NEW_USER = '"expansion.user_groups.user_add';
+    const EVENT_NEW_USER = 'expansion.user_groups.user_add';
     const EVENT_REMOVE_USER = 'expansion.user_groups.user_remove';
-    const EVENT_DESTROY = 'expansion.user_groups.group_desroy';
+    const EVENT_DESTROY = 'expansion.user_groups.group_destroy';
 
     /** @var DispatcherInterface */
     protected $dispatcher;
@@ -53,8 +53,10 @@ class Group
      */
     public function addLogin($login)
     {
-        $this->logins[$login] = true;
-        $this->dispatcher->dispatch(self::EVENT_NEW_USER, [$this, $login]);
+        if (!isset($this->logins[$login])) {
+            $this->logins[$login] = true;
+            $this->dispatcher->dispatch(self::EVENT_NEW_USER, [$this, $login]);
+        }
     }
 
     /**
@@ -66,9 +68,10 @@ class Group
     {
         if (isset($this->logins[$login])) {
             unset($this->logins[$login]);
+
+            $this->dispatcher->dispatch(self::EVENT_REMOVE_USER, [$this, $login]);
         }
 
-        $this->dispatcher->dispatch(self::EVENT_REMOVE_USER, [$this, $login]);
 
         if (!$this->isPersistent() && empty($this->logins)) {
             $this->dispatcher->dispatch(self::EVENT_DESTROY, [$this, $login]);

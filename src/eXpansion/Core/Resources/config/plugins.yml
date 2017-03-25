@@ -13,6 +13,7 @@ services:
         arguments:
             - '@expansion.core.services.dedicated_connection'
             - '@expansion.core.services.console'
+            - '@expansion.core.helpers.time'
         tags:
             - {name: expansion.plugin, data_provider: expansion.match_data}
             - {name: expansion.plugin, data_provider: expansion.timer_data}

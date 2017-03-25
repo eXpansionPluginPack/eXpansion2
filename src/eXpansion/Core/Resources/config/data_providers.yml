@@ -86,5 +86,5 @@ services:
             - {name: expansion.data_provider.compatibility, title: ALL}
             - {name: expansion.data_provider.listener, event_name: expansion.user_groups.user_add, method: onExpansionGroupAddUser}
             - {name: expansion.data_provider.listener, event_name: expansion.user_groups.user_remove, method: onExpansionGroupRemoveUser}
-            - {name: expansion.data_provider.listener, event_name: expansion.user_groups.group_desroy, method: onExpansionGroupDestroy}
+            - {name: expansion.data_provider.listener, event_name: expansion.user_groups.group_destroy, method: onExpansionGroupDestroy}
 

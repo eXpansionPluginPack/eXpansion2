@@ -3,7 +3,7 @@ parameters:
 
 services:
     expansion.core.gui.manialink.test:
-        class: 'eXpansion\Core\Plugins\Gui\GroupManialinkFactory'
+        class: 'eXpansion\Core\Plugins\Gui\ManialinkFactory'
         arguments:
             - "@expansion.core.plugins.gui_handler"
             - "test-manialink"

@@ -4,6 +4,7 @@ namespace eXpansion\Core\Plugins;
 
 use eXpansion\Core\DataProviders\Listener\ChatDataListenerInterface;
 use eXpansion\Core\Model\UserGroups\Group;
+use eXpansion\Core\Plugins\Gui\GroupManialinkFactory;
 use eXpansion\Core\Plugins\Gui\ManialinkFactory;
 use eXpansion\Core\Services\Console;
 use eXpansion\Core\Storage\Data\Player;
@@ -13,7 +14,7 @@ use eXpansion\Core\Storage\Data\Player;
  *
  * @package eXpansion\Core\Plugins
  */
-class TotoPlugin implements ChatDataListenerInterface
+class TotoPlugin implements ChatDataListenerInterface, StatusAwarePluginInterface
 {
     /** @var Console  */
     protected $console;
@@ -43,6 +44,23 @@ class TotoPlugin implements ChatDataListenerInterface
             $from = '$777Console';
         }
 
-        $this->mlFactory->create($this->playersGroup);
+        $this->console->writeln($from . $text);
+    }
+
+
+    /**
+     * Set the status of the plugin
+     *
+     * @param boolean $status
+     *
+     * @return null
+     */
+    public function setStatus($status)
+    {
+        if ($status) {
+            $this->mlFactory->create($this->playersGroup);
+        } else {
+            $this->mlFactory->destroy($this->playersGroup);
+        }
     }
 }

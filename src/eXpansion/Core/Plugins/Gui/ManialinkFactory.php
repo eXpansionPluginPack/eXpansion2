@@ -18,7 +18,7 @@ use eXpansion\Core\Plugins\GuiHandler;
  * @package eXpansion\Core\Plugins\Gui
  * @author Oliver de Cramer
  */
-class GroupManialinkFactory implements UserGroupDataListenerInterface
+class ManialinkFactory implements UserGroupDataListenerInterface
 {
     /** @var  GuiHandler */
     protected $guiHandler;

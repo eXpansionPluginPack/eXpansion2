@@ -16,9 +16,11 @@ trait PlayerDataTrait
         $playerI->playerId = 1;
         $playerI->isServer = false;
         $playerI->spectator = $spectator;
+        $playerI->spectatorStatus = (int) $spectator;
         $playerD = new PlayerDetailedInfo();
         $playerD->playerId = 1;
         $playerD->login = $login;
+        $playerI->spectatorStatus = (int) $spectator;
         $playerD->clientVersion = 'client-test';
         $playerD->nickName = '$fff' . $login;
 

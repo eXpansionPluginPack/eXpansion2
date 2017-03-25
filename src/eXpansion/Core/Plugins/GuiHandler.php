@@ -45,7 +45,10 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
+
+        $this->connection->sendHideManialinkPage(null);
     }
+
 
     /**
      * Add a manialink to the diplay queue.

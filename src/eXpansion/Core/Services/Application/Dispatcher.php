@@ -36,6 +36,7 @@ class Dispatcher implements DispatcherInterface
      */
     public function init()
     {
+        $this->pluginManager->init();
         $this->dataProviderManager->init();
     }
 

@@ -44,4 +44,24 @@ class PlayerTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testMerge()
+    {
+        $player = new Player();
+        $initialData = [
+            'Login' => 'test',
+            'SpectatorStatus' => 2
+        ];
+        $player->merge($initialData);
+
+        $this->assertEquals('test', $player->getLogin());
+        $this->assertEquals(2, $player->getSpectatorStatus());
+
+        $data = [
+            'SpectatorStatus' => 0
+        ];
+        $player->merge($data);
+        $this->assertEquals(0, $player->getSpectatorStatus());
+
+    }
+
 }
