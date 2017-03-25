@@ -28,6 +28,7 @@
                 <directory>src/*/DependencyInjection</directory>
                 <directory>src/*/*/DependencyInjection</directory>
                 <directory>src/*/*/*/DependencyInjection</directory>
+                <directory>src/eXpansion/Bundle/</directory><!-- Only testing plugins are here. They will eventually be deleted -->
             </exclude>
         </whitelist>
     </filter>
