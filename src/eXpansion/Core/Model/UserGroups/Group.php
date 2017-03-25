@@ -72,7 +72,6 @@ class Group
             $this->dispatcher->dispatch(self::EVENT_REMOVE_USER, [$this, $login]);
         }
 
-
         if (!$this->isPersistent() && empty($this->logins)) {
             $this->dispatcher->dispatch(self::EVENT_DESTROY, [$this, $login]);
         }

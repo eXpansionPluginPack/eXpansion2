@@ -6,6 +6,7 @@ services:
         class: 'eXpansion\Core\Plugins\Gui\ManialinkFactory'
         arguments:
             - "@expansion.core.plugins.gui_handler"
+            - "@expansion.core.user_groups.factory"
             - "test-manialink"
             - 2.5
             - 2.5
