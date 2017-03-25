@@ -5,14 +5,15 @@ namespace Tests\eXpansion\Core\Model\UserGoups;
 
 
 use eXpansion\Core\Model\UserGroups\Group;
+use Tests\eXpansion\Core\TestCore;
 
 
-class GroupTest extends \PHPUnit_Framework_TestCase
+class GroupTest extends TestCore
 {
 
     public function testPersistentGroup()
     {
-        $group = new Group("test");
+        $group = new Group($this->container->get('expansion.core.services.application.dispatcher'), "test");
 
         $group->addLogin('l1');
         $group->addLogin('l2');
@@ -28,7 +29,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
     public function testNonPersistentGroup()
     {
-        $group = new Group();
+        $group = new Group($this->container->get('expansion.core.services.application.dispatcher'));
         $this->assertFalse($group->isPersistent());
     }
 }

@@ -18,9 +18,10 @@ class Spectators extends AbstractUserGroupPlugin
 
     public function onPlayerInfoChanged(Player $oldPlayer, Player $player)
     {
-        $this->userGroup->removeLogin($player->getLogin());
-        $this->onPlayerConnect($player);
-
-        parent::onPlayerInfoChanged($oldPlayer, $player);
+        if ($player->getSpectatorStatus() != 0) {
+            $this->userGroup->addLogin($player->getLogin());
+        } else {
+            $this->userGroup->removeLogin($player->getLogin());
+        }
     }
 }

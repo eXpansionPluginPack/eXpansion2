@@ -1,0 +1,14 @@
+parameters:
+    expansion.core.model.hui.manialink.class: 'eXpansion\Core\Model\Gui\Manialink'
+
+services:
+    expansion.core.gui.manialink.test:
+        class: 'eXpansion\Core\Plugins\Gui\ManialinkFactory'
+        arguments:
+            - "@expansion.core.plugins.gui_handler"
+            - "@expansion.core.user_groups.factory"
+            - "test-manialink"
+            - 2.5
+            - 2.5
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.user_group}

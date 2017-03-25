@@ -6,17 +6,28 @@ services:
     expansion.core.user_groups.all_players:
         class: '%expansion.core.model.user_groups.group.class%'
         arguments:
+            - '@expansion.core.services.application.dispatcher'
             - 'all_players'
 
     expansion.core.user_groups.players:
         class: '%expansion.core.model.user_groups.group.class%'
         arguments:
+            - '@expansion.core.services.application.dispatcher'
             - 'players'
 
     expansion.core.user_groups.spectators:
         class: '%expansion.core.model.user_groups.group.class%'
         arguments:
+            - '@expansion.core.services.application.dispatcher'
             - 'spectators'
+
+    expansion.core.user_groups.factory:
+        class: eXpansion\Core\Plugins\UserGroups\Factory
+        arguments:
+            - '@expansion.core.services.application.dispatcher'
+            - '%expansion.core.model.user_groups.group.class%'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.user_group}
 
     # Defining plugins to keep groups up to date. You normally never need these services.
     expansion.core.plugins.user_group.all_players:

@@ -31,9 +31,6 @@ class Player
     protected $teamId;
 
     /** @var bool */
-    protected $isSpectator;
-
-    /** @var bool */
     protected $isInOfficialMode;
 
     /** @var int */
@@ -86,7 +83,6 @@ class Player
 
     /** @var int */
     protected $currentTargetId;
-
 
     /** @var string */
     protected $path;
@@ -184,7 +180,7 @@ class Player
      */
     public function isIsSpectator()
     {
-        return $this->isSpectator;
+        return $this->spectatorStatus != 0;
     }
 
     /**
@@ -507,6 +503,7 @@ class Player
     function merge($data)
     {
         foreach ($data as $key => $value) {
+            $key = lcfirst($key);
             $this->$key = $value;
         }
 

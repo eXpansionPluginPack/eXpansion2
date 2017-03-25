@@ -24,9 +24,26 @@ services:
     expansion.core.services.application:
         class: "%expansion.core.services.application.class%"
         arguments:
-            - '@expansion.core.services.plugin_manager'
-            - '@expansion.core.services.data_provider_manager'
+            - '@expansion.core.services.application.dispatcher'
             - '@expansion.core.services.dedicated_connection'
+            - '@expansion.core.services.console'
+
+    expansion.core.services.application_debug:
+        class: eXpansion\Core\Services\ApplicationDebug
+        arguments:
+            - '@expansion.core.services.application.dispatch_logger'
+            - '@expansion.core.services.dedicated_connection'
+            - '@expansion.core.services.console'
+
+    expansion.core.services.application.dispatcher:
+        class: eXpansion\Core\Services\Application\Dispatcher
+        arguments:
+            - '@expansion.core.services.data_provider_manager'
+            - '@expansion.core.services.plugin_manager'
+
+    expansion.core.services.application.dispatch_logger:
+        class: eXpansion\Core\Services\Application\DispatchLogger
+        arguments:
             - '@expansion.core.services.console'
 
     expansion.core.services.plugin_manager:

@@ -42,7 +42,6 @@ class BaseTest extends TestCore
         $this->groupPlayers = $this->getPlayersGroup();
     }
 
-
     public function testOnPlayerConnect()
     {
         $p1 = $this->getPlayer('l1', false);
@@ -54,6 +53,19 @@ class BaseTest extends TestCore
         $this->assertEquals(['l1', 'l2'], $this->groupAllPlayers->getLogins());
         $this->assertEquals(['l1', 'l2'], $this->groupPlayers->getLogins());
         $this->assertEmpty($this->groupSpectators->getLogins());
+    }
+
+    public function testOnSpectatorConnect()
+    {
+        $p1 = $this->getPlayer('l1', true);
+        $p2 = $this->getPlayer('l2', true);
+
+        $this->playerConnect($p1);
+        $this->playerConnect($p2);
+
+        $this->assertEquals(['l1', 'l2'], $this->groupAllPlayers->getLogins());
+        $this->assertEquals(['l1', 'l2'], $this->groupSpectators->getLogins());
+        $this->assertEmpty($this->groupPlayers->getLogins());
     }
 
     public function testOnPlayerDisconnect()
@@ -88,6 +100,15 @@ class BaseTest extends TestCore
         $this->assertEquals(['l1', 'l2'], $this->groupAllPlayers->getLogins());
         $this->assertEquals(['l2'], $this->groupPlayers->getLogins());
         $this->assertEquals(['l1'], $this->groupSpectators->getLogins());
+
+        $this->pluginAllPlayers->onPlayerInfoChanged($p1New, $p1);
+        $this->pluginSpectators->onPlayerInfoChanged($p1New, $p1);
+        $this->pluginPlayers->onPlayerInfoChanged($p1New, $p1);
+
+        $this->assertEquals(['l1', 'l2'], $this->groupAllPlayers->getLogins());
+        $this->assertEquals(['l2', 'l1'], $this->groupPlayers->getLogins());
+        $this->assertEquals([], $this->groupSpectators->getLogins());
+
     }
 
     public function testOnAlliesChange()

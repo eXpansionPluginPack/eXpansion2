@@ -14,14 +14,10 @@ use Maniaplanet\DedicatedServer\Structures\PlayerInfo;
  */
 class PlayerDataProvider extends AbstractDataProvider
 {
-    /**
-     * @var PlayerStorage
-     */
+    /** @var PlayerStorage */
     protected $playerStorage;
 
-    /**
-     * @var Connection
-     */
+    /** @var Connection */
     protected $connection;
 
     /** @var Application */
@@ -111,8 +107,8 @@ class PlayerDataProvider extends AbstractDataProvider
      */
     public function onPlayerAlliesChanged($login)
     {
-        $newPlayerData = $this->playerStorage->getPlayerInfo($login, true);
         $playerData = $this->playerStorage->getPlayerInfo($login);
+        $newPlayerData = $this->playerStorage->getPlayerInfo($login, true);
 
         $this->playerStorage->onPlayerAlliesChanged($playerData, $newPlayerData);
         $this->dispatch(__FUNCTION__, [$playerData, $newPlayerData]);

@@ -13,7 +13,7 @@ class JoinLeaveMessages implements PlayerDataListenerInterface
     protected $connection;
     /** @var Console  */
     protected $console;
-    /** @var bool  */
+    /** @var bool $enabled is output enabled  */
     private $enabled = true;
 
     /**
@@ -22,11 +22,13 @@ class JoinLeaveMessages implements PlayerDataListenerInterface
      * @param Connection $connection
      * @param Console $console
      */
-    function __construct(Connection $connection, Console $console)
+    public function __construct(Connection $connection, Console $console)
     {
         $this->connection = $connection;
         $this->console = $console;
     }
+
+//#region Callbacks
 
     /**
      * @inheritdoc
@@ -43,9 +45,7 @@ class JoinLeaveMessages implements PlayerDataListenerInterface
     public function onPlayerConnect(Player $player)
     {
         $msg = '$fffHello, ' . $player->getNickName() . '  $n$fff($888' . $player->getLogin() . '$fff)';
-        if ($this->enabled) {
-            $this->connection->chatSendServerMessage($msg);
-        }
+        $this->sendChat($msg);
     }
 
     /**
@@ -54,9 +54,7 @@ class JoinLeaveMessages implements PlayerDataListenerInterface
     public function onPlayerDisconnect(Player $player, $disconnectionReason)
     {
         $msg = '$fffSee you, ' . $player->getNickName() . '  $n$fff($888' . $player->getLogin() . '$fff)';
-        if ($this->enabled) {
-            $this->connection->chatSendServerMessage($msg);
-        }
+        $this->sendChat($msg);
     }
 
     /**
@@ -72,4 +70,13 @@ class JoinLeaveMessages implements PlayerDataListenerInterface
     public function onPlayerAlliesChanged(Player $oldPlayer, Player $player)
     {
     }
+//#endregion
+
+//#region Helpers
+    private function sendChat($msg) {
+        if ($this->enabled) {
+            $this->connection->chatSendServerMessage($msg);
+        }
+    }
+//#endregion
 }
