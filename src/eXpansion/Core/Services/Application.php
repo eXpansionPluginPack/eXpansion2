@@ -4,7 +4,6 @@ namespace eXpansion\Core\Services;
 
 use eXpansion\Core\Services\Application\AbstractApplication;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * eXpansion Application main routine.
