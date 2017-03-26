@@ -152,7 +152,7 @@ class ManialinkFactory implements ManialinkFactoryInterface, UserGroupDataListen
      *
      * @param Group $group
      *
-     * @return mixed
+     * @return Manialink
      */
     protected function createManialink(Group $group)
     {

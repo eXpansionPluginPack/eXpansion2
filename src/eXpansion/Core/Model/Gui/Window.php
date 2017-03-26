@@ -2,6 +2,7 @@
 
 namespace eXpansion\Core\Model\Gui;
 
+use eXpansion\Core\Exceptions\Gui\MissingCloseActionException;
 use eXpansion\Core\Model\UserGroups\Group;
 use Manialib\Manialink\Elements\Frame;
 use Manialib\Manialink\Elements\Label;
@@ -11,11 +12,18 @@ use Manialib\XML\Rendering\Renderer;
 
 class Window extends Manialink
 {
-
     protected $manialink;
 
-    public function __construct(Group $group, $name, $sizeX, $sizeY, $posX = null, $posY = null)
-    {
+    protected $closeButon;
+
+    public function __construct(
+        Group $group,
+        $name,
+        $sizeX,
+        $sizeY,
+        $posX = null,
+        $posY = null
+    ) {
         parent::__construct($group, $name, $sizeX, $sizeY, $posX, $posY);
 
         $titleHeight = 5.5;
@@ -27,7 +35,6 @@ class Window extends Manialink
         $ml->setVersion(3);
         $ml->setAttribute('id', $this->getId());
         $ml->setName($name);
-        $ml->setAttribute("id", $this->getId());
         $window = Frame::create()->setId("Window")->setPosn($posX, $posY)->appendTo($ml);
 
         // titlebar text
@@ -55,7 +62,6 @@ class Window extends Manialink
             ->setBgcolor("fff")
             ->appendTo($window);
 
-
         Quad::create()
             ->setSizen($sizeX - $closeButtonWidth, $titleHeight)
             ->setBgcolor($titlebarColor)
@@ -63,7 +69,7 @@ class Window extends Manialink
             ->setScriptevents()
             ->appendTo($window);
 
-        Label::create()
+        $this->closeButon = Label::create()
             ->setId("Close")
             ->setSizen($closeButtonWidth, $titleHeight)
             ->setPosn($sizeX - $closeButtonWidth + ($closeButtonWidth / 2), -$titleHeight / 2)
@@ -169,9 +175,18 @@ EOD;
         $this->manialink = $ml;
     }
 
+    public function setCloseAction($actionId)
+    {
+        $this->closeButon->setAttribute('action', $actionId);
+    }
 
     public function getXml()
     {
+        if (empty($this->closeButon->getAttribute('action')))
+        {
+            throw new MissingCloseActionException("Close action is missing for window. Check if you are using the proper factory.");
+        }
+
         $renderer = new Renderer();
         return $renderer->getXML($this->manialink);
     }
