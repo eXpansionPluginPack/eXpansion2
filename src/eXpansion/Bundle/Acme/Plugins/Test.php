@@ -99,6 +99,8 @@ class Test implements MatchDataListenerInterface, TimerDataListenerInterface
         // TODO: Implement onPostLoop() method.
     }
 
+
+
     public function onEverySecond()
     {
         $mem = memory_get_usage(true) / 1024;
