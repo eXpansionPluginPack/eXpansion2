@@ -2,6 +2,7 @@
 
 namespace eXpansion\Core\Plugins\Gui;
 
+use eXpansion\Core\DataProviders\Listener\UserGroupDataListenerInterface;
 use eXpansion\Core\Model\Gui\Manialink;
 use eXpansion\Core\Model\Gui\ManialinkInerface;
 use eXpansion\Core\Model\UserGroups\Group;
@@ -14,13 +15,16 @@ use eXpansion\Core\Plugins\UserGroups\Factory;
  * @package eXpansion\Core\Plugins\Gui
  * @author Oliver de Cramer
  */
-class ManialinkFactory
+class ManialinkFactory implements UserGroupDataListenerInterface
 {
     /** @var  GuiHandler */
     protected $guiHandler;
 
     /** @var Factory  */
     protected $groupFactory;
+
+    /** @var ActionFactory */
+    protected $actionFactory;
 
     /** @var  string */
     protected $name;
@@ -50,6 +54,8 @@ class ManialinkFactory
      * GroupManialinkFactory constructor.
      *
      * @param GuiHandler $guiHandler
+     * @param Factory $groupFactory
+     * @param ActionFactory $actionFactory
      * @param $name
      * @param $sizeX
      * @param $sizeY
@@ -60,6 +66,7 @@ class ManialinkFactory
     public function __construct(
         GuiHandler $guiHandler,
         Factory $groupFactory,
+        ActionFactory $actionFactory,
         $name,
         $sizeX,
         $sizeY,
@@ -77,6 +84,7 @@ class ManialinkFactory
 
         $this->guiHandler = $guiHandler;
         $this->groupFactory = $groupFactory;
+        $this->actionFactory = $actionFactory;
         $this->name = $name;
         $this->className = $className;
         $this->sizeX = $sizeX;
@@ -92,7 +100,7 @@ class ManialinkFactory
      *
      * @return Group
      */
-    public function create($group)
+    final public function create($group)
     {
         if (is_string($group)) {
             $group = $this->groupFactory->createForPlayer($group);
@@ -103,7 +111,22 @@ class ManialinkFactory
         $this->manialinks[$group->getName()] = $this->createManialink($group);
         $this->guiHandler->addToDisplay($this->manialinks[$group->getName()]);
 
+        $this->updateContent($this->manialinks[$group->getName()]);
+
         return $group;
+    }
+
+    final public function update($group)
+    {
+        if (isset($this->manialinks[$group->getName()])) {
+            $this->guiHandler->addToDisplay($this->manialinks[$group->getName()]);
+            $this->updateContent($this->manialinks[$group->getName()]);
+        }
+    }
+
+    protected function updateContent(ManialinkInerface $manialink)
+    {
+        // Put content in the manialink here.
     }
 
     /**
@@ -113,10 +136,11 @@ class ManialinkFactory
      *
      * @return void
      */
-    public function destroy(Group $group)
+    final public function destroy(Group $group)
     {
         if (isset($this->manialinks[$group->getName()])) {
             $this->guiHandler->addToHide($this->manialinks[$group->getName()]);
+            $this->actionFactory->destroyManialinkActions($this->manialinks[$group->getName()]);
             unset($this->manialinks[$group->getName()]);
         }
     }
@@ -146,6 +170,7 @@ class ManialinkFactory
     {
         if (isset($this->manialinks[$group->getName()])) {
             // Gui Handler will handle delete by it's own.
+            $this->actionFactory->destroyManialinkActions($this->manialinks[$group->getName()]);
             unset($this->manialinks[$group->getName()]);
         }
     }

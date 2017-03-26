@@ -7,6 +7,20 @@ class AppKernel extends Kernel
 {
     public function registerBundles()
     {
+        /* Register symfony bundles & eXpansion core bundles */
+        $bundles = $this->registerCoreBundles();
+
+        /* Register eXpansion Plugins */
+        $bundles[] = new \eXpansion\Bundle\JoinLeaveMessages\JoinLeaveMessagesBundle();
+
+        /* Register test bundles. */
+        $bundles[] = new \eXpansion\Bundle\Acme\AcmeBundle();
+
+        return $bundles;
+    }
+
+    protected function registerCoreBundles()
+    {
         $bundles = [
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
@@ -15,10 +29,12 @@ class AppKernel extends Kernel
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+
+            // And add eXpansion core.
             new \eXpansion\Core\eXpansionCore(),
-            new \eXpansion\Bundle\JoinLeaveMessages\JoinLeaveMessagesBundle(),
         ];
 
+        // Also add debug help bundles.
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();

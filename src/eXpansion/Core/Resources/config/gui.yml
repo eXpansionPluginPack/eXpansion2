@@ -1,5 +1,6 @@
 parameters:
-    expansion.core.model.hui.manialink.class: 'eXpansion\Core\Model\Gui\Manialink'
+    expansion.core.model.gui.manialink.class: 'eXpansion\Core\Model\Gui\Manialink'
+    expansion.core.model.gui.action.class: 'eXpansion\Core\Model\Gui\Action'
 
 services:
     expansion.core.gui.manialink.test:
@@ -7,6 +8,7 @@ services:
         arguments:
             - "@expansion.core.plugins.gui_handler"
             - "@expansion.core.user_groups.factory"
+            - "@expansion.core.plugins.gui.action_factory"
             - "test-manialink"
             - 2.5
             - 2.5

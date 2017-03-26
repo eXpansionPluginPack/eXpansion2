@@ -1,23 +1,5 @@
 services:
-    expansion.core.plugins.totot:
-        class: eXpansion\Core\Plugins\TotoPlugin
-        arguments:
-            - '@expansion.core.services.console'
-            - '@expansion.core.gui.manialink.test'
-            - '@expansion.core.user_groups.players'
-        tags:
-            - {name: expansion.plugin, data_provider: expansion.chat_data}
-
-    expansion.core.plugins.test:
-        class: eXpansion\Core\Plugins\Test
-        arguments:
-            - '@expansion.core.services.dedicated_connection'
-            - '@expansion.core.services.console'
-            - '@expansion.core.helpers.time'
-        tags:
-            - {name: expansion.plugin, data_provider: expansion.match_data}
-            - {name: expansion.plugin, data_provider: expansion.timer_data}
-
+    # Plugins for Grapgical user interfaces.
     expansion.core.plugins.gui_handler:
         class: 'eXpansion\Core\Plugins\GuiHandler'
         arguments:
@@ -27,3 +9,32 @@ services:
         tags:
             - {name: expansion.plugin, data_provider: expansion.timer_data}
             - {name: expansion.plugin, data_provider: expansion.user_group}
+
+    expansion.core.plugins.gui.action_factory:
+        class: 'eXpansion\Core\Plugins\Gui\ActionFactory'
+        arguments:
+            - "%expansion.core.model.gui.action.class%"
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.manialink_page_answer}
+
+    # Defining plugins to keep groups up to date. You normally never need these services.
+    expansion.core.plugins.user_group.all_players:
+        class: eXpansion\Core\Plugins\UserGroups\AllPlayers
+        arguments:
+            - '@expansion.core.user_groups.all_players'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.player_data}
+
+    expansion.core.plugins.user_group.players:
+        class: eXpansion\Core\Plugins\UserGroups\Players
+        arguments:
+            - '@expansion.core.user_groups.players'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.player_data}
+
+    expansion.core.plugins.user_group.spectators:
+        class: eXpansion\Core\Plugins\UserGroups\Spectators
+        arguments:
+            - '@expansion.core.user_groups.spectators'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.player_data}

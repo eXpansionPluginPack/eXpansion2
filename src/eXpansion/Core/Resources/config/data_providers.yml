@@ -18,6 +18,10 @@ parameters:
     expansion.core.data_providers.user_group_data_provider.interface: eXpansion\Core\DataProviders\Listener\UserGroupDataListenerInterface
 
 
+    expansion.core.data_providers.manialink_page_answer_provider.class: eXpansion\Core\DataProviders\ManialinkPageAnswerDataProvider
+    expansion.core.data_providers.manialink_page_answer_provider.interface: eXpansion\Core\DataProviders\Listener\ManialinkPageAnswerDataListenerInterface
+
+
 services:
     expansion.core.data_providers.chat_data_provider:
         class: "%expansion.core.data_providers.chat_data_provider.class%"
@@ -85,6 +89,11 @@ services:
             - {name: expansion.data_provider, provider: "expansion.user_group", interface: "%expansion.core.data_providers.user_group_data_provider.interface%"}
             - {name: expansion.data_provider.compatibility, title: ALL}
             - {name: expansion.data_provider.listener, event_name: expansion.user_groups.user_add, method: onExpansionGroupAddUser}
-            - {name: expansion.data_provider.listener, event_name: expansion.user_groups.user_remove, method: onExpansionGroupRemoveUser}
-            - {name: expansion.data_provider.listener, event_name: expansion.user_groups.group_destroy, method: onExpansionGroupDestroy}
+
+    expansion.core.data_providers.manialink_page_answer_provider:
+        class: "%expansion.core.data_providers.manialink_page_answer_provider.class%"
+        tags:
+            - {name: expansion.data_provider, provider: "expansion.manialink_page_answer", interface: "%expansion.core.data_providers.manialink_page_answer_provider.interface%"}
+            - {name: expansion.data_provider.compatibility, title: ALL}
+            - {name: expansion.data_provider.listener, event_name: PlayerManialinkPageAnswer, method: onPlayerManialinkPageAnswer}
 
