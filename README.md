@@ -1,12 +1,10 @@
 # eXpansion² Prototype
 
-[![Build Status](https://travis-ci.org/eXpansionPluginPack/eXpansion2-prototype.svg?branch=master)](https://travis-ci.org/eXpansionPluginPack/eXpansion2-prototype)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/eXpansionPluginPack/eXpansion2-prototype/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/eXpansionPluginPack/eXpansion2-prototype/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/eXpansionPluginPack/eXpansion2-prototype/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/eXpansionPluginPack/eXpansion2-prototype/?branch=master)
+[![Build Status](https://travis-ci.org/eXpansionPluginPack/eXpansion2.svg?branch=master)](https://travis-ci.org/eXpansionPluginPack/eXpansion2)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/eXpansionPluginPack/eXpansion2/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/eXpansionPluginPack/eXpansion2/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/eXpansionPluginPack/eXpansion2/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/eXpansionPluginPack/eXpansion2/?branch=master)
 
-This is a quickly done prototype for eXpansion² using symfony components. 
-
-**This is not meant to be used as it is !**
+This is the new eXpansion 2 controllers framework, that uses symfony components.
 
 ## TODO
 
