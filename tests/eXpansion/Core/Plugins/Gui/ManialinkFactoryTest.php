@@ -3,6 +3,7 @@
 namespace Tests\eXpansion\Core\Plugins\Gui;
 
 use eXpansion\Core\Model\UserGroups\Group;
+use eXpansion\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Core\Plugins\Gui\ManialinkFactory;
 use eXpansion\Core\Plugins\GuiHandler;
 use eXpansion\Core\Plugins\UserGroups\Factory;
@@ -20,6 +21,9 @@ class ManialinkFactoryTest extends TestCore
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $dispatcherMock;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $actionFactoryMock;
+
     protected function setUp()
     {
         parent::setUp();
@@ -27,6 +31,7 @@ class ManialinkFactoryTest extends TestCore
         $this->guiHandlerMock = $this->createMock(GuiHandler::class);
         $this->userGroupFactoryMock = $this->createMock(Factory::class);
         $this->dispatcherMock = $this->createMock(DispatcherInterface::class);
+        $this->actionFactoryMock = $this->createMock(ActionFactory::class);
     }
 
     public function testCreateForGroup()
@@ -86,6 +91,7 @@ class ManialinkFactoryTest extends TestCore
 
         $this->guiHandlerMock->expects($this->exactly(1))->method('addToDisplay');
         $this->guiHandlerMock->expects($this->exactly(1))->method('addToHide');
+        $this->actionFactoryMock->expects($this->exactly(1))->method('destroyManialinkActions');
 
         $mlFactory->create(['test1', 'test2']);
         $mlFactory->destroy($group);
@@ -103,6 +109,7 @@ class ManialinkFactoryTest extends TestCore
 
         $this->guiHandlerMock->expects($this->exactly(1))->method('addToDisplay');
         $this->guiHandlerMock->expects($this->exactly(0))->method('addToHide');
+        $this->actionFactoryMock->expects($this->exactly(1))->method('destroyManialinkActions');
 
         $mlFactory->create(['test1', 'test2']);
         $mlFactory->onExpansionGroupDestroy($group, 'test1');
@@ -122,6 +129,7 @@ class ManialinkFactoryTest extends TestCore
         return new ManialinkFactory(
             $this->guiHandlerMock,
             $this->userGroupFactoryMock,
+            $this->actionFactoryMock,
             'test',
             2,
             2

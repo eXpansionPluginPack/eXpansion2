@@ -12,9 +12,11 @@ use eXpansion\Core\Model\Gui\Manialink;
 use eXpansion\Core\Model\UserGroups\Group;
 use eXpansion\Core\Plugins\GuiHandler;
 use Tests\eXpansion\Core\TestCore;
+use Tests\eXpansion\Core\TestHelpers\ManialinkDataTrait;
 
 class GuiHandlerTest extends TestCore
 {
+    use ManialinkDataTrait;
 
     public function testSendManialink()
     {
@@ -218,17 +220,5 @@ class GuiHandlerTest extends TestCore
 
         $guiHanlder->onPreLoop();
         $guiHanlder->onEverySecond();
-    }
-
-    protected function getManialink($logins)
-    {
-        $group = new Group($this->container->get('expansion.core.services.application.dispatcher'), "test");
-        foreach ($logins as $login) {
-            $group->addLogin($login);
-        }
-
-        $manialink = new Manialink($group, 'test', 1, 1,1,1);
-
-        return $manialink;
     }
 }
