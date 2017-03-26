@@ -4,6 +4,7 @@ namespace eXpansion\Core\Model\Gui;
 
 use eXpansion\Core\Model\UserGroups\Group;
 use Manialib\Manialink\Elements\Quad;
+use Manialib\XML\Rendering\Renderer;
 
 class Window extends Manialink
 {
@@ -16,6 +17,7 @@ class Window extends Manialink
 
         $ml = new \Manialib\Manialink\Elements\Manialink();
         $ml->setVersion(3);
+        $ml->setAttribute('id', $this->getId());
         $ml->setName($name);
 
         Quad::create()->setSizen($sizeX, $sizeY)->setPosn($posX, $posY)->setBgcolor("0008")->appendTo($ml);
@@ -26,7 +28,8 @@ class Window extends Manialink
 
     public function getXml()
     {
-        return (string)$this->manialink;
+        $renderer = new Renderer();
+        return $renderer->getXML($this->manialink);
     }
 
 }

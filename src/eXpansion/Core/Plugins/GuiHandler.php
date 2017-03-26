@@ -151,13 +151,11 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
     {
         foreach ($this->displayQueu as $groupName => $manialinks) {
             foreach ($manialinks as $id => $manialink) {
-
-                echo "YOPLA\n";
-
                 $logins = $manialink->getUserGroup()->getLogins();
+
+                $this->displayeds[$groupName][$id] = $manialink;
                 if (!empty($logins)) {
                     yield ['logins' => $logins, 'ml' => $manialink->getXml()];
-                    $this->displayeds[$groupName][$id] = $manialink;
                 }
             }
         }

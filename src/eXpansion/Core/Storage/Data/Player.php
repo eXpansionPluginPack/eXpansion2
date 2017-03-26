@@ -292,7 +292,7 @@ class Player
      */
     public function isSpectator()
     {
-        return $this->spectator;
+        return $this->spectatorStatus != 0;
     }
 
     /**
