@@ -1,6 +1,6 @@
 <?php
 
-namespace eXpansion\Core\Plugins;
+namespace eXpansion\Bundle\Acme\Plugins;
 
 use eXpansion\Core\DataProviders\Listener\MatchDataListenerInterface;
 use eXpansion\Core\DataProviders\Listener\TimerDataListenerInterface;

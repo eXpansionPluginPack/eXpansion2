@@ -2,6 +2,7 @@
 
 namespace eXpansion\Core\Plugins\Gui;
 
+use eXpansion\Core\DataProviders\Listener\UserGroupDataListenerInterface;
 use eXpansion\Core\Model\Gui\Manialink;
 use eXpansion\Core\Model\Gui\ManialinkInerface;
 use eXpansion\Core\Model\UserGroups\Group;
@@ -14,7 +15,7 @@ use eXpansion\Core\Plugins\UserGroups\Factory;
  * @package eXpansion\Core\Plugins\Gui
  * @author Oliver de Cramer
  */
-class ManialinkFactory
+class ManialinkFactory implements UserGroupDataListenerInterface
 {
     /** @var  GuiHandler */
     protected $guiHandler;

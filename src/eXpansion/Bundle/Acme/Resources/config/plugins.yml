@@ -1,0 +1,19 @@
+services:
+    expansion.bundle.acme.plugins.totot:
+        class: eXpansion\Bundle\Acme\Plugins\TotoPlugin
+        arguments:
+            - '@expansion.core.services.console'
+            - '@expansion.core.gui.manialink.test'
+            - '@expansion.core.user_groups.players'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.chat_data}
+
+    expansion.bundle.acme.plugins.test:
+        class: eXpansion\Bundle\Acme\Plugins\Test
+        arguments:
+            - '@expansion.core.services.dedicated_connection'
+            - '@expansion.core.services.console'
+            - '@expansion.core.helpers.time'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.match_data}
+            - {name: expansion.plugin, data_provider: expansion.timer_data}
