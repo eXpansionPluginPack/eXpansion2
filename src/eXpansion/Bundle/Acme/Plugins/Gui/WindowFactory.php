@@ -1,10 +1,9 @@
 <?php
 
-namespace eXpansion\Core\Plugins\Gui;
+namespace eXpansion\Bundle\Acme\Plugins\Gui;
 
-use eXpansion\Core\Model\Gui\ManialinkInerface;
+use eXpansion\Core\Plugins\Gui\ManialinkFactory;
 
 class WindowFactory extends ManialinkFactory
 {
-
 }

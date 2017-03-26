@@ -4,8 +4,8 @@ namespace eXpansion\Bundle\Acme\Plugins;
 
 use eXpansion\Core\DataProviders\Listener\ChatDataListenerInterface;
 use eXpansion\Core\Model\UserGroups\Group;
-use eXpansion\Core\Plugins\Gui\GroupManialinkFactory;
 use eXpansion\Core\Plugins\Gui\ManialinkFactory;
+use eXpansion\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Core\Services\Console;
 use eXpansion\Core\Storage\Data\Player;
 

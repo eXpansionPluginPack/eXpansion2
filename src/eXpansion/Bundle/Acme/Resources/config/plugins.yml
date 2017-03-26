@@ -27,5 +27,8 @@ services:
                 - "tesst window"
                 - 180
                 - 90
+                - null
+                - null
+                - '%expansion.core.model.gui.window.class%'
             tags:
                 - {name: expansion.plugin, data_provider: expansion.user_group}
