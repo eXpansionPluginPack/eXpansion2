@@ -89,6 +89,8 @@ services:
             - {name: expansion.data_provider, provider: "expansion.user_group", interface: "%expansion.core.data_providers.user_group_data_provider.interface%"}
             - {name: expansion.data_provider.compatibility, title: ALL}
             - {name: expansion.data_provider.listener, event_name: expansion.user_groups.user_add, method: onExpansionGroupAddUser}
+            - {name: expansion.data_provider.listener, event_name: expansion.user_groups.user_remove, method: onExpansionGroupRemoveUser}
+            - {name: expansion.data_provider.listener, event_name: expansion.user_groups.group_destroy, method: onExpansionGroupDestroy}
 
     expansion.core.data_providers.manialink_page_answer_provider:
         class: "%expansion.core.data_providers.manialink_page_answer_provider.class%"

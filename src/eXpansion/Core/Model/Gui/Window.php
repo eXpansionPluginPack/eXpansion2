@@ -7,9 +7,6 @@ use Manialib\Manialink\Elements\Frame;
 use Manialib\Manialink\Elements\Label;
 use Manialib\Manialink\Elements\Quad;
 use Manialib\Manialink\Elements\Script;
-use Manialib\Manialink\Elements\Stylesheet;
-use Manialib\Manialink\Styles\Bgs1;
-use Manialib\XML\Fragment;
 use Manialib\XML\Rendering\Renderer;
 
 class Window extends Manialink
@@ -28,6 +25,7 @@ class Window extends Manialink
 
         $ml = new \Manialib\Manialink\Elements\Manialink();
         $ml->setVersion(3);
+        $ml->setAttribute('id', $this->getId());
         $ml->setName($name);
         $ml->setAttribute("id", $this->getId());
         $window = Frame::create()->setId("Window")->setPosn($posX, $posY)->appendTo($ml);
@@ -168,7 +166,6 @@ main () {
 }
 EOD;
         Script::create()->setNodeValue($script)->appendTo($ml);
-
         $this->manialink = $ml;
     }
 
@@ -176,8 +173,7 @@ EOD;
     public function getXml()
     {
         $renderer = new Renderer();
-        $renderer->setRoot($this->manialink);
-        return $renderer->getXML($this->manialink) . "\n";
+        return $renderer->getXML($this->manialink);
     }
 
 }
