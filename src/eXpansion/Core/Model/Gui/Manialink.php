@@ -4,7 +4,7 @@ namespace eXpansion\Core\Model\Gui;
 
 use eXpansion\Core\Model\UserGroups\Group;
 
-class Manialink implements ManialinkInerface
+class Manialink implements ManialinkInterface
 {
     /** @var string  */
     protected $id;

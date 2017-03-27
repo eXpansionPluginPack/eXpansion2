@@ -14,7 +14,7 @@ class Window extends Manialink
 {
     protected $manialink;
 
-    protected $closeButon;
+    protected $closeButton;
 
     public function __construct(
         Group $group,
@@ -65,11 +65,11 @@ class Window extends Manialink
         Quad::create()
             ->setSizen($sizeX - $closeButtonWidth, $titleHeight)
             ->setBgcolor($titlebarColor)
-            ->setId("title")
+            ->setId("Title")
             ->setScriptevents()
             ->appendTo($window);
 
-        $this->closeButon = Label::create()
+        $this->closeButton = Label::create()
             ->setId("Close")
             ->setSizen($closeButtonWidth, $titleHeight)
             ->setPosn($sizeX - $closeButtonWidth + ($closeButtonWidth / 2), -$titleHeight / 2)
@@ -105,7 +105,8 @@ class Window extends Manialink
 main () {
 
     declare CMlFrame Window <=> (Page.GetFirstChild("Window") as CMlFrame);
-    declare CMlQuad Titlebar <=> (Page.GetFirstChild("title") as CMlQuad);
+    declare CMlQuad Titlebar <=> (Page.GetFirstChild("Title") as CMlQuad);
+    declare CMlLabel CloseButton <=> (Page.GetFirstChild("Close") as CMlLabel);
     declare moveWindow = False;
     declare closeWindow = False;
     declare openWindow = False;
@@ -132,6 +133,7 @@ main () {
 
 	    if (closeWindow && lastAction + 200 <= Now ) {
             closeWindow = False;
+            TriggerPageAction(CloseButton.DataAttributeGet("action"));
 	        continue;
 	    }
 	
@@ -142,14 +144,13 @@ main () {
 	
 	    if (PendingEvents.count != 0) {
             foreach (Event in PendingEvents) {
-                if ( (Event.Type == CMlEvent::Type::MouseClick && Event.ControlId == "Close")  || (Event.Type == CMlEvent::Type::KeyPress && Event.KeyCode == 35) ) {
+                if ( (Event.Type == CMlEvent::Type::MouseClick && Event.ControlId == "Close")  || 
+                   (Event.Type == CMlEvent::Type::KeyPress && Event.KeyCode == 35) ) {
                     closeWindow = True;
-                    lastAction = Now;
-                    log("close");
+                    lastAction = Now;                  
                 }
                 
                 if ( (Event.Type == CMlEvent::Type::MouseClick && Event.ControlId == "Open") ) {
-                    log("open");
                     lastAction = Now;
                     openWindow = True;
                 }
@@ -159,9 +160,9 @@ main () {
 	    if (MouseLeftButton == True) {
             foreach (Event in PendingEvents) {
                 if (Event.Type == CMlEvent::Type::MouseClick && Event.ControlId == "title")  {		
-                Offset = <Window.RelativePosition_V3.X - MouseX, Window.RelativePosition_V3.Y - MouseY>;
-                MoveWindow = True;
-                 }
+                    Offset = <Window.RelativePosition_V3.X - MouseX, Window.RelativePosition_V3.Y - MouseY>;
+                    MoveWindow = True;
+                }
             }
         } else {
             MoveWindow = False;
@@ -177,12 +178,12 @@ EOD;
 
     public function setCloseAction($actionId)
     {
-        $this->closeButon->setAttribute('action', $actionId);
+        $this->closeButton->setAttribute('data-action', $actionId);
     }
 
     public function getXml()
     {
-        if (empty($this->closeButon->getAttribute('action')))
+        if (empty($this->closeButton->getAttribute('data-action')))
         {
             throw new MissingCloseActionException("Close action is missing for window. Check if you are using the proper factory.");
         }

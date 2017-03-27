@@ -5,7 +5,7 @@ namespace eXpansion\Core\Plugins\Gui;
 use eXpansion\Core\DataProviders\Listener\UserGroupDataListenerInterface;
 use eXpansion\Core\Model\Gui\Manialink;
 use eXpansion\Core\Model\Gui\ManialinkFactoryInterface;
-use eXpansion\Core\Model\Gui\ManialinkInerface;
+use eXpansion\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Core\Model\UserGroups\Group;
 use eXpansion\Core\Plugins\GuiHandler;
 use eXpansion\Core\Plugins\UserGroups\Factory;
@@ -33,7 +33,7 @@ class ManialinkFactory implements ManialinkFactoryInterface, UserGroupDataListen
     /** @var  string */
     protected $className;
 
-    /** @var ManialinkInerface[]  */
+    /** @var ManialinkInterface[]  */
     protected $manialinks = [];
 
     /** @var Group[] */
@@ -127,10 +127,10 @@ class ManialinkFactory implements ManialinkFactoryInterface, UserGroupDataListen
     /**
      * Update/put content in the manialink.
      *
-     * @param ManialinkInerface $manialink
+     * @param ManialinkInterface $manialink
      *
      */
-    protected function updateContent(ManialinkInerface $manialink)
+    protected function updateContent(ManialinkInterface $manialink)
     {
         // Put content in the manialink here.
     }

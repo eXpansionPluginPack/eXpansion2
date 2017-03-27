@@ -1,1 +1,1 @@
-php bin\console eXpansion:run -vvv --env=prod
+php bin\console eXpansion:run -vvv --env=dev
