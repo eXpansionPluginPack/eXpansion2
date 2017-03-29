@@ -87,7 +87,7 @@ class Window extends Manialink
         Quad::create()
             ->setSizen($sizeX, ($sizeY - $titleHeight))
             ->setPosn(0, -$titleHeight)
-            ->setStyle("Bgs1:BgWindow1")
+            ->setStyle("Bgs1:BgWindow3")
             ->appendTo($window);
 
         Quad::create()
@@ -159,7 +159,7 @@ main () {
 	
 	    if (MouseLeftButton == True) {
             foreach (Event in PendingEvents) {
-                if (Event.Type == CMlEvent::Type::MouseClick && Event.ControlId == "title")  {		
+                if (Event.Type == CMlEvent::Type::MouseClick && Event.ControlId == "Title")  {		
                     Offset = <Window.RelativePosition_V3.X - MouseX, Window.RelativePosition_V3.Y - MouseY>;
                     MoveWindow = True;
                 }

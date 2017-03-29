@@ -41,10 +41,10 @@ class TotoPlugin implements ChatDataListenerInterface, StatusAwarePluginInterfac
         $text = trim($text);
         $from = trim($player->getNickName());
         if ($player->getPlayerId() === 0) {
-            $from = '$777Console';
+            $from = '$777Server';
         }
 
-        $this->console->writeln($from . $text);
+        $this->console->writeln('$ff0['.$from.'$ff0] '.$text);
     }
 
 

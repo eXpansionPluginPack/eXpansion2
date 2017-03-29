@@ -172,8 +172,7 @@ class Console
      */
     protected function stripStyles($string)
     {
-        $string = preg_replace('/(?<!\$)((?:\$\$)*)\$[^$0-9a-hlp]/iu', '$1', $string);
-        return preg_replace('/(?<!\$)((?:\$\$)*)\$(?:g|[0-9a-f][^\$]{0,2})/iu', '$1', $string);
+        return preg_replace('/(\$[wnoitsgz><]|\$[lh]\[.+\]|\$[lh]|\$[0-9a-f]{3})+/i', '', $string);
     }
 
     /**
