@@ -2,6 +2,7 @@
 
 namespace eXpansion\Bundle\Emotes\ChatCommand;
 
+use eXpansion\Core\Helpers\ChatNotification;
 use eXpansion\Core\Model\ChatCommand\AbstractChatCommand;
 use Maniaplanet\DedicatedServer\Connection;
 
@@ -17,33 +18,32 @@ class BasicEmote extends AbstractChatCommand
     /** @var string */
     protected $message;
 
-    /** @var Connection  */
-    protected $connection;
+    /** @var ChatNotification  */
+    protected $chatNotification;
 
     /**
      * BasicEmote constructor.
      *
-     * @param $command The chat command
+     * @param string $command The chat command
      * @param string $message The emote message to send
-     * @param Connection $connection
+     * @param ChatNotification $chatNotification
      * @param array $aliases
      * @param bool $parametersAsArray
      */
     public function __construct(
         $command,
         $message,
-        Connection $connection,
+        ChatNotification $chatNotification,
         array $aliases = [],
         $parametersAsArray = true
     ) {
         parent::__construct($command, $aliases, $parametersAsArray);
         $this->message = $message;
-        $this->connection = $connection;
+        $this->chatNotification = $chatNotification;
     }
 
     public function execute($login, $parameter)
     {
-        // TODO use proper notificaiton service & translations.
-        $this->connection->chatSendServerMessage($this->message);
+        $this->chatNotification->sendMessage($this->message, null, ['%nickname%' => $login]);
     }
 }
