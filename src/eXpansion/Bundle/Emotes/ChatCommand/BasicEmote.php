@@ -4,7 +4,7 @@ namespace eXpansion\Bundle\Emotes\ChatCommand;
 
 use eXpansion\Core\Helpers\ChatNotification;
 use eXpansion\Core\Model\ChatCommand\AbstractChatCommand;
-use Maniaplanet\DedicatedServer\Connection;
+use eXpansion\Core\Storage\PlayerStorage;
 
 
 /**
@@ -21,6 +21,9 @@ class BasicEmote extends AbstractChatCommand
     /** @var ChatNotification  */
     protected $chatNotification;
 
+    /** @var PlayerStorage */
+    protected $playerStorage;
+
     /**
      * BasicEmote constructor.
      *
@@ -34,16 +37,19 @@ class BasicEmote extends AbstractChatCommand
         $command,
         $message,
         ChatNotification $chatNotification,
+        PlayerStorage $playerStorage,
         array $aliases = [],
         $parametersAsArray = true
     ) {
         parent::__construct($command, $aliases, $parametersAsArray);
         $this->message = $message;
         $this->chatNotification = $chatNotification;
+        $this->playerStorage = $playerStorage;
     }
 
     public function execute($login, $parameter)
     {
-        $this->chatNotification->sendMessage($this->message, null, ['%nickname%' => $login]);
+        $nickName = $this->playerStorage->getPlayerInfo($login)->getNickName();
+        $this->chatNotification->sendMessage($this->message, null, ['%nickname%' => $nickName]);
     }
 }

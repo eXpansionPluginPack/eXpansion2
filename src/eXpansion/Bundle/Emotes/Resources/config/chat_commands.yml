@@ -5,4 +5,5 @@ services:
             - "gg"
             - "expansion_emotes.gg"
             - '@expansion.core.helpers.chat_notification'
+            - '@expansion.core.storage.player'
             - ['goodgame']

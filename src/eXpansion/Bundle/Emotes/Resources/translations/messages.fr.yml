@@ -1,2 +1,2 @@
 expansion_emotes:
-  gg: '%nickname%|Bon Jeu'
+  gg: '%nickname%{separator}|{pretty_chat}Bon Jeu'

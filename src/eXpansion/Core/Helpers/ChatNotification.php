@@ -22,37 +22,45 @@ class ChatNotification
     /** @var PlayerStorage */
     protected $playerStorage;
 
+    protected $colorCodes = [];
+
     /**
      * ChatNotification constructor.
      *
      * @param Connection $connection
      * @param Translations $translations
      */
-    public function __construct(Connection $connection, Translations $translations, PlayerStorage $playerStorage)
-    {
+    public function __construct(
+        Connection $connection,
+        Translations $translations,
+        PlayerStorage $playerStorage,
+        $colorCodes
+    ){
         $this->connection = $connection;
         $this->translations = $translations;
         $this->playerStorage = $playerStorage;
+
+        foreach ($colorCodes as $code => $colorCode) {
+            $this->colorCodes["{" . $code . "}"] = '$z' . $colorCode;
+        }
     }
 
     /**
      * Send message.
      *
-     * @param $messageId
-     * @param $to
-     * @param $parameters
+     * @param string $messageId
+     * @param string|string[]|null $to
+     * @param string[] $parameters
      */
     public function sendMessage($messageId, $to = null, $parameters = [])
     {
+        $parameters = array_merge($this->colorCodes, $parameters);
+
         if (is_string($to)) {
             $player = $this->playerStorage->getPlayerInfo($to);
             $message = $this->translations->getTranslation($messageId, $parameters, strtolower($player->getLanguage()));
-
-            // @TODO process color codes.
         } else {
             $message = $this->translations->getTranslations($messageId, $parameters);
-
-            // @TODO process color codes.
         }
 
         $this->connection->chatSendServerMessage($message, $to);
