@@ -15,8 +15,8 @@ use eXpansion\Core\Storage\PlayerStorage;
  */
 class BasicEmote extends AbstractChatCommand
 {
-    /** @var string */
-    protected $message;
+    /** @var string[] */
+    protected $messages;
 
     /** @var ChatNotification  */
     protected $chatNotification;
@@ -35,21 +35,27 @@ class BasicEmote extends AbstractChatCommand
      */
     public function __construct(
         $command,
-        $message,
+        $nbMessages,
+        array $aliases = [],
         ChatNotification $chatNotification,
         PlayerStorage $playerStorage,
-        array $aliases = [],
         $parametersAsArray = true
     ) {
         parent::__construct($command, $aliases, $parametersAsArray);
-        $this->message = $message;
         $this->chatNotification = $chatNotification;
         $this->playerStorage = $playerStorage;
+
+        for($i = 1; $i <= $nbMessages; $i++) {
+            $this->messages[] = "expansion_emotes.$command" . $i;
+        }
     }
 
     public function execute($login, $parameter)
     {
+        $select = rand(0, count($this->messages) - 1);
+        $message = $this->messages[$select];
+
         $nickName = $this->playerStorage->getPlayerInfo($login)->getNickName();
-        $this->chatNotification->sendMessage($this->message, null, ['%nickname%' => $nickName]);
+        $this->chatNotification->sendMessage($message, null, ['%nickname%' => $nickName]);
     }
 }

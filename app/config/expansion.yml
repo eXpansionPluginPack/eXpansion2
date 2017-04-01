@@ -1,5 +1,5 @@
 e_xpansion_core:
     parameters:
         core_chat_color_codes:
-            separator: '$FFF'
-            pretty_chat: '$3af'
+            separator: '$3af'
+            pretty_chat: '$fff'

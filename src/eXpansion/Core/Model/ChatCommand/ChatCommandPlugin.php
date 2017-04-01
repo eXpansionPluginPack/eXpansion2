@@ -9,7 +9,7 @@ namespace eXpansion\Core\Model\ChatCommand;
  * @package eXpansion\Core\Model\ChatCommand;
  * @author oliver de Cramer <oliverde8@gmail.com>
  */
-Class AbstractChatCommandPlugin implements \eXpansion\Core\DataProviders\Listener\ChatCommandInterface
+class ChatCommandPlugin implements \eXpansion\Core\DataProviders\Listener\ChatCommandInterface
 {
 
     protected $chatCommands;
