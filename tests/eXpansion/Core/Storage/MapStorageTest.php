@@ -24,6 +24,7 @@ class MapStorageTest extends TestCore
     public function testGetMaps()
     {
         $maps = $this->getMaps(10, 0);
+        $mapsByIndex = array_values($maps);
         $mapStorage = $this->getMapStorage();
 
         foreach ($maps as $map) {
@@ -31,6 +32,9 @@ class MapStorageTest extends TestCore
         }
 
         $this->assertSame($maps, $mapStorage->getMaps());
+        $this->assertSame($mapsByIndex[0], $mapStorage->getMapByIndex(0));
+        $this->assertSame($mapsByIndex[2], $mapStorage->getMapByIndex('2'));
+        $this->assertFalse($mapStorage->getMapByIndex(20));
     }
 
     public function testCurrentNextMap()
