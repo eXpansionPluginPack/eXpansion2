@@ -2,6 +2,7 @@
 
 namespace eXpansion\Core\Helpers;
 
+use eXpansion\Core\Model\Helpers\ChatNotificationInterface;
 use eXpansion\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
 
@@ -11,7 +12,7 @@ use Maniaplanet\DedicatedServer\Connection;
  * @package eXpansion\Core\Helpers;
  * @author oliver de Cramer <oliverde8@gmail.com>
  */
-class ChatNotification
+class ChatNotification implements ChatNotificationInterface
 {
     /** @var  Connection */
     protected $connection;

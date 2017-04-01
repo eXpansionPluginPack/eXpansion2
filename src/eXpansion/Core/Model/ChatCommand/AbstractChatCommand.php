@@ -37,7 +37,6 @@ abstract class AbstractChatCommand implements ChatCommandInterface
         $this->parametersAsArray = $parametersAsArray;
     }
 
-
     /**
      * @inheritdoc
      */

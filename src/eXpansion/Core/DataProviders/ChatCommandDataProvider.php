@@ -2,8 +2,7 @@
 
 namespace eXpansion\Core\DataProviders;
 
-
-use eXpansion\Core\Helpers\ChatNotification;
+use eXpansion\Core\Model\Helpers\ChatNotificationInterface;
 use eXpansion\Core\Services\ChatCommands;
 
 class ChatCommandDataProvider extends AbstractDataProvider
@@ -18,7 +17,7 @@ class ChatCommandDataProvider extends AbstractDataProvider
      * ChatCommandDataProvider constructor.
      * @param $chatCommands
      */
-    public function __construct(ChatCommands $chatCommands, ChatNotification $chatNotification)
+    public function __construct(ChatCommands $chatCommands, ChatNotificationInterface $chatNotification)
     {
         $this->chatCommands = $chatCommands;
         $this->chatNotification = $chatNotification;
