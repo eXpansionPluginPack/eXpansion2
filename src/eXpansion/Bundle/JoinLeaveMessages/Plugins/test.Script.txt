@@ -1,0 +1,11 @@
+declare Text tests = "";
+
+
+main Test() {
+    for () {
+
+    }
+}
+
+
+

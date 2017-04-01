@@ -4,11 +4,10 @@ namespace eXpansion\Core\Plugins;
 
 use eXpansion\Core\DataProviders\Listener\TimerDataListenerInterface;
 use eXpansion\Core\DataProviders\Listener\UserGroupDataListenerInterface;
-use eXpansion\Core\Model\Gui\ManialinkInerface;
+use eXpansion\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Core\Model\UserGroups\Group;
 use eXpansion\Core\Services\Console;
 use Maniaplanet\DedicatedServer\Connection;
-use Maniaplanet\DedicatedServer\Xmlrpc\GbxRemote;
 use Monolog\Logger;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
 
@@ -32,16 +31,16 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
     /** @var int */
     protected $charLimit;
 
-    /** @var ManialinkInerface[][] */
+    /** @var ManialinkInterface[][] */
     protected $displayQueu = [];
 
-    /** @var ManialinkInerface[][] */
+    /** @var ManialinkInterface[][] */
     protected $individualQueu = [];
 
-    /** @var ManialinkInerface[][] */
+    /** @var ManialinkInterface[][] */
     protected $displayeds = [];
 
-    /** @var ManialinkInerface[][] */
+    /** @var ManialinkInterface[][] */
     protected $hideQueu = [];
 
     /** @var String[][] */
@@ -67,9 +66,9 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
     /**
      * Add a manialink to the diplay queue.
      *
-     * @param ManialinkInerface $manialink
+     * @param ManialinkInterface $manialink
      */
-    public function addToDisplay(ManialinkInerface $manialink)
+    public function addToDisplay(ManialinkInterface $manialink)
     {
         $userGroup = $manialink->getUserGroup()->getName();
 
@@ -83,9 +82,9 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
     /**
      * Add a manialink to the destruction queue.
      *
-     * @param ManialinkInerface $manialink
+     * @param ManialinkInterface $manialink
      */
-    public function addToHide(ManialinkInerface $manialink)
+    public function addToHide(ManialinkInterface $manialink)
     {
         $userGroup = $manialink->getUserGroup()->getName();
 
@@ -152,9 +151,10 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
         foreach ($this->displayQueu as $groupName => $manialinks) {
             foreach ($manialinks as $id => $manialink) {
                 $logins = $manialink->getUserGroup()->getLogins();
+
+                $this->displayeds[$groupName][$id] = $manialink;
                 if (!empty($logins)) {
                     yield ['logins' => $logins, 'ml' => $manialink->getXml()];
-                    $this->displayeds[$groupName][$id] = $manialink;
                 }
             }
         }
@@ -247,7 +247,7 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
     /**
      * List of all manialinks that are currentyl displayed.
      *
-     * @return \eXpansion\Core\Model\Gui\ManialinkInerface[][]
+     * @return ManialinkInterface[]
      */
     public function getDisplayeds()
     {

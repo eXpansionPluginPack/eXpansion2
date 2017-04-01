@@ -4,8 +4,8 @@ namespace eXpansion\Bundle\Acme\Plugins;
 
 use eXpansion\Core\DataProviders\Listener\ChatDataListenerInterface;
 use eXpansion\Core\Model\UserGroups\Group;
-use eXpansion\Core\Plugins\Gui\GroupManialinkFactory;
 use eXpansion\Core\Plugins\Gui\ManialinkFactory;
+use eXpansion\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Core\Services\Console;
 use eXpansion\Core\Storage\Data\Player;
 
@@ -41,10 +41,10 @@ class TotoPlugin implements ChatDataListenerInterface, StatusAwarePluginInterfac
         $text = trim($text);
         $from = trim($player->getNickName());
         if ($player->getPlayerId() === 0) {
-            $from = '$777Console';
+            $from = '$777Server';
         }
 
-        $this->console->writeln($from . $text);
+        $this->console->writeln('$ff0['.$from.'$ff0] '.$text);
     }
 
 

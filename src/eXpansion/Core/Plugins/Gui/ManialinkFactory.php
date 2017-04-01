@@ -4,7 +4,8 @@ namespace eXpansion\Core\Plugins\Gui;
 
 use eXpansion\Core\DataProviders\Listener\UserGroupDataListenerInterface;
 use eXpansion\Core\Model\Gui\Manialink;
-use eXpansion\Core\Model\Gui\ManialinkInerface;
+use eXpansion\Core\Model\Gui\ManialinkFactoryInterface;
+use eXpansion\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Core\Model\UserGroups\Group;
 use eXpansion\Core\Plugins\GuiHandler;
 use eXpansion\Core\Plugins\UserGroups\Factory;
@@ -15,7 +16,7 @@ use eXpansion\Core\Plugins\UserGroups\Factory;
  * @package eXpansion\Core\Plugins\Gui
  * @author Oliver de Cramer
  */
-class ManialinkFactory implements UserGroupDataListenerInterface
+class ManialinkFactory implements ManialinkFactoryInterface, UserGroupDataListenerInterface
 {
     /** @var  GuiHandler */
     protected $guiHandler;
@@ -32,7 +33,7 @@ class ManialinkFactory implements UserGroupDataListenerInterface
     /** @var  string */
     protected $className;
 
-    /** @var ManialinkInerface[]  */
+    /** @var ManialinkInterface[]  */
     protected $manialinks = [];
 
     /** @var Group[] */
@@ -94,11 +95,7 @@ class ManialinkFactory implements UserGroupDataListenerInterface
     }
 
     /**
-     * Create & display manialink for user.
-     *
-     * @param Group|string|string[] $group
-     *
-     * @return Group
+     * @inheritdoc
      */
     final public function create($group)
     {
@@ -116,6 +113,9 @@ class ManialinkFactory implements UserGroupDataListenerInterface
         return $group;
     }
 
+    /**
+     * @inheritdoc
+     */
     final public function update($group)
     {
         if (isset($this->manialinks[$group->getName()])) {
@@ -124,17 +124,19 @@ class ManialinkFactory implements UserGroupDataListenerInterface
         }
     }
 
-    protected function updateContent(ManialinkInerface $manialink)
+    /**
+     * Update/put content in the manialink.
+     *
+     * @param ManialinkInterface $manialink
+     *
+     */
+    protected function updateContent(ManialinkInterface $manialink)
     {
         // Put content in the manialink here.
     }
 
     /**
-     * Hide & destoy manialink fr user.
-     *
-     * @param Group $group
-     *
-     * @return void
+     * @inheritdoc
      */
     final public function destroy(Group $group)
     {
@@ -150,7 +152,7 @@ class ManialinkFactory implements UserGroupDataListenerInterface
      *
      * @param Group $group
      *
-     * @return mixed
+     * @return Manialink
      */
     protected function createManialink(Group $group)
     {

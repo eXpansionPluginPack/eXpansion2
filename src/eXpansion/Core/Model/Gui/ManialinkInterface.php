@@ -4,7 +4,7 @@ namespace eXpansion\Core\Model\Gui;
 
 use eXpansion\Core\Model\UserGroups\Group;
 
-interface ManialinkInerface
+interface ManialinkInterface
 {
     /**
      *

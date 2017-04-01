@@ -6,6 +6,7 @@ parameters:
     expansion.core.services.plugin_manager.class: eXpansion\Core\Services\PluginManager
     expansion.core.services.data_provider_manager.class: eXpansion\Core\Services\DataProviderManager
     expansion.core.services.console.class: eXpansion\Core\Services\Console
+    expansion.core.services.chat_commands.class: eXpansion\Core\Services\ChatCommands
 
 services:
     expansion.core.services.dedicated_connection.factory:
@@ -62,6 +63,9 @@ services:
         class: "%expansion.core.services.console.class%"
         arguments:
             - '%color_enabled%'
+
+    expansion.core.services.chat_commands:
+        class: "%expansion.core.services.chat_commands.class%"
 
     expansion.core.services.model.plugin.plugin_description_factory:
         class: 'eXpansion\Core\Model\Plugin\PluginDescriptionFactory'

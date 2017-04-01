@@ -34,12 +34,14 @@ class PlayerTest extends \PHPUnit_Framework_TestCase
         // Check all getters;
         foreach ($props as $prop)
         {
-            if (in_array('is' . ucfirst($prop->getName()), $methods)) {
-                $method = 'is' . ucfirst($prop->getName());
-                $this->assertEquals("Value-" . $prop->getName(), $player->$method());
-            } elseif (in_array('get' . ucfirst($prop->getName()), $methods)) {
-                $method = 'get' . ucfirst($prop->getName());
-                $this->assertEquals("Value-" . $prop->getName(), $player->$method());
+            if ($prop->getName() != 'spectator') {
+                if (in_array('is' . ucfirst($prop->getName()), $methods)) {
+                    $method = 'is' . ucfirst($prop->getName());
+                    $this->assertEquals("Value-" . $prop->getName(), $player->$method());
+                } elseif (in_array('get' . ucfirst($prop->getName()), $methods)) {
+                    $method = 'get' . ucfirst($prop->getName());
+                    $this->assertEquals("Value-" . $prop->getName(), $player->$method());
+                }
             }
         }
     }

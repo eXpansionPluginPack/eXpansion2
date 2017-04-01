@@ -5,7 +5,7 @@ namespace eXpansion\Core\Plugins\Gui;
 use eXpansion\Core\DataProviders\Listener\ManialinkPageAnswerDataListenerInterface;
 use eXpansion\Core\Model\Gui\Action;
 use eXpansion\Core\Model\Gui\Manialink;
-use eXpansion\Core\Model\Gui\ManialinkInerface;
+use eXpansion\Core\Model\Gui\ManialinkInterface;
 
 /**
  * Class ActionFactory Handles available Gui Actions.
@@ -36,13 +36,13 @@ class ActionFactory implements ManialinkPageAnswerDataListenerInterface
     /**
      * Create a Manialink action for a manialink.
      *
-     * @param Manialink $manialink
+     * @param ManialinkInterface $manialink
      * @param $callable
      * @param array $args
      *
      * @return string action Id
      */
-    public function createManialinkAction(ManialinkInerface $manialink, $callable, $args)
+    public function createManialinkAction(ManialinkInterface $manialink, $callable, $args)
     {
         $class = $this->class;
         $action = new $class($callable, $args);
@@ -55,9 +55,9 @@ class ActionFactory implements ManialinkPageAnswerDataListenerInterface
     /**
      * Destroy all actions for a manialink.
      *
-     * @param Manialink $manialink
+     * @param ManialinkInterface $manialink
      */
-    public function destroyManialinkActions(ManialinkInerface $manialink)
+    public function destroyManialinkActions(ManialinkInterface $manialink)
     {
         if (isset($this->actionsByManialink[$manialink->getId()])) {
             foreach ($this->actionsByManialink[$manialink->getId()] as $actionId => $action) {

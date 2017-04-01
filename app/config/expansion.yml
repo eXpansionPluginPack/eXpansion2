@@ -1,0 +1,10 @@
+e_xpansion_core:
+    parameters:
+        core_chat_color_codes:
+            error: '$b32'
+            warning: '$d50'
+            info: '$db1'
+            highlight: '$u$fff'
+
+            separator: '$3af'
+            pretty_chat: '$dee'

@@ -58,6 +58,7 @@ class Test implements MatchDataListenerInterface, TimerDataListenerInterface
      * @param $time
      * @param $lap
      * @param $index
+     * @return mixed|void
      */
     public function onPlayerCheckpoint(Player $player, $time, $lap, $index)
     {
@@ -69,6 +70,7 @@ class Test implements MatchDataListenerInterface, TimerDataListenerInterface
      * Callback when player retire or finish
      * @param Player $player
      * @param $time 0 if retire, > 0 if finish
+     * @return mixed|void
      */
     public function onPlayerFinish(Player $player, $time)
     {
@@ -91,13 +93,15 @@ class Test implements MatchDataListenerInterface, TimerDataListenerInterface
 
     public function onPreLoop()
     {
-        // TODO: Implement onPreLoop() method.
+      // do nothing
     }
 
     public function onPostLoop()
     {
-        // TODO: Implement onPostLoop() method.
+      // do nothing
     }
+
+
 
     public function onEverySecond()
     {

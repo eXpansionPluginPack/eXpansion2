@@ -1,5 +1,6 @@
 parameters:
     expansion.core.model.gui.manialink.class: 'eXpansion\Core\Model\Gui\Manialink'
+    expansion.core.model.gui.window.class: 'eXpansion\Core\Model\Gui\Window'
     expansion.core.model.gui.action.class: 'eXpansion\Core\Model\Gui\Action'
 
 services:

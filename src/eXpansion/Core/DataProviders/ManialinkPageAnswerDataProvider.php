@@ -24,6 +24,6 @@ class ManialinkPageAnswerDataProvider extends AbstractDataProvider
             }
         }
 
-        $this->dispatch(__METHOD__, [$login, $actionId, $entryValues]);
+        $this->dispatch(__FUNCTION__, [$login, $actionId, $entryValues]);
     }
 }
