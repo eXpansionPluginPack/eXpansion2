@@ -93,12 +93,12 @@ class Test implements MatchDataListenerInterface, TimerDataListenerInterface
 
     public function onPreLoop()
     {
-      // do nothing
+        // do nothing
     }
 
     public function onPostLoop()
     {
-      // do nothing
+        // do nothing
     }
 
 

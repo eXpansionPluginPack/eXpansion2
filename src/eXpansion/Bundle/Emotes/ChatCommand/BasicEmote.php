@@ -28,7 +28,7 @@ class BasicEmote extends AbstractChatCommand
      * BasicEmote constructor.
      *
      * @param string $command The chat command
-     * @param string $message The emote message to send
+     * @param string $nbMessages The emote message to send
      * @param ChatNotification $chatNotification
      * @param array $aliases
      * @param bool $parametersAsArray
@@ -45,8 +45,8 @@ class BasicEmote extends AbstractChatCommand
         $this->chatNotification = $chatNotification;
         $this->playerStorage = $playerStorage;
 
-        for($i = 1; $i <= $nbMessages; $i++) {
-            $this->messages[] = "expansion_emotes.$command" . $i;
+        for ($i = 1; $i <= $nbMessages; $i++) {
+            $this->messages[] = "expansion_emotes.$command".$i;
         }
     }
 

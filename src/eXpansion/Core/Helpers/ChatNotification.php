@@ -36,13 +36,13 @@ class ChatNotification implements ChatNotificationInterface
         Translations $translations,
         PlayerStorage $playerStorage,
         $colorCodes
-    ){
+    ) {
         $this->connection = $connection;
         $this->translations = $translations;
         $this->playerStorage = $playerStorage;
 
         foreach ($colorCodes as $code => $colorCode) {
-            $this->colorCodes["{" . $code . "}"] = '$z' . $colorCode;
+            $this->colorCodes["{".$code."}"] = '$z'.$colorCode;
         }
     }
 
