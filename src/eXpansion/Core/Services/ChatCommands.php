@@ -62,7 +62,7 @@ class ChatCommands
     /**
      * Get a chat command.
      *
-     * @param $command
+     * @param string $command
      * @return ChatCommandInterface|null
      */
     public function getChatCommand($command)
@@ -72,7 +72,7 @@ class ChatCommands
 
     /**
      *
-     * @param $pluginId
+     * @param string $pluginId
      * @param $cmdTxt
      * @param ChatCommandInterface $command
      *

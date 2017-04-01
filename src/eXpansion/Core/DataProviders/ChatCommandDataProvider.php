@@ -62,7 +62,7 @@ class ChatCommandDataProvider extends AbstractDataProvider
         $parameter = count($cmdAndArgs) > 1 ? $cmdAndArgs[1] : '';
 
         // Internal dedicated serer command to ignore.
-        if($cmdTxt === 'version') {
+        if ($cmdTxt === 'version') {
             return;
         }
 
