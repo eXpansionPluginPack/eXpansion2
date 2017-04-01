@@ -12,6 +12,7 @@ class AppKernel extends Kernel
 
         /* Register eXpansion Plugins */
         $bundles[] = new \eXpansion\Bundle\JoinLeaveMessages\JoinLeaveMessagesBundle();
+        $bundles[] = new \eXpansion\Bundle\Emotes\EmotesBundle();
 
         /* Register test bundles. */
         $bundles[] = new \eXpansion\Bundle\Acme\AcmeBundle();

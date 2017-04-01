@@ -1,0 +1,9 @@
+parameters:
+
+services:
+    expansion.emotes.plugins.chat_commands:
+        class: eXpansion\Bundle\Emotes\Plugins\ChatCommands
+        arguments:
+            - ['@expansion.emotes.chat_command.good_game']
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.chat_command_data}

@@ -1,0 +1,8 @@
+services:
+    expansion.emotes.chat_command.good_game:
+        class: eXpansion\Bundle\Emotes\ChatCommand\BasicEmote
+        arguments:
+            - "gg"
+            - "Good Game"
+            - '@expansion.core.services.dedicated_connection'
+            - ['goodgame']
