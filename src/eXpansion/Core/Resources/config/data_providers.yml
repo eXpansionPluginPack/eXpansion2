@@ -39,6 +39,7 @@ services:
         class: "%expansion.core.data_providers.chat_command_data_provider.class%"
         arguments:
             - "@expansion.core.services.chat_commands"
+            - "@expansion.core.helpers.chat_notification"
         tags:
             - {name: expansion.data_provider, provider: "expansion.chat_command_data", interface: "%expansion.core.data_providers.chat_command_data_provider.interface%"}
             - {name: expansion.data_provider.compatibility, title: ALL}

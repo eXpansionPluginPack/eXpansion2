@@ -3,6 +3,7 @@
 namespace eXpansion\Core\DataProviders;
 
 
+use eXpansion\Core\Helpers\ChatNotification;
 use eXpansion\Core\Services\ChatCommands;
 
 class ChatCommandDataProvider extends AbstractDataProvider
@@ -10,13 +11,17 @@ class ChatCommandDataProvider extends AbstractDataProvider
     /** @var ChatCommands  */
     protected $chatCommands;
 
+    /** @var ChatCommands  */
+    protected $chatNotification;
+
     /**
      * ChatCommandDataProvider constructor.
      * @param $chatCommands
      */
-    public function __construct(ChatCommands $chatCommands)
+    public function __construct(ChatCommands $chatCommands, ChatNotification $chatNotification)
     {
         $this->chatCommands = $chatCommands;
+        $this->chatNotification = $chatNotification;
     }
 
     /**
@@ -66,7 +71,7 @@ class ChatCommandDataProvider extends AbstractDataProvider
         if ($command && $command->validate($login, $parameter)) {
             $command->execute($login, $command->parseParameters($parameter));
         } else {
-            // TODO command don't exist notificaiton (need translation & notificaiton service)
+            $this->chatNotification->sendMessage('expansion_core.chat_commands.wrong_chat', $login);
         }
     }
 }
