@@ -2,9 +2,9 @@
 
 namespace eXpansion\Bundle\JoinLeaveMessages\Plugins;
 
-use eXpansion\Core\DataProviders\Listener\PlayerDataListenerInterface;
-use eXpansion\Core\Services\Console;
-use eXpansion\Core\Storage\Data\Player;
+use eXpansion\Framework\Core\DataProviders\Listener\PlayerDataListenerInterface;
+use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Storage\Data\Player;
 use Maniaplanet\DedicatedServer\Connection;
 
 class JoinLeaveMessages implements PlayerDataListenerInterface

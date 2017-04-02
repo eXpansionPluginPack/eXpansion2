@@ -2,9 +2,9 @@
 
 namespace eXpansion\Bundle\Emotes\ChatCommand;
 
-use eXpansion\Core\Helpers\ChatNotification;
-use eXpansion\Core\Model\ChatCommand\AbstractChatCommand;
-use eXpansion\Core\Storage\PlayerStorage;
+use eXpansion\Framework\Core\Helpers\ChatNotification;
+use eXpansion\Framework\Core\Model\ChatCommand\AbstractChatCommand;
+use eXpansion\Framework\Core\Storage\PlayerStorage;
 
 
 /**

@@ -2,8 +2,8 @@
 
 namespace eXpansion\Bundle\Emotes;
 
-use eXpansion\Core\DependencyInjection\Compiler\DataProviderPass;
-use eXpansion\Core\DependencyInjection\Compiler\PluginPass;
+use eXpansion\Framework\Core\DependencyInjection\Compiler\DataProviderPass;
+use eXpansion\Framework\Core\DependencyInjection\Compiler\PluginPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

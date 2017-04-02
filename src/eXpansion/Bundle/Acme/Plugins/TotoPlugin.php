@@ -2,17 +2,17 @@
 
 namespace eXpansion\Bundle\Acme\Plugins;
 
-use eXpansion\Core\DataProviders\Listener\ChatDataListenerInterface;
-use eXpansion\Core\Model\UserGroups\Group;
-use eXpansion\Core\Plugins\Gui\ManialinkFactory;
-use eXpansion\Core\Plugins\StatusAwarePluginInterface;
-use eXpansion\Core\Services\Console;
-use eXpansion\Core\Storage\Data\Player;
+use eXpansion\Framework\Core\DataProviders\Listener\ChatDataListenerInterface;
+use eXpansion\Framework\Core\Model\UserGroups\Group;
+use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
+use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
+use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Storage\Data\Player;
 
 /**
  * TotoPlugin is a test plugin to be removed.
  *
- * @package eXpansion\Core\Plugins
+ * @package eXpansion\Framework\Core\Plugins
  */
 class TotoPlugin implements ChatDataListenerInterface, StatusAwarePluginInterface
 {

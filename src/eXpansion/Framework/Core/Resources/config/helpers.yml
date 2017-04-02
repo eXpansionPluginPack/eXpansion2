@@ -1,0 +1,17 @@
+services:
+    expansion.framework.core.helpers.time:
+        class: 'eXpansion\Framework\Core\Helpers\Time'
+
+    expansion.framework.core.helpers.translations:
+        class: 'eXpansion\Framework\Core\Helpers\Translations'
+        arguments:
+            - '@translator'
+            - ['fr', 'de', 'fi', 'nl', 'en']
+
+    expansion.framework.core.helpers.chat_notification:
+        class: 'eXpansion\Framework\Core\Helpers\ChatNotification'
+        arguments:
+            - '@expansion.framework.core.services.dedicated_connection'
+            - '@expansion.framework.core.helpers.translations'
+            - '@expansion.framework.core.storage.player'
+            - '%expansion.config.core_chat_color_codes%'

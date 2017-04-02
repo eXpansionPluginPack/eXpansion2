@@ -2,18 +2,18 @@ services:
     expansion.bundle.acme.plugins.totot:
         class: eXpansion\Bundle\Acme\Plugins\TotoPlugin
         arguments:
-            - '@expansion.core.services.console'
+            - '@expansion.framework.core.services.console'
             - '@expansion.bundle.acme.plugins.gui.windowfactory'
-            - '@expansion.core.user_groups.players'
+            - '@expansion.framework.core.user_groups.players'
         tags:
             - {name: expansion.plugin, data_provider: expansion.chat_data}
 
     expansion.bundle.acme.plugins.test:
         class: eXpansion\Bundle\Acme\Plugins\Test
         arguments:
-            - '@expansion.core.services.dedicated_connection'
-            - '@expansion.core.services.console'
-            - '@expansion.core.helpers.time'
+            - '@expansion.framework.core.services.dedicated_connection'
+            - '@expansion.framework.core.services.console'
+            - '@expansion.framework.core.helpers.time'
         tags:
             - {name: expansion.plugin, data_provider: expansion.match_data}
             - {name: expansion.plugin, data_provider: expansion.timer_data}
@@ -21,14 +21,14 @@ services:
     expansion.bundle.acme.plugins.gui.windowfactory:
             class: 'eXpansion\Bundle\Acme\Plugins\Gui\WindowFactory'
             arguments:
-                - "@expansion.core.plugins.gui_handler"
-                - "@expansion.core.user_groups.factory"
-                - "@expansion.core.plugins.gui.action_factory"
+                - "@expansion.framework.core.plugins.gui_handler"
+                - "@expansion.framework.core.user_groups.factory"
+                - "@expansion.framework.core.plugins.gui.action_factory"
                 - "tesst window"
                 - 180
                 - 90
                 - null
                 - null
-                - '%expansion.core.model.gui.window.class%'
+                - '%expansion.framework.core.model.gui.window.class%'
             tags:
                 - {name: expansion.plugin, data_provider: expansion.user_group}
