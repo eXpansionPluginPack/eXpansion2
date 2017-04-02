@@ -1,0 +1,5 @@
+services:
+    expansion.admin_groups.services.admin_group_configuration:
+        class: eXpansion\Framework\AdminGroups\Services\AdminGroupConfiguration
+        arguments:
+            - '%expansion.admin_groups.groups%'

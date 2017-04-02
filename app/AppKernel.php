@@ -32,7 +32,8 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 
             // And add eXpansion core.
-            new \eXpansion\Core\eXpansionCore(),
+            new \eXpansion\Framework\Core\eXpansionCore(),
+            new \eXpansion\Framework\AdminGroups\eXpansionAdminGroupsBundle(),
         ];
 
         // Also add debug help bundles.

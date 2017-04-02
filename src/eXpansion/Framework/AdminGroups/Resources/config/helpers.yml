@@ -1,0 +1,8 @@
+services:
+    expansion.admin_groups.plugins.groups:
+        class: eXpansion\Framework\AdminGroups\Helpers\AdminGroups
+        arguments:
+            - '@expansion.admin_groups.services.admin_group_configuration'
+            - '@expansion.framework.core.user_groups.factory'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.player_data}
