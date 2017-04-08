@@ -8,7 +8,7 @@ namespace eXpansion\Bundle\AdminChat\ChatCommand;
  * @package eXpansion\Bundle\AdminChat\ChatCommand;
  * @author oliver de Cramer <oliverde8@gmail.com>
  */
-class Restart extends AbstractConnectionCommand
+class Next extends AbstractConnectionCommand
 {
     /**
      * @param $login
@@ -19,7 +19,7 @@ class Restart extends AbstractConnectionCommand
     public function execute($login, $parameter)
     {
         $nickName = $this->playerStorage->getPlayerInfo($login)->getNickName();
-        $this->chatNotification->sendMessage('expansion_admin_chat.restart', null,['%nickname%' => $nickName]);
-        $this->connection->restartMap();
+        $this->chatNotification->sendMessage('expansion_admin_chat.next', null,['%nickname%' => $nickName]);
+        $this->connection->nextMap();
     }
 }

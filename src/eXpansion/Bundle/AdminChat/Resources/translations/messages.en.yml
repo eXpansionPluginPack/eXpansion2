@@ -1,2 +1,3 @@
 expansion_admin_chat:
   restart: '{admin_info}Admin %nickname% {admin_info}restarted the map'
+  next: '{admin_info}Admin %nickname% {admin_info}skipped current map'

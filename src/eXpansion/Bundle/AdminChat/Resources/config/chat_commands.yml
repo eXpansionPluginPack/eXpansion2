@@ -1,6 +1,6 @@
 services:
     expansion.admin_chat.chat_command.base:
-        class: eXpansion\Bundle\AdminChat\ChatCommand\Restart
+        class: eXpansion\Bundle\AdminChat\ChatCommand\AbstractConnectionCommand
         arguments:
             - '__'
             - '__'
@@ -18,3 +18,11 @@ services:
             index_0: "restart"
             index_1: "restart"
             index_2: ['res', 'restartmap']
+
+    expansion.admin_chat.chat_command.next:
+        class: eXpansion\Bundle\AdminChat\ChatCommand\Next
+        parent: expansion.admin_chat.chat_command.base
+        arguments:
+            index_0: "next"
+            index_1: "next"
+            index_2: ['skip', 'nextmap']

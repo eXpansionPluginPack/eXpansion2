@@ -7,5 +7,6 @@ services:
         arguments:
             -
               - '@expansion.admin_chat.chat_command.restart'
+              - '@expansion.admin_chat.chat_command.next'
         tags:
             - {name: expansion.plugin, data_provider: expansion.chat_command_data}

@@ -22,4 +22,6 @@ e_xpansion_admin_groups:
         admin:
             label: Admin
             logins: []
-            permissions: [] # To be edited.
+            permissions:
+              - next
+              - restart
