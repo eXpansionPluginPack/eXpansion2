@@ -58,7 +58,7 @@ abstract class AbstractChatCommand implements ChatCommandInterface
      */
     public function validate($login, $parameter)
     {
-        return true;
+        return "";
     }
 
     /**

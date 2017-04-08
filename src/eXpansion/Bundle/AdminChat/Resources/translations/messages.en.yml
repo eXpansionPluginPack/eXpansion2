@@ -1,0 +1,2 @@
+expansion_admin_chat:
+  restart: '{admin_info}Admin %nickname% {admin_info}restarted the map'

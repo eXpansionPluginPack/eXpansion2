@@ -92,8 +92,15 @@ class AdminGroupConfiguration
      */
     public function hasPermission($login, $permission)
     {
-        $permissions = $this->getGroupPermissions($this->getLoginGroupName($login));
+        $groupName = $this->getLoginGroupName($login);
 
-        return in_array($permission, $permissions);
+        echo "\n\n$groupName\n\n";
+
+        if ($groupName != 'master_admin') {
+            $permissions = $this->getGroupPermissions($groupName);
+            return in_array($permission, $permissions);
+        } else {
+            return true;
+        }
     }
 }

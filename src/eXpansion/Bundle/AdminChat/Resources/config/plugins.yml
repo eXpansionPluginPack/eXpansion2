@@ -1,0 +1,11 @@
+parameters:
+
+services:
+    # Plugin that register chat commands that work with all gamemodes & titles.
+    expansion.admin_chat.plugins.generic_chat_commands:
+        class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
+        arguments:
+            -
+              - '@expansion.admin_chat.chat_command.restart'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.chat_command_data}

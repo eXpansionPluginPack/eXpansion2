@@ -9,6 +9,8 @@ e_xpansion_core:
             separator: '$3af'
             pretty_chat: '$dee'
 
+            admin_info: '$db1'
+
 e_xpansion_admin_groups:
     groups:
         master_admin:

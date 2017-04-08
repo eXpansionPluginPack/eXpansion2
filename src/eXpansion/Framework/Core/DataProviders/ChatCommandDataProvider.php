@@ -66,11 +66,17 @@ class ChatCommandDataProvider extends AbstractDataProvider
             return;
         }
 
+        $errorMessage = 'expansion_core.chat_commands.wrong_chat';
+
         $command = $this->chatCommands->getChatCommand($cmdTxt);
-        if ($command && $command->validate($login, $parameter)) {
-            $command->execute($login, $command->parseParameters($parameter));
-        } else {
-            $this->chatNotification->sendMessage('expansion_core.chat_commands.wrong_chat', $login);
+        if ($command) {
+            $errorMessage = $command->validate($login, $parameter);
+            if (empty($errorMessage)) {
+                $command->execute($login, $command->parseParameters($parameter));
+                return;
+            }
         }
+
+        $this->chatNotification->sendMessage($errorMessage, $login);
     }
 }

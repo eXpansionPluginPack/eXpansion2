@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: olive
- * Date: 01/04/2017
- * Time: 10:12
- */
 
 namespace eXpansion\Framework\Core\Model\ChatCommand;
 
@@ -17,13 +11,36 @@ namespace eXpansion\Framework\Core\Model\ChatCommand;
  */
 Interface ChatCommandInterface
 {
+    /**
+     * @return string
+     */
     public function getCommand();
 
+    /**
+     * @return string[]
+     */
     public function getAliases();
 
+    /**
+     * @param $login
+     * @param $parameter
+     *
+     * @return string Empty string if there are no validaton errors.
+     */
     public function validate($login, $parameter);
 
+    /**
+     * @param $parameter
+     *
+     * @return mixed
+     */
     public function parseParameters($parameter);
 
+    /**
+     * @param $login
+     * @param $parameter
+     *
+     * @return mixed
+     */
     public function execute($login, $parameter);
 }

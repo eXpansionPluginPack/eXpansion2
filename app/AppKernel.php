@@ -10,6 +10,9 @@ class AppKernel extends Kernel
         /* Register symfony bundles & eXpansion core bundles */
         $bundles = $this->registerCoreBundles();
 
+        /* Register eXpansion Base Bundles */
+        $bundles[] = new \eXpansion\Bundle\AdminChat\AdminChatBundle();
+
         /* Register eXpansion Plugins */
         $bundles[] = new \eXpansion\Bundle\JoinLeaveMessages\JoinLeaveMessagesBundle();
         $bundles[] = new \eXpansion\Bundle\Emotes\EmotesBundle();
