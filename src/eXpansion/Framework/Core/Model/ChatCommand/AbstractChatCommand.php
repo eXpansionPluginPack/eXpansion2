@@ -7,6 +7,10 @@
  */
 
 namespace eXpansion\Framework\Core\Model\ChatCommand;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 
 
 /**
@@ -17,24 +21,44 @@ namespace eXpansion\Framework\Core\Model\ChatCommand;
  */
 abstract class AbstractChatCommand implements ChatCommandInterface
 {
+    /** @var string */
     protected $command;
 
+    /** @var string[] */
     protected $aliases = [];
 
-    protected $parametersAsArray = true;
+    /** @var InputDefinition  */
+    protected $inputDefinition;
+
+    /** @var InputDefinition  */
+    private $baseDefinition;
 
     /**
      * AbstractChatCommand constructor.
      *
      * @param $command
      * @param array $aliases
-     * @param bool $parametersAsArray
      */
-    public function __construct($command, array $aliases = [], $parametersAsArray = true)
+    public function __construct($command, array $aliases = [])
     {
         $this->command = $command;
         $this->aliases = $aliases;
-        $this->parametersAsArray = $parametersAsArray;
+
+        $this->inputDefinition = new InputDefinition();
+        $this->baseDefinition = new InputDefinition();
+
+        // Allow help command.
+        $this->baseDefinition->addOption(new InputOption('help', 'h', InputOption::VALUE_NONE,'get help for this command.'));
+
+        $this->configure();
+    }
+
+    /**
+     * Configure input definition.
+     */
+    protected function configure()
+    {
+        // Overwrite to add input definition.
     }
 
     /**
@@ -64,11 +88,23 @@ abstract class AbstractChatCommand implements ChatCommandInterface
     /**
      * @inheritdoc
      */
-    public function parseParameters($parameter) {
-        if ($this->parametersAsArray) {
-            return explode(' ', $parameter);
-        } else {
-            return $parameter;
+    public function run($login, $parameter)
+    {
+        $parameter = str_getcsv($parameter, " ", '"');
+        $parameter = array_merge([0 => 1], $parameter);
+
+        $input = new ArgvInput($parameter, $this->baseDefinition);
+
+        if ($input->getOption('help')) {
+            // TODO show help
+            return "Help message should be here";
         }
+
+        $input->bind($this->inputDefinition);
+        $input->validate();
+
+        $this->execute($login, $input);
     }
+
+    abstract public function execute($login, InputInterface $input);
 }

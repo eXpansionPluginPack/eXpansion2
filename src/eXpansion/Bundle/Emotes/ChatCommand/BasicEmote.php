@@ -5,6 +5,7 @@ namespace eXpansion\Bundle\Emotes\ChatCommand;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Model\ChatCommand\AbstractChatCommand;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
+use Symfony\Component\Console\Input\InputInterface;
 
 
 /**
@@ -41,7 +42,7 @@ class BasicEmote extends AbstractChatCommand
         PlayerStorage $playerStorage,
         $parametersAsArray = true
     ) {
-        parent::__construct($command, $aliases, $parametersAsArray);
+        parent::__construct($command, $aliases);
         $this->chatNotification = $chatNotification;
         $this->playerStorage = $playerStorage;
 
@@ -50,7 +51,10 @@ class BasicEmote extends AbstractChatCommand
         }
     }
 
-    public function execute($login, $parameter)
+    /**
+     * @inheritdoc
+     */
+    public function execute($login, InputInterface $input)
     {
         $select = rand(0, count($this->messages) - 1);
         $message = $this->messages[$select];

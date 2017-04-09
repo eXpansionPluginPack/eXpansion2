@@ -30,17 +30,10 @@ Interface ChatCommandInterface
     public function validate($login, $parameter);
 
     /**
-     * @param $parameter
-     *
-     * @return mixed
-     */
-    public function parseParameters($parameter);
-
-    /**
      * @param $login
      * @param $parameter
      *
      * @return mixed
      */
-    public function execute($login, $parameter);
+    public function run($login, $parameter);
 }

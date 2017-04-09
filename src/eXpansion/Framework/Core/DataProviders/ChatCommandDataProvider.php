@@ -4,6 +4,8 @@ namespace eXpansion\Framework\Core\DataProviders;
 
 use eXpansion\Framework\Core\Model\Helpers\ChatNotificationInterface;
 use eXpansion\Framework\Core\Services\ChatCommands;
+use Symfony\Component\Console\Exception\RuntimeException;
+
 
 class ChatCommandDataProvider extends AbstractDataProvider
 {
@@ -66,17 +68,24 @@ class ChatCommandDataProvider extends AbstractDataProvider
             return;
         }
 
-        $errorMessage = 'expansion_core.chat_commands.wrong_chat';
+        $message = 'expansion_core.chat_commands.wrong_chat';
 
         $command = $this->chatCommands->getChatCommand($cmdTxt);
         if ($command) {
-            $errorMessage = $command->validate($login, $parameter);
-            if (empty($errorMessage)) {
-                $command->execute($login, $command->parseParameters($parameter));
-                return;
+            $message = $command->validate($login, $parameter);
+            if (empty($message)) {
+                try {
+                    $message = $command->run($login, $parameter);
+                } catch (RuntimeException $e) {
+                    $this->chatNotification->sendMessage($e->getMessage(), $login);
+                } catch(\Exception $e) {
+                    $this->chatNotification->sendMessage($e->getMessage(), $login);
+                }
             }
         }
 
-        $this->chatNotification->sendMessage($errorMessage, $login);
+        if (!empty($message)) {
+            $this->chatNotification->sendMessage($message, $login);
+        }
     }
 }

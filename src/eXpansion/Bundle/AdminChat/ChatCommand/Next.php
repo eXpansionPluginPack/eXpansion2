@@ -2,6 +2,8 @@
 
 namespace eXpansion\Bundle\AdminChat\ChatCommand;
 
+use Symfony\Component\Console\Input\InputInterface;
+
 /**
  * Class Restart
  *
@@ -11,12 +13,9 @@ namespace eXpansion\Bundle\AdminChat\ChatCommand;
 class Next extends AbstractConnectionCommand
 {
     /**
-     * @param $login
-     * @param $parameter
-     *
-     * @return void
+     * @inheritdoc
      */
-    public function execute($login, $parameter)
+    public function execute($login, InputInterface $input)
     {
         $nickName = $this->playerStorage->getPlayerInfo($login)->getNickName();
         $this->chatNotification->sendMessage('expansion_admin_chat.next', null,['%nickname%' => $nickName]);
