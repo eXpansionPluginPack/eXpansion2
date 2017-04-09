@@ -5,7 +5,6 @@ services:
             - '__'
             - '__'
             - []
-            - '1'
             - '@expansion.admin_groups.helpers.groups'
             - '@expansion.framework.core.services.dedicated_connection'
             - '@expansion.framework.core.helpers.chat_notification'

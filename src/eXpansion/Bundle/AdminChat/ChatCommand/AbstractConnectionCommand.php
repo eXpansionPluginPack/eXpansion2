@@ -29,14 +29,13 @@ abstract class AbstractConnectionCommand extends AbstractAdminChatCommand
         $command,
         $permission,
         array $aliases = [],
-        $parametersAsArray = true,
         AdminGroups $adminGroupsHelper,
         Connection $connection,
         ChatNotification $chatNotification,
         PlayerStorage $playerStorage
     )
     {
-        parent::__construct($command, $permission, $aliases, $parametersAsArray, $adminGroupsHelper);
+        parent::__construct($command, $permission, $aliases, $adminGroupsHelper);
 
         $this->connection = $connection;
         $this->chatNotification = $chatNotification;

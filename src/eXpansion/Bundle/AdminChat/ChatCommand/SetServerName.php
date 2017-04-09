@@ -45,7 +45,7 @@ class SetServerName extends AbstractConnectionCommand
         $this->chatNotification->sendMessage(
             'expansion_admin_chat.set_server_name.msg',
             null,
-            ['%nickname%' => $nickName, 'servername' => $name]
+            ['%nickname%' => $nickName, '%servername%' => $name]
         );
         $this->connection->setServerName($name);
     }
