@@ -22,10 +22,18 @@ abstract class AbstractAdminChatCommand extends AbstractChatCommand
         $command,
         $permission,
         array $aliases = [],
-        $parametersAsArray = true,
         AdminGroups $adminGroupsHelper
     ){
-        parent::__construct($command, $aliases, $parametersAsArray);
+        $newAliases = [];
+        $newAliases[] = "adm $command";
+        foreach ($aliases as $alias) {
+            $newAliases[] = "admin $alias";
+            $newAliases[] = "adm $alias";
+        }
+
+        $command = "admin $command";
+
+        parent::__construct($command, $newAliases);
 
         $this->adminGroupsHelper = $adminGroupsHelper;
         $this->permission = $permission;

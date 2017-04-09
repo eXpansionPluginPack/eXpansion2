@@ -67,19 +67,19 @@ class ChatCommandDataProvider extends AbstractDataProvider
             return;
         }
 
-        $cmdAndArgs = explode(' ', $text, 2);
-        $cmdTxt = substr($cmdAndArgs[0], 1);
-        $parameter = count($cmdAndArgs) > 1 ? $cmdAndArgs[1] : '';
+        $text = substr($text, 1);
+        $cmdAndArgs = explode(' ', $text);
 
         // Internal dedicated serer command to ignore.
-        if($cmdTxt === 'version') {
+        if($cmdAndArgs[0] === 'version') {
             return;
         }
 
         $message = 'expansion_core.chat_commands.wrong_chat';
 
-        $command = $this->chatCommands->getChatCommand($cmdTxt);
+        list($command, $parameter) = $this->chatCommands->getChatCommand($cmdAndArgs);
         if ($command) {
+            $parameter = implode(" ", $parameter);
             $message = $command->validate($login, $parameter);
             if (empty($message)) {
                 try {

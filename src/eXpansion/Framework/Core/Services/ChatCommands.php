@@ -20,6 +20,20 @@ class ChatCommands
     /** @var ChatCommandInterface[] */
     protected $commandPlugin;
 
+    /** @var int  */
+    protected $depth = 3;
+
+    /**
+     * ChatCommands constructor.
+     * @param int $depth
+     */
+    public function __construct($depth)
+    {
+        $this->depth = $depth;
+        var_dump($depth);
+    }
+
+
     /**
      * Register chat commands of a plugin.
      *
@@ -62,12 +76,27 @@ class ChatCommands
     /**
      * Get a chat command.
      *
-     * @param $command
-     * @return ChatCommandInterface|null
+     * @param string[] $cmdAndArgs
+     * @return array
      */
-    public function getChatCommand($command)
+    public function getChatCommand($cmdAndArgs)
     {
-        return isset($this->commands[$command]) ? $this->commands[$command] : null;
+        return $this->findChatCommand($cmdAndArgs, $this->depth);
+    }
+
+    protected function findChatCommand($cmdAndArgs, $depth)
+    {
+        if ($depth == 0) {
+            return [null, []];
+        }
+
+        $parameters = array_splice($cmdAndArgs, $depth - 1, 100);
+        $cmdAndArgs = array_splice($cmdAndArgs, 0, $depth);
+        $command = implode(' ', $cmdAndArgs);
+
+        return isset($this->commands[$command])
+            ? [$this->commands[$command], $parameters]
+            : $this->findChatCommand($cmdAndArgs, $depth-1);
     }
 
     /**
