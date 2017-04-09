@@ -1,12 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: olive
- * Date: 01/04/2017
- * Time: 10:44
- */
 
 namespace eXpansion\Framework\Core\Model\ChatCommand;
+
+use eXpansion\Framework\Core\Helpers\ChatOutput;
+use Symfony\Component\Console\Helper\DescriptorHelper;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
@@ -85,10 +82,20 @@ abstract class AbstractChatCommand implements ChatCommandInterface
         return "";
     }
 
+    public function getDescription()
+    {
+        return 'expansion_core.chat_commands.no_description';
+    }
+
+    public function getHelp()
+    {
+        return 'expansion_core.chat_commands.no_help';
+    }
+
     /**
      * @inheritdoc
      */
-    public function run($login, $parameter)
+    public function run($login, ChatOutput $output, $parameter)
     {
         $parameter = str_getcsv($parameter, " ", '"');
         $parameter = array_merge([0 => 1], $parameter);
@@ -96,8 +103,10 @@ abstract class AbstractChatCommand implements ChatCommandInterface
         $input = new ArgvInput($parameter, $this->baseDefinition);
 
         if ($input->getOption('help')) {
-            // TODO show help
-            return "Help message should be here";
+            $helper = new DescriptorHelper();
+            $output->getChatNotification()->sendMessage($this->getDescription(), $login);
+            $helper->describe($output, $this->inputDefinition);
+            return '';
         }
 
         $input->bind($this->inputDefinition);

@@ -15,3 +15,10 @@ services:
             - '@expansion.framework.core.helpers.translations'
             - '@expansion.framework.core.storage.player'
             - '%expansion.config.core_chat_color_codes%'
+
+
+    expansion.framework.core.helpers.chat_output:
+        class: 'eXpansion\Framework\Core\Helpers\ChatOutput'
+        arguments:
+            - '@expansion.framework.core.services.dedicated_connection'
+            - '@expansion.framework.core.helpers.chat_notification'

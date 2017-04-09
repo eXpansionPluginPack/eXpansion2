@@ -40,6 +40,7 @@ services:
         arguments:
             - "@expansion.framework.core.services.chat_commands"
             - "@expansion.framework.core.helpers.chat_notification"
+            - "@expansion.framework.core.helpers.chat_output"
         tags:
             - {name: expansion.data_provider, provider: "expansion.chat_command_data", interface: "%expansion.framework.core.data_providers.chat_command_data_provider.interface%"}
             - {name: expansion.data_provider.compatibility, title: ALL}

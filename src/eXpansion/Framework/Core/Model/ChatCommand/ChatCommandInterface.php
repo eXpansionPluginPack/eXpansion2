@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Core\Model\ChatCommand;
 
+use eXpansion\Framework\Core\Helpers\ChatOutput;
 
 /**
  * Interface ChatCommandInterface
@@ -30,10 +31,11 @@ Interface ChatCommandInterface
     public function validate($login, $parameter);
 
     /**
-     * @param $login
-     * @param $parameter
+     * @param string $login
+     * @param ChatOutput $output
+     * @param string $parameter
      *
      * @return mixed
      */
-    public function run($login, $parameter);
+    public function run($login, ChatOutput $output, $parameter);
 }

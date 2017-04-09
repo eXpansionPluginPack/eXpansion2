@@ -1,3 +1,5 @@
 expansion_core:
   chat_commands:
     wrong_chat: "{error}This chat command does not exists. {info}Please use /help to see all available chat commands."
+    no_description: "{info}Sorry, this command has no description."
+    no_help: "{info}Sorry, this command has no help message."

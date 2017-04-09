@@ -94,8 +94,6 @@ class AdminGroupConfiguration
     {
         $groupName = $this->getLoginGroupName($login);
 
-        echo "\n\n$groupName\n\n";
-
         if ($groupName != 'master_admin') {
             $permissions = $this->getGroupPermissions($groupName);
             return in_array($permission, $permissions);

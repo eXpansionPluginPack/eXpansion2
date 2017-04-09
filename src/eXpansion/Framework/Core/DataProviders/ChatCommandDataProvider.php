@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Core\DataProviders;
 
+use eXpansion\Framework\Core\Helpers\ChatOutput;
 use eXpansion\Framework\Core\Model\Helpers\ChatNotificationInterface;
 use eXpansion\Framework\Core\Services\ChatCommands;
 use Symfony\Component\Console\Exception\RuntimeException;
@@ -15,14 +16,21 @@ class ChatCommandDataProvider extends AbstractDataProvider
     /** @var ChatCommands  */
     protected $chatNotification;
 
+    /** @var ChatOutput */
+    protected $chatOutput;
+
     /**
      * ChatCommandDataProvider constructor.
      * @param $chatCommands
      */
-    public function __construct(ChatCommands $chatCommands, ChatNotificationInterface $chatNotification)
+    public function __construct(
+        ChatCommands $chatCommands,
+        ChatNotificationInterface $chatNotification,
+        ChatOutput $chatOutput)
     {
         $this->chatCommands = $chatCommands;
         $this->chatNotification = $chatNotification;
+        $this->chatOutput = $chatOutput;
     }
 
     /**
@@ -75,7 +83,8 @@ class ChatCommandDataProvider extends AbstractDataProvider
             $message = $command->validate($login, $parameter);
             if (empty($message)) {
                 try {
-                    $message = $command->run($login, $parameter);
+                    $this->chatOutput->setLogin($login);
+                    $message = $command->run($login, $this->chatOutput, $parameter);
                 } catch (RuntimeException $e) {
                     $this->chatNotification->sendMessage($e->getMessage(), $login);
                 } catch(\Exception $e) {
