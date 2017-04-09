@@ -15,10 +15,18 @@ class Restart extends AbstractConnectionCommand
     /**
      * @inheritdoc
      */
+    public function getDescription()
+    {
+        return 'expansion_admin_chat.restart.description';
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function execute($login, InputInterface $input)
     {
         $nickName = $this->playerStorage->getPlayerInfo($login)->getNickName();
-        $this->chatNotification->sendMessage('expansion_admin_chat.restart', null,['%nickname%' => $nickName]);
+        $this->chatNotification->sendMessage('expansion_admin_chat.restart.msg', null,['%nickname%' => $nickName]);
         $this->connection->restartMap();
     }
 }

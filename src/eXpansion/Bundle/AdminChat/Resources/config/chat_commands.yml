@@ -26,3 +26,12 @@ services:
             index_0: "next"
             index_1: "next"
             index_2: ['skip', 'nextmap']
+
+
+    expansion.admin_chat.chat_command.set_server_name:
+        class: eXpansion\Bundle\AdminChat\ChatCommand\SetServerName
+        parent: expansion.admin_chat.chat_command.base
+        arguments:
+            index_0: "setservername"
+            index_1: "set_server_name"
+            index_2: []
