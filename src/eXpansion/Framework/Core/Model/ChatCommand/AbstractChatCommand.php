@@ -27,9 +27,6 @@ abstract class AbstractChatCommand implements ChatCommandInterface
     /** @var InputDefinition  */
     protected $inputDefinition;
 
-    /** @var InputDefinition  */
-    private $baseDefinition;
-
     /**
      * AbstractChatCommand constructor.
      *
@@ -42,10 +39,6 @@ abstract class AbstractChatCommand implements ChatCommandInterface
         $this->aliases = $aliases;
 
         $this->inputDefinition = new InputDefinition();
-        $this->baseDefinition = new InputDefinition();
-
-        // Allow help command.
-        $this->baseDefinition->addOption(new InputOption('help', 'h', InputOption::VALUE_NONE,'get help for this command.'));
 
         $this->configure();
     }
@@ -100,9 +93,9 @@ abstract class AbstractChatCommand implements ChatCommandInterface
         $parameter = str_getcsv($parameter, " ", '"');
         $parameter = array_merge([0 => 1], $parameter);
 
-        $input = new ArgvInput($parameter, $this->baseDefinition);
+        $input = new ArgvInput($parameter);
 
-        if ($input->getOption('help')) {
+        if (true === $input->hasParameterOption(array('--help', '-h'), true)) {
             $helper = new DescriptorHelper();
             $output->getChatNotification()->sendMessage($this->getDescription(), $login);
             $helper->describe($output, $this->inputDefinition);
