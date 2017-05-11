@@ -25,11 +25,12 @@ class DataProviderPass implements CompilerPassInterface
         }
 
         // Get the data provider manager service definition to register plugins into.
-        $definition = $container->getDefinition('expansion.framework.core.services.data_provider_manager');
+        $dpmDefinition = $container->getDefinition('expansion.framework.core.services.data_provider_manager');
+        $pmDefinition = $container->getDefinition('expansion.framework.core.services.plugin_manager');
 
         $providerData = [];
 
-        // Get Procider service names.
+        // Get provider service names.
         $dataProviders = $container->findTaggedServiceIds('expansion.data_provider');
         foreach ($dataProviders as $id => $tags) {
             foreach ($tags as $attributes) {
@@ -58,14 +59,30 @@ class DataProviderPass implements CompilerPassInterface
             }
         }
 
+        // Get parent plugins the data provider requires.
+        $plugins = $container->findTaggedServiceIds('expansion.data_provider.parent');
+        foreach ($plugins as $id => $tags) {
+            foreach ($tags as $attributes) {
+                $providerData[$id]['parent'][] = $attributes['parent'];
+            }
+        }
+
         // Finally register collected data.
         foreach ($providerData as $id => $data) {
-            $definition->addMethodCall('registerDataProvider', [
+            $dpmDefinition->addMethodCall('registerDataProvider', [
                     $id,
                     $data['provider'],
                     $data['interface'],
                     $data['compatibility'],
                     !empty($data['listener']) ? $data['listener'] : [],
+                ]
+            );
+
+            $pmDefinition->addMethodCall('registerPlugin', [
+                    $id,
+                    [],
+                    isset($data['parent']) ? $data['parent'] : [],
+                    $data['provider'],
                 ]
             );
         }

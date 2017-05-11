@@ -19,8 +19,8 @@ class PluginManager
     /** @var PluginDescription[] List of all the plugins adescriptions. */
     protected $plugins = [];
 
-    /** @var PluginDescription[] List of all the root plugins. Plugin that depends of no plugins */
-    protected $pluginsTree = [];
+    /** @var PluginDescription[] Current List of enabled plugins */
+    protected $enabledPlugins = [];
 
     /** @var PluginDescriptionFactory  */
     protected $pluginDescriptionFactory;
@@ -57,61 +57,89 @@ class PluginManager
         $mode = 'script';
         $script = 'TimeAttack.script.txt';
 
-        $this->createPluginTree();
-        $this->enableDisablePlugins($this->pluginsTree, $title, $mode, $script);
+        $this->enableDisablePlugins($title, $mode, $script);
     }
 
     /**
-     * Recursively enable disable plugins taking into account dependencies.
+     * Enable all possible plugins.
      *
-     * @param PluginDescription[] $pluginsTree
      * @param $title
      * @param $mode
      * @param $script
-     * @param bool $isCompatible
-     *
      */
-    protected function enableDisablePlugins($pluginsTree, $title, $mode, $script, $isCompatible = true)
+    protected function enableDisablePlugins($title, $mode, $script)
     {
-        foreach ($pluginsTree as $plugin) {
-            // If parent product isn't compatible then this plugin needs disabling.
-            // if not check all children plugins to see which ones needs enabling.
-            if ($isCompatible && $this->isPluginCompatible($plugin, $title, $mode, $script)) {
-                $this->enablePlugin($plugin, $title, $mode, $script);
+        $pluginsToEnable = [];
+        $pluginsToProcess = $this->plugins;
 
-                if (!empty($plugin->getChildrens())) {
-                    $this->enableDisablePlugins($plugin->getChildrens(), $title, $mode, $script, true);
-                }
-            } else {
-                $this->disablePlugin($plugin);
+        do {
+            $lastEnabledPluginCount = count($pluginsToEnable);
+            $pluginsToProcessNew = [];
 
-                if (!empty($plugin->getChildrens())) {
-                    $this->enableDisablePlugins($plugin->getChildrens(), $title, $mode, $script, false);
+            foreach ($pluginsToProcess as $pluginId => $plugin) {
+                if ($this->isPluginCompatible($plugin, $pluginsToEnable, $title, $mode, $script)) {
+                    $pluginsToEnable[$pluginId] = $plugin;
+                } else {
+                    $pluginsToProcessNew[$pluginId] = $plugin;
                 }
             }
+
+            $pluginsToProcess = $pluginsToProcessNew;
+        } while ($lastEnabledPluginCount != count($pluginsToEnable) && !empty($pluginsToProcess));
+
+        foreach ($pluginsToEnable as $plugin) {
+            $this->enablePlugin($plugin);
+        }
+
+        foreach ($pluginsToProcess as $plugin)  {
+            $this->disablePlugin($plugin);
         }
     }
 
     /**
-     * Check if a plugin is compatible.
+     * Check if a plugin is compatible or not.
      *
      * @param PluginDescription $plugin
+     * @param $enabledPlugins
      * @param $title
      * @param $mode
      * @param $script
      *
      * @return bool
      */
-    protected function isPluginCompatible(PluginDescription $plugin, $title, $mode, $script)
-    {
-        foreach ($plugin->getDataProviders() as $provider) {
-            if (!$this->dataProviderManager->isProviderCompatible($provider, $title, $mode, $script)) {
+    protected function isPluginCompatible(PluginDescription $plugin, $enabledPlugins, $title, $mode, $script) {
+
+        // first check for other plugins.
+        foreach ($plugin->getParents() as $parentPluginId) {
+            if (!isset($enabledPlugins[$parentPluginId])) {
+                // A parent plugin is missing. Can't enable plugin.
+                return false;
+            }
+        }
+
+        // Now check  for data providers.
+        foreach ($plugin->getDataProviders() as $dataProvider) {
+            $providerId = $this->dataProviderManager->getCompatibleProviderId($dataProvider,  $title, $mode, $script);
+
+            if (is_null($providerId) || !isset($enabledPlugins[$providerId])) {
+                // Either there are no data providers compatible or the only one compatible
+                return false;
+            }
+        }
+
+        // If data provider need to check if it was "the chosen one".
+        if ($plugin->isIsDataProvider()) {
+            $selectedProvider = $this->dataProviderManager->getCompatibleProviderId($plugin->getDataProviderName(),  $title, $mode, $script);
+
+            if ($plugin->getPluginId() != $selectedProvider) {
+                // This data provider wasn't the one selected and therefore the plugin isn't compatible.
                 return false;
             }
         }
 
         return true;
     }
+
 
     /**
      * Enable a plugin for a certain game mode.
@@ -125,13 +153,15 @@ class PluginManager
         $plugin->setIsEnabled(true);
         $pluginService = $this->container->get($plugin->getPluginId());
 
-        if ($pluginService instanceof StatusAwarePluginInterface) {
+        if ($pluginService instanceof StatusAwarePluginInterface && !isset($this->enabledPlugins[$plugin->getPluginId()])) {
             $pluginService->setStatus(true);
         }
 
         foreach ($plugin->getDataProviders() as $provider) {
             $this->dataProviderManager->registerPlugin($provider, $plugin->getPluginId(), $title, $mode, $script);
         }
+
+        $this->enabledPlugins[$plugin->getPluginId()] = $plugin;
     }
 
     /**
@@ -142,39 +172,30 @@ class PluginManager
      */
     protected function disablePlugin(PluginDescription $plugin) {
         $plugin->setIsEnabled(false);
+        $pluginService = $this->container->get($plugin->getPluginId());
 
         foreach ($plugin->getDataProviders() as $provider) {
             $this->dataProviderManager->deletePlugin($provider, $plugin->getPluginId());
         }
+
+        if (isset($this->enabledPlugins[$plugin->getPluginId()])) {
+            unset($this->enabledPlugins[$plugin->getPluginId()]);
+
+            if ($pluginService instanceof StatusAwarePluginInterface) {
+                $pluginService->setStatus(true);
+            }
+        }
     }
 
     /**
-     * Create a plugin tree to handle plugin dependencies.
+     * Check if a plugin is enabled or not.
+     *
+     * @param $pluginId
+     *
+     * @return bool
      */
-    protected function createPluginTree()
-    {
-        // Inverse order so that we have get childrends from the plugins.
-        $toRemove = [];
-        foreach ($this->plugins as $plugin) {
-            if (!empty($plugin->getParents())) {
-                foreach ($plugin->getParents() as $parentId) {
-                    if ($this->plugins[$parentId]) {
-                        $this->plugins[$parentId]->addChildren($plugin);
-                    } else {
-                        $toRemove[] = $plugin->getPluginId();
-                        break;
-                    }
-                }
-            }
-        }
-        // TODO handle removed plugin, those plugins aren't just not compatible they are broken.
-
-        // For now own we will hand plugins recusively.
-        foreach ($this->plugins as $plugin) {
-            if (empty($plugin->getParents())) {
-                $this->pluginsTree[] = $plugin;
-            }
-        }
+    public function isPluginEnabled($pluginId) {
+        return isset($this->enabledPlugins[$pluginId]);
     }
 
     /**
@@ -184,12 +205,13 @@ class PluginManager
      * @param string[] $dataProviders The data providers it needs to work.
      * @param string[] $parents The parent plugins.
      */
-    public function registerPlugin($id, $dataProviders, $parents) {
+    public function registerPlugin($id, $dataProviders, $parents, $dataProviderName = null) {
         if (!isset($this->plugins[$id])) {
             $this->plugins[$id] = $this->pluginDescriptionFactory->create($id);
         }
 
         $this->plugins[$id]->setDataProviders($dataProviders);
         $this->plugins[$id]->setParents($parents);
+        $this->plugins[$id]->setDataProviderName($dataProviderName);
     }
 }

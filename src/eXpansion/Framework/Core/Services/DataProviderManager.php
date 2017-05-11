@@ -54,7 +54,7 @@ class DataProviderManager
     /**
      * Initialize all the providers properly.
      */
-    public function init()
+    public function init(PluginManager $pluginManager)
     {
         // TODO run check in order not  to have same providers multiple times.
         // TODO get this data from the dedicated!
@@ -62,12 +62,13 @@ class DataProviderManager
         $mode = 'script';
         $script = 'TimeAttack.script.txt';
 
-        foreach ($this->providerListeners as $id => $listeners)
-        {
-            $providerService = $this->container->get($id);
+        foreach ($this->providersByCompatibility as $provider => $data) {
 
-            foreach ($listeners as $listener) {
-                if ($this->isProviderCompatible($listener->getProvider(), $title, $mode, $script)) {
+            $providerId = $this->getCompatibleProviderId($provider, $title, $mode, $script);
+            $providerService = $this->container->get($providerId);
+
+            if ($pluginManager->isPluginEnabled($providerId)) {
+                foreach ($this->providerListeners[$providerId] as $listener) {
                     $this->enabledProviderListeners[$listener->getEventName()][] = [
                         $providerService,
                         $listener->getMethod()

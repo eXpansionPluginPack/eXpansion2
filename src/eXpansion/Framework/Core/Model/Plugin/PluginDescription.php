@@ -25,6 +25,9 @@ class PluginDescription
     /** @var bool  */
     protected $isEnabled = false;
 
+    /** @var string  */
+    protected $dataProviderName = null;
+
     /**
      * PluginDescription constructor.
      * @param string $pluginId
@@ -105,4 +108,30 @@ class PluginDescription
     {
         $this->isEnabled = $isEnabled;
     }
+
+    /**
+     * @return string
+     */
+    public function getDataProviderName()
+    {
+        return $this->dataProviderName;
+    }
+
+    /**
+     * @param string $dataProviderName
+     */
+    public function setDataProviderName($dataProviderName)
+    {
+        $this->dataProviderName = $dataProviderName;
+    }
+
+
+    /**
+     * @return bool
+     */
+    public function isIsDataProvider()
+    {
+        return !is_null($this->dataProviderName);
+    }
+
 }

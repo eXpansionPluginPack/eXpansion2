@@ -25,7 +25,7 @@ class PluginPass implements CompilerPassInterface
 
         $pluginsData = [];
 
-        // Find all Data Provider services.
+        // Find all Plugin services.
         $plugins = $container->findTaggedServiceIds('expansion.plugin');
         foreach ($plugins as $id => $tags) {
             foreach ($tags as $attributes) {
@@ -33,7 +33,7 @@ class PluginPass implements CompilerPassInterface
             }
         }
 
-        // FInd the parent services.
+        // Find the parent services.
         $plugins = $container->findTaggedServiceIds('expansion.plugin.parent');
         foreach ($plugins as $id => $tags) {
             foreach ($tags as $attributes) {
