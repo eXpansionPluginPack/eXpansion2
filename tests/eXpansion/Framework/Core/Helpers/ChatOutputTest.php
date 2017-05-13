@@ -50,11 +50,5 @@ class ChatOutputTest extends TestCore
         $chatOutput->getFormatter();
     }
 
-    /**
-     * @return ChatOutput
-     */
-    protected function getChatOutputHelper()
-    {
-        return $this->container->get('expansion.framework.core.helpers.chat_output');
-    }
+
 }

@@ -4,6 +4,7 @@ namespace Tests\eXpansion\Framework\Core;
 
 use eXpansion\Framework\Core\DataProviders\ChatDataProvider;
 use eXpansion\Framework\Core\DataProviders\Listener\ChatDataListenerInterface;
+use eXpansion\Framework\Core\Helpers\ChatOutput;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
@@ -58,5 +59,13 @@ class TestCore extends KernelTestCase
             ->willReturn($player);
 
         return $playerStorage;
+    }
+
+    /**
+     * @return ChatOutput
+     */
+    protected function getChatOutputHelper()
+    {
+        return $this->container->get('expansion.framework.core.helpers.chat_output');
     }
 }
