@@ -7,7 +7,7 @@ use eXpansion\Framework\Core\Exceptions\ChatCommand\CommandExistException;
 use eXpansion\Framework\Core\Model\ChatCommand\ChatCommandInterface;
 
 /**
- * Class ChatCommands
+ * Class ChatCommands store all currently active chat commands.
  *
  * @package eXpansion\Framework\Core\Services;
  * @author oliver de Cramer <oliverde8@gmail.com>
@@ -15,7 +15,7 @@ use eXpansion\Framework\Core\Model\ChatCommand\ChatCommandInterface;
 class ChatCommands
 {
     /** @var ChatCommandInterface[] */
-    protected $commands;
+    protected $commands = array();
 
     /** @var ChatCommandInterface[] */
     protected $commandPlugin;
@@ -30,7 +30,6 @@ class ChatCommands
     public function __construct($depth)
     {
         $this->depth = $depth;
-        var_dump($depth);
     }
 
 

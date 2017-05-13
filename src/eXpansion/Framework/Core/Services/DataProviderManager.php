@@ -65,14 +65,17 @@ class DataProviderManager
         foreach ($this->providersByCompatibility as $provider => $data) {
 
             $providerId = $this->getCompatibleProviderId($provider, $title, $mode, $script);
-            $providerService = $this->container->get($providerId);
 
-            if ($pluginManager->isPluginEnabled($providerId)) {
-                foreach ($this->providerListeners[$providerId] as $listener) {
-                    $this->enabledProviderListeners[$listener->getEventName()][] = [
-                        $providerService,
-                        $listener->getMethod()
-                    ];
+            if ($providerId) {
+                $providerService = $this->container->get($providerId);
+
+                if ($pluginManager->isPluginEnabled($providerId)) {
+                    foreach ($this->providerListeners[$providerId] as $listener) {
+                        $this->enabledProviderListeners[$listener->getEventName()][] = [
+                            $providerService,
+                            $listener->getMethod()
+                        ];
+                    }
                 }
             }
         }

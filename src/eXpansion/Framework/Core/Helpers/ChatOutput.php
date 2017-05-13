@@ -2,13 +2,14 @@
 
 namespace eXpansion\Framework\Core\Helpers;
 
+use eXpansion\Framework\Core\Model\Helpers\ChatNotificationInterface;
 use Maniaplanet\DedicatedServer\Connection;
 use Symfony\Component\Console\Formatter\OutputFormatterInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 
 /**
- * Class ChatOutput can be used to redirect default symfony output to the maniaplane tin game chat.
+ * Class ChatOutput can be used to redirect default symfony output to the maniaplanet in game chat.
  *
  * @package eXpansion\Framework\Core\Helpers;
  * @author oliver de Cramer <oliverde8@gmail.com>
@@ -18,7 +19,7 @@ class ChatOutput implements OutputInterface
     /** @var Connection */
     protected $connection;
 
-    /** @var ChatNotification */
+    /** @var ChatNotificationInterface */
     protected $chatNotification;
 
     protected $login;
@@ -26,10 +27,10 @@ class ChatOutput implements OutputInterface
     /**
      * ChatOutput constructor.
      *
-     * @param ChatNotification $chatNotification
-     * @param ChatNotification $connection
+     * @param Connection $connection
+     * @param ChatNotificationInterface $chatNotification
      */
-    public function __construct(Connection $connection, ChatNotification $chatNotification)
+    public function __construct(Connection $connection, ChatNotificationInterface $chatNotification)
     {
         $this->connection = $connection;
         $this->chatNotification = $chatNotification;

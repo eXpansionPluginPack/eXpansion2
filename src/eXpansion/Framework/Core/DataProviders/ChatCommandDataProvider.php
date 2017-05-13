@@ -7,7 +7,11 @@ use eXpansion\Framework\Core\Model\Helpers\ChatNotificationInterface;
 use eXpansion\Framework\Core\Services\ChatCommands;
 use Symfony\Component\Console\Exception\RuntimeException;
 
-
+/**
+ * Class ChatCommandDataProvider, provides execution instructions for chat commands.
+ *
+ * @package eXpansion\Framework\Core\DataProviders
+ */
 class ChatCommandDataProvider extends AbstractDataProvider
 {
     /** @var ChatCommands  */
