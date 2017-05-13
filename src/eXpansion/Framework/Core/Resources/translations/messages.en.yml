@@ -1,5 +1,6 @@
 expansion_core:
   test: "This is a test translation : %test%"
+  test_color: "{error}This is a test translation : %test%"
   chat_commands:
     wrong_chat: "{error}This chat command does not exists. {info}Please use /help to see all available chat commands."
     no_description: "{info}Sorry, this command has no description."
