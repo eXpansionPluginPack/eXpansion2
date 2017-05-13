@@ -59,7 +59,7 @@ class ChatOutput implements OutputInterface
      */
     public function write($messages, $newline = false, $options = 0)
     {
-        $this->connection->chatSendServerMessage(strip_tags($messages), $this->login);
+        $this->writeln($messages, $options);
     }
 
     /**
