@@ -11,15 +11,14 @@ class ManialinkPageAnswerDataProvider extends AbstractDataProvider
      *
      * @param $login
      * @param $actionId
-     * @param array $entryValues
      *
      */
     public function onPlayerManialinkPageAnswer($playerUid, $login, $actionId, array $entries)
     {
         $entryValues = array();
-        if(count($entries))
+        if (count($entries))
         {
-            foreach($entries as $entry) {
+            foreach ($entries as $entry) {
                 $entryValues[$entry['Name']] = $entry['Value'];
             }
         }

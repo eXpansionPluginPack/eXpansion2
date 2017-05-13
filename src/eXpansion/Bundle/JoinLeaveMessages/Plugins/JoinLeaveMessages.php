@@ -44,7 +44,7 @@ class JoinLeaveMessages implements PlayerDataListenerInterface
      */
     public function onPlayerConnect(Player $player)
     {
-        $msg = '$fffHello, ' . $player->getNickName() . '  $n$fff($888' . $player->getLogin() . '$fff)';
+        $msg = '$fffHello, '.$player->getNickName().'  $n$fff($888'.$player->getLogin().'$fff)';
         $this->sendChat($msg);
     }
 
@@ -53,7 +53,7 @@ class JoinLeaveMessages implements PlayerDataListenerInterface
      */
     public function onPlayerDisconnect(Player $player, $disconnectionReason)
     {
-        $msg = '$fffSee you, ' . $player->getNickName() . '  $n$fff($888' . $player->getLogin() . '$fff)';
+        $msg = '$fffSee you, '.$player->getNickName().'  $n$fff($888'.$player->getLogin().'$fff)';
         $this->sendChat($msg);
     }
 

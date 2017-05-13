@@ -83,6 +83,10 @@ class ChatCommands
         return $this->findChatCommand($cmdAndArgs, $this->depth);
     }
 
+    /**
+     * @param string[] $cmdAndArgs
+     * @param integer $depth
+     */
     protected function findChatCommand($cmdAndArgs, $depth)
     {
         if ($depth == 0) {
@@ -100,8 +104,8 @@ class ChatCommands
 
     /**
      *
-     * @param $pluginId
-     * @param $cmdTxt
+     * @param string $pluginId
+     * @param string $cmdTxt
      * @param ChatCommandInterface $command
      *
      * @throws CommandExistException
