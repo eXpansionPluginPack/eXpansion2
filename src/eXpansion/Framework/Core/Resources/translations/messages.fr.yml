@@ -1,3 +1,4 @@
 expansion_core:
+  test: "Ceci est une trad de test : %test%"
   chat_commands:
     wrong_chat: "{error}This chat command does not exists. {info}Please use {highlight}/help {info}to see all available chat commands."
