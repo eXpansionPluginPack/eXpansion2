@@ -75,7 +75,7 @@ class ChatCommandDataProvider extends AbstractDataProvider
         $cmdAndArgs = explode(' ', $text);
 
         // Internal dedicated serer command to ignore.
-        if($cmdAndArgs[0] === 'version') {
+        if ($cmdAndArgs[0] === 'version') {
             return;
         }
 
@@ -91,7 +91,7 @@ class ChatCommandDataProvider extends AbstractDataProvider
                     $message = $command->run($login, $this->chatOutput, $parameter);
                 } catch (RuntimeException $e) {
                     $this->chatNotification->sendMessage($e->getMessage(), $login);
-                } catch(\Exception $e) {
+                } catch (\Exception $e) {
                     $this->chatNotification->sendMessage($e->getMessage(), $login);
                 }
             }
