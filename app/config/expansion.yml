@@ -8,3 +8,20 @@ e_xpansion_core:
 
             separator: '$3af'
             pretty_chat: '$dee'
+
+            admin_info: '$db1'
+
+e_xpansion_admin_groups:
+    groups:
+        master_admin:
+            label: Master Admin
+            logins:
+                - oliverde8
+                - reaby
+            permissions: [] # Master_admin has always all permissions.
+        admin:
+            label: Admin
+            logins: []
+            permissions:
+              - next
+              - restart

@@ -1,0 +1,17 @@
+parameters:
+    expansion.framework.core.model.gui.manialink.class: 'eXpansion\Framework\Core\Model\Gui\Manialink'
+    expansion.framework.core.model.gui.window.class: 'eXpansion\Framework\Core\Model\Gui\Window'
+    expansion.framework.core.model.gui.action.class: 'eXpansion\Framework\Core\Model\Gui\Action'
+
+services:
+    expansion.framework.core.gui.manialink.test:
+        class: 'eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory'
+        arguments:
+            - "@expansion.framework.core.plugins.gui_handler"
+            - "@expansion.framework.core.user_groups.factory"
+            - "@expansion.framework.core.plugins.gui.action_factory"
+            - "test-manialink"
+            - 2.5
+            - 2.5
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.user_group}

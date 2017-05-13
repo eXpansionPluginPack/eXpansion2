@@ -2,7 +2,7 @@ parameters:
 
 services:
     expansion.emotes.plugins.chat_commands:
-        class: eXpansion\Core\Model\ChatCommand\ChatCommandPlugin
+        class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
         arguments:
             -
               - '@expansion.emotes.chat_command.gg'

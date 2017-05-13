@@ -10,6 +10,9 @@ class AppKernel extends Kernel
         /* Register symfony bundles & eXpansion core bundles */
         $bundles = $this->registerCoreBundles();
 
+        /* Register eXpansion Base Bundles */
+        $bundles[] = new \eXpansion\Bundle\AdminChat\AdminChatBundle();
+
         /* Register eXpansion Plugins */
         $bundles[] = new \eXpansion\Bundle\JoinLeaveMessages\JoinLeaveMessagesBundle();
         $bundles[] = new \eXpansion\Bundle\Emotes\EmotesBundle();
@@ -32,7 +35,8 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 
             // And add eXpansion core.
-            new \eXpansion\Core\eXpansionCore(),
+            new \eXpansion\Framework\Core\eXpansionCore(),
+            new \eXpansion\Framework\AdminGroups\eXpansionAdminGroupsBundle(),
         ];
 
         // Also add debug help bundles.

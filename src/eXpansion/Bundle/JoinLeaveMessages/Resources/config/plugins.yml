@@ -1,8 +1,8 @@
 services:
-    expansion.core.plugins.joinleave:
+    expansion.framework.core.plugins.joinleave:
         class: eXpansion\Bundle\JoinLeaveMessages\Plugins\JoinLeaveMessages
         arguments:
-            - '@expansion.core.services.dedicated_connection'
-            - '@expansion.core.services.console'
+            - '@expansion.framework.core.services.dedicated_connection'
+            - '@expansion.framework.core.services.console'
         tags:
             - {name: expansion.plugin, data_provider: expansion.player_data}

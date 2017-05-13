@@ -2,9 +2,9 @@
 
 namespace eXpansion\Bundle\JoinLeaveMessages\Plugins;
 
-use eXpansion\Core\DataProviders\Listener\PlayerDataListenerInterface;
-use eXpansion\Core\Services\Console;
-use eXpansion\Core\Storage\Data\Player;
+use eXpansion\Framework\Core\DataProviders\Listener\PlayerDataListenerInterface;
+use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Storage\Data\Player;
 use Maniaplanet\DedicatedServer\Connection;
 
 class JoinLeaveMessages implements PlayerDataListenerInterface
@@ -44,7 +44,7 @@ class JoinLeaveMessages implements PlayerDataListenerInterface
      */
     public function onPlayerConnect(Player $player)
     {
-        $msg = '$fffHello, ' . $player->getNickName() . '  $n$fff($888' . $player->getLogin() . '$fff)';
+        $msg = '$fffHello, '.$player->getNickName().'  $n$fff($888'.$player->getLogin().'$fff)';
         $this->sendChat($msg);
     }
 
@@ -53,7 +53,7 @@ class JoinLeaveMessages implements PlayerDataListenerInterface
      */
     public function onPlayerDisconnect(Player $player, $disconnectionReason)
     {
-        $msg = '$fffSee you, ' . $player->getNickName() . '  $n$fff($888' . $player->getLogin() . '$fff)';
+        $msg = '$fffSee you, '.$player->getNickName().'  $n$fff($888'.$player->getLogin().'$fff)';
         $this->sendChat($msg);
     }
 

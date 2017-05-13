@@ -1,0 +1,30 @@
+parameters:
+    expansion.framework.core.model.user_groups.group.class: eXpansion\Framework\Core\Model\UserGroups\Group
+
+services:
+    # Defining core user groups.
+    expansion.framework.core.user_groups.all_players:
+        class: '%expansion.framework.core.model.user_groups.group.class%'
+        arguments:
+            - '@expansion.framework.core.services.application.dispatcher'
+            - 'all_players'
+
+    expansion.framework.core.user_groups.players:
+        class: '%expansion.framework.core.model.user_groups.group.class%'
+        arguments:
+            - '@expansion.framework.core.services.application.dispatcher'
+            - 'players'
+
+    expansion.framework.core.user_groups.spectators:
+        class: '%expansion.framework.core.model.user_groups.group.class%'
+        arguments:
+            - '@expansion.framework.core.services.application.dispatcher'
+            - 'spectators'
+
+    expansion.framework.core.user_groups.factory:
+        class: eXpansion\Framework\Core\Plugins\UserGroups\Factory
+        arguments:
+            - '@expansion.framework.core.services.application.dispatcher'
+            - '%expansion.framework.core.model.user_groups.group.class%'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.user_group}

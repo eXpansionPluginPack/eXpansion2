@@ -2,11 +2,11 @@
 
 namespace eXpansion\Bundle\Acme\Plugins;
 
-use eXpansion\Core\DataProviders\Listener\MatchDataListenerInterface;
-use eXpansion\Core\DataProviders\Listener\TimerDataListenerInterface;
-use eXpansion\Core\Helpers\Time;
-use eXpansion\Core\Services\Console;
-use eXpansion\Core\Storage\Data\Player;
+use eXpansion\Framework\Core\DataProviders\Listener\MatchDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\TimerDataListenerInterface;
+use eXpansion\Framework\Core\Helpers\Time;
+use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Storage\Data\Player;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map;
 

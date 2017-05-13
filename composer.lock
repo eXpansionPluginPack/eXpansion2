@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cbdcdcc8eabb86f0ae01ba2b25af7eba",
-    "content-hash": "24a141373e99f3e3e2ad56ac1e3f9a84",
+    "hash": "686169ebde6bd8983c7b54a59ef777b0",
+    "content-hash": "67469ea60477e0a1e122e116b47f1952",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1529,6 +1529,63 @@
                 "mailer"
             ],
             "time": "2017-02-13 07:52:53"
+        },
+        {
+            "name": "symfony-bundles/bundle-dependency",
+            "version": "v1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony-bundles/bundle-dependency.git",
+                "reference": "755ae15fff7cfeca812e528eab4bf7ff9a4f1a72"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony-bundles/bundle-dependency/zipball/755ae15fff7cfeca812e528eab4bf7ff9a4f1a72",
+                "reference": "755ae15fff7cfeca812e528eab4bf7ff9a4f1a72",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "doctrine/annotations": "~1.1",
+                "phpunit/php-code-coverage": "^3.3.0",
+                "phpunit/phpunit": "^5.3",
+                "symfony/framework-bundle": "~2.7|~3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "SymfonyBundles\\BundleDependency\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitry Khaperets",
+                    "email": "khaperets@gmail.com"
+                }
+            ],
+            "description": "Symfony BundleDependency Component",
+            "homepage": "https://github.com/symfony-bundles/bundle-dependency",
+            "keywords": [
+                "bundle",
+                "dependencies",
+                "dependency",
+                "symfony"
+            ],
+            "time": "2016-11-27 03:28:57"
         },
         {
             "name": "symfony/monolog-bundle",

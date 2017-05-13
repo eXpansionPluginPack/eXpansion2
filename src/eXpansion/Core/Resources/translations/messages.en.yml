@@ -1,3 +1,0 @@
-expansion_core:
-  chat_commands:
-    wrong_chat: "{error}This chat command does not exists. {info}Please use /help to see all available chat commands."

@@ -1,0 +1,12 @@
+expansion_admin_chat:
+  restart:
+    msg: '{admin_info}Admin %nickname% {admin_info}restarted the map'
+    description: 'Replay current map.'
+
+  next:
+    msg: '{admin_info}Admin %nickname% {admin_info}skipped current map'
+    description: '{info} Skip current map & go to the next map.'
+
+  set_server_name:
+    msg: '{admin_info}Admin %nickname% {admin_info}changed server name to %servername%'
+    description: '{info}Change the name of the server.'

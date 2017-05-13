@@ -29,6 +29,9 @@
                 <directory>src/*/*/DependencyInjection</directory>
                 <directory>src/*/*/*/DependencyInjection</directory>
                 <directory>src/eXpansion/Bundle/</directory><!-- Only testing plugins are here. They will eventually be deleted -->
+
+                <file>src/eXpansion/Framework/Core/eXpansionCore.php</file>
+                <file>src/eXpansion/Framework/AdminGroups/eXpansionAdminGroupsBundle.php</file>
             </exclude>
         </whitelist>
     </filter>
