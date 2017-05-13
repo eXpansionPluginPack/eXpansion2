@@ -81,7 +81,7 @@ class AdminGroups
 
     /**
      * @param $login
-     * @param $permission
+     * @param string $permission
      *
      * @return bool
      */

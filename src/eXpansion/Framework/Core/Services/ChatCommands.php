@@ -45,7 +45,7 @@ class ChatCommands
     {
         $commands = $pluginService->getChatCommands();
 
-        foreach($commands as $command)
+        foreach ($commands as $command)
         {
             $this->addCommand($pluginId, $command->getCommand(), $command);
 
@@ -62,7 +62,7 @@ class ChatCommands
      */
     public function deletePlugin($pluginId)
     {
-        if(!isset($this->commandPlugin[$pluginId])) {
+        if (!isset($this->commandPlugin[$pluginId])) {
             return;
         }
 
@@ -99,7 +99,7 @@ class ChatCommands
 
         return isset($this->commands[$command])
             ? [$this->commands[$command], $parameters]
-            : $this->findChatCommand($cmdAndArgs, $depth-1);
+            : $this->findChatCommand($cmdAndArgs, $depth - 1);
     }
 
     /**
@@ -119,6 +119,6 @@ class ChatCommands
         }
 
         $this->commands[$cmdTxt] = $command;
-        $this->commandPlugin[$pluginId][$cmdTxt]  = $command;
+        $this->commandPlugin[$pluginId][$cmdTxt] = $command;
     }
 }
