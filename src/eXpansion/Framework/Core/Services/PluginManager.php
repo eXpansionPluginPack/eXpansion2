@@ -63,9 +63,9 @@ class PluginManager
     /**
      * Enable all possible plugins.
      *
-     * @param $title
-     * @param $mode
-     * @param $script
+     * @param string $title
+     * @param string $mode
+     * @param string $script
      */
     protected function enableDisablePlugins($title, $mode, $script)
     {
@@ -91,7 +91,7 @@ class PluginManager
             $this->enablePlugin($plugin);
         }
 
-        foreach ($pluginsToProcess as $plugin)  {
+        foreach ($pluginsToProcess as $plugin) {
             $this->disablePlugin($plugin);
         }
     }
@@ -119,7 +119,7 @@ class PluginManager
 
         // Now check  for data providers.
         foreach ($plugin->getDataProviders() as $dataProvider) {
-            $providerId = $this->dataProviderManager->getCompatibleProviderId($dataProvider,  $title, $mode, $script);
+            $providerId = $this->dataProviderManager->getCompatibleProviderId($dataProvider, $title, $mode, $script);
 
             if (is_null($providerId) || !isset($enabledPlugins[$providerId])) {
                 // Either there are no data providers compatible or the only one compatible
@@ -129,7 +129,7 @@ class PluginManager
 
         // If data provider need to check if it was "the chosen one".
         if ($plugin->isIsDataProvider()) {
-            $selectedProvider = $this->dataProviderManager->getCompatibleProviderId($plugin->getDataProviderName(),  $title, $mode, $script);
+            $selectedProvider = $this->dataProviderManager->getCompatibleProviderId($plugin->getDataProviderName(), $title, $mode, $script);
 
             if ($plugin->getPluginId() != $selectedProvider) {
                 // This data provider wasn't the one selected and therefore the plugin isn't compatible.

@@ -29,7 +29,7 @@ class BasicEmote extends AbstractChatCommand
      * BasicEmote constructor.
      *
      * @param string $command The chat command
-     * @param string $message The emote message to send
+     * @param string $nbMessages The emote message to send
      * @param ChatNotification $chatNotification
      * @param array $aliases
      * @param bool $parametersAsArray
