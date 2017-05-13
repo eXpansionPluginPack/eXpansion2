@@ -22,7 +22,7 @@ class eXpansionAdminGroupsExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter("expansion.admin_groups.groups", $config['groups']);
+        $container->setParameter("expansion.framework.admin_groups.groups", $config['groups']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('helpers.yml');

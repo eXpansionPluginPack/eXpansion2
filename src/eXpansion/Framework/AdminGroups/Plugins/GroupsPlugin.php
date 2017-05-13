@@ -48,7 +48,7 @@ class GroupsPlugin implements PlayerDataListenerInterface
     {
         $groupName = $this->adminGroupConfiguration->getLoginGroupName($player->getLogin());
 
-        if (empty($groups)) {
+        if (empty($groupName)) {
             $this->userGroupFactory->getGroup('admin:guest')->addLogin($player->getLogin());
         } else {
             $this->userGroupFactory->getGroup("admin:$groupName")->addLogin($player->getLogin());

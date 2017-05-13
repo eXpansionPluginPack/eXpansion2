@@ -18,6 +18,13 @@ abstract class AbstractAdminChatCommand extends AbstractChatCommand
 
     protected $permission;
 
+    /**
+     * AbstractAdminChatCommand constructor.
+     * @param $command
+     * @param string $permission
+     * @param array $aliases
+     * @param AdminGroups $adminGroupsHelper
+     */
     public function __construct(
         $command,
         $permission,

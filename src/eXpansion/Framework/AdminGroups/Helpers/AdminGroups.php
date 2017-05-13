@@ -41,9 +41,12 @@ class AdminGroups
      */
     public function getUserGroups()
     {
+        $groups = [];
         foreach ($this->adminGroupConfiguration->getGroups() as $groupName) {
-            yield $this->userGroupFactory->getGroup("admin:$groupName");
+            $groups[] = $this->getUserGroup("$groupName");
         }
+
+        return $groups;
     }
 
     /**
@@ -57,10 +60,23 @@ class AdminGroups
     {
         $groupName = $this->adminGroupConfiguration->getLoginGroupName($login);
         if (empty($groupName)) {
-            return $this->userGroupFactory->getGroup('admin:guest');
-        } else {
-            return $this->userGroupFactory->getGroup("admin:$groupName");
+            $groupName = 'guest';
         }
+
+        return $this->getUserGroup("$groupName");
+    }
+
+    protected function getUserGroup($groupName)
+    {
+        $groupName = "admin:$groupName";
+
+        $group = $this->userGroupFactory->getGroup($groupName);
+        if (!$group) {
+            $this->userGroupFactory->create($groupName);
+            $group = $this->userGroupFactory->getGroup($groupName);
+        }
+
+        return $group;
     }
 
     /**

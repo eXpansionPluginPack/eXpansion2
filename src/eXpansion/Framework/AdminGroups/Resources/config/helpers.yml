@@ -1,6 +1,6 @@
 services:
-    expansion.admin_groups.helpers.groups:
+    expansion.framework.admin_groups.helpers.groups:
         class: eXpansion\Framework\AdminGroups\Helpers\AdminGroups
         arguments:
-            - '@expansion.admin_groups.services.admin_group_configuration'
+            - '@expansion.framework.admin_groups.services.admin_group_configuration'
             - '@expansion.framework.core.user_groups.factory'

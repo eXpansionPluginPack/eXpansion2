@@ -5,7 +5,7 @@ services:
             - '__'
             - '__'
             - []
-            - '@expansion.admin_groups.helpers.groups'
+            - '@expansion.framework.admin_groups.helpers.groups'
             - '@expansion.framework.core.services.dedicated_connection'
             - '@expansion.framework.core.helpers.chat_notification'
             - '@expansion.framework.core.storage.player'
