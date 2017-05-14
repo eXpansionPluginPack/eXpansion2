@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "69e014082a02f73a3eaf846ea65d8ab5",
-    "content-hash": "eec26b2a48689ff64ed9b2e091f4469e",
+    "hash": "c3c4e3229a2b1d469a6d1b4cf16a4a14",
+    "content-hash": "99389bfe77664805eec036f037184519",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -1411,16 +1411,16 @@
         },
         {
             "name": "steeffeen/fancymanialinks",
-            "version": "dev-master",
+            "version": "2.0.0-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/steeffeen/FancyManiaLinks.git",
-                "reference": "72c5bb8787de79a0bc15999f261dc55ce899aeb8"
+                "reference": "a7fb0aef1c823c0a0206428e64e6434901a2202d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/steeffeen/FancyManiaLinks/zipball/72c5bb8787de79a0bc15999f261dc55ce899aeb8",
-                "reference": "72c5bb8787de79a0bc15999f261dc55ce899aeb8",
+                "url": "https://api.github.com/repos/steeffeen/FancyManiaLinks/zipball/a7fb0aef1c823c0a0206428e64e6434901a2202d",
+                "reference": "a7fb0aef1c823c0a0206428e64e6434901a2202d",
                 "shasum": ""
             },
             "require": {
@@ -1457,7 +1457,7 @@
                 "manialink",
                 "xml"
             ],
-            "time": "2017-05-13 15:59:47"
+            "time": "2017-05-14 12:47:45"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -3559,7 +3559,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "maniaplanet/dedicated-server-api": 20,
-        "steeffeen/fancymanialinks": 20
+        "steeffeen/fancymanialinks": 10
     },
     "prefer-stable": false,
     "prefer-lowest": false,

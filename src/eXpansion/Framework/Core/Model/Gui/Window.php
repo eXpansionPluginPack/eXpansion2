@@ -60,21 +60,18 @@ class Window extends Manialink implements Container
 
         $titleBar = new Quad();
         $titleBar->setSize($sizeX, 0.33)
-            ->setAlign(null, null) // Fix issue with FML's default values.
             ->setPosition(0, -$titleHeight)
             ->setBackgroundColor('fff');
         $windowFrame->addChild($titleBar);
 
         $titleBar = new Quad();
         $titleBar->setSize($sizeX / 4, 0.5)
-            ->setAlign(null, null) // Fix issue with FML's default values.
             ->setPosition(0, -$titleHeight)
             ->setBackgroundColor('fff');
         $windowFrame->addChild($titleBar);
 
-        $titleBar = new Quad('Title"');
+        $titleBar = new Quad('Title');
         $titleBar->setSize($sizeX - $closeButtonWidth, $titleHeight)
-            ->setAlign(null, null) // Fix issue with FML's default values.
             ->setBackgroundColor($titlebarColor)
             ->setScriptEvents(true);
         $windowFrame->addChild($titleBar);
@@ -94,29 +91,23 @@ class Window extends Manialink implements Container
         //body
         $body = new Quad_Bgs1();
         $body->setSize($sizeX, $sizeY - $titleHeight)
-            ->setAlign(null, null) // Fix issue with FML's default values.
             ->setPosition(0, -$titleHeight)
             ->setSubStyle(Quad_Bgs1::SUBSTYLE_BgWindow3);
         $windowFrame->addChild($body);
 
         $body = new Quad_Bgs1InRace();
         $body->setSize($sizeX + 10, $sizeY + 10)
-            ->setAlign(null, null) // Fix issue with FML's default values.
             ->setPosition(-5, 5)
             ->setSubStyle(Quad_Bgs1InRace::SUBSTYLE_BgButtonShadow);
         $windowFrame->addChild($body);
 
         // Add maniascript for window handling.
-        $this->manialink->addChild($windowManiaScriptFactory->createScript([
-            ''
-        ]));
+        $this->manialink->addChild($windowManiaScriptFactory->createScript(['']));
 
         // Frame to handle the content of the window.
         $this->contentFrame = new Frame();
         $this->contentFrame->setPosition(2, -$titleHeight - 2);
         $windowFrame->addChild($this->contentFrame);
-
-        // TODO put back maniascript to move windows.
     }
 
     /**
