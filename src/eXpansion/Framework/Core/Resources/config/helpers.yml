@@ -23,3 +23,6 @@ services:
         arguments:
             - '@expansion.framework.core.services.dedicated_connection'
             - '@expansion.framework.core.helpers.chat_notification'
+
+    expansion.framework.core.helpers.data.array_filter:
+        class: 'eXpansion\Framework\Core\Helpers\Data\ArrayFilter'
