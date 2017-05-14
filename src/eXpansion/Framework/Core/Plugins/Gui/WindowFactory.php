@@ -7,6 +7,7 @@ use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\GuiHandler;
 use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
+use FML\Controls\Control;
 
 /**
  * Class ManialiveFactory allow the creation of manialinks.
@@ -30,6 +31,9 @@ class WindowFactory extends ManialinkFactory {
         $posX = null,
         $posY = null
     ) {
+        // Hack for FML to use default MP alignements.
+        Control::clearDefaultAlign();
+
         parent::__construct($guiHandler, $groupFactory, $actionFactory, $name, $sizeX, $sizeY, $posX, $posY, $className);
 
         $this->windowManiaScriptFactory = $windowManiaScriptFactory;

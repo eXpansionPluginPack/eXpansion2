@@ -2,55 +2,54 @@
 
 main () {
 
-    declare CMlFrame Window <=> (Page.GetFirstChild("Window") as CMlFrame);
-    declare CMlQuad Titlebar <=> (Page.GetFirstChild("Title") as CMlQuad);
-    declare CMlLabel CloseButton <=> (Page.GetFirstChild("Close") as CMlLabel);
-    declare moveWindow = False;
-    declare closeWindow = False;
-    declare openWindow = False;
-    declare Vec2 Offset = <0.0, 0.0>;
-    declare Real zIndex = 0.;
-    declare Boolean MoveWindow = False;
-    declare Integer lastAction = Now;
+    declare CMlFrame Exp_Window <=> (Page.GetFirstChild("Window") as CMlFrame);
+    declare CMlQuad Exp_Titlebar <=> (Page.GetFirstChild("Title") as CMlQuad);
+    declare CMlLabel Exp_CloseButton <=> (Page.GetFirstChild("Close") as CMlLabel);
+    declare Exp_CloseWindow = False;
+    declare Exp_OpenWindow = False;
+    declare Vec2 Exp_Offset = <0.0, 0.0>;
+    declare Real Exp_zIndex = 0.;
+    declare Boolean Exp_MoveWindow = False;
+    declare Integer Exp_lastAction = Now;
 
     while(True) {
 		yield;
 
-        if (openWindow) {
-            AnimMgr.Add(Window, "<frame scale=\"1.\" />", 200, CAnimManager::EAnimManagerEasing::SineIn);
+        if (Exp_OpenWindow) {
+            AnimMgr.Add(Exp_Window, "<frame scale=\"1.\" />", 200, CAnimManager::EAnimManagerEasing::SineIn);
        	}
 
-        if (closeWindow) {
-         	AnimMgr.Add(Window, "<frame scale=\"0.\" />", 200, CAnimManager::EAnimManagerEasing::SineOut);
+        if (Exp_CloseWindow) {
+         	AnimMgr.Add(Exp_Window, "<frame scale=\"0.\" />", 200, CAnimManager::EAnimManagerEasing::SineOut);
         }
 
-        if (openWindow && lastAction + 200 <= Now ) {
-            openWindow = False;
-            lastAction = 0;
+        if (Exp_OpenWindow && Exp_lastAction + 200 <= Now ) {
+            Exp_OpenWindow = False;
+            Exp_lastAction = 0;
         }
 
-	    if (closeWindow && lastAction + 200 <= Now ) {
-            closeWindow = False;
-            TriggerPageAction(CloseButton.DataAttributeGet("action"));
+	    if (Exp_CloseWindow && Exp_lastAction + 200 <= Now ) {
+            Exp_CloseWindow = False;
+            TriggerPageAction(Exp_CloseButton.DataAttributeGet("action"));
 	        continue;
 	    }
 
-	    if (MoveWindow) {
-            Window.RelativePosition_V3.X = MouseX + Offset.X;
-	        Window.RelativePosition_V3.Y = MouseY + Offset.Y;
+	    if (Exp_MoveWindow) {
+            Exp_Window.RelativePosition_V3.X = MouseX + Exp_Offset.X;
+	        Exp_Window.RelativePosition_V3.Y = MouseY + Exp_Offset.Y;
 	    }
 
 	    if (PendingEvents.count != 0) {
             foreach (Event in PendingEvents) {
                 if ( (Event.Type == CMlEvent::Type::MouseClick && Event.ControlId == "Close")  ||
                    (Event.Type == CMlEvent::Type::KeyPress && Event.KeyCode == 35) ) {
-                    closeWindow = True;
-                    lastAction = Now;
+                    Exp_CloseWindow = True;
+                    Exp_lastAction = Now;
                 }
 
                 if ( (Event.Type == CMlEvent::Type::MouseClick && Event.ControlId == "Open") ) {
-                    lastAction = Now;
-                    openWindow = True;
+                    Exp_lastAction = Now;
+                    Exp_OpenWindow = True;
                 }
             }
 	    }
@@ -58,13 +57,12 @@ main () {
 	    if (MouseLeftButton == True) {
             foreach (Event in PendingEvents) {
                 if (Event.Type == CMlEvent::Type::MouseClick && Event.ControlId == "Title")  {
-                    Offset = <Window.RelativePosition_V3.X - MouseX, Window.RelativePosition_V3.Y - MouseY>;
-                    MoveWindow = True;
+                    Exp_Offset = <Exp_Window.RelativePosition_V3.X - MouseX, Exp_Window.RelativePosition_V3.Y - MouseY>;
+                    Exp_MoveWindow = True;
                 }
             }
         } else {
-            MoveWindow = False;
+            Exp_MoveWindow = False;
         }
-
     }
 }

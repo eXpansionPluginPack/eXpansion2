@@ -36,7 +36,7 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "maniaplanet/dedicated-server-api": "dev-master",
         "oliverde8/associative-array-simplified": "^1.0.0",
-        "steeffeen/fancymanialinks": "dev-master"
+        "steeffeen/fancymanialinks": "2.0.0-beta"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
