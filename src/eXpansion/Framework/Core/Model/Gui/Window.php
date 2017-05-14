@@ -26,6 +26,7 @@ class Window extends Manialink implements Container
 
     public function __construct(
         Group $group,
+        ManiaScriptFactory $windowManiaScriptFactory,
         $name,
         $sizeX,
         $sizeY,
@@ -104,6 +105,11 @@ class Window extends Manialink implements Container
             ->setPosition(-5, 5)
             ->setSubStyle(Quad_Bgs1InRace::SUBSTYLE_BgButtonShadow);
         $windowFrame->addChild($body);
+
+        // Add maniascript for window handling.
+        $this->manialink->addChild($windowManiaScriptFactory->createScript([
+            ''
+        ]));
 
         // Frame to handle the content of the window.
         $this->contentFrame = new Frame();
