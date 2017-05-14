@@ -139,8 +139,6 @@ class Window extends Manialink implements Container
             throw new MissingCloseActionException("Close action is missing for window. Check if you are using the proper factory.");
         }
 
-        echo $this->manialink->__toString();
-
         return $this->manialink->__toString();
     }
 
