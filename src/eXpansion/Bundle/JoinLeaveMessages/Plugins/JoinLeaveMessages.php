@@ -44,7 +44,7 @@ class JoinLeaveMessages implements PlayerDataListenerInterface
      */
     public function onPlayerConnect(Player $player)
     {
-        $msg = '$fffHello, '.$player->getNickName().'  $n$fff($888'.$player->getLogin().'$fff)';
+        $msg = '|success| $fffHello, '.$player->getNickName().'  $n$fff($888'.$player->getLogin().'$fff)';
         $this->sendChat($msg);
     }
 

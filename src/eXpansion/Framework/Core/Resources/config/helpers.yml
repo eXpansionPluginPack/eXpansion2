@@ -15,6 +15,7 @@ services:
             - '@expansion.framework.core.helpers.translations'
             - '@expansion.framework.core.storage.player'
             - '%expansion.config.core_chat_color_codes%'
+            - '%expansion.config.core_chat_glyph_icons%'
 
 
     expansion.framework.core.helpers.chat_output:
