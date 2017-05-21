@@ -9,8 +9,9 @@ e_xpansion_core:
             pretty_chat: '$dee'
             admin_info: '$db1'
         core_chat_glyph_icons:
-            success: '$db1✔'
+            success: '$0d0✔'
             fail: '$b32✘'
+            server: '$afd$fff'
 e_xpansion_admin_groups:
     groups:
         master_admin:

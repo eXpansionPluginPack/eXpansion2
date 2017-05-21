@@ -3,18 +3,23 @@
 namespace eXpansion\Bundle\JoinLeaveMessages\Plugins;
 
 use eXpansion\Framework\Core\DataProviders\Listener\PlayerDataListenerInterface;
+use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use Maniaplanet\DedicatedServer\Connection;
 
 class JoinLeaveMessages implements PlayerDataListenerInterface
 {
-    /** @var Connection  */
+    /** @var Connection */
     protected $connection;
-    /** @var Console  */
+    /** @var Console */
     protected $console;
-    /** @var bool $enabled is output enabled  */
+    /** @var bool $enabled is output enabled */
     private $enabled = true;
+    /**
+     * @var ChatNotification $chat
+     */
+    protected $chat;
 
     /**
      * JoinLeaveMessages constructor.
@@ -22,10 +27,11 @@ class JoinLeaveMessages implements PlayerDataListenerInterface
      * @param Connection $connection
      * @param Console $console
      */
-    public function __construct(Connection $connection, Console $console)
+    public function __construct(Connection $connection, Console $console, ChatNotification $chatNotification)
     {
         $this->connection = $connection;
         $this->console = $console;
+        $this->chat = $chatNotification;
     }
 
 //#region Callbacks
@@ -44,8 +50,12 @@ class JoinLeaveMessages implements PlayerDataListenerInterface
      */
     public function onPlayerConnect(Player $player)
     {
-        $msg = '|success| $fffHello, '.$player->getNickName().'  $n$fff($888'.$player->getLogin().'$fff)';
-        $this->sendChat($msg);
+        $this->chat->sendMessage(
+            "expansion_join_leave_messages.connect",
+            null,
+            ["%nickname%" => $player->getNickName(),
+                "%login%" => $player->getLogin()
+            ]);
     }
 
     /**
@@ -53,8 +63,12 @@ class JoinLeaveMessages implements PlayerDataListenerInterface
      */
     public function onPlayerDisconnect(Player $player, $disconnectionReason)
     {
-        $msg = '$fffSee you, '.$player->getNickName().'  $n$fff($888'.$player->getLogin().'$fff)';
-        $this->sendChat($msg);
+        $this->chat->sendMessage(
+            "expansion_join_leave_messages.disconnect",
+            null,
+            ["%nickname%" => $player->getNickName(),
+             "%login%" => $player->getLogin()
+             ]);
     }
 
     /**
@@ -72,11 +86,4 @@ class JoinLeaveMessages implements PlayerDataListenerInterface
     }
 //#endregion
 
-//#region Helpers
-    private function sendChat($msg) {
-        if ($this->enabled) {
-            $this->connection->chatSendServerMessage($msg);
-        }
-    }
-//#endregion
 }
