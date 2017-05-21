@@ -23,7 +23,8 @@ class ChatNotification implements ChatNotificationInterface
     /** @var PlayerStorage */
     protected $playerStorage;
 
-    protected $colorCodes = [];
+    /** @var string[] */
+    protected $replacementPatterns = [];
 
     /**
      * ChatNotification constructor.
@@ -35,15 +36,22 @@ class ChatNotification implements ChatNotificationInterface
         Connection $connection,
         Translations $translations,
         PlayerStorage $playerStorage,
-        $colorCodes
-    ) {
+        $colorCodes,
+        $glyphIcons
+    )
+    {
         $this->connection = $connection;
         $this->translations = $translations;
         $this->playerStorage = $playerStorage;
 
         foreach ($colorCodes as $code => $colorCode) {
-            $this->colorCodes["{".$code."}"] = '$z'.$colorCode;
+            $this->replacementPatterns["{" . $code . "}"] = '$z' . $colorCode;
         }
+
+        foreach ($glyphIcons as $name => $icon) {
+            $this->replacementPatterns["|" . $name . "|"] = $icon;
+        }
+
     }
 
     /**
@@ -55,7 +63,7 @@ class ChatNotification implements ChatNotificationInterface
      */
     public function sendMessage($messageId, $to = null, $parameters = [])
     {
-        $parameters = array_merge($this->colorCodes, $parameters);
+        $parameters = array_merge($this->replacementPatterns, $parameters);
 
         if (is_string($to)) {
             $player = $this->playerStorage->getPlayerInfo($to);

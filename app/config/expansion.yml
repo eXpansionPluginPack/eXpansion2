@@ -5,12 +5,13 @@ e_xpansion_core:
             warning: '$d50'
             info: '$db1'
             highlight: '$u$fff'
-
             separator: '$3af'
             pretty_chat: '$dee'
-
             admin_info: '$db1'
-
+        core_chat_glyph_icons:
+            success: '$0d0✔'
+            fail: '$b32✘'
+            server: '$afd$fff'
 e_xpansion_admin_groups:
     groups:
         master_admin:

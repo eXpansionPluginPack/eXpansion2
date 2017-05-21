@@ -25,15 +25,21 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $treeBuilder->root('e_xpansion_core')
             ->children()
-                ->arrayNode('parameters')->children()
-                    ->arrayNode('core_chat_color_codes')
+                ->arrayNode('parameters')
+                    ->children()
+                        ->arrayNode('core_chat_color_codes')
+                            ->useAttributeAsKey('name')
+                            ->prototype('scalar')
+                        ->end()
+                    ->end()
+                    ->arrayNode('core_chat_glyph_icons')
                         ->useAttributeAsKey('name')
                         ->prototype('scalar')
                     ->end()
+                    ->end()
                 ->end()
+            ->end()
             ->end();
-
-
         return $treeBuilder;
     }
 }
