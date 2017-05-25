@@ -26,3 +26,6 @@ services:
 
     expansion.framework.core.helpers.data.array_filter:
         class: 'eXpansion\Framework\Core\Helpers\Data\ArrayFilter'
+
+    expansion.framework.core.helpers.data.object_filter:
+        class: 'eXpansion\Framework\Core\Helpers\Data\ObjectFilter'

@@ -25,8 +25,11 @@ class ArrayFilter implements FilterInterface
      */
     public function filterData($data, $filters, $logic = self::FILTER_LOGIC_AND)
     {
-        $filteredData = [];
+        if (empty($filters)) {
+            return $data;
+        }
 
+        $filteredData = [];
         foreach ($data as $line) {
             $allTrue = $logic == self::FILTER_LOGIC_AND;
 

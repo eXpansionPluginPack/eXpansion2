@@ -20,6 +20,13 @@ interface DataCollectionInterface
     public function getData($page);
 
     /**
+     * Get the number of the last page.
+     *
+     * @return int
+     */
+    public function getLastPageNumber();
+
+    /**
      * Set filters & sorting to apply to the data.
      *
      * @param array $filters List of filters with the fallowing format :
@@ -27,8 +34,8 @@ interface DataCollectionInterface
      *                       For the possible types of filters check FilterInstance constants.
      *                       Example to find a map or author containing the keyword "hello"
      *                          ['name'=> ['like', 'hello"], 'author_loin'=> ['like', 'hello"]]
-     * @param array $sortField Field to sort on
-     * @param array $sortOrder Order DESC or ASC.
+     * @param string $sortField Field to sort on
+     * @param string $sortOrder Order DESC or ASC.
      *
      * @return $this
      */
@@ -39,14 +46,14 @@ interface DataCollectionInterface
      *
      * @param int $size Size of each page
      *
-     * @return mixed
+     * @return $this
      */
     public function setPageSize($size);
 
     /**
      * Reset current filters & sorting.
      *
-     * @return mixed
+     * @return $this
      */
     public function reset();
 }
