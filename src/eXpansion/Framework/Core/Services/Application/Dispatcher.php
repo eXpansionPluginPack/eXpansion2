@@ -19,6 +19,9 @@ class Dispatcher implements DispatcherInterface
     /** @var PluginManager */
     protected $pluginManager;
 
+    /** @var EventProcessorInterface[] */
+    protected $eventProcessors = [];
+
     /**
      * Dispatcher constructor.
      *
@@ -41,10 +44,32 @@ class Dispatcher implements DispatcherInterface
     }
 
     /**
+     * Reset when game mode changes.
+     */
+    public function reset()
+    {
+
+    }
+
+    /**
+     * Add a processor of events.
+     *
+     * @param EventProcessorInterface $eventProcessor
+     */
+    public function addEventProcesseor(EventProcessorInterface $eventProcessor)
+    {
+        $this->eventProcessors[] = $eventProcessor;
+    }
+
+    /**
      * @inheritdoc
      */
     public function dispatch($event, $params)
     {
+        foreach ($this->eventProcessors as $eventProcessor) {
+            $eventProcessor->dispatch($event, $params);
+        }
+
         $this->dataProviderManager->dispatch($event, $params);
     }
 }

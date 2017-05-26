@@ -51,14 +51,19 @@ class PluginManager
     /**
      * Initialize plugins.
      */
-    public function init() {
+    public function init()
+    {
+        $this->reset();
+    }
+
+    public function reset()
+    {
         // TODO get this data from the dedicated!
         $title = 'TMStadium@nadeo';
         $mode = 'script';
         $script = 'TimeAttack.script.txt';
 
-        $this->enableDisablePlugins($title, $mode, $script);
-    }
+        $this->enableDisablePlugins($title, $mode, $script);    }
 
     /**
      * Enable all possible plugins.

@@ -43,6 +43,13 @@ services:
         arguments:
             - '@expansion.framework.core.services.data_provider_manager'
             - '@expansion.framework.core.services.plugin_manager'
+        calls:
+            - [addEventProcesseor, ['@expansion.framework.core.services.symfony_event_adapter']]
+
+    expansion.framework.core.services.symfony_event_adapter:
+        class: eXpansion\Framework\Core\Services\SymfonyEventAdapter
+        arguments:
+            - '@event_dispatcher'
 
     expansion.framework.core.services.application.dispatch_logger:
         class: eXpansion\Framework\Core\Services\Application\DispatchLogger

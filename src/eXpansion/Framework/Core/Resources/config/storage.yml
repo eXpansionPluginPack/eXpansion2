@@ -1,6 +1,7 @@
 parameters:
     expansion.framework.core.storage.player.class: eXpansion\Framework\Core\Storage\PlayerStorage
     expansion.framework.core.storage.map.class: eXpansion\Framework\Core\Storage\MapStorage
+    expansion.framework.core.storage.game_data.class: eXpansion\Framework\Core\Storage\GameDataStorage
 
     expansion.framework.core.storage.data.player.class: eXpansion\Framework\Core\Storage\Data\Player
     expansion.framework.core.storage.data.player.factory: eXpansion\Framework\Core\Storage\Data\PlayerFactory
@@ -16,6 +17,9 @@ services:
         class: "%expansion.framework.core.storage.map.class%"
         arguments:
             - "@expansion.framework.core.services.dedicated_connection"
+
+    expansion.framework.core.storage.game_data:
+        class: "%expansion.framework.core.storage.game_data.class%"
 
     expansion.framework.core.storage.data.player.factory:
         class: "%expansion.framework.core.storage.data.player.factory%"

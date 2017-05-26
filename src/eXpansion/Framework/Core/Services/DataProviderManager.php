@@ -56,6 +56,11 @@ class DataProviderManager
      */
     public function init(PluginManager $pluginManager)
     {
+        $this->reset();
+    }
+
+    public function reset()
+    {
         // TODO run check in order not  to have same providers multiple times.
         // TODO get this data from the dedicated!
         $title = 'TMStadium@nadeo';
