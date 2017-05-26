@@ -38,7 +38,9 @@ class BaseStorageUpdateListener
         $this->dispatcher = $dispatcher;
 
         $gameInfos = $this->connection->getCurrentGameInfo();
+
         $this->gameDataStorage->setGameInfos(clone $gameInfos);
+        $this->gameDataStorage->setVersion($this->connection->getVersion());
     }
 
     /**

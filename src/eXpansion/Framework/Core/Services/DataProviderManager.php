@@ -6,6 +6,7 @@ use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
 use eXpansion\Framework\Core\Exceptions\DataProvider\UncompatibleException;
 use eXpansion\Framework\Core\Model\ProviderListner;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
+use eXpansion\Framework\Core\Storage\GameDataStorage;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -41,14 +42,18 @@ class DataProviderManager
     /** @var ContainerInterface */
     protected $container;
 
+    /** @var GameDataStorage  */
+    protected $gameDataStorage;
+
     /**
      * DataProviderManager constructor.
      *
      * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, GameDataStorage $gameDataStorage)
     {
         $this->container = $container;
+        $this->gameDataStorage = $gameDataStorage;
     }
 
     /**
@@ -61,11 +66,9 @@ class DataProviderManager
 
     public function reset(PluginManager $pluginManager)
     {
-        // TODO run check in order not  to have same providers multiple times.
-        // TODO get this data from the dedicated!
-        $title = 'TMStadium@nadeo';
-        $mode = 'script';
-        $script = 'TimeAttack.script.txt';
+        $title = $this->gameDataStorage->getVersion();
+        $mode = $this->gameDataStorage->getGameModeCode();
+        $script = $this->gameDataStorage->getGameInfos()->scriptName;
 
         foreach ($this->providersByCompatibility as $provider => $data) {
 

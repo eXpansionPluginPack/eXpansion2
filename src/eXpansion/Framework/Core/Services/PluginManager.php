@@ -5,6 +5,7 @@ namespace eXpansion\Framework\Core\Services;
 use eXpansion\Framework\Core\Model\Plugin\PluginDescription;
 use eXpansion\Framework\Core\Model\Plugin\PluginDescriptionFactory;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
+use eXpansion\Framework\Core\Storage\GameDataStorage;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -31,6 +32,9 @@ class PluginManager
     /** @var DataProviderManager  */
     protected $dataProviderManager;
 
+    /** @var GameDataStorage  */
+    protected $gameDataStorage;
+
     /**
      * PluginManager constructor.
      *
@@ -40,12 +44,14 @@ class PluginManager
     public function __construct(
         ContainerInterface $container,
         PluginDescriptionFactory $pluginDescriptionFactory,
-        DataProviderManager $dataProviderManager
+        DataProviderManager $dataProviderManager,
+        GameDataStorage $gameDataStorage
     )
     {
         $this->container = $container;
         $this->pluginDescriptionFactory = $pluginDescriptionFactory;
         $this->dataProviderManager = $dataProviderManager;
+        $this->gameDataStorage = $gameDataStorage;
     }
 
     /**
@@ -59,9 +65,9 @@ class PluginManager
     public function reset()
     {
         // TODO get this data from the dedicated!
-        $title = 'TMStadium@nadeo';
-        $mode = 'script';
-        $script = 'TimeAttack.script.txt';
+        $title = $this->gameDataStorage->getVersion();
+        $mode = $this->gameDataStorage->getGameModeCode();
+        $script = $this->gameDataStorage->getGameInfos()->scriptName;
 
         $this->enableDisablePlugins($title, $mode, $script);    }
 
