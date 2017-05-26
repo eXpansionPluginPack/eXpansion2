@@ -56,10 +56,10 @@ class DataProviderManager
      */
     public function init(PluginManager $pluginManager)
     {
-        $this->reset();
+        $this->reset($pluginManager);
     }
 
-    public function reset()
+    public function reset(PluginManager $pluginManager)
     {
         // TODO run check in order not  to have same providers multiple times.
         // TODO get this data from the dedicated!
