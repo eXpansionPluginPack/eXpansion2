@@ -61,6 +61,11 @@ services:
             - '@expansion.framework.core.gui.element.factory.label'
             - 'title'
 
+    expansion.framework.core.gui.element.factory.pager:
+        class: 'eXpansion\Framework\Core\Model\Gui\Factory\PagerFactory'
+        arguments:
+            - '@expansion.framework.core.gui.element.factory.label'
+
     #
     # Default window factories.
     #

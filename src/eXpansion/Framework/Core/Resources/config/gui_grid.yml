@@ -22,6 +22,6 @@ services:
         arguments:
             - '%expansion.framework.core.model.gui.grid.grid_builder.class%'
             - '@expansion.framework.core.plugins.gui.action_factory'
-            - '@expansion.framework.core.gui.element.factory.label'
             - '@expansion.framework.core.gui.element.factory.line'
             - '@expansion.framework.core.gui.element.factory.title_line'
+            - '@expansion.framework.core.gui.element.factory.pager'

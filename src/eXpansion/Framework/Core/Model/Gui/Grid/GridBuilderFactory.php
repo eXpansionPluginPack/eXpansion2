@@ -1,15 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: olive
- * Date: 27/05/2017
- * Time: 11:14
- */
 
 namespace eXpansion\Framework\Core\Model\Gui\Grid;
 
-use eXpansion\Framework\Core\Model\Gui\Factory\LabelFactory;
 use eXpansion\Framework\Core\Model\Gui\Factory\LineFactory;
+use eXpansion\Framework\Core\Model\Gui\Factory\PagerFactory;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 
 
@@ -27,14 +21,14 @@ class GridBuilderFactory
     /** @var ActionFactory */
     protected $actionFactory;
 
-    /** @var LabelFactory */
-    protected $labelFactory;
-
     /** @var LineFactory */
     protected $lineFactory;
 
     /** @var LineFactory */
     protected $titleLineFactory;
+
+    /** @var PagerFactory */
+    protected $pagerFactory;
 
     /**
      * GridBuilderFactory constructor.
@@ -45,16 +39,16 @@ class GridBuilderFactory
     public function __construct(
         $class,
         ActionFactory $actionFactory,
-        LabelFactory $labelFactory,
         LineFactory $lineFactory,
-        LineFactory $titleLineFactory
+        LineFactory $titleLineFactory,
+        PagerFactory $pagerFactory
     )
     {
         $this->class = $class;
         $this->actionFactory = $actionFactory;
-        $this->labelFactory = $labelFactory;
         $this->lineFactory = $lineFactory;
         $this->titleLineFactory = $titleLineFactory;
+        $this->pagerFactory = $pagerFactory;
     }
 
     /**
@@ -63,7 +57,6 @@ class GridBuilderFactory
     public function create()
     {
         $class = $this->class;
-
-        return new $class($this->actionFactory, $this->labelFactory, $this->lineFactory, $this->titleLineFactory);
+        return new $class($this->actionFactory, $this->lineFactory, $this->titleLineFactory, $this->pagerFactory);
     }
 }

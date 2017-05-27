@@ -1,14 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: olive
- * Date: 27/05/2017
- * Time: 10:38
- */
 
 namespace eXpansion\Framework\Core\Model\Gui\Grid;
+use eXpansion\Framework\Core\Model\Gui\Action;
 use eXpansion\Framework\Core\Model\Gui\Factory\LabelFactory;
 use eXpansion\Framework\Core\Model\Gui\Factory\LineFactory;
+use eXpansion\Framework\Core\Model\Gui\Factory\PagerFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
@@ -20,7 +16,7 @@ use FML\Controls\Quads\Quad_Icons64x64_1;
 /**
  * Class GridBuilder
  *
- * @TODO Add actions on elements.
+ * @TODO Add possibility to add actions on elements.
  *
  * @package eXpansion\Framework\Core\Model\Gui\Grid;
  * @author  oliver de Cramer <oliverde8@gmail.com>
@@ -30,14 +26,14 @@ class GridBuilder
     /** @var  ActionFactory */
     protected $actionFactory;
 
-    /** @var LabelFactory  */
-    protected $labelFactory;
-
     /** @var LineFactory */
     protected $titleLineFactory;
 
     /** @var LineFactory */
     protected $lineFactory;
+
+    /** @var PagerFactory */
+    protected $pagerFactory;
 
     /** @var DataCollectionInterface */
     protected $dataCollection;
@@ -60,26 +56,33 @@ class GridBuilder
     /** @var string */
     protected $pageKey;
 
-    protected $actionFirstPage;
+    /** @var Action */
     protected $actionPreviousPage;
+    /** @var Action */
     protected $actionNextPage;
+    /** @var Action */
     protected $actionLastPage;
+    /** @var Action */
+    protected $actionFirstPage;
 
     /**
      * GridBuilder constructor.
      *
      * @param ActionFactory $actionFactory
+     * @param LineFactory   $lineFactory
+     * @param LineFactory   $titleLineFactory
+     * @param PagerFactory  $pagerFactory
      */
     public function __construct(
         ActionFactory $actionFactory,
-        LabelFactory $labelFactory,
         LineFactory $lineFactory,
-        LineFactory $titleLineFactory
+        LineFactory $titleLineFactory,
+        PagerFactory $pagerFactory
     ) {
         $this->actionFactory = $actionFactory;
-        $this->labelFactory = $labelFactory;
         $this->titleLineFactory = $titleLineFactory;
         $this->lineFactory = $lineFactory;
+        $this->pagerFactory = $pagerFactory;
 
         $this->pageKey = spl_object_hash($this) . "_key";
     }
@@ -101,7 +104,7 @@ class GridBuilder
     /**
      * Set the manialink the content is generated for.
      *
-     * @param DataCollectionInterface $manialink
+     * @param ManialinkInterface $manialink
      *
      * @return $this
      */
@@ -171,14 +174,14 @@ class GridBuilder
 
         $posY = 0;
         // Generating headers.
-        // TODO Add proper background if sortable create action...
+        // TODO if sortable create actions...
         $data = [];
         foreach ($this->columns as $columnData) {
             list($key, $name, $widthCoefficiency, $sortable) = $columnData;
             $data[] = ['text' => $name, 'width' => $widthCoefficiency];
         }
-        $frame->addChild($this->titleLineFactory->create($frame->getWidth(), $data));
 
+        $frame->addChild($this->titleLineFactory->create($frame->getWidth(), $data));
         $posY -= $lineHeight + 1;
 
         /*
@@ -207,66 +210,63 @@ class GridBuilder
         /*
          * Handle the pager.
          */
-        $buttonSize = 7;
         $posY = ($frame->getHeight() -7) * -1;
-        if ($this->currentPage > 2) {
-            $button = Quad_Icons64x64_1::create();
-            $button->setSubStyle(Quad_Icons64x64_1::SUBSTYLE_ArrowFirst)
-                ->setSize($buttonSize,$buttonSize)
-                ->setPosition(1, $posY)
-                ->setAction($this->actionFirstPage);
-            $frame->addChild($button);
-        }
-        if ($this->currentPage > 1) {
-            $button = Quad_Icons64x64_1::create();
-            $button->setSubStyle(Quad_Icons64x64_1::SUBSTYLE_ArrowPrev)
-                ->setSize($buttonSize,$buttonSize)
-                ->setPosition(2 + $buttonSize, $posY)
-                ->setAction($this->actionPreviousPage);
-            $frame->addChild($button);
-        }
-        if ($this->currentPage < $this->dataCollection->getLastPageNumber()) {
-            $button = Quad_Icons64x64_1::create();
-            $button->setSubStyle(Quad_Icons64x64_1::SUBSTYLE_ArrowNext)
-                ->setSize($buttonSize,$buttonSize)
-                ->setPosition($frame->getWidth() - 1 - (2*$buttonSize), $posY)
-                ->setAction($this->actionNextPage);
-            $frame->addChild($button);
-        }
-        if ($this->currentPage < $this->dataCollection->getLastPageNumber() - 1) {
-            $button = Quad_Icons64x64_1::create();
-            $button->setSubStyle(Quad_Icons64x64_1::SUBSTYLE_ArrowLast)
-                ->setSize($buttonSize,$buttonSize)
-                ->setPosition($frame->getWidth() - 1 - $buttonSize, $posY)
-                ->setAction($this->actionLastPage);
-            $frame->addChild($button);
-        }
+        $pager = $this->pagerFactory->create(
+            $frame->getWidth(),
+            $this->currentPage,
+            $this->dataCollection->getLastPageNumber(),
+            $this->actionFirstPage,
+            $this->actionPreviousPage,
+            $this->actionNextPage,
+            $this->actionLastPage
+        );
+        $pager->setPosition(0, $posY);
+        $frame->addChild($pager);
 
         return $frame;
     }
 
+    /**
+     * Action callback to go to the first page.
+     */
     public function goToFirstPage()
     {
         $this->changePage(1);
     }
 
+    /**
+     * Action callback to go to the previous page.
+     */
     public function goToPreviousPage()
     {
         if ($this->currentPage - 1 >= 1) {
             $this->changePage($this->currentPage - 1);
         }
     }
+
+    /**
+     * Action callback to go to the next page.
+     */
     public function goToNextPage()
     {
         if ($this->currentPage + 1 <= $this->dataCollection->getLastPageNumber()) {
             $this->changePage($this->currentPage + 1);
         }
     }
+
+    /**
+     * Action callback to go to the last page.
+     */
     public function goToLastPage()
     {
         $this->changePage($this->dataCollection->getLastPageNumber());
     }
 
+    /**
+     * Handle page change & refresh user window.
+     *
+     * @param $page
+     */
     protected function changePage($page)
     {
         $this->currentPage = $page;
