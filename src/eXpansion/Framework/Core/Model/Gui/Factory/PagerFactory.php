@@ -1,6 +1,7 @@
 <?php
 namespace eXpansion\Framework\Core\Model\Gui\Factory;
 
+use FML\Controls\Control;
 use FML\Controls\Frame;
 use FML\Controls\Quads\Quad_Icons64x64_1;
 
@@ -14,6 +15,16 @@ class PagerFactory
 {
     /** @var LabelFactory */
     protected $labelFactory;
+
+    /**
+     * PagerFactory constructor.
+     *
+     * @param LabelFactory $labelFactory
+     */
+    public function __construct(LabelFactory $labelFactory)
+    {
+        $this->labelFactory = $labelFactory;
+    }
 
     /**
      * @param $width
@@ -61,10 +72,9 @@ class PagerFactory
         // Show current page.
         $label = $this->labelFactory->create("$currentPageNumber / $lastPageNumber");
         $label->setSize(10, 7);
-        $label->centerAlign();
+        $label->setHorizontalAlign(Control::CENTER);
         $label->setPosition($frame->getWidth() / 2, 0);
         $frame->addChild($label);
-
 
         if ($currentPageNumber < $lastPageNumber) {
             $button = Quad_Icons64x64_1::create();

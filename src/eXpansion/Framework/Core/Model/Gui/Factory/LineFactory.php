@@ -1,7 +1,10 @@
 <?php
 
 namespace eXpansion\Framework\Core\Model\Gui\Factory;
+use FML\Controls\Control;
 use FML\Controls\Frame;
+use FML\Controls\Label;
+use FML\Types\Renderable;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
 
 /**
@@ -43,35 +46,73 @@ class LineFactory
      * TODO Handle more options such as pregenerated buttons and such instead of text.
      *
      * @param $totalWidth
-     * @param $titles
+     * @param $columns
      *
      * @return Frame
      */
-    public function create($totalWidth, $titles, $index = 0)
+    public function create($totalWidth, $columns, $index = 0)
     {
         $totalCoef
-            = ($totalWidth - 1) / array_reduce($titles, function($carry, $item){return $carry + $item['width'];});
+            = ($totalWidth - 1) / array_reduce($columns, function($carry, $item){return $carry + $item['width'];});
 
         $frame = new Frame();
         $frame->setHeight(5);
         $frame->setWidth($totalWidth);
 
         $postX = 1;
-        foreach ($titles as $title)
+        foreach ($columns as $columnData)
         {
-            $label = $this->labelFactory->create(
-                $title['text'],
-                AssociativeArray::getFromKey($title, 'translatable', false),
-                $this->type
-            );
-            $label->setWidth(($title["width"] * $totalCoef) - 0.5);
-            $label->setPosition($postX, -0.5);
-            $frame->addChild($label);
+            if (isset($columnData['text'])) {
+                $element = $this->createTextColumn($totalCoef, $columnData, $postX);
+            } elseif (isset($columnData['renderer'])) {
+                $element = $this->createRendererColumn($columnData, $postX);
+            }
 
-            $postX += $title["width"] * $totalCoef;
+            if (isset($columnData['action'])) {
+                $element->setAction($columnData['action']);
+            }
+
+            $frame->addChild($element);
+            $postX += $columnData["width"] * $totalCoef;
         }
 
         $frame->addChild($this->backGroundFactory->create($totalWidth, 5, $index));
         return $frame;
+    }
+
+    /**
+     * @param float $totalCoef
+     * @param array $columnData
+     * @param float $postX
+     *
+     * @return Label
+     */
+    protected function createTextColumn($totalCoef, $columnData, $postX)
+    {
+        $label = $this->labelFactory->create(
+            $columnData['text'],
+            AssociativeArray::getFromKey($columnData, 'translatable', false),
+            $this->type
+        );
+        $label->setWidth(($columnData["width"] * $totalCoef) - 0.5);
+        $label->setPosition($postX, -0.5);
+
+        return $label;
+    }
+
+    /**
+     * @param $columnData
+     * @param $postX
+     *
+     * @return Control
+     */
+    protected function createRendererColumn($columnData, $postX)
+    {
+        /** @var Control $element */
+        $element = $columnData['renderer'];
+        $element->setPosition($postX, -0.5);
+        $element->setHeight(4);
+
+        return $element;
     }
 }

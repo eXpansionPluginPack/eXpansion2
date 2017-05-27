@@ -82,5 +82,6 @@ services:
             - [setGridBuilderFactory, ['@expansion.framework.core.model.gui.grid.builder_factory']]
             - [setDataCollectionFactory, ['@expansion.framework.core.model.gui.grid.data_collection_factory.array']]
             - [setChatCommands, ['@expansion.framework.core.services.chat_commands']]
+            - [setChatCommandDataProvide, ['@expansion.framework.core.data_providers.chat_command_data_provider']]
         tags:
             - {name: expansion.plugin, data_provider: expansion.user_group}

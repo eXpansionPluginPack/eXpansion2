@@ -5,6 +5,9 @@ use eXpansion\Framework\Core\Model\Gui\Action;
 use eXpansion\Framework\Core\Model\Gui\Factory\LabelFactory;
 use eXpansion\Framework\Core\Model\Gui\Factory\LineFactory;
 use eXpansion\Framework\Core\Model\Gui\Factory\PagerFactory;
+use eXpansion\Framework\Core\Model\Gui\Grid\Column\AbstractColumn;
+use eXpansion\Framework\Core\Model\Gui\Grid\Column\ActionColumn;
+use eXpansion\Framework\Core\Model\Gui\Grid\Column\TextColumn;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
@@ -44,7 +47,7 @@ class GridBuilder
     /** @var ManialinkFactory */
     protected $manialinkFactory;
 
-    /** @var  array */
+    /** @var AbstractColumn[] */
     protected $columns;
 
     /** @var  float */
@@ -64,6 +67,9 @@ class GridBuilder
     protected $actionLastPage;
     /** @var Action */
     protected $actionFirstPage;
+
+    /** @var Action[] */
+    protected $temporaryActions = [];
 
     /**
      * GridBuilder constructor.
@@ -139,20 +145,33 @@ class GridBuilder
     }
 
     /**
-     * Add a column to the display
+     * @param      $key
+     * @param      $name
+     * @param      $widthCoefficiency
+     * @param bool $sortable
+     * @param bool $translatable
+     *
+     * @return $this
+     */
+    public function addTextColumn($key, $name, $widthCoefficiency, $sortable = false, $translatable = false)
+    {
+        $this->columns[] = new TextColumn($key, $name, $widthCoefficiency, $sortable, $translatable);
+
+        return $this;
+    }
+
+    /**
+     * Add an action into a column.
      *
      * @param $key
      * @param $name
      * @param $widthCoefficiency
-     *
-     * @return $this
+     * @param $action
+     * @param $renderer
      */
-    public function addColumn($key, $name, $widthCoefficiency, $sortable = false, $translatable = false)
+    public function addActionColumn($key, $name, $widthCoefficiency, $action, $renderer)
     {
-        $this->columns[] = [$key, $name, $widthCoefficiency, $sortable, $translatable];
-        $this->totalWidthCoefficency += $widthCoefficiency;
-
-        return $this;
+        $this->columns[] = new ActionColumn($key, $name, $widthCoefficiency, $action, $renderer);
     }
 
     /**
@@ -166,6 +185,10 @@ class GridBuilder
 
     public function build($width, $height)
     {
+        foreach ($this->temporaryActions as $action) {
+            $this->actionFactory->destroyAction($action);
+        }
+
         $lineHeight = 5 + 0.5;
 
         $frame = new Frame();
@@ -177,8 +200,7 @@ class GridBuilder
         // TODO if sortable create actions...
         $data = [];
         foreach ($this->columns as $columnData) {
-            list($key, $name, $widthCoefficiency, $sortable) = $columnData;
-            $data[] = ['text' => $name, 'width' => $widthCoefficiency];
+            $data[] = ['text' => $columnData->getName(), 'width' => $columnData->getWidthCoeficiency()];
         }
 
         $frame->addChild($this->titleLineFactory->create($frame->getWidth(), $data));
@@ -193,13 +215,22 @@ class GridBuilder
         foreach ($lines as $i => $lineData) {
             $data = [];
             foreach ($this->columns as $columnData) {
-                list($key, $name, $widthCoefficiency, $sortable, $translatable) = $columnData;
-
-                $data[] = [
-                    'text' => $this->dataCollection->getLineData($lineData, $key),
-                    'width' => $widthCoefficiency,
-                    'translatable' => $translatable
-                ];
+                if ($columnData instanceof TextColumn) {
+                    $data[] = [
+                        'text' => $this->dataCollection->getLineData($lineData, $columnData->getKey()),
+                        'width' => $columnData->getWidthCoeficiency(),
+                        'translatable' => $columnData->getTranslatable()
+                    ];
+                } elseif($columnData instanceof ActionColumn) {
+                    $action = $this->actionFactory
+                        ->createManialinkAction($this->manialink, $columnData->getCallable(), $lineData);
+                    $this->temporaryActions[] = $action;
+                    $data[] = [
+                        'renderer' => clone $columnData->getRenderer(),
+                        'width' => $columnData->getWidthCoeficiency(),
+                        'action' => $action,
+                    ];
+                }
             }
             $line = $this->lineFactory->create($frame->getWidth(), $data, $i);
             $line->setPosition(0, $posY);
@@ -271,23 +302,5 @@ class GridBuilder
     {
         $this->currentPage = $page;
         $this->manialinkFactory->update($this->manialink->getUserGroup());
-    }
-
-    /**
-     * Get the columns with their final width
-     *
-     * @param float $width Width of each columns
-     *
-     * @return \Generator
-     */
-    protected function getColumns($width)
-    {
-        $coef = $width / $this->totalWidthCoefficency;
-
-        foreach ($this->columns as $columnData) {
-            list($key, $name, $widthCoefficiency, $sortable, $translatable) = $columnData;
-
-            yield [$key, $name, $widthCoefficiency * $coef, $sortable, $translatable];
-        }
     }
 }
