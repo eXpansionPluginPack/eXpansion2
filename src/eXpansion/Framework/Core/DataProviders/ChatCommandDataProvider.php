@@ -86,14 +86,14 @@ class ChatCommandDataProvider extends AbstractDataProvider
             $parameter = implode(" ", $parameter);
             $message = $command->validate($login, $parameter);
             if (empty($message)) {
-                try {
+                //try {
                     $this->chatOutput->setLogin($login);
                     $message = $command->run($login, $this->chatOutput, $parameter);
-                } catch (RuntimeException $e) {
-                    $this->chatNotification->sendMessage($e->getMessage(), $login);
-                } catch (\Exception $e) {
-                    $this->chatNotification->sendMessage($e->getMessage(), $login);
-                }
+//                } catch (RuntimeException $e) {
+//                    $this->chatNotification->sendMessage($e->getMessage(), $login);
+//                } catch (\Exception $e) {
+//                    $this->chatNotification->sendMessage($e->getMessage(), $login);
+//                }
             }
         }
 

@@ -28,7 +28,7 @@ class ObjectFilter extends ArrayFilter
      *
      * @return string
      */
-    protected function getFieldValue($line, $field)
+    public function getFieldValue($line, $field)
     {
         return $line->$field();
     }

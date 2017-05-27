@@ -93,7 +93,7 @@ class ArrayFilter implements FilterInterface
      *
      * @return string
      */
-    protected function getFieldValue($line, $field)
+    public function getFieldValue($line, $field)
     {
         return isset($line[$field]) ? $line[$field] : '';
     }

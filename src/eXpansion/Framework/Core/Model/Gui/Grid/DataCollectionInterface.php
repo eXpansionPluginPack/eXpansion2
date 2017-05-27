@@ -20,6 +20,16 @@ interface DataCollectionInterface
     public function getData($page);
 
     /**
+     * Read data on a certain line
+     *
+     * @param mixed  $lineData
+     * @param string $key
+     *
+     * @return mixed
+     */
+    public function getLineData($lineData, $key);
+
+    /**
      * Get the number of the last page.
      *
      * @return int

@@ -59,6 +59,19 @@ class DataCollection implements DataCollectionInterface
     }
 
     /**
+     * Read data on a certain line
+     *
+     * @param mixed  $lineData
+     * @param string $key
+     *
+     * @return mixed
+     */
+    public function getLineData($lineData, $key)
+    {
+        return $this->filterHelper->getFieldValue($lineData, $key);
+    }
+
+    /**
      * Get the number of the last page.
      *
      * @return int

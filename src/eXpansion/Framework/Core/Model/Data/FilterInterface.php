@@ -26,4 +26,14 @@ interface FilterInterface
      * @return mixed
      */
     public function filterData($data, $filters, $logic);
+
+    /**
+     * Get value from an associative array.
+     *
+     * @param $line
+     * @param $field
+     *
+     * @return string
+     */
+    public function getFieldValue($line, $field);
 }

@@ -48,6 +48,12 @@ class Window extends Manialink implements Container
         $windowFrame->setPosition($posX, $posY);
         $this->manialink->addChild($windowFrame);
 
+        // Frame to handle the content of the window.
+        $this->contentFrame = new Frame();
+        $this->contentFrame->setPosition(2, -$titleHeight - 2);
+        $this->contentFrame->setSize($sizeX - 4, $sizeY -$titleHeight - 4);
+        $windowFrame->addChild($this->contentFrame);
+
         // Title bar & title.
         $titleLabel = new Label();
         $titleLabel->setPosition(3, -$titleHeight/3 - 1)
@@ -103,11 +109,6 @@ class Window extends Manialink implements Container
 
         // Add maniascript for window handling.
         $this->manialink->addChild($windowManiaScriptFactory->createScript(['']));
-
-        // Frame to handle the content of the window.
-        $this->contentFrame = new Frame();
-        $this->contentFrame->setPosition(2, -$titleHeight - 2);
-        $windowFrame->addChild($this->contentFrame);
     }
 
     /**
@@ -251,5 +252,13 @@ class Window extends Manialink implements Container
      */
     public function setFormat(Format $format = null) {
         return $this->contentFrame->setFormat($format);
+    }
+
+    /**
+     * @return Frame
+     */
+    public function getContentFrame()
+    {
+        return $this->contentFrame;
     }
 }

@@ -84,8 +84,31 @@ class ChatCommands
     }
 
     /**
+     * Get list of all chat commands;
+     *
+     * return array
+     */
+    public function getChatCommands()
+    {
+        $chatCommands = [];
+        foreach ($this->commands as $chatCommand => $data)
+        {
+            $chatCommands[] = [
+                'command' => $chatCommand,
+                'description' => $data->getDescription(),
+                'help' => $data->getHelp(),
+                'aliases' => $data->getAliases()
+            ];
+        }
+
+        return $chatCommands;
+    }
+
+    /**
      * @param string[] $cmdAndArgs
      * @param integer $depth
+     *
+     * @return mixed
      */
     protected function findChatCommand($cmdAndArgs, $depth)
     {

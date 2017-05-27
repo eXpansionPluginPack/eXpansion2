@@ -20,25 +20,30 @@ class WindowFactory extends ManialinkFactory {
     protected $windowManiaScriptFactory;
 
     public function __construct(
+        $name,
+        $sizeX,
+        $sizeY,
+        $posX,
+        $posY,
         GuiHandler $guiHandler,
         Factory $groupFactory,
         ActionFactory $actionFactory,
         ManiaScriptFactory $windowManiaScriptFactory,
-        $className = Window::class,
-        $name,
-        $sizeX,
-        $sizeY,
-        $posX = null,
-        $posY = null
+        $className = Window::class
     ) {
         // Hack for FML to use default MP alignements.
         Control::clearDefaultAlign();
 
-        parent::__construct($guiHandler, $groupFactory, $actionFactory, $name, $sizeX, $sizeY, $posX, $posY, $className);
+        parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $guiHandler, $groupFactory, $actionFactory, $className);
 
         $this->windowManiaScriptFactory = $windowManiaScriptFactory;
     }
 
+    /**
+     * @param Group $group
+     *
+     * @return Window
+     */
     protected function createManialink(Group $group)
     {
         $className = $this->className;
