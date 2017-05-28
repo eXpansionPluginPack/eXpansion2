@@ -35,6 +35,7 @@ services:
             - "@expansion.framework.core.user_groups.factory"
             - "@expansion.framework.core.plugins.gui.action_factory"
             - "@expansion.framework.core.mania_script.window_factory"
+            - "@expansion.framework.core.helpers.translations"
 
     #
     # GUI Element factories
@@ -73,7 +74,7 @@ services:
         parent: "expansion.framework.core.plugins.gui.window_factory"
         class: 'eXpansion\Framework\Core\Plugins\Gui\WindowHelpFactory'
         arguments:
-            index_0: Chat Commands
+            index_0: 'expansion_core.windows.chat_commands.title'
             index_1: 180
             index_2: 90
             index_3: null

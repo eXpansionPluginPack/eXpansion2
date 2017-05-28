@@ -19,16 +19,32 @@ class Translations
     /** @var string[] List of supported locales. */
     protected $supportedLocales;
 
+    /** @var string[] */
+    protected $replacementPatterns = [];
+
     /**
      * Translations constructor.
      *
      * @param $translator
      * @param array $supportedLocales
      */
-    public function __construct($translator, array $supportedLocales)
+    public function __construct(
+        $translator,
+        array $supportedLocales,
+        $colorCodes,
+        $glyphIcons
+    )
     {
         $this->translator = $translator;
         $this->supportedLocales = $supportedLocales;
+
+        foreach ($colorCodes as $code => $colorCode) {
+            $this->replacementPatterns["{" . $code . "}"] = '$z' . $colorCode;
+        }
+
+        foreach ($glyphIcons as $name => $icon) {
+            $this->replacementPatterns["|" . $name . "|"] = $icon;
+        }
     }
 
     /**
@@ -42,6 +58,8 @@ class Translations
      */
     public function getTranslation($id, $parameters = [], $locale = null)
     {
+        $parameters = array_merge($this->replacementPatterns, $parameters);
+
         return $this->translator->trans($id, $parameters, null, $locale);
     }
 
@@ -55,9 +73,10 @@ class Translations
      *
      * @return array
      */
-    public function getTranslations($id, $parameters)
+    public function getTranslations($id, $parameters = [])
     {
         $messages = [];
+        $parameters = array_merge($this->replacementPatterns, $parameters);
 
         foreach ($this->supportedLocales as $locale)
         {

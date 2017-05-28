@@ -1,6 +1,7 @@
 <?php
 
 namespace eXpansion\Framework\Core\Plugins\Gui;
+use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Model\Gui\Manialink;
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
 use eXpansion\Framework\Core\Model\Gui\Window;
@@ -17,7 +18,11 @@ use FML\Controls\Control;
  */
 class WindowFactory extends ManialinkFactory {
 
+    /** @var ManiaScriptFactory */
     protected $windowManiaScriptFactory;
+
+    /** @var Translations */
+    protected $translationsHelper;
 
     public function __construct(
         $name,
@@ -29,14 +34,26 @@ class WindowFactory extends ManialinkFactory {
         Factory $groupFactory,
         ActionFactory $actionFactory,
         ManiaScriptFactory $windowManiaScriptFactory,
+        Translations $translationsHelper,
         $className = Window::class
     ) {
         // Hack for FML to use default MP alignements.
         Control::clearDefaultAlign();
 
-        parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $guiHandler, $groupFactory, $actionFactory, $className);
+        parent::__construct(
+            $name,
+            $sizeX,
+            $sizeY,
+            $posX,
+            $posY,
+            $guiHandler,
+            $groupFactory,
+            $actionFactory,
+            $className
+        );
 
         $this->windowManiaScriptFactory = $windowManiaScriptFactory;
+        $this->translationsHelper = $translationsHelper;
     }
 
     /**
@@ -50,6 +67,7 @@ class WindowFactory extends ManialinkFactory {
         $manialink = new $className(
             $group,
             $this->windowManiaScriptFactory,
+            $this->translationsHelper,
             $this->name,
             $this->sizeX,
             $this->sizeY,

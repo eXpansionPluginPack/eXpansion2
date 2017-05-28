@@ -200,7 +200,11 @@ class GridBuilder
         // TODO if sortable create actions...
         $data = [];
         foreach ($this->columns as $columnData) {
-            $data[] = ['text' => $columnData->getName(), 'width' => $columnData->getWidthCoeficiency()];
+            $data[] = [
+                'text' => $columnData->getName(),
+                'width' => $columnData->getWidthCoeficiency(),
+                'translatable' => true
+            ];
         }
 
         $frame->addChild($this->titleLineFactory->create($frame->getWidth(), $data));

@@ -3,20 +3,28 @@
 namespace eXpansion\Framework\Core\Model\Gui;
 
 use eXpansion\Framework\Core\Exceptions\Gui\MissingCloseActionException;
+use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use FML\Controls\Frame;
 use FML\Controls\Label;
 use FML\Controls\Quad;
 use FML\Controls\Quads\Quad_Bgs1;
 use FML\Controls\Quads\Quad_Bgs1InRace;
+use FML\Elements\Dico;
 use FML\Elements\Format;
 use FML\Types\Container;
 use FML\Types\Renderable;
 
 class Window extends Manialink implements Container
 {
+    /** @var Translations */
+    protected $translationHelper;
+
     /** @var \FML\ManiaLink */
     protected $manialink;
+
+    /** @var Dico */
+    protected $dictionary;
 
     /** @var Label */
     protected $closeButton;
@@ -27,6 +35,7 @@ class Window extends Manialink implements Container
     public function __construct(
         Group $group,
         ManiaScriptFactory $windowManiaScriptFactory,
+        Translations $translationHelper,
         $name,
         $sizeX,
         $sizeY,
@@ -35,6 +44,8 @@ class Window extends Manialink implements Container
     )
     {
         parent::__construct($group, $name, $sizeX, $sizeY, $posX, $posY);
+
+        $this->translationHelper = $translationHelper;
 
         $titleHeight = 5.5;
         $closeButtonWidth = 9.5;
@@ -45,6 +56,10 @@ class Window extends Manialink implements Container
         $this->manialink->setId($this->getId())
             ->setName($name)
             ->setVersion(\FML\ManiaLink::VERSION_3);
+
+        $this->dictionary = new Dico();
+        $this->manialink->setDico($this->dictionary);
+
         $windowFrame = new Frame('Window');
         $windowFrame->setPosition($posX, $posY);
         $this->manialink->addChild($windowFrame);
@@ -59,9 +74,10 @@ class Window extends Manialink implements Container
         $titleLabel = new Label();
         $titleLabel->setPosition(3, -$titleHeight / 3 - 1)
             ->setAlign(Label::LEFT, Label::CENTER2)
-            ->setText($name)
+            ->setTextId($name)
             ->setTextColor('fff')
             ->setTextSize(2)
+            ->setTranslate(true)
             ->setTextFont('RajdhaniMono')
             ->setId("TitleText");
         $windowFrame->addChild($titleLabel);
@@ -131,11 +147,50 @@ class Window extends Manialink implements Container
      */
     public function getXml()
     {
+        $this->addDictionaryInformation();
+
         if (empty($this->closeButton->getDataAttribute('action'))) {
             throw new MissingCloseActionException("Close action is missing for window. Check if you are using the proper factory.");
         }
 
         return $this->manialink->__toString();
+    }
+
+    /**
+     * Add translations to dictionary.
+     */
+    protected function addDictionaryInformation()
+    {
+        $translations = array();
+        $this->getDictionaryInformation($this->manialink, $translations);
+        $this->dictionary->removeAllEntries();
+
+        foreach ($translations as $msgId => $messages) {
+            foreach ($messages as $message) {
+                $this->dictionary->setEntry($message['Lang'], $msgId, htmlspecialchars ($message['Text']));
+            }
+        }
+    }
+
+    /**
+     * Recursive search all dome tree in order to find all translatable labels.
+     *
+     * @param $frame
+     * @param $translations
+     */
+    protected function getDictionaryInformation($frame, &$translations)
+    {
+        foreach ($frame->getChildren() as $child) {
+            if ($child instanceof Label && $child->getTranslate()) {
+                $textId = 'exp_' . md5($child->getTextId());
+                $translations[$textId] = $this->translationHelper->getTranslations($child->getTextId(), []);
+
+                // Replaces with text id that can be used in the xml.
+                $child->setTextId($textId);
+            } else if ($child instanceof Frame) {
+                $this->getDictionaryInformation($child, $translations);
+            }
+        }
     }
 
     /**

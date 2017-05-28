@@ -17,10 +17,15 @@ class LabelFactory
     public function create($text, $translate = false, $type = self::TYPE_NORMAL)
     {
         $label = new Label();
-        $label->setText($text)
-            ->setTextSize(2)
+        $label->setTextSize(2)
             ->setHeight(4)
             ->setTranslate($translate);
+
+        if ($translate) {
+            $label->setTextId($text);
+        } else {
+            $label->setText($text);
+        }
 
         if ($type == self::TYPE_TITLE) {
             $label->setTextFont('RajdhaniMono');

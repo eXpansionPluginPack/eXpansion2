@@ -80,8 +80,18 @@ class WindowHelpFactory extends WindowFactory
         $gridBuilder->setManialink($manialink)
             ->setDataCollection($collection)
             ->setManialinkFactory($this)
-            ->addTextColumn('command', "Command", 25)
-            ->addTextColumn('description', 'Description', 70)
+            ->addTextColumn(
+                'command',
+                "expansion_core.windows.chat_commands.column_command",
+                25
+            )
+            ->addTextColumn(
+                'description',
+                'expansion_core.windows.chat_commands.column_description',
+                70,
+                false,
+                true
+            )
             ->addActionColumn('help', '', 5, array($this, 'callbackHelp'), $helpButton);
 
         $manialink->setData('grid', $gridBuilder);
