@@ -2,6 +2,8 @@
 
 namespace eXpansion\Framework\Core\Model\Gui\Grid\Column;
 
+use FML\Types\Renderable;
+
 
 /**
  * Class ActionColumn
@@ -15,12 +17,12 @@ class ActionColumn extends AbstractColumn
 
     protected $renderer;
 
-    public function __construct($key, $name, $widthCoeficiency, $sortable, $translatable)
+    public function __construct($key, $name, $widthCoeficiency, $callable, Renderable $renderer)
     {
         parent::__construct($key, $name, $widthCoeficiency);
 
-        $this->callable = $sortable;
-        $this->renderer = $translatable;
+        $this->callable = $callable;
+        $this->renderer = $renderer;
     }
 
     /**
