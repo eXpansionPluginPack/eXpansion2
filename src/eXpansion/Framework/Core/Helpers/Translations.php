@@ -41,11 +41,11 @@ class Translations
         $this->supportedLocales = $supportedLocales;
 
         foreach ($colorCodes as $code => $colorCode) {
-            $this->replacementPatterns["{" . $code . "}"] = '$z' . $colorCode;
+            $this->replacementPatterns["{".$code."}"] = '$z'.$colorCode;
         }
 
         foreach ($glyphIcons as $name => $icon) {
-            $this->replacementPatterns["|" . $name . "|"] = $icon;
+            $this->replacementPatterns["|".$name."|"] = $icon;
         }
     }
 

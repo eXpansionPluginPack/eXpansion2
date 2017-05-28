@@ -10,7 +10,6 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Services\ChatCommands;
 use FML\Controls\Frame;
 use FML\Controls\Label;
-use FML\Controls\Quads\Quad_Icons64x64_1;
 
 
 /**
@@ -123,6 +122,6 @@ class WindowHelpFactory extends WindowFactory
      */
     public function callbackHelp($login, $params, $arguments)
     {
-        $this->chatCommandDataPovider->onPlayerChat(0, $login, '/' . $arguments['command'] . ' -h', true);
+        $this->chatCommandDataPovider->onPlayerChat(0, $login, '/'.$arguments['command'].' -h', true);
     }
 }

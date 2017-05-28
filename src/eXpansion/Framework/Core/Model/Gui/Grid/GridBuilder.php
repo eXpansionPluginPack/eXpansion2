@@ -2,7 +2,6 @@
 
 namespace eXpansion\Framework\Core\Model\Gui\Grid;
 use eXpansion\Framework\Core\Model\Gui\Action;
-use eXpansion\Framework\Core\Model\Gui\Factory\LabelFactory;
 use eXpansion\Framework\Core\Model\Gui\Factory\LineFactory;
 use eXpansion\Framework\Core\Model\Gui\Factory\PagerFactory;
 use eXpansion\Framework\Core\Model\Gui\Grid\Column\AbstractColumn;
@@ -12,8 +11,6 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
 use FML\Controls\Frame;
-use FML\Controls\Label;
-use FML\Controls\Quads\Quad_Icons64x64_1;
 
 
 /**
@@ -90,7 +87,7 @@ class GridBuilder
         $this->lineFactory = $lineFactory;
         $this->pagerFactory = $pagerFactory;
 
-        $this->pageKey = spl_object_hash($this) . "_key";
+        $this->pageKey = spl_object_hash($this)."_key";
     }
 
     /**
@@ -145,9 +142,9 @@ class GridBuilder
     }
 
     /**
-     * @param      $key
-     * @param      $name
-     * @param      $widthCoefficiency
+     * @param      string $key
+     * @param      string $name
+     * @param      integer $widthCoefficiency
      * @param bool $sortable
      * @param bool $translatable
      *
@@ -163,11 +160,11 @@ class GridBuilder
     /**
      * Add an action into a column.
      *
-     * @param $key
-     * @param $name
-     * @param $widthCoefficiency
+     * @param string $key
+     * @param string $name
+     * @param integer $widthCoefficiency
      * @param $action
-     * @param $renderer
+     * @param Label $renderer
      */
     public function addActionColumn($key, $name, $widthCoefficiency, $action, $renderer)
     {
@@ -186,8 +183,8 @@ class GridBuilder
     /**
      * Build a grid.
      *
-     * @param $width
-     * @param $height
+     * @param double $width
+     * @param double $height
      *
      * @return Frame
      */
@@ -200,7 +197,7 @@ class GridBuilder
         $lineHeight = 5 + 0.5;
 
         $frame = new Frame();
-        $frame->setPosition(0,0);
+        $frame->setPosition(0, 0);
         $frame->setSize($width, $height);
 
         $posY = 0;
@@ -233,7 +230,7 @@ class GridBuilder
                         'width' => $columnData->getWidthCoeficiency(),
                         'translatable' => $columnData->getTranslatable()
                     ];
-                } elseif($columnData instanceof ActionColumn) {
+                } elseif ($columnData instanceof ActionColumn) {
                     $action = $this->actionFactory
                         ->createManialinkAction($this->manialink, $columnData->getCallable(), $lineData);
                     $this->temporaryActions[] = $action;
@@ -253,7 +250,7 @@ class GridBuilder
         /*
          * Handle the pager.
          */
-        $posY = ($frame->getHeight() -7) * -1;
+        $posY = ($frame->getHeight() - 7) * -1;
         $pager = $this->pagerFactory->create(
             $frame->getWidth(),
             $this->currentPage,
@@ -308,7 +305,7 @@ class GridBuilder
     /**
      * Handle page change & refresh user window.
      *
-     * @param $page
+     * @param integer $page
      */
     protected function changePage($page)
     {

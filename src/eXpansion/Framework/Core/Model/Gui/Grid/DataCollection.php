@@ -64,7 +64,7 @@ class DataCollection implements DataCollectionInterface
      * @param mixed  $lineData
      * @param string $key
      *
-     * @return mixed
+     * @return string
      */
     public function getLineData($lineData, $key)
     {

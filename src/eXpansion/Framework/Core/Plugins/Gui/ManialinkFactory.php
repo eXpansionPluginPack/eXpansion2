@@ -116,6 +116,7 @@ class ManialinkFactory implements ManialinkFactoryInterface, UserGroupDataListen
 
     /**
      * @inheritdoc
+     * @param Group $group
      */
     final public function update($group)
     {
