@@ -23,10 +23,9 @@ class WindowTest extends TestCore
     public function testWindow()
     {
         /** @var ManiaScriptFactory $factory */
-        $factory = $this->container->get('expansion.framework.core.mania_script.window_factory');
         $action = new Action([$this, 'totoCallback'], []);
 
-        $window = new Window($this->getSpectatorsGroup(), $factory, 'test', 10, 20);
+        $window = $this->getWindow();
         $window->setCloseAction($action->getId());
 
         $this->assertInstanceOf(\SimpleXMLElement::class, simplexml_load_string($window->getXml()));
@@ -34,9 +33,7 @@ class WindowTest extends TestCore
 
     public function testWindowWithoutAction()
     {
-        /** @var ManiaScriptFactory $factory */
-        $factory = $this->container->get('expansion.framework.core.mania_script.window_factory');
-        $window = new Window($this->getSpectatorsGroup(), $factory, 'test', 10, 20);
+        $window = $this->getWindow();
 
         $this->expectException(MissingCloseActionException::class);
 
@@ -45,9 +42,7 @@ class WindowTest extends TestCore
 
     public function testMethods()
     {
-        /** @var ManiaScriptFactory $factory */
-        $factory = $this->container->get('expansion.framework.core.mania_script.window_factory');
-        $window = new Window($this->getSpectatorsGroup(), $factory, 'test', 10, 20);
+        $window = $this->getWindow();
 
         $mockRenderable = $this->createMock(Renderable::class);
 
@@ -75,5 +70,13 @@ class WindowTest extends TestCore
     protected function getSpectatorsGroup()
     {
         return $this->container->get('expansion.framework.core.user_groups.spectators');
+    }
+
+    protected function getWindow()
+    {
+        $factory = $this->container->get('expansion.framework.core.mania_script.window_factory');
+        $translation = $this->container->get('expansion.framework.core.helpers.translations');
+
+        return new Window($this->getSpectatorsGroup(), $factory, $translation, 'test', 10, 20);
     }
 }
