@@ -4,7 +4,6 @@ namespace eXpansion\Framework\Core\Model\Gui\Factory;
 use FML\Controls\Control;
 use FML\Controls\Frame;
 use FML\Controls\Label;
-use FML\Types\Renderable;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
 
 /**
@@ -53,7 +52,7 @@ class LineFactory
     public function create($totalWidth, $columns, $index = 0)
     {
         $totalCoef
-            = ($totalWidth - 1) / array_reduce($columns, function($carry, $item){return $carry + $item['width'];});
+            = ($totalWidth - 1) / array_reduce($columns, function($carry, $item) {return $carry + $item['width']; });
 
         $frame = new Frame();
         $frame->setHeight(5);

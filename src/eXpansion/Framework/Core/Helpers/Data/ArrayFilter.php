@@ -34,7 +34,7 @@ class ArrayFilter implements FilterInterface
                     $allTrue = true;
                     break;
                 } else if ($logic == self::FILTER_LOGIC_AND) {
-                    if (!$result)  {
+                    if (!$result) {
                         $allTrue = false;
                         break;
                     }
@@ -52,10 +52,10 @@ class ArrayFilter implements FilterInterface
     /**
      * Check if value respects condition.
      *
-     * @param $value
+     * @param string $value
      * @param $condition
      *
-     * @return bool
+     * @return boolean|null
      * @throws InvalidFilterTypeException
      */
     protected function checkValue($value, $condition) {

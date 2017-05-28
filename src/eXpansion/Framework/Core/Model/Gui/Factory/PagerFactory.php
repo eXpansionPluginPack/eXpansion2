@@ -45,7 +45,7 @@ class PagerFactory
         $actionPreviousPage,
         $actionNextPage,
         $actionLastPage
-    ){
+    ) {
         $frame = new Frame();
         $frame->setSize($width, 7);
 
@@ -55,7 +55,7 @@ class PagerFactory
         if ($currentPageNumber > 2) {
             $button = Quad_Icons64x64_1::create();
             $button->setSubStyle(Quad_Icons64x64_1::SUBSTYLE_ArrowFirst)
-                ->setSize($buttonSize,$buttonSize)
+                ->setSize($buttonSize, $buttonSize)
                 ->setPosition(1, 0)
                 ->setAction($actionFirstPage);
             $frame->addChild($button);
@@ -63,7 +63,7 @@ class PagerFactory
         if ($currentPageNumber > 1) {
             $button = Quad_Icons64x64_1::create();
             $button->setSubStyle(Quad_Icons64x64_1::SUBSTYLE_ArrowPrev)
-                ->setSize($buttonSize,$buttonSize)
+                ->setSize($buttonSize, $buttonSize)
                 ->setPosition(2 + $buttonSize, 0)
                 ->setAction($actionPreviousPage);
             $frame->addChild($button);
@@ -79,15 +79,15 @@ class PagerFactory
         if ($currentPageNumber < $lastPageNumber) {
             $button = Quad_Icons64x64_1::create();
             $button->setSubStyle(Quad_Icons64x64_1::SUBSTYLE_ArrowNext)
-                ->setSize($buttonSize,$buttonSize)
-                ->setPosition($frame->getWidth() - 1 - (2*$buttonSize), 0)
+                ->setSize($buttonSize, $buttonSize)
+                ->setPosition($frame->getWidth() - 1 - (2 * $buttonSize), 0)
                 ->setAction($actionNextPage);
             $frame->addChild($button);
         }
         if ($currentPageNumber < $lastPageNumber - 1) {
             $button = Quad_Icons64x64_1::create();
             $button->setSubStyle(Quad_Icons64x64_1::SUBSTYLE_ArrowLast)
-                ->setSize($buttonSize,$buttonSize)
+                ->setSize($buttonSize, $buttonSize)
                 ->setPosition($frame->getWidth() - 1 - $buttonSize, 0)
                 ->setAction($actionLastPage);
             $frame->addChild($button);
