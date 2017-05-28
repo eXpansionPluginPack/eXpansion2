@@ -7,7 +7,7 @@ main () {
     declare CMlLabel Exp_CloseButton <=> (Page.GetFirstChild("Close") as CMlLabel);
     declare CMlLabel Exp_Title <=> (Page.GetFirstChild("TitleText") as CMlLabel);
     declare Exp_CloseWindow = False;
-    declare Exp_OpenWindow = True;
+    declare Exp_OpenWindow for LocalUser = True;
     declare Vec2[Text] Exp_PositionCache for LocalUser = Vec2[Text];
     declare Vec2 Exp_Offset = <0., 0.>;
     declare Real Exp_zIndex = 0.;
@@ -16,6 +16,7 @@ main () {
     declare Integer Exp_lastAction = Now;
 
     Exp_activeWindow = Exp_Window.Id;
+    Exp_OpenWindow = True;
 
     if (! Exp_PositionCache.existskey(Exp_Title.Value) ) {
         Exp_PositionCache[Exp_Title.Value] = Exp_Window.RelativePosition_V3;
@@ -23,19 +24,17 @@ main () {
         Exp_Window.RelativePosition_V3 = Exp_PositionCache[Exp_Title.Value];
     }
 
-    if (Exp_activeWindow == Exp_Window.Id) {
-        Exp_Window.ZIndex = 1.;
-    } else {
-        Exp_Window.ZIndex = -1.;
-    }
+
     while(True) {
-		yield;
+      if (Exp_OpenWindow) {
+                if (Exp_activeWindow == Exp_Window.Id) {
+                       Exp_Window.ZIndex = 1.;
+                   } else {
+                       Exp_Window.ZIndex = -1.;
+                   }
+           	}
 
-        if (Exp_OpenWindow) {
-            AnimMgr.Add(Exp_Window, "<frame scale=\"1.\" />", 200, CAnimManager::EAnimManagerEasing::SineIn);
-       	}
-
-        if (Exp_CloseWindow) {
+      if (Exp_CloseWindow) {
          	AnimMgr.Add(Exp_Window, "<frame scale=\"0.\" />", 200, CAnimManager::EAnimManagerEasing::SineOut);
         }
 
@@ -91,5 +90,7 @@ main () {
        	        Exp_Window.RelativePosition_V3.Y = MouseY + Exp_Offset.Y;
        	        Exp_PositionCache[Exp_Title.Value] = Exp_Window.RelativePosition_V3;
        	}
+
+       	yield;
     }
 }
