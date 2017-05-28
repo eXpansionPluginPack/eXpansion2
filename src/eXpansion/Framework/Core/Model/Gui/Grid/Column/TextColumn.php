@@ -37,7 +37,7 @@ class TextColumn extends AbstractColumn
     /**
      * @return bool
      */
-    public function isSortable()
+    public function getSortable()
     {
         return $this->sortable;
     }
@@ -53,7 +53,7 @@ class TextColumn extends AbstractColumn
     /**
      * @return bool
      */
-    public function isTranslatable()
+    public function getTranslatable()
     {
         return $this->translatable;
     }

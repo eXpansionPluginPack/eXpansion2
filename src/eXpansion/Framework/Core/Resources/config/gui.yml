@@ -1,6 +1,7 @@
 parameters:
     expansion.framework.core.model.gui.manialink.class: 'eXpansion\Framework\Core\Model\Gui\Manialink'
     expansion.framework.core.model.gui.window.class: 'eXpansion\Framework\Core\Model\Gui\Window'
+    expansion.framework.core.model.gui.widget.class: 'eXpansion\Framework\Core\Model\Gui\Widget'
     expansion.framework.core.model.gui.action.class: 'eXpansion\Framework\Core\Model\Gui\Action'
 
 services:
@@ -23,6 +24,20 @@ services:
         tags:
             - {name: expansion.plugin, data_provider: expansion.user_group}
 
+    expansion.framework.core.plugins.gui.widget_factory:
+        abstract: true
+        arguments:
+            - no_name
+            - 180
+            - 90
+            - null
+            - null
+            - "@expansion.framework.core.plugins.gui_handler"
+            - "@expansion.framework.core.user_groups.factory"
+            - "@expansion.framework.core.plugins.gui.action_factory"
+            - "@expansion.framework.core.helpers.translations"
+            - "%expansion.framework.core.model.gui.widget.class%"
+
     expansion.framework.core.plugins.gui.window_factory:
         abstract: true
         arguments:
@@ -36,6 +51,7 @@ services:
             - "@expansion.framework.core.plugins.gui.action_factory"
             - "@expansion.framework.core.mania_script.window_factory"
             - "@expansion.framework.core.helpers.translations"
+            - "%expansion.framework.core.model.gui.window.class%"
 
     #
     # GUI Element factories
