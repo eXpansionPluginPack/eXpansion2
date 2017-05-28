@@ -13,8 +13,8 @@ services:
         class: eXpansion\Bundle\Menu\Plugins\Gui\MenuFactory
         arguments:
             index_0: 'Menu Factory'
-            index_1: 180
-            index_2: 90
+            index_1: 0
+            index_2: 0
             index_3: null
             index_4: null
         calls:

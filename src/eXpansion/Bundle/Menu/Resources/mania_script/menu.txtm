@@ -1,0 +1,141 @@
+
+declare Boolean isClosing;
+declare Boolean isMenuOpen;
+
+declare Text[] CustomEvents;
+
+Void show() {
+ declare CMlFrame frame <=> (Page.GetFirstChild("buttons") as CMlFrame);
+ declare CMlFrame background <=> (Page.GetFirstChild("background") as CMlFrame);
+ isClosing = False;
+ isMenuOpen = True;
+ declare start = Now + 200;
+ declare counter = 0;
+
+Page.GetClassChildren("bg", background, True);
+	foreach (Elem in Page.GetClassChildren_Result) {
+		    AnimMgr.Add(Elem, "<elem scale=\"1\" />", 1200, CAnimManager::EAnimManagerEasing::ElasticOut2);
+		}
+
+        Page.GetClassChildren("button", frame, True);
+        foreach (Button in Page.GetClassChildren_Result) {
+                AnimMgr.Add(Button, "<quad scale=\"1.\" />", (start+(counter*150 )), 1400, CAnimManager::EAnimManagerEasing::ElasticOut2);
+                AnimMgr.Add(Button, "<quad scale=\"1.\" />", (start+400+(counter*150 )), 1400, CAnimManager::EAnimManagerEasing::ElasticOut2);	// fix mouse hover
+                counter+=1;
+        }
+
+}
+
+Void hide() {
+
+ isMenuOpen = False;
+ declare CMlFrame frame <=> (Page.GetFirstChild("buttons") as CMlFrame);
+ declare CMlFrame background <=> (Page.GetFirstChild("background") as CMlFrame);
+ isClosing = True;
+ declare start = Now;
+ declare counter = 0;
+
+	Page.GetClassChildren("button", frame, False);
+	declare Integer total = Page.GetClassChildren_Result.count;
+
+	foreach (Elem in Page.GetClassChildren_Result) {
+			 AnimMgr.Add(Elem, "<elem scale=\"0\" />", (start+((total-counter)*150 )), 1200, CAnimManager::EAnimManagerEasing::ElasticOut2);
+			 AnimMgr.Add(Elem, "<elem scale=\"0\" />", (start+600+((total-counter)*150 )), 1200, CAnimManager::EAnimManagerEasing::ElasticOut2);
+			counter+=1;
+	}
+
+	Page.GetClassChildren("bg", background, False);
+	foreach (Elem in Page.GetClassChildren_Result) {
+		AnimMgr.Add(Elem, "<elem scale=\"0\" />", Now+150, 1200, CAnimManager::EAnimManagerEasing::ElasticIn);
+		}
+}
+
+Void InitialHide() {
+ declare CMlFrame frame <=> (Page.GetFirstChild("buttons") as CMlFrame);
+ declare CMlFrame background <=> (Page.GetFirstChild("background") as CMlFrame);
+    isMenuOpen = False;
+
+	Page.GetClassChildren("button", frame, True);
+	foreach (Button in Page.GetClassChildren_Result) {
+		Button.RelativeScale = 0.;
+	}
+
+	Page.GetClassChildren("bg", background, True);
+	foreach (Elem in Page.GetClassChildren_Result) {
+	 	Elem.RelativeScale = 0.;
+		}
+}
+
+main() {
+	EnableMenuNavigationInputs = True;
+	isClosing = False;
+	InitialHide();
+	CustomEvents = Text[];
+
+	while (True) {
+		yield;
+
+		foreach (Event in CustomEvents) {
+
+		}
+		CustomEvents.clear();
+
+
+            ClientUI.StatusMessage = "";
+
+
+		foreach (Event in PendingEvents) {
+
+            if (Event.Type == CMlScriptEvent::Type::KeyPress && Event.KeyCode == 36) {
+
+            if (isMenuOpen) {
+                hide();
+            } else {
+                show();
+            }
+
+            }
+
+
+			if (Event.Type == CMlScriptEvent::Type::MouseClick && Event.Control.HasClass("button") ) {
+				hide();
+				if (Event.Control.DataAttributeExists("action")) {
+					switch (Event.Control.DataAttributeGet("action")) {
+							case "!profile": {
+								Playground.ShowProfile(LocalUser.Login);
+							}
+							case "!spec": {
+								Playground.RequestSpectatorClient(!IsSpectator);
+							}
+							case "!quit": {
+							    Playground.QuitServer(False);
+							}
+							case "!help": {
+                                    ShowModeHelp();
+							}
+				    }
+				}
+			}
+
+			if (Event.Type == CMlScriptEvent::Type::MouseClick && Event.ControlId == "open") {
+				show();
+			}
+		}
+
+		if (isClosing == False) {
+
+			foreach (Event in PendingEvents) {
+				if (Event.Type == CMlScriptEvent::Type::MouseOver ) {
+						AnimMgr.Add(Event.Control, "<elem scale=\"1.2\" />", 1000, CAnimManager::EAnimManagerEasing::ElasticOut2);
+				}
+
+				if (Event.Type == CMlScriptEvent::Type::MouseOut) {
+						AnimMgr.Add(Event.Control, "<elem scale=\"1.\" />", 1000, CAnimManager::EAnimManagerEasing::ElasticOut2);
+				}
+			}
+
+		}
+
+	}
+
+}
