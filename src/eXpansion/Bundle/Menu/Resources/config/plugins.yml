@@ -1,0 +1,8 @@
+services:
+    expansion.framework.core.plugins.menu:
+        class: eXpansion\Bundle\Menu\Plugins\Menu
+        arguments:
+            - '@expansion.framework.admin_groups.helpers.groups'
+            - '@expansion.framework.core.plugins.gui.menu'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.match_data}
