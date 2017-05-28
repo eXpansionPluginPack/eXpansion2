@@ -31,6 +31,21 @@ Interface ChatCommandInterface
     public function validate($login, $parameter);
 
     /**
+     * Get description of the chat command.
+     *
+     * @return string
+     */
+    public function getDescription();
+
+    /**
+     * Get help on the chat command.
+     *
+     * @return string
+     */
+    public function getHelp();
+
+
+    /**
      * @param string $login
      * @param ChatOutput $output
      * @param string $parameter

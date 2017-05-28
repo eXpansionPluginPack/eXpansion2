@@ -1,0 +1,24 @@
+services:
+
+    expansion.framework.core.gui.scripts.menu:
+        class: '%expansion.framework.core.model.gui.mania_scrip_factory.class%'
+        arguments:
+          - 'MenuBundle/Resources/mania_script/menu.txtm'
+          - '@file_locator'
+          - '%expansion.framework.core.model.gui.mania_script.class%'
+
+
+    expansion.framework.core.plugins.gui.menu:
+        parent: "expansion.framework.core.plugins.gui.widget_factory"
+        class: eXpansion\Bundle\Menu\Plugins\Gui\MenuFactory
+        arguments:
+            index_0: 'Menu Factory'
+            index_1: 180
+            index_2: 90
+            index_3: null
+            index_4: null
+        calls:
+            - [setMenuScriptFactory, ['@expansion.framework.core.gui.scripts.menu']]
+            - [setAdminGroupsHelper, ['@expansion.framework.admin_groups.helpers.groups']]
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.user_group}

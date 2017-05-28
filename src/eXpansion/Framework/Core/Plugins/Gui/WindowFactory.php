@@ -1,6 +1,7 @@
 <?php
 
 namespace eXpansion\Framework\Core\Plugins\Gui;
+use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Model\Gui\Manialink;
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
 use eXpansion\Framework\Core\Model\Gui\Window;
@@ -15,36 +16,69 @@ use FML\Controls\Control;
  * @package eXpansion\Framework\Core\Plugins\Gui
  * @author Oliver de Cramer
  */
-class WindowFactory extends ManialinkFactory {
+class WindowFactory extends WidgetFactory {
 
+    /** @var ManiaScriptFactory */
     protected $windowManiaScriptFactory;
 
+    /**
+     * WindowFactory constructor.
+     *
+     * @param                    $name
+     * @param                    $sizeX
+     * @param                    $sizeY
+     * @param null               $posX
+     * @param null               $posY
+     * @param GuiHandler         $guiHandler
+     * @param Factory            $groupFactory
+     * @param ActionFactory      $actionFactory
+     * @param ManiaScriptFactory $windowManiaScriptFactory
+     * @param Translations       $translationsHelper
+     * @param string             $className
+     */
     public function __construct(
+        $name,
+        $sizeX,
+        $sizeY,
+        $posX,
+        $posY,
         GuiHandler $guiHandler,
         Factory $groupFactory,
         ActionFactory $actionFactory,
         ManiaScriptFactory $windowManiaScriptFactory,
-        $className = Window::class,
-        $name,
-        $sizeX,
-        $sizeY,
-        $posX = null,
-        $posY = null
+        Translations $translationsHelper,
+        $className = Window::class
     ) {
-        // Hack for FML to use default MP alignements.
-        Control::clearDefaultAlign();
-
-        parent::__construct($guiHandler, $groupFactory, $actionFactory, $name, $sizeX, $sizeY, $posX, $posY, $className);
+        parent::__construct(
+            $name,
+            $sizeX,
+            $sizeY,
+            $posX,
+            $posY,
+            $guiHandler,
+            $groupFactory,
+            $actionFactory,
+            $translationsHelper,
+            $className
+        );
 
         $this->windowManiaScriptFactory = $windowManiaScriptFactory;
     }
 
+
+
+    /**
+     * @param Group $group
+     *
+     * @return Window
+     */
     protected function createManialink(Group $group)
     {
         $className = $this->className;
         $manialink = new $className(
             $group,
             $this->windowManiaScriptFactory,
+            $this->translationsHelper,
             $this->name,
             $this->sizeX,
             $this->sizeY,

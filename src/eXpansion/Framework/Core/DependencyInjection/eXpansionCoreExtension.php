@@ -41,6 +41,7 @@ class eXpansionCoreExtension extends Extension
         $loader->load('user_groups.yml');
         $loader->load('ml_scripts.yml');
         $loader->load('gui.yml');
+        $loader->load('gui_grid.yml');
         $loader->load('helpers.yml');
 
         // Temporary for the prototype.

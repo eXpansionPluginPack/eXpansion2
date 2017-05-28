@@ -2,10 +2,13 @@
 
 namespace eXpansion\Framework\Core\Model\Gui;
 
+use eXpansion\Framework\Core\Model\Data\DataStorageTrait;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 
 class Manialink implements ManialinkInterface
 {
+    use DataStorageTrait;
+
     /** @var string  */
     protected $id;
 

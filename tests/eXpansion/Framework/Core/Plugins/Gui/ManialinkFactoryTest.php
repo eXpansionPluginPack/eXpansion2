@@ -127,12 +127,14 @@ class ManialinkFactoryTest extends TestCore
     protected function getManialinkFactory()
     {
         return new ManialinkFactory(
-            $this->guiHandlerMock,
-            $this->userGroupFactoryMock,
-            $this->actionFactoryMock,
             'test',
             2,
-            2
+            2,
+            null,
+            null,
+            $this->guiHandlerMock,
+            $this->userGroupFactoryMock,
+            $this->actionFactoryMock
         );
     }
 }

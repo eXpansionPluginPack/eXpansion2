@@ -65,14 +65,14 @@ class ManialinkFactory implements ManialinkFactoryInterface, UserGroupDataListen
      * @param string $className
      */
     public function __construct(
-        GuiHandler $guiHandler,
-        Factory $groupFactory,
-        ActionFactory $actionFactory,
         $name,
         $sizeX,
         $sizeY,
         $posX = null,
         $posY = null,
+        GuiHandler $guiHandler,
+        Factory $groupFactory,
+        ActionFactory $actionFactory,
         $className = Manialink::class
     ) {
         if (is_null($posX)) {
@@ -108,6 +108,7 @@ class ManialinkFactory implements ManialinkFactoryInterface, UserGroupDataListen
         $this->manialinks[$group->getName()] = $this->createManialink($group);
         $this->guiHandler->addToDisplay($this->manialinks[$group->getName()]);
 
+        $this->createContent($this->manialinks[$group->getName()]);
         $this->updateContent($this->manialinks[$group->getName()]);
 
         return $group;
@@ -125,7 +126,18 @@ class ManialinkFactory implements ManialinkFactoryInterface, UserGroupDataListen
     }
 
     /**
-     * Update/put content in the manialink.
+     * Create content in the manialink.
+     *
+     * @param ManialinkInterface $manialink
+     *
+     */
+    protected function createContent(ManialinkInterface $manialink)
+    {
+        // Put content in the manialink here.
+    }
+
+    /**
+     * Update content in the manialink.
      *
      * @param ManialinkInterface $manialink
      *

@@ -21,15 +21,9 @@ services:
     expansion.bundle.acme.plugins.gui.windowfactory:
             class: 'eXpansion\Bundle\Acme\Plugins\Gui\WindowFactory'
             arguments:
-                - "@expansion.framework.core.plugins.gui_handler"
-                - "@expansion.framework.core.user_groups.factory"
-                - "@expansion.framework.core.plugins.gui.action_factory"
-                - "@expansion.framework.core.mania_script.window_factory"
-                - '%expansion.framework.core.model.gui.window.class%'
-                - "tesst window"
-                - 180
-                - 90
-                - null
-                - null
+                index_0: "test window"
+                index_1: 180
+                index_2: 90
+            parent : expansion.framework.core.plugins.gui.window_factory
             tags:
                 - {name: expansion.plugin, data_provider: expansion.user_group}

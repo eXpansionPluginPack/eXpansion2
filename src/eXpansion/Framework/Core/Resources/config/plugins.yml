@@ -38,3 +38,22 @@ services:
             - '@expansion.framework.core.user_groups.spectators'
         tags:
             - {name: expansion.plugin, data_provider: expansion.player_data}
+
+
+    #
+    # Default Chat commands
+    #
+    expansion.framework.core.plugins.chat_commands:
+        class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
+        arguments:
+            -
+              - '@expansion.framework.core.chat_command.help'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.chat_command_data}
+
+    expansion.framework.core.chat_command.help:
+        class:  eXpansion\Framework\Core\ChatCommand\Help
+        arguments:
+            - 'help'
+            - ['h']
+            - '@expansion.framework.core.plugins.gui.window_help_factory'

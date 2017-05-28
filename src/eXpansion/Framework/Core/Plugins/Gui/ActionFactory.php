@@ -18,10 +18,13 @@ class ActionFactory implements ManialinkPageAnswerDataListenerInterface
     protected $class;
 
     /** @var  Action[] */
-    protected $actions;
+    protected $actions = [];
 
     /** @var Action[][] */
-    protected $actionsByManialink;
+    protected $actionsByManialink = [];
+
+    /** @var Action[] */
+    protected $manialinkByAction = [];
 
     /**
      * ActionFactory constructor.
@@ -48,6 +51,7 @@ class ActionFactory implements ManialinkPageAnswerDataListenerInterface
         $action = new $class($callable, $args);
         $this->actions[$action->getId()] = $action;
         $this->actionsByManialink[$manialink->getId()][$action->getId()] = $action;
+        $this->manialinkByAction[$action->getId()] = $manialink->getId();
 
         return $action->getId();
     }
@@ -62,9 +66,25 @@ class ActionFactory implements ManialinkPageAnswerDataListenerInterface
         if (isset($this->actionsByManialink[$manialink->getId()])) {
             foreach ($this->actionsByManialink[$manialink->getId()] as $actionId => $action) {
                 unset($this->actions[$actionId]);
+                unset($this->manialinkByAction[$actionId]);
             }
 
             unset($this->actionsByManialink[$manialink->getId()]);
+        }
+    }
+
+    /**
+     * Destroy an individual action.
+     *
+     * @param $actionId
+     */
+    public function destroyAction($actionId)
+    {
+        if (isset($this->manialinkByAction[$actionId])) {
+            unset($this->actionsByManialink[$this->manialinkByAction[$actionId]][$actionId]);
+            unset($this->actions[$actionId]);
+            unset($this->manialinkByAction[$actionId]);
+
         }
     }
 
