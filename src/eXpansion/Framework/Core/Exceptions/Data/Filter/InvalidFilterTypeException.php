@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: olive
- * Date: 13/05/2017
- * Time: 22:07
- */
 
 namespace eXpansion\Framework\Core\Exceptions\Data\Filter;
-
 
 /**
  * Class InvalidFIlterTypeException
@@ -17,5 +10,4 @@ namespace eXpansion\Framework\Core\Exceptions\Data\Filter;
  */
 class InvalidFilterTypeException extends \Exception
 {
-
 }

@@ -25,8 +25,10 @@ class Translations
     /**
      * Translations constructor.
      *
-     * @param $translator
+     * @param       $translator
      * @param array $supportedLocales
+     * @param       $colorCodes
+     * @param       $glyphIcons
      */
     public function __construct(
         $translator,

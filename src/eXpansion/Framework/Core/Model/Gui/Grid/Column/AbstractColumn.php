@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: olive
- * Date: 27/05/2017
- * Time: 19:48
- */
 
 namespace eXpansion\Framework\Core\Model\Gui\Grid\Column;
 
@@ -17,18 +11,21 @@ namespace eXpansion\Framework\Core\Model\Gui\Grid\Column;
  */
 abstract class AbstractColumn
 {
+    /** @var string  */
     protected $key;
 
+    /** @var string  */
     protected $name;
 
+    /** @var float  */
     protected $widthCoeficiency;
 
     /**
      * AbstractColumn constructor.
      *
-     * @param $key
-     * @param $name
-     * @param $widthCoeficiency
+     * @param string $key
+     * @param string $name
+     * @param float $widthCoeficiency
      */
     public function __construct($key, $name, $widthCoeficiency)
     {
@@ -38,7 +35,7 @@ abstract class AbstractColumn
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getKey()
     {
@@ -46,7 +43,7 @@ abstract class AbstractColumn
     }
 
     /**
-     * @param mixed $key
+     * @param string $key
      */
     public function setKey($key)
     {
@@ -54,7 +51,7 @@ abstract class AbstractColumn
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getName()
     {
@@ -62,7 +59,7 @@ abstract class AbstractColumn
     }
 
     /**
-     * @param mixed $name
+     * @param string $name
      */
     public function setName($name)
     {
@@ -70,7 +67,7 @@ abstract class AbstractColumn
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getWidthCoeficiency()
     {
@@ -78,7 +75,7 @@ abstract class AbstractColumn
     }
 
     /**
-     * @param mixed $widthCoeficiency
+     * @param float $widthCoeficiency
      */
     public function setWidthCoeficiency($widthCoeficiency)
     {

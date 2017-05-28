@@ -183,6 +183,14 @@ class GridBuilder
         $this->totalWidthCoefficency = 0;
     }
 
+    /**
+     * Build a grid.
+     *
+     * @param $width
+     * @param $height
+     *
+     * @return Frame
+     */
     public function build($width, $height)
     {
         foreach ($this->temporaryActions as $action) {

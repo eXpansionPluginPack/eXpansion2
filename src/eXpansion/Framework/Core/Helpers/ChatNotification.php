@@ -26,8 +26,9 @@ class ChatNotification implements ChatNotificationInterface
     /**
      * ChatNotification constructor.
      *
-     * @param Connection $connection
-     * @param Translations $translations
+     * @param Connection    $connection
+     * @param Translations  $translations
+     * @param PlayerStorage $playerStorage
      */
     public function __construct(
         Connection $connection,

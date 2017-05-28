@@ -43,7 +43,7 @@ class LineFactory
     }
 
     /**
-     * TODO Handle more options such as pregenerated buttons and such instead of text.
+     * Create a multi column line.
      *
      * @param $totalWidth
      * @param $columns

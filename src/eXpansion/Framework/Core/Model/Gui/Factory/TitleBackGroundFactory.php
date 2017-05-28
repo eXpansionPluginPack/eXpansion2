@@ -15,8 +15,7 @@ class TitleBackGroundFactory extends BackGroundFactory
 {
     public function create($width, $height, $index = 0)
     {
-        // TODO set proper default size & font.
-        $background = new Quad(); //BgRacePlayerName
+        $background = new Quad();
         $background->setBackgroundColor('fff')
             ->setPosition(0, -$height + 0.25)
             ->setSize($width, 0.25);

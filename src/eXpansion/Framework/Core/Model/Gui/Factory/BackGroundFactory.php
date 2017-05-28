@@ -17,8 +17,6 @@ class BackGroundFactory
     {
         $index = $index % 2;
 
-        // TODO set proper default size & font.
-
         $background = new Quad();
         $background->setSize($width, $height);
         if ($index == 0) {

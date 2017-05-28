@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: olive
- * Date: 13/05/2017
- * Time: 21:57
- */
 
 namespace eXpansion\Framework\Core\Helpers\Data;
 

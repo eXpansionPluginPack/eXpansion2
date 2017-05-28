@@ -13,10 +13,21 @@ use FML\Types\Renderable;
  */
 class ActionColumn extends AbstractColumn
 {
+    /** @var array */
     protected $callable;
 
+    /** @var Renderable  */
     protected $renderer;
 
+    /**
+     * ActionColumn constructor.
+     *
+     * @param string     $key
+     * @param string     $name
+     * @param float      $widthCoeficiency
+     * @param array      $callable
+     * @param Renderable $renderer
+     */
     public function __construct($key, $name, $widthCoeficiency, $callable, Renderable $renderer)
     {
         parent::__construct($key, $name, $widthCoeficiency);
@@ -26,7 +37,7 @@ class ActionColumn extends AbstractColumn
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getCallable()
     {
@@ -34,7 +45,7 @@ class ActionColumn extends AbstractColumn
     }
 
     /**
-     * @param mixed $callable
+     * @param array $callable
      */
     public function setCallable($callable)
     {
@@ -42,7 +53,7 @@ class ActionColumn extends AbstractColumn
     }
 
     /**
-     * @return mixed
+     * @return Renderable
      */
     public function getRenderer()
     {
@@ -50,7 +61,7 @@ class ActionColumn extends AbstractColumn
     }
 
     /**
-     * @param mixed $renderer
+     * @param Renderable $renderer
      */
     public function setRenderer($renderer)
     {
