@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Core\Model\Gui\Factory;
 
+use FML\Controls\Quad;
 use FML\Controls\Quads\Quad_BgsPlayerCard;
 
 /**
@@ -15,9 +16,10 @@ class TitleBackGroundFactory extends BackGroundFactory
     public function create($width, $height, $index = 0)
     {
         // TODO set proper default size & font.
-        $background = new Quad_BgsPlayerCard(); //BgRacePlayerName
-        $background->setSubStyle(Quad_BgsPlayerCard::SUBSTYLE_BgRacePlayerName)
-            ->setSize($width, $height);
+        $background = new Quad(); //BgRacePlayerName
+        $background->setBackgroundColor('fff')
+            ->setPosition(0, -$height + 0.25)
+            ->setSize($width, 0.25);
 
         return $background;
     }

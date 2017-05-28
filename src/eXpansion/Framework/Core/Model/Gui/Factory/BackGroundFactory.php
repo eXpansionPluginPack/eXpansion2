@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Core\Model\Gui\Factory;
 
+use FML\Controls\Quad;
 use FML\Controls\Quads\Quad_BgsPlayerCard;
 
 /**
@@ -17,10 +18,14 @@ class BackGroundFactory
         $index = $index % 2;
 
         // TODO set proper default size & font.
-        $background = new Quad_BgsPlayerCard(); //BgRacePlayerName
-        $background->setSubStyle(Quad_BgsPlayerCard::SUBSTYLE_BgActivePlayerName)
-            ->setSize($width, $height);
 
+        $background = new Quad();
+        $background->setSize($width, $height);
+        if ($index == 0) {
+            $background->setBackgroundColor("eee5");
+        } else {
+            $background->setBackgroundColor("eee3");
+        }
         return $background;
     }
 }

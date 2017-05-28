@@ -9,6 +9,7 @@ use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Services\ChatCommands;
 use FML\Controls\Frame;
+use FML\Controls\Label;
 use FML\Controls\Quads\Quad_Icons64x64_1;
 
 
@@ -20,16 +21,16 @@ use FML\Controls\Quads\Quad_Icons64x64_1;
  */
 class WindowHelpFactory extends WindowFactory
 {
-    /** @var GridBuilderFactory  */
+    /** @var GridBuilderFactory */
     protected $gridBuilderFactory;
 
-    /** @var DataCollectionFactory  */
+    /** @var DataCollectionFactory */
     protected $dataCollectionFactory;
 
-    /** @var ChatCommands  */
+    /** @var ChatCommands */
     protected $chatCommands;
 
-    /** @var ChatCommandDataProvider  */
+    /** @var ChatCommandDataProvider */
     protected $chatCommandDataPovider;
 
     /**
@@ -69,9 +70,11 @@ class WindowHelpFactory extends WindowFactory
         $collection = $this->dataCollectionFactory->create($this->chatCommands->getChatCommands());
         $collection->setPageSize(2);
 
-        $helpButton = Quad_Icons64x64_1::create();
-        $helpButton->setSubStyle(Quad_Icons64x64_1::SUBSTYLE_TrackInfo);
-        $helpButton->setSize(6,6);
+        $helpButton = new Label();
+        $helpButton->setText('')
+            ->setSize(6, 6)
+            ->setAreaColor("0000")
+            ->setAreaFocusColor("0000");
 
         $gridBuilder = $this->gridBuilderFactory->create();
         $gridBuilder->setManialink($manialink)

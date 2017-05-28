@@ -15,13 +15,13 @@ use FML\Types\Renderable;
 
 class Window extends Manialink implements Container
 {
-    /** @var \FML\ManiaLink  */
+    /** @var \FML\ManiaLink */
     protected $manialink;
 
-    /** @var Label  */
+    /** @var Label */
     protected $closeButton;
 
-    /** @var Frame  */
+    /** @var Frame */
     protected $contentFrame;
 
     public function __construct(
@@ -32,7 +32,8 @@ class Window extends Manialink implements Container
         $sizeY,
         $posX = null,
         $posY = null
-    ) {
+    )
+    {
         parent::__construct($group, $name, $sizeX, $sizeY, $posX, $posY);
 
         $titleHeight = 5.5;
@@ -42,8 +43,8 @@ class Window extends Manialink implements Container
         // Manialink containing everything
         $this->manialink = new \FML\ManiaLink();
         $this->manialink->setId($this->getId())
-                        ->setName($name)
-                        ->setVersion(\FML\ManiaLink::VERSION_3);
+            ->setName($name)
+            ->setVersion(\FML\ManiaLink::VERSION_3);
         $windowFrame = new Frame('Window');
         $windowFrame->setPosition($posX, $posY);
         $this->manialink->addChild($windowFrame);
@@ -51,17 +52,18 @@ class Window extends Manialink implements Container
         // Frame to handle the content of the window.
         $this->contentFrame = new Frame();
         $this->contentFrame->setPosition(2, -$titleHeight - 2);
-        $this->contentFrame->setSize($sizeX - 4, $sizeY -$titleHeight - 4);
+        $this->contentFrame->setSize($sizeX - 4, $sizeY - $titleHeight - 4);
         $windowFrame->addChild($this->contentFrame);
 
         // Title bar & title.
         $titleLabel = new Label();
-        $titleLabel->setPosition(3, -$titleHeight/3 - 1)
+        $titleLabel->setPosition(3, -$titleHeight / 3 - 1)
             ->setAlign(Label::LEFT, Label::CENTER2)
             ->setText($name)
             ->setTextColor('fff')
             ->setTextSize(2)
-            ->setTextFont('RajdhaniMono');
+            ->setTextFont('RajdhaniMono')
+            ->setId("TitleText");
         $windowFrame->addChild($titleLabel);
 
         $titleBar = new Quad();
@@ -91,14 +93,17 @@ class Window extends Manialink implements Container
             ->setTextSize(2)
             ->setTextFont('OswaldMono')
             ->setScriptEvents(true)
-            ->setAreaFocusColor($titlebarColor);
+            ->setAreaColor('d00')
+            ->setAreaFocusColor('f22');
         $windowFrame->addChild($this->closeButton);
 
         //body
         $body = new Quad_Bgs1();
         $body->setSize($sizeX, $sizeY - $titleHeight)
             ->setPosition(0, -$titleHeight)
-            ->setSubStyle(Quad_Bgs1::SUBSTYLE_BgWindow3);
+            ->setSubStyle(Quad_Bgs1::SUBSTYLE_BgWindow3)
+            ->setId('WindowBg')
+            ->setScriptEvents(true);
         $windowFrame->addChild($body);
 
         $body = new Quad_Bgs1InRace();
@@ -126,8 +131,7 @@ class Window extends Manialink implements Container
      */
     public function getXml()
     {
-        if (empty($this->closeButton->getDataAttribute('action')))
-        {
+        if (empty($this->closeButton->getDataAttribute('action'))) {
             throw new MissingCloseActionException("Close action is missing for window. Check if you are using the proper factory.");
         }
 
@@ -250,7 +254,8 @@ class Window extends Manialink implements Container
      * @deprecated Use Style
      * @see        Style
      */
-    public function setFormat(Format $format = null) {
+    public function setFormat(Format $format = null)
+    {
         return $this->contentFrame->setFormat($format);
     }
 

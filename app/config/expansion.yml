@@ -12,6 +12,7 @@ e_xpansion_core:
             success: '$0d0✔'
             fail: '$b32✘'
             server: '$afd$fff'
+            info: ''
 e_xpansion_admin_groups:
     groups:
         master_admin:
