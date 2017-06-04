@@ -13,6 +13,14 @@ interface DispatcherInterface
      */
     public function init();
 
+
+    /**
+     * Reset the dispatcher elements when gamemode changes.
+     *
+     * @return void
+     */
+    public function reset();
+
     /**
      * Dispatch the event.
      *

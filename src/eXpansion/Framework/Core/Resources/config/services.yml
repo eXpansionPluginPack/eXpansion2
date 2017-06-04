@@ -43,6 +43,13 @@ services:
         arguments:
             - '@expansion.framework.core.services.data_provider_manager'
             - '@expansion.framework.core.services.plugin_manager'
+        calls:
+            - [addEventProcesseor, ['@expansion.framework.core.services.symfony_event_adapter']]
+
+    expansion.framework.core.services.symfony_event_adapter:
+        class: eXpansion\Framework\Core\Services\SymfonyEventAdapter
+        arguments:
+            - '@event_dispatcher'
 
     expansion.framework.core.services.application.dispatch_logger:
         class: eXpansion\Framework\Core\Services\Application\DispatchLogger
@@ -55,11 +62,15 @@ services:
             - '@service_container'
             - '@expansion.framework.core.services.model.plugin.plugin_description_factory'
             - '@expansion.framework.core.services.data_provider_manager'
+            - '@expansion.framework.core.storage.game_data'
+            - '@expansion.framework.core.services.console'
 
     expansion.framework.core.services.data_provider_manager:
         class: "%expansion.framework.core.services.data_provider_manager.class%"
         arguments:
             - '@service_container'
+            - '@expansion.framework.core.storage.game_data'
+            - '@expansion.framework.core.services.console'
 
     expansion.framework.core.services.console:
         class: "%expansion.framework.core.services.console.class%"

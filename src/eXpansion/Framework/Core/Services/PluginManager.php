@@ -5,6 +5,7 @@ namespace eXpansion\Framework\Core\Services;
 use eXpansion\Framework\Core\Model\Plugin\PluginDescription;
 use eXpansion\Framework\Core\Model\Plugin\PluginDescriptionFactory;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
+use eXpansion\Framework\Core\Storage\GameDataStorage;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -31,34 +32,51 @@ class PluginManager
     /** @var DataProviderManager  */
     protected $dataProviderManager;
 
+    /** @var GameDataStorage  */
+    protected $gameDataStorage;
+
+    /** @var Console  */
+    protected $console;
+
     /**
      * PluginManager constructor.
      *
-     * @param ContainerInterface $container
-     * @param DataProviderManager $dataProviderManager
+     * @param ContainerInterface       $container
+     * @param PluginDescriptionFactory $pluginDescriptionFactory
+     * @param DataProviderManager      $dataProviderManager
+     * @param GameDataStorage          $gameDataStorage
+     * @param Console                  $console
      */
     public function __construct(
         ContainerInterface $container,
         PluginDescriptionFactory $pluginDescriptionFactory,
-        DataProviderManager $dataProviderManager
+        DataProviderManager $dataProviderManager,
+        GameDataStorage $gameDataStorage,
+        Console $console
     )
     {
         $this->container = $container;
         $this->pluginDescriptionFactory = $pluginDescriptionFactory;
         $this->dataProviderManager = $dataProviderManager;
+        $this->gameDataStorage = $gameDataStorage;
+        $this->console = $console;
     }
 
     /**
      * Initialize plugins.
      */
-    public function init() {
-        // TODO get this data from the dedicated!
-        $title = 'TMStadium@nadeo';
-        $mode = 'script';
-        $script = 'TimeAttack.script.txt';
-
-        $this->enableDisablePlugins($title, $mode, $script);
+    public function init()
+    {
+        $this->reset();
     }
+
+    public function reset()
+    {
+        $title = $this->gameDataStorage->getTitle();
+        $mode = $this->gameDataStorage->getGameModeCode();
+        $script = $this->gameDataStorage->getGameInfos()->scriptName;
+
+        $this->enableDisablePlugins($title, $mode, $script);    }
 
     /**
      * Enable all possible plugins.
@@ -159,6 +177,8 @@ class PluginManager
             $pluginService->setStatus(true);
         }
 
+        $this->console->getConsoleOutput()
+            ->writeln("<info>Plugin <comment>'{$plugin->getPluginId()}'</comment> is enabled with providers :</info>");
         foreach ($plugin->getDataProviders() as $provider) {
             $this->dataProviderManager->registerPlugin($provider, $plugin->getPluginId(), $title, $mode, $script);
         }

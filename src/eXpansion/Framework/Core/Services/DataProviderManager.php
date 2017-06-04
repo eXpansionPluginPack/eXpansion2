@@ -6,6 +6,7 @@ use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
 use eXpansion\Framework\Core\Exceptions\DataProvider\UncompatibleException;
 use eXpansion\Framework\Core\Model\ProviderListner;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
+use eXpansion\Framework\Core\Storage\GameDataStorage;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -41,14 +42,22 @@ class DataProviderManager
     /** @var ContainerInterface */
     protected $container;
 
+    /** @var GameDataStorage  */
+    protected $gameDataStorage;
+
+    /** @var Console  */
+    protected $console;
+
     /**
      * DataProviderManager constructor.
      *
      * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, GameDataStorage $gameDataStorage, Console $console)
     {
         $this->container = $container;
+        $this->gameDataStorage = $gameDataStorage;
+        $this->console = $console;
     }
 
     /**
@@ -56,11 +65,14 @@ class DataProviderManager
      */
     public function init(PluginManager $pluginManager)
     {
-        // TODO run check in order not  to have same providers multiple times.
-        // TODO get this data from the dedicated!
-        $title = 'TMStadium@nadeo';
-        $mode = 'script';
-        $script = 'TimeAttack.script.txt';
+        $this->reset($pluginManager);
+    }
+
+    public function reset(PluginManager $pluginManager)
+    {
+        $title = $this->gameDataStorage->getTitle();
+        $mode = $this->gameDataStorage->getGameModeCode();
+        $script = $this->gameDataStorage->getGameInfos()->scriptName;
 
         foreach ($this->providersByCompatibility as $provider => $data) {
 
@@ -158,8 +170,9 @@ class DataProviderManager
      */
     public function registerPlugin($provider, $pluginId, $title, $mode, $script)
     {
+        $providerId = $this->getCompatibleProviderId($provider, $title, $mode, $script);
         /** @var AbstractDataProvider $providerService */
-        $providerService = $this->container->get($this->getCompatibleProviderId($provider, $title, $mode, $script));
+        $providerService = $this->container->get($providerId);
         $pluginService = $this->container->get($pluginId);
         $interface = $this->providerInterfaces[$provider];
 
@@ -169,6 +182,8 @@ class DataProviderManager
         } else {
             throw new UncompatibleException("Plugin $pluginId isn't compatible with $provider. Should be instance of $interface");
         }
+
+        $this->console->getConsoleOutput()->writeln("\t<info>- $provider : $providerId</info>");
     }
 
     /**
