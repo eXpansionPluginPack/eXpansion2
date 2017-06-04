@@ -12,6 +12,17 @@ parameters:
         5 : cup
         6 : stunts
 
+    expansion.framework.core.storage.game_data.titles:
+        'TmStadium@nadeo': 'TM'
+        'TmStadium':       'TM'
+        'TmValley@nadeo':  'TM'
+        'TmValley':        'TM'
+        'TmCanyon@nadeo':  'TM'
+        'TmCanyon':        'TM'
+        'TmLagoon@nadeo':  'TM'
+        'TmLagoon':        'TM'
+
+
     expansion.framework.core.storage.data.player.class: eXpansion\Framework\Core\Storage\Data\Player
     expansion.framework.core.storage.data.player.factory: eXpansion\Framework\Core\Storage\Data\PlayerFactory
 
@@ -31,6 +42,7 @@ services:
         class: "%expansion.framework.core.storage.game_data.class%"
         arguments:
           - "%expansion.framework.core.storage.game_data.mode.codes%"
+          - "%expansion.framework.core.storage.game_data.titles%"
 
     expansion.framework.core.storage.data.player.factory:
         class: "%expansion.framework.core.storage.data.player.factory%"

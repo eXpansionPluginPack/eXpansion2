@@ -44,6 +44,14 @@ class BaseStorageUpdateListener
     }
 
     /**
+     *
+     */
+    public function onManiaplanetGameExpansionBeforeInit()
+    {
+        // Nothing to do.
+    }
+
+    /**
      * Called on the begining of a new map.
      *
      * @param DedicatedEvent $event

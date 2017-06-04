@@ -66,7 +66,7 @@ class DataProviderManager
 
     public function reset(PluginManager $pluginManager)
     {
-        $title = $this->gameDataStorage->getVersion();
+        $title = $this->gameDataStorage->getTitle();
         $mode = $this->gameDataStorage->getGameModeCode();
         $script = $this->gameDataStorage->getGameInfos()->scriptName;
 

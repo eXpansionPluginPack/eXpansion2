@@ -64,8 +64,7 @@ class PluginManager
 
     public function reset()
     {
-        // TODO get this data from the dedicated!
-        $title = $this->gameDataStorage->getVersion();
+        $title = $this->gameDataStorage->getTitle();
         $mode = $this->gameDataStorage->getGameModeCode();
         $script = $this->gameDataStorage->getGameInfos()->scriptName;
 

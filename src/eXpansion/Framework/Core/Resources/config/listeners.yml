@@ -9,3 +9,4 @@ services:
             - '@expansion.framework.core.services.application.dispatcher'
         tags:
             - { name: kernel.event_listener, event: maniaplanet.game.BeginMap }
+            - { name: kernel.event_listener, event: maniaplanet.game.expansion.before_init }

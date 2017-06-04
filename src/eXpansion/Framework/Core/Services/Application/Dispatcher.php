@@ -22,6 +22,9 @@ class Dispatcher implements DispatcherInterface
     /** @var EventProcessorInterface[] */
     protected $eventProcessors = [];
 
+    /** @var bool  */
+    protected $isInitialized = false;
+
     /**
      * Dispatcher constructor.
      *
@@ -41,6 +44,8 @@ class Dispatcher implements DispatcherInterface
     {
         $this->pluginManager->init();
         $this->dataProviderManager->init($this->pluginManager);
+
+        $this->isInitialized = true;
     }
 
     /**
@@ -70,6 +75,8 @@ class Dispatcher implements DispatcherInterface
             $eventProcessor->dispatch($event, $params);
         }
 
-        $this->dataProviderManager->dispatch($event, $params);
+        if ($this->isInitialized) {
+            $this->dataProviderManager->dispatch($event, $params);
+        }
     }
 }

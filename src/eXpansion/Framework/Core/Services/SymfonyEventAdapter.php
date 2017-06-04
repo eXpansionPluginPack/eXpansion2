@@ -21,11 +21,10 @@ class SymfonyEventAdapter implements EventProcessorInterface
     /** @var EventDispatcherInterface */
     protected $symfonyEventDispatcher;
 
-
     /**
-     * StorageProvider constructor.
+     * SymfonyEventAdapter constructor.
      *
-     * @param $connection
+     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher
@@ -42,7 +41,6 @@ class SymfonyEventAdapter implements EventProcessorInterface
      */
     public function dispatch($eventName, $params)
     {
-
         $event = new DedicatedEvent();
         $event->setParameters($params);
         $this->symfonyEventDispatcher->dispatch("maniaplanet.game." . $eventName, $event);

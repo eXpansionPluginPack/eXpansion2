@@ -14,8 +14,15 @@ use oliverde8\AssociativeArraySimplified\AssociativeArray;
  */
 class GameDataStorage
 {
-    /**  */
+    /**
+     * Constant used for unknown game modes.
+     */
     const GAME_MODE_CODE_UNKNOWN = 'unknown';
+
+    /**
+     * Constant used for unknown titles.
+     */
+    const TITLE_UNKNOWN = 'unknown';
 
     /** @var  GameInfos */
     protected $gameInfos;
@@ -29,13 +36,19 @@ class GameDataStorage
     protected $gameModeCodes;
 
     /**
+     * @var AssociativeArray
+     */
+    protected $titles;
+
+    /**
      * GameDataStorage constructor.
      *
      * @param array $gameModeCodes
      */
-    public function __construct(array $gameModeCodes)
+    public function __construct(array $gameModeCodes, array $titles)
     {
         $this->gameModeCodes = new AssociativeArray($gameModeCodes);
+        $this->titles = new AssociativeArray($titles);
     }
 
 
@@ -79,5 +92,15 @@ class GameDataStorage
     public function getGameModeCode()
     {
         return $this->gameModeCodes->get($this->getGameInfos()->gameMode, self::GAME_MODE_CODE_UNKNOWN);
+    }
+
+    /**
+     * Get the title name, this returns a simplified title name such as TM
+     *
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        return $this->titles->get($this->getVersion()->titleId, self::TITLE_UNKNOWN);
     }
 }
