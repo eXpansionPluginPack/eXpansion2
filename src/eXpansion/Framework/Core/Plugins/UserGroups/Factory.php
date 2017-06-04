@@ -2,9 +2,11 @@
 
 namespace eXpansion\Framework\Core\Plugins\UserGroups;
 
+use eXpansion\Framework\Core\DataProviders\Listener\PlayerDataListenerInterface;
 use eXpansion\Framework\Core\DataProviders\Listener\UserGroupDataListenerInterface;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
+use eXpansion\Framework\Core\Storage\Data\Player;
 
 /**
  * Class Factory handles non persistent user groups.
@@ -12,7 +14,7 @@ use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
  * @package eXpansion\Framework\Core\Plugins
  * @author Oliver de Cramer
  */
-class Factory implements UserGroupDataListenerInterface
+class Factory implements UserGroupDataListenerInterface, PlayerDataListenerInterface
 {
     /** @var Group[] */
     protected $groups = [];
@@ -116,15 +118,55 @@ class Factory implements UserGroupDataListenerInterface
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function onExpansionGroupAddUser(Group $group, $loginAdded)
     {
         // Nothing to
     }
 
+    /**
+     * @inheritdoc
+     */
     public function onExpansionGroupRemoveUser(Group $group, $loginRemoved)
     {
         if (isset($this->groups[$loginRemoved])) {
             unset($this->groups[$loginRemoved]);
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function onPlayerConnect(Player $player)
+    {
+        // Nothing to do as the plugin don't now the rules to add or remove players to groups;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function onPlayerDisconnect(Player $player, $disconnectionReason)
+    {
+        foreach ($this->groups as $group) {
+            $group->removeLogin($player->getLogin());
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function onPlayerInfoChanged(Player $oldPlayer, Player $player)
+    {
+        // Nothing to do as the plugin don't now the rules to add or remove players to groups;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function onPlayerAlliesChanged(Player $oldPlayer, Player $player)
+    {
+        // Nothing to do as the plugin don't now the rules to add or remove players to groups;
     }
 }

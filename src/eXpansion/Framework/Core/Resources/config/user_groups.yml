@@ -28,3 +28,4 @@ services:
             - '%expansion.framework.core.model.user_groups.group.class%'
         tags:
             - {name: expansion.plugin, data_provider: expansion.user_group}
+            - {name: expansion.plugin, data_provider: expansion.player_data}
