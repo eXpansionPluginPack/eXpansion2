@@ -45,15 +45,19 @@ class DataProviderManager
     /** @var GameDataStorage  */
     protected $gameDataStorage;
 
+    /** @var Console  */
+    protected $console;
+
     /**
      * DataProviderManager constructor.
      *
      * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container, GameDataStorage $gameDataStorage)
+    public function __construct(ContainerInterface $container, GameDataStorage $gameDataStorage, Console $console)
     {
         $this->container = $container;
         $this->gameDataStorage = $gameDataStorage;
+        $this->console = $console;
     }
 
     /**
@@ -166,8 +170,9 @@ class DataProviderManager
      */
     public function registerPlugin($provider, $pluginId, $title, $mode, $script)
     {
+        $providerId = $this->getCompatibleProviderId($provider, $title, $mode, $script);
         /** @var AbstractDataProvider $providerService */
-        $providerService = $this->container->get($this->getCompatibleProviderId($provider, $title, $mode, $script));
+        $providerService = $this->container->get($providerId);
         $pluginService = $this->container->get($pluginId);
         $interface = $this->providerInterfaces[$provider];
 
@@ -177,6 +182,8 @@ class DataProviderManager
         } else {
             throw new UncompatibleException("Plugin $pluginId isn't compatible with $provider. Should be instance of $interface");
         }
+
+        $this->console->getConsoleOutput()->writeln("\t<info>- $provider : $providerId</info>");
     }
 
     /**

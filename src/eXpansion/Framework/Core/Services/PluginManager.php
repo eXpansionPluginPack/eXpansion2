@@ -35,23 +35,31 @@ class PluginManager
     /** @var GameDataStorage  */
     protected $gameDataStorage;
 
+    /** @var Console  */
+    protected $console;
+
     /**
      * PluginManager constructor.
      *
-     * @param ContainerInterface $container
-     * @param DataProviderManager $dataProviderManager
+     * @param ContainerInterface       $container
+     * @param PluginDescriptionFactory $pluginDescriptionFactory
+     * @param DataProviderManager      $dataProviderManager
+     * @param GameDataStorage          $gameDataStorage
+     * @param Console                  $console
      */
     public function __construct(
         ContainerInterface $container,
         PluginDescriptionFactory $pluginDescriptionFactory,
         DataProviderManager $dataProviderManager,
-        GameDataStorage $gameDataStorage
+        GameDataStorage $gameDataStorage,
+        Console $console
     )
     {
         $this->container = $container;
         $this->pluginDescriptionFactory = $pluginDescriptionFactory;
         $this->dataProviderManager = $dataProviderManager;
         $this->gameDataStorage = $gameDataStorage;
+        $this->console = $console;
     }
 
     /**
@@ -169,6 +177,8 @@ class PluginManager
             $pluginService->setStatus(true);
         }
 
+        $this->console->getConsoleOutput()
+            ->writeln("<info>Plugin <comment>'{$plugin->getPluginId()}'</comment> is enabled with providers :</info>");
         foreach ($plugin->getDataProviders() as $provider) {
             $this->dataProviderManager->registerPlugin($provider, $plugin->getPluginId(), $title, $mode, $script);
         }

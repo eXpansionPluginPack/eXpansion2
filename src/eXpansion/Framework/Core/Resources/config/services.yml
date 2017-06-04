@@ -63,12 +63,14 @@ services:
             - '@expansion.framework.core.services.model.plugin.plugin_description_factory'
             - '@expansion.framework.core.services.data_provider_manager'
             - '@expansion.framework.core.storage.game_data'
+            - '@expansion.framework.core.services.console'
 
     expansion.framework.core.services.data_provider_manager:
         class: "%expansion.framework.core.services.data_provider_manager.class%"
         arguments:
             - '@service_container'
             - '@expansion.framework.core.storage.game_data'
+            - '@expansion.framework.core.services.console'
 
     expansion.framework.core.services.console:
         class: "%expansion.framework.core.services.console.class%"
