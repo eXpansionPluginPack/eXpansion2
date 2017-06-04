@@ -11,6 +11,7 @@ use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Xmlrpc\FaultException;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class TestCore extends KernelTestCase
@@ -44,10 +45,14 @@ class TestCore extends KernelTestCase
             ->getMock();
         $this->container->set('expansion.framework.core.services.dedicated_connection', $dedicatedConnectionMock);
 
-        $dedicatedConnectionMock = $this->getMockBuilder(Console::class)
+        $consoleMock = $this->getMockBuilder(Console::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->container->set('expansion.framework.core.services.console', $dedicatedConnectionMock);
+        $this->container->set('expansion.framework.core.services.console', $consoleMock);
+
+        $outputMock = $this->getMockBuilder(OutputInterface::class)->getMock();
+        $consoleMock->method('getConsoleOutput')->willReturn($outputMock);
+
     }
 
     protected function getMockPlayerStorage($player)
