@@ -13,14 +13,14 @@ parameters:
         6 : stunts
 
     expansion.framework.core.storage.game_data.titles:
-        'TmStadium@nadeo': 'TM'
-        'TmStadium':       'TM'
-        'TmValley@nadeo':  'TM'
-        'TmValley':        'TM'
-        'TmCanyon@nadeo':  'TM'
-        'TmCanyon':        'TM'
-        'TmLagoon@nadeo':  'TM'
-        'TmLagoon':        'TM'
+        'TMStadium@nadeo': 'TM'
+        'TMStadium':       'TM'
+        'TMValley@nadeo':  'TM'
+        'TMValley':        'TM'
+        'TMCanyon@nadeo':  'TM'
+        'TMCanyon':        'TM'
+        'TMLagoon@nadeo':  'TM'
+        'TMLagoon':        'TM'
 
 
     expansion.framework.core.storage.data.player.class: eXpansion\Framework\Core\Storage\Data\Player

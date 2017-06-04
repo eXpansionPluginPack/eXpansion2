@@ -20,10 +20,11 @@ parameters:
     expansion.framework.core.data_providers.user_group_data_provider.class: eXpansion\Framework\Core\DataProviders\UserGroupDataProvider
     expansion.framework.core.data_providers.user_group_data_provider.interface: eXpansion\Framework\Core\DataProviders\Listener\UserGroupDataListenerInterface
 
-
     expansion.framework.core.data_providers.manialink_page_answer_provider.class: eXpansion\Framework\Core\DataProviders\ManialinkPageAnswerDataProvider
     expansion.framework.core.data_providers.manialink_page_answer_provider.interface: eXpansion\Framework\Core\DataProviders\Listener\ManialinkPageAnswerDataListenerInterface
 
+    expansion.framework.core.data_providers.script_data_provider.class: eXpansion\Framework\Core\DataProviders\ScriptDataProvider
+    expansion.framework.core.data_providers.script_data_provider.interface: eXpansion\Framework\Core\DataProviders\Listener\ScriptDataListenerInterface
 
 services:
     expansion.framework.core.data_providers.chat_data_provider:
@@ -82,12 +83,6 @@ services:
             - {name: expansion.data_provider.compatibility, title: ALL}
             - {name: expansion.data_provider.listener, event_name: BeginMap, method: onBeginMap}
             - {name: expansion.data_provider.listener, event_name: EndMap, method: onEndMap}
-            - {name: expansion.data_provider.listener, event_name: BeginMatch, method: onBeginMatch}
-            - {name: expansion.data_provider.listener, event_name: EndMatch, method: onEndMatch}
-            - {name: expansion.data_provider.listener, event_name: BeginRound, method: onBeginRound}
-            - {name: expansion.data_provider.listener, event_name: EndRound, method: onEndRound}
-            - {name: expansion.data_provider.listener, event_name: PlayerCheckpoint, method: onPlayerCheckpoint}
-            - {name: expansion.data_provider.listener, event_name: PlayerFinish, method: onPlayerFinish}
 
     expansion.framework.core.data_providers.timer_data_provider:
         class: "%expansion.framework.core.data_providers.timer_data_provider.class%"
@@ -113,3 +108,10 @@ services:
             - {name: expansion.data_provider.compatibility, title: ALL}
             - {name: expansion.data_provider.listener, event_name: PlayerManialinkPageAnswer, method: onPlayerManialinkPageAnswer}
 
+
+    expansion.framework.core.data_providers.script_data_provider:
+        class: "%expansion.framework.core.data_providers.script_data_provider.class%"
+        tags:
+            - {name: expansion.data_provider, provider: "expansion.script", interface: "%expansion.framework.core.data_providers.script_data_provider.interface%"}
+            - {name: expansion.data_provider.compatibility, title: ALL, gamemode: script}
+            - {name: expansion.data_provider.listener, event_name: ModeScriptCallbackArray, method: onModeScriptCallbackArray}

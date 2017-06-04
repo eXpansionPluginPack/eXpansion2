@@ -65,33 +65,6 @@ class Menu implements StatusAwarePluginInterface, MatchDataListenerInterface
         }
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function onBeginMatch()
-    {
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function onEndMatch()
-    {
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function onBeginRound()
-    {
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function onEndRound()
-    {
-    }
 
     /**
      * @inheritdoc
@@ -104,20 +77,6 @@ class Menu implements StatusAwarePluginInterface, MatchDataListenerInterface
      * @inheritdoc
      */
     public function onEndMap(Map $map)
-    {
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function onPlayerCheckpoint(Player $player, $time, $lap, $index)
-    {
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function onPlayerFinish(Player $player, $time)
     {
     }
 }
