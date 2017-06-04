@@ -12,37 +12,17 @@ use Maniaplanet\DedicatedServer\Structures\Map;
  */
 interface MatchDataListenerInterface
 {
-    public function onBeginMatch();
-
-    public function onEndMatch();
-
-    public function onBeginRound();
-
-    public function onEndRound();
-
+    /**
+     * @param Map $map
+     *
+     * @return mixed
+     */
     public function onBeginMap(Map $map);
 
+    /**
+     * @param Map $map
+     *
+     * @return mixed
+     */
     public function onEndMap(Map $map);
-
-    /**
-     * Callback when player passes checkpoint.
-     *
-     * @param Player $player
-     * @param $time
-     * @param $lap
-     * @param $index
-     * @return mixed
-     */
-    public function onPlayerCheckpoint(Player $player, $time, $lap, $index);
-
-    /**
-     * Callback when player retire or finish
-     *
-     * @param Player $player
-     * @param $time 0 if retire, > 0 if finish
-     * @return mixed
-     */
-    public function onPlayerFinish(Player $player, $time);
-
-
 }

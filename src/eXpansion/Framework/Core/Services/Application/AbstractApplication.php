@@ -10,6 +10,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class AbstractApplication implements RunInterface
 {
+    /** Base eXpansion callbacks. */
+    const EVENT_BEFORE_INIT = "expansion.before_init";
+    const EVENT_AFTER_INIT = "expansion.after_init";
+
     /** @var Connection */
     protected $connection;
 
@@ -52,7 +56,10 @@ abstract class AbstractApplication implements RunInterface
     public function init(OutputInterface $console)
     {
         $this->console->init($console);
+
+        $this->dispatcher->dispatch(self::EVENT_BEFORE_INIT, []);
         $this->dispatcher->init();
+        $this->dispatcher->dispatch(self::EVENT_AFTER_INIT, []);
 
         return $this;
     }

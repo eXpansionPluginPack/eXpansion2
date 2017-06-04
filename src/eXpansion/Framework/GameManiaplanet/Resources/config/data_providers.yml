@@ -1,0 +1,18 @@
+parameters:
+    expansion.framework.game_maniaplanet.data_providers.base.class: eXpansion\Framework\GameManiaplanet\DataProviders\BaseDataProvider
+    expansion.framework.game_maniaplanet.data_providers.base.interface: eXpansion\Framework\Core\DataProviders\Listener\ChatDataListenerInterface
+
+services:
+    expansion.framework.game_maniaplanet.data_providers.base:
+        class: "%expansion.framework.game_maniaplanet.data_providers.base.class%"
+        arguments:
+            - "@expansion.framework.core.storage.map"
+        tags:
+            - {name: expansion.data_provider, provider: "expansion.tm.base", interface: "%expansion.framework.game_maniaplanet.data_providers.base.interface%"}
+            - {name: expansion.data_provider.compatibility, title: ALL, gamemode: script}
+            - {name: expansion.data_provider.listener, event_name: Maniaplanet.StartMap_Start, method: onStartMapStart}
+            - {name: expansion.data_provider.listener, event_name: Maniaplanet.StartMap_End, method: onStartMapEnd}
+            - {name: expansion.data_provider.listener, event_name: Maniaplanet.EndMap_Start, method: onEndMapStart}
+            - {name: expansion.data_provider.listener, event_name: Maniaplanet.EndMap_End, method: onEndMapEnd}
+            - {name: expansion.data_provider.listener, event_name: Maniaplanet.StartMatch_Start, method: onStartMatchStart}
+            - {name: expansion.data_provider.listener, event_name: Maniaplanet.StartMatch_End, method: onStartMatchEnd}

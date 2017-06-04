@@ -38,6 +38,8 @@ class AppKernel extends Kernel
             // And add eXpansion core.
             new \eXpansion\Framework\Core\eXpansionCore(),
             new \eXpansion\Framework\AdminGroups\eXpansionAdminGroupsBundle(),
+            new \eXpansion\Framework\GameTrackmania\eXpansionGameTrackmaniaBundle(),
+            new \eXpansion\Framework\GameManiaplanet\eXpansionGameManiaplanetBundle(),
         ];
 
         // Also add debug help bundles.
