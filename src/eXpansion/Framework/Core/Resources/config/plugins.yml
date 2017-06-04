@@ -39,6 +39,12 @@ services:
         tags:
             - {name: expansion.plugin, data_provider: expansion.player_data}
 
+    expansion.framework.core.plugins.script_adapter:
+        class: eXpansion\Framework\Core\Plugins\ScriptAdapter
+        arguments:
+            - '@expansion.framework.core.services.application.dispatcher'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.script}
 
     #
     # Default Chat commands
