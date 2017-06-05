@@ -2,14 +2,14 @@ expansion_local_records:
   chat:
     race:
       new:
-        top1: %nickname% drives first Local Record! %score%
-        top5: %nickname% drives %position% Local Record! %score%
-        any: %nickname% drives %position% Local Record! %score%
+        top1: '%nickname% drives first Local Record! %score%'
+        top5: '%nickname% drives %position% Local Record! %score%'
+        any: '%nickname% drives %position% Local Record! %score%'
       better:
-        top1: %nickname% drives first Local Record! %score%(%by%)
-        top5: %nickname% drives %position% Local Record! %score%(%by%)
-        any: %nickname% drives %position% Local Record! %score%(%by%)
+        top1: '%nickname% drives first Local Record! %score%(%by%)'
+        top5: '%nickname% drives %position% Local Record! %score%(%by%)'
+        any: '%nickname% drives %position% Local Record! %score%(%by%)'
       secures:
-        top1: %nickname% improves first Local Record! %score%(%by%)
-        top5: %nickname% improves %position% Local Record! %score%(%by%)
-        any: %nickname% improves %position% Local Record! %score%(%by%)
+        top1: '%nickname% improves first Local Record! %score%(%by%)'
+        top5: '%nickname% improves %position% Local Record! %score%(%by%)'
+        any: '%nickname% improves %position% Local Record! %score%(%by%)'
