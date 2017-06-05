@@ -7,6 +7,7 @@ use eXpansion\Bundle\LocalRecords\Services\RecordHandlerFactory;
 use eXpansion\Framework\Core\DataProviders\Listener\PlayerDataListenerInterface;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
+use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\MapStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\BaseDataListenerInterface as MpBaseDataListenerInterface;
@@ -35,23 +36,29 @@ class BaseRecords implements MpBaseDataListenerInterface, PlayerDataListenerInte
     /** @var string */
     protected $eventPrefix;
 
+    /** @var DispatcherInterface */
+    protected $dispatcher;
+
     /**
-     * RaceRecords constructor.
+     * BaseRecords constructor.
      *
-     * @param RecordHandler $recordsHandler
-     * @param Group         $allPlayersGroup
-     * @param string        $eventPrefix
+     * @param RecordHandlerFactory $recordsHandlerFactory
+     * @param Group                $allPlayersGroup
+     * @param MapStorage           $mapStorage
+     * @param                      $eventPrefix
      */
     public function __construct(
         RecordHandlerFactory $recordsHandlerFactory,
         Group $allPlayersGroup,
         MapStorage $mapStorage,
+        DispatcherInterface $dispatcher,
         $eventPrefix
     ) {
         $this->recordsHandler = $recordsHandlerFactory->create();
         $this->allPlayersGroup = $allPlayersGroup;
         $this->mapStorage = $mapStorage;
         $this->eventPrefix = $eventPrefix;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -71,6 +78,8 @@ class BaseRecords implements MpBaseDataListenerInterface, PlayerDataListenerInte
 
             // Load time information for remaining players.
             $this->recordsHandler->loadForPlayers($map->uId, $this->getNbLaps(), $this->allPlayersGroup->getLogins());
+
+            $this->dispatchEvent(['event' => 'lodead', 'records' => $this->recordsHandler->getRecords()]);
         }
     }
 
@@ -91,6 +100,8 @@ class BaseRecords implements MpBaseDataListenerInterface, PlayerDataListenerInte
 
         // Load time information for remaining players.
         $this->recordsHandler->loadForPlayers($map->uId, $this->getNbLaps(), $this->allPlayersGroup->getLogins());
+
+        $this->dispatchEvent(['event' => 'lodead', 'records' => $this->recordsHandler->getRecords()]);
     }
 
     /**
@@ -185,6 +196,19 @@ class BaseRecords implements MpBaseDataListenerInterface, PlayerDataListenerInte
     public function onPlayerAlliesChanged(Player $oldPlayer, Player $player)
     {
         // Nothing to do.
+    }
+
+    /**
+     * Dispatch a record event.
+     *
+     * @param $eventData
+     */
+    protected function dispatchEvent($eventData)
+    {
+        $event = $this->eventPrefix . '.' . $eventData['event'];
+        unset($eventData['event']);
+
+        $this->dispatcher->dispatch($event, $eventData);
     }
 
     /**

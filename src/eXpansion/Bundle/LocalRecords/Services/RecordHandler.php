@@ -81,6 +81,30 @@ class RecordHandler
     }
 
     /**
+     * Get the position of a player
+     *
+     * @param string $login
+     *
+     * @return bool
+     */
+    public function getPlayerPosition($login)
+    {
+        return isset($this->positionPerPlayer[$login]) ? $this->positionPerPlayer[$login] : null;
+    }
+
+    /**
+     * Get a players record information.
+     *
+     * @param $login
+     *
+     * @return Record|null
+     */
+    public function getPlayerRecord($login)
+    {
+        return isset($this->recordsPerPlayer[$login]) ? $this->recordsPerPlayer[$login] : null;
+    }
+
+    /**
      * Load records for a certain map.
      *
      * @param $mapUid
@@ -176,27 +200,21 @@ class RecordHandler
         // Check if first time of this player.
         $firstTime = is_null($record->getScore());
 
-        if ($firstTime || $this->compareNewScore($score, $record)) {
-            if ($score == $record->getScore()) {
-                return [
-                    self::COL_EVENT => self::EVENT_TYPE_SAME_SCORE,
-                    self::COL_RECORD => $record,
-                    self::COL_OLD_RECORD => $oldRecord,
-                    self::COL_RECORDS => $this->records
-                ];
-            }
+        if ($score == $record->getScore()) {
+            return [
+                self::COL_EVENT => self::EVENT_TYPE_SAME_SCORE,
+                self::COL_RECORD => $record,
+                self::COL_OLD_RECORD => $oldRecord,
+                self::COL_RECORDS => $this->records
+            ];
+        }
 
-            $record->setScore($score);
-            $record->setDate(new \DateTime());
-            $record->setCheckpointTimes($checkpoints);
+        if ($firstTime || $this->compareNewScore($record, $score)) {
 
-            $betterRecordIndex = $oldPosition - 1;
+            $betterRecordIndex = $oldPosition - 2;
             $newPosition = $oldPosition;
 
-            echo "Better Record Index : $betterRecordIndex\n";
-
-            while ($betterRecordIndex >= 0 && $this->compareRecords($this->records[$betterRecordIndex], $record)) {
-
+            while ($betterRecordIndex >= 0 && $this->compareNewScore($this->records[$betterRecordIndex], $score)) {
                 $previousRecord = $this->records[$betterRecordIndex];
 
                 $this->records[$betterRecordIndex] = $record;
@@ -209,6 +227,10 @@ class RecordHandler
                 $betterRecordIndex--;
             }
 
+            $record->setScore($score);
+            $record->setDate(new \DateTime());
+            $record->setCheckpointTimes($checkpoints);
+
             // Remove entries whose position is superior to the limit.
             $this->records = array_slice($this->records, 0, $this->nbRecords);
 
@@ -220,17 +242,17 @@ class RecordHandler
                         self::COL_OLD_RECORD => $oldRecord,
                         self::COL_RECORDS => $this->records,
                         self::COL_POS => $newPosition,
-                        self::COL_OLD_POS => $oldPosition,
-                    ];
-                } else {
-                    return [
-                        self::COL_EVENT => self::EVENT_TYPE_SAME_POS,
-                        self::COL_RECORD => $record,
-                        self::COL_OLD_RECORD => $oldRecord,
-                        self::COL_RECORDS => $this->records,
-                        self::COL_POS => $newPosition,
+                        self::COL_OLD_POS => $firstTime ? null : $oldPosition,
                     ];
                 }
+
+                return [
+                    self::COL_EVENT => self::EVENT_TYPE_SAME_POS,
+                    self::COL_RECORD => $record,
+                    self::COL_OLD_RECORD => $oldRecord,
+                    self::COL_RECORDS => $this->records,
+                    self::COL_POS => $newPosition,
+                ];
             }
         }
 
@@ -286,27 +308,12 @@ class RecordHandler
      *
      * @return bool
      */
-    protected function compareNewScore($newScore, $record)
+    protected function compareNewScore($record, $newScore)
     {
         if ($this->getScoreOrdering() == self::ORDER_ASC) {
             return $newScore <= $record->getScore();
         } else {
             return $newScore >= $record->getScore();
-        }
-    }
-
-    /**
-     * @param Record $previousRecord
-     * @param Record $newRecord
-     *
-     * @return bool
-     */
-    protected function compareRecords(Record $previousRecord, Record $newRecord)
-    {
-        if ($this->getScoreOrdering() == self::ORDER_ASC) {
-            return $newRecord->getScore() < $previousRecord->getScore();
-        } else {
-            return $newRecord->getScore() > $previousRecord->getScore();
         }
     }
 }
