@@ -1,0 +1,28 @@
+services:
+    eXpansion.local_records.repository.record:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments: ['LocalRecordsBundle:Record']
+
+
+    eXpansion.local_records.services.race_record_handler_factory:
+        class: eXpansion\Bundle\LocalRecords\Services\RecordHandlerFactory
+        arguments:
+            - '@eXpansion.local_records.repository.record'
+            - ASC
+            - 100
+
+    # Plugins to save race records in all TM gamemodes.
+    eXpansion.local_records.plugins.race_records:
+        class: eXpansion\Bundle\LocalRecords\Plugins\RaceRecords
+        arguments:
+            - '@eXpansion.local_records.services.race_record_handler_factory'
+            - '@eXpansion.framework.core.user_groups.all_players'
+            - '@eXpansion.framework.core.storage.map'
+            - 'expansion.local_records.race'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.player_data}
+            - {name: expansion.plugin, data_provider: expansion.mp.base}
+            - {name: expansion.plugin, data_provider: expansion.tm.base}
+
+    # TODO Create service to save for each lap individually
