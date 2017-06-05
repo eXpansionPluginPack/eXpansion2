@@ -36,14 +36,9 @@ class MapDataProvider extends AbstractDataProvider
     {
         $this->mapStorage = $mapStorage;
         $this->connection = $connection;
-    }
 
-    /**
-     * Called when eXpansion is started.
-     */
-    public function onRun()
-    {
         $this->updateMapList();
+
         $this->mapStorage->setCurrentMap($this->connection->getCurrentMapInfo());
         $this->mapStorage->setNextMap($this->connection->getNextMapInfo());
     }

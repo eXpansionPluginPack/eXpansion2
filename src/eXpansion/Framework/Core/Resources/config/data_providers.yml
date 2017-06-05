@@ -70,7 +70,6 @@ services:
         tags:
             - {name: expansion.data_provider, provider: "expansion.map_data", interface: "%expansion.framework.core.data_providers.map_data_provider.interface%"}
             - {name: expansion.data_provider.compatibility, title: ALL}
-            - {name: expansion.data_provider.listener, event_name: expansion.run, method: onRun}
             - {name: expansion.data_provider.listener, event_name: MapListModified, method: onMapListModified}
 
     expansion.framework.core.data_providers.match_data_provider:

@@ -23,8 +23,6 @@ interface BaseDataListenerInterface
      * @param string $blockId     Id of the checkpoint block
      * @param string $speed       Speed of the player in km/h
      * @param string $distance    Distance traveled by the player
-     *
-     * @return mixed
      */
     public function onPlayerWayPoint(
         $login,
@@ -51,8 +49,6 @@ interface BaseDataListenerInterface
      * @param string $blockId     Id of the checkpoint block
      * @param string $speed       Speed of the player in km/h
      * @param string $distance    Distance traveled by the player
-     *
-     * @return mixed
      */
     public function onPlayerEndRace(
         $login,
@@ -76,8 +72,6 @@ interface BaseDataListenerInterface
      * @param string $blockId     Id of the checkpoint block
      * @param string $speed       Speed of the player in km/h
      * @param string $distance    Distance traveled by the player
-     *
-     * @return mixed
      */
     public function onPlayerEndLap(
         $login,
