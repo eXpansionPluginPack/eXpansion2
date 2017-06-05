@@ -57,9 +57,7 @@ class MapDataProviderTest extends TestCore
             ->method('addMap');
          $this->container->set('expansion.framework.core.storage.map', $mapStorageMock);
 
-        /** @var MapDataProvider $dataProvider */
-        $dataProvider = $this->container->get('expansion.framework.core.data_providers.map_data_provider');
-        $dataProvider->onRun();
+        $this->container->get('expansion.framework.core.data_providers.map_data_provider');
     }
 
     public function testMapListModified()
@@ -95,7 +93,6 @@ class MapDataProviderTest extends TestCore
 
         /** @var MapDataProvider $dataProvider */
         $dataProvider = $this->container->get('expansion.framework.core.data_providers.map_data_provider');
-        $dataProvider->onRun();
         $dataProvider->onMapListModified($uids2[0], $uids2[1], true);
     }
 }
