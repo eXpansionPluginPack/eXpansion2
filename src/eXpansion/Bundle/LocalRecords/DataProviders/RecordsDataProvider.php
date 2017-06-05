@@ -15,7 +15,7 @@ class RecordsDataProvider extends AbstractDataProvider
 {
     public function onRecordsLoaded($params)
     {
-        $this->dispatch('onLocalRecordsLoaded', [$params['records']]);
+        $this->dispatch('onLocalRecordsLoaded', [$params[RecordHandler::COL_RECORDS]]);
     }
 
     public function onFirstRecord($params)

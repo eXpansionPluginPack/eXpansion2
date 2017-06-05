@@ -125,7 +125,7 @@ class ChatNotification implements RecordsDataListener
         } else if ($position <= 5) {
             $msg .= '.top5';
         } else {
-            $msg .= 'any';
+            $msg .= '.any';
         }
 
         $securedBy = $this->getSecuredBy($record, $oldRecord);
@@ -167,7 +167,7 @@ class ChatNotification implements RecordsDataListener
         } else if ($position <= 5) {
             $msg .= '.top5';
         } else {
-            $msg .= 'any';
+            $msg .= '.any';
         }
 
         $securedBy = $this->getSecuredBy($record, $oldRecord);
@@ -186,7 +186,6 @@ class ChatNotification implements RecordsDataListener
     protected function getSecuredBy(Record $record, Record $oldRecord)
     {
         $securedBy =$this->timeFormater->milisecondsToTrackmania($oldRecord->getScore() - $record->getScore(), true);
-        var_dump($securedBy);
 
         if (substr($securedBy, 0, 4) === "00:0") {
             $securedBy = substr($securedBy, 4);
