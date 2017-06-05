@@ -79,7 +79,7 @@ class BaseRecords implements MpBaseDataListenerInterface, PlayerDataListenerInte
             // Load time information for remaining players.
             $this->recordsHandler->loadForPlayers($map->uId, $this->getNbLaps(), $this->allPlayersGroup->getLogins());
 
-            $this->dispatchEvent(['event' => 'lodead', 'records' => $this->recordsHandler->getRecords()]);
+            $this->dispatchEvent(['event' => 'loaded', 'records' => $this->recordsHandler->getRecords()]);
         }
     }
 
@@ -101,7 +101,7 @@ class BaseRecords implements MpBaseDataListenerInterface, PlayerDataListenerInte
         // Load time information for remaining players.
         $this->recordsHandler->loadForPlayers($map->uId, $this->getNbLaps(), $this->allPlayersGroup->getLogins());
 
-        $this->dispatchEvent(['event' => 'lodead', 'records' => $this->recordsHandler->getRecords()]);
+        $this->dispatchEvent(['event' => 'loaded', 'records' => $this->recordsHandler->getRecords()]);
     }
 
     /**
@@ -208,7 +208,7 @@ class BaseRecords implements MpBaseDataListenerInterface, PlayerDataListenerInte
         $event = $this->eventPrefix . '.' . $eventData['event'];
         unset($eventData['event']);
 
-        $this->dispatcher->dispatch($event, $eventData);
+        $this->dispatcher->dispatch($event, [$eventData]);
     }
 
     /**
