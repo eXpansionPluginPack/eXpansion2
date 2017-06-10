@@ -8,11 +8,16 @@ e_xpansion_core:
             separator: '$3af'
             pretty_chat: '$dee'
             admin_info: '$db1'
+            variable: '$fff'
+            record: '$3af'
+            record_top: '$bdd'
+            record_rank: '$dee'
         core_chat_glyph_icons:
             success: '$0d0✔'
             fail: '$b32✘'
             server: '$afd$fff'
             info: ''
+            time: ''
 e_xpansion_admin_groups:
     groups:
         master_admin:

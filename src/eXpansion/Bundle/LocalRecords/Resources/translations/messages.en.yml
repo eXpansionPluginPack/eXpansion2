@@ -2,14 +2,29 @@ expansion_local_records:
   chat:
     race:
       new:
-        top1: '%nickname% drives first Local Record! %score%'
-        top5: '%nickname% drives %position% Local Record! %score%'
-        any: '%nickname% drives %position% Local Record! %score%'
+        top1: '{variable}%nickname% {record_top}drives {record_rank}first {record_top}Local Record! {variable)%score%'
+        top5: '{variable}%nickname% {record_top}drives {record_rank}%position% {record_top}Local Record! %score%'
+        any:  '{variable}%nickname% {record}drives {record_rank}%position% {record}Local Record! {variable}%score%'
       better:
-        top1: '%nickname% drives first Local Record! %score%(%by%)'
-        top5: '%nickname% drives %position% Local Record! %score%(%by%)'
-        any: '%nickname% drives %position% Local Record! %score%(%by%)'
+        top1: '{variable}%nickname% {record_top}drives first {record_top}Local Record! {variable}%score%{record_top}({variable}%by%{record_top})'
+        top5: '{variable}%nickname% {record_top}drives %position% {record_top}Local Record! {variable}%score%{record_top}({variable}%by%{record_top})'
+        any:  '{variable}%nickname% {record}drives %position% {record}Local Record! {variable}%score%{record_top}({variable}%by%{record_top})'
       secures:
-        top1: '%nickname% improves first Local Record! %score%(%by%)'
-        top5: '%nickname% improves %position% Local Record! %score%(%by%)'
-        any: '%nickname% improves %position% Local Record! %score%(%by%)'
+        top1: '{variable}%nickname% {record_top}improves {record_rank}first {record_top}Local Record! {variable}%score%{record_top}({variable}%by%{record_top})'
+        top5: '{variable}%nickname% {record_top}improves {record_rank}%position% {record_top}Local Record! {variable}%score%{record_top}({variable}%by%{record_top})'
+        any:  '{variable}%nickname% {record}improves {record_rank}%position% {record}Local Record! {variable}%score%{record_top}({variable}%by%{record_top})'
+
+    ## Messages used in laps mode & other modes that supports proper multilaps support (not TA)
+    lap:
+      new:
+        top1: '{variable}%nickname% {record_top}drives {record_rank}first {record_top}LAP Local Record! {variable)%score%'
+        top5: '{variable}%nickname% {record_top}drives {record_rank}%position% {record_top}LAP Local Record! %score%'
+        any:  '{variable}%nickname% {record}drives {record_rank}%position% {record_top}LAP Local Record! {variable}%score%'
+      better:
+        top1: '{variable}%nickname% {record_top}drives first {record_top}LAP Local Record! {variable}%score%{record_top}({variable}%by%{record_top})'
+        top5: '{variable}%nickname% {record_top}drives %position% {record_top}LAP Local Record! {variable}%score%{record_top}({variable}%by%{record_top})'
+        any:  '{variable}%nickname% {record}drives %position% {record}LAP Local Record! {variable}%score%{record_top}({variable}%by%{record_top})'
+      secures:
+        top1: '{variable}%nickname% {record_top}improves {record_rank}first {record_top}LAP Local Record! {variable}%score%{record_top}({variable}%by%{record_top})'
+        top5: '{variable}%nickname% {record_top}improves {record_rank}%position% {record_top}LAP Local Record! {variable}%score%{record_top}({variable}%by%{record_top})'
+        any:  '{variable}%nickname% {record}improves {record_rank}%position% {record}LAP Local Record! {variable}%score%{record_top}({variable}%by%{record_top})'
