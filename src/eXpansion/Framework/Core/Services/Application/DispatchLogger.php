@@ -20,8 +20,6 @@ class DispatchLogger implements DispatcherInterface
     /**
      * Dispatcher constructor.
      *
-     * @param DataProviderManager $dataProviderManager
-     * @param PluginManager $pluginManager
      */
     public function __construct(Console $console)
     {

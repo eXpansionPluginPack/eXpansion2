@@ -136,8 +136,8 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
         try {
             $this->connection->executeMulticall();
         } catch (\Exception $e) {
-            $this->logger->addError("Couldn't deliver all manialinks : " . $e->getMessage(), ['exception' => $e]);
-            $this->console->writeln('$F00ERROR - Couldn\'t deliver all manialinks : ' . $e->getMessage());
+            $this->logger->addError("Couldn't deliver all manialinks : ".$e->getMessage(), ['exception' => $e]);
+            $this->console->writeln('$F00ERROR - Couldn\'t deliver all manialinks : '.$e->getMessage());
         }
     }
 
@@ -170,14 +170,14 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
             foreach ($manialinks as $id => $manialink) {
                 $logins = $manialink->getUserGroup()->getLogins();
                 if (!empty($logins)) {
-                    yield ['logins' => $logins, 'ml' => '<manialink id="' . $id . '" />'];
+                    yield ['logins' => $logins, 'ml' => '<manialink id="'.$id.'" />'];
                 }
             }
         }
 
         foreach ($this->hideIndividualQueu as $login => $manialinks) {
             foreach ($manialinks as $id => $manialink) {
-                yield ['logins' => $login, 'ml' => '<manialink id="' . $id . '" />'];
+                yield ['logins' => $login, 'ml' => '<manialink id="'.$id.'" />'];
             }
         }
     }
@@ -239,9 +239,9 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
      */
     public function onExpansionGroupDestroy(Group $group, $lastLogin)
     {
-       if (isset($this->displayeds[$group->getName()])) {
-           unset($this->displayeds[$group->getName()]);
-       }
+        if (isset($this->displayeds[$group->getName()])) {
+            unset($this->displayeds[$group->getName()]);
+        }
     }
 
     /**
