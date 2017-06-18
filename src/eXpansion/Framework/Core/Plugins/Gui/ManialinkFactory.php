@@ -76,11 +76,11 @@ class ManialinkFactory implements ManialinkFactoryInterface, UserGroupDataListen
         $className = Manialink::class
     ) {
         if (is_null($posX)) {
-            $posX = $sizeX/-2;
+            $posX = $sizeX / -2;
         }
 
         if (is_null($posY)) {
-            $posY = $sizeY/2;
+            $posY = $sizeY / 2;
         }
 
         $this->guiHandler = $guiHandler;

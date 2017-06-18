@@ -24,7 +24,7 @@ class eXpansionAdminGroupsExtension extends Extension
 
         $container->setParameter("expansion.framework.admin_groups.groups", $config['groups']);
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('helpers.yml');
         $loader->load('services.yml');
         $loader->load('plugins.yml');

@@ -34,7 +34,7 @@ class GroupsPlugin implements PlayerDataListenerInterface
         $this->adminGroupConfiguration = $adminGroupConfiguration;
         $this->userGroupFactory = $userGroupFactory;
 
-        foreach ($this->adminGroupConfiguration->getGroups() as $groupName){
+        foreach ($this->adminGroupConfiguration->getGroups() as $groupName) {
             $this->userGroupFactory->create("admin:$groupName");
         }
 

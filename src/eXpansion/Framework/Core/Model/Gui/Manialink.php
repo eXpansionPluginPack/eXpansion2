@@ -58,7 +58,7 @@ class Manialink implements ManialinkInterface
     public function getXml()
     {
         return '<?xml version="1.0" encoding="utf-8" standalone="yes" ?>'
-                .'<manialink version="3" id="' . $this->getId() . '">'
+                .'<manialink version="3" id="'.$this->getId().'">'
                     .'<label text="Hello World!" />'
                 .'</manialink>';
     }

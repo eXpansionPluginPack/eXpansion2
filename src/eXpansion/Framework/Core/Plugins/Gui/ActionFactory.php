@@ -98,7 +98,7 @@ class ActionFactory implements ManialinkPageAnswerDataListenerInterface
      */
     public function onPlayerManialinkPageAnswer($login, $actionId, array $entryValues)
     {
-        if(isset($this->actions[$actionId]))
+        if (isset($this->actions[$actionId]))
         {
             $this->actions[$actionId]->execute($login, $entryValues);
         }
