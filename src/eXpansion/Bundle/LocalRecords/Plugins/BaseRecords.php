@@ -62,6 +62,16 @@ class BaseRecords implements MpBaseDataListenerInterface, PlayerDataListenerInte
     }
 
     /**
+     * Get the current record handler.
+     *
+     * @return RecordHandler|mixed
+     */
+    public function getRecordsHandler()
+    {
+        return $this->recordsHandler;
+    }
+
+    /**
      * Set the status of the plugin
      *
      * @param boolean $status

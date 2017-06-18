@@ -3,7 +3,6 @@
 
 namespace eXpansion\Bundle\LocalRecords\Plugins\Gui;
 use eXpansion\Bundle\Acme\Plugins\Gui\WindowFactory;
-use eXpansion\Bundle\LocalRecords\DataProviders\Listener\RecordsDataListener;
 use eXpansion\Bundle\LocalRecords\Entity\Record;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionFactory;
@@ -19,7 +18,7 @@ use FML\Controls\Frame;
  * @package eXpansion\Bundle\LocalRecords\Plugins\Gui;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-class RecordsWindowFactory extends WindowFactory implements RecordsDataListener
+class RecordsWindowFactory extends WindowFactory
 {
     /** @var Record[] */
     protected $recordsData = [];
@@ -126,64 +125,10 @@ class RecordsWindowFactory extends WindowFactory implements RecordsDataListener
         $this->timeFormatter = $time;
     }
 
-
     /**
-     * Called when local records are loaded.
-     *
      * @param Record[] $records
      */
-    public function onLocalRecordsLoaded($records)
-    {
-        $this->recordsData = $records;
-    }
-
-    /**
-     * Called when a player finishes map for the very first time (basically first record).
-     *
-     * @param Record   $record
-     * @param Record[] $records
-     * @param          $position
-     */
-    public function onLocalRecordsFirstRecord(Record $record, $records, $position)
-    {
-        $this->recordsData = $records;
-    }
-
-    /**
-     * Called when a player finishes map and does same time as before.
-     *
-     * @param Record   $record
-     * @param Record   $oldRecord
-     * @param Record[] $records
-     */
-    public function onLocalRecordsSameScore(Record $record, Record $oldRecord, $records)
-    {
-        $this->recordsData = $records;
-    }
-
-    /**
-     * Called when a player finishes map with better time and has better position.
-     *
-     * @param Record   $record
-     * @param Record   $oldRecord
-     * @param Record[] $records
-     * @param int      $position
-     * @param int      $oldPosition
-     */
-    public function onLocalRecordsBetterPosition(Record $record, Record $oldRecord, $records, $position, $oldPosition)
-    {
-        $this->recordsData = $records;
-    }
-
-    /**
-     * Called when a player finishes map with better time but keeps same position.
-     *
-     * @param Record   $record
-     * @param Record   $oldRecord
-     * @param Record[] $records
-     * @param          $position
-     */
-    public function onLocalRecordsSamePosition(Record $record, Record $oldRecord, $records, $position)
+    public function setRecordsData($records)
     {
         $this->recordsData = $records;
     }

@@ -2,6 +2,7 @@
 
 
 namespace eXpansion\Bundle\LocalRecords\ChatCommand;
+use eXpansion\Bundle\LocalRecords\Plugins\BaseRecords;
 use eXpansion\Bundle\LocalRecords\Plugins\Gui\RecordsWindowFactory;
 use eXpansion\Framework\Core\Model\ChatCommand\AbstractChatCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,6 +19,9 @@ class Records extends AbstractChatCommand
     /** @var RecordsWindowFactory */
     protected $recordsWindowFactory;
 
+    /** @var BaseRecords */
+    protected $recordsPlugin;
+
     /**
      * Records constructor.
      *
@@ -25,11 +29,17 @@ class Records extends AbstractChatCommand
      * @param array                $aliases
      * @param RecordsWindowFactory $recordsWindowFactory
      */
-    public function __construct($command, array $aliases = [], RecordsWindowFactory $recordsWindowFactory)
+    public function __construct(
+        $command,
+        array $aliases = [],
+        RecordsWindowFactory $recordsWindowFactory,
+        BaseRecords $recordsPlugin
+    )
     {
         parent::__construct($command, $aliases);
 
         $this->recordsWindowFactory = $recordsWindowFactory;
+        $this->recordsPlugin = $recordsPlugin;
     }
 
     /**
@@ -37,6 +47,7 @@ class Records extends AbstractChatCommand
      */
     public function execute($login, InputInterface $input)
     {
+        $this->recordsWindowFactory->setRecordsData($this->recordsPlugin->getRecordsHandler()->getRecords());
         $this->recordsWindowFactory->create($login);
     }
 }

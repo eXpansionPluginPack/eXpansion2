@@ -12,5 +12,3 @@ services:
             - [setTimerFormatter, ['@expansion.framework.core.helpers.time']]
         tags:
             - {name: expansion.plugin, data_provider: expansion.user_group}
-            - {name: expansion.plugin, data_provider: expansion.local_records.race}
-
