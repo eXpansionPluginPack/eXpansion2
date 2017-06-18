@@ -35,3 +35,13 @@ expansion_local_records:
       loaded:
         top1: '|server| {variable}%nickname% {record_top}Holds {record_rank}first {record_top}LAP Local Record with {variable}|time| %score%'
         any: '{record}You hold {record_rank}%position% {record}LAP Local Record with {variable}|time| %score%'
+
+  gui:
+    race:
+      window:
+        title: 'Local Records'
+        column:
+          position: 'Position'
+          nickname: 'NickName'
+          login: 'Login'
+          score: 'Time'
