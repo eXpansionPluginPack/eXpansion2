@@ -103,8 +103,8 @@ class BaseDataProvider extends AbstractDataProvider
             $eventName,
             [
                 $params['count'],
-                $params['time'],
-                $params['restarted'],
+                isset($params['time']) ? $params['time'] : time(),
+                isset($params['restarted']) ? $params['restarted'] : false,
                 $map,
             ]
         );

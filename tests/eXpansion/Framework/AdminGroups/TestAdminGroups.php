@@ -49,6 +49,10 @@ class TestAdminGroups extends TestCore
                 'logins' => ['toto20', 'toto21'],
                 'permissions' => ['p20', 'p21'],
             ],
+            'empty' => [
+                'logins' => [],
+                'permissions' => ['p20']
+            ]
         ];
     }
 

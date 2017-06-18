@@ -1,6 +1,6 @@
 parameters:
     expansion.framework.game_trackmania.data_providers.base.class: eXpansion\Framework\GameTrackmania\DataProviders\BaseDataProvider
-    expansion.framework.game_trackmania.data_providers.base.interface: eXpansion\Framework\Core\DataProviders\Listener\ChatDataListenerInterface
+    expansion.framework.game_trackmania.data_providers.base.interface: eXpansion\Framework\GameTrackmania\DataProviders\Listener\BaseDataListenerInterface
 
 services:
     expansion.framework.game_trackmania.data_providers.base:

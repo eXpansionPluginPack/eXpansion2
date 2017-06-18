@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\AdminGroups\Helpers;
 
+use eXpansion\Framework\AdminGroups\Exceptions\UnknownGroupException;
 use eXpansion\Framework\AdminGroups\Services\AdminGroupConfiguration;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
@@ -66,6 +67,13 @@ class AdminGroups
         return $this->getUserGroup("$groupName");
     }
 
+    /**
+     * Get the user group of a certain admin group.
+     *
+     * @param $groupName
+     *
+     * @return Group|null
+     */
     protected function getUserGroup($groupName)
     {
         $groupName = "admin:$groupName";
@@ -80,13 +88,43 @@ class AdminGroups
     }
 
     /**
-     * @param $login
-     * @param string $permission
+     * Check if a player(login) has a certain permission or not.
+     *
+     * @param string $login      Login of the player to check for permission.
+     * @param string $permission The permission to check for.
      *
      * @return bool
      */
     public function hasPermission($login, $permission)
     {
         return $this->adminGroupConfiguration->hasPermission($login, $permission);
+    }
+
+    /**
+     * Check if a group has a certain permission or not.
+     *
+     * @param string $groupName  The name of the group to check permissions for.
+     * @param string $permission The permission to check for.
+     *
+     * @return bool
+     * @throws UnknownGroupException Thrown when group isn't an admin group.
+     */
+    public function hasGroupPermission($groupName, $permission)
+    {
+        if (strpos($groupName, 'admin:') === 0) {
+            $groupName = str_replace("admin:", '', $groupName);
+        }
+
+        $logins = $this->adminGroupConfiguration->getGroupLogins($groupName);
+
+        if (!empty($logins)) {
+            return $this->hasPermission($logins[0], $permission);
+        }
+
+        if (is_null($logins)) {
+            throw new UnknownGroupException("'$groupName' admin group does not exist.");
+        }
+
+        return false;
     }
 }

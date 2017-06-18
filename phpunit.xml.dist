@@ -29,7 +29,12 @@
                 <directory>src/*/DependencyInjection</directory>
                 <directory>src/*/*/DependencyInjection</directory>
                 <directory>src/*/*/*/DependencyInjection</directory>
-                <directory>src/eXpansion/Bundle/</directory><!-- Only testing plugins are here. They will eventually be deleted -->
+
+                <directory>src/eXpansion/Bundle/Acme</directory> <!-- Acme plugin doesen't need tests,  it's for developpers to see only -->
+
+                <directory>src/eXpansion/Bundle/Emotes</directory> <!-- Need to finalize bundle to write tests -->
+                <directory>src/eXpansion/Bundle/JoinLeaveMessages</directory> <!-- Need to finalize bundle to write tests -->
+                <directory>src/eXpansion/Bundle/Menu</directory> <!-- Need to finalize bundle to write tests -->
 
                 <file>src/eXpansion/Framework/Core/eXpansionCore.php</file>
                 <file>src/eXpansion/Framework/AdminGroups/eXpansionAdminGroupsBundle.php</file>

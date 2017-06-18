@@ -1,0 +1,18 @@
+services:
+    eXpansion.local_records.chat_commands.record:
+        class: eXpansion\Bundle\LocalRecords\ChatCommand\Records
+        arguments:
+          - records
+          - ['recs']
+          - '@eXpansion.local_records.gui.window.race_factory'
+          - '@eXpansion.local_records.plugins.race_records'
+
+
+    eXpansion.local_records.plugins.chat_commands.records:
+        class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
+        arguments:
+            -
+                - '@eXpansion.local_records.chat_commands.record'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.chat_command_data}
+            - {name: expansion.plugin.parent, parent: expansion.local_records.plugins.race_records}

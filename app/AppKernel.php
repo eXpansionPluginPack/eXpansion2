@@ -14,6 +14,7 @@ class AppKernel extends Kernel
         $bundles[] = new \eXpansion\Bundle\AdminChat\AdminChatBundle();
 
         /* Register eXpansion Plugins */
+        $bundles[] = new \eXpansion\Bundle\LocalRecords\LocalRecordsBundle();
         $bundles[] = new \eXpansion\Bundle\JoinLeaveMessages\JoinLeaveMessagesBundle();
         $bundles[] = new \eXpansion\Bundle\Emotes\EmotesBundle();
         $bundles[] = new \eXpansion\Bundle\Menu\MenuBundle();

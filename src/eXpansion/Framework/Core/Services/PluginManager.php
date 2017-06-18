@@ -94,9 +94,7 @@ class PluginManager
             $lastEnabledPluginCount = count($pluginsToEnable);
             $pluginsToProcessNew = [];
 
-            foreach ($pluginsToProcess
-
-                     as $pluginId => $plugin) {
+            foreach ($pluginsToProcess as $pluginId => $plugin) {
                 if ($this->isPluginCompatible($plugin, $pluginsToEnable, $title, $mode, $script)) {
                     $pluginsToEnable[$pluginId] = $plugin;
                 } else {

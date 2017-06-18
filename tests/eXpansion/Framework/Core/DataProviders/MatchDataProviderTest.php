@@ -45,18 +45,6 @@ class MatchDataProviderTest extends TestCore
         $this->matchDataProvider->registerPlugin('test', $this->pluginMock);
     }
 
-    public function testOnBeginMatch()
-    {
-        $this->pluginMock->expects($this->once())->method('onBeginMatch')->withConsecutive([]);
-        $this->matchDataProvider->onBeginMatch();
-    }
-
-    public function testOnEndMatch()
-    {
-        $this->pluginMock->expects($this->once())->method('onEndMatch')->withConsecutive([]);
-        $this->matchDataProvider->onEndMatch();
-    }
-
     public function testOnBeginMap()
     {
         $mapArray = $this->getMapArray();
@@ -70,40 +58,6 @@ class MatchDataProviderTest extends TestCore
         $this->pluginMock->expects($this->once())->method('onEndMap')->withAnyParameters();
         $this->matchDataProvider->onEndMap($mapArray);
     }
-
-    public function testOnBeginRound()
-    {
-        $this->pluginMock->expects($this->once())->method('onBeginRound')->withConsecutive([]);
-        $this->matchDataProvider->onBeginRound();
-    }
-
-    public function testOnEndRound()
-    {
-        $this->pluginMock->expects($this->once())->method('onEndRound')->withConsecutive([]);
-        $this->matchDataProvider->OnEndRound();
-    }
-
-    public function testOnPlayerFinish()
-    {
-        $data = "1.5";
-        $this->pluginMock
-            ->expects($this->once())
-            ->method("onPlayerFinish")
-            ->withConsecutive([$this->player, (float)$data]);
-
-        $this->matchDataProvider->onPlayerFinish(1, 'test', $data);
-    }
-
-    public function testOnPlayerCheckpoint()
-    {
-        $this->pluginMock
-            ->expects($this->once())
-            ->method("onPlayerCheckpoint")
-            ->withConsecutive([$this->player, 1200, 1, 5]);
-
-        $this->matchDataProvider->onPlayerCheckpoint(1, 'test', 1200, 1, 5);
-    }
-
 
     protected function getMapArray()
     {
