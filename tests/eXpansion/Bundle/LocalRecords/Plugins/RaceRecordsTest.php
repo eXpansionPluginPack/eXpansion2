@@ -83,7 +83,7 @@ class RaceRecordsTest extends \PHPUnit_Framework_TestCase
             10,
             10,
             10,
-            10,
+            [10],
             10,
             10,
             10
@@ -101,7 +101,7 @@ class RaceRecordsTest extends \PHPUnit_Framework_TestCase
             10,
             10,
             10,
-            10,
+            [10],
             10,
             10,
             10

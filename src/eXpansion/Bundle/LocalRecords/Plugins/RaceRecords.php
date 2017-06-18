@@ -35,7 +35,7 @@ class RaceRecords extends BaseRecords implements TmBaseDataListenerInterface
         $distance
     )
     {
-        $eventData = $this->recordsHandler->addRecord($login, $raceTime, $cpInRace);
+        $eventData = $this->recordsHandler->addRecord($login, $raceTime, $curCps);
 
         if ($eventData) {
             $this->dispatchEvent($eventData);

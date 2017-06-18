@@ -182,8 +182,7 @@ class Record
      */
     public function setCheckpointTimes($checkpointTimes)
     {
-        // @TODO see why cp times is empty.
-        // $this->setCheckpointTimes(implode(',', $checkpointTimes));
+         $this->setCheckpoints(implode(',', $checkpointTimes));
     }
 
     /**

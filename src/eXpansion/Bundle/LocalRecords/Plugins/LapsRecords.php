@@ -59,7 +59,7 @@ class LapsRecords extends BaseRecords implements TmBaseDataListenerInterface
         $speed,
         $distance
     ) {
-        $eventData = $this->recordsHandler->addRecord($login, $raceTime, $cpInRace);
+        $eventData = $this->recordsHandler->addRecord($login, $lapTime, $curLapCps);
 
         if ($eventData) {
             $this->dispatchEvent($eventData);
