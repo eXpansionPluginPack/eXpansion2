@@ -10,8 +10,8 @@ use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\MapStorage;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\BaseDataListenerInterface as MpBaseDataListenerInterface;
-use eXpansion\Framework\GameTrackmania\DataProviders\Listener\BaseDataListenerInterface as TmBaseDataListenerInterface;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\MapDataListenerInterface;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\MatchDataListenerInterface;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
 /**
@@ -22,7 +22,7 @@ use Maniaplanet\DedicatedServer\Structures\Map;
  * @package eXpansion\Bundle\LocalRecords\Plugins;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-class BaseRecords implements MpBaseDataListenerInterface, PlayerDataListenerInterface, StatusAwarePluginInterface
+class BaseRecords implements MapDataListenerInterface, MatchDataListenerInterface, PlayerDataListenerInterface, StatusAwarePluginInterface
 {
     /** @var  RecordHandler */
     protected $recordsHandler;
