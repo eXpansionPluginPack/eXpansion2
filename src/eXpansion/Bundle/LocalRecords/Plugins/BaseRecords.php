@@ -101,6 +101,7 @@ class BaseRecords implements MpBaseDataListenerInterface, PlayerDataListenerInte
         // Load time information for remaining players.
         $this->recordsHandler->loadForPlayers($map->uId, $this->getNbLaps(), $this->allPlayersGroup->getLogins());
 
+        // Let others know that records information is now available.
         $this->dispatchEvent(['event' => 'loaded', 'records' => $this->recordsHandler->getRecords()]);
     }
 

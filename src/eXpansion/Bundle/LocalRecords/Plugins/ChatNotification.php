@@ -55,7 +55,6 @@ class ChatNotification implements RecordsDataListener
         $this->positionForPublicMessage = $positionForPublicMessage;
     }
 
-
     /**
      * Called when local records are loaded.
      *
@@ -63,7 +62,26 @@ class ChatNotification implements RecordsDataListener
      */
     public function onLocalRecordsLoaded($records)
     {
-        // TODO send chat information.
+        if (!empty($records)) {
+            $firstRecord = $records[0];
+
+            $this->sendMessage('loaded.top1', null, [
+               '%nickname%' => $firstRecord->getPlayerLogin(), // TODO get player nickname from database.
+                '%score%' => $this->timeFormater->milisecondsToTrackmania($firstRecord->getScore(), true)
+            ]);
+
+
+            $onlinePlayers = $this->playerStorage->getOnline();
+            for ($i = 1; $i < count($records); $i++) {
+                if (isset($onlinePlayers[$records[$i]->getPlayerLogin()])) {
+                    $this->sendMessage('loaded.any', $records[$i]->getPlayerLogin(), [
+                        '%nickname%' => $onlinePlayers[$records[$i]->getPlayerLogin()]->getNickName(),
+                        '%score%' => $this->timeFormater->milisecondsToTrackmania($records[$i]->getScore(), true),
+                        '%position%' => $i+1,
+                    ]);
+                }
+            }
+        }
     }
 
     /**

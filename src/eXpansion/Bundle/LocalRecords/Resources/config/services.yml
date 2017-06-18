@@ -4,7 +4,9 @@ services:
         factory: ["@doctrine.orm.entity_manager", getRepository]
         arguments: ['LocalRecordsBundle:Record']
 
-
+    #
+    # Services used to handle Records in TA.
+    #
     eXpansion.local_records.services.race_record_handler_factory:
         class: eXpansion\Bundle\LocalRecords\Services\RecordHandlerFactory
         arguments:
@@ -53,4 +55,7 @@ services:
             - {name: expansion.plugin, data_provider: expansion.local_records.race}
 
 
-
+    #
+    # In Laps mode we will also need a service to save individual lap records and not just race records.
+    #
+    # TODO Complete

@@ -34,6 +34,55 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
         $this->timeFormatter = $this->getMockBuilder(Time::class)->getMock();
     }
 
+    /**
+     *
+     */
+    public function testLoad()
+    {
+        $this->playerStorage->expects($this->once())->method('getOnline')->willReturn(
+            [
+                'toto-1' => new Player(),
+                'toto-2' => new Player(),
+                'toto-4' => new Player(),
+            ]
+        );
+
+        $this->chatNotificationHelper
+            ->expects($this->at(0))
+            ->method('sendMessage')
+            ->with(
+                'prefix.loaded.top1',
+                null,
+                ['%nickname%' => 'toto-1', '%score%' => null]
+            );
+        $this->chatNotificationHelper
+            ->expects($this->at(1))
+            ->method('sendMessage')
+            ->with(
+                'prefix.loaded.any',
+                'toto-2',
+                ['%nickname%' => null, '%score%' => null, '%position%' => 2]
+            );
+        $this->chatNotificationHelper
+            ->expects($this->at(2))
+            ->method('sendMessage')
+            ->with(
+                'prefix.loaded.any',
+                'toto-4',
+                ['%nickname%' => null, '%score%' => null, '%position%' => 4]
+            );
+
+        $cnotificaiton = $this->getChatNotification();
+        $records = [
+            $this->getRecord('toto-1', 10),
+            $this->getRecord('toto-2', 20),
+            $this->getRecord('toto-3', 30),
+            $this->getRecord('toto-4', 40),
+        ];
+
+        $cnotificaiton->onLocalRecordsLoaded($records);
+    }
+
     public function testFirstRecord() {
         $cnotificaiton = $this->getChatNotification();
 
