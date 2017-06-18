@@ -1,3 +1,6 @@
+parameters:
+    eXpansion.local_records.nb_records: 100
+
 services:
     eXpansion.local_records.repository.record:
         class: Doctrine\ORM\EntityRepository
@@ -12,7 +15,7 @@ services:
         arguments:
             - '@eXpansion.local_records.repository.record'
             - ASC
-            - 100
+            - '%eXpansion.local_records.nb_records%'
 
     # Plugins to save race records in all TM gamemodes.
     eXpansion.local_records.plugins.race_records:
