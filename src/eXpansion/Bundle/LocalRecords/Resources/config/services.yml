@@ -28,9 +28,9 @@ services:
             - 'expansion.local_records.race'
         tags:
             - {name: expansion.plugin, data_provider: expansion.player_data}
-            - {name: expansion.plugin, data_provider: expansion.mp.base}
+            - {name: expansion.plugin, data_provider: expansion.mp.map}
+            - {name: expansion.plugin, data_provider: expansion.mp.match}
             - {name: expansion.plugin, data_provider: expansion.tm.base}
-
 
     # Data provider to race records data to other plugins.
     eXpansion.local_records.data_providers.race_records:
