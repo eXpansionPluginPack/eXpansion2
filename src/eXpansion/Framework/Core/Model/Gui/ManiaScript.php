@@ -50,7 +50,7 @@ class ManiaScript implements Renderable
      */
     public function getVarN($name)
     {
-        return "exp_" . $this->id . "_$name";
+        return "exp_".$this->id."_$name";
     }
 
     /**

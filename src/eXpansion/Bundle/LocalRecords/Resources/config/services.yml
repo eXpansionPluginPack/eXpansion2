@@ -1,0 +1,64 @@
+parameters:
+    eXpansion.local_records.nb_records: 100
+
+services:
+    eXpansion.local_records.repository.record:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments: ['LocalRecordsBundle:Record']
+
+    #
+    # Services used to handle Records in TA.
+    #
+    eXpansion.local_records.services.race_record_handler_factory:
+        class: eXpansion\Bundle\LocalRecords\Services\RecordHandlerFactory
+        arguments:
+            - '@eXpansion.local_records.repository.record'
+            - ASC
+            - '%eXpansion.local_records.nb_records%'
+
+    # Plugins to save race records in all TM gamemodes.
+    eXpansion.local_records.plugins.race_records:
+        class: eXpansion\Bundle\LocalRecords\Plugins\RaceRecords
+        arguments:
+            - '@eXpansion.local_records.services.race_record_handler_factory'
+            - '@eXpansion.framework.core.user_groups.all_players'
+            - '@eXpansion.framework.core.storage.map'
+            - '@eXpansion.framework.core.services.application.dispatcher'
+            - 'expansion.local_records.race'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.player_data}
+            - {name: expansion.plugin, data_provider: expansion.mp.map}
+            - {name: expansion.plugin, data_provider: expansion.mp.match}
+            - {name: expansion.plugin, data_provider: expansion.tm.base}
+
+    # Data provider to race records data to other plugins.
+    eXpansion.local_records.data_providers.race_records:
+        class: eXpansion\Bundle\LocalRecords\DataProviders\RecordsDataProvider
+        tags:
+          - {name: expansion.data_provider, provider: "expansion.local_records.race", interface: 'eXpansion\Bundle\LocalRecords\DataProviders\Listener\RecordsDataListener'}
+          - {name: expansion.data_provider.compatibility, title: 'ALL'}
+          - {name: expansion.data_provider.parent, parent: 'expansion.local_records.plugins.race_records'}
+          - {name: expansion.data_provider.listener, event_name: expansion.local_records.race.loaded, method: onRecordsLoaded}
+          - {name: expansion.data_provider.listener, event_name: expansion.local_records.race.first_time, method: onFirstRecord}
+          - {name: expansion.data_provider.listener, event_name: expansion.local_records.race.same_score, method: onSameScore}
+          - {name: expansion.data_provider.listener, event_name: expansion.local_records.race.same_position, method: onSamePosition}
+          - {name: expansion.data_provider.listener, event_name: expansion.local_records.race.better_position, method: onBetterPosition}
+
+    # Plugin to have chat notificaiton for race records.
+    eXpansion.local_records.plugins.race_records_notifications:
+        class: eXpansion\Bundle\LocalRecords\Plugins\ChatNotification
+        arguments:
+            - '@expansion.framework.core.helpers.chat_notification'
+            - '@expansion.framework.core.storage.player'
+            - '@expansion.framework.core.helpers.time'
+            - 'expansion_local_records.chat.race'
+            - 20
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.local_records.race}
+
+
+    #
+    # In Laps mode we will also need a service to save individual lap records and not just race records.
+    #
+    # TODO Complete

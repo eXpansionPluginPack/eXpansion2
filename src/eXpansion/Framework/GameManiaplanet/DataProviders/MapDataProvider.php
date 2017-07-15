@@ -5,14 +5,13 @@ namespace eXpansion\Framework\GameManiaplanet\DataProviders;
 use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
 use eXpansion\Framework\Core\Storage\MapStorage;
 
-
 /**
- * Class BaseDataProvider
+ * Class MapDataProvider
  *
  * @package eXpansion\Framework\GameManiaplanet\DataProviders;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-class BaseDataProvider extends AbstractDataProvider
+class MapDataProvider extends AbstractDataProvider
 {
     /** @var  MapStorage */
     protected $mapStorage;
@@ -25,27 +24,6 @@ class BaseDataProvider extends AbstractDataProvider
     public function __construct(MapStorage $mapStorage)
     {
         $this->mapStorage = $mapStorage;
-    }
-
-
-    /**
-     * Callback sent when the "StartMatch" section start.
-     *
-     * @param array $params
-     */
-    public function onStartMatchStart($params)
-    {
-        $this->dispatch('onStartMatchStart', [$params['count'], $params['time']]);
-    }
-
-    /**
-     * Callback sent when the "StartMatch" section end.
-     *
-     * @param array $params
-     */
-    public function onStartMatchEnd($params)
-    {
-        $this->dispatch('onStartMatchEnd', [$params['count'], $params['time']]);
     }
 
     /**
@@ -103,11 +81,10 @@ class BaseDataProvider extends AbstractDataProvider
             $eventName,
             [
                 $params['count'],
-                $params['time'],
-                $params['restarted'],
+                isset($params['time']) ? $params['time'] : time(),
+                isset($params['restarted']) ? $params['restarted'] : false,
                 $map,
             ]
         );
     }
-
 }

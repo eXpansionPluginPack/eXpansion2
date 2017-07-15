@@ -8,6 +8,7 @@
 
 namespace Tests\eXpansion\Framework\AdminGroups\Helpers;
 
+use eXpansion\Framework\AdminGroups\Exceptions\UnknownGroupException;
 use Tests\eXpansion\Framework\AdminGroups\TestAdminGroups;
 
 
@@ -43,4 +44,21 @@ class AdminGroupsTest extends TestAdminGroups
         $this->assertTrue($helper->hasPermission('toto1', 'p1'));
     }
 
+    public function testHasGroupPermission()
+    {
+        $helper = $this->getAdminGroupHelper();
+
+        $this->assertTrue($helper->hasGroupPermission('master_admin', 'wrong_permission'));
+        $this->assertTrue($helper->hasGroupPermission('admin:master_admin', 'wrong_permission'));
+        $this->assertFalse($helper->hasGroupPermission('admin:empty', 'wrong_permission'));
+    }
+
+    public function testHasGroupPermissionsException()
+    {
+        $helper = $this->getAdminGroupHelper();
+
+        $this->expectException(UnknownGroupException::class);
+
+        $helper->hasGroupPermission('yoyo', 'p20');
+    }
 }

@@ -36,16 +36,14 @@ class MapDataProvider extends AbstractDataProvider
     {
         $this->mapStorage = $mapStorage;
         $this->connection = $connection;
-    }
 
-    /**
-     * Called when eXpansion is started.
-     */
-    public function onRun()
-    {
         $this->updateMapList();
-        $this->mapStorage->setCurrentMap($this->connection->getCurrentMapInfo());
-        $this->mapStorage->setNextMap($this->connection->getNextMapInfo());
+
+        $currentMap = $this->connection->getCurrentMapInfo();
+        if ($currentMap) {
+            $this->mapStorage->setCurrentMap($currentMap);
+            $this->mapStorage->setNextMap($this->connection->getNextMapInfo());
+        }
     }
 
     /**
@@ -63,8 +61,10 @@ class MapDataProvider extends AbstractDataProvider
                 return;
             }
 
-            foreach ($maps as $map) {
-                $this->mapStorage->addMap($map);
+            if ($maps) {
+                foreach ($maps as $map) {
+                    $this->mapStorage->addMap($map);
+                }
             }
 
             $start += self::BATCH_SIZE;

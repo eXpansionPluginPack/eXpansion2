@@ -10,28 +10,8 @@ use Maniaplanet\DedicatedServer\Structures\Map;
  * @package eXpansion\Framework\GameManiaplanet\DataProviders\Listener;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-interface BaseDataListenerInterface
+interface MapDataListenerInterface
 {
-    /**
-     * Callback sent when the "StartMatch" section start.
-     *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time  Server time when the callback was sent
-     *
-     * @return mixed
-     */
-    public function onStartMatchStart($count, $time);
-
-    /**
-     * Callback sent when the "StartMatch" section end.
-     *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time  Server time when the callback was sent
-     *
-     * @return mixed
-     */
-    public function onStartMatchEnd($count, $time);
-
     /**
      * Callback sent when the "StartMap" section start.
      *
