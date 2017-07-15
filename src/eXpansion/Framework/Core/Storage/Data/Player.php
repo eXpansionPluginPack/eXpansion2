@@ -8,6 +8,9 @@
 
 namespace eXpansion\Framework\Core\Storage\Data;
 
+use Maniaplanet\DedicatedServer\Structures\FileDesc;
+use Maniaplanet\DedicatedServer\Structures\Skin;
+
 /**
  * All data related to a player/spectator on the server.
  *
@@ -456,7 +459,7 @@ class Player
     }
 
     /**
-     * @return integer[]
+     * @return int[]
      */
     public function getBestCheckpoints()
     {

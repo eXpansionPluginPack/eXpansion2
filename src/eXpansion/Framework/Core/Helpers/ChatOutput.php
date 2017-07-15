@@ -37,7 +37,7 @@ class ChatOutput implements OutputInterface
     }
 
     /**
-     * @return ChatNotification
+     * @return ChatNotificationInterface
      */
     public function getChatNotification()
     {

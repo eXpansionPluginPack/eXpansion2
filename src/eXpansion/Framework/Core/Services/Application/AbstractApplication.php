@@ -13,6 +13,7 @@ abstract class AbstractApplication implements RunInterface
     /** Base eXpansion callbacks. */
     const EVENT_BEFORE_INIT = "expansion.before_init";
     const EVENT_AFTER_INIT = "expansion.after_init";
+    const EVENT_RUN = "expansion.run";
 
     /** @var Connection */
     protected $connection;
@@ -23,11 +24,8 @@ abstract class AbstractApplication implements RunInterface
     /** @var Console */
     protected $console;
 
-    /** @var bool  */
+    /** @var bool */
     protected $isRunning = true;
-
-    /** Base eXpansion callbacks. */
-    const EVENT_RUN = "expansion.run";
 
     /**
      * Application constructor.
@@ -70,13 +68,13 @@ abstract class AbstractApplication implements RunInterface
      */
     public function run()
     {
-        $this->connection->enableCallbacks(true);
 
         $startTime = microtime(true);
         $nextCycleStart = $startTime;
         $cycleTime = 1 / 60;
 
         $this->console->writeln("Running preflight checks...");
+        $this->connection->enableCallbacks(true);
 
         // need to send this for scripts to start callback handling
         $this->connection->triggerModeScriptEvent("XmlRpc.EnableCallbacks", ["True"]);

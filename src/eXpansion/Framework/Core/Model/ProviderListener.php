@@ -9,11 +9,11 @@
 namespace eXpansion\Framework\Core\Model;
 
 /**
- * Class ProviderListner
+ * Class ProviderListener
  *
  * @package eXpansion\Framework\Core\Model
  */
-class ProviderListner
+class ProviderListener
 {
     /** @var string */
     protected $eventName;
@@ -25,7 +25,7 @@ class ProviderListner
     protected $method;
 
     /**
-     * ProviderListner constructor.
+     * ProviderListener constructor.
      *
      * @param string $eventName
      * @param string $provider

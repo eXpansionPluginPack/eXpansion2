@@ -227,7 +227,7 @@ class Console
     }
 
     /**
-     * Get symfony console.
+     * Get symphony console.
      *
      * @return OutputInterface
      */

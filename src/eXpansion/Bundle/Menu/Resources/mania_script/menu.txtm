@@ -1,137 +1,181 @@
 
 declare Boolean isClosing;
+declare Text[] CustomEvents;
 declare Boolean isMenuOpen;
 
-declare Text[] CustomEvents;
+Void show()  {
+     isMenuOpen = True;
+	 Audio.PlaySoundEvent( CAudioManager::ELibSound::ShowDialog  , 0, 0.);
+	 declare CMlFrame frame <=> (Page.GetFirstChild("buttons") as CMlFrame);
+	 declare CMlFrame background <=> (Page.GetFirstChild("background") as CMlFrame);
+	 isClosing = False;
+	 declare start = Now;
+	 declare counter = 0;
 
-Void show() {
- declare CMlFrame frame <=> (Page.GetFirstChild("buttons") as CMlFrame);
- declare CMlFrame background <=> (Page.GetFirstChild("background") as CMlFrame);
- isClosing = False;
- isMenuOpen = True;
- declare start = Now + 200;
- declare counter = 0;
-
-Page.GetClassChildren("bg", background, True);
+	Page.GetClassChildren("bg", background, True);
 	foreach (Elem in Page.GetClassChildren_Result) {
-		    AnimMgr.Add(Elem, "<elem scale=\"1\" />", 1200, CAnimManager::EAnimManagerEasing::ElasticOut2);
-		}
-
-        Page.GetClassChildren("button", frame, True);
-        foreach (Button in Page.GetClassChildren_Result) {
-                AnimMgr.Add(Button, "<quad scale=\"1.\" />", (start+(counter*150 )), 1400, CAnimManager::EAnimManagerEasing::ElasticOut2);
-                AnimMgr.Add(Button, "<quad scale=\"1.\" />", (start+400+(counter*150 )), 1400, CAnimManager::EAnimManagerEasing::ElasticOut2);	// fix mouse hover
-                counter+=1;
-        }
+       AnimMgr.Add(Elem, "<elem opacity=\"1\" />", 500, CAnimManager::EAnimManagerEasing::Linear);
+    }
+	Page.GetClassChildren("button", frame, True);
+	foreach (Button in Page.GetClassChildren_Result) {
+        Button.RelativeScale = 1.;
+        AnimMgr.Add(Button, "<qu§ad opacity=\"1.\" />", 500, CAnimManager::EAnimManagerEasing::QuadIn);
+    }
+    declare CMlQuad mainBg <=> (Page.GetFirstChild("mainBg") as CMlQuad);
+    mainBg.Show();
 
 }
 
-Void hide() {
+Void hide(CMlControl ClickedElem) {
+    isMenuOpen = False;
+    Audio.PlaySoundEvent( CAudioManager::ELibSound::Valid, 0, 0.);
+    declare CMlFrame frame <=> (Page.GetFirstChild("buttons") as CMlFrame);
+    declare CMlFrame background <=> (Page.GetFirstChild("background") as CMlFrame);
+    isClosing = True;
+    declare start = Now;
+    declare counter = 0;
 
- isMenuOpen = False;
- declare CMlFrame frame <=> (Page.GetFirstChild("buttons") as CMlFrame);
- declare CMlFrame background <=> (Page.GetFirstChild("background") as CMlFrame);
- isClosing = True;
- declare start = Now;
- declare counter = 0;
+    Page.GetClassChildren("button", frame, True);
+    declare Integer total = Page.GetClassChildren_Result.count;
+    foreach (Elem in Page.GetClassChildren_Result) {
+        if  (Elem != ClickedElem) {
+             AnimMgr.Add(Elem, "<elem opacity=\"0\" />", 500, CAnimManager::EAnimManagerEasing::Linear);
+        } else {
+            if (Elem.HasClass("noAnim")  == False) {
+                 AnimMgr.Add(Elem, "<elem scale=\"4\" opacity=\"0\" />", 500, CAnimManager::EAnimManagerEasing::Linear);
+            }
+            else {
+             AnimMgr.Add(Elem, "<elem opacity=\"0\" />", 500, CAnimManager::EAnimManagerEasing::Linear);
+            }
+        }
+    //	counter+=1;
+    }
 
-	Page.GetClassChildren("button", frame, False);
-	declare Integer total = Page.GetClassChildren_Result.count;
-
-	foreach (Elem in Page.GetClassChildren_Result) {
-			 AnimMgr.Add(Elem, "<elem scale=\"0\" />", (start+((total-counter)*150 )), 1200, CAnimManager::EAnimManagerEasing::ElasticOut2);
-			 AnimMgr.Add(Elem, "<elem scale=\"0\" />", (start+600+((total-counter)*150 )), 1200, CAnimManager::EAnimManagerEasing::ElasticOut2);
-			counter+=1;
-	}
-
-	Page.GetClassChildren("bg", background, False);
-	foreach (Elem in Page.GetClassChildren_Result) {
-		AnimMgr.Add(Elem, "<elem scale=\"0\" />", Now+150, 1200, CAnimManager::EAnimManagerEasing::ElasticIn);
-		}
+    Page.GetClassChildren("bg", background, True);
+    foreach (Elem in Page.GetClassChildren_Result) {
+        AnimMgr.Add(Elem, "<elem opacity=\"0\" />",  500, CAnimManager::EAnimManagerEasing::Linear);
+    }
+    declare CMlQuad mainBg <=> (Page.GetFirstChild("mainBg") as CMlQuad);
+    mainBg.Hide();
 }
 
 Void InitialHide() {
+ isMenuOpen = False;
  declare CMlFrame frame <=> (Page.GetFirstChild("buttons") as CMlFrame);
  declare CMlFrame background <=> (Page.GetFirstChild("background") as CMlFrame);
-    isMenuOpen = False;
-
+ declare CMlQuad mainBg <=> (Page.GetFirstChild("mainBg") as CMlQuad);
+    mainBg.Hide();
 	Page.GetClassChildren("button", frame, True);
-	foreach (Button in Page.GetClassChildren_Result) {
-		Button.RelativeScale = 0.;
+	foreach (Elem in Page.GetClassChildren_Result) {
+			if (Elem is CMlLabel) {
+				declare El = (Elem as CMlLabel);
+				El.Opacity = 0.;
+				//El.Blend = CMlLabel::EBlendMode::Add;
+			}
+			if (Elem is CMlQuad) {
+			declare El = (Elem as CMlQuad);
+			// El.Blend = CMlQuad::EBlendMode::Add;
+			El.Opacity = 0.;
+		}
 	}
 
 	Page.GetClassChildren("bg", background, True);
 	foreach (Elem in Page.GetClassChildren_Result) {
-	 	Elem.RelativeScale = 0.;
+		if (Elem is CMlQuad) {
+			declare El = (Elem as CMlQuad);
+			El.Opacity = 0.;
+		}
+		if (Elem is CMlLabel) {
+			declare El = (Elem as CMlLabel);
+			El.Blend = CMlLabel::EBlendMode::Add;
+			El.Opacity = 0.;
+		}
+	}
+}
+
+Void onButtonOver(CMlControl Element) {
+	Audio.PlaySoundEvent( CAudioManager::ELibSound::ScoreIncrease   , 0, 0.);
+
+	if (Element is CMlLabel) {
+		declare El = (Element as CMlLabel);
+	}
+
+	if (Element.HasClass("noAnim")  == False) {
+		AnimMgr.Add(Element, "<elem scale=\"1.3\" />", 400, CAnimManager::EAnimManagerEasing::ElasticOut);
+	}
+}
+
+Void onButtonOut(CMlControl Element) {
+		if (Element.HasClass("noAnim")  == False) {
+			AnimMgr.Add(Element, "<elem scale=\"1.0\" />", 400, CAnimManager::EAnimManagerEasing::ElasticOut);
 		}
 }
 
+
 main() {
-	EnableMenuNavigationInputs = True;
-	isClosing = False;
+	isClosing = True;
 	InitialHide();
 	CustomEvents = Text[];
-
 	while (True) {
 		yield;
 
 		foreach (Event in CustomEvents) {
+		switch (Event) {
+					case "!profile":
 
+					break;
+			}
 		}
 		CustomEvents.clear();
 
-
-            ClientUI.StatusMessage = "";
-
+        if (Playground.IsInGameMenuDisplayed) {
+            CloseInGameMenu( CMlScriptIngame::EInGameMenuResult::Resume);
+        }
 
 		foreach (Event in PendingEvents) {
-
-            if (Event.Type == CMlScriptEvent::Type::KeyPress && Event.KeyCode == 36) {
-
-            if (isMenuOpen) {
-                hide();
-            } else {
-                show();
+		    // 36 for esc, 31 for numpad /
+            if (Event.Type == CMlScriptEvent::Type::KeyPress && Event.KeyCode == 31) {
+                if (isMenuOpen) {
+                    hide(Null);
+                } else {
+                    show();
+                }
             }
-
-            }
-
-
-			if (Event.Type == CMlScriptEvent::Type::MouseClick && Event.Control.HasClass("button") ) {
-				hide();
-				if (Event.Control.DataAttributeExists("action")) {
-					switch (Event.Control.DataAttributeGet("action")) {
-							case "!profile": {
-								Playground.ShowProfile(LocalUser.Login);
-							}
-							case "!spec": {
-								Playground.RequestSpectatorClient(!IsSpectator);
-							}
-							case "!quit": {
-							    Playground.QuitServer(False);
-							}
-							case "!help": {
-                                    ShowModeHelp();
-							}
-				    }
-				}
-			}
-
-			if (Event.Type == CMlScriptEvent::Type::MouseClick && Event.ControlId == "open") {
-				show();
-			}
 		}
 
 		if (isClosing == False) {
+		   foreach (Event in PendingEvents) {
 
-			foreach (Event in PendingEvents) {
-				if (Event.Type == CMlScriptEvent::Type::MouseOver ) {
-						AnimMgr.Add(Event.Control, "<elem scale=\"1.2\" />", 1000, CAnimManager::EAnimManagerEasing::ElasticOut2);
+				if (Event.Type == CMlScriptEvent::Type::MouseOver && Event.Control.HasClass("button")) {
+						onButtonOver(Event.Control);
 				}
 
-				if (Event.Type == CMlScriptEvent::Type::MouseOut) {
-						AnimMgr.Add(Event.Control, "<elem scale=\"1.\" />", 1000, CAnimManager::EAnimManagerEasing::ElasticOut2);
+				if (Event.Type == CMlScriptEvent::Type::MouseOut && Event.Control.HasClass("button")) {
+						onButtonOut(Event.Control);
 				}
+
+				if (Event.Type == CMlScriptEvent::Type::MouseClick && Event.Control.HasClass("button") ) {
+				    isClosing = True;
+				    hide(Event.Control);
+                    if (Event.Control.DataAttributeExists("action")) {
+                        switch (Event.Control.DataAttributeGet("action")) {
+                                case "!profile": {
+                                    Playground.ShowProfile(LocalUser.Login);
+                                }
+                                case "!spec": {
+                                    Playground.RequestSpectatorClient(!IsSpectator);
+                                }
+                                case "!quit": {
+                                    Playground.QuitServer(False);
+                                }
+                                case "!help": {
+                                        ShowModeHelp();
+                                }
+                        }
+
+                    }
+                }
+
 			}
 
 		}

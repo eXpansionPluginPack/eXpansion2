@@ -7,6 +7,7 @@ use eXpansion\Framework\AdminGroups\Model\AbstractAdminChatCommand;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
+use Monolog\Logger;
 
 /**
  * Class Restart
@@ -25,6 +26,9 @@ abstract class AbstractConnectionCommand extends AbstractAdminChatCommand
     /** @var PlayerStorage  */
     protected $playerStorage;
 
+    /** @var Logger */
+    protected $logger;
+
     public function __construct(
         $command,
         $permission,
@@ -32,7 +36,8 @@ abstract class AbstractConnectionCommand extends AbstractAdminChatCommand
         AdminGroups $adminGroupsHelper,
         Connection $connection,
         ChatNotification $chatNotification,
-        PlayerStorage $playerStorage
+        PlayerStorage $playerStorage,
+        Logger $logger
     )
     {
         parent::__construct($command, $permission, $aliases, $adminGroupsHelper);
@@ -40,5 +45,6 @@ abstract class AbstractConnectionCommand extends AbstractAdminChatCommand
         $this->connection = $connection;
         $this->chatNotification = $chatNotification;
         $this->playerStorage = $playerStorage;
+        $this->logger = $logger;
     }
 }

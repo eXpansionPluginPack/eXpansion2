@@ -9,5 +9,11 @@ services:
               - '@expansion.admin_chat.chat_command.restart'
               - '@expansion.admin_chat.chat_command.next'
               - '@expansion.admin_chat.chat_command.set_server_name'
+              - '@expansion.admin_chat.chat_command.kick'
+              - '@expansion.admin_chat.chat_command.ban'
+              - '@expansion.admin_chat.chat_command.unban'
+              - '@expansion.admin_chat.chat_command.black'
+              - '@expansion.admin_chat.chat_command.unblack'
+
         tags:
             - {name: expansion.plugin, data_provider: expansion.chat_command_data}

@@ -23,29 +23,29 @@ class PluginManager
     /** @var PluginDescription[] Current List of enabled plugins */
     protected $enabledPlugins = [];
 
-    /** @var PluginDescriptionFactory  */
+    /** @var PluginDescriptionFactory */
     protected $pluginDescriptionFactory;
 
-    /** @var ContainerInterface  */
+    /** @var ContainerInterface */
     protected $container;
 
-    /** @var DataProviderManager  */
+    /** @var DataProviderManager */
     protected $dataProviderManager;
 
-    /** @var GameDataStorage  */
+    /** @var GameDataStorage */
     protected $gameDataStorage;
 
-    /** @var Console  */
+    /** @var Console */
     protected $console;
 
     /**
      * PluginManager constructor.
      *
-     * @param ContainerInterface       $container
+     * @param ContainerInterface $container
      * @param PluginDescriptionFactory $pluginDescriptionFactory
-     * @param DataProviderManager      $dataProviderManager
-     * @param GameDataStorage          $gameDataStorage
-     * @param Console                  $console
+     * @param DataProviderManager $dataProviderManager
+     * @param GameDataStorage $gameDataStorage
+     * @param Console $console
      */
     public function __construct(
         ContainerInterface $container,
@@ -53,8 +53,7 @@ class PluginManager
         DataProviderManager $dataProviderManager,
         GameDataStorage $gameDataStorage,
         Console $console
-    )
-    {
+    ) {
         $this->container = $container;
         $this->pluginDescriptionFactory = $pluginDescriptionFactory;
         $this->dataProviderManager = $dataProviderManager;
@@ -70,13 +69,17 @@ class PluginManager
         $this->reset();
     }
 
+    /**
+     * Do a reset
+     */
     public function reset()
     {
         $title = $this->gameDataStorage->getTitle();
         $mode = $this->gameDataStorage->getGameModeCode();
         $script = $this->gameDataStorage->getGameInfos()->scriptName;
 
-        $this->enableDisablePlugins($title, $mode, $script);    }
+        $this->enableDisablePlugins($title, $mode, $script);
+    }
 
     /**
      * Enable all possible plugins.
@@ -94,9 +97,7 @@ class PluginManager
             $lastEnabledPluginCount = count($pluginsToEnable);
             $pluginsToProcessNew = [];
 
-            foreach ($pluginsToProcess
-
-                     as $pluginId => $plugin) {
+            foreach ($pluginsToProcess as $pluginId => $plugin) {
                 if ($this->isPluginCompatible($plugin, $pluginsToEnable, $title, $mode, $script)) {
                     $pluginsToEnable[$pluginId] = $plugin;
                 } else {
@@ -127,7 +128,8 @@ class PluginManager
      *
      * @return bool
      */
-    protected function isPluginCompatible(PluginDescription $plugin, $enabledPlugins, $title, $mode, $script) {
+    protected function isPluginCompatible(PluginDescription $plugin, $enabledPlugins, $title, $mode, $script)
+    {
 
         // first check for other plugins.
         foreach ($plugin->getParents() as $parentPluginId) {
@@ -137,7 +139,7 @@ class PluginManager
             }
         }
 
-        // Now check  for data providers.
+        // Now check for data providers.
         foreach ($plugin->getDataProviders() as $dataProvider) {
             $providerId = $this->dataProviderManager->getCompatibleProviderId($dataProvider, $title, $mode, $script);
 
@@ -149,7 +151,8 @@ class PluginManager
 
         // If data provider need to check if it was "the chosen one".
         if ($plugin->isIsDataProvider()) {
-            $selectedProvider = $this->dataProviderManager->getCompatibleProviderId($plugin->getDataProviderName(), $title, $mode, $script);
+            $selectedProvider = $this->dataProviderManager->getCompatibleProviderId($plugin->getDataProviderName(),
+                $title, $mode, $script);
 
             if ($plugin->getPluginId() != $selectedProvider) {
                 // This data provider wasn't the one selected and therefore the plugin isn't compatible.
@@ -169,7 +172,8 @@ class PluginManager
      * @param $mode
      * @param $script
      */
-    protected function enablePlugin(PluginDescription $plugin, $title, $mode, $script) {
+    protected function enablePlugin(PluginDescription $plugin, $title, $mode, $script)
+    {
         $plugin->setIsEnabled(true);
         $pluginService = $this->container->get($plugin->getPluginId());
 
@@ -192,7 +196,8 @@ class PluginManager
      * @param PluginDescription $plugin
      *
      */
-    protected function disablePlugin(PluginDescription $plugin) {
+    protected function disablePlugin(PluginDescription $plugin)
+    {
         $plugin->setIsEnabled(false);
         $pluginService = $this->container->get($plugin->getPluginId());
 
@@ -216,7 +221,8 @@ class PluginManager
      *
      * @return bool
      */
-    public function isPluginEnabled($pluginId) {
+    public function isPluginEnabled($pluginId)
+    {
         return isset($this->enabledPlugins[$pluginId]);
     }
 
@@ -227,7 +233,8 @@ class PluginManager
      * @param string[] $dataProviders The data providers it needs to work.
      * @param string[] $parents The parent plugins.
      */
-    public function registerPlugin($id, $dataProviders, $parents, $dataProviderName = null) {
+    public function registerPlugin($id, $dataProviders, $parents, $dataProviderName = null)
+    {
         if (!isset($this->plugins[$id])) {
             $this->plugins[$id] = $this->pluginDescriptionFactory->create($id);
         }

@@ -74,8 +74,13 @@ class ChatCommandDataProvider extends AbstractDataProvider
         $text = substr($text, 1);
         $cmdAndArgs = explode(' ', $text);
 
-        // Internal dedicated serer command to ignore.
+        // Internal dedicated server command to ignore.
         if ($cmdAndArgs[0] === 'version') {
+            return;
+        }
+
+        // Internal dedicated server command to ignore.
+        if ($cmdAndArgs[0] === 'serverlogin') {
             return;
         }
 

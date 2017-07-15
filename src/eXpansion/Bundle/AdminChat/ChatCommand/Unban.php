@@ -6,12 +6,12 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 
 /**
- * Class Restart
+ * Class Unban
  *
  * @package eXpansion\Bundle\AdminChat\ChatCommand;
- * @author oliver de Cramer <oliverde8@gmail.com>
+ * @author reaby
  */
-class SetServerName extends AbstractConnectionCommand
+class Unban extends AbstractConnectionCommand
 {
     /**
      * @inheritdoc
@@ -21,8 +21,9 @@ class SetServerName extends AbstractConnectionCommand
         parent::configure();
 
         $this->inputDefinition->addArgument(
-            new InputArgument('name', InputArgument::REQUIRED, 'New name to give to the server')
+            new InputArgument('login', InputArgument::REQUIRED, 'Login of player to unban.')
         );
+
     }
 
     /**
@@ -30,9 +31,8 @@ class SetServerName extends AbstractConnectionCommand
      */
     public function getDescription()
     {
-        return 'expansion_admin_chat.set_server_name.description';
+        return 'expansion_admin_chat.unban.description';
     }
-
 
     /**
      * @inheritdoc
@@ -40,13 +40,14 @@ class SetServerName extends AbstractConnectionCommand
     public function execute($login, InputInterface $input)
     {
         $nickName = $this->playerStorage->getPlayerInfo($login)->getNickName();
-        $name = $input->getArgument('name');
+        $playerLogin = $input->getArgument('login');
 
         $this->chatNotification->sendMessage(
-            'expansion_admin_chat.set_server_name.msg',
+            'expansion_admin_chat.unban.msg',
             null,
-            ['%admin%' => $nickName, '%servername%' => $name]
+            ['%admin%' => $nickName, '%player%' => $playerLogin]
         );
-        $this->connection->setServerName($name);
+
+        $this->connection->unBan($playerLogin);
     }
 }

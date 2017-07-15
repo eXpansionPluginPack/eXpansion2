@@ -9,6 +9,7 @@ services:
             - '@expansion.framework.core.services.dedicated_connection'
             - '@expansion.framework.core.helpers.chat_notification'
             - '@expansion.framework.core.storage.player'
+            - '@logger'
 
     expansion.admin_chat.chat_command.restart:
         class: eXpansion\Bundle\AdminChat\ChatCommand\Restart
@@ -33,4 +34,44 @@ services:
         arguments:
             index_0: "setservername"
             index_1: "set_server_name"
+            index_2: []
+
+    expansion.admin_chat.chat_command.kick:
+        class: eXpansion\Bundle\AdminChat\ChatCommand\Kick
+        parent: expansion.admin_chat.chat_command.base
+        arguments:
+            index_0: "kick"
+            index_1: "kick"
+            index_2: []
+
+    expansion.admin_chat.chat_command.ban:
+        class: eXpansion\Bundle\AdminChat\ChatCommand\Ban
+        parent: expansion.admin_chat.chat_command.base
+        arguments:
+            index_0: "ban"
+            index_1: "ban"
+            index_2: []
+
+    expansion.admin_chat.chat_command.unban:
+        class: eXpansion\Bundle\AdminChat\ChatCommand\Unban
+        parent: expansion.admin_chat.chat_command.base
+        arguments:
+            index_0: "unban"
+            index_1: "unban"
+            index_2: []
+
+    expansion.admin_chat.chat_command.black:
+        class: eXpansion\Bundle\AdminChat\ChatCommand\Black
+        parent: expansion.admin_chat.chat_command.base
+        arguments:
+            index_0: "black"
+            index_1: "black"
+            index_2: []
+
+    expansion.admin_chat.chat_command.unblack:
+        class: eXpansion\Bundle\AdminChat\ChatCommand\Unblack
+        parent: expansion.admin_chat.chat_command.base
+        arguments:
+            index_0: "unblack"
+            index_1: "unblack"
             index_2: []

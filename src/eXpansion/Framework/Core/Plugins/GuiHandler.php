@@ -247,7 +247,7 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
     /**
      * List of all manialinks that are currentyl displayed.
      *
-     * @return ManialinkInterface[]
+     * @return ManialinkInterface[][]
      */
     public function getDisplayeds()
     {

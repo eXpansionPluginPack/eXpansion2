@@ -30,9 +30,11 @@ abstract class AbstractAdminChatCommand extends AbstractChatCommand
         $permission,
         array $aliases = [],
         AdminGroups $adminGroupsHelper
-    ) {
+    )
+    {
         $newAliases = [];
         $newAliases[] = "adm $command";
+        $newAliases[] = "/ $command";
         foreach ($aliases as $alias) {
             $newAliases[] = "admin $alias";
             $newAliases[] = "adm $alias";

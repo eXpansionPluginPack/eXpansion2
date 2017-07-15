@@ -64,6 +64,7 @@ class MenuFactory extends WidgetFactory
         $baseLabel = Label::create();
         $baseLabel->setAreaColor("0000")
             ->setAreaFocusColor("0000")
+            ->setSize(48, 7)
             ->setTextColor("FFF")
             ->setAlign("center", "center2")
             ->addClass("button")
@@ -72,37 +73,37 @@ class MenuFactory extends WidgetFactory
         $label = clone $baseLabel;
         $label->setPosition(0, $y -= 8)
             ->setText("Help")
-            ->setTextPrefix(" ")
+            // ->setTextPrefix(" ")
             ->setDataAttributes(["action" => "!help"]);
         $btnFrame->addChild($label);
 
         $label = clone $baseLabel;
         $label->setPosition(0, $y -= 10)
             ->setText("Show Profile")
-            ->setTextPrefix(" ")
+            // ->setTextPrefix(" ")
             ->setDataAttributes(["action" => "!profile"]);
         $btnFrame->addChild($label);
 
         $label = clone $baseLabel;
         $label->setPosition(0, $y -= 8)
             ->setText("Spectate")
-            ->setTextPrefix("")
+            // ->setTextPrefix("")
             ->setDataAttributes(["action" => "!spec"]);
         $btnFrame->addChild($label);
 
         $label = clone $baseLabel;
         $label->setPosition(0, $y -= 8)
-            ->setText("Return to game")
-            ->setTextPrefix(" ")
-            ->setDataAttributes(["action" => "!close"]);
+            ->setText("Exit server")
+            // ->setTextPrefix(" ")
+            ->setDataAttributes(["action" => "!quit"]);
         $btnFrame->addChild($label);
 
 
         $label = clone $baseLabel;
         $label->setPosition(0, $y -= 12)
-            ->setText("Return to main menu")
-            ->setTextPrefix("🏁 ")
-            ->setDataAttributes(["action" => "!quit"]);
+            ->setText("Back to game")
+          //  ->setTextPrefix("🏁 ")
+            ->setDataAttributes(["action" => "!close"]);
         $btnFrame->addChild($label);
 
 
@@ -143,13 +144,12 @@ class MenuFactory extends WidgetFactory
 
         $quad = Quad::create();
         $quad->addClass("bg")
+            ->setId("mainBg")
             ->setPosition(0, 0)
             ->setSize(322, 182)
             ->setAlign("center", "center")
             ->setStyles("Bgs1", "BgDialogBlur");
         $bgFrame->addChild($quad);
-
-
 
         $manialink->addChild($btnFrame);
         $manialink->addChild($bgFrame);

@@ -1,10 +1,12 @@
 e_xpansion_core:
     parameters:
         core_chat_color_codes:
-            error: '$b32'
-            warning: '$d50'
-            info: '$db1'
-            highlight: '$u$fff'
+            error: '$daa'
+            warning: '$dda'
+            info: '$add'
+            primary: '$3af'
+            secondary: '$fff'
+            highlight: '$fff'
             separator: '$3af'
             pretty_chat: '$dee'
             admin_info: '$db1'
@@ -13,6 +15,7 @@ e_xpansion_core:
             fail: '$b32✘'
             server: '$afd$fff'
             info: ''
+            admin: '$daa$fff'
 e_xpansion_admin_groups:
     groups:
         master_admin:

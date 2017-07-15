@@ -26,7 +26,10 @@ class Next extends AbstractConnectionCommand
     public function execute($login, InputInterface $input)
     {
         $nickName = $this->playerStorage->getPlayerInfo($login)->getNickName();
-        $this->chatNotification->sendMessage('expansion_admin_chat.next.msg', null, ['%nickname%' => $nickName]);
+        $this->chatNotification->sendMessage(
+            'expansion_admin_chat.next.msg',
+            null,
+            ['%admin%' => $nickName]);
         $this->connection->nextMap();
     }
 }

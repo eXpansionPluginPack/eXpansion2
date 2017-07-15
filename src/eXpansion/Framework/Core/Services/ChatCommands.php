@@ -17,14 +17,15 @@ class ChatCommands
     /** @var ChatCommandInterface[] */
     protected $commands = array();
 
-    /** @var ChatCommandInterface[] */
+    /** @var ChatCommandInterface[][] */
     protected $commandPlugin;
 
-    /** @var int  */
+    /** @var int */
     protected $depth = 3;
 
     /**
      * ChatCommands constructor.
+     *
      * @param int $depth
      */
     public function __construct($depth)
@@ -34,7 +35,7 @@ class ChatCommands
 
 
     /**
-     * Register chat commands of a plugin.
+     * Registers all chat commands of a plugin.
      *
      * @param string $pluginId
      * @param ChatCommandPluginInterface $pluginService
@@ -45,8 +46,7 @@ class ChatCommands
     {
         $commands = $pluginService->getChatCommands();
 
-        foreach ($commands as $command)
-        {
+        foreach ($commands as $command) {
             $this->addCommand($pluginId, $command->getCommand(), $command);
 
             foreach ($command->getAliases() as $alias) {
@@ -84,20 +84,19 @@ class ChatCommands
     }
 
     /**
-     * Get list of all chat commands;
+     * Get list of all chat commands.
      *
      * return array
      */
     public function getChatCommands()
     {
         $chatCommands = [];
-        foreach ($this->commands as $chatCommand => $data)
-        {
+        foreach ($this->commands as $chatCommand => $data) {
             $chatCommands[] = [
                 'command' => $chatCommand,
                 'description' => $data->getDescription(),
                 'help' => $data->getHelp(),
-                'aliases' => $data->getAliases()
+                'aliases' => $data->getAliases(),
             ];
         }
 
@@ -105,6 +104,8 @@ class ChatCommands
     }
 
     /**
+     * Find a chat command.
+     *
      * @param string[] $cmdAndArgs
      * @param integer $depth
      *
@@ -126,6 +127,7 @@ class ChatCommands
     }
 
     /**
+     * Register a command.
      *
      * @param string $pluginId
      * @param string $cmdTxt
