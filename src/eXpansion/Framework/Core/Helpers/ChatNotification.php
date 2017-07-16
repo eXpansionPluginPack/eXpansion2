@@ -26,16 +26,15 @@ class ChatNotification implements ChatNotificationInterface
     /**
      * ChatNotification constructor.
      *
-     * @param Connection    $connection
-     * @param Translations  $translations
+     * @param Connection $connection
+     * @param Translations $translations
      * @param PlayerStorage $playerStorage
      */
     public function __construct(
         Connection $connection,
         Translations $translations,
         PlayerStorage $playerStorage
-    )
-    {
+    ) {
         $this->connection = $connection;
         $this->translations = $translations;
         $this->playerStorage = $playerStorage;
@@ -59,4 +58,21 @@ class ChatNotification implements ChatNotificationInterface
 
         $this->connection->chatSendServerMessage($message, $to);
     }
+
+    /**
+     * Return messageId with arguments as a string
+     * Usage: used for retrieving partials for chat messages
+     *  * defaults to English locale, without parameters
+     *
+     * @param $messageId
+     * @param array $parameters
+     * @param string $locale
+     * @return mixed
+     */
+    public function getMessage($messageId, $parameters = [], $locale = "en")
+    {
+        return $this->translations->getTranslation($messageId, $parameters, $locale);
+    }
+
+
 }

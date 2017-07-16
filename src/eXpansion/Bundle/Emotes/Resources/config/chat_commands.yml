@@ -13,7 +13,7 @@ services:
         parent: expansion.emotes.chat_command.base
         arguments:
             index_0: "bb"
-            index_1: "8"
+            index_1: "6"
             index_2: ['bye']
 
     expansion.emotes.chat_command.gg:

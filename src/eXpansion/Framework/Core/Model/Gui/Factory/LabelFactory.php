@@ -28,7 +28,7 @@ class LabelFactory
         }
 
         if ($type == self::TYPE_TITLE) {
-            $label->setTextFont('RajdhaniMono');
+            $label->setTextFont('file://Media/Font/BiryaniDemiBold.Font.gbx');
         }
 
         return $label;

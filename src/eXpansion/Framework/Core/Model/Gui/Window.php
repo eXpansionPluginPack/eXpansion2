@@ -35,7 +35,8 @@ class Window extends Widget implements Container
 
         $titleHeight = 5.5;
         $closeButtonWidth = 9.5;
-        $titlebarColor = "3afe";
+        $titlebarColor = "000e";
+        $titleTextColor = "eff";
 
         // Frame to handle the content of the window.
         $this->contentFrame->setPosition(2, -$titleHeight - 2);
@@ -47,7 +48,7 @@ class Window extends Widget implements Container
         $titleLabel->setPosition(3, -$titleHeight / 3 - 1)
             ->setAlign(Label::LEFT, Label::CENTER2)
             ->setTextId($name)
-            ->setTextColor('fff')
+            ->setTextColor($titleTextColor)
             ->setTextSize(2)
             ->setTranslate(true)
             ->setTextFont('RajdhaniMono')
@@ -81,7 +82,7 @@ class Window extends Widget implements Container
             ->setTextSize(2)
             ->setTextFont('OswaldMono')
             ->setScriptEvents(true)
-            ->setAreaColor('d00')
+            ->setAreaColor($titlebarColor)
             ->setAreaFocusColor('f22');
         $windowFrame->addChild($this->closeButton);
 
@@ -89,7 +90,7 @@ class Window extends Widget implements Container
         $body = new Quad_Bgs1();
         $body->setSize($sizeX, $sizeY - $titleHeight)
             ->setPosition(0, -$titleHeight)
-            ->setSubStyle(Quad_Bgs1::SUBSTYLE_BgWindow3)
+            ->setSubStyle(Quad_Bgs1::SUBSTYLE_BgDialogBlur)
             ->setId('WindowBg')
             ->setScriptEvents(true);
         $windowFrame->addChild($body);

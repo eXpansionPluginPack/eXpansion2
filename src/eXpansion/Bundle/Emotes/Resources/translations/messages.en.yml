@@ -1,16 +1,16 @@
 expansion_emotes:
-  gg1: '%nickname%{separator}|{pretty_chat}Good Game'
-  gg2: '%nickname%{separator}|{pretty_chat}Great Game'
+  prefix: '%nickname%{separator}|{pretty_chat}'
 
-  bb1: "%nickname%{separator}|{pretty_chat}Bye"
-  bb2: "%nickname%{separator}|{pretty_chat}Laters"
-  bb3: "%nickname%{separator}|{pretty_chat}See ya later!"
-  bb4: "%nickname%{separator}|{pretty_chat}Goodbye!"
-  bb5: "%nickname%{separator}|{pretty_chat}Hasta la vista!"
-  bb6: "%nickname%{separator}|{pretty_chat}Ciao!"
-  bb7: "%nickname%{separator}|{pretty_chat}is out of here, bye!"
-  bb8: "%nickname%{separator}|{pretty_chat}bye all!!"
+  gg1: '%prefix%Good Game'
+  gg2: '%prefix%Great Game'
 
-  thx1: "%nickname%{separator}|{pretty_chat}Thanks"
-  thx2: "%nickname%{separator}|{pretty_chat}Thank you"
-  thx3: "%nickname%{separator}|{pretty_chat}Many thanks"
+  bb1: "%prefix%Bye"
+  bb2: "%prefix%Laters"
+  bb3: "%prefix%See you later!"
+  bb4: "%prefix%Hasta la vista!"
+  bb5: "%prefix%Ciao!"
+  bb6: "%prefix%Bye all!"
+
+  thx1: "%prefix%Thanks"
+  thx2: "%prefix%Thank you"
+  thx3: "%prefix%Many thanks"

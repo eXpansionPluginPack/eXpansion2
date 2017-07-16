@@ -36,10 +36,10 @@ class ChatNotification implements RecordsDataListener
      * ChatNotification constructor.
      *
      * @param ChatNotificationHelper $chatNotification
-     * @param PlayerStorage          $playerStorage
-     * @param Time                   $timeFormater
-     * @param string                 $translationPrefix
-     * @param int                    $positionForPublicMessage
+     * @param PlayerStorage $playerStorage
+     * @param Time $timeFormater
+     * @param string $translationPrefix
+     * @param int $positionForPublicMessage
      */
     public function __construct(
         ChatNotificationHelper $chatNotification,
@@ -66,8 +66,8 @@ class ChatNotification implements RecordsDataListener
             $firstRecord = $records[0];
 
             $this->sendMessage('loaded.top1', null, [
-               '%nickname%' => $firstRecord->getPlayerLogin(), // TODO get player nickname from database.
-                '%score%' => $this->timeFormater->milisecondsToTrackmania($firstRecord->getScore(), true)
+                '%nickname%' => $firstRecord->getPlayerLogin(), // TODO get player nickname from database.
+                '%score%' => $this->timeFormater->milisecondsToTrackmania($firstRecord->getScore(), true),
             ]);
 
 
@@ -77,7 +77,7 @@ class ChatNotification implements RecordsDataListener
                     $this->sendMessage('loaded.any', $records[$i]->getPlayerLogin(), [
                         '%nickname%' => $onlinePlayers[$records[$i]->getPlayerLogin()]->getNickName(),
                         '%score%' => $this->timeFormater->milisecondsToTrackmania($records[$i]->getScore(), true),
-                        '%position%' => $i+1,
+                        '%position%' => $i + 1,
                     ]);
                 }
             }
@@ -87,9 +87,9 @@ class ChatNotification implements RecordsDataListener
     /**
      * Called when a player finishes map for the very first time (basically first record).
      *
-     * @param Record   $record
-     * @param Record[] $records
-     * @param          $position
+     * @param Record     $record
+     * @param Record[]   $records
+     * @param int        $position
      */
     public function onLocalRecordsFirstRecord(Record $record, $records, $position)
     {
@@ -99,11 +99,11 @@ class ChatNotification implements RecordsDataListener
     /**
      * Called when a player finishes map and does same time as before.
      *
-     * @param Record   $record
-     * @param Record   $oldRecord
-     * @param Record[] $records
+     * @param Record    $record
+     * @param Record    $oldRecord
+     * @param Record[]  $records
      *
-     * @return mixed
+     * @return void
      */
     public function onLocalRecordsSameScore(Record $record, Record $oldRecord, $records)
     {
@@ -113,16 +113,19 @@ class ChatNotification implements RecordsDataListener
     /**
      * Called when a player finishes map with better time and has better position.
      *
-     * @param Record   $record
-     * @param Record   $oldRecord
-     * @param Record[] $records
-     * @param int      $position
-     * @param int      $oldPosition
+     * @param Record    $record
+     * @param Record    $oldRecord
+     * @param Record[]  $records
+     * @param int       $position
+     * @param int       $oldPosition
+     *
+     * @return void
      */
     public function onLocalRecordsBetterPosition(Record $record, Record $oldRecord, $records, $position, $oldPosition)
     {
         if ($position == 1 && $oldPosition == null) {
-            return $this->messageFirstPlaceNew($record);
+            $this->messageFirstPlaceNew($record);
+            return;
         }
 
         // Check to who to send.
@@ -140,10 +143,12 @@ class ChatNotification implements RecordsDataListener
         // Check for top status
         if ($position == 1) {
             $msg .= '.top1';
-        } else if ($position <= 5) {
-            $msg .= '.top5';
         } else {
-            $msg .= '.any';
+            if ($position <= 5) {
+                $msg .= '.top5';
+            } else {
+                $msg .= '.any';
+            }
         }
 
         $securedBy = $this->getSecuredBy($record, $oldRecord);
@@ -155,7 +160,7 @@ class ChatNotification implements RecordsDataListener
                 '%score%' => $this->timeFormater->milisecondsToTrackmania($record->getScore(), true),
                 '%position%' => $position,
                 '%old_position%' => $oldPosition,
-                '%by%' => $securedBy
+                '%by%' => $securedBy,
             ]
         );
     }
@@ -163,12 +168,12 @@ class ChatNotification implements RecordsDataListener
     /**
      * Called when a player finishes map with better time but keeps same position.
      *
-     * @param Record   $record
-     * @param Record   $oldRecord
+     * @param Record $record
+     * @param Record $oldRecord
      * @param Record[] $records
      * @param          $position
      *
-     * @return mixed
+     * @return void
      */
     public function onLocalRecordsSamePosition(Record $record, Record $oldRecord, $records, $position)
     {
@@ -182,10 +187,12 @@ class ChatNotification implements RecordsDataListener
         $msg = 'secures';
         if ($position == 1) {
             $msg .= '.top1';
-        } else if ($position <= 5) {
-            $msg .= '.top5';
         } else {
-            $msg .= '.any';
+            if ($position <= 5) {
+                $msg .= '.top5';
+            } else {
+                $msg .= '.any';
+            }
         }
 
         $securedBy = $this->getSecuredBy($record, $oldRecord);
@@ -196,14 +203,14 @@ class ChatNotification implements RecordsDataListener
                 '%nickname%' => $this->playerStorage->getPlayerInfo($record->getPlayerLogin())->getNickName(),
                 '%score%' => $this->timeFormater->milisecondsToTrackmania($record->getScore(), true),
                 '%position%' => $position,
-                '%by%' => $securedBy
+                '%by%' => $securedBy,
             ]
         );
     }
 
     protected function getSecuredBy(Record $record, Record $oldRecord)
     {
-        $securedBy =$this->timeFormater->milisecondsToTrackmania($oldRecord->getScore() - $record->getScore(), true);
+        $securedBy = $this->timeFormater->milisecondsToTrackmania($oldRecord->getScore() - $record->getScore(), true);
 
         if (substr($securedBy, 0, 4) === "00:0") {
             $securedBy = substr($securedBy, 4);
@@ -213,7 +220,7 @@ class ChatNotification implements RecordsDataListener
             }
         }
 
-        return '-' . $securedBy;
+        return '-'.$securedBy;
     }
 
     protected function messageFirstPlaceNew(Record $record)
@@ -224,7 +231,7 @@ class ChatNotification implements RecordsDataListener
             [
                 '%nickname%' => $this->playerStorage->getPlayerInfo($record->getPlayerLogin())->getNickName(),
                 '%score%' => $this->timeFormater->milisecondsToTrackmania($record->getScore(), true),
-                '%position%' => 1
+                '%position%' => 1,
             ]
         );
     }
@@ -232,7 +239,7 @@ class ChatNotification implements RecordsDataListener
     protected function sendMessage($message, $recipe, $params)
     {
         $this->chatNotification->sendMessage(
-            $this->translationPrefix . '.' . $message,
+            $this->translationPrefix.'.'.$message,
             $recipe,
             $params
         );

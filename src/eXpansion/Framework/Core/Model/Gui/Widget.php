@@ -43,8 +43,7 @@ class Widget extends Manialink implements Container
         $sizeY,
         $posX = null,
         $posY = null
-    )
-    {
+    ) {
         parent::__construct($group, $name, $sizeX, $sizeY, $posX, $posY);
 
         $this->translationHelper = $translationHelper;
@@ -107,13 +106,15 @@ class Widget extends Manialink implements Container
     {
         foreach ($frame->getChildren() as $child) {
             if ($child instanceof Label && $child->getTranslate()) {
-                $textId = 'exp_' . md5($child->getTextId());
+                $textId = 'exp_'.md5($child->getTextId());
                 $translations[$textId] = $this->translationHelper->getTranslations($child->getTextId(), []);
 
                 // Replaces with text id that can be used in the xml.
                 $child->setTextId($textId);
-            } else if ($child instanceof Frame) {
-                $this->getDictionaryInformation($child, $translations);
+            } else {
+                if ($child instanceof Frame) {
+                    $this->getDictionaryInformation($child, $translations);
+                }
             }
         }
     }

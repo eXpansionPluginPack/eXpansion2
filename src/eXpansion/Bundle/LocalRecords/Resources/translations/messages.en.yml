@@ -3,7 +3,7 @@ expansion_local_records:
     # Messages to be used in normal TA, and when a race is finished (so in laps X number of laps is completed)
     race:
       new:
-        top1: '|server| {variable}%nickname% {record_top}drives {record_rank}first {record_top}Local Record! {variable)|time| %score%'
+        top1: '|server| {variable}%nickname% {record_top}drives {record_rank}first {record_top}Local Record! {variable}|time| %score%'
         top5: '|server| {variable}%nickname% {record_top}drives {record_rank}%position% {record_top}Local Record! |time| %score%'
         any:  '|server| {variable}%nickname% {record}drives {record_rank}%position% {record}Local Record! {variable}|time| %score%'
       better:
@@ -21,7 +21,7 @@ expansion_local_records:
     # Messages used in laps mode & other modes that supports proper multilaps support (not TA)
     lap:
       new:
-        top1: '|server| {variable}%nickname% {record_top}drives {record_rank}first {record_top}LAP Local Record! {variable)|time| %score%'
+        top1: '|server| {variable}%nickname% {record_top}drives {record_rank}first {record_top}LAP Local Record! {variable}|time| %score%'
         top5: '|server| {variable}%nickname% {record_top}drives {record_rank}%position% {record_top}LAP Local Record! |time| %score%'
         any:  '|server| {variable}%nickname% {record}drives {record_rank}%position% {record_top}LAP Local Record! {variable}|time| %score%'
       better:
@@ -41,7 +41,7 @@ expansion_local_records:
       window:
         title: 'Local Records'
         column:
-          position: 'Position'
+          position: '#'
+          score: 'Time'
           nickname: 'NickName'
           login: 'Login'
-          score: 'Time'
