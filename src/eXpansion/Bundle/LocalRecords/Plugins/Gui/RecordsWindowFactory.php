@@ -97,7 +97,7 @@ class RecordsWindowFactory extends WindowFactory
                 'position' => $i + 1,
                 'nickname' => $record->getPlayerLogin(),
                 'login' => $record->getPlayerLogin(),
-                'score' => $this->timeFormatter->milisecondsToTrackmania($record->getScore(), true),
+                'score' => $this->timeFormatter->timeToText($record->getScore(), true),
             ];
         }
 

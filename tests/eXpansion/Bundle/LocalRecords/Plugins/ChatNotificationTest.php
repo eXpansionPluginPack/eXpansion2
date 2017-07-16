@@ -301,7 +301,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
     public function testBy()
     {
         $cnotificaiton = $this->getChatNotification();
-        $this->timeFormatter->method('milisecondsToTrackmania')->willReturn('00:10:00');
+        $this->timeFormatter->method('timeToText')->willReturn('00:10.00');
 
         $this->chatNotificationHelper
             ->expects($this->once())
@@ -309,7 +309,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'prefix.secures.any',
                 'toto',
-                ['%nickname%' => null, '%score%' => '00:10:00', '%position%' => 30, '%by%' => '-10:00']
+                ['%nickname%' => null, '%score%' => '00:10.00', '%position%' => 30, '%by%' => '-10.00']
             );
 
         $cnotificaiton->onLocalRecordsSamePosition(
@@ -322,7 +322,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
     public function testByShort()
     {
         $cnotificaiton = $this->getChatNotification();
-        $this->timeFormatter->method('milisecondsToTrackmania')->willReturn('00:01:00');
+        $this->timeFormatter->method('timeToText')->willReturn('00:01.00');
 
         $this->chatNotificationHelper
             ->expects($this->once())
@@ -330,7 +330,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'prefix.secures.any',
                 'toto',
-                ['%nickname%' => null, '%score%' => '00:01:00', '%position%' => 30, '%by%' => '-1:00']
+                ['%nickname%' => null, '%score%' => '00:01.00', '%position%' => 30, '%by%' => '-1.00']
             );
 
         $cnotificaiton->onLocalRecordsSamePosition(

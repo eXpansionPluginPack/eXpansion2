@@ -67,7 +67,7 @@ class ChatNotification implements RecordsDataListener
 
             $this->sendMessage('loaded.top1', null, [
                 '%nickname%' => $firstRecord->getPlayerLogin(), // TODO get player nickname from database.
-                '%score%' => $this->timeFormater->milisecondsToTrackmania($firstRecord->getScore(), true),
+                '%score%' => $this->timeFormater->timeToText($firstRecord->getScore(), true),
             ]);
 
 
@@ -76,7 +76,7 @@ class ChatNotification implements RecordsDataListener
                 if (isset($onlinePlayers[$records[$i]->getPlayerLogin()])) {
                     $this->sendMessage('loaded.any', $records[$i]->getPlayerLogin(), [
                         '%nickname%' => $onlinePlayers[$records[$i]->getPlayerLogin()]->getNickName(),
-                        '%score%' => $this->timeFormater->milisecondsToTrackmania($records[$i]->getScore(), true),
+                        '%score%' => $this->timeFormater->timeToText($records[$i]->getScore(), true),
                         '%position%' => $i + 1,
                     ]);
                 }
@@ -157,7 +157,7 @@ class ChatNotification implements RecordsDataListener
             $to,
             [
                 '%nickname%' => $this->playerStorage->getPlayerInfo($record->getPlayerLogin())->getNickName(),
-                '%score%' => $this->timeFormater->milisecondsToTrackmania($record->getScore(), true),
+                '%score%' => $this->timeFormater->timeToText($record->getScore(), true),
                 '%position%' => $position,
                 '%old_position%' => $oldPosition,
                 '%by%' => $securedBy,
@@ -201,7 +201,7 @@ class ChatNotification implements RecordsDataListener
             $to,
             [
                 '%nickname%' => $this->playerStorage->getPlayerInfo($record->getPlayerLogin())->getNickName(),
-                '%score%' => $this->timeFormater->milisecondsToTrackmania($record->getScore(), true),
+                '%score%' => $this->timeFormater->timeToText($record->getScore(), true),
                 '%position%' => $position,
                 '%by%' => $securedBy,
             ]
@@ -210,7 +210,7 @@ class ChatNotification implements RecordsDataListener
 
     protected function getSecuredBy(Record $record, Record $oldRecord)
     {
-        $securedBy = $this->timeFormater->milisecondsToTrackmania($oldRecord->getScore() - $record->getScore(), true);
+        $securedBy = $this->timeFormater->timeToText($oldRecord->getScore() - $record->getScore(), true);
 
         if (substr($securedBy, 0, 4) === "00:0") {
             $securedBy = substr($securedBy, 4);
@@ -230,7 +230,7 @@ class ChatNotification implements RecordsDataListener
             null,
             [
                 '%nickname%' => $this->playerStorage->getPlayerInfo($record->getPlayerLogin())->getNickName(),
-                '%score%' => $this->timeFormater->milisecondsToTrackmania($record->getScore(), true),
+                '%score%' => $this->timeFormater->timeToText($record->getScore(), true),
                 '%position%' => 1,
             ]
         );

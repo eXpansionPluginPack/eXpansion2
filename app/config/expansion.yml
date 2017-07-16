@@ -14,7 +14,9 @@ e_xpansion_core:
             record: '$0f3'
             record_top: '$0d3'
             record_rank: '$afa'
+            test: '$f00'
         core_chat_glyph_icons:
+            test: '✔'
             success: '$0d0✔'
             fail: '$b32✘'
             server: '$afd$fff'

@@ -5,31 +5,35 @@ namespace eXpansion\Framework\Core\Helpers;
 class Time
 {
     /**
-     * Transform milliseconds date into trackmania format.
+     * Transform tm timestamp to mm:ss.ccc string
      *
-     * @param $time
+     * @param int $time
      * @param bool $milliseconds
      *
      * @return string
      */
-    public function milisecondsToTrackmania($time, $milliseconds = false)
+    public function timeToText($time, $milliseconds = false)
     {
         $time = intval($time);
         $ms = "";
         if ($milliseconds) {
-            $ms = ":".str_pad(($time % 1000), 3, '0', STR_PAD_LEFT);
+            $ms = ".".str_pad((abs($time) % 1000), 3, '0', STR_PAD_LEFT);
         }
-        return gmdate("i:s", $time / 1000).$ms;
+        if ($time > 0) {
+            return gmdate("i:s", $time / 1000).$ms;
+        } else {
+            return "-".gmdate("i:s", abs($time / 1000)).$ms;
+        }
     }
 
     /**
-     * Transform trackmania formated time in miliseconds.
+     * Transform mm:ss to tm timestamp
      *
-     * @param $string
+     * @param string $string formatted like mm:ss
      *
      * @return int
      */
-    public function trackmaniaToMiliseconds($string)
+    public function textToTime($string)
     {
         $timeLimit = explode(":", trim($string));
         if (count($timeLimit) == 1) {

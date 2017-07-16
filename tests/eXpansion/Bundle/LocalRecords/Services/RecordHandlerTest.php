@@ -20,6 +20,9 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
+    /**
+     *
+     */
     public function testLoad()
     {
         $records = [
