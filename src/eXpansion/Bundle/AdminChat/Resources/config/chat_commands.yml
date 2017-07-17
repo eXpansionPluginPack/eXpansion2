@@ -43,11 +43,12 @@ services:
             index_0: "kick"
             index_1: "kick"
             index_2: []
-            index_8: "Login of player to kick."
-            index_9: "The reason for kicking."
-            index_10: "expansion_admin_chat.kick.description"
-            index_11: "expansion_admin_chat.kick.msg"
-            index_12: "kick"
+        calls:
+            - [setParameterLoginDescription, ["Login of player to kick."]]
+            - [setParameterReasonDescription, ["The reason for kicking."]]
+            - [setDescription, ["expansion_admin_chat.kick.description"]]
+            - [setChatMessage, ["expansion_admin_chat.kick.msg"]]
+            - [setFunctionName, ["kick"]]
 
     expansion.admin_chat.chat_command.ban:
         class: eXpansion\Bundle\AdminChat\ChatCommand\ReasonUserCommand
@@ -56,11 +57,12 @@ services:
             index_0: "ban"
             index_1: "ban"
             index_2: []
-            index_8: "Login of player to ban."
-            index_9: "The reason for banning."
-            index_10: "expansion_admin_chat.ban.description"
-            index_11: "expansion_admin_chat.ban.msg"
-            index_12: "ban"
+        calls:
+            - [setParameterLoginDescription, ["Login of player to ban."]]
+            - [setParameterReasonDescription, ["The reason for banning."]]
+            - [setDescription, ["expansion_admin_chat.ban.description"]]
+            - [setChatMessage, ["expansion_admin_chat.ban.msg"]]
+            - [setFunctionName, ["ban"]]
 
 
     expansion.admin_chat.chat_command.unban:
@@ -79,11 +81,12 @@ services:
             index_0: "black"
             index_1: "black"
             index_2: []
-            index_8: "Login of player to black."
-            index_9: "The reason for black listing."
-            index_10: "expansion_admin_chat.black.description"
-            index_11: "expansion_admin_chat.black.msg"
-            index_12: "banAndBlackList"
+        calls:
+            - [setParameterLoginDescription, ["Login of player to black."]]
+            - [setParameterReasonDescription, ["The reason for black listing."]]
+            - [setDescription, ["expansion_admin_chat.black.description"]]
+            - [setChatMessage, ["expansion_admin_chat.black.msg"]]
+            - [setFunctionName, ["banAndBlackList"]]
 
     expansion.admin_chat.chat_command.unblack:
         class: eXpansion\Bundle\AdminChat\ChatCommand\Unblack
