@@ -19,49 +19,40 @@ use Symfony\Component\Console\Input\InputInterface;
  */
 class ReasonUserCommand extends AbstractConnectionCommand
 {
+    /**
+     * Description of the login parameter
+     *
+     * @var string
+     */
     protected $parameterLoginDescription;
 
+    /**
+     * Description of the reason parameter.
+     *
+     * @var string
+     */
     protected $parameterReasonDescription;
 
+    /**
+     * Description of the command.
+     *
+     * @var string
+     */
     protected $description;
 
+    /**
+     * Message to display in chat.
+     *
+     * @var string
+     */
     protected $chatMessage;
 
+    /**
+     * Name of the dedicated function to call.
+     *
+     * @var string
+     */
     protected $functionName;
-
-    public function __construct(
-        $command,
-        $permission,
-        array $aliases = [],
-        AdminGroups $adminGroupsHelper,
-        Connection $connection,
-        ChatNotification $chatNotification,
-        PlayerStorage $playerStorage,
-        LoggerInterface $logger,
-        $parameterLoginDescription,
-        $parameterReasonDescription,
-        $description,
-        $chatMessage,
-        $functionName
-    ) {
-        parent::__construct(
-            $command,
-            $permission,
-            $aliases,
-            $adminGroupsHelper,
-            $connection,
-            $chatNotification,
-            $playerStorage,
-            $logger
-        );
-
-        $this->parameterLoginDescription = $parameterLoginDescription;
-        $this->parameterReasonDescription = $parameterReasonDescription;
-        $this->description = $description;
-        $this->chatMessage = $chatMessage;
-        $this->functionName = $functionName;
-    }
-
 
     /**
      * @inheritdoc
@@ -104,5 +95,45 @@ class ReasonUserCommand extends AbstractConnectionCommand
         );
 
         $this->connection->{$this->functionName}($playerLogin, $reason);
+    }
+
+    /**
+     * @param string $parameterLoginDescription
+     */
+    public function setParameterLoginDescription($parameterLoginDescription)
+    {
+        $this->parameterLoginDescription = $parameterLoginDescription;
+    }
+
+    /**
+     * @param string $parameterReasonDescription
+     */
+    public function setParameterReasonDescription($parameterReasonDescription)
+    {
+        $this->parameterReasonDescription = $parameterReasonDescription;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @param string $chatMessage
+     */
+    public function setChatMessage($chatMessage)
+    {
+        $this->chatMessage = $chatMessage;
+    }
+
+    /**
+     * @param string $functionName
+     */
+    public function setFunctionName($functionName)
+    {
+        $this->functionName = $functionName;
     }
 }

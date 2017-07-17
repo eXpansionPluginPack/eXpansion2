@@ -61,13 +61,14 @@ class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
             $this->connectionMock,
             $this->chatNotificationMock,
             $this->playerStorageMock,
-            $this->getMockBuilder(LoggerInterface::class)->disableOriginalConstructor()->getMock(),
-'login description',
-'reason description',
-'description',
-'message',
-'ban'
+            $this->getMockBuilder(LoggerInterface::class)->disableOriginalConstructor()->getMock()
         );
+
+        $this->reasonCommand->setParameterLoginDescription('login description');
+        $this->reasonCommand->setParameterReasonDescription('reason description');
+        $this->reasonCommand->setDescription('description');
+        $this->reasonCommand->setChatMessage('message');
+        $this->reasonCommand->setFunctionName('ban');
     }
 
     public function testDescription()
