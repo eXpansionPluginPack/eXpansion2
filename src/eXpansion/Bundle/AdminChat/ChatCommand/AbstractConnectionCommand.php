@@ -8,6 +8,7 @@ use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Restart
@@ -37,7 +38,7 @@ abstract class AbstractConnectionCommand extends AbstractAdminChatCommand
         Connection $connection,
         ChatNotification $chatNotification,
         PlayerStorage $playerStorage,
-        Logger $logger
+        LoggerInterface $logger
     )
     {
         parent::__construct($command, $permission, $aliases, $adminGroupsHelper);
