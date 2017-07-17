@@ -45,10 +45,10 @@ class ChatDataProviderTest extends TestCore
         $dataProvider->registerPlugin('testB', $pluginB);
         $dataProvider->deletePlugin('testB');
 
-        $dataProvider->onPlayerChat('test', 'test', 'Chat text', false);
+        $dataProvider->onPlayerChat(1, 'test', 'Chat text', false);
 
         $dataProvider->deletePlugin('testA');
-        $dataProvider->onPlayerChat('test', 'test', 'Chat text', false);
+        $dataProvider->onPlayerChat(1, 'test', 'Chat text', false);
     }
 
 }

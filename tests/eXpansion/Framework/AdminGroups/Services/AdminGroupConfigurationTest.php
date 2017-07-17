@@ -32,10 +32,17 @@ class AdminGroupConfigurationTest extends TestAdminGroups
             $config['master_admin']['logins'],
             $configService->getGroupLogins('master_admin')
         );
+
+        $this->assertEquals(
+            $config['admin']['logins'],
+            $configService->getGroupLogins('admin')
+        );
+
         $this->assertEquals(
             $config['operator']['logins'],
             $configService->getGroupLogins('operator')
         );
+
         $this->assertNull(
             $configService->getGroupLogins('operator_toto')
         );
@@ -47,11 +54,21 @@ class AdminGroupConfigurationTest extends TestAdminGroups
         $config = $this->getAdminGroupConfiguration();
 
         $this->assertEquals(
+            $config['admin']['permissions'],
+            $configService->getGroupPermissions('admin')
+        );
+
+        $this->assertEquals(
             $config['operator']['permissions'],
             $configService->getGroupPermissions('operator')
         );
+
         $this->assertEmpty(
-            $configService->getGroupPermissions('operator_toto')
+            $configService->getGroupPermissions('guest')
+        );
+
+        $this->assertEmpty(
+            $configService->getGroupPermissions('invalidGroupName')
         );
     }
 
@@ -63,10 +80,22 @@ class AdminGroupConfigurationTest extends TestAdminGroups
             'master_admin',
             $configService->getLoginGroupName('toto1')
         );
+
+        $this->assertEquals(
+            'admin',
+            $configService->getLoginGroupName('toto10')
+        );
+
+        $this->assertEquals(
+            'admin',
+            $configService->getLoginGroupName('toto11')
+        );
+
         $this->assertEquals(
             'operator',
             $configService->getLoginGroupName('toto20')
         );
+
         $this->assertNull(
             $configService->getLoginGroupName('toto_null')
         );
@@ -76,9 +105,25 @@ class AdminGroupConfigurationTest extends TestAdminGroups
     {
         $configService = $this->getAdminGroupConfigurationService();
 
-        $this->assertTrue($configService->hasPermission('toto1', 'toto_permission'));
-        $this->assertFalse($configService->hasPermission('toto10', 'toto_permission'));
+        $this->assertTrue($configService->hasPermission('toto1', 'toto_invalid'));
+        $this->assertFalse($configService->hasPermission('toto10', 'toto_invalid'));
+        $this->assertFalse($configService->hasPermission('toto20', 'toto_invalid'));
+        $this->assertFalse($configService->hasPermission('toto_guest', 'toto_invalid'));
+
+        $this->assertTrue($configService->hasPermission('toto1', 'p1'));
+        $this->assertFalse($configService->hasPermission('toto10', 'p1'));
+        $this->assertFalse($configService->hasPermission('toto20', 'p1'));
+        $this->assertFalse($configService->hasPermission('toto_guest', 'p1'));
+
+        $this->assertTrue($configService->hasPermission('toto1', 'p10'));
         $this->assertTrue($configService->hasPermission('toto10', 'p10'));
-        $this->assertFalse($configService->hasPermission('toto10', 'p21'));
+        $this->assertFalse($configService->hasPermission('toto20', 'p10'));
+        $this->assertFalse($configService->hasPermission('toto_guest', 'p10'));
+
+
+        $this->assertTrue($configService->hasPermission('toto1', 'p20'));
+        $this->assertFalse($configService->hasPermission('toto10', 'p20'));
+        $this->assertTrue($configService->hasPermission('toto20', 'p20'));
+        $this->assertFalse($configService->hasPermission('toto_guest', 'p20'));
     }
 }

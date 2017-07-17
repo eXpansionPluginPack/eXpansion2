@@ -20,9 +20,10 @@ abstract class AbstractAdminChatCommand extends AbstractChatCommand
 
     /**
      * AbstractAdminChatCommand constructor.
+     *
      * @param $command
      * @param string $permission
-     * @param array $aliases
+     * @param string[] $aliases
      * @param AdminGroups $adminGroupsHelper
      */
     public function __construct(
@@ -34,10 +35,10 @@ abstract class AbstractAdminChatCommand extends AbstractChatCommand
     {
         $newAliases = [];
         $newAliases[] = "adm $command";
-        $newAliases[] = "/ $command";
         foreach ($aliases as $alias) {
             $newAliases[] = "admin $alias";
             $newAliases[] = "adm $alias";
+            $newAliases[] = "/ $alias";
         }
 
         $command = "admin $command";
@@ -48,6 +49,13 @@ abstract class AbstractAdminChatCommand extends AbstractChatCommand
         $this->permission = $permission;
     }
 
+    /**
+     * check permissions for this chat command
+     *
+     * @param $login
+     * @param $parameter
+     * @return string
+     */
     public function validate($login, $parameter)
     {
         if (!$this->adminGroupsHelper->hasPermission($login, $this->permission)) {

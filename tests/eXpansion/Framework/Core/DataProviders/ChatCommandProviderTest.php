@@ -29,6 +29,7 @@ class ChatCommandProviderTest extends TestCore
     public function testRegister()
     {
         $commands = new TestChatCommand('test', [], true);
+        /** @var ChatCommandPlugin|object $plugin */
         $plugin = new ChatCommandPlugin([$commands]);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $chatCommandsMock */
@@ -50,7 +51,7 @@ class ChatCommandProviderTest extends TestCore
 
     public function testExecute()
     {
-        $cmdText = 'value1 value2';
+        $cmdText = 'value1 "value2 space"';
 
         $commands = $this->createMock(TestChatCommand::class);
         $commands->expects($this->once())
@@ -66,7 +67,8 @@ class ChatCommandProviderTest extends TestCore
             ->method('getChatCommand')
             ->willReturn([$commands, explode(' ', $cmdText)]);
 
-        $this->getDataProvider()->onPlayerChat('test', 'test', "/test $cmdText", true);
+        $this->getDataProvider()->onPlayerChat(2, 'test2', "this is normal chat line", false);
+        $this->getDataProvider()->onPlayerChat(1, 'test', "/test $cmdText", true);
     }
 
     public function testChat()
@@ -79,13 +81,13 @@ class ChatCommandProviderTest extends TestCore
             ->expects($this->never())
             ->method('getChatCommand');
 
-        $this->getDataProvider()->onPlayerChat('test', 'test', "test $cmdText", false);
+        $this->getDataProvider()->onPlayerChat(2, 'test2', "this is normal chat line", false);
+        $this->getDataProvider()->onPlayerChat(1, 'test', "test $cmdText", false);
     }
 
     public function testInvalidCommand()
     {
         $cmdText = 'value1 value2';
-
 
         $this->getChatNotificationMock()
             ->expects($this->once())
@@ -99,14 +101,13 @@ class ChatCommandProviderTest extends TestCore
             ->method('getChatCommand')
             ->willReturn(array(null, null));
 
-        $this->getDataProvider()->onPlayerChat('test', 'test', "/test $cmdText", true);
+        $this->getDataProvider()->onPlayerChat(1, 'test', "/invalid $cmdText", true);
     }
-
 
 
     public function testVersionCommand()
     {
-        $cmdText = 'value1 value2';
+        $cmdText = 'value1';
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $chatCommandsMock */
         $chatCommandsMock = $this->container->get('expansion.framework.core.services.chat_commands');
@@ -119,7 +120,7 @@ class ChatCommandProviderTest extends TestCore
 
 
     /**
-     * @return  ChatCommandDataProvider
+     * @return  ChatCommandDataProvider|object
      */
     protected function getDataProvider()
     {
@@ -127,7 +128,7 @@ class ChatCommandProviderTest extends TestCore
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject|object
      */
     protected function getChatNotificationMock()
     {

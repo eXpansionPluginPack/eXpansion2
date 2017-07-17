@@ -7,7 +7,8 @@
  */
 
 namespace eXpansion\Framework\Core\Model\Gui;
-use Symfony\Component\Config\FileLocator;
+use /** @noinspection PhpUndefinedClassInspection */
+    Symfony\Component\Config\FileLocator;
 
 
 /**
@@ -29,7 +30,7 @@ class ManiaScriptFactory
      *
      * @param string $relativePath
      * @param FileLocator $fileLocator
-     * @paramFileLocator $className
+     * @param string $className
      */
     public function __construct($relativePath, FileLocator $fileLocator, $className)
     {
@@ -53,4 +54,9 @@ class ManiaScriptFactory
 
         return new $className($filePath, $params);
     }
+
+    public function getFileLocation() {
+        return $this->fileLocator->locate('@' . $this->relativePath);
+    }
+
 }

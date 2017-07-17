@@ -43,79 +43,73 @@ class MenuFactory extends WidgetFactory
     }
 
     /**
-     * @param Widget $manialink
+     * @param ManialinkInterface|Widget $manialink
      */
     protected function createContent(ManialinkInterface $manialink)
     {
-        /* Button frame first */
-
-        $label = Label::create("open");
+        $label = new Label("open");
         $label->setText("Open")
             ->setAreaFocusColor("5ff")
             ->setAreaColor("3af")
             ->setPosition(100, 60)
             ->setScriptEvents(true);
-       // $manialink->addChild($label);
+        // $manialink->addChild($label); // disables open menu button from main view
 
-        $btnFrame = Frame::create("buttons");
+        /* Button frame first */
+        $btnFrame = new Frame("buttons");
         $btnFrame->setZ(101)->setPosition(0, 30);
 
         $y = 0;
-        $baseLabel = Label::create();
-        $baseLabel->setAreaColor("0000")
+        $baseLabel = new Label();
+        $baseLabel->setPosition(0, $y)
+            ->setAreaColor("0000")
             ->setAreaFocusColor("0000")
             ->setSize(48, 7)
-            ->setTextColor("FFF")
-            ->setAlign("center", "center2")
+            ->setTextColor("FFF");
+        $baseLabel->setAlign("center", "center2")
             ->addClass("button")
             ->setScriptEvents(true);
 
         $label = clone $baseLabel;
         $label->setPosition(0, $y -= 8)
             ->setText("Help")
-            // ->setTextPrefix(" ")
-            ->setDataAttributes(["action" => "!help"]);
+            ->setDataAttributes(["do" => "!help"]);
         $btnFrame->addChild($label);
 
         $label = clone $baseLabel;
-        $label->setPosition(0, $y -= 10)
-            ->setText("Show Profile")
-            // ->setTextPrefix(" ")
-            ->setDataAttributes(["action" => "!profile"]);
+        $openSettingsId = $this->actionFactory->createManialinkAction($manialink, [$this, "showSettings"], []);
+        $label->setPosition(0, $y -= 8)
+            ->setText("Server Settings")
+            ->setDataAttributes(["action" => $openSettingsId]);
         $btnFrame->addChild($label);
 
         $label = clone $baseLabel;
         $label->setPosition(0, $y -= 8)
             ->setText("Spectate")
-            // ->setTextPrefix("")
-            ->setDataAttributes(["action" => "!spec"]);
+            ->setDataAttributes(["action" => ""]);
         $btnFrame->addChild($label);
 
         $label = clone $baseLabel;
         $label->setPosition(0, $y -= 8)
             ->setText("Exit server")
-            // ->setTextPrefix(" ")
-            ->setDataAttributes(["action" => "!quit"]);
+            ->setDataAttributes(["do" => "!exit"]);
         $btnFrame->addChild($label);
 
 
         $label = clone $baseLabel;
-        $label->setPosition(0, $y -= 12)
+        $label->setPosition(0, $y - 12)
             ->setText("Back to game")
-          //  ->setTextPrefix("🏁 ")
-            ->setDataAttributes(["action" => "!close"]);
+            ->setDataAttributes(["action" => ""]);
         $btnFrame->addChild($label);
-
-
 
         $bgFrame = Frame::create("background");
         $bgFrame->setZ(100);
 
-        $baseLabel = Label::create();
+        $baseLabel = new Label();
         $baseLabel->setAreaColor("0000")
             ->setAreaFocusColor("0000")
-            ->setTextColor("FFF")
-            ->setAlign("center", "center2")
+            ->setTextColor("FFF");
+        $baseLabel->setAlign("center", "center2")
             ->addClass("bg");
 
 
@@ -134,7 +128,7 @@ class MenuFactory extends WidgetFactory
         $bgFrame->addChild($label);
 
 
-        $quad = Quad::create();
+        $quad = new Quad();
         $quad->addClass("bg")
             ->setPosition(0, 28)
             ->setSize(100, 0.5)
@@ -142,27 +136,32 @@ class MenuFactory extends WidgetFactory
             ->setBackgroundColor("fff");
         $bgFrame->addChild($quad);
 
-        $quad = Quad::create();
+
+        $quad = new Quad();
         $quad->addClass("bg")
             ->setId("mainBg")
             ->setPosition(0, 0)
-            ->setSize(322, 182)
-            ->setAlign("center", "center")
+            ->setSize(322, 182);
+        $quad->setAlign("center", "center")
             ->setStyles("Bgs1", "BgDialogBlur");
         $bgFrame->addChild($quad);
-
         $manialink->addChild($btnFrame);
-        $manialink->addChild($bgFrame);
 
-        $manialink->addChild($this->menuScriptFactory->createScript([]));
+        $manialink->addChild($bgFrame);
+        $manialink->getFmlManialink()->addChild($this->menuScriptFactory->createScript(["settingsId" => $openSettingsId]));
     }
 
     /**
-     * @param Widget $manialink
+     * @param ManialinkInterface|Widget $manialink
      */
     protected function updateContent(ManialinkInterface $manialink)
     {
         // Do stuff Here.
+    }
+
+    public function showSettings($login)
+    {
+        echo "Show settings: ".$login."\n";
     }
 
 }
