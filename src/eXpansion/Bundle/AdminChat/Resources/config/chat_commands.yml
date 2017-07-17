@@ -37,20 +37,31 @@ services:
             index_2: []
 
     expansion.admin_chat.chat_command.kick:
-        class: eXpansion\Bundle\AdminChat\ChatCommand\Kick
+        class: eXpansion\Bundle\AdminChat\ChatCommand\ReasonUserCommand
         parent: expansion.admin_chat.chat_command.base
         arguments:
             index_0: "kick"
             index_1: "kick"
             index_2: []
+            index_8: "Login of player to kick."
+            index_9: "The reason for kicking."
+            index_10: "expansion_admin_chat.kick.description"
+            index_11: "expansion_admin_chat.kick.msg"
+            index_12: "kick"
 
     expansion.admin_chat.chat_command.ban:
-        class: eXpansion\Bundle\AdminChat\ChatCommand\Ban
+        class: eXpansion\Bundle\AdminChat\ChatCommand\ReasonUserCommand
         parent: expansion.admin_chat.chat_command.base
         arguments:
             index_0: "ban"
             index_1: "ban"
             index_2: []
+            index_8: "Login of player to ban."
+            index_9: "The reason for banning."
+            index_10: "expansion_admin_chat.ban.description"
+            index_11: "expansion_admin_chat.ban.msg"
+            index_12: "ban"
+
 
     expansion.admin_chat.chat_command.unban:
         class: eXpansion\Bundle\AdminChat\ChatCommand\Unban
@@ -60,13 +71,19 @@ services:
             index_1: "unban"
             index_2: []
 
+
     expansion.admin_chat.chat_command.black:
-        class: eXpansion\Bundle\AdminChat\ChatCommand\Black
+        class: eXpansion\Bundle\AdminChat\ChatCommand\ReasonUserCommand
         parent: expansion.admin_chat.chat_command.base
         arguments:
             index_0: "black"
             index_1: "black"
             index_2: []
+            index_8: "Login of player to black."
+            index_9: "The reason for black listing."
+            index_10: "expansion_admin_chat.black.description"
+            index_11: "expansion_admin_chat.black.msg"
+            index_12: "banAndBlackList"
 
     expansion.admin_chat.chat_command.unblack:
         class: eXpansion\Bundle\AdminChat\ChatCommand\Unblack
