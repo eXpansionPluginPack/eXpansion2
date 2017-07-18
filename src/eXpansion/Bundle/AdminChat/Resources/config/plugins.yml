@@ -17,6 +17,5 @@ services:
               - '@expansion.admin_chat.chat_command.planets'
               - '@expansion.admin_chat.chat_command.ignore'
               - '@expansion.admin_chat.chat_command.unignore'
-
         tags:
             - {name: expansion.plugin, data_provider: expansion.chat_command_data}

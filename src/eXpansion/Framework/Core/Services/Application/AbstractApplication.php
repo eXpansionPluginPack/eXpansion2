@@ -13,7 +13,8 @@ abstract class AbstractApplication implements RunInterface
     /** Base eXpansion callbacks. */
     const EVENT_BEFORE_INIT = "expansion.before_init";
     const EVENT_AFTER_INIT = "expansion.after_init";
-    const EVENT_RUN = "expansion.run";
+    const EVENT_READY = "expansion.ready";
+    const EVENT_STOP = "expansion.stop";
 
     /** @var Connection */
     protected $connection;
@@ -79,7 +80,7 @@ abstract class AbstractApplication implements RunInterface
         // need to send this for scripts to start callback handling
         $this->connection->triggerModeScriptEvent("XmlRpc.EnableCallbacks", ["True"]);
 
-        $this->dispatcher->dispatch(self::EVENT_RUN, []);
+        $this->dispatcher->dispatch(self::EVENT_READY, []);
 
         $this->console->writeln("And takeoff");
 
@@ -101,6 +102,7 @@ abstract class AbstractApplication implements RunInterface
      */
     public function stopApplication()
     {
+        $this->dispatcher->dispatch(self::EVENT_STOP, []);
         $this->isRunning = false;
     }
 

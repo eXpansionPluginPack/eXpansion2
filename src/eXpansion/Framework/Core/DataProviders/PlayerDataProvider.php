@@ -79,6 +79,7 @@ class PlayerDataProvider extends AbstractDataProvider
         // dedicated server sends disconnect for server itself when it's closed...
         // so it's time to stop application gracefully.
         if ($playerData->getPlayerId() == 0) {
+            // emit event to plugins
             $this->application->stopApplication();
             return;
         }

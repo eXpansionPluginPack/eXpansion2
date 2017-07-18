@@ -38,7 +38,7 @@ class ApplicationDebugTest extends TestCore
         $dataProviderMock->expects($this->exactly(2))
             ->method('dispatch')
             ->withConsecutive(
-                [Application::EVENT_RUN, []],
+                [Application::EVENT_READY, []],
                 ['test', ['data']]
             );
 

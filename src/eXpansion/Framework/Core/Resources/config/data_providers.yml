@@ -26,6 +26,9 @@ parameters:
     expansion.framework.core.data_providers.script_data_provider.class: eXpansion\Framework\Core\DataProviders\ScriptDataProvider
     expansion.framework.core.data_providers.script_data_provider.interface: eXpansion\Framework\Core\DataProviders\Listener\ScriptDataListenerInterface
 
+    expansion.framework.core.data_providers.application_data_provider.class: eXpansion\Framework\Core\DataProviders\ApplicationDataProvider
+    expansion.framework.core.data_providers.application_data_provider.interface: eXpansion\Framework\Core\DataProviders\Listener\ApplicationDataProvider
+
 services:
     expansion.framework.core.data_providers.chat_data_provider:
         class: "%expansion.framework.core.data_providers.chat_data_provider.class%"
@@ -114,3 +117,12 @@ services:
             - {name: expansion.data_provider, provider: "expansion.script", interface: "%expansion.framework.core.data_providers.script_data_provider.interface%"}
             - {name: expansion.data_provider.compatibility, title: ALL, gamemode: script}
             - {name: expansion.data_provider.listener, event_name: ModeScriptCallbackArray, method: onModeScriptCallbackArray}
+
+    expansion.framework.core.data_providers.application_data_provider:
+        class: "%expansion.framework.core.data_providers.application_data_provider.class%"
+        tags:
+            - {name: expansion.data_provider, provider: "expansion.application_data", interface: "%expansion.framework.core.data_providers.application_data_provider.interface%"}
+            - {name: expansion.data_provider.compatibility, title: ALL}
+            - {name: expansion.data_provider.listener, event_name: expansion.after_init, method: onApplicationInit}
+            - {name: expansion.data_provider.listener, event_name: expansion.ready, method: onApplicationReady}
+            - {name: expansion.data_provider.listener, event_name: expansion.stop, method: onApplicationStop}

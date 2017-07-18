@@ -503,7 +503,7 @@ class Player
      *
      * @return $this
      */
-    function merge($data)
+    public function merge($data)
     {
         foreach ($data as $key => $value) {
             $key = lcfirst($key);
@@ -511,5 +511,14 @@ class Player
         }
 
         return $this;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLogin();
     }
 }

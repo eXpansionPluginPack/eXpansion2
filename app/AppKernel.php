@@ -11,6 +11,7 @@ class AppKernel extends Kernel
         $bundles = $this->registerCoreBundles();
 
         /* Register eXpansion Base Bundles */
+        $bundles[] = new \eXpansion\Bundle\CustomChat\CustomChatBundle();
         $bundles[] = new \eXpansion\Bundle\AdminChat\AdminChatBundle();
 
         /* Register eXpansion Plugins */
@@ -20,7 +21,7 @@ class AppKernel extends Kernel
         $bundles[] = new \eXpansion\Bundle\Menu\MenuBundle();
 
         /* Register test bundles. */
-        $bundles[] = new \eXpansion\Bundle\Acme\AcmeBundle();
+        // $bundles[] = new \eXpansion\Bundle\Acme\AcmeBundle();
 
         return $bundles;
     }

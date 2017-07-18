@@ -93,7 +93,7 @@ class AdminGroups
     /**
      * Checks if a login or player has a certain permission or not.
      *
-     * @param string|Player $login      Login of the player to check for permission.
+     * @param string|Player $login Login of the player to check for permission.
      * @param string $permission The permission to check for.
      *
      * @return bool
@@ -110,7 +110,7 @@ class AdminGroups
     /**
      * Check if a group has a certain permission or not.
      *
-     * @param string $groupName  The name of the group to check permissions for.
+     * @param string $groupName The name of the group to check permissions for.
      * @param string $permission The permission to check for.
      *
      * @return bool
@@ -120,7 +120,7 @@ class AdminGroups
     {
 
         if (strpos($groupName, 'admin:') === 0) {
-          $groupName = str_replace("admin:", '', $groupName);
+            $groupName = str_replace("admin:", '', $groupName);
         }
 
         $logins = $this->adminGroupConfiguration->getGroupLogins($groupName);
@@ -135,4 +135,16 @@ class AdminGroups
 
         return false;
     }
+
+    /**
+     * gets if the player is admin
+     *
+     * @param string $login
+     * @return bool
+     */
+    public function isAdmin($login)
+    {
+        return (strpos($this->getLoginUserGroups($login), 'admin:') === 0) ? true : false;
+    }
+
 }
