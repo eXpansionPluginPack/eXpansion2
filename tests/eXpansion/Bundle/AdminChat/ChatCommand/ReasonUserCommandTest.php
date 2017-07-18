@@ -11,6 +11,7 @@ namespace Tests\eXpansion\Bundle\AdminChat\ChatCommand;
 use eXpansion\Bundle\AdminChat\ChatCommand\ReasonUserCommand;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
+use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Monolog\Logger;
@@ -61,7 +62,8 @@ class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
             $this->connectionMock,
             $this->chatNotificationMock,
             $this->playerStorageMock,
-            $this->getMockBuilder(LoggerInterface::class)->disableOriginalConstructor()->getMock()
+            $this->getMockBuilder(LoggerInterface::class)->disableOriginalConstructor()->getMock(),
+            $this->getMockBuilder(Time::class)->disableOriginalConstructor()->getMock()
         );
 
         $this->reasonCommand->setParameterLoginDescription('login description');

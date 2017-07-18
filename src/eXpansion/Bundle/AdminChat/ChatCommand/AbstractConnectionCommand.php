@@ -40,6 +40,18 @@ abstract class AbstractConnectionCommand extends AbstractAdminChatCommand
      */
     protected $isPublic = true;
 
+    /**
+     * AbstractConnectionCommand constructor.
+     * @param $command
+     * @param string $permission
+     * @param array $aliases
+     * @param AdminGroups $adminGroupsHelper
+     * @param Connection $connection
+     * @param ChatNotification $chatNotification
+     * @param PlayerStorage $playerStorage
+     * @param LoggerInterface $logger
+     * @param Time $timeHelper
+     */
     public function __construct(
         $command,
         $permission,
