@@ -1,32 +1,44 @@
 expansion_admin_chat:
   restart:
-    msg: '{admin_info}%admin% {admin_info}restarts the map'
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}restarts the map'
     description: 'Replay current map.'
 
   next:
-    msg: '{admin_info}Admin %admin% {admin_info}skips the current map'
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}skips the current map'
     description: '{info} Skip current map & go to the next map.'
 
   set_server_name:
-    msg: '{admin_info}Admin %admin% {admin_info}changes the server name to %servername%'
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}changes the server name to {highlight}%parameter%'
     description: '{info}Change the name of the server.'
 
   kick:
-    msg: '{admin_info}Admin %admin% {admin_info}kicks %player% {admin_info}reason: {highlite}%reason%'
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}kicks {highlight}%player% {admin_info}reason: {highlight}%reason%'
     description: '{info}Kick a player from the server.'
 
   ban:
-    msg: '{admin_info}Admin %admin% {admin_info}bans %player% {admin_info}reason: {highlite}%reason%'
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}bans {highlight}%player% {admin_info}reason: {highlight}%reason%'
     description: '{info}Ban a player from the server.'
 
   unban:
-    msg: '{admin_info}Admin %admin% {admin_info}unbans %player% '
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}unbans {highlight}%parameter%'
     description: '{info}Unban a player from the server.'
 
   black:
-    msg: '{admin_info}Admin %admin% {admin_info}blacklists %player% {admin_info}reason: {highlite}%reason%'
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}blacklists {highlight}%player% {admin_info}reason: {highlight}%reason%'
     description: '{info}Blacklist a player for the server.'
 
   unblack:
-    msg: '{admin_info}Admin %admin% {admin_info}unblacklists %player%'
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}unblacklists {highlight}%parameter%'
     description: '{info}Unblacklist a player for the server.'
+
+  planets:
+    msg: '|info| {admin_info}Server has {highlight}%return% {admin_info}planets.'
+    description: '{info}Show server planets.'
+
+  ignore:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}ignores {highlight}%parameter%'
+    description: '{info}Ignore (mute) players public chat messages.'
+
+  unignore:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}unignores {highlight}%parameter%'
+    description: '{info}Unignore (allow) players public chat messages.'

@@ -4,7 +4,8 @@ namespace eXpansion\Framework\AdminGroups\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\Component\Config\FileLocator;
+use /** @noinspection PhpUndefinedClassInspection */
+    Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader;
 
 class eXpansionAdminGroupsExtension extends Extension
@@ -24,6 +25,7 @@ class eXpansionAdminGroupsExtension extends Extension
 
         $container->setParameter("expansion.framework.admin_groups.groups", $config['groups']);
 
+        /** @noinspection PhpUndefinedClassInspection */
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('helpers.yml');
         $loader->load('services.yml');

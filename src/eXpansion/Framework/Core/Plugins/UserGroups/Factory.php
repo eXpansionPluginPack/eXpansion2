@@ -27,6 +27,8 @@ class Factory implements UserGroupDataListenerInterface, PlayerDataListenerInter
 
     /**
      * IndividualUserGroups constructor.
+     *
+     * @param DispatcherInterface $dispatcher
      * @param string $class
      */
     public function __construct(DispatcherInterface $dispatcher, $class)
@@ -36,7 +38,7 @@ class Factory implements UserGroupDataListenerInterface, PlayerDataListenerInter
     }
 
     /**
-     * Get the individual group of a pleyer.
+     * Get the individual group of a player.
      *
      * @param $login
      *
@@ -78,7 +80,7 @@ class Factory implements UserGroupDataListenerInterface, PlayerDataListenerInter
     }
 
     /**
-     * Create a persistend group.
+     * Create a persistent group.
      *
      * @param $name
      * @return Group

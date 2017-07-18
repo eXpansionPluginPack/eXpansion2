@@ -9,7 +9,7 @@ e_xpansion_core:
             highlight: '$fff'
             separator: '$3af'
             pretty_chat: '$dee'
-            admin_info: '$db1'
+            admin_info: '$aff'
             variable: '$fff'
             record: '$0f3'
             record_top: '$0d3'
@@ -21,8 +21,9 @@ e_xpansion_core:
             fail: '$b32✘'
             server: '$afd$fff'
             info: ''
-            admin: '$daa$fff'
-            time: '⏱'
+            admin: '$fff'
+            time: ''
+            record: ''
 e_xpansion_admin_groups:
     groups:
         master_admin:

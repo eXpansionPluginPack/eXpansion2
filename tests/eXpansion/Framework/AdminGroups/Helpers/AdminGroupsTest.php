@@ -74,7 +74,6 @@ class AdminGroupsTest extends TestAdminGroups
     {
         $helper = $this->getAdminGroupHelper();
 
-        $this->assertTrue($helper->hasGroupPermission('master_admin', 'wrong_permission'));
         $this->assertTrue($helper->hasGroupPermission('admin:master_admin', 'wrong_permission'));
         $this->assertTrue($helper->hasGroupPermission('admin:master_admin', 'p1'));
         $this->assertTrue($helper->hasGroupPermission('admin:master_admin', 'p10'));

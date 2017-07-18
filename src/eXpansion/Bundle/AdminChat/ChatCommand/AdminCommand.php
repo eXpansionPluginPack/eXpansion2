@@ -1,6 +1,7 @@
 <?php
 
 namespace eXpansion\Bundle\AdminChat\ChatCommand;
+
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
@@ -13,26 +14,11 @@ use Symfony\Component\Console\Input\InputInterface;
 /**
  * Class ReasonUserCommand
  *
- * @author    de Cramer Oliver<oldec@smile.fr>
- * @copyright 2017 Smile
+ * @author  Reaby
  * @package eXpansion\Bundle\AdminChat\ChatCommand
  */
-class ReasonUserCommand extends AbstractConnectionCommand
+class AdminCommand extends AbstractConnectionCommand
 {
-    /**
-     * Description of the login parameter
-     *
-     * @var string
-     */
-    protected $parameterLoginDescription;
-
-    /**
-     * Description of the reason parameter.
-     *
-     * @var string
-     */
-    protected $parameterReasonDescription;
-
     /**
      * Description of the command.
      *
@@ -61,12 +47,6 @@ class ReasonUserCommand extends AbstractConnectionCommand
     {
         parent::configure();
 
-        $this->inputDefinition->addArgument(
-            new InputArgument('login', InputArgument::REQUIRED, $this->parameterLoginDescription)
-        );
-        $this->inputDefinition->addArgument(
-            new InputArgument('reason', InputArgument::REQUIRED, $this->parameterReasonDescription)
-        );
     }
 
     /**
@@ -83,35 +63,15 @@ class ReasonUserCommand extends AbstractConnectionCommand
     public function execute($login, InputInterface $input)
     {
         $nickName = $this->playerStorage->getPlayerInfo($login)->getNickName();
-        $playerLogin = $input->getArgument('login');
-        $reason = $input->getArgument('reason');
         $group = $this->adminGroupsHelper->getLoginUserGroups($login)->getName();
-
-        $playerNickName = $this->playerStorage->getPlayerInfo($playerLogin)->getNickName();
 
         $this->chatNotification->sendMessage(
             $this->chatMessage,
             $this->isPublic ? null : $login,
-            ['%adminLevel%' => $group, '%admin%' => $nickName, '%player%' => $playerNickName, "%reason%" => $reason]
+            ['%adminLevel%' => $group, '%admin%' => $nickName]
         );
 
-        $this->connection->{$this->functionName}($playerLogin, $reason);
-    }
-
-    /**
-     * @param string $parameterLoginDescription
-     */
-    public function setParameterLoginDescription($parameterLoginDescription)
-    {
-        $this->parameterLoginDescription = $parameterLoginDescription;
-    }
-
-    /**
-     * @param string $parameterReasonDescription
-     */
-    public function setParameterReasonDescription($parameterReasonDescription)
-    {
-        $this->parameterReasonDescription = $parameterReasonDescription;
+        $this->connection->{$this->functionName}();
     }
 
     /**
@@ -137,4 +97,5 @@ class ReasonUserCommand extends AbstractConnectionCommand
     {
         $this->functionName = $functionName;
     }
+
 }

@@ -2,6 +2,7 @@
 
 
 namespace eXpansion\Bundle\Menu\Plugins;
+
 use eXpansion\Bundle\Menu\Plugins\Gui\MenuFactory;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\DataProviders\Listener\MatchDataListenerInterface;
@@ -59,8 +60,7 @@ class Menu implements StatusAwarePluginInterface, MatchDataListenerInterface
      */
     protected function displayMenu()
     {
-        foreach ($this->adminGroups->getUserGroups() as $userGroup)
-        {
+        foreach ($this->adminGroups->getUserGroups() as $userGroup) {
             $this->menuGuiFactory->create($userGroup);
         }
     }

@@ -14,8 +14,12 @@ use eXpansion\Framework\Core\Model\ChatCommand\AbstractChatCommand;
  */
 abstract class AbstractAdminChatCommand extends AbstractChatCommand
 {
+    /** @var AdminGroups */
     protected $adminGroupsHelper;
 
+    /**
+     * @var string
+     */
     protected $permission;
 
     /**

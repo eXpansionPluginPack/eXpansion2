@@ -25,7 +25,9 @@ class PlayerDataProvider extends AbstractDataProvider
 
     /**
      * PlayerDataProvider constructor.
-     * @param $playerStorage
+     * @param PlayerStorage $playerStorage
+     * @param Connection $connection
+     * @param Application $application
      */
     public function __construct(PlayerStorage $playerStorage, Connection $connection, Application $application)
     {

@@ -4,6 +4,7 @@ namespace eXpansion\Framework\Core\Plugins\Gui;
 use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Model\Gui\Manialink;
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
+use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\GuiHandler;
@@ -45,7 +46,7 @@ class WidgetFactory extends ManialinkFactory {
         Factory $groupFactory,
         ActionFactory $actionFactory,
         Translations $translationsHelper,
-        $className = Window::class
+        $className = Widget::class
     ) {
         // Hack for FML to use default MP alignements.
         Control::clearDefaultAlign();

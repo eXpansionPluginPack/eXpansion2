@@ -118,8 +118,9 @@ class AdminGroups
      */
     public function hasGroupPermission($groupName, $permission)
     {
+
         if (strpos($groupName, 'admin:') === 0) {
-            $groupName = str_replace("admin:", '', $groupName);
+          $groupName = str_replace("admin:", '', $groupName);
         }
 
         $logins = $this->adminGroupConfiguration->getGroupLogins($groupName);

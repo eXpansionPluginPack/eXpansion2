@@ -1,11 +1,12 @@
 <?php
 
 namespace eXpansion\Framework\Core\Model\UserGroups;
+
 use eXpansion\Framework\Core\Services\Application\Dispatcher;
 use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
 
 /**
- * A Group of users. Each group of users should have a plugin to handle unser disconnects at the very least.
+ * A Group of users. Each group of users should have a plugin to handle user disconnects at the very least.
  *
  * @package eXpansion\Framework\Core\Model\UserGroups
  * @author Oliver de Cramer
@@ -31,6 +32,7 @@ class Group
     /**
      * Group constructor.
      *
+     * @param DispatcherInterface $dispatcher
      * @param string $name
      */
     public function __construct(DispatcherInterface $dispatcher, $name = null)
@@ -42,6 +44,8 @@ class Group
             $this->name = $name;
             $this->persistent = true;
         }
+
+        print_r("new group:".$name."\n");
 
         $this->dispatcher = $dispatcher;
     }

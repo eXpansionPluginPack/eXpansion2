@@ -1,5 +1,5 @@
 services:
-    # Plugins for Grapgical user interfaces.
+    # Plugins for Graphical user interfaces.
     expansion.framework.core.plugins.gui_handler:
         class: 'eXpansion\Framework\Core\Plugins\GuiHandler'
         arguments:
