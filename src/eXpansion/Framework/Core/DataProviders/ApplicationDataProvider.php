@@ -11,19 +11,19 @@ namespace eXpansion\Framework\Core\DataProviders;
 class ApplicationDataProvider extends AbstractDataProvider
 {
 
-    public function onApplicationInit($eventName, $parameters)
+    public function onApplicationInit()
     {
-        $this->dispatch(__FUNCTION__, [$eventName, $parameters]);
+        $this->dispatch(__FUNCTION__, []);
     }
 
-    public function onApplicationReady($eventName, $parameters)
+    public function onApplicationReady()
     {
-        $this->dispatch(__FUNCTION__, [$eventName, $parameters]);
+        $this->dispatch(__FUNCTION__, []);
     }
 
 
-    public function onApplicationStop($eventName, $parameters)
+    public function onApplicationStop()
     {
-        $this->dispatch(__FUNCTION__, [$eventName, $parameters]);
+        $this->dispatch(__FUNCTION__, []);
     }
 }

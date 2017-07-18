@@ -66,7 +66,7 @@ class CustomChat implements ApplicationDataListenerInterface, ChatDataListenerIn
                 }
 
                 $this->connection->chatSendServerMessage(
-                    '$fff$<'.$nick.'$z$s$> '.$color.$force.$text,
+                    '$fff$<'.$nick.'$z$s$>  '.$color.$force.$text,
                     null
                 );
                 $this->console->writeln('$ff0['.$from.'$ff0] '.$text);

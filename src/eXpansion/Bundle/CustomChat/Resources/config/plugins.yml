@@ -7,4 +7,4 @@ services:
           - '@expansion.framework.admin_groups.helpers.groups'
         tags:
           - {name: expansion.plugin, data_provider: expansion.chat_data}
-          - {name: expansion.plugin, data_provider: expansion.application_data}
+          - {name: expansion.plugin, data_provider: expansion.application}
