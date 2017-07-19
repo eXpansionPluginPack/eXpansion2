@@ -3,16 +3,12 @@
 
 namespace eXpansion\Framework\Core\Plugins\Gui;
 
-use eXpansion\Bundle\Acme\Plugins\Gui\WindowFactory;
-use eXpansion\Bundle\LocalRecords\Entity\Record;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionFactory;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilder;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use FML\Controls\Frame;
-use Maniaplanet\DedicatedServer\Structures\Map;
-
 
 /**
  * Class RecordsWindowFactory
