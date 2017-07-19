@@ -137,6 +137,20 @@ class AdminGroups
     }
 
     /**
+     * @param string $groupName
+     * @return string
+     */
+    public function getGroupLabel($groupName)
+    {
+        if (strpos($groupName, 'admin:') === 0) {
+            $groupName = str_replace("admin:", '', $groupName);
+        }
+
+        return $this->adminGroupConfiguration->getGroupLabel($groupName);
+
+    }
+
+    /**
      * gets if the player is admin
      *
      * @param string $login

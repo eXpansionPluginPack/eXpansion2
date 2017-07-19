@@ -74,7 +74,7 @@ class OneParameterCommand extends AbstractConnectionCommand
     {
         $nickName = $this->playerStorage->getPlayerInfo($login)->getNickName();
         $parameter = $input->getArgument('parameter');
-        $group = $this->adminGroupsHelper->getLoginUserGroups($login)->getName();
+        $group = $this->getGroupLabel($login);
 
         $this->chatNotification->sendMessage(
             $this->chatMessage,

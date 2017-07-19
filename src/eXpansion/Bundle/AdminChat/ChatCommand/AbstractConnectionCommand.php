@@ -79,4 +79,25 @@ abstract class AbstractConnectionCommand extends AbstractAdminChatCommand
         $this->isPublic = (bool)$bool;
     }
 
+    /**
+     * Get admin group Label
+     *
+     * @param string $login
+     * @return string
+     */
+    public function getGroupLabel($login)
+    {
+        $group = $this->adminGroupsHelper->getLoginUserGroups($login);
+
+        $groupName = "Admin";
+        if ($group) {
+            if ($groupName) {
+                $groupName = $this->adminGroupsHelper->getGroupLabel($group->getName());
+
+            }
+        }
+
+        return $groupName;
+    }
+
 }

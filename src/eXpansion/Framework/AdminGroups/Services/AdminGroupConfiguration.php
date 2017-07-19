@@ -74,6 +74,22 @@ class AdminGroupConfiguration
     }
 
     /**
+     * Get admin group label
+     *
+     * @param string $groupName
+     * @return string
+     */
+    public function getGroupLabel($groupName)
+    {
+        if (!isset($this->config[$groupName])) {
+            return "";
+        }
+
+        return $this->config[$groupName]['label'];
+    }
+
+
+    /**
      * @param string $login
      *
      * @return string|null

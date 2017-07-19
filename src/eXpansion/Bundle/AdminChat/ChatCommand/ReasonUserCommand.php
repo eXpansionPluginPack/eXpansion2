@@ -86,12 +86,7 @@ class ReasonUserCommand extends AbstractConnectionCommand
         $nickName = $this->playerStorage->getPlayerInfo($login)->getNickName();
         $playerLogin = $input->getArgument('login');
         $reason = $input->getArgument('reason');
-        $group = $this->adminGroupsHelper->getLoginUserGroups($login);
-        if ($group) {
-            $group = $group->getName();
-        } else {
-            $group = "Admin";
-        }
+        $group = $this->getGroupLabel($login);
 
         $playerNickName = $this->playerStorage->getPlayerInfo($playerLogin)->getNickName();
 

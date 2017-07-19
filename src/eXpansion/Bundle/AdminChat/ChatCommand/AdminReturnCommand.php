@@ -26,7 +26,7 @@ class AdminReturnCommand extends AdminCommand
     public function execute($login, InputInterface $input)
     {
         $nickName = $this->playerStorage->getPlayerInfo($login)->getNickName();
-        $group = $this->adminGroupsHelper->getLoginUserGroups($login)->getName();
+        $group = $this->getGroupLabel($login);
 
         $return = $this->connection->{$this->functionName}();
 
