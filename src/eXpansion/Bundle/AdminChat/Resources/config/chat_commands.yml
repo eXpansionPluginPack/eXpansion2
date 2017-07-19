@@ -104,6 +104,19 @@ services:
             - [setChatMessage, ["expansion_admin_chat.unban.msg"]]
             - [setFunctionName, ["unBan"]]
 
+    expansion.admin_chat.chat_command.cleanban:
+          class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
+          parent: expansion.admin_chat.chat_command.base
+          arguments:
+              index_0: "cleanbanlist"
+              index_1: "cleanbanlist"
+              index_2: []
+          calls:
+              - [setDescription, ["expansion_admin_chat.cleanbanlist.description"]]
+              - [setChatMessage, ["expansion_admin_chat.cleanbanlist.msg"]]
+              - [setFunctionName, ["cleanBanList"]]
+
+
     expansion.admin_chat.chat_command.black:
         class: eXpansion\Bundle\AdminChat\ChatCommand\ReasonUserCommand
         parent: expansion.admin_chat.chat_command.base
@@ -130,6 +143,44 @@ services:
             - [setDescription, ["expansion_admin_chat.unblack.description"]]
             - [setChatMessage, ["expansion_admin_chat.unblack.msg"]]
             - [setFunctionName, ["unBlacklist"]]
+
+    expansion.admin_chat.chat_command.cleanblacklist:
+          class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
+          parent: expansion.admin_chat.chat_command.base
+          arguments:
+              index_0: "cleanblacklist"
+              index_1: "cleanblacklist"
+              index_2: []
+          calls:
+              - [setDescription, ["expansion_admin_chat.cleanblacklist.description"]]
+              - [setChatMessage, ["expansion_admin_chat.cleanblacklist.msg"]]
+              - [setFunctionName, ["cleanBlackList"]]
+
+    expansion.admin_chat.chat_command.saveblacklist:
+          class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
+          parent: expansion.admin_chat.chat_command.base
+          arguments:
+              index_0: "saveblacklist"
+              index_1: "saveblacklist"
+              index_2: []
+          calls:
+              - [setParameterDescription, ['Filename to save the list']]
+              - [setDescription, ["expansion_admin_chat.saveblacklist.description"]]
+              - [setChatMessage, ["expansion_admin_chat.saveblacklist.msg"]]
+              - [setFunctionName, ["saveBlackList"]]
+
+    expansion.admin_chat.chat_command.loadblacklist:
+          class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
+          parent: expansion.admin_chat.chat_command.base
+          arguments:
+              index_0: "loadblacklist"
+              index_1: "loadblacklist"
+              index_2: []
+          calls:
+              - [setParameterDescription, ['Filename to load the list']]
+              - [setDescription, ["expansion_admin_chat.loadblacklist.description"]]
+              - [setChatMessage, ["expansion_admin_chat.loadblacklist.msg"]]
+              - [setFunctionName, ["loadBlackList"]]
 
     expansion.admin_chat.chat_command.planets:
           class: eXpansion\Bundle\AdminChat\ChatCommand\AdminReturnCommand
@@ -169,3 +220,67 @@ services:
               - [setDescription, ["expansion_admin_chat.unignore.description"]]
               - [setChatMessage, ["expansion_admin_chat.unignore.msg"]]
               - [setFunctionName, ["unignore"]]
+
+    expansion.admin_chat.chat_command.addguest:
+          class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
+          parent: expansion.admin_chat.chat_command.base
+          arguments:
+              index_0: "addguest"
+              index_1: "addguest"
+              index_2: []
+          calls:
+              - [setParameterDescription, ['Add a guest by login']]
+              - [setDescription, ["expansion_admin_chat.addguest.description"]]
+              - [setChatMessage, ["expansion_admin_chat.addguest.msg"]]
+              - [setFunctionName, ["addGuest"]]
+
+    expansion.admin_chat.chat_command.removeguest:
+          class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
+          parent: expansion.admin_chat.chat_command.base
+          arguments:
+              index_0: "removeguest"
+              index_1: "removeguest"
+              index_2: []
+          calls:
+              - [setParameterDescription, ['Remove a guest by login']]
+              - [setDescription, ["expansion_admin_chat.removeguest.description"]]
+              - [setChatMessage, ["expansion_admin_chat.removeguest.msg"]]
+              - [setFunctionName, ["removeGuest"]]
+
+    expansion.admin_chat.chat_command.cleanguestlist:
+          class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
+          parent: expansion.admin_chat.chat_command.base
+          arguments:
+              index_0: "cleanguestlist"
+              index_1: "cleanguestlist"
+              index_2: []
+          calls:
+              - [setDescription, ["expansion_admin_chat.cleanguestlist.description"]]
+              - [setChatMessage, ["expansion_admin_chat.cleanguestlist.msg"]]
+              - [setFunctionName, ["cleanGuestList"]]
+
+    expansion.admin_chat.chat_command.saveguestlist:
+          class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
+          parent: expansion.admin_chat.chat_command.base
+          arguments:
+              index_0: "saveguestlist"
+              index_1: "saveguestlist"
+              index_2: []
+          calls:
+              - [setParameterDescription, ['Filename to save the list']]
+              - [setDescription, ["expansion_admin_chat.saveguestlist.description"]]
+              - [setChatMessage, ["expansion_admin_chat.saveguestlist.msg"]]
+              - [setFunctionName, ["saveGuestList"]]
+
+    expansion.admin_chat.chat_command.loadguestlist:
+          class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
+          parent: expansion.admin_chat.chat_command.base
+          arguments:
+              index_0: "loadguestlist"
+              index_1: "loadguestlist"
+              index_2: []
+          calls:
+              - [setParameterDescription, ['Filename to load the list']]
+              - [setDescription, ["expansion_admin_chat.loadguestlist.description"]]
+              - [setChatMessage, ["expansion_admin_chat.loadguestlist.msg"]]
+              - [setFunctionName, ["loadGuestList"]]

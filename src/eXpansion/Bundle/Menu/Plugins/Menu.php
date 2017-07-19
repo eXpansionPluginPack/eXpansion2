@@ -63,6 +63,7 @@ class Menu implements StatusAwarePluginInterface, MatchDataListenerInterface
         foreach ($this->adminGroups->getUserGroups() as $userGroup) {
             $this->menuGuiFactory->create($userGroup);
         }
+
     }
 
 
