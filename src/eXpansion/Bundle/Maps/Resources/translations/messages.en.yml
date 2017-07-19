@@ -1,0 +1,9 @@
+expansion_maps:
+  gui:
+    window:
+      title: 'Server Maps'
+      column:
+        index: '#'
+        name: 'Name'
+        author: 'Author'
+        goldtime: 'Time'

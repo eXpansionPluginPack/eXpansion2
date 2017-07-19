@@ -1,0 +1,14 @@
+services:
+    eXpansion.maps.gui.window.mapslist_factory:
+        parent: "expansion.framework.core.plugins.gui.window_factory"
+        class: 'eXpansion\Bundle\Maps\Plugins\Gui\MapsWindowFactory'
+        arguments:
+            index_0: 'expansion_maps.gui.window.title'
+            index_1: 160
+            index_2: 90
+        calls:
+            - [setGridBuilderFactory, ['@expansion.framework.core.model.gui.grid.builder_factory']]
+            - [setDataCollectionFactory, ['@expansion.framework.core.model.gui.grid.data_collection_factory.array']]
+            - [setTimerFormatter, ['@expansion.framework.core.helpers.time']]
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.user_group}

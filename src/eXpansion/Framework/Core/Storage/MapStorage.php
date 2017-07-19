@@ -36,7 +36,7 @@ class MapStorage
     /**
      * Get current map list.
      *
-     * @return array
+     * @return Map[]
      */
     public function getMaps()
     {

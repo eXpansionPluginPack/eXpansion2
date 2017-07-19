@@ -1,0 +1,17 @@
+services:
+    eXpansion.maps.chat_commands.mapslist:
+        class: eXpansion\Bundle\Maps\ChatCommand\MapsList
+        arguments:
+          - 'maps'
+          - ['maps','list']
+          - '@eXpansion.maps.gui.window.mapslist_factory'
+          - '@eXpansion.maps.plugins.maps'
+
+    eXpansion.maps.plugins.chat_commands.mapslist:
+        class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
+        arguments:
+            -
+              - '@eXpansion.maps.chat_commands.mapslist'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.chat_command_data}
+            - {name: expansion.plugin.parent, parent: expansion.maps.plugins.maps}

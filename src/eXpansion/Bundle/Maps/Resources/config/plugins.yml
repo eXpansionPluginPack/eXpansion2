@@ -1,0 +1,10 @@
+services:
+    expansion.bundle.maps.plugins.maps:
+        class: eXpansion\Bundle\Maps\Plugins\Maps
+        arguments:
+          - '@expansion.framework.core.services.dedicated_connection'
+          - '@expansion.framework.core.services.console'
+          - '@expansion.framework.admin_groups.helpers.groups'
+          - '@expansion.framework.core.storage.map_storage'
+        tags:
+          - {name: expansion.plugin, data_provider: expansion.map_data}
