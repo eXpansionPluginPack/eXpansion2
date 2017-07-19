@@ -48,21 +48,21 @@ class MapsWindowFactory extends GridWindowFactory
             ->setManialinkFactory($this)
             ->addTextColumn(
                 'index',
-                'maps.gui.window.column.index',
+                'expansion_maps.gui.window.column.index',
                 '1',
                 true
             )->addTextColumn(
                 'name',
-                'maps.gui.window.column.name',
+                'expansion_maps.gui.window.column.name',
                 '3',
                 true
             )->addTextColumn(
                 'author',
-                'maps.gui.window.column.author',
+                'expansion_maps.gui.window.column.author',
                 '4'
             )->addTextColumn(
                 'time',
-                'maps.gui.window.column.goldtime',
+                'expansion_maps.gui.window.column.goldtime',
                 '3',
                 true
             );
@@ -77,10 +77,10 @@ class MapsWindowFactory extends GridWindowFactory
          * @var string $i
          * @var Map $map
          */
-        $i = 0;
+        $i = 1;
         foreach ($maps as $uid => $map) {
             $this->genericData[] = [
-                'index' => $i + 1,
+                'index' => $i++,
                 'name' => $map->name,
                 'author' => $map->author,
                 'time' => $this->timeFormatter->timeToText($map->goldTime, true),

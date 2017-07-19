@@ -47,7 +47,6 @@ class MapsList extends AbstractChatCommand
      */
     public function execute($login, InputInterface $input)
     {
-        echo "should work!!";
         $this->mapsListWindowFactory->setMaps($this->mapsPlugin->getMaps());
         $this->mapsListWindowFactory->create($login);
     }
