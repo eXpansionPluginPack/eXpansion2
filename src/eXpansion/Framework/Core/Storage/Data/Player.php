@@ -10,6 +10,7 @@ namespace eXpansion\Framework\Core\Storage\Data;
 
 use Maniaplanet\DedicatedServer\Structures\FileDesc;
 use Maniaplanet\DedicatedServer\Structures\Skin;
+use Maniaplanet\DedicatedServer\Structures\Player as DedicatedPlayer;
 
 /**
  * All data related to a player/spectator on the server.
@@ -505,6 +506,11 @@ class Player
      */
     public function merge($data)
     {
+
+        if ($data instanceof DedicatedPlayer) {
+            $data = $data->toArray();
+        }
+
         foreach ($data as $key => $value) {
             $key = lcfirst($key);
             $this->$key = $value;

@@ -49,7 +49,7 @@ services:
             - [setChatMessage, ["expansion_admin_chat.set_server_name.msg"]]
             - [setFunctionName, ["setServerName"]]
 
-    expansion.admin_chat.chat_command.set_server_name:
+    expansion.admin_chat.chat_command.set_server_comment:
         class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
         parent: expansion.admin_chat.chat_command.base
         arguments:

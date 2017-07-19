@@ -19,7 +19,7 @@ abstract class AbstractApplication implements RunInterface
     /** @var Connection */
     protected $connection;
 
-    /** @var Dispatcher */
+    /** @var DispatcherInterface */
     protected $dispatcher;
 
     /** @var Console */

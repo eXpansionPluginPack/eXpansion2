@@ -39,16 +39,16 @@ class ManialinkFactory implements ManialinkFactoryInterface, UserGroupDataListen
     /** @var Group[] */
     protected $groups = [];
 
-    /** @var float */
+    /** @var float|int */
     protected $sizeX;
 
-    /** @var float */
+    /** @var float|int */
     protected $sizeY;
 
-    /** @var float */
+    /** @var float|int */
     protected $posX;
 
-    /** @var float */
+    /** @var float|int */
     protected $posY;
 
     /**

@@ -1,6 +1,7 @@
 <?php
 
 namespace eXpansion\Bundle\AdminChat\ChatCommand;
+
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
@@ -85,7 +86,12 @@ class ReasonUserCommand extends AbstractConnectionCommand
         $nickName = $this->playerStorage->getPlayerInfo($login)->getNickName();
         $playerLogin = $input->getArgument('login');
         $reason = $input->getArgument('reason');
-        $group = $this->adminGroupsHelper->getLoginUserGroups($login)->getName();
+        $group = $this->adminGroupsHelper->getLoginUserGroups($login);
+        if ($group) {
+            $group = $group->getName();
+        } else {
+            $group = "Admin";
+        }
 
         $playerNickName = $this->playerStorage->getPlayerInfo($playerLogin)->getNickName();
 

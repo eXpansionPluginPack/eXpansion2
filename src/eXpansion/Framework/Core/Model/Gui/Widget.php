@@ -2,15 +2,10 @@
 
 namespace eXpansion\Framework\Core\Model\Gui;
 
-use eXpansion\Framework\Core\Exceptions\Gui\MissingCloseActionException;
 use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
-use FML\Controls\Control;
 use FML\Controls\Frame;
 use FML\Controls\Label;
-use FML\Controls\Quad;
-use FML\Controls\Quads\Quad_Bgs1;
-use FML\Controls\Quads\Quad_Bgs1InRace;
 use FML\Elements\Dico;
 use FML\Elements\Format;
 use FML\Script\Features\ToggleInterface;
@@ -19,6 +14,10 @@ use FML\Types\Renderable;
 
 class Widget extends Manialink implements Container
 {
+
+    /** @var  ManiaScript */
+    protected $scriptData;
+
     /** @var Translations */
     protected $translationHelper;
 
@@ -80,10 +79,16 @@ class Widget extends Manialink implements Container
         return $this->manialink;
     }
 
-    public function setScriptData(ManiaScript $script) {
+    /**
+     * sets scripts data
+     *
+     * @param ManiaScript $script
+     */
+    public function setScriptData(ManiaScript $script)
+    {
         $this->scriptData = $script->__toString();
-
     }
+
     /**
      * @inheritdoc
      */
@@ -252,10 +257,13 @@ class Widget extends Manialink implements Container
      * @return static
      * @deprecated Use Style
      * @see        Style
+     *
      */
     public function setFormat(Format $format = null)
     {
-        return $this->contentFrame->setFormat($format);
+        $this->contentFrame->setFormat($format);
+
+        return $this;
     }
 
     /**

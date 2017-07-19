@@ -1,6 +1,7 @@
 <?php
 
 namespace eXpansion\Framework\Core\Model\Gui\Factory;
+
 use FML\Controls\Control;
 use FML\Controls\Frame;
 use FML\Controls\Label;
@@ -27,15 +28,14 @@ class LineFactory
      * TitleLineFactory constructor.
      *
      * @param BackGroundFactory $backGroundFactory
-     * @param LabelFactory      $labelFactory
-     * @param string            $type
+     * @param LabelFactory $labelFactory
+     * @param string $type
      */
     public function __construct(
         BackGroundFactory $backGroundFactory,
         LabelFactory $labelFactory,
         $type = LabelFactory::TYPE_NORMAL
-    )
-    {
+    ) {
         $this->backGroundFactory = $backGroundFactory;
         $this->labelFactory = $labelFactory;
         $this->type = $type;
@@ -47,24 +47,32 @@ class LineFactory
      * @param $totalWidth
      * @param $columns
      *
+     * @param int $index
      * @return Frame
+     *
+     * @throws \Exception
      */
     public function create($totalWidth, $columns, $index = 0)
     {
         $totalCoef
-            = ($totalWidth - 1) / array_reduce($columns, function($carry, $item) {return $carry + $item['width']; });
+            = ($totalWidth - 1) / array_reduce($columns, function ($carry, $item) {
+                return $carry + $item['width'];
+            });
 
         $frame = new Frame();
         $frame->setHeight(5);
         $frame->setWidth($totalWidth);
 
         $postX = 1;
-        foreach ($columns as $columnData)
-        {
+        foreach ($columns as $columnData) {
             if (isset($columnData['text'])) {
                 $element = $this->createTextColumn($totalCoef, $columnData, $postX);
             } elseif (isset($columnData['renderer'])) {
                 $element = $this->createRendererColumn($columnData, $postX);
+            }
+
+            if (!isset($element)) {
+                throw new \Exception('Element not found.');
             }
 
             if (isset($columnData['action'])) {
@@ -76,6 +84,7 @@ class LineFactory
         }
 
         $frame->addChild($this->backGroundFactory->create($totalWidth, 5, $index));
+
         return $frame;
     }
 

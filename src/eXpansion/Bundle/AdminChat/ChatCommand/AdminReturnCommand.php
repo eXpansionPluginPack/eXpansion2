@@ -17,45 +17,8 @@ use Symfony\Component\Console\Input\InputInterface;
  * @author  Reaby
  * @package eXpansion\Bundle\AdminChat\ChatCommand
  */
-class AdminReturnCommand extends AbstractConnectionCommand
+class AdminReturnCommand extends AdminCommand
 {
-    /**
-     * Description of the command.
-     *
-     * @var string
-     */
-    protected $description;
-
-    /**
-     * Message to display in chat.
-     *
-     * @var string
-     */
-    protected $chatMessage;
-
-    /**
-     * Name of the dedicated function to call.
-     *
-     * @var string
-     */
-    protected $functionName;
-
-    /**
-     * @inheritdoc
-     */
-    protected function configure()
-    {
-        parent::configure();
-
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
 
     /**
      * @inheritdoc
@@ -73,31 +36,5 @@ class AdminReturnCommand extends AbstractConnectionCommand
             ['%adminLevel%' => $group, '%admin%' => $nickName, '%return%' => $return]
         );
 
-
     }
-
-    /**
-     * @param string $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @param string $chatMessage
-     */
-    public function setChatMessage($chatMessage)
-    {
-        $this->chatMessage = $chatMessage;
-    }
-
-    /**
-     * @param string $functionName
-     */
-    public function setFunctionName($functionName)
-    {
-        $this->functionName = $functionName;
-    }
-
 }

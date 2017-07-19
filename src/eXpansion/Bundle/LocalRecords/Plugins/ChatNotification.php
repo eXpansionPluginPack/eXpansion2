@@ -72,7 +72,8 @@ class ChatNotification implements RecordsDataListener
 
 
             $onlinePlayers = $this->playerStorage->getOnline();
-            for ($i = 1; $i < count($records); $i++) {
+            $count = count($records);
+            for ($i = 1; $i < $count; $i++) {
                 if (isset($onlinePlayers[$records[$i]->getPlayerLogin()])) {
                     $this->sendMessage('loaded.any', $records[$i]->getPlayerLogin(), [
                         '%nickname%' => $onlinePlayers[$records[$i]->getPlayerLogin()]->getNickName(),

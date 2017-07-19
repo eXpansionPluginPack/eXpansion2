@@ -15,7 +15,7 @@ interface DispatcherInterface
 
 
     /**
-     * Reset the dispatcher elements when gamemode changes.
+     * Reset the dispatcher elements when game mode changes.
      *
      * @return void
      */

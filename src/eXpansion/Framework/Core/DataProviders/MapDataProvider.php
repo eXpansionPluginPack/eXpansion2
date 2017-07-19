@@ -61,7 +61,7 @@ class MapDataProvider extends AbstractDataProvider
                 return;
             }
 
-            if ($maps) {
+            if (!empty($maps)) {
                 foreach ($maps as $map) {
                     $this->mapStorage->addMap($map);
                 }
@@ -80,7 +80,7 @@ class MapDataProvider extends AbstractDataProvider
      * @param $isListModified
      *
      */
-    function onMapListModified($curMapIndex, $nextMapIndex, $isListModified)
+    public function onMapListModified($curMapIndex, $nextMapIndex, $isListModified)
     {
         if ($isListModified) {
             $oldMaps = $this->mapStorage->getMaps();

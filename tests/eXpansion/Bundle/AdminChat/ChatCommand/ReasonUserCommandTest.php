@@ -104,7 +104,7 @@ class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock->expects($this->once())->method('ban')->with('test', 'reason');
 
         $this->chatNotificationMock->expects($this->once())->method('sendMessage')->with(
-            'message', null, ['%admin%' => '$ffftest', '%player%' => '$ffftest', '%reason%' => 'reason']
+            'message', null, ['%adminLevel%' => 'Admin', '%admin%' => '$ffftest', '%player%' => '$ffftest', '%reason%' => 'reason']
         );
 
         $this->reasonCommand->execute(

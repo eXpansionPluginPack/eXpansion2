@@ -48,7 +48,7 @@ class GridBuilder
     protected $columns;
 
     /** @var  float */
-    protected $totalWidthCoefficency = 0;
+    protected $totalWidthCoefficency = 0.;
 
     /** @var int */
     protected $currentPage = 1;
@@ -56,16 +56,16 @@ class GridBuilder
     /** @var string */
     protected $pageKey;
 
-    /** @var Action */
+    /** @var string */
     protected $actionPreviousPage;
-    /** @var Action */
+    /** @var string */
     protected $actionNextPage;
-    /** @var Action */
+    /** @var string */
     protected $actionLastPage;
-    /** @var Action */
+    /** @var string */
     protected $actionFirstPage;
 
-    /** @var Action[] */
+    /** @var string[] */
     protected $temporaryActions = [];
 
     /**
@@ -177,7 +177,7 @@ class GridBuilder
     public function resetColumns()
     {
         $this->columns = [];
-        $this->totalWidthCoefficency = 0;
+        $this->totalWidthCoefficency = 0.;
     }
 
     /**
@@ -200,7 +200,7 @@ class GridBuilder
         $frame->setPosition(0, 0);
         $frame->setSize($width, $height);
 
-        $posY = 0;
+        $posY = 0.;
         // Generating headers.
         // TODO if sortable create actions...
         $data = [];

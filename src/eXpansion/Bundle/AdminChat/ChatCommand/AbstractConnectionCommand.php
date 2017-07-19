@@ -8,7 +8,6 @@ use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
-use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -28,7 +27,7 @@ abstract class AbstractConnectionCommand extends AbstractAdminChatCommand
     /** @var PlayerStorage */
     protected $playerStorage;
 
-    /** @var Logger */
+    /** @var LoggerInterface */
     protected $logger;
 
     /** @var Time */
