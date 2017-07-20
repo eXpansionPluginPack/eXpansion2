@@ -58,7 +58,7 @@ class UserGroupDataProviderTest extends TestCore
     }
 
     /**
-     * @return UserGroupDataProvider
+     * @return UserGroupDataProvider|object
      */
     public function getUserGroupDataProvider()
     {

@@ -2,21 +2,22 @@
 
 namespace eXpansion\Framework\Core\Model\Gui;
 
-use eXpansion\Framework\Core\Exceptions\Gui\MissingCloseActionException;
 use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use FML\Controls\Frame;
 use FML\Controls\Label;
-use FML\Controls\Quad;
-use FML\Controls\Quads\Quad_Bgs1;
-use FML\Controls\Quads\Quad_Bgs1InRace;
 use FML\Elements\Dico;
 use FML\Elements\Format;
+use FML\Script\Features\ToggleInterface;
 use FML\Types\Container;
 use FML\Types\Renderable;
 
 class Widget extends Manialink implements Container
 {
+
+    /** @var  ManiaScript */
+    protected $scriptData;
+
     /** @var Translations */
     protected $translationHelper;
 
@@ -43,8 +44,7 @@ class Widget extends Manialink implements Container
         $sizeY,
         $posX = null,
         $posY = null
-    )
-    {
+    ) {
         parent::__construct($group, $name, $sizeX, $sizeY, $posX, $posY);
 
         $this->translationHelper = $translationHelper;
@@ -72,11 +72,33 @@ class Widget extends Manialink implements Container
     }
 
     /**
+     * @return \FML\ManiaLink
+     */
+    public function getFmlManialink()
+    {
+        return $this->manialink;
+    }
+
+    /**
+     * sets scripts data
+     *
+     * @param ManiaScript $script
+     */
+    public function setScriptData(ManiaScript $script)
+    {
+        $this->scriptData = $script->__toString();
+    }
+
+    /**
      * @inheritdoc
      */
     public function getXml()
     {
         $this->addDictionaryInformation();
+
+        $toggleInterfaceF9 = new ToggleInterface("F9");
+        $this->manialink->getScript()
+            ->addFeature($toggleInterfaceF9);
 
         return $this->manialink->__toString();
     }
@@ -100,20 +122,22 @@ class Widget extends Manialink implements Container
     /**
      * Recursive search all dome tree in order to find all translatable labels.
      *
-     * @param $frame
+     * @param Container|\FML\ManiaLink $control
      * @param $translations
      */
-    protected function getDictionaryInformation($frame, &$translations)
+    protected function getDictionaryInformation($control, &$translations)
     {
-        foreach ($frame->getChildren() as $child) {
+        foreach ($control->getChildren() as $child) {
             if ($child instanceof Label && $child->getTranslate()) {
-                $textId = 'exp_' . md5($child->getTextId());
+                $textId = 'exp_'.md5($child->getTextId());
                 $translations[$textId] = $this->translationHelper->getTranslations($child->getTextId(), []);
 
                 // Replaces with text id that can be used in the xml.
                 $child->setTextId($textId);
-            } else if ($child instanceof Frame) {
-                $this->getDictionaryInformation($child, $translations);
+            } else {
+                if ($child instanceof Frame) {
+                    $this->getDictionaryInformation($child, $translations);
+                }
             }
         }
     }
@@ -233,10 +257,13 @@ class Widget extends Manialink implements Container
      * @return static
      * @deprecated Use Style
      * @see        Style
+     *
      */
     public function setFormat(Format $format = null)
     {
-        return $this->contentFrame->setFormat($format);
+        $this->contentFrame->setFormat($format);
+
+        return $this;
     }
 
     /**

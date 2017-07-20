@@ -11,6 +11,7 @@ class ManialinkPageAnswerDataProviderTest extends TestCore
 
     public function testDispatch()
     {
+        /** @var ManialinkPageAnswerDataListenerInterface|object $mockPlugin */
         $mockPlugin = $this->createMock(ManialinkPageAnswerDataListenerInterface::class);
         $mockPlugin->expects($this->once())
             ->method('onPlayerManialinkPageAnswer')

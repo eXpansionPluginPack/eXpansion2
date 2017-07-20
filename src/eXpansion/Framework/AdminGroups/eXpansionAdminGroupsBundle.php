@@ -2,9 +2,13 @@
 
 namespace eXpansion\Framework\AdminGroups;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use eXpansion\Framework\Core\eXpansionCore;
+use /** @noinspection PhpUndefinedClassInspection */
+    Symfony\Component\HttpKernel\Bundle\Bundle;
 use SymfonyBundles\BundleDependency\BundleDependency;
 use SymfonyBundles\BundleDependency\BundleDependencyInterface;
+
+/** @noinspection PhpUndefinedClassInspection */
 
 /**
  * Class EmotesBundle
@@ -23,7 +27,7 @@ class eXpansionAdminGroupsBundle extends Bundle implements BundleDependencyInter
     public function getBundleDependencies()
     {
         return [
-            \eXpansion\Framework\Core\eXpansionCore::class
+            eXpansionCore::class
         ];
     }
 }

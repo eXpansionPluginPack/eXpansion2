@@ -19,7 +19,7 @@ class BasicEmote extends AbstractChatCommand
     /** @var string[] */
     protected $messages;
 
-    /** @var ChatNotification  */
+    /** @var ChatNotification */
     protected $chatNotification;
 
     /** @var PlayerStorage */
@@ -30,8 +30,9 @@ class BasicEmote extends AbstractChatCommand
      *
      * @param string $command The chat command
      * @param string $nbMessages The emote message to send
-     * @param ChatNotification $chatNotification
      * @param array $aliases
+     * @param ChatNotification $chatNotification
+     * @param PlayerStorage $playerStorage
      * @param bool $parametersAsArray
      */
     public function __construct(
@@ -60,6 +61,7 @@ class BasicEmote extends AbstractChatCommand
         $message = $this->messages[$select];
 
         $nickName = $this->playerStorage->getPlayerInfo($login)->getNickName();
-        $this->chatNotification->sendMessage($message, null, ['%nickname%' => $nickName]);
+        $prefix = $this->chatNotification->getMessage('expansion_emotes.prefix', ['%nickname%' => $nickName]);
+        $this->chatNotification->sendMessage($message, null, ['%prefix%' => $prefix]);
     }
 }

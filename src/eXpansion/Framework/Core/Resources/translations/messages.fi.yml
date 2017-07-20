@@ -1,0 +1,16 @@
+expansion_core:
+  test: "Tämä on testikäännös : %test%"
+  test_color: "{test}Tämä on testikäännös : %test%"
+  test_glyph: "|test|Tämä on testikäännös : %test%"
+  test_color_glyph: "|test|{test}Tämä on testikäännös : %test%"
+
+  chat_commands:
+    wrong_chat: "{error}Komentoa ei löydy. {info}Kirjoita /help nähdäksesi kaikki komennot."
+    no_description: "{info} Selitteen teksti puuttuu."
+    no_help: "{info}Ohjeen teksti puuttuu."
+
+  windows:
+    chat_commands:
+      title: Komennot
+      column_command: Komento
+      column_description: Selite

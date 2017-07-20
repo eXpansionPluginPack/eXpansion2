@@ -3,45 +3,45 @@ expansion_local_records:
     # Messages to be used in normal TA, and when a race is finished (so in laps X number of laps is completed)
     race:
       new:
-        top1: '|server| {variable}%nickname% {record_top}drives {record_rank}first {record_top}Local Record! {variable)|time| %score%'
-        top5: '|server| {variable}%nickname% {record_top}drives {record_rank}%position% {record_top}Local Record! |time| %score%'
-        any:  '|server| {variable}%nickname% {record}drives {record_rank}%position% {record}Local Record! {variable}|time| %score%'
+        top1: '|record| {variable}%nickname% {record_top}drives {record_rank}first {record_top}Local Record! {variable}|time| %score%'
+        top5: '|record| {variable}%nickname% {record_top}drives {record_rank}%position% {record_top}Local Record! |time| %score%'
+        any:  '|record| {variable}%nickname% {record}drives {record_rank}%position% {record}Local Record! {variable}|time| %score%'
       better:
-        top1: '|server| {variable}%nickname% {record_top}drives first {record_top}Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
-        top5: '|server| {variable}%nickname% {record_top}drives %position% {record_top}Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
-        any:  '|server| {variable}%nickname% {record}drives %position% {record}Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
+        top1: '|record| {variable}%nickname% {record_top}drives first {record_top}Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
+        top5: '|record| {variable}%nickname% {record_top}drives %position% {record_top}Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
+        any:  '|record| {variable}%nickname% {record}drives %position% {record}Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
       secures:
-        top1: '|server| {variable}%nickname% {record_top}improves {record_rank}first {record_top}Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
-        top5: '|server| {variable}%nickname% {record_top}improves {record_rank}%position% {record_top}Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
-        any:  '|server| {variable}%nickname% {record}improves {record_rank}%position% {record}Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
+        top1: '|record| {variable}%nickname% {record_top}improves {record_rank}first {record_top}Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
+        top5: '|record| {variable}%nickname% {record_top}improves {record_rank}%position% {record_top}Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
+        any:  '|record| {variable}%nickname% {record}improves {record_rank}%position% {record}Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
       loaded:
-        top1: '|server| {variable}%nickname% {record_top}Holds {record_rank}first {record_top}Local Record with {variable}|time| %score%'
-        any: '{record}You hold {record_rank}%position% {record}Local Record with {variable}|time| %score%'
+        top1: '|record| {variable}%nickname% {record_top}Holds {record_rank}first {record_top}Local Record with {variable}|time| %score%'
+        any: '|record| {record}You hold {record_rank}%position% {record}Local Record with {variable}|time| %score%'
 
     # Messages used in laps mode & other modes that supports proper multilaps support (not TA)
     lap:
       new:
-        top1: '|server| {variable}%nickname% {record_top}drives {record_rank}first {record_top}LAP Local Record! {variable)|time| %score%'
-        top5: '|server| {variable}%nickname% {record_top}drives {record_rank}%position% {record_top}LAP Local Record! |time| %score%'
-        any:  '|server| {variable}%nickname% {record}drives {record_rank}%position% {record_top}LAP Local Record! {variable}|time| %score%'
+        top1: '|record| {variable}%nickname% {record_top}drives {record_rank}first {record_top}LAP Local Record! {variable}|time| %score%'
+        top5: '|record| {variable}%nickname% {record_top}drives {record_rank}%position% {record_top}LAP Local Record! |time| %score%'
+        any:  '|record| {variable}%nickname% {record}drives {record_rank}%position% {record_top}LAP Local Record! {variable}|time| %score%'
       better:
-        top1: '|server| {variable}%nickname% {record_top}drives first {record_top}LAP Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
-        top5: '|server| {variable}%nickname% {record_top}drives %position% {record_top}LAP Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
-        any:  '|server| {variable}%nickname% {record}drives %position% {record}LAP Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
+        top1: '|record| {variable}%nickname% {record_top}drives first {record_top}LAP Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
+        top5: '|record| {variable}%nickname% {record_top}drives %position% {record_top}LAP Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
+        any:  '|record| {variable}%nickname% {record}drives %position% {record}LAP Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
       secures:
-        top1: '|server| {variable}%nickname% {record_top}improves {record_rank}first {record_top}LAP Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
-        top5: '|server| {variable}%nickname% {record_top}improves {record_rank}%position% {record_top}LAP Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
-        any:  '|server| {variable}%nickname% {record}improves {record_rank}%position% {record}LAP Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
+        top1: '|record| {variable}%nickname% {record_top}improves {record_rank}first {record_top}LAP Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
+        top5: '|record| {variable}%nickname% {record_top}improves {record_rank}%position% {record_top}LAP Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
+        any:  '|record| {variable}%nickname% {record}improves {record_rank}%position% {record}LAP Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top})'
       loaded:
-        top1: '|server| {variable}%nickname% {record_top}Holds {record_rank}first {record_top}LAP Local Record with {variable}|time| %score%'
-        any: '{record}You hold {record_rank}%position% {record}LAP Local Record with {variable}|time| %score%'
+        top1: '|record| {variable}%nickname% {record_top}Holds {record_rank}first {record_top}LAP Local Record with {variable}|time| %score%'
+        any: '|record| {record}You hold {record_rank}%position% {record}LAP Local Record with {variable}|time| %score%'
 
   gui:
     race:
       window:
         title: 'Local Records'
         column:
-          position: 'Position'
+          position: '#'
+          score: 'Time'
           nickname: 'NickName'
           login: 'Login'
-          score: 'Time'

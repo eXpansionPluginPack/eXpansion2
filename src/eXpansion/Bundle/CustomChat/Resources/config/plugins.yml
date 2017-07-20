@@ -1,0 +1,10 @@
+services:
+    expansion.bundle.custom_chat.plugins.custom_chat:
+        class: eXpansion\Bundle\CustomChat\Plugins\CustomChat
+        arguments:
+          - '@expansion.framework.core.services.dedicated_connection'
+          - '@expansion.framework.core.services.console'
+          - '@expansion.framework.admin_groups.helpers.groups'
+        tags:
+          - {name: expansion.plugin, data_provider: expansion.chat_data}
+          - {name: expansion.plugin, data_provider: expansion.application}

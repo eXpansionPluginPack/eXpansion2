@@ -1,0 +1,189 @@
+// global variables
+/* declare Boolean isClosing;
+declare Boolean isMenuOpen;
+declare Integer animDuration;
+*/
+
+// functions
+Void show()  {
+     declare isMenuOpen for Page = True;
+     declare isClosing for Page = False;
+     declare animDuration for Page = 300;
+     isMenuOpen = True;
+     isClosing = False;
+	 Audio.PlaySoundEvent( CAudioManager::ELibSound::ShowDialog  , 0, 0.);
+	 declare CMlFrame frame <=> (Page.GetFirstChild("buttons") as CMlFrame);
+	 declare CMlFrame background <=> (Page.GetFirstChild("background") as CMlFrame);
+
+	 declare start = Now;
+	 declare counter = 0;
+
+	Page.GetClassChildren("bg", background, True);
+	foreach (Elem in Page.GetClassChildren_Result) {
+       AnimMgr.Add(Elem, "<elem opacity=\"1\" />", animDuration, CAnimManager::EAnimManagerEasing::Linear);
+    }
+	Page.GetClassChildren("button", frame, True);
+	foreach (Button in Page.GetClassChildren_Result) {
+        Button.RelativeScale = 1.;
+        AnimMgr.Add(Button, "<quad opacity=\"1.\" />", animDuration, CAnimManager::EAnimManagerEasing::QuadIn);
+    }
+    declare CMlQuad mainBg <=> (Page.GetFirstChild("mainBg") as CMlQuad);
+    mainBg.Show();
+
+}
+
+Void hide(CMlControl ClickedElem) {
+    declare isMenuOpen for Page = False;
+    declare isClosing for Page = True;
+    declare animDuration for Page = 300;
+    isMenuOpen = False;
+    isClosing = True;
+    Audio.PlaySoundEvent( CAudioManager::ELibSound::Valid, 0, 0.);
+    declare CMlFrame frame <=> (Page.GetFirstChild("buttons") as CMlFrame);
+    declare CMlFrame background <=> (Page.GetFirstChild("background") as CMlFrame);
+    declare start = Now;
+    declare counter = 0;
+
+    Page.GetClassChildren("button", frame, True);
+    declare Integer total = Page.GetClassChildren_Result.count;
+    foreach (Elem in Page.GetClassChildren_Result) {
+        if  (Elem != ClickedElem) {
+             AnimMgr.Add(Elem, "<elem opacity=\"0\" />", animDuration, CAnimManager::EAnimManagerEasing::Linear);
+        } else {
+            if (Elem.HasClass("noAnim")  == False) {
+                 AnimMgr.Add(Elem, "<elem scale=\"4\" opacity=\"0\" />", animDuration, CAnimManager::EAnimManagerEasing::Linear);
+            }
+            else {
+             AnimMgr.Add(Elem, "<elem opacity=\"0\" />", animDuration, CAnimManager::EAnimManagerEasing::Linear);
+            }
+        }
+    //	counter+=1;
+    }
+
+    Page.GetClassChildren("bg", background, True);
+    foreach (Elem in Page.GetClassChildren_Result) {
+        AnimMgr.Add(Elem, "<elem opacity=\"0\" />",  animDuration, CAnimManager::EAnimManagerEasing::Linear);
+    }
+    declare CMlQuad mainBg <=> (Page.GetFirstChild("mainBg") as CMlQuad);
+    mainBg.Hide();
+}
+
+Void InitialHide() {
+    declare isMenuOpen for Page = True;
+    declare isClosing for Page = False;
+    declare animDuration for Page = 300;
+
+    isClosing = True;
+    isMenuOpen = False;
+    declare CMlFrame frame <=> (Page.GetFirstChild("buttons") as CMlFrame);
+    declare CMlFrame background <=> (Page.GetFirstChild("background") as CMlFrame);
+    declare CMlQuad mainBg <=> (Page.GetFirstChild("mainBg") as CMlQuad);
+    mainBg.Hide();
+    Page.GetClassChildren("button", frame, True);
+    foreach (Elem in Page.GetClassChildren_Result) {
+            if (Elem is CMlLabel) {
+                declare El = (Elem as CMlLabel);
+                El.Opacity = 0.;
+                //El.Blend = CMlLabel::EBlendMode::Add;
+            }
+            if (Elem is CMlQuad) {
+            declare El = (Elem as CMlQuad);
+            // El.Blend = CMlQuad::EBlendMode::Add;
+            El.Opacity = 0.;
+        }
+    }
+
+    Page.GetClassChildren("bg", background, True);
+    foreach (Elem in Page.GetClassChildren_Result) {
+        if (Elem is CMlQuad) {
+            declare El = (Elem as CMlQuad);
+            El.Opacity = 0.;
+        }
+        if (Elem is CMlLabel) {
+            declare El = (Elem as CMlLabel);
+            El.Blend = CMlLabel::EBlendMode::Add;
+            El.Opacity = 0.;
+        }
+    }
+}
+
+Void onButtonOver(CMlControl Element) {
+    declare animDuration for Page = 300;
+  	Audio.PlaySoundEvent( CAudioManager::ELibSound::ScoreIncrease   , 0, 0.);
+
+	if (Element is CMlLabel) {
+		declare El = (Element as CMlLabel);
+	}
+
+	if (Element.HasClass("noAnim")  == False) {
+		AnimMgr.Add(Element, "<elem scale=\"1.3\" />", animDuration, CAnimManager::EAnimManagerEasing::ElasticOut);
+	}
+}
+
+Void onButtonOut(CMlControl Element) {
+        declare animDuration for Page = 300;
+		if (Element.HasClass("noAnim")  == False) {
+			AnimMgr.Add(Element, "<elem scale=\"1.0\" />", animDuration, CAnimManager::EAnimManagerEasing::ElasticOut);
+		}
+}
+
+
+***FML_OnInit***
+***
+     declare isMenuOpen for Page = False;
+     declare isClosing for Page = True;
+     declare animDuration for Page = 300;
+	isClosing = True;
+	InitialHide();
+***
+
+***FML_KeyPress***
+***
+    // 36 for esc, 31 for numpad /
+    if (Event.KeyCode == 31) {
+        if (isMenuOpen) {
+            hide(Null);
+        } else {
+            show();
+        }
+    }
+***
+
+***FML_Loop***
+***
+    if (isClosing == False) {
+        // handle pending events
+        foreach (Event in PendingEvents) {
+
+            // mouse hover states
+            if (Event.Type == CMlScriptEvent::Type::MouseOver && Event.Control.HasClass("button")) {
+                onButtonOver(Event.Control);
+            }
+
+            if (Event.Type == CMlScriptEvent::Type::MouseOut && Event.Control.HasClass("button")) {
+                onButtonOut(Event.Control);
+            }
+
+            // button click
+            if (Event.Type == CMlScriptEvent::Type::MouseClick && Event.Control.HasClass("button") ) {
+                isClosing = True;
+                hide(Event.Control);
+                if (Event.Control.DataAttributeExists("action")) {
+                    TriggerPageAction(Event.Control.DataAttributeGet("action"));
+                }
+
+                if (Event.Control.DataAttributeExists("do")) {
+                    switch (Event.Control.DataAttributeGet("do")) {
+                        case "!help": {
+                            Playground.ShowProfile(LocalUser.Login);
+                        }
+                        case "!exit": {
+                            Playground.QuitServer(False);
+                        }
+                    }
+                }
+            }
+
+        } // events
+    }
+***

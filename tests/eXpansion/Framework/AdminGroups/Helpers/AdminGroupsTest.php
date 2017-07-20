@@ -33,24 +33,68 @@ class AdminGroupsTest extends TestAdminGroups
         $helper = $this->getAdminGroupHelper();
 
         $this->assertEquals('admin:master_admin', $helper->getLoginUserGroups('toto1')->getName());
+        $this->assertEquals('admin:admin', $helper->getLoginUserGroups('toto10')->getName());
         $this->assertEquals('admin:operator', $helper->getLoginUserGroups('toto21')->getName());
         $this->assertEquals('admin:guest', $helper->getLoginUserGroups('toto_invalid')->getName());
+
+
     }
 
     public function testHasPermission()
     {
         $helper = $this->getAdminGroupHelper();
 
+        // master admin tests
         $this->assertTrue($helper->hasPermission('toto1', 'p1'));
+        $this->assertTrue($helper->hasPermission('toto1', 'p10'));
+        $this->assertTrue($helper->hasPermission('toto1', 'p20'));
+        $this->assertTrue($helper->hasPermission('toto1', 'p_invalid'));
+
+        // if admin has permission
+        $this->assertFalse($helper->hasPermission('toto10', 'p1'));
+        $this->assertTrue($helper->hasPermission('toto10', 'p10'));
+        $this->assertFalse($helper->hasPermission('toto10', 'p20'));
+        $this->assertFalse($helper->hasPermission('toto10', 'p_invalid'));
+
+        // if operator has permission
+        $this->assertFalse($helper->hasPermission('toto20', 'p1'));
+        $this->assertFalse($helper->hasPermission('toto20', 'p10'));
+        $this->assertTrue($helper->hasPermission('toto20', 'p20'));
+        $this->assertFalse($helper->hasPermission('toto20', 'p_invalid'));
+
+
+        // guest group
+        $this->assertFalse($helper->hasPermission('toto_invalid', 'p1'));
+        $this->assertFalse($helper->hasPermission('toto_invalid', 'p10'));
+        $this->assertFalse($helper->hasPermission('toto_invalid', 'p20'));
+        $this->assertFalse($helper->hasPermission('toto_invalid', 'p_invalid'));
     }
 
     public function testHasGroupPermission()
     {
         $helper = $this->getAdminGroupHelper();
 
-        $this->assertTrue($helper->hasGroupPermission('master_admin', 'wrong_permission'));
         $this->assertTrue($helper->hasGroupPermission('admin:master_admin', 'wrong_permission'));
+        $this->assertTrue($helper->hasGroupPermission('admin:master_admin', 'p1'));
+        $this->assertTrue($helper->hasGroupPermission('admin:master_admin', 'p10'));
+        $this->assertTrue($helper->hasGroupPermission('admin:master_admin', 'p20'));
+
+        $this->assertFalse($helper->hasGroupPermission('admin:admin', 'wrong_permission'));
+        $this->assertFalse($helper->hasGroupPermission('admin:admin', 'p1'));
+        $this->assertTrue($helper->hasGroupPermission('admin:admin', 'p10'));
+        $this->assertFalse($helper->hasGroupPermission('admin:admin', 'p20'));
+
+        $this->assertFalse($helper->hasGroupPermission('admin:operator', 'wrong_permission'));
+        $this->assertFalse($helper->hasGroupPermission('admin:operator', 'p1'));
+        $this->assertFalse($helper->hasGroupPermission('admin:operator', 'p10'));
+        $this->assertTrue($helper->hasGroupPermission('admin:operator', 'p20'));
+
+        // empty group
         $this->assertFalse($helper->hasGroupPermission('admin:empty', 'wrong_permission'));
+
+        // invalid group
+        $this->expectException(UnknownGroupException::class);
+        $this->assertFalse($helper->hasGroupPermission('invalid_group', 'wrong_permission'));
     }
 
     public function testHasGroupPermissionsException()

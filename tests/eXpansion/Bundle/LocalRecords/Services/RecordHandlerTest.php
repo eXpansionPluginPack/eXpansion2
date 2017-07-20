@@ -20,6 +20,9 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
+    /**
+     *
+     */
     public function testLoad()
     {
         $records = [
@@ -157,6 +160,52 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $recordHandler->getPlayerPosition('toto1'));
         $this->assertEquals(3, $recordHandler->getPlayerPosition('toto2'));
         $this->assertEquals(1, $recordHandler->getPlayerPosition('toto3'));
+    }
+
+    public function testImproveAndNot()
+    {
+        $records = [
+            $this->createRecord('toto1', 10),
+            $this->createRecord('toto2', 20),
+            $this->createRecord('toto3', 30),
+        ];
+
+        $this->recordRepositoryMock->expects($this->at(0))->method('findBy')->willReturn($records);
+
+        $recordHandler = $this->getRecordHandler(3);
+        $recordHandler->loadForMap('', 1);
+
+        $eventData = $recordHandler->addRecord('toto1', 8, [5,8]);
+        $this->assertEquals(RecordHandler::EVENT_TYPE_SAME_POS, $eventData[RecordHandler::COL_EVENT]);
+        $this->assertEquals(1, $eventData[RecordHandler::COL_POS]);
+        $records =  $recordHandler->getRecords();
+        $this->assertEquals('8', $records[0]->getScore());
+
+        $eventData = $recordHandler->addRecord('toto1', 9, [5,9]);
+        $this->assertNull($eventData);
+        $records =  $recordHandler->getRecords();
+        $this->assertEquals('8', $records[0]->getScore());
+    }
+
+    public function testFirstImproveAndNot()
+    {
+        $records = [ ];
+
+        $this->recordRepositoryMock->expects($this->at(0))->method('findBy')->willReturn($records);
+
+        $recordHandler = $this->getRecordHandler(3);
+        $recordHandler->loadForMap('', 1);
+
+        $eventData = $recordHandler->addRecord('toto1', 8, [5,8]);
+        $this->assertEquals(RecordHandler::EVENT_TYPE_FIRST_TIME, $eventData[RecordHandler::COL_EVENT]);
+        $this->assertEquals(1, $eventData[RecordHandler::COL_POS]);
+        $records =  $recordHandler->getRecords();
+        $this->assertEquals('8', $records[0]->getScore());
+
+        $eventData = $recordHandler->addRecord('toto1', 9, [5,9]);
+        $this->assertNull($eventData);
+        $records =  $recordHandler->getRecords();
+        $this->assertEquals('8', $records[0]->getScore());
     }
 
     public function testNewRecord()

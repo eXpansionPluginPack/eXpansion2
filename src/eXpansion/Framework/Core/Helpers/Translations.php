@@ -41,11 +41,11 @@ class Translations
         $this->supportedLocales = $supportedLocales;
 
         foreach ($colorCodes as $code => $colorCode) {
-            $this->replacementPatterns["{".$code."}"] = '$z'.$colorCode;
+            $this->replacementPatterns["{" . $code . "}"] = '$z' . $colorCode;
         }
 
         foreach ($glyphIcons as $name => $icon) {
-            $this->replacementPatterns["|".$name."|"] = $icon;
+            $this->replacementPatterns["|" . $name . "|"] = $icon;
         }
     }
 
@@ -78,10 +78,9 @@ class Translations
     public function getTranslations($id, $parameters = [])
     {
         $messages = [];
-        $parameters = array_merge($this->replacementPatterns, $parameters);
+       // $parameters = array_merge($this->replacementPatterns, $parameters);
 
-        foreach ($this->supportedLocales as $locale)
-        {
+        foreach ($this->supportedLocales as $locale) {
             $message = $this->getTranslation($id, $parameters, $locale);
             $messages[] = array(
                 "Lang" => lcfirst($locale),

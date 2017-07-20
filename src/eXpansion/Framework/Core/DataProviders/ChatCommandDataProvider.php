@@ -2,10 +2,14 @@
 
 namespace eXpansion\Framework\Core\DataProviders;
 
+use eXpansion\Framework\Core\DataProviders\Listener\ChatCommandInterface;
 use eXpansion\Framework\Core\Helpers\ChatOutput;
+use eXpansion\Framework\Core\Model\ChatCommand\AbstractChatCommand;
 use eXpansion\Framework\Core\Model\Helpers\ChatNotificationInterface;
 use eXpansion\Framework\Core\Services\ChatCommands;
-use Symfony\Component\Console\Exception\RuntimeException;
+
+use /** @noinspection PhpUndefinedClassInspection */
+    Symfony\Component\Console\Exception\RuntimeException;
 
 /**
  * Class ChatCommandDataProvider, provides execution instructions for chat commands.
@@ -14,10 +18,10 @@ use Symfony\Component\Console\Exception\RuntimeException;
  */
 class ChatCommandDataProvider extends AbstractDataProvider
 {
-    /** @var ChatCommands  */
+    /** @var ChatCommands */
     protected $chatCommands;
 
-    /** @var ChatCommands  */
+    /** @var ChatCommands */
     protected $chatNotification;
 
     /** @var ChatOutput */
@@ -25,13 +29,15 @@ class ChatCommandDataProvider extends AbstractDataProvider
 
     /**
      * ChatCommandDataProvider constructor.
-     * @param $chatCommands
+     * @param ChatCommands $chatCommands
+     * @param ChatNotificationInterface $chatNotification
+     * @param ChatOutput $chatOutput
      */
     public function __construct(
         ChatCommands $chatCommands,
         ChatNotificationInterface $chatNotification,
-        ChatOutput $chatOutput)
-    {
+        ChatOutput $chatOutput
+    ) {
         $this->chatCommands = $chatCommands;
         $this->chatNotification = $chatNotification;
         $this->chatOutput = $chatOutput;
@@ -44,6 +50,7 @@ class ChatCommandDataProvider extends AbstractDataProvider
     {
         parent::registerPlugin($pluginId, $pluginService);
 
+        /** @var ChatCommandInterface|object $pluginService */
         $this->chatCommands->registerPlugin($pluginId, $pluginService);
     }
 
@@ -67,6 +74,11 @@ class ChatCommandDataProvider extends AbstractDataProvider
      */
     public function onPlayerChat($playerUid, $login, $text, $isRegisteredCmd = false)
     {
+        // disable for server
+        if ($playerUid === 0) {
+            return;
+        }
+
         if (!$isRegisteredCmd) {
             return;
         }
@@ -74,14 +86,20 @@ class ChatCommandDataProvider extends AbstractDataProvider
         $text = substr($text, 1);
         $cmdAndArgs = explode(' ', $text);
 
-        // Internal dedicated serer command to ignore.
+        // Internal dedicated server command to ignore.
         if ($cmdAndArgs[0] === 'version') {
+            return;
+        }
+
+        // Internal dedicated server command to ignore.
+        if ($cmdAndArgs[0] === 'serverlogin') {
             return;
         }
 
         $message = 'expansion_core.chat_commands.wrong_chat';
 
         list($command, $parameter) = $this->chatCommands->getChatCommand($cmdAndArgs);
+        /** @var AbstractChatCommand $command */
         if ($command) {
             $parameter = implode(" ", $parameter);
             $message = $command->validate($login, $parameter);
@@ -89,7 +107,8 @@ class ChatCommandDataProvider extends AbstractDataProvider
                 try {
                     $this->chatOutput->setLogin($login);
                     $message = $command->run($login, $this->chatOutput, $parameter);
-                } catch (RuntimeException $e) {
+                } /** @noinspection PhpUndefinedClassInspection */
+                catch (RuntimeException $e) {
                     $this->chatNotification->sendMessage($e->getMessage(), $login);
                 } catch (\Exception $e) {
                     $this->chatNotification->sendMessage($e->getMessage(), $login);

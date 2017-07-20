@@ -4,7 +4,7 @@ namespace eXpansion\Framework\Core\Services;
 
 use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
 use eXpansion\Framework\Core\Exceptions\DataProvider\UncompatibleException;
-use eXpansion\Framework\Core\Model\ProviderListner;
+use eXpansion\Framework\Core\Model\ProviderListener;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
@@ -33,25 +33,27 @@ class DataProviderManager
     /** @var string[] Interface a plugin needs extend/implement to be used by a provider. */
     protected $providerInterfaces = [];
 
-    /** @var ProviderListner[][] Providers that listen a certain event. */
+    /** @var ProviderListener[][] Providers that listen a certain event. */
     protected $providerListeners = [];
 
-    /** @var ProviderListner[][] Enabled providers that listen to certain events. */
+    /** @var array[][] Enabled providers that listen to certain events. */
     protected $enabledProviderListeners = [];
 
     /** @var ContainerInterface */
     protected $container;
 
-    /** @var GameDataStorage  */
+    /** @var GameDataStorage */
     protected $gameDataStorage;
 
-    /** @var Console  */
+    /** @var Console */
     protected $console;
 
     /**
      * DataProviderManager constructor.
      *
      * @param ContainerInterface $container
+     * @param GameDataStorage $gameDataStorage
+     * @param Console $console
      */
     public function __construct(ContainerInterface $container, GameDataStorage $gameDataStorage, Console $console)
     {
@@ -62,12 +64,17 @@ class DataProviderManager
 
     /**
      * Initialize all the providers properly.
+     * @param PluginManager $pluginManager
      */
     public function init(PluginManager $pluginManager)
     {
         $this->reset($pluginManager);
     }
 
+    /**
+     * Reset
+     * @param PluginManager $pluginManager
+     */
     public function reset(PluginManager $pluginManager)
     {
         $title = $this->gameDataStorage->getTitle();
@@ -85,7 +92,7 @@ class DataProviderManager
                     foreach ($this->providerListeners[$providerId] as $listener) {
                         $this->enabledProviderListeners[$listener->getEventName()][] = [
                             $providerService,
-                            $listener->getMethod()
+                            $listener->getMethod(),
                         ];
                     }
                 }
@@ -109,14 +116,14 @@ class DataProviderManager
         }
 
         foreach ($listeners as $eventName => $method) {
-            $this->providerListeners[$id][] = new ProviderListner($eventName, $provider, $method);
+            $this->providerListeners[$id][] = new ProviderListener($eventName, $provider, $method);
         }
         $this->providerInterfaces[$provider] = $interface;
         $this->providerById[$id] = $provider;
     }
 
     /**
-     * Checl of a provider is compatible
+     * Check of a provider is compatible
      *
      * @param string $provider
      * @param string $title

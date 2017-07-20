@@ -22,8 +22,7 @@ class AdminGroupConfiguration
     {
         $this->config = $config;
 
-        foreach ($this->config as $groupName => $groupData)
-        {
+        foreach ($this->config as $groupName => $groupData) {
             if (!empty($groupData['logins'])) {
                 foreach ($groupData['logins'] as $login) {
                     $this->loginGroups[$login] = $groupName;
@@ -47,7 +46,7 @@ class AdminGroupConfiguration
      *
      * @param $groupName
      *
-     * @return string[]
+     * @return string[]|null
      */
     public function getGroupLogins($groupName)
     {
@@ -61,7 +60,7 @@ class AdminGroupConfiguration
     /**
      * Get list of all permissions given to a group.
      *
-     * @param $groupName
+     * @param string $groupName
      *
      * @return string[]
      */
@@ -75,9 +74,25 @@ class AdminGroupConfiguration
     }
 
     /**
+     * Get admin group label
+     *
+     * @param string $groupName
+     * @return string
+     */
+    public function getGroupLabel($groupName)
+    {
+        if (!isset($this->config[$groupName])) {
+            return "";
+        }
+
+        return $this->config[$groupName]['label'];
+    }
+
+
+    /**
      * @param string $login
      *
-     * @return string
+     * @return string|null
      */
     public function getLoginGroupName($login)
     {
@@ -85,8 +100,8 @@ class AdminGroupConfiguration
     }
 
     /**
-     * @param $login
-     * @param $permission
+     * @param string $login
+     * @param string $permission
      *
      * @return bool
      */
@@ -94,11 +109,17 @@ class AdminGroupConfiguration
     {
         $groupName = $this->getLoginGroupName($login);
 
-        if ($groupName != 'master_admin') {
-            $permissions = $this->getGroupPermissions($groupName);
-            return in_array($permission, $permissions);
-        } else {
+        // if login has no groups, no permission
+        if ($groupName === null) {
+            return false;
+        }
+        // master admin has all permissions
+        if ($groupName == 'master_admin') {
             return true;
         }
+
+        $permissions = $this->getGroupPermissions($groupName);
+
+        return in_array($permission, $permissions);
     }
 }

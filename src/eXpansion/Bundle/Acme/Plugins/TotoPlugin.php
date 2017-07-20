@@ -14,7 +14,7 @@ use eXpansion\Framework\Core\Storage\Data\Player;
  *
  * @package eXpansion\Framework\Core\Plugins
  */
-class TotoPlugin implements ChatDataListenerInterface, StatusAwarePluginInterface
+class TotoPlugin implements StatusAwarePluginInterface
 {
     /** @var Console  */
     protected $console;
@@ -35,18 +35,6 @@ class TotoPlugin implements ChatDataListenerInterface, StatusAwarePluginInterfac
         $this->mlFactory = $mlFactory;
         $this->playersGroup = $players;
     }
-
-    public function onPlayerChat(Player $player, $text)
-    {
-        $text = trim($text);
-        $from = trim($player->getNickName());
-        if ($player->getPlayerId() === 0) {
-            $from = '$777Server';
-        }
-
-        $this->console->writeln('$ff0['.$from.'$ff0] '.$text);
-    }
-
 
     /**
      * Set the status of the plugin

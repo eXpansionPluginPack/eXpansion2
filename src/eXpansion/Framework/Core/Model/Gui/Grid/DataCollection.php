@@ -16,7 +16,7 @@ class DataCollection implements DataCollectionInterface
     /** @var array  */
     protected $data;
 
-    /** @var  array */
+    /** @var  array|null */
     protected $filteredData;
 
     /** @var FilterInterface  */

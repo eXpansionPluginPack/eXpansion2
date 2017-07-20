@@ -13,7 +13,7 @@ use FML\Types\Renderable;
 /**
  * Class ManiaScript
  *
- * @TODO add other helper methods to clean escape script sutff.
+ * @TODO add other helper methods to clean escape script stuff.
  *
  * @package eXpansion\Framework\Core\Model\Gui;
  * @author  oliver de Cramer <oliverde8@gmail.com>
@@ -33,6 +33,7 @@ class ManiaScript implements Renderable
      * ManiaScript constructor.
      *
      * @param string $filePath
+     * @param array $params
      */
     public function __construct($filePath, $params)
     {
@@ -61,13 +62,13 @@ class ManiaScript implements Renderable
     public function __toString()
     {
         ob_start();
-
         echo "\n";
         echo "/**************************************************\n";
         echo " *     eXpansion : 2.*.*\n";
         echo "**************************************************/\n";
         echo "\n";
 
+        /** @noinspection PhpIncludeInspection */
         include $this->filePath;
 
         $script = ob_get_contents();

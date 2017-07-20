@@ -7,7 +7,7 @@ use eXpansion\Framework\Core\DataProviders\Listener\PlayerDataListenerInterface;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Storage\Data\Player;
 
-abstract class AbstractUserGroupPlugin  implements PlayerDataListenerInterface
+abstract class AbstractUserGroupPlugin implements PlayerDataListenerInterface
 {
     protected $userGroup;
 
@@ -19,6 +19,8 @@ abstract class AbstractUserGroupPlugin  implements PlayerDataListenerInterface
     public function __construct(Group $userGroup)
     {
         $this->userGroup = $userGroup;
+        echo $userGroup->getName()." \n";
+
     }
 
     /**

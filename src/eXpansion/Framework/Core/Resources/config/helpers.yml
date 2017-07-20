@@ -16,6 +16,7 @@ services:
             - '@expansion.framework.core.services.dedicated_connection'
             - '@expansion.framework.core.helpers.translations'
             - '@expansion.framework.core.storage.player'
+            - '@expansion.framework.core.services.console'
 
     expansion.framework.core.helpers.chat_output:
         class: 'eXpansion\Framework\Core\Helpers\ChatOutput'

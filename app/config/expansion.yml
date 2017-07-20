@@ -1,23 +1,29 @@
 e_xpansion_core:
     parameters:
         core_chat_color_codes:
-            error: '$b32'
-            warning: '$d50'
-            info: '$db1'
-            highlight: '$u$fff'
+            error: '$daa'
+            warning: '$dda'
+            info: '$add'
+            primary: '$3af'
+            secondary: '$fff'
+            highlight: '$fff'
             separator: '$3af'
             pretty_chat: '$dee'
-            admin_info: '$db1'
+            admin_info: '$aff'
             variable: '$fff'
             record: '$0f3'
             record_top: '$0d3'
             record_rank: '$afa'
+            test: '$f00'
         core_chat_glyph_icons:
+            test: '✔'
             success: '$0d0✔'
             fail: '$b32✘'
             server: '$afd$fff'
             info: ''
-            time: '⏱'
+            admin: '$fff'
+            time: ''
+            record: ''
 e_xpansion_admin_groups:
     groups:
         master_admin:

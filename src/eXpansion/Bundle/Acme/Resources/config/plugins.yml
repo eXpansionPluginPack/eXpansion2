@@ -3,10 +3,8 @@ services:
         class: eXpansion\Bundle\Acme\Plugins\TotoPlugin
         arguments:
             - '@expansion.framework.core.services.console'
-            - '@expansion.bundle.acme.plugins.gui.windowfactory'
+            - '@expansion.bundle.acme.plugins.gui.windowFactory'
             - '@expansion.framework.core.user_groups.players'
-        tags:
-            - {name: expansion.plugin, data_provider: expansion.chat_data}
 
     expansion.bundle.acme.plugins.test:
         class: eXpansion\Bundle\Acme\Plugins\Test
@@ -18,7 +16,7 @@ services:
             - {name: expansion.plugin, data_provider: expansion.match_data}
             - {name: expansion.plugin, data_provider: expansion.timer_data}
 
-    expansion.bundle.acme.plugins.gui.windowfactory:
+    expansion.bundle.acme.plugins.gui.windowFactory:
             class: 'eXpansion\Bundle\Acme\Plugins\Gui\WindowFactory'
             arguments:
                 index_0: "test window"

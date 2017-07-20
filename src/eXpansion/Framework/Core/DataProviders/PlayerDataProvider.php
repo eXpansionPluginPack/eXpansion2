@@ -25,7 +25,9 @@ class PlayerDataProvider extends AbstractDataProvider
 
     /**
      * PlayerDataProvider constructor.
-     * @param $playerStorage
+     * @param PlayerStorage $playerStorage
+     * @param Connection $connection
+     * @param Application $application
      */
     public function __construct(PlayerStorage $playerStorage, Connection $connection, Application $application)
     {
@@ -77,6 +79,7 @@ class PlayerDataProvider extends AbstractDataProvider
         // dedicated server sends disconnect for server itself when it's closed...
         // so it's time to stop application gracefully.
         if ($playerData->getPlayerId() == 0) {
+            // emit event to plugins
             $this->application->stopApplication();
             return;
         }

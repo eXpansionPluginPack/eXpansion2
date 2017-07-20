@@ -45,6 +45,7 @@ class BaseRecords implements MapDataListenerInterface, MatchDataListenerInterfac
      * @param RecordHandlerFactory $recordsHandlerFactory
      * @param Group                $allPlayersGroup
      * @param MapStorage           $mapStorage
+     * @param DispatcherInterface  $dispatcher
      * @param                      $eventPrefix
      */
     public function __construct(
@@ -76,7 +77,7 @@ class BaseRecords implements MapDataListenerInterface, MatchDataListenerInterfac
      *
      * @param boolean $status
      *
-     * @return null
+     * @return void
      */
     public function setStatus($status)
     {
@@ -101,7 +102,7 @@ class BaseRecords implements MapDataListenerInterface, MatchDataListenerInterfac
      * @param boolean $restarted true if the map was restarted, false otherwise
      * @param Map     $map       Map started with.
      *
-     * @return mixed
+     * @return void
      */
     public function onStartMapStart($count, $time, $restarted, Map $map)
     {
@@ -131,7 +132,7 @@ class BaseRecords implements MapDataListenerInterface, MatchDataListenerInterfac
      * @param boolean $restarted true if the map was restarted, false otherwise
      * @param Map     $map       Map started with.
      *
-     * @return mixed
+     * @return void
      */
     public function onEndMapEnd($count, $time, $restarted, Map $map)
     {
@@ -144,7 +145,7 @@ class BaseRecords implements MapDataListenerInterface, MatchDataListenerInterfac
      * @param int $count Each time this section is played, this number is incremented by one
      * @param int $time  Server time when the callback was sent
      *
-     * @return mixed
+     * @return void
      */
     public function onStartMatchStart($count, $time)
     {
@@ -157,7 +158,7 @@ class BaseRecords implements MapDataListenerInterface, MatchDataListenerInterfac
      * @param int $count Each time this section is played, this number is incremented by one
      * @param int $time  Server time when the callback was sent
      *
-     * @return mixed
+     * @return void
      */
     public function onStartMatchEnd($count, $time)
     {
@@ -172,7 +173,7 @@ class BaseRecords implements MapDataListenerInterface, MatchDataListenerInterfac
      * @param boolean $restarted true if the map was restarted, false otherwise
      * @param Map     $map       Map started with.
      *
-     * @return mixed
+     * @return void
      */
     public function onStartMapEnd($count, $time, $restarted, Map $map)
     {
@@ -187,7 +188,7 @@ class BaseRecords implements MapDataListenerInterface, MatchDataListenerInterfac
      * @param boolean $restarted true if the map was restarted, false otherwise
      * @param Map     $map       Map started with.
      *
-     * @return mixed
+     * @return void
      */
     public function onEndMapStart($count, $time, $restarted, Map $map)
     {

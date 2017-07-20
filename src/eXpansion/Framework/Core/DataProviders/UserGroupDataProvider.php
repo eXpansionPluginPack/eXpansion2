@@ -36,7 +36,7 @@ class UserGroupDataProvider extends AbstractDataProvider
     }
 
     /**
-     * When a user group has been remvoed from a non persistent group, and the group will be destroyed.
+     * When a user group has been removed from a non persistent group, and the group will be destroyed.
      *
      * @param Group $group
      * @param $login

@@ -67,7 +67,7 @@ class TestCore extends KernelTestCase
     }
 
     /**
-     * @return ChatOutput
+     * @return ChatOutput|object
      */
     protected function getChatOutputHelper()
     {

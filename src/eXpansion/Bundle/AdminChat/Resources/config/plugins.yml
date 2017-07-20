@@ -8,6 +8,34 @@ services:
             -
               - '@expansion.admin_chat.chat_command.restart'
               - '@expansion.admin_chat.chat_command.next'
+
               - '@expansion.admin_chat.chat_command.set_server_name'
+              - '@expansion.admin_chat.chat_command.set_server_comment'
+
+              - '@expansion.admin_chat.chat_command.kick'
+              - '@expansion.admin_chat.chat_command.ban'
+              - '@expansion.admin_chat.chat_command.unban'
+              - '@expansion.admin_chat.chat_command.cleanban'
+
+              - '@expansion.admin_chat.chat_command.black'
+              - '@expansion.admin_chat.chat_command.unblack'
+              - '@expansion.admin_chat.chat_command.cleanblacklist'
+              - '@expansion.admin_chat.chat_command.saveblacklist'
+              - '@expansion.admin_chat.chat_command.loadblacklist'
+
+
+              - '@expansion.admin_chat.chat_command.planets'
+              - '@expansion.admin_chat.chat_command.ignore'
+              - '@expansion.admin_chat.chat_command.unignore'
+
+              - '@expansion.admin_chat.chat_command.addguest'
+              - '@expansion.admin_chat.chat_command.removeguest'
+              - '@expansion.admin_chat.chat_command.cleanguestlist'
+              - '@expansion.admin_chat.chat_command.saveguestlist'
+              - '@expansion.admin_chat.chat_command.loadguestlist'
+
+
+
+
         tags:
             - {name: expansion.plugin, data_provider: expansion.chat_command_data}

@@ -6,6 +6,7 @@ use eXpansion\Framework\AdminGroups\Exceptions\UnknownGroupException;
 use eXpansion\Framework\AdminGroups\Services\AdminGroupConfiguration;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
+use eXpansion\Framework\Core\Storage\Data\Player;
 
 /**
  * Class AdminGroupConfiguration
@@ -36,7 +37,8 @@ class AdminGroups
     }
 
     /**
-     * Get list of all user groups. This is usefull for gui actions.
+     * Get list of all user groups.
+     * Can be useful for creating group based GUI widgets.
      *
      * @return Group[]
      */
@@ -51,9 +53,10 @@ class AdminGroups
     }
 
     /**
-     * Get the group in which a user is. This is usefull for gui actions.
+     * Get the group in which a user is.
+     * This is useful for gui actions.
      *
-     * @param $login
+     * @param string $login
      *
      * @return Group
      */
@@ -68,11 +71,11 @@ class AdminGroups
     }
 
     /**
-     * Get the user group of a certain admin group.
+     * Get (or create a new) admin user group
      *
-     * @param $groupName
+     * @param string $groupName
      *
-     * @return Group|null
+     * @return Group
      */
     protected function getUserGroup($groupName)
     {
@@ -88,22 +91,26 @@ class AdminGroups
     }
 
     /**
-     * Check if a player(login) has a certain permission or not.
+     * Checks if a login or player has a certain permission or not.
      *
-     * @param string $login      Login of the player to check for permission.
+     * @param string|Player $login Login of the player to check for permission.
      * @param string $permission The permission to check for.
      *
      * @return bool
      */
     public function hasPermission($login, $permission)
     {
+        if ($login instanceof Player) {
+            $login = $login->getLogin();
+        }
+
         return $this->adminGroupConfiguration->hasPermission($login, $permission);
     }
 
     /**
      * Check if a group has a certain permission or not.
      *
-     * @param string $groupName  The name of the group to check permissions for.
+     * @param string $groupName The name of the group to check permissions for.
      * @param string $permission The permission to check for.
      *
      * @return bool
@@ -111,6 +118,7 @@ class AdminGroups
      */
     public function hasGroupPermission($groupName, $permission)
     {
+
         if (strpos($groupName, 'admin:') === 0) {
             $groupName = str_replace("admin:", '', $groupName);
         }
@@ -127,4 +135,30 @@ class AdminGroups
 
         return false;
     }
+
+    /**
+     * @param string $groupName
+     * @return string
+     */
+    public function getGroupLabel($groupName)
+    {
+        if (strpos($groupName, 'admin:') === 0) {
+            $groupName = str_replace("admin:", '', $groupName);
+        }
+
+        return $this->adminGroupConfiguration->getGroupLabel($groupName);
+
+    }
+
+    /**
+     * gets if the player is admin
+     *
+     * @param string $login
+     * @return bool
+     */
+    public function isAdmin($login)
+    {
+        return (strpos($this->getLoginUserGroups($login)->getName(), 'admin:') === 0) ? true : false;
+    }
+
 }

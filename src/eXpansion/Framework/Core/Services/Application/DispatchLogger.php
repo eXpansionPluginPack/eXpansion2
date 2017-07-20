@@ -42,4 +42,14 @@ class DispatchLogger implements DispatcherInterface
         $this->console->getConsoleOutput()->writeln("<info>$event");
         $this->console->getConsoleOutput()->writeln(print_r($params, true));
     }
+
+    /**
+     * Reset the dispatcher elements when game mode changes.
+     *
+     * @return void
+     */
+    public function reset()
+    {
+        // TODO: Implement reset() method.
+    }
 }

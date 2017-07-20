@@ -46,6 +46,9 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
     /** @var String[][] */
     protected $hideIndividualQueu = [];
 
+    private $groupsBuffer = [];
+    private $windowsBuffer = [];
+
     /**
      * GuiHandler constructor.
      *
@@ -64,9 +67,11 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
 
 
     /**
-     * Add a manialink to the diplay queue.
+     * Add a manialink to the display queue.
      *
      * @param ManialinkInterface $manialink
+     *
+     * @return void
      */
     public function addToDisplay(ManialinkInterface $manialink)
     {
@@ -114,7 +119,13 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
                 $size = strlen($mlData['ml']);
             }
 
-            $this->connection->sendDisplayManialinkPage($mlData['logins'], $mlData['ml'], 0, false, true);
+            $this->connection->sendDisplayManialinkPage(
+                $mlData['logins'],
+                $mlData['ml'],
+                0,
+                false,
+                true
+            );
         }
 
         if ($size > 0) {
@@ -129,7 +140,7 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
     }
 
     /**
-     * Execute multicall & handle error.
+     * Execute multi call & handle error.
      */
     protected function executeMultiCall()
     {
@@ -202,6 +213,28 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
      */
     public function onEverySecond()
     {
+        $groups = array_keys($this->displayeds);
+        if ($groups !== $this->groupsBuffer) {
+            $this->console->writeln('groups ('.count($this->displayeds).') $0f0'.implode(",",
+                    $groups));
+        }
+
+        $windows = [];
+        foreach ($this->displayeds as $group => $ml) {
+            foreach ($ml as $mlId => $manialink) {
+                $windows[$group][] = $mlId;
+            }
+        }
+
+        if ($windows !== $this->windowsBuffer) {
+            foreach ($windows as $group => $data) {
+                $this->console->writeln('windows in group '.$group.':$0f0'.implode(",", $data));
+            }
+        }
+
+        $this->windowsBuffer = $windows;
+        $this->groupsBuffer = $groups;
+
     }
 
     /**
@@ -216,6 +249,8 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
             foreach ($this->displayeds[$group] as $mlId => $manialink) {
                 $this->individualQueu[$loginAdded][$mlId] = $manialink;
             }
+        } else {
+            $this->console->writeln('player added to group, but group not found: $ff0'.$group);
         }
     }
 
@@ -226,7 +261,7 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
     {
         $group = $group->getName();
 
-        // User was added to group, need to hide all manialinks of the group to this user
+        // User was removed from group, need to hide all manialinks of the group to this user
         if (isset($this->displayeds[$group])) {
             foreach ($this->displayeds[$group] as $mlId => $manialink) {
                 $this->hideIndividualQueu[$loginRemoved][$mlId] = $manialink;
@@ -245,9 +280,9 @@ class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInt
     }
 
     /**
-     * List of all manialinks that are currentyl displayed.
+     * List of all manialinks that are currently displayed.
      *
-     * @return ManialinkInterface[]
+     * @return ManialinkInterface[][]
      */
     public function getDisplayeds()
     {

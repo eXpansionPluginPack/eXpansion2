@@ -4,12 +4,13 @@ namespace eXpansion\Framework\Core\Model\Gui;
 
 use eXpansion\Framework\Core\Model\Data\DataStorageTrait;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
+use FML\Types\Renderable;
 
 class Manialink implements ManialinkInterface
 {
     use DataStorageTrait;
 
-    /** @var string  */
+    /** @var string */
     protected $id;
 
     /** @var string */
@@ -58,9 +59,9 @@ class Manialink implements ManialinkInterface
     public function getXml()
     {
         return '<?xml version="1.0" encoding="utf-8" standalone="yes" ?>'
-                .'<manialink version="3" id="'.$this->getId().'">'
-                    .'<label text="Hello World!" />'
-                .'</manialink>';
+            .'<manialink version="3" id="'.$this->getId().'">'
+            .'<label text="Hello World!" />'
+            .'</manialink>';
     }
 
     /**
@@ -79,5 +80,26 @@ class Manialink implements ManialinkInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function addChild(Renderable $child)
+    {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getChildren()
+    {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getContentFrame()
+    {
     }
 }
