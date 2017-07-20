@@ -204,59 +204,6 @@ class Console
     }
 
     /**
-     * Fix the color codes from MP standard to world standard
-     *
-     * @param string $r
-     * @param string $g
-     * @param string $b
-     *
-     * @return string
-     */
-    public function fixColors($r, $g, $b)
-    {
-        $out = "111";
-        // black/gray/white
-        if ($r == $g && $g == $b && $b == $r) {
-            if ($r >= 0 && $r < 5) {
-                $out = "000";
-            }
-            if ($r >= 5 && $r < 13) {
-                $out = "111";
-            }
-            if ($r >= 13 && $r <= 16) {
-                $out = "222";
-            }
-        } else {
-            $out = $this->convert($r).$this->convert($g).$this->convert($b);
-        }
-
-        return $out;
-    }
-
-    /**
-     * Convert from number to numeric string
-     *
-     * @param int $number
-     *
-     * @return string
-     */
-    public function convert($number)
-    {
-        $out = "0";
-        if ($number >= 10 && $number <= 16) {
-            $out = "2";
-        }
-        if ($number >= 3 && $number < 10) {
-            $out = "1";
-        }
-        if ($number >= 0 && $number < 3) {
-            $out = "0";
-        }
-
-        return $out;
-    }
-
-    /**
      * Get symphony console.
      *
      * @return OutputInterface

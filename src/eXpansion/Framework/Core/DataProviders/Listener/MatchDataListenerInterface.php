@@ -1,4 +1,5 @@
 <?php
+
 namespace eXpansion\Framework\Core\DataProviders\Listener;
 
 use eXpansion\Framework\Core\DataProviders\PlayerDataProvider;
@@ -25,4 +26,5 @@ interface MatchDataListenerInterface
      * @return mixed
      */
     public function onEndMap(Map $map);
+
 }

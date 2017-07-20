@@ -1,4 +1,7 @@
 expansion_maps:
+  chat:
+    onbeginmap: '|info| {info}Current map {variable}%name%{info} by {variable}%author%'
+
   gui:
     window:
       title: 'Server Maps'
