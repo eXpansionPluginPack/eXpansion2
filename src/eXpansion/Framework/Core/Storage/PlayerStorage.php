@@ -3,6 +3,7 @@
 namespace eXpansion\Framework\Core\Storage;
 
 use eXpansion\Framework\Core\DataProviders\Listener\PlayerDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\TimerDataListenerInterface;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\Data\PlayerFactory;
 use Maniaplanet\DedicatedServer\Connection;
@@ -12,12 +13,12 @@ use Maniaplanet\DedicatedServer\Connection;
  *
  * @package eXpansion\Framework\Core\Storage
  */
-class PlayerStorage implements PlayerDataListenerInterface
+class PlayerStorage implements PlayerDataListenerInterface, TimerDataListenerInterface
 {
     /** @var  Connection */
     protected $connection;
 
-    /** @var PlayerFactory  */
+    /** @var PlayerFactory */
     protected $playerFactory;
 
     /** @var Player[] List of all the players on the server. */
@@ -29,10 +30,14 @@ class PlayerStorage implements PlayerDataListenerInterface
     /** @var Player[] List of all spectators on the server. */
     protected $spectators = [];
 
+    /** @var array */
+    protected $playersToRemove = [];
+
     /**
      * PlayerDataProvider constructor.
      *
      * @param Connection $connection
+     * @param PlayerFactory $playerFactory
      */
     public function __construct(Connection $connection, PlayerFactory $playerFactory)
     {
@@ -43,7 +48,8 @@ class PlayerStorage implements PlayerDataListenerInterface
     /**
      * Get information about a player.
      *
-     * @param $login
+     * @param string $login
+     * @param bool $forceNew
      *
      * @return Player
      */
@@ -84,9 +90,7 @@ class PlayerStorage implements PlayerDataListenerInterface
      */
     public function onPlayerDisconnect(Player $playerData, $disconnectionReason)
     {
-        unset($this->online[$playerData->getLogin()]);
-        unset($this->spectators[$playerData->getLogin()]);
-        unset($this->players[$playerData->getLogin()]);
+        $this->playersToRemove[] = $playerData->getLogin();
     }
 
     /**
@@ -134,5 +138,36 @@ class PlayerStorage implements PlayerDataListenerInterface
     public function getSpectators()
     {
         return $this->spectators;
+    }
+
+
+
+    public function onPreLoop()
+    {
+        foreach ($this->playersToRemove as $login) {
+            unset($this->online[$login]);
+            unset($this->spectators[$login]);
+            unset($this->players[$login]);
+        }
+
+        $this->playersToRemove = [];
+    }
+
+    public function onPostLoop()
+    {
+        // TODO: Implement onPostLoop() method.
+    }
+
+    public function onEverySecond()
+    {
+        // TODO: Implement onEverySecond() method.
+    }
+
+    /**
+     * @return array
+     */
+    public function getPlayersToRemove()
+    {
+        return $this->playersToRemove;
     }
 }

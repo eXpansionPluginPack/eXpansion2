@@ -65,6 +65,11 @@ class PlayerStorageTest extends TestCore
 
         $this->getPlayerStorage()->onPlayerDisconnect($player1, '');
 
+        $toRemove = $this->getPlayerStorage()->getPlayersToRemove();
+        $this->assertSame(['test-2'], $toRemove);
+
+        $this->getPlayerStorage()->onPreLoop();
+
         $players = $this->getPlayerStorage()->getPlayers();
         $this->assertArrayHasKey('test-1', $players);
         $this->assertArrayNotHasKey('test-2', $players);

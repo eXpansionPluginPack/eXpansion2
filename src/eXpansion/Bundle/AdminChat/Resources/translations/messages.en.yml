@@ -79,5 +79,13 @@ expansion_admin_chat:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}loads guest list. File name: {highlight}%parameter%'
     description: '{info}Loads guest list. File is relative to server config directory.'
 
+  password:
+    msg: '|admin| {admin_info}New join password for server is: "{highlight}%parameter%{admin_info}"'
+    description: '{info}Saves guest list to server. File is relative to server config directory.'
+
+  specpass:
+    msg: '|admin| {admin_infoNew spectators join passowrd for server is: "{highlight}%parameter%{admin_info}"'
+    description: '{info}Loads guest list. File is relative to server config directory.'
+
 
 

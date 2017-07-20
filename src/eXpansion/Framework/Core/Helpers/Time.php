@@ -14,16 +14,27 @@ class Time
      */
     public function timeToText($time, $milliseconds = false)
     {
-        $time = intval($time);
-        $ms = "";
+        $sign = "";
+        if ($time < 0) {
+            $sign = "-";
+        }
+        $time = abs($time);
+        $cent = str_pad(($time % 1000), 3, '0', STR_PAD_LEFT);
+        $time = floor($time / 1000);
+        $sec = str_pad($time % 60, 2, '0', STR_PAD_LEFT);
+        $min = str_pad(floor($time / 60), 2, '0', STR_PAD_LEFT);
+        $hour = str_pad(floor($time / 60 / 60), 1, '0');
+
+        $textTime = $min.':'.$sec;
+        if (floor($time / 60 / 60) > 0) {
+            $textTime = $hour."'".$textTime;
+        }
+
         if ($milliseconds) {
-            $ms = ".".str_pad((abs($time) % 1000), 3, '0', STR_PAD_LEFT);
+            $textTime = $textTime.'.'.$cent;
         }
-        if ($time > 0) {
-            return gmdate("i:s", $time / 1000).$ms;
-        } else {
-            return "-".gmdate("i:s", abs($time / 1000)).$ms;
-        }
+
+        return $sign.$textTime;
     }
 
     /**

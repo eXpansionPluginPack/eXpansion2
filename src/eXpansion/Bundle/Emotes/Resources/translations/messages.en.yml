@@ -1,5 +1,5 @@
 expansion_emotes:
-  prefix: '%nickname%{separator}|{pretty_chat}'
+  prefix: '%nickname%{separator}|{default}'
 
   gg1: '%prefix%Good Game'
   gg2: '%prefix%Great Game'
