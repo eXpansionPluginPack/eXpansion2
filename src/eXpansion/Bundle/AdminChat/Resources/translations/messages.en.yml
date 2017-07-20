@@ -81,11 +81,11 @@ expansion_admin_chat:
 
   password:
     msg: '|admin| {admin_info}New join password for server is: "{highlight}%parameter%{admin_info}"'
-    description: '{info}Saves guest list to server. File is relative to server config directory.'
+    description: '{info}Sets new server password'
 
   specpass:
-    msg: '|admin| {admin_infoNew spectators join passowrd for server is: "{highlight}%parameter%{admin_info}"'
-    description: '{info}Loads guest list. File is relative to server config directory.'
+    msg: '|admin| {admin_info}New spectators join password for server is: "{highlight}%parameter%{admin_info}"'
+    description: '{info}Sets new specator password'
 
 
 
