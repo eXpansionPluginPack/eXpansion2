@@ -7,6 +7,7 @@ use eXpansion\Framework\Core\DataProviders\Listener\TimerDataListenerInterface;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\Data\PlayerFactory;
 use Maniaplanet\DedicatedServer\Connection;
+use Maniaplanet\DedicatedServer\Xmlrpc\UnknownPlayerException;
 
 /**
  * PlayerStorage keeps in storage player data in order to minimize amounts of calls done to the dedicated server.
@@ -56,10 +57,15 @@ class PlayerStorage implements PlayerDataListenerInterface, TimerDataListenerInt
     public function getPlayerInfo($login, $forceNew = false)
     {
         if (!isset($this->online[$login]) || $forceNew) {
-            $playerInformation = $this->connection->getPlayerInfo($login);
-            $playerDetails = $this->connection->getDetailedPlayerInfo($login);
+            try {
+                $playerInformation = $this->connection->getPlayerInfo($login);
+                $playerDetails = $this->connection->getDetailedPlayerInfo($login);
 
-            return $this->playerFactory->createPlayer($playerInformation, $playerDetails);
+                return $this->playerFactory->createPlayer($playerInformation, $playerDetails);
+            } catch (UnknownPlayerException $e) {
+                // @todo log unknown player error
+                return new Player();
+            }
         }
 
         return $this->online[$login];

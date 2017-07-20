@@ -66,6 +66,8 @@ class JoinLeaveMessages implements PlayerDataListenerInterface
                 "%group%" => $this->adminGroups->getGroupLabel($groupName),
                 "%nickname%" => $player->getNickName(),
                 "%login%" => $player->getLogin(),
+                "%path%" => $player->getPath(),
+                "%ladder%" => $player->getLadderScore(),
             ]);
     }
 
@@ -83,6 +85,8 @@ class JoinLeaveMessages implements PlayerDataListenerInterface
                 "%group%" => $this->adminGroups->getGroupLabel($groupName),
                 "%nickname%" => $player->getNickName(),
                 "%login%" => $player->getLogin(),
+                "%path%" => $player->getPath(),
+                "%ladder%" => $player->getLadderScore(),
             ]);
     }
 
