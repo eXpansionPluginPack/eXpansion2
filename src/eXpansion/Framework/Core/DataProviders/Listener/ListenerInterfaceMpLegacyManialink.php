@@ -2,7 +2,7 @@
 
 namespace eXpansion\Framework\Core\DataProviders\Listener;
 
-interface ManialinkPageAnswerDataListenerInterface
+interface ListenerInterfaceMpLegacyManialink
 {
     /**
      * When a player uses an action dispatch information.

@@ -5,12 +5,12 @@ services:
             - '__'
             - '__'
             - []
-            - '@expansion.framework.admin_groups.helpers.groups'
-            - '@expansion.framework.core.services.dedicated_connection'
-            - '@expansion.framework.core.helpers.chat_notification'
-            - '@expansion.framework.core.storage.player'
+            - '@expansion.helper.admingroups'
+            - '@expansion.service.dedicated_connection'
+            - '@expansion.helper.chat_notification'
+            - '@expansion.storage.player'
             - '@logger'
-            - '@expansion.framework.core.helpers.time'
+            - '@expansion.helper.time'
 
     expansion.admin_chat.chat_command.restart:
         class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand

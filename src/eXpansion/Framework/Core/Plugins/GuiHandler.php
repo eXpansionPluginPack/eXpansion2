@@ -2,8 +2,8 @@
 
 namespace eXpansion\Framework\Core\Plugins;
 
-use eXpansion\Framework\Core\DataProviders\Listener\TimerDataListenerInterface;
-use eXpansion\Framework\Core\DataProviders\Listener\UserGroupDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpUserGroup;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Services\Console;
@@ -17,7 +17,7 @@ use oliverde8\AssociativeArraySimplified\AssociativeArray;
  * @package eXpansion\Framework\Core\Plugins\Gui
  * @author Oliver de Cramer
  */
-class GuiHandler implements TimerDataListenerInterface, UserGroupDataListenerInterface
+class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserGroup
 {
     /** @var Connection */
     protected $connection;

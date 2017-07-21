@@ -15,7 +15,7 @@ class AbstractAdminChatCommandTest extends TestAdminGroups
 {
     public function testChatCommand()
     {
-        $adminHelper = $this->container->get('expansion.framework.admin_groups.helpers.groups');
+        $adminHelper = $this->container->get('expansion.helper.admingroups');
 
         $chat = new AdminChatCommand('restart', 'p10', ['res'], $adminHelper);
 

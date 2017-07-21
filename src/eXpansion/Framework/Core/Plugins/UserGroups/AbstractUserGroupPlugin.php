@@ -3,11 +3,11 @@
 
 namespace eXpansion\Framework\Core\Plugins\UserGroups;
 
-use eXpansion\Framework\Core\DataProviders\Listener\PlayerDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Storage\Data\Player;
 
-abstract class AbstractUserGroupPlugin implements PlayerDataListenerInterface
+abstract class AbstractUserGroupPlugin implements ListenerInterfaceMpLegacyPlayer
 {
     protected $userGroup;
 

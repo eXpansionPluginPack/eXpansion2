@@ -3,8 +3,8 @@
 
 namespace Tests\eXpansion\Framework\Core\DataProviders;
 
-use eXpansion\Framework\Core\DataProviders\Listener\ChatDataListenerInterface;
-use eXpansion\Framework\Core\DataProviders\Listener\PlayerDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Core\DataProviders\PlayerDataProvider;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
@@ -29,15 +29,15 @@ class PlayerDataProviderTest extends TestCore
     public function testOnRun()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject $connectionMock */
-        $connectionMock = $this->container->get('expansion.framework.core.services.dedicated_connection');
+        $connectionMock = $this->container->get('expansion.service.dedicated_connection');
         $connectionMock->method('getPlayerList')
             ->withAnyParameters()
             ->willReturn([$this->player]);
 
         $player = new Player();
-        $this->container->set('expansion.framework.core.storage.player', $this->getMockPlayerStorage($player));
+        $this->container->set('expansion.storage.player', $this->getMockPlayerStorage($player));
 
-        $plugin = $this->createMock(PlayerDataListenerInterface::class);
+        $plugin = $this->createMock(ListenerInterfaceMpLegacyPlayer::class);
         $plugin->expects($this->once())
             ->method('onPlayerConnect')
             ->withConsecutive([$player]);
@@ -52,9 +52,9 @@ class PlayerDataProviderTest extends TestCore
     public function testOnPlayerConnect()
     {
         $player = $this->getPlayer('test', false);
-        $this->container->set('expansion.framework.core.storage.player', $this->getMockPlayerStorage($player));
+        $this->container->set('expansion.storage.player', $this->getMockPlayerStorage($player));
 
-        $plugin = $this->createMock(PlayerDataListenerInterface::class);
+        $plugin = $this->createMock(ListenerInterfaceMpLegacyPlayer::class);
         $plugin->expects($this->once())
             ->method('onPlayerConnect')
             ->withConsecutive([$player]);
@@ -74,9 +74,9 @@ class PlayerDataProviderTest extends TestCore
             ->getMock();
         $playerStorage->method('getPlayerInfo')
             ->willThrowException(new \Exception());
-        $this->container->set('expansion.framework.core.storage.player',$playerStorage);
+        $this->container->set('expansion.storage.player',$playerStorage);
 
-        $plugin = $this->createMock(PlayerDataListenerInterface::class);
+        $plugin = $this->createMock(ListenerInterfaceMpLegacyPlayer::class);
         $plugin->expects($this->never())
             ->method('onPlayerConnect');
 
@@ -90,9 +90,9 @@ class PlayerDataProviderTest extends TestCore
     public function testOnPlayerDisconnect()
     {
         $player = $this->getPlayer('test', false);
-        $this->container->set('expansion.framework.core.storage.player', $this->getMockPlayerStorage($player));
+        $this->container->set('expansion.storage.player', $this->getMockPlayerStorage($player));
 
-        $plugin = $this->createMock(PlayerDataListenerInterface::class);
+        $plugin = $this->createMock(ListenerInterfaceMpLegacyPlayer::class);
         $plugin->expects($this->once())
             ->method('onPlayerDisconnect')
             ->withConsecutive([$player]);
@@ -107,9 +107,9 @@ class PlayerDataProviderTest extends TestCore
     public function testOnPlayerInfoChanged()
     {
         $player = $this->getPlayer('test', false);
-        $this->container->set('expansion.framework.core.storage.player', $this->getMockPlayerStorage($player));
+        $this->container->set('expansion.storage.player', $this->getMockPlayerStorage($player));
 
-        $plugin = $this->createMock(PlayerDataListenerInterface::class);
+        $plugin = $this->createMock(ListenerInterfaceMpLegacyPlayer::class);
         $plugin->expects($this->once())
             ->method('onPlayerInfoChanged')
             ->withConsecutive([$player]);
@@ -125,9 +125,9 @@ class PlayerDataProviderTest extends TestCore
     public function testOnPlayerAlliesChanged()
     {
         $player = $this->getPlayer('test', false);
-        $this->container->set('expansion.framework.core.storage.player', $this->getMockPlayerStorage($player));
+        $this->container->set('expansion.storage.player', $this->getMockPlayerStorage($player));
 
-        $plugin = $this->createMock(PlayerDataListenerInterface::class);
+        $plugin = $this->createMock(ListenerInterfaceMpLegacyPlayer::class);
         $plugin->expects($this->once())
             ->method('onPlayerAlliesChanged')
             ->withConsecutive([$player, $player]);

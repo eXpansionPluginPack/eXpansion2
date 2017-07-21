@@ -75,7 +75,7 @@ class TimeParameterCommand extends AbstractConnectionCommand
         $nickName = $this->playerStorage->getPlayerInfo($login)->getNickName();
         $parameter = $this->timeHelper->textToTime($input->getArgument('parameter'));
         $group = $this->getGroupLabel($login);
-        
+
         $this->chatNotification->sendMessage(
             $this->chatMessage,
             $this->isPublic ? null : $login,

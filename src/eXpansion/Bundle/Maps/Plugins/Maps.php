@@ -3,8 +3,8 @@
 namespace eXpansion\Bundle\Maps\Plugins;
 
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
-use eXpansion\Framework\Core\DataProviders\Listener\MapDataListenerInterface;
-use eXpansion\Framework\Core\DataProviders\Listener\MatchDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyMaplist;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Console;
@@ -13,7 +13,7 @@ use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
 
-class Maps implements MatchDataListenerInterface, MapDataListenerInterface, StatusAwarePluginInterface
+class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMaplist, StatusAwarePluginInterface
 {
     /** @var Connection */
     protected $connection;

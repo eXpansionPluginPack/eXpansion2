@@ -3,7 +3,7 @@
 namespace eXpansion\Framework\AdminGroups\Plugins;
 
 use eXpansion\Framework\AdminGroups\Services\AdminGroupConfiguration;
-use eXpansion\Framework\Core\DataProviders\Listener\PlayerDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
 use eXpansion\Framework\Core\Storage\Data\Player;
 
@@ -13,7 +13,7 @@ use eXpansion\Framework\Core\Storage\Data\Player;
  * @package eXpansion\Bundle\AdminGroupConfiguration\Plugins;
  * @author oliver de Cramer <oliverde8@gmail.com>
  */
-class GroupsPlugin implements PlayerDataListenerInterface
+class GroupsPlugin implements ListenerInterfaceMpLegacyPlayer
 {
     /** @var  AdminGroupConfiguration */
     protected $adminGroupConfiguration;

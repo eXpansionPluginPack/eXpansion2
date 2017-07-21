@@ -3,12 +3,12 @@
 namespace eXpansion\Framework\Core\DataProviders\Listener;
 
 /**
- * Interface ApplicationDataListenerInterface
+ * Interface ListenerInterfaceExpApplication
  *
  * @package eXpansion\Framework\Core\DataProviders\Listener;
  * @author  reaby
  */
-interface ApplicationDataListenerInterface
+interface ListenerInterfaceExpApplication
 {
     /**
      * called at eXpansion init

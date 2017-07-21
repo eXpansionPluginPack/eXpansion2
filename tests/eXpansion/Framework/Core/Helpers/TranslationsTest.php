@@ -67,7 +67,7 @@ class TranslationsTest extends TestCore
      */
     protected function getTranslationHelper()
     {
-        return $this->container->get('expansion.framework.core.helpers.translations');
+        return $this->container->get('expansion.helper.translations');
     }
 
 }

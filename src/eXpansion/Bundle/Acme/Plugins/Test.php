@@ -2,15 +2,14 @@
 
 namespace eXpansion\Bundle\Acme\Plugins;
 
-use eXpansion\Framework\Core\DataProviders\Listener\MatchDataListenerInterface;
-use eXpansion\Framework\Core\DataProviders\Listener\TimerDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyMaplist;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Services\Console;
-use eXpansion\Framework\Core\Storage\Data\Player;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
-class Test implements MatchDataListenerInterface, TimerDataListenerInterface
+class Test implements ListenerInterfaceMpLegacyMaplist, ListenerInterfaceExpTimer
 {
     /** @var Connection */
     protected $connection;
@@ -68,5 +67,27 @@ class Test implements MatchDataListenerInterface, TimerDataListenerInterface
 
             $this->previousMemoryValue = $mem;
         }
+    }
+
+    /**
+     * @param Map[] $oldMaps
+     * @param string $currentMapUid
+     * @param string $nextMapUid
+     * @param bool $isListModified
+     * @return mixed
+     */
+    public function onMapListModified($oldMaps, $currentMapUid, $nextMapUid, $isListModified)
+    {
+        // TODO: Implement onMapListModified() method.
+    }
+
+    public function onExpansionMapChange($currentMap, $previousMap)
+    {
+        // TODO: Implement onExpansionMapChange() method.
+    }
+
+    public function onExpansionNextMapChange($nextMap, $previousNextMap)
+    {
+        // TODO: Implement onExpansionNextMapChange() method.
     }
 }

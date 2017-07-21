@@ -38,6 +38,9 @@ class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
     /** @var ReasonUserCommand  */
     protected $reasonCommand;
 
+    /**
+     *
+     */
     protected function setUp()
     {
         $this->connectionMock = $this->getMockBuilder(Connection::class)

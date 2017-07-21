@@ -5,8 +5,8 @@ services:
             - '__'
             - ['__']
             - '1'
-            - '@expansion.framework.core.helpers.chat_notification'
-            - '@expansion.framework.core.storage.player'
+            - '@expansion.helper.chat_notification'
+            - '@expansion.storage.player'
 
     expansion.emotes.chat_command.bb:
         class: eXpansion\Bundle\Emotes\ChatCommand\BasicEmote

@@ -2,7 +2,7 @@
 
 namespace eXpansion\Bundle\Acme\Plugins;
 
-use eXpansion\Framework\Core\DataProviders\Listener\ChatDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;

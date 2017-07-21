@@ -21,7 +21,7 @@ class DediEventsTestCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getContainer()->get('expansion.framework.core.services.application_debug')
+        $this->getContainer()->get('expansion.service.application_debug')
             ->init($output)
             ->run();
     }

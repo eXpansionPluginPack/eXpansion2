@@ -9,7 +9,7 @@
 namespace eXpansion\Framework\Core\DataProviders\Listener;
 
 
-interface TimerDataListenerInterface
+interface ListenerInterfaceExpTimer
 {
 
     public function onPreLoop();

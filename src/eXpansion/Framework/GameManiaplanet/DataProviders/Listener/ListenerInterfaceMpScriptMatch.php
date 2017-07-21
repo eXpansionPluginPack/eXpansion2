@@ -10,7 +10,7 @@ use Maniaplanet\DedicatedServer\Structures\Map;
  * @package eXpansion\Framework\GameManiaplanet\DataProviders\Listener;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-interface MatchDataListenerInterface
+interface ListenerInterfaceMpScriptMatch
 {
     /**
      * Callback sent when the "StartMatch" section start.

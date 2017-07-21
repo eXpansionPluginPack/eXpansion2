@@ -6,8 +6,8 @@ services:
     expansion.framework.game_trackmania.data_providers.base:
         class: "%expansion.framework.game_trackmania.data_providers.base.class%"
         arguments:
-            - "@expansion.framework.core.storage.player"
+            - "@expansion.storage.player"
         tags:
-            - {name: expansion.data_provider, provider: "expansion.tm.base", interface: "%expansion.framework.game_trackmania.data_providers.base.interface%"}
-            - {name: expansion.data_provider.compatibility, title: TM, gamemode: script}
-            - {name: expansion.data_provider.listener, event_name: Trackmania.Event.WayPoint, method: onWayPoint}
+            - {name: expansion.dataprovider, provider: "tm.script.race", interface: "%expansion.framework.game_trackmania.data_providers.base.interface%"}
+            - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script}
+            - {name: expansion.dataprovider.listener, event_name: Trackmania.Event.WayPoint, method: onWayPoint}

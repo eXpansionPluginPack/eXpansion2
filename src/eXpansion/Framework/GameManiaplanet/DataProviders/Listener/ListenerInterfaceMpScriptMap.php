@@ -10,7 +10,7 @@ use Maniaplanet\DedicatedServer\Structures\Map;
  * @package eXpansion\Framework\GameManiaplanet\DataProviders\Listener;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-interface MapDataListenerInterface
+interface ListenerInterfaceMpScriptMap
 {
     /**
      * Callback sent when the "StartMap" section start.

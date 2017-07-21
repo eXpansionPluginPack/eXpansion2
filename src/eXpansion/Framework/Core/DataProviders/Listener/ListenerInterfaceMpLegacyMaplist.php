@@ -11,7 +11,7 @@ use Maniaplanet\DedicatedServer\Structures\Map;
  *
  * @see PlayerDataProvider
  */
-interface MapDataListenerInterface
+interface ListenerInterfaceMpLegacyMaplist
 {
     /**
      * @param Map[] $oldMaps

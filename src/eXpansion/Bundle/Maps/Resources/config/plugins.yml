@@ -2,11 +2,11 @@ services:
     expansion.bundle.maps.plugins.maps:
         class: eXpansion\Bundle\Maps\Plugins\Maps
         arguments:
-          - '@expansion.framework.core.services.dedicated_connection'
-          - '@expansion.framework.core.services.console'
-          - '@expansion.framework.admin_groups.helpers.groups'
+          - '@expansion.service.dedicated_connection'
+          - '@expansion.service.console'
+          - '@expansion.helper.admingroups'
           - '@expansion.framework.core.storage.map'
-          - '@expansion.framework.core.helpers.chat_notification'
+          - '@expansion.helper.chat_notification'
         tags:
-          - {name: expansion.plugin, data_provider: expansion.map_data}
-          - {name: expansion.plugin, data_provider: expansion.match_data}
+          - {name: expansion.plugin, data_provider: mp.legacy.maplist}
+          - {name: expansion.plugin, data_provider: mp.legacy.map}

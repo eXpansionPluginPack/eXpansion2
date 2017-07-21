@@ -9,6 +9,6 @@ services:
         calls:
             - [setGridBuilderFactory, ['@expansion.framework.core.model.gui.grid.builder_factory']]
             - [setDataCollectionFactory, ['@expansion.framework.core.model.gui.grid.data_collection_factory.array']]
-            - [setTimerFormatter, ['@expansion.framework.core.helpers.time']]
+            - [setTimerFormatter, ['@expansion.helper.time']]
         tags:
             - {name: expansion.plugin, data_provider: expansion.user_group}

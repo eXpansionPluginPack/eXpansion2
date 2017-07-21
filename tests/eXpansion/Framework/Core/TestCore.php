@@ -3,7 +3,7 @@
 namespace Tests\eXpansion\Framework\Core;
 
 use eXpansion\Framework\Core\DataProviders\ChatDataProvider;
-use eXpansion\Framework\Core\DataProviders\Listener\ChatDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
 use eXpansion\Framework\Core\Helpers\ChatOutput;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
@@ -43,12 +43,12 @@ class TestCore extends KernelTestCase
         $dedicatedConnectionMock = $this->getMockBuilder('Maniaplanet\DedicatedServer\Connection')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->container->set('expansion.framework.core.services.dedicated_connection', $dedicatedConnectionMock);
+        $this->container->set('expansion.service.dedicated_connection', $dedicatedConnectionMock);
 
         $consoleMock = $this->getMockBuilder(Console::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->container->set('expansion.framework.core.services.console', $consoleMock);
+        $this->container->set('expansion.service.console', $consoleMock);
 
         $outputMock = $this->getMockBuilder(OutputInterface::class)->getMock();
         $consoleMock->method('getConsoleOutput')->willReturn($outputMock);
@@ -71,6 +71,6 @@ class TestCore extends KernelTestCase
      */
     protected function getChatOutputHelper()
     {
-        return $this->container->get('expansion.framework.core.helpers.chat_output');
+        return $this->container->get('expansion.helper.chat_output');
     }
 }

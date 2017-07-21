@@ -1,9 +1,9 @@
 parameters:
     expansion.framework.game_maniaplanet.data_providers.map.class: eXpansion\Framework\GameManiaplanet\DataProviders\MapDataProvider
-    expansion.framework.game_maniaplanet.data_providers.map.interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\MapDataListenerInterface
+    expansion.framework.game_maniaplanet.data_providers.map.interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMap
 
     expansion.framework.game_maniaplanet.data_providers.match.class: eXpansion\Framework\GameManiaplanet\DataProviders\MatchDataProvider
-    expansion.framework.game_maniaplanet.data_providers.match.interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\MatchDataListenerInterface
+    expansion.framework.game_maniaplanet.data_providers.match.interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMatch
 
 services:
     expansion.framework.game_maniaplanet.data_providers.map:
@@ -11,27 +11,27 @@ services:
         arguments:
             - "@expansion.framework.core.storage.map"
         tags:
-            - {name: expansion.data_provider, provider: "expansion.mp.map", interface: "%expansion.framework.game_maniaplanet.data_providers.map.interface%"}
-            - {name: expansion.data_provider.compatibility, title: ALL, gamemode: script}
-            - {name: expansion.data_provider.listener, event_name: Maniaplanet.StartMap_Start, method: onStartMapStart}
-            - {name: expansion.data_provider.listener, event_name: Maniaplanet.StartMap_End, method: onStartMapEnd}
-            - {name: expansion.data_provider.listener, event_name: Maniaplanet.EndMap_Start, method: onEndMapStart}
-            - {name: expansion.data_provider.listener, event_name: Maniaplanet.EndMap_End, method: onEndMapEnd}
+            - {name: expansion.dataprovider, provider: "mp.script.map", interface: "%expansion.framework.game_maniaplanet.data_providers.map.interface%"}
+            - {name: expansion.dataprovider.compatibility, title: ALL, gamemode: script}
+            - {name: expansion.dataprovider.listener, event_name: Maniaplanet.StartMap_Start, method: onStartMapStart}
+            - {name: expansion.dataprovider.listener, event_name: Maniaplanet.StartMap_End, method: onStartMapEnd}
+            - {name: expansion.dataprovider.listener, event_name: Maniaplanet.EndMap_Start, method: onEndMapStart}
+            - {name: expansion.dataprovider.listener, event_name: Maniaplanet.EndMap_End, method: onEndMapEnd}
 
     expansion.framework.game_maniaplanet.data_providers.match:
         class: "%expansion.framework.game_maniaplanet.data_providers.match.class%"
         tags:
-            - {name: expansion.data_provider, provider: "expansion.mp.match", interface: "%expansion.framework.game_maniaplanet.data_providers.match.interface%"}
-            - {name: expansion.data_provider.compatibility, title: ALL, gamemode: script}
-            - {name: expansion.data_provider.listener, event_name: Maniaplanet.StartMatch_Start, method: onStartMatchStart}
-            - {name: expansion.data_provider.listener, event_name: Maniaplanet.StartMatch_End, method: onStartMatchEnd}
-            - {name: expansion.data_provider.listener, event_name: Maniaplanet.EndMatch_Start, method: onEndMatchStart}
-            - {name: expansion.data_provider.listener, event_name: Maniaplanet.EndMatch_End, method: onEndMatchEnd}
-            - {name: expansion.data_provider.listener, event_name: Maniaplanet.StartTurn_Start, method: onStartTurnStart}
-            - {name: expansion.data_provider.listener, event_name: Maniaplanet.StartTurn_End, method: onStartTurnEnd}
-            - {name: expansion.data_provider.listener, event_name: Maniaplanet.EndTurn_Start, method: onEndTurnStart}
-            - {name: expansion.data_provider.listener, event_name: Maniaplanet.EndTurn_End, method: onEndTurnEnd}
-            - {name: expansion.data_provider.listener, event_name: Maniaplanet.StartRound_Start, method: onStartRoundStart}
-            - {name: expansion.data_provider.listener, event_name: Maniaplanet.StartRound_End, method: onStartRoundEnd}
-            - {name: expansion.data_provider.listener, event_name: Maniaplanet.EndRound_Start, method: onEndRoundStart}
-            - {name: expansion.data_provider.listener, event_name: Maniaplanet.EndRound_End, method: onEndRoundEnd}
+            - {name: expansion.dataprovider, provider: "mp.script.match", interface: "%expansion.framework.game_maniaplanet.data_providers.match.interface%"}
+            - {name: expansion.dataprovider.compatibility, title: ALL, gamemode: script}
+            - {name: expansion.dataprovider.listener, event_name: Maniaplanet.StartMatch_Start, method: onStartMatchStart}
+            - {name: expansion.dataprovider.listener, event_name: Maniaplanet.StartMatch_End, method: onStartMatchEnd}
+            - {name: expansion.dataprovider.listener, event_name: Maniaplanet.EndMatch_Start, method: onEndMatchStart}
+            - {name: expansion.dataprovider.listener, event_name: Maniaplanet.EndMatch_End, method: onEndMatchEnd}
+            - {name: expansion.dataprovider.listener, event_name: Maniaplanet.StartTurn_Start, method: onStartTurnStart}
+            - {name: expansion.dataprovider.listener, event_name: Maniaplanet.StartTurn_End, method: onStartTurnEnd}
+            - {name: expansion.dataprovider.listener, event_name: Maniaplanet.EndTurn_Start, method: onEndTurnStart}
+            - {name: expansion.dataprovider.listener, event_name: Maniaplanet.EndTurn_End, method: onEndTurnEnd}
+            - {name: expansion.dataprovider.listener, event_name: Maniaplanet.StartRound_Start, method: onStartRoundStart}
+            - {name: expansion.dataprovider.listener, event_name: Maniaplanet.StartRound_End, method: onStartRoundEnd}
+            - {name: expansion.dataprovider.listener, event_name: Maniaplanet.EndRound_Start, method: onEndRoundStart}
+            - {name: expansion.dataprovider.listener, event_name: Maniaplanet.EndRound_End, method: onEndRoundEnd}

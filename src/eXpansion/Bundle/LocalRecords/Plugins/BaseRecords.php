@@ -4,14 +4,14 @@ namespace eXpansion\Bundle\LocalRecords\Plugins;
 
 use eXpansion\Bundle\LocalRecords\Services\RecordHandler;
 use eXpansion\Bundle\LocalRecords\Services\RecordHandlerFactory;
-use eXpansion\Framework\Core\DataProviders\Listener\PlayerDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\MapStorage;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\MapDataListenerInterface;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\MatchDataListenerInterface;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMap;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMatch;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
 /**
@@ -22,7 +22,7 @@ use Maniaplanet\DedicatedServer\Structures\Map;
  * @package eXpansion\Bundle\LocalRecords\Plugins;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-class BaseRecords implements MapDataListenerInterface, MatchDataListenerInterface, PlayerDataListenerInterface, StatusAwarePluginInterface
+class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpScriptMatch, ListenerInterfaceMpLegacyPlayer, StatusAwarePluginInterface
 {
     /** @var  RecordHandler */
     protected $recordsHandler;

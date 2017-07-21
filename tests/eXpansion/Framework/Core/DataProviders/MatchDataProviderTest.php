@@ -2,7 +2,7 @@
 
 namespace Tests\eXpansion\Framework\Core\DataProviders;
 
-use eXpansion\Framework\Core\DataProviders\Listener\MatchDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
 use eXpansion\Framework\Core\DataProviders\MatchDataProvider;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
@@ -37,9 +37,9 @@ class MatchDataProviderTest extends TestCore
 
         $this->player = $this->getPlayer('test', false);
         $this->playerStorageMock = $this->getMockPlayerStorage($this->player);
-        $this->container->set('expansion.framework.core.storage.player', $this->playerStorageMock);
+        $this->container->set('expansion.storage.player', $this->playerStorageMock);
 
-        $this->pluginMock = $this->createMock(MatchDataListenerInterface::class);
+        $this->pluginMock = $this->createMock(ListenerInterfaceMpLegacyMap::class);
         $this->matchDataProvider = $this->container->get('expansion.framework.core.data_providers.match_data_provider');
 
         $this->matchDataProvider->registerPlugin('test', $this->pluginMock);

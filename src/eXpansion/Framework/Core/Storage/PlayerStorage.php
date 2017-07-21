@@ -2,8 +2,8 @@
 
 namespace eXpansion\Framework\Core\Storage;
 
-use eXpansion\Framework\Core\DataProviders\Listener\PlayerDataListenerInterface;
-use eXpansion\Framework\Core\DataProviders\Listener\TimerDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\Data\PlayerFactory;
 use Maniaplanet\DedicatedServer\Connection;
@@ -14,7 +14,7 @@ use Maniaplanet\DedicatedServer\Xmlrpc\UnknownPlayerException;
  *
  * @package eXpansion\Framework\Core\Storage
  */
-class PlayerStorage implements PlayerDataListenerInterface, TimerDataListenerInterface
+class PlayerStorage implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceExpTimer
 {
     /** @var  Connection */
     protected $connection;

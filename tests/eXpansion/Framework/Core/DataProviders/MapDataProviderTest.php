@@ -36,7 +36,7 @@ class MapDataProviderTest extends TestCore
         $maps = array_values($allMaps);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $connectionMock */
-        $connectionMock = $this->container->get('expansion.framework.core.services.dedicated_connection');
+        $connectionMock = $this->container->get('expansion.service.dedicated_connection');
         $connectionMock->expects($this->exactly(3))
             ->method('getMapList')
             ->withConsecutive([500, 0], [500, 500])
@@ -68,7 +68,7 @@ class MapDataProviderTest extends TestCore
         $uids2 = array_keys($mapPack2);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $connectionMock */
-        $connectionMock = $this->container->get('expansion.framework.core.services.dedicated_connection');
+        $connectionMock = $this->container->get('expansion.service.dedicated_connection');
         $connectionMock->expects($this->exactly(2))
             ->method('getMapList')
             ->withConsecutive([500, 0], [500, 0])

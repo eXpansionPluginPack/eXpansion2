@@ -17,7 +17,7 @@ use eXpansion\Framework\Core\Storage\Data\Player;
  *
  * @package eXpansion\Framework\Core\DataProviders\Listener
  */
-interface ChatDataListenerInterface
+interface ListenerInterfaceMpLegacyChat
 {
     /**
      * Called when a player chats.

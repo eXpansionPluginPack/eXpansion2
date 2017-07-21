@@ -25,7 +25,7 @@ class GuiHandlerTest extends TestCore
 
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $dedicatedConnection */
-        $dedicatedConnection = $this->container->get('expansion.framework.core.services.dedicated_connection');
+        $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
         $dedicatedConnection->expects($this->once())
             ->method('sendDisplayManialinkPage')
             ->with($logins, $manialink->getXml());
@@ -44,7 +44,7 @@ class GuiHandlerTest extends TestCore
 
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $dedicatedConnection */
-        $dedicatedConnection = $this->container->get('expansion.framework.core.services.dedicated_connection');
+        $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
         $dedicatedConnection->expects($this->once())
             ->method('sendDisplayManialinkPage')
             ->with($logins, '<manialink id="' . $manialink->getId() . '" />');
@@ -64,7 +64,7 @@ class GuiHandlerTest extends TestCore
 
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $dedicatedConnection */
-        $dedicatedConnection = $this->container->get('expansion.framework.core.services.dedicated_connection');
+        $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
         $dedicatedConnection->expects($this->once())
             ->method('sendDisplayManialinkPage')
             ->with($logins, $manialink->getXml());
@@ -86,7 +86,7 @@ class GuiHandlerTest extends TestCore
 
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $dedicatedConnection */
-        $dedicatedConnection = $this->container->get('expansion.framework.core.services.dedicated_connection');
+        $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
         $dedicatedConnection->expects($this->exactly(2))
             ->method('sendDisplayManialinkPage')
             ->withConsecutive([$logins, $manialink->getXml()], [$logins, '<manialink id="' . $manialink->getId() . '" />']);
@@ -107,7 +107,7 @@ class GuiHandlerTest extends TestCore
 
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $dedicatedConnection */
-        $dedicatedConnection = $this->container->get('expansion.framework.core.services.dedicated_connection');
+        $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
         $dedicatedConnection->expects($this->exactly(2))
             ->method('sendDisplayManialinkPage')
             ->withConsecutive([$logins, $manialink->getXml()], ['test3', $manialink->getXml()]);
@@ -128,7 +128,7 @@ class GuiHandlerTest extends TestCore
 
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $dedicatedConnection */
-        $dedicatedConnection = $this->container->get('expansion.framework.core.services.dedicated_connection');
+        $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
         $dedicatedConnection->expects($this->exactly(2))
             ->method('sendDisplayManialinkPage')
             ->withConsecutive([$logins, $manialink->getXml()], ['test1', '<manialink id="' . $manialink->getId() . '" />']);
@@ -149,7 +149,7 @@ class GuiHandlerTest extends TestCore
 
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $dedicatedConnection */
-        $dedicatedConnection = $this->container->get('expansion.framework.core.services.dedicated_connection');
+        $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
         $dedicatedConnection->expects($this->once())
             ->method('sendDisplayManialinkPage')
             ->with($logins, $manialink->getXml());
@@ -167,7 +167,7 @@ class GuiHandlerTest extends TestCore
     public function testExtreme()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject $dedicatedConnection */
-        $dedicatedConnection = $this->container->get('expansion.framework.core.services.dedicated_connection');
+        $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
         $dedicatedConnection->expects($this->exactly(2))
             ->method('sendDisplayManialinkPage')
             ->withAnyParameters();
@@ -190,7 +190,7 @@ class GuiHandlerTest extends TestCore
     public function testError()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject $dedicatedConnection */
-        $dedicatedConnection = $this->container->get('expansion.framework.core.services.dedicated_connection');
+        $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
         $dedicatedConnection->expects($this->exactly(2))
             ->method('sendDisplayManialinkPage')
             ->withAnyParameters();
@@ -199,7 +199,7 @@ class GuiHandlerTest extends TestCore
         $logins = ['test1', 'test2'];
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $loggerMock */
-        $loggerMock = $this->container->get('expansion.framework.core.services.console');
+        $loggerMock = $this->container->get('expansion.service.console');
         $loggerMock->expects($this->exactly(2))->method('writeln');
 
         $guiHanlder = $this->container->get('expansion.framework.core.plugins.gui_handler');

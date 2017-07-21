@@ -18,12 +18,12 @@ class ChatCommandProviderTest extends TestCore
         $chatCommandsMock = $this->getMockBuilder(ChatCommands::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->container->set('expansion.framework.core.services.chat_commands', $chatCommandsMock);
+        $this->container->set('expansion.service.chat_commands', $chatCommandsMock);
 
         $notification = $this->getMockBuilder(ChatNotificationInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->container->set('expansion.framework.core.helpers.chat_notification', $notification);
+        $this->container->set('expansion.helper.chat_notification', $notification);
     }
 
     public function testRegister()
@@ -33,7 +33,7 @@ class ChatCommandProviderTest extends TestCore
         $plugin = new ChatCommandPlugin([$commands]);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $chatCommandsMock */
-        $chatCommandsMock = $this->container->get('expansion.framework.core.services.chat_commands');
+        $chatCommandsMock = $this->container->get('expansion.service.chat_commands');
         $chatCommandsMock->expects($this->once())->method('registerPlugin')->with('test', $plugin);
 
         $this->getDataProvider()->registerPlugin('test', $plugin);
@@ -43,7 +43,7 @@ class ChatCommandProviderTest extends TestCore
     public function testDelete()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject $chatCommandsMock */
-        $chatCommandsMock = $this->container->get('expansion.framework.core.services.chat_commands');
+        $chatCommandsMock = $this->container->get('expansion.service.chat_commands');
         $chatCommandsMock->expects($this->once())->method('deletePlugin')->with('test');
 
         $this->getDataProvider()->deletePlugin('test');
@@ -61,7 +61,7 @@ class ChatCommandProviderTest extends TestCore
         $commands->expects($this->once())->method('run');
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $chatCommandsMock */
-        $chatCommandsMock = $this->container->get('expansion.framework.core.services.chat_commands');
+        $chatCommandsMock = $this->container->get('expansion.service.chat_commands');
         $chatCommandsMock
             ->expects($this->once())
             ->method('getChatCommand')
@@ -76,7 +76,7 @@ class ChatCommandProviderTest extends TestCore
         $cmdText = 'value1 value2';
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $chatCommandsMock */
-        $chatCommandsMock = $this->container->get('expansion.framework.core.services.chat_commands');
+        $chatCommandsMock = $this->container->get('expansion.service.chat_commands');
         $chatCommandsMock
             ->expects($this->never())
             ->method('getChatCommand');
@@ -95,7 +95,7 @@ class ChatCommandProviderTest extends TestCore
             ->with('expansion_core.chat_commands.wrong_chat', 'test');
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $chatCommandsMock */
-        $chatCommandsMock = $this->container->get('expansion.framework.core.services.chat_commands');
+        $chatCommandsMock = $this->container->get('expansion.service.chat_commands');
         $chatCommandsMock
             ->expects($this->once())
             ->method('getChatCommand')
@@ -110,7 +110,7 @@ class ChatCommandProviderTest extends TestCore
         $cmdText = 'value1';
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $chatCommandsMock */
-        $chatCommandsMock = $this->container->get('expansion.framework.core.services.chat_commands');
+        $chatCommandsMock = $this->container->get('expansion.service.chat_commands');
         $chatCommandsMock
             ->expects($this->never())
             ->method('getChatCommand');
@@ -132,6 +132,6 @@ class ChatCommandProviderTest extends TestCore
      */
     protected function getChatNotificationMock()
     {
-        return $this->container->get('expansion.framework.core.helpers.chat_notification');
+        return $this->container->get('expansion.helper.chat_notification');
     }
 }

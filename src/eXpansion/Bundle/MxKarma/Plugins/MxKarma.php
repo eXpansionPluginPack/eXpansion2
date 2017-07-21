@@ -3,19 +3,19 @@
 namespace eXpansion\Bundle\MxKarma\Plugins;
 
 
-use eXpansion\Framework\Core\DataProviders\Listener\ApplicationDataListenerInterface;
-use eXpansion\Framework\Core\DataProviders\Listener\ChatDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Application\Dispatcher;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\MatchDataListenerInterface;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMatch;
 use Maniaplanet\DedicatedServer\Structures\Map;
 use Symfony\Component\Yaml\Yaml;
 use eXpansion\Bundle\MxKarma\Plugins\Connection as MxConnection;
 
-class MxKarma implements MatchDataListenerInterface, StatusAwarePluginInterface, ChatDataListenerInterface, ApplicationDataListenerInterface
+class MxKarma implements ListenerInterfaceMpScriptMatch, StatusAwarePluginInterface, ListenerInterfaceMpLegacyChat, ListenerInterfaceExpApplication
 {
     /**
      * @var object

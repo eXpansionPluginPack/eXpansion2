@@ -75,7 +75,7 @@ class WindowTest extends TestCore
     protected function getWindow()
     {
         $factory = $this->container->get('expansion.framework.core.mania_script.window_factory');
-        $translation = $this->container->get('expansion.framework.core.helpers.translations');
+        $translation = $this->container->get('expansion.helper.translations');
 
         return new Window($this->getSpectatorsGroup(), $factory, $translation, 'test', 10, 20);
     }

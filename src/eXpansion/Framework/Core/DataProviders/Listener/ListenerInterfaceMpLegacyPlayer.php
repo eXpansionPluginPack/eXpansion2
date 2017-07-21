@@ -8,7 +8,7 @@ use eXpansion\Framework\Core\Storage\Data\Player;
  * Interface PlayerDataListenerInterface for plugins using the PlayerDataProvider data provider.
  * @see PlayerDataProvider
  */
-interface PlayerDataListenerInterface
+interface ListenerInterfaceMpLegacyPlayer
 {
     public function onPlayerConnect(Player $player);
 

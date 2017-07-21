@@ -62,6 +62,6 @@ class TestAdminGroups extends TestCore
      */
     protected function getAdminGroupHelper()
     {
-        return $this->container->get('expansion.framework.admin_groups.helpers.groups');
+        return $this->container->get('expansion.helper.admingroups');
     }
 }

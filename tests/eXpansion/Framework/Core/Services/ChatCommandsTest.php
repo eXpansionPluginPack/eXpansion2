@@ -62,6 +62,6 @@ class ChatCommandsTest extends TestCore
      */
     protected function getChatCommandService()
     {
-        return $this->container->get('expansion.framework.core.services.chat_commands');
+        return $this->container->get('expansion.service.chat_commands');
     }
 }

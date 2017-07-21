@@ -24,7 +24,7 @@ class ChatOutputTest extends TestCore
     public function testWrite()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject $dedicatedConnection */
-        $dedicatedConnection = $this->container->get('expansion.framework.core.services.dedicated_connection');
+        $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
         $dedicatedConnection->expects($this->exactly(2))
             ->method('chatSendServerMessage')
             ->with("Test message stripped", 'toto');

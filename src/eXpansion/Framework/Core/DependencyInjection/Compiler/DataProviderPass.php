@@ -20,18 +20,18 @@ class DataProviderPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has('expansion.framework.core.services.data_provider_manager')) {
+        if (!$container->has('expansion.service.data_provider_manager')) {
             return;
         }
 
         // Get the data provider manager service definition to register plugins into.
-        $dpmDefinition = $container->getDefinition('expansion.framework.core.services.data_provider_manager');
-        $pmDefinition = $container->getDefinition('expansion.framework.core.services.plugin_manager');
+        $dpmDefinition = $container->getDefinition('expansion.service.data_provider_manager');
+        $pmDefinition = $container->getDefinition('expansion.service.plugin_manager');
 
         $providerData = [];
 
         // Get provider service names.
-        $dataProviders = $container->findTaggedServiceIds('expansion.data_provider');
+        $dataProviders = $container->findTaggedServiceIds('expansion.dataprovider');
         foreach ($dataProviders as $id => $tags) {
             foreach ($tags as $attributes) {
                 $providerData[$id]['provider'] = $attributes['provider'];
@@ -40,7 +40,7 @@ class DataProviderPass implements CompilerPassInterface
         }
 
         // Get compatibility information for each provider
-        $dataProviders = $container->findTaggedServiceIds('expansion.data_provider.compatibility');
+        $dataProviders = $container->findTaggedServiceIds('expansion.dataprovider.compatibility');
         foreach ($dataProviders as $id => $tags) {
             foreach ($tags as $attributes) {
                 $providerData[$id]['compatibility'][] = [
@@ -52,7 +52,7 @@ class DataProviderPass implements CompilerPassInterface
         }
 
         // Get base events the data provider needs to listen to.
-        $dataProviders = $container->findTaggedServiceIds('expansion.data_provider.listener');
+        $dataProviders = $container->findTaggedServiceIds('expansion.dataprovider.listener');
         foreach ($dataProviders as $id => $tags) {
             foreach ($tags as $attributes) {
                 $providerData[$id]['listener'][$attributes['event_name']] = $attributes['method'];
@@ -60,7 +60,7 @@ class DataProviderPass implements CompilerPassInterface
         }
 
         // Get parent plugins the data provider requires.
-        $plugins = $container->findTaggedServiceIds('expansion.data_provider.parent');
+        $plugins = $container->findTaggedServiceIds('expansion.dataprovider.parent');
         foreach ($plugins as $id => $tags) {
             foreach ($tags as $attributes) {
                 $providerData[$id]['parent'][] = $attributes['parent'];

@@ -3,7 +3,7 @@
 
 namespace Tests\eXpansion\Framework\Core\DataProviders;
 
-use eXpansion\Framework\Core\DataProviders\Listener\ChatDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use Tests\eXpansion\Framework\Core\TestCore;
 
@@ -12,9 +12,9 @@ class ChatDataProviderTest extends TestCore
     public function testOnPlayerChat()
     {
         $player = new Player();
-        $this->container->set('expansion.framework.core.storage.player', $this->getMockPlayerStorage($player));
+        $this->container->set('expansion.storage.player', $this->getMockPlayerStorage($player));
 
-        $plugin = $this->createMock(ChatDataListenerInterface::class);
+        $plugin = $this->createMock(ListenerInterfaceMpLegacyChat::class);
         $plugin->method('onPlayerChat')
             ->withConsecutive([$player, 'Chat text']);
 
@@ -28,14 +28,14 @@ class ChatDataProviderTest extends TestCore
     public function testRemovePlugin()
     {
         $player = new Player();
-        $this->container->set('expansion.framework.core.storage.player', $this->getMockPlayerStorage($player));
+        $this->container->set('expansion.storage.player', $this->getMockPlayerStorage($player));
 
-        $pluginA = $this->createMock(ChatDataListenerInterface::class);
+        $pluginA = $this->createMock(ListenerInterfaceMpLegacyChat::class);
         $pluginA->expects($this->once())
             ->method('onPlayerChat')
             ->withConsecutive([$player, 'Chat text']);
 
-        $pluginB = $this->createMock(ChatDataListenerInterface::class);
+        $pluginB = $this->createMock(ListenerInterfaceMpLegacyChat::class);
         $pluginB->expects($this->never())
             ->method('onPlayerChat');
 
