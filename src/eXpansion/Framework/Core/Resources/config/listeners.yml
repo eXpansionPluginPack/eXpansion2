@@ -6,7 +6,7 @@ services:
         arguments:
             - '@expansion.service.dedicated_connection'
             - "@expansion.framework.core.storage.game_data"
-            - '@expansion.service.application.dispatcher'
+            - '@expansion.service.dispatcher'
         tags:
             - { name: kernel.event_listener, event: maniaplanet.game.BeginMap }
             - { name: kernel.event_listener, event: maniaplanet.game.expansion.before_init }

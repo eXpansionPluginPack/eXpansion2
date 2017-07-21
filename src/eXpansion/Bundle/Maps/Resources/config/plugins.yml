@@ -5,7 +5,7 @@ services:
           - '@expansion.service.dedicated_connection'
           - '@expansion.service.console'
           - '@expansion.helper.admingroups'
-          - '@expansion.framework.core.storage.map'
+          - '@expansion.storage.map'
           - '@expansion.helper.chat_notification'
         tags:
           - {name: expansion.plugin, data_provider: mp.legacy.maplist}

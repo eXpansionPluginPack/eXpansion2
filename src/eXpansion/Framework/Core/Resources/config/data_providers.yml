@@ -68,7 +68,7 @@ services:
     expansion.framework.core.data_providers.map_data_provider:
         class: "%expansion.framework.core.data_providers.map_data_provider.class%"
         arguments:
-            - "@expansion.framework.core.storage.map"
+            - "@expansion.storage.map"
             - "@expansion.service.dedicated_connection"
         tags:
             - {name: expansion.dataprovider, provider: "mp.legacy.maplist", interface: "%expansion.framework.core.data_providers.map_data_provider.interface%"}

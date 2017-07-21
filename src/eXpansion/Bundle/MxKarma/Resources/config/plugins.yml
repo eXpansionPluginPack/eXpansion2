@@ -2,7 +2,7 @@ services:
    expansion.framework.core.plugins.mxkarma.connection:
         class: eXpansion\Bundle\MxKarma\Plugins\Connection
         arguments:
-            - '@expansion.service.application.dispatcher'
+            - '@expansion.service.dispatcher'
 
    expansion.framework.core.plugins.mxkarma:
         class: eXpansion\Bundle\MxKarma\Plugins\MxKarma
@@ -10,7 +10,7 @@ services:
             - '@expansion.framework.core.plugins.mxkarma.connection'
             - '@expansion.service.console'
             - '@expansion.helper.chat_notification'
-            - '@expansion.service.application.dispatcher'
+            - '@expansion.service.dispatcher'
         tags:
             - {name: expansion.plugin, data_provider: mp.script.match}
             - {name: expansion.plugin, data_provider: mp.legacy.chat}

@@ -19,7 +19,7 @@ class ApplicationTest extends TestCore
         parent::setUp();
 
         $dataProviderMock = $this->createMock(Application\Dispatcher::class);
-        $this->container->set('expansion.service.application.dispatcher', $dataProviderMock);
+        $this->container->set('expansion.service.dispatcher', $dataProviderMock);
 
         $consoleMock = $this->createMock(Console::class);
         $this->container->set('expansion.service.console', $consoleMock);
@@ -35,7 +35,7 @@ class ApplicationTest extends TestCore
         $consoleMock->expects($this->atLeastOnce())->method('writeln');
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $dataProviderMock */
-        $dataProviderMock = $this->container->get('expansion.service.application.dispatcher');
+        $dataProviderMock = $this->container->get('expansion.service.dispatcher');
         $dataProviderMock->expects($this->once())->method('init');
 
         $application = $this->container->get('expansion.service.application');
@@ -51,7 +51,7 @@ class ApplicationTest extends TestCore
         $application->stopApplication();
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $dataProviderMock */
-        $dataProviderMock = $this->container->get('expansion.service.application.dispatcher');
+        $dataProviderMock = $this->container->get('expansion.service.dispatcher');
         $dataProviderMock->expects($this->exactly(4))
             ->method('dispatch')
             ->withConsecutive(

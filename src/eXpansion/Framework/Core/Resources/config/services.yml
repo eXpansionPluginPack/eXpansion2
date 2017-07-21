@@ -27,7 +27,7 @@ services:
     expansion.service.application:
         class: "%expansion.service.application.class%"
         arguments:
-            - '@expansion.service.application.dispatcher'
+            - '@expansion.service.dispatcher'
             - '@expansion.service.dedicated_connection'
             - '@expansion.service.console'
 
@@ -38,7 +38,7 @@ services:
             - '@expansion.service.dedicated_connection'
             - '@expansion.service.console'
 
-    expansion.service.application.dispatcher:
+    expansion.service.dispatcher:
         class: eXpansion\Framework\Core\Services\Application\Dispatcher
         arguments:
             - '@expansion.service.data_provider_manager'

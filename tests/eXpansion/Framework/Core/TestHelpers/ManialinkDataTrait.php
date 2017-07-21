@@ -16,7 +16,7 @@ trait ManialinkDataTrait
      */
     protected function getManialink($logins)
     {
-        $group = new Group($this->container->get('expansion.service.application.dispatcher'), "test");
+        $group = new Group($this->container->get('expansion.service.dispatcher'), "test");
         foreach ($logins as $login) {
             $group->addLogin($login);
         }
