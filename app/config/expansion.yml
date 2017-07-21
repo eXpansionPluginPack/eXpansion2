@@ -8,6 +8,7 @@ e_xpansion_core:
             success: 'ada'
             warning: '$dda'
             danger: '$daa'
+            error: '$d77'
             variable: '$fff'
 #ui defaults
             primary: '$3af'

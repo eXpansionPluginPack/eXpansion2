@@ -1,0 +1,16 @@
+services:
+   expansion.framework.core.plugins.mxkarma.connection:
+        class: eXpansion\Bundle\MxKarma\Plugins\Connection
+        arguments:
+            - '@expansion.framework.core.services.application.dispatcher'
+
+   expansion.framework.core.plugins.mxkarma:
+        class: eXpansion\Bundle\MxKarma\Plugins\MxKarma
+        arguments:
+            - '@expansion.framework.core.plugins.mxkarma.connection'
+            - '@expansion.framework.core.services.console'
+            - '@expansion.framework.core.helpers.chat_notification'
+            - '@expansion.framework.core.services.application.dispatcher'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.mp.match}
+            - {name: expansion.plugin, data_provider: expansion.chat_data}

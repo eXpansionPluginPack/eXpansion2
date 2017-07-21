@@ -232,4 +232,134 @@ class BaseRecords implements MapDataListenerInterface, MatchDataListenerInterfac
     {
         return 1;
     }
+
+    /**
+     * Callback sent when the "EndMatch" section start.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return mixed
+     */
+    public function onEndMatchStart($count, $time)
+    {
+        // TODO: Implement onEndMatchStart() method.
+    }
+
+    /**
+     * Callback sent when the "EndMatch" section end.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return mixed
+     */
+    public function onEndMatchEnd($count, $time)
+    {
+        // TODO: Implement onEndMatchEnd() method.
+    }
+
+    /**
+     * Callback sent when the "StartTurn" section start.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return mixed
+     */
+    public function onStartTurnStart($count, $time)
+    {
+        // TODO: Implement onStartTurnStart() method.
+    }
+
+    /**
+     * Callback sent when the "StartTurn" section end.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return mixed
+     */
+    public function onStartTurnEnd($count, $time)
+    {
+        // TODO: Implement onStartTurnEnd() method.
+    }
+
+    /**
+     * Callback sent when the "EndMatch" section start.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return mixed
+     */
+    public function onEndTurnStart($count, $time)
+    {
+        // TODO: Implement onEndTurnStart() method.
+    }
+
+    /**
+     * Callback sent when the "EndMatch" section end.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return mixed
+     */
+    public function onEndTurnEnd($count, $time)
+    {
+        // TODO: Implement onEndTurnEnd() method.
+    }
+
+    /**
+     * Callback sent when the "StartRound" section start.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return mixed
+     */
+    public function onStartRoundStart($count, $time)
+    {
+        // TODO: Implement onStartRoundStart() method.
+    }
+
+    /**
+     * Callback sent when the "StartRound" section end.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return mixed
+     */
+    public function onStartRoundEnd($count, $time)
+    {
+        // TODO: Implement onStartRoundEnd() method.
+    }
+
+    /**
+     * Callback sent when the "EndMatch" section start.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return mixed
+     */
+    public function onEndRoundStart($count, $time)
+    {
+        // TODO: Implement onEndRoundStart() method.
+    }
+
+    /**
+     * Callback sent when the "EndMatch" section end.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return mixed
+     */
+    public function onEndRoundEnd($count, $time)
+    {
+        // TODO: Implement onEndRoundEnd() method.
+    }
 }

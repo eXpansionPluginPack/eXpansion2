@@ -25,3 +25,13 @@ services:
             - {name: expansion.data_provider.compatibility, title: ALL, gamemode: script}
             - {name: expansion.data_provider.listener, event_name: Maniaplanet.StartMatch_Start, method: onStartMatchStart}
             - {name: expansion.data_provider.listener, event_name: Maniaplanet.StartMatch_End, method: onStartMatchEnd}
+            - {name: expansion.data_provider.listener, event_name: Maniaplanet.EndMatch_Start, method: onEndMatchStart}
+            - {name: expansion.data_provider.listener, event_name: Maniaplanet.EndMatch_End, method: onEndMatchEnd}
+            - {name: expansion.data_provider.listener, event_name: Maniaplanet.StartTurn_Start, method: onStartTurnStart}
+            - {name: expansion.data_provider.listener, event_name: Maniaplanet.StartTurn_End, method: onStartTurnEnd}
+            - {name: expansion.data_provider.listener, event_name: Maniaplanet.EndTurn_Start, method: onEndTurnStart}
+            - {name: expansion.data_provider.listener, event_name: Maniaplanet.EndTurn_End, method: onEndTurnEnd}
+            - {name: expansion.data_provider.listener, event_name: Maniaplanet.StartRound_Start, method: onStartRoundStart}
+            - {name: expansion.data_provider.listener, event_name: Maniaplanet.StartRound_End, method: onStartRoundEnd}
+            - {name: expansion.data_provider.listener, event_name: Maniaplanet.EndRound_Start, method: onEndRoundStart}
+            - {name: expansion.data_provider.listener, event_name: Maniaplanet.EndRound_End, method: onEndRoundEnd}
