@@ -7,7 +7,7 @@ services:
             - "@logger"
             - "@expansion.service.console"
         tags:
-            - {name: expansion.plugin, data_provider:exp.timer}
+            - {name: expansion.plugin, data_provider: exp.timer}
             - {name: expansion.plugin, data_provider: expansion.user_group}
 
     expansion.framework.core.plugins.gui.action_factory:
