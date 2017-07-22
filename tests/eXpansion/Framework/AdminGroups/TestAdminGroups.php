@@ -39,7 +39,7 @@ class TestAdminGroups extends TestCore
     {
         return [
             'master_admin' => [
-                'logins' => ['toto1', 'toto2'],
+                'logins' => ['toto1', 'toto2']
             ],
             'admin' => [
                 'logins' => ['toto10', 'toto11'],
