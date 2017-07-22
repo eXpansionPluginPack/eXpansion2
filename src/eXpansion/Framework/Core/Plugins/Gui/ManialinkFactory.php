@@ -105,6 +105,11 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
             $group = $this->groupFactory->createForPlayers($group);
         }
 
+        if (isset($this->manialinks[$group->getName()])) {
+            $this->update($group);
+            return $group;
+        }
+
         $this->manialinks[$group->getName()] = $this->createManialink($group);
         $this->guiHandler->addToDisplay($this->manialinks[$group->getName()]);
 
