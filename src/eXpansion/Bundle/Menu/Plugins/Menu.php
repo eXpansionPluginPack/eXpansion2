@@ -5,10 +5,8 @@ namespace eXpansion\Bundle\Menu\Plugins;
 
 use eXpansion\Bundle\Menu\Plugins\Gui\MenuFactory;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
-use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyMaplist;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
-use eXpansion\Framework\Core\Storage\Data\Player;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
 
@@ -20,7 +18,6 @@ use Maniaplanet\DedicatedServer\Structures\Map;
  */
 class Menu implements StatusAwarePluginInterface, ListenerInterfaceMpLegacyMap
 {
-
     /** @var  AdminGroups */
     protected $adminGroups;
 
@@ -64,7 +61,6 @@ class Menu implements StatusAwarePluginInterface, ListenerInterfaceMpLegacyMap
         foreach ($this->adminGroups->getUserGroups() as $userGroup) {
             $this->menuGuiFactory->create($userGroup);
         }
-
     }
 
 

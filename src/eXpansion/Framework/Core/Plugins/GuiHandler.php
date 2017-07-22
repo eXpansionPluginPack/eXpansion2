@@ -46,9 +46,6 @@ class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserG
     /** @var String[][] */
     protected $hideIndividualQueu = [];
 
-    private $groupsBuffer = [];
-    private $windowsBuffer = [];
-
     /**
      * GuiHandler constructor.
      *
@@ -213,28 +210,6 @@ class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserG
      */
     public function onEverySecond()
     {
-        $groups = array_keys($this->displayeds);
-        if ($groups !== $this->groupsBuffer) {
-            $this->console->writeln('groups ('.count($this->displayeds).') $0f0'.implode(",",
-                    $groups));
-        }
-
-        $windows = [];
-        foreach ($this->displayeds as $group => $ml) {
-            foreach ($ml as $mlId => $manialink) {
-                $windows[$group][] = $mlId;
-            }
-        }
-
-        if ($windows !== $this->windowsBuffer) {
-            foreach ($windows as $group => $data) {
-                $this->console->writeln('windows in group '.$group.':$0f0'.implode(",", $data));
-            }
-        }
-
-        $this->windowsBuffer = $windows;
-        $this->groupsBuffer = $groups;
-
     }
 
     /**
@@ -249,8 +224,6 @@ class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserG
             foreach ($this->displayeds[$group] as $mlId => $manialink) {
                 $this->individualQueu[$loginAdded][$mlId] = $manialink;
             }
-        } else {
-            $this->console->writeln('player added to group, but group not found: $ff0'.$group);
         }
     }
 

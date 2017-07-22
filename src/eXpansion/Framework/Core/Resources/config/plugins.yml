@@ -22,13 +22,15 @@ services:
         class: eXpansion\Framework\Core\Plugins\UserGroups\AllPlayers
         arguments:
             - '@expansion.framework.core.user_groups.all_players'
+            - '@expansion.storage.player'
         tags:
             - {name: expansion.plugin, data_provider: mp.legacy.player}
 
     expansion.framework.core.plugins.user_group.players:
         class: eXpansion\Framework\Core\Plugins\UserGroups\Players
         arguments:
-            - '@expansion.helper.usergroups'
+            - '@expansion.framework.core.user_groups.players'
+            - '@expansion.storage.player'
         tags:
             - {name: expansion.plugin, data_provider: mp.legacy.player}
 
@@ -36,6 +38,8 @@ services:
         class: eXpansion\Framework\Core\Plugins\UserGroups\Spectators
         arguments:
             - '@expansion.framework.core.user_groups.spectators'
+            - '@expansion.storage.player'
+
         tags:
             - {name: expansion.plugin, data_provider: mp.legacy.player}
 
