@@ -176,6 +176,7 @@ class RecordHandler
     public function addRecord($login, $score, $checkpoints) {
         $oldPosition = isset($this->positionPerPlayer[$login]) ? $this->positionPerPlayer[$login] : count($this->records) + 1;
         $record = isset($this->recordsPerPlayer[$login]) ? $this->recordsPerPlayer[$login] : $this->getNewRecord($login);
+        $this->recordsPerPlayer[$login] = $record;
 
         $oldRecord = clone $record;
         $this->updateRecordStats($record, $score);

@@ -307,6 +307,20 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(3, $eventData[RecordHandler::COL_OLD_POS]);
     }
 
+    public function testInsertNew()
+    {
+        $records = [
+            $this->createRecord('toto1', 10),
+        ];
+        $this->recordRepositoryMock->expects($this->at(0))->method('findBy')->willReturn($records);
+
+        $recordHandler = $this->getRecordHandler(10, RecordHandler::ORDER_ASC);
+        $recordHandler->loadForMap('', 1);
+
+        $recordHandler->addRecord('toto4', 8, [5,15]);
+        $this->assertNull($eventData = $recordHandler->addRecord('toto4', 12, [5,15]));
+    }
+
     public function testSave()
     {
         $this->recordRepositoryMock->expects($this->once())->method('massSave');
