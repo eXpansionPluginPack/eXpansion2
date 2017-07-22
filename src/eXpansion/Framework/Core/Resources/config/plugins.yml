@@ -9,6 +9,7 @@ services:
         tags:
             - {name: expansion.plugin, data_provider: exp.timer}
             - {name: expansion.plugin, data_provider: expansion.user_group}
+            - {name: expansion.plugin, data_provider: mp.legacy.player}
 
     expansion.framework.core.plugins.gui.action_factory:
         class: 'eXpansion\Framework\Core\Plugins\Gui\ActionFactory'
