@@ -43,15 +43,15 @@ class TestAdminGroups extends TestCore
             ],
             'admin' => [
                 'logins' => ['toto10', 'toto11'],
-                'permissions' => ['p10', 'p11'],
+                'permissions' => ['p10', 'p11']
             ],
             'operator' => [
                 'logins' => ['toto20', 'toto21'],
-                'permissions' => ['p20', 'p21'],
+                'permissions' => ['p20', 'p21']
             ],
             'empty' => [
                 'logins' => [],
-                'permissions' => ['p20'],
+                'permissions' => ['p20']
             ]
         ];
     }
