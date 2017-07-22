@@ -19,7 +19,6 @@ abstract class AbstractUserGroupPlugin implements ListenerInterfaceMpLegacyPlaye
     public function __construct(Group $userGroup)
     {
         $this->userGroup = $userGroup;
-        echo $userGroup->getName()." \n";
 
     }
 
