@@ -6,6 +6,7 @@ use eXpansion\Framework\Core\Model\Helpers\ChatNotificationInterface;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
+use Maniaplanet\DedicatedServer\Xmlrpc\UnknownPlayerException;
 
 /**
  * Class ChatNotification
@@ -72,8 +73,11 @@ class ChatNotification implements ChatNotificationInterface
             $this->console->writeln(end($message)['Text']);
         }
 
-        $this->connection->chatSendServerMessage($message, $to);
-
+        try {
+            $this->connection->chatSendServerMessage($message, $to);
+        } catch (UnknownPlayerException $e) {
+            // Nothing to do, it happens.
+        }
     }
 
     /**
