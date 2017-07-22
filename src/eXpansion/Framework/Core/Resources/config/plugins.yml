@@ -68,3 +68,10 @@ services:
             - 'help'
             - ['h']
             - '@expansion.framework.core.plugins.gui.window_help_factory'
+
+    expansion.framework.core.plugins.start_greeter:
+        class: 'eXpansion\Framework\Core\Plugins\StartGreeter'
+        arguments:
+            - "@expansion.helper.chat_notification"
+        tags:
+            - {name: expansion.plugin, data_provider: exp.application}
