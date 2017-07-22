@@ -92,12 +92,7 @@ class ChatCommands
     {
         $chatCommands = [];
         foreach ($this->commands as $chatCommand => $data) {
-            $chatCommands[] = [
-                'command' => $chatCommand,
-                'description' => $data->getDescription(),
-                'help' => $data->getHelp(),
-                'aliases' => $data->getAliases(),
-            ];
+            $chatCommands[$data->getCommand()] = clone $data;
         }
 
         return $chatCommands;
