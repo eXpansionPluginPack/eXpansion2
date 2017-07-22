@@ -2,7 +2,9 @@
 
 namespace eXpansion\Framework\Core\Plugins\Gui;
 
+use eXpansion\Framework\AdminGroups\Model\AbstractAdminChatCommand;
 use eXpansion\Framework\Core\DataProviders\ChatCommandDataProvider;
+use eXpansion\Framework\Core\Model\ChatCommand\AbstractChatCommand;
 use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionFactory;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilder;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
@@ -66,7 +68,7 @@ class WindowHelpFactory extends WindowFactory
      */
     protected function createContent(ManialinkInterface $manialink)
     {
-        $collection = $this->dataCollectionFactory->create($this->chatCommands->getChatCommands());
+        $collection = $this->dataCollectionFactory->create($this->getChatCommands($manialink));
         $collection->setPageSize(2);
 
         $helpButton = new Label();
@@ -105,12 +107,46 @@ class WindowHelpFactory extends WindowFactory
         $contentFrame = $manialink->getContentFrame();
         $contentFrame->removeAllChildren();
 
-        $collection = $this->dataCollectionFactory->create($this->chatCommands->getChatCommands());
+        $collection = $this->dataCollectionFactory->create($this->getChatCommands($manialink));
         $collection->setPageSize(20);
 
         /** @var GridBuilder $gridBuilder */
         $gridBuilder = $manialink->getData('grid');
         $contentFrame->addChild($gridBuilder->build($contentFrame->getWidth(), $contentFrame->getHeight()));
+    }
+
+    /**
+     * Get chat commands to display the admin.
+     *
+     * @param ManialinkInterface $manialink
+     *
+     * @return array
+     */
+    protected function getChatCommands(ManialinkInterface $manialink)
+    {
+        $login = $manialink->getUserGroup()->getLogins()[0];
+
+        return array_map(
+            function($command) {
+                /** @var AbstractChatCommand $command */
+                return [
+                    'command' => $command->getCommand(),
+                    'description' => $command->getDescription(),
+                    'help' => $command->getHelp(),
+                    'aliases' => $command->getAliases(),
+                ];
+            },
+            array_filter(
+                $this->chatCommands->getChatCommands(),
+                function ($command) use ($login) {
+                    if ($command instanceof AbstractAdminChatCommand) {
+                        return $command->hasPermission($login);
+                    }
+                    return true;
+                }
+
+            )
+        );
     }
 
     /**
