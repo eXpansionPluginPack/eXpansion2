@@ -34,16 +34,11 @@ class PlayerDataProvider extends AbstractDataProvider
         $this->playerStorage = $playerStorage;
         $this->connection = $connection;
         $this->application = $application;
-    }
 
-    /**
-     * Called when eXpansion is started.
-     */
-    public function onRun()
-    {
+        // Initialize data with existing players.
         $infos = $this->connection->getPlayerList(-1, 0);
         foreach ($infos as $info) {
-            $this->onPlayerConnect($info->login);
+            $this->onPlayerConnect($info->login, false, false);
         }
     }
 
@@ -53,7 +48,7 @@ class PlayerDataProvider extends AbstractDataProvider
      * @param string $login
      * @param bool $isSpectator
      */
-    public function onPlayerConnect($login, $isSpectator = false)
+    public function onPlayerConnect($login, $isSpectator = false, $dispatch = true)
     {
         try {
             $playerData = $this->playerStorage->getPlayerInfo($login);
@@ -63,7 +58,10 @@ class PlayerDataProvider extends AbstractDataProvider
         }
 
         $this->playerStorage->onPlayerConnect($playerData);
-        $this->dispatch(__FUNCTION__, [$playerData]);
+
+        if ($dispatch) {
+            $this->dispatch(__FUNCTION__, [$playerData]);
+        }
     }
 
     /**

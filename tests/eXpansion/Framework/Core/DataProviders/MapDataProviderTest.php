@@ -36,7 +36,7 @@ class MapDataProviderTest extends TestCore
         $maps = array_values($allMaps);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $connectionMock */
-        $connectionMock = $this->container->get('expansion.framework.core.services.dedicated_connection');
+        $connectionMock = $this->container->get('expansion.service.dedicated_connection');
         $connectionMock->expects($this->exactly(3))
             ->method('getMapList')
             ->withConsecutive([500, 0], [500, 500])
@@ -55,7 +55,7 @@ class MapDataProviderTest extends TestCore
         $mapStorageMock = $this->createMock(MapStorage::class);
         $mapStorageMock->expects($this->exactly(count($allMaps)))
             ->method('addMap');
-         $this->container->set('expansion.framework.core.storage.map', $mapStorageMock);
+         $this->container->set('expansion.storage.map', $mapStorageMock);
 
         $this->container->get('expansion.framework.core.data_providers.map_data_provider');
     }
@@ -68,7 +68,7 @@ class MapDataProviderTest extends TestCore
         $uids2 = array_keys($mapPack2);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $connectionMock */
-        $connectionMock = $this->container->get('expansion.framework.core.services.dedicated_connection');
+        $connectionMock = $this->container->get('expansion.service.dedicated_connection');
         $connectionMock->expects($this->exactly(2))
             ->method('getMapList')
             ->withConsecutive([500, 0], [500, 0])
@@ -89,7 +89,7 @@ class MapDataProviderTest extends TestCore
         $mapStorageMock->expects($this->exactly(2))->method('setCurrentMap');
         $mapStorageMock->expects($this->exactly(2))->method('setNextMap');
 
-        $this->container->set('expansion.framework.core.storage.map', $mapStorageMock);
+        $this->container->set('expansion.storage.map', $mapStorageMock);
 
         /** @var MapDataProvider $dataProvider */
         $dataProvider = $this->container->get('expansion.framework.core.data_providers.map_data_provider');

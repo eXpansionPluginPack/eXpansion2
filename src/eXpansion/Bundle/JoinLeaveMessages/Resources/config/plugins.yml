@@ -2,8 +2,10 @@ services:
     expansion.framework.core.plugins.joinleave:
         class: eXpansion\Bundle\JoinLeaveMessages\Plugins\JoinLeaveMessages
         arguments:
-            - '@expansion.framework.core.services.dedicated_connection'
-            - '@expansion.framework.core.services.console'
-            - '@expansion.framework.core.helpers.chat_notification'
+            - '@expansion.service.dedicated_connection'
+            - '@expansion.service.console'
+            - '@expansion.helper.chat_notification'
+            - '@expansion.helper.admingroups'
         tags:
-            - {name: expansion.plugin, data_provider: expansion.player_data}
+            - {name: expansion.plugin, data_provider: mp.legacy.player}
+

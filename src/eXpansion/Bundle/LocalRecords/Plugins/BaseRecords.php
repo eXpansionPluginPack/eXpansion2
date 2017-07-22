@@ -4,14 +4,14 @@ namespace eXpansion\Bundle\LocalRecords\Plugins;
 
 use eXpansion\Bundle\LocalRecords\Services\RecordHandler;
 use eXpansion\Bundle\LocalRecords\Services\RecordHandlerFactory;
-use eXpansion\Framework\Core\DataProviders\Listener\PlayerDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\MapStorage;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\MapDataListenerInterface;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\MatchDataListenerInterface;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMap;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMatch;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
 /**
@@ -22,7 +22,7 @@ use Maniaplanet\DedicatedServer\Structures\Map;
  * @package eXpansion\Bundle\LocalRecords\Plugins;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-class BaseRecords implements MapDataListenerInterface, MatchDataListenerInterface, PlayerDataListenerInterface, StatusAwarePluginInterface
+class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpScriptMatch, ListenerInterfaceMpLegacyPlayer, StatusAwarePluginInterface
 {
     /** @var  RecordHandler */
     protected $recordsHandler;
@@ -231,5 +231,135 @@ class BaseRecords implements MapDataListenerInterface, MatchDataListenerInterfac
     protected function getNbLaps()
     {
         return 1;
+    }
+
+    /**
+     * Callback sent when the "EndMatch" section start.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return mixed
+     */
+    public function onEndMatchStart($count, $time)
+    {
+        // TODO: Implement onEndMatchStart() method.
+    }
+
+    /**
+     * Callback sent when the "EndMatch" section end.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return mixed
+     */
+    public function onEndMatchEnd($count, $time)
+    {
+        // TODO: Implement onEndMatchEnd() method.
+    }
+
+    /**
+     * Callback sent when the "StartTurn" section start.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return mixed
+     */
+    public function onStartTurnStart($count, $time)
+    {
+        // TODO: Implement onStartTurnStart() method.
+    }
+
+    /**
+     * Callback sent when the "StartTurn" section end.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return mixed
+     */
+    public function onStartTurnEnd($count, $time)
+    {
+        // TODO: Implement onStartTurnEnd() method.
+    }
+
+    /**
+     * Callback sent when the "EndMatch" section start.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return mixed
+     */
+    public function onEndTurnStart($count, $time)
+    {
+        // TODO: Implement onEndTurnStart() method.
+    }
+
+    /**
+     * Callback sent when the "EndMatch" section end.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return mixed
+     */
+    public function onEndTurnEnd($count, $time)
+    {
+        // TODO: Implement onEndTurnEnd() method.
+    }
+
+    /**
+     * Callback sent when the "StartRound" section start.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return mixed
+     */
+    public function onStartRoundStart($count, $time)
+    {
+        // TODO: Implement onStartRoundStart() method.
+    }
+
+    /**
+     * Callback sent when the "StartRound" section end.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return mixed
+     */
+    public function onStartRoundEnd($count, $time)
+    {
+        // TODO: Implement onStartRoundEnd() method.
+    }
+
+    /**
+     * Callback sent when the "EndMatch" section start.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return mixed
+     */
+    public function onEndRoundStart($count, $time)
+    {
+        // TODO: Implement onEndRoundStart() method.
+    }
+
+    /**
+     * Callback sent when the "EndMatch" section end.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return mixed
+     */
+    public function onEndRoundEnd($count, $time)
+    {
+        // TODO: Implement onEndRoundEnd() method.
     }
 }

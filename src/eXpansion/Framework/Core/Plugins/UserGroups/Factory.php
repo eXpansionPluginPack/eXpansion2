@@ -2,8 +2,8 @@
 
 namespace eXpansion\Framework\Core\Plugins\UserGroups;
 
-use eXpansion\Framework\Core\DataProviders\Listener\PlayerDataListenerInterface;
-use eXpansion\Framework\Core\DataProviders\Listener\UserGroupDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpUserGroup;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
 use eXpansion\Framework\Core\Storage\Data\Player;
@@ -14,7 +14,7 @@ use eXpansion\Framework\Core\Storage\Data\Player;
  * @package eXpansion\Framework\Core\Plugins
  * @author Oliver de Cramer
  */
-class Factory implements UserGroupDataListenerInterface, PlayerDataListenerInterface
+class Factory implements ListenerInterfaceExpUserGroup, ListenerInterfaceMpLegacyPlayer
 {
     /** @var Group[] */
     protected $groups = [];

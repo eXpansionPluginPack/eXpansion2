@@ -19,10 +19,10 @@ class ApplicationTest extends TestCore
         parent::setUp();
 
         $dataProviderMock = $this->createMock(Application\Dispatcher::class);
-        $this->container->set('expansion.framework.core.services.application.dispatcher', $dataProviderMock);
+        $this->container->set('expansion.service.dispatcher', $dataProviderMock);
 
         $consoleMock = $this->createMock(Console::class);
-        $this->container->set('expansion.framework.core.services.console', $consoleMock);
+        $this->container->set('expansion.service.console', $consoleMock);
     }
 
     public function testInit()
@@ -30,15 +30,15 @@ class ApplicationTest extends TestCore
         $outPutMock = $this->createMock(ConsoleOutputInterface::class);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $consoleMock */
-        $consoleMock = $this->container->get('expansion.framework.core.services.console');
+        $consoleMock = $this->container->get('expansion.service.console');
         $consoleMock->expects($this->once())->method('init')->withConsecutive([$outPutMock]);
         $consoleMock->expects($this->atLeastOnce())->method('writeln');
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $dataProviderMock */
-        $dataProviderMock = $this->container->get('expansion.framework.core.services.application.dispatcher');
+        $dataProviderMock = $this->container->get('expansion.service.dispatcher');
         $dataProviderMock->expects($this->once())->method('init');
 
-        $application = $this->container->get('expansion.framework.core.services.application');
+        $application = $this->container->get('expansion.service.application');
 
         $this->assertEquals($application, $application->init($outPutMock));
     }
@@ -46,12 +46,12 @@ class ApplicationTest extends TestCore
     public function testRun()
     {
         /** @var Application $application */
-        $application = $this->container->get('expansion.framework.core.services.application');
+        $application = $this->container->get('expansion.service.application');
         // We need to stop the application so that it doesen't run indefinitively.
         $application->stopApplication();
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $dataProviderMock */
-        $dataProviderMock = $this->container->get('expansion.framework.core.services.application.dispatcher');
+        $dataProviderMock = $this->container->get('expansion.service.dispatcher');
         $dataProviderMock->expects($this->exactly(4))
             ->method('dispatch')
             ->withConsecutive(
@@ -62,7 +62,7 @@ class ApplicationTest extends TestCore
             );
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $connectionMock */
-        $connectionMock = $this->container->get('expansion.framework.core.services.dedicated_connection');
+        $connectionMock = $this->container->get('expansion.service.dedicated_connection');
         $connectionMock->expects($this->exactly(1))
             ->method('executeCallbacks')
             ->willReturn([['test', ['data']]]);

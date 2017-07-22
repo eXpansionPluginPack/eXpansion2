@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Core\Services;
 
+use eXpansion\Framework\Core\Helpers\ColorConversion;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -18,25 +19,25 @@ class Console
     const b_black = "\e[30;1m";
 
     const red = "\e[0;31m";
-    const b_red = "\e[31;1m";
+    const b_red = "\e[1;31m";
 
     const green = "\e[0;32m";
-    const b_green = "\e[32;1m";
+    const b_green = "\e[1;32m";
 
     const yellow = "\e[0;33m";
-    const b_yellow = "\e[33;1m";
+    const b_yellow = "\e[1;33m";
 
     const blue = "\e[0;34m";
-    const b_blue = "\e[34;1m";
+    const b_blue = "\e[1;34m";
 
     const magenta = "\e[0;35m";
-    const b_magenta = "\e[35;1m";
+    const b_magenta = "\e[1;35m";
 
     const cyan = "\e[0;36m";
-    const b_cyan = "\e[36;1m";
+    const b_cyan = "\e[1;36m";
 
     const white = "\e[0;37m";
-    const b_white = "\e[37;1m";
+    const b_white = "\e[1;37m";
 
     // define aliases for colors
     const error = "\e[37;1m\e[41m";
@@ -86,46 +87,15 @@ class Console
     public function write($string, $newline = false)
     {
         if ($this->colorEnabled && $this->consoleOutput->isDecorated()) {
-            $array = array("000" => self::b_black,
-                "100" => self::red,
-                "010" => self::green,
-                "110" => self::yellow,
-                "001" => self::blue,
-                "011" => self::magenta,
-                "101" => self::cyan,
-                "111" => self::white,
-                "200" => self::b_red,
-                "211" => self::red,
-                "121" => self::green,
-                "020" => self::b_green,
-                "021" => self::green,
-                "012" => self::cyan,
-                "221" => self::b_yellow,
-                "220" => self::b_yellow,
-                "120" => self::green,
-                "210" => self::yellow,
-                "112" => self::b_blue,
-                "002" => self::b_blue,
-                "122" => self::b_cyan,
-                "022" => self::b_cyan,
-                "202" => self::b_magenta,
-                "212" => self::b_magenta,
-                "102" => self::magenta,
-                "201" => self::b_red,
-                "222" => self::b_white,
-            );
+
             $matches = array();
             preg_match_all("/\\$[A-Fa-f0-9]{3}/", $string, $matches);
             $split = preg_split("/\\$[A-Fa-f0-9]{3}/", $string);
-
             $out = "";
+
             foreach ($matches[0] as $i => $rgb) {
-                $code = $this->fixColors(hexdec($rgb[1]), hexdec($rgb[2]), hexdec($rgb[3]));
-                if (array_key_exists($code, $array)) {
-                    $out .= $array[$code].$this->stripStyles($split[$i + 1]);
-                } else {
-                    $out .= self::white.$this->stripStyles($split[$i + 1]);
-                }
+                $code = $this->doHslConvert(hexdec($rgb[1].$rgb[1]), hexdec($rgb[2].$rgb[2]), hexdec($rgb[3].$rgb[3]));
+                $out .= $code.$this->stripStyles($split[$i + 1]);
                 $end = $this->stripStyles($split[$i + 1]);
             }
 
@@ -175,55 +145,62 @@ class Console
         return preg_replace('/(\$[wnoitsgz><]|\$[lh]\[.+\]|\$[lh]|\$[0-9a-f]{3})+/i', '', $string);
     }
 
-    /**
-     * Fix the color codes from MP standard to world standard
-     *
-     * @param string $r
-     * @param string $g
-     * @param string $b
-     *
-     * @return string
-     */
-    public function fixColors($r, $g, $b)
-    {
-        $out = "111";
-        // black/gray/white
-        if ($r == $g && $g == $b && $b == $r) {
-            if ($r >= 0 && $r < 5) {
-                $out = "000";
-            }
-            if ($r >= 5 && $r < 13) {
-                $out = "111";
-            }
-            if ($r >= 13 && $r <= 16) {
-                $out = "222";
-            }
-        } else {
-            $out = $this->convert($r).$this->convert($g).$this->convert($b);
-        }
-        return $out;
-    }
 
-    /**
-     * Convert from number to numeric string
-     *
-     * @param int $number
-     *
-     * @return string
-     */
-    public function convert($number)
+    protected function doHslConvert($r, $g, $b)
     {
-        $out = "0";
-        if ($number >= 9 && $number <= 16) {
-            $out = "2";
+        $hsl = ColorConversion::rgbToHsl($r, $g, $b);
+
+        $lightness = 100 * $hsl[2];
+        $attr = 0;
+
+        // if color has saturation
+        if ($hsl[1] > 0) {
+            $h = $hsl[0];
+
+            $color = "37";
+
+            if ($h >= 333 && $h <= 360) {
+                $color = "31"; // red
+            }
+            if ($h >= 284 && $h < 333) {
+                $color = "35"; // magenta
+            }
+            if ($h >= 214 && $h < 284) {
+                $color = "34"; // blue
+            }
+            if ($h >= 160 && $h < 214) {
+                $color = "36"; // cyan
+            }
+            if ($h >= 70 && $h < 160) {
+                $color = "32"; // green
+            }
+            if ($h >= 20 && $h < 70) {
+                $color = "33"; // yellow
+            }
+            if ($h >= 0 && $h < 20) {
+                $color = "31"; // red
+            }
+        } else // color is grayscale
+        {
+            $color = "37";
         }
-        if ($number >= 3 && $number < 9) {
-            $out = "1";
+
+        if ($lightness >= 95 && $lightness <= 100) {
+            $color = "37";
+            $attr = "1";
         }
-        if ($number >= 0 && $number < 3) {
-            $out = "0";
+        if ($lightness >= 50 && $lightness < 95) {
+            $attr = "1";
         }
-        return $out;
+        if ($lightness >= 30 && $lightness < 50) {
+            $attr = "0";
+        }
+        if ($lightness >= 0 && $lightness < 30) {
+            $color = "30";
+            $attr = "1";
+        }
+
+        return "\e[".$attr.";".$color."m";
     }
 
     /**

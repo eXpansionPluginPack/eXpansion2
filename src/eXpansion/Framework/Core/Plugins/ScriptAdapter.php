@@ -2,7 +2,7 @@
 
 namespace eXpansion\Framework\Core\Plugins;
 
-use eXpansion\Framework\Core\DataProviders\Listener\ScriptDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyScript;
 use eXpansion\Framework\Core\Services\Application\Dispatcher;
 
 /**
@@ -11,7 +11,7 @@ use eXpansion\Framework\Core\Services\Application\Dispatcher;
  * @package eXpansion\Framework\Core\Plugins;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-class ScriptAdapter implements ScriptDataListenerInterface
+class ScriptAdapter implements ListenerInterfaceMpLegacyScript
 {
     /** @var  Dispatcher */
     protected $dispatcher;

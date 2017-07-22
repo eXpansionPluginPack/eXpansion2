@@ -13,7 +13,7 @@ class GroupTest extends TestCore
 
     public function testPersistentGroup()
     {
-        $group = new Group($this->container->get('expansion.framework.core.services.application.dispatcher'), "test");
+        $group = new Group($this->container->get('expansion.service.dispatcher'), "test");
 
         $group->addLogin('l1');
         $group->addLogin('l2');
@@ -29,7 +29,7 @@ class GroupTest extends TestCore
 
     public function testNonPersistentGroup()
     {
-        $group = new Group($this->container->get('expansion.framework.core.services.application.dispatcher'));
+        $group = new Group($this->container->get('expansion.service.dispatcher'));
         $this->assertFalse($group->isPersistent());
     }
 }

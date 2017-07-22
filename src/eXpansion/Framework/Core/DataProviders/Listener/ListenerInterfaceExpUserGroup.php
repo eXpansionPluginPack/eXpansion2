@@ -5,13 +5,13 @@ namespace eXpansion\Framework\Core\DataProviders\Listener;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 
 /**
- * Class UserGroupDataListenerInterface
+ * Class ListenerInterfaceExpUserGroup
  *
  * @author    de Cramer Oliver<oldec@smile.fr>
  * @copyright 2017 Smile
  * @package eXpansion\Framework\Core\DataProviders\Listener
  */
-interface UserGroupDataListenerInterface
+interface ListenerInterfaceExpUserGroup
 {
     public function onExpansionGroupAddUser(Group $group, $loginAdded);
 

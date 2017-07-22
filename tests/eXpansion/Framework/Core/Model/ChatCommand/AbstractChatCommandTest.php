@@ -23,7 +23,7 @@ class AbstractChatCommandTest extends TestCore
         $notification = $this->getMockBuilder(ChatNotificationInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->container->set('expansion.framework.core.helpers.chat_notification', $notification);
+        $this->container->set('expansion.helper.chat_notification', $notification);
     }
 
     public function testModel()
@@ -71,6 +71,6 @@ class AbstractChatCommandTest extends TestCore
      */
     protected function getChatNotificationMock()
     {
-        return $this->container->get('expansion.framework.core.helpers.chat_notification');
+        return $this->container->get('expansion.helper.chat_notification');
     }
 }

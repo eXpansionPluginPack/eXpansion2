@@ -102,6 +102,6 @@ class ArrayFilterTest extends TestCore
      */
     protected function getArrayFilterHelper()
     {
-        return $this->container->get('expansion.framework.core.helpers.data.array_filter');
+        return $this->container->get('expansion.helper.data.array_filter');
     }
 }

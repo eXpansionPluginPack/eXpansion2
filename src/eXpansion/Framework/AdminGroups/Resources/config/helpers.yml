@@ -1,5 +1,5 @@
 services:
-    expansion.framework.admin_groups.helpers.groups:
+    expansion.helper.admingroups:
         class: eXpansion\Framework\AdminGroups\Helpers\AdminGroups
         arguments:
             - '@expansion.framework.admin_groups.services.admin_group_configuration'

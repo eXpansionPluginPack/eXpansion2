@@ -8,13 +8,13 @@ services:
     expansion.framework.core.model.gui.grid.data_collection_factory.array:
         class: '%expansion.framework.core.model.gui.grid.data_collection_factory.class%'
         arguments:
-            - "@expansion.framework.core.helpers.data.array_filter"
+            - "@expansion.helper.data.array_filter"
             - "%expansion.framework.core.model.gui.grid.data_collection.class%"
 
     expansion.framework.core.model.gui.grid.data_collection_factory.object:
         class: '%expansion.framework.core.model.gui.grid.data_collection_factory.class%'
         arguments:
-            - "@expansion.framework.core.helpers.data.object_filter"
+            - "@expansion.helper.data.object_filter"
             - "%expansion.framework.core.model.gui.grid.data_collection.class%"
 
     expansion.framework.core.model.gui.grid.builder_factory:

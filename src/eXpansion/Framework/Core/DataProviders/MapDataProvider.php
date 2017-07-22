@@ -89,7 +89,7 @@ class MapDataProvider extends AbstractDataProvider
             $this->updateMapList();
 
             // We will dispatch even only when list is modified. If not we dispatch specific events.
-            $this->dispatch(__FUNCTION__, [$oldMaps, $curMapIndex, $nextMapIndex]);
+            $this->dispatch(__FUNCTION__, [$oldMaps, $curMapIndex, $nextMapIndex, $isListModified]);
         }
 
         $currentMap = $this->mapStorage->getMapByIndex($curMapIndex);

@@ -1,8 +1,8 @@
 services:
-    expansion.framework.core.helpers.time:
+    expansion.helper.time:
         class: 'eXpansion\Framework\Core\Helpers\Time'
 
-    expansion.framework.core.helpers.translations:
+    expansion.helper.translations:
         class: 'eXpansion\Framework\Core\Helpers\Translations'
         arguments:
             - '@translator'
@@ -10,22 +10,22 @@ services:
             - '%expansion.config.core_chat_color_codes%'
             - '%expansion.config.core_chat_glyph_icons%'
 
-    expansion.framework.core.helpers.chat_notification:
+    expansion.helper.chat_notification:
         class: 'eXpansion\Framework\Core\Helpers\ChatNotification'
         arguments:
-            - '@expansion.framework.core.services.dedicated_connection'
-            - '@expansion.framework.core.helpers.translations'
-            - '@expansion.framework.core.storage.player'
-            - '@expansion.framework.core.services.console'
+            - '@expansion.service.dedicated_connection'
+            - '@expansion.helper.translations'
+            - '@expansion.storage.player'
+            - '@expansion.service.console'
 
-    expansion.framework.core.helpers.chat_output:
+    expansion.helper.chat_output:
         class: 'eXpansion\Framework\Core\Helpers\ChatOutput'
         arguments:
-            - '@expansion.framework.core.services.dedicated_connection'
-            - '@expansion.framework.core.helpers.chat_notification'
+            - '@expansion.service.dedicated_connection'
+            - '@expansion.helper.chat_notification'
 
-    expansion.framework.core.helpers.data.array_filter:
+    expansion.helper.data.array_filter:
         class: 'eXpansion\Framework\Core\Helpers\Data\ArrayFilter'
 
-    expansion.framework.core.helpers.data.object_filter:
+    expansion.helper.data.object_filter:
         class: 'eXpansion\Framework\Core\Helpers\Data\ObjectFilter'

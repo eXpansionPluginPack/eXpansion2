@@ -25,7 +25,7 @@ class PlayerStorageTest extends TestCore
 
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $connectionMock */
-        $connectionMock = $this->container->get('expansion.framework.core.services.dedicated_connection');
+        $connectionMock = $this->container->get('expansion.service.dedicated_connection');
         $connectionMock->method('getPlayerInfo')
             ->withConsecutive(['test'])
             ->willReturn($playerI);
@@ -64,6 +64,11 @@ class PlayerStorageTest extends TestCore
         $player1 = $this->getPlayer('test-2', false);
 
         $this->getPlayerStorage()->onPlayerDisconnect($player1, '');
+
+        $toRemove = $this->getPlayerStorage()->getPlayersToRemove();
+        $this->assertSame(['test-2'], $toRemove);
+
+        $this->getPlayerStorage()->onPreLoop();
 
         $players = $this->getPlayerStorage()->getPlayers();
         $this->assertArrayHasKey('test-1', $players);
@@ -112,6 +117,6 @@ class PlayerStorageTest extends TestCore
      */
     protected function getPlayerStorage()
     {
-        return $this->container->get('expansion.framework.core.storage.player');
+        return $this->container->get('expansion.storage.player');
     }
 }

@@ -19,7 +19,7 @@ class PluginPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has('expansion.framework.core.services.plugin_manager')) {
+        if (!$container->has('expansion.service.plugin_manager')) {
             return;
         }
 
@@ -42,7 +42,7 @@ class PluginPass implements CompilerPassInterface
         }
 
         // Get the data provider manager service definition to register data providers into.
-        $definition = $container->getDefinition('expansion.framework.core.services.plugin_manager');
+        $definition = $container->getDefinition('expansion.service.plugin_manager');
 
         foreach ($pluginsData as $pluginId => $data)
         {

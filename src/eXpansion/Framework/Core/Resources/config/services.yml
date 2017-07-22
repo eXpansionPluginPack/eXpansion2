@@ -1,18 +1,18 @@
 parameters:
-    expansion.framework.core.services.dedicated_connection.class: Maniaplanet\DedicatedServer\Connection
-    expansion.framework.core.services.dedicated_connection.factory.class: eXpansion\Framework\Core\Services\DedicatedConnection\Factory
+    expansion.service.dedicated_connection.class: Maniaplanet\DedicatedServer\Connection
+    expansion.service.dedicated_connection.factory.class: eXpansion\Framework\Core\Services\DedicatedConnection\Factory
 
-    expansion.framework.core.services.application.class: eXpansion\Framework\Core\Services\Application
-    expansion.framework.core.services.plugin_manager.class: eXpansion\Framework\Core\Services\PluginManager
-    expansion.framework.core.services.data_provider_manager.class: eXpansion\Framework\Core\Services\DataProviderManager
-    expansion.framework.core.services.console.class: eXpansion\Framework\Core\Services\Console
-    expansion.framework.core.services.chat_commands.class: eXpansion\Framework\Core\Services\ChatCommands
+    expansion.service.application.class: eXpansion\Framework\Core\Services\Application
+    expansion.service.plugin_manager.class: eXpansion\Framework\Core\Services\PluginManager
+    expansion.service.data_provider_manager.class: eXpansion\Framework\Core\Services\DataProviderManager
+    expansion.service.console.class: eXpansion\Framework\Core\Services\Console
+    expansion.service.chat_commands.class: eXpansion\Framework\Core\Services\ChatCommands
 
-    expansion.framework.core.services.chat_commands.depth: 3
+    expansion.service.chat_commands.depth: 3
 
 services:
-    expansion.framework.core.services.dedicated_connection.factory:
-        class: "%expansion.framework.core.services.dedicated_connection.factory.class%"
+    expansion.service.dedicated_connection.factory:
+        class: "%expansion.service.dedicated_connection.factory.class%"
         arguments:
             - "%dedicated_host%"
             - "%dedicated_port%"
@@ -20,69 +20,69 @@ services:
             - "%dedicated_user%"
             - "%dedicated_password%"
 
-    expansion.framework.core.services.dedicated_connection:
-        class: "%expansion.framework.core.services.dedicated_connection.class%"
-        factory: "expansion.framework.core.services.dedicated_connection.factory:createConnection"
+    expansion.service.dedicated_connection:
+        class: "%expansion.service.dedicated_connection.class%"
+        factory: "expansion.service.dedicated_connection.factory:createConnection"
 
-    expansion.framework.core.services.application:
-        class: "%expansion.framework.core.services.application.class%"
+    expansion.service.application:
+        class: "%expansion.service.application.class%"
         arguments:
-            - '@expansion.framework.core.services.application.dispatcher'
-            - '@expansion.framework.core.services.dedicated_connection'
-            - '@expansion.framework.core.services.console'
+            - '@expansion.service.dispatcher'
+            - '@expansion.service.dedicated_connection'
+            - '@expansion.service.console'
 
-    expansion.framework.core.services.application_debug:
+    expansion.service.application_debug:
         class: eXpansion\Framework\Core\Services\ApplicationDebug
         arguments:
-            - '@expansion.framework.core.services.application.dispatch_logger'
-            - '@expansion.framework.core.services.dedicated_connection'
-            - '@expansion.framework.core.services.console'
+            - '@expansion.service.application.dispatch_logger'
+            - '@expansion.service.dedicated_connection'
+            - '@expansion.service.console'
 
-    expansion.framework.core.services.application.dispatcher:
+    expansion.service.dispatcher:
         class: eXpansion\Framework\Core\Services\Application\Dispatcher
         arguments:
-            - '@expansion.framework.core.services.data_provider_manager'
-            - '@expansion.framework.core.services.plugin_manager'
+            - '@expansion.service.data_provider_manager'
+            - '@expansion.service.plugin_manager'
         calls:
-            - [addEventProcesseor, ['@expansion.framework.core.services.symfony_event_adapter']]
+            - [addEventProcesseor, ['@expansion.service.symfony_event_adapter']]
 
-    expansion.framework.core.services.symfony_event_adapter:
+    expansion.service.symfony_event_adapter:
         class: eXpansion\Framework\Core\Services\SymfonyEventAdapter
         arguments:
             - '@event_dispatcher'
 
-    expansion.framework.core.services.application.dispatch_logger:
+    expansion.service.application.dispatch_logger:
         class: eXpansion\Framework\Core\Services\Application\DispatchLogger
         arguments:
-            - '@expansion.framework.core.services.console'
+            - '@expansion.service.console'
 
-    expansion.framework.core.services.plugin_manager:
-        class: "%expansion.framework.core.services.plugin_manager.class%"
+    expansion.service.plugin_manager:
+        class: "%expansion.service.plugin_manager.class%"
         arguments:
             - '@service_container'
-            - '@expansion.framework.core.services.model.plugin.plugin_description_factory'
-            - '@expansion.framework.core.services.data_provider_manager'
+            - '@expansion.service.model.plugin.plugin_description_factory'
+            - '@expansion.service.data_provider_manager'
             - '@expansion.framework.core.storage.game_data'
-            - '@expansion.framework.core.services.console'
+            - '@expansion.service.console'
 
-    expansion.framework.core.services.data_provider_manager:
-        class: "%expansion.framework.core.services.data_provider_manager.class%"
+    expansion.service.data_provider_manager:
+        class: "%expansion.service.data_provider_manager.class%"
         arguments:
             - '@service_container'
             - '@expansion.framework.core.storage.game_data'
-            - '@expansion.framework.core.services.console'
+            - '@expansion.service.console'
 
-    expansion.framework.core.services.console:
-        class: "%expansion.framework.core.services.console.class%"
+    expansion.service.console:
+        class: "%expansion.service.console.class%"
         arguments:
             - '%color_enabled%'
 
-    expansion.framework.core.services.chat_commands:
-        class: "%expansion.framework.core.services.chat_commands.class%"
+    expansion.service.chat_commands:
+        class: "%expansion.service.chat_commands.class%"
         arguments:
-          - '%expansion.framework.core.services.chat_commands.depth%'
+          - '%expansion.service.chat_commands.depth%'
 
-    expansion.framework.core.services.model.plugin.plugin_description_factory:
+    expansion.service.model.plugin.plugin_description_factory:
         class: 'eXpansion\Framework\Core\Model\Plugin\PluginDescriptionFactory'
         arguments:
             - 'eXpansion\Framework\Core\Model\Plugin\PluginDescription'

@@ -19,14 +19,14 @@ class ChatNotificationTest extends TestCore
         $colorCodes = $this->container->getParameter('expansion.config.core_chat_color_codes');
         $colorCode = $colorCodes['test'];
 
-        $dedicatedConnection = $this->container->get('expansion.framework.core.services.dedicated_connection');
+        $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
         $dedicatedConnection->expects($this->once())
             ->method('chatSendServerMessage')
             ->with('$z' . $colorCode . 'This is a test translation : Toto', 'toto');
 
         $player = new Player();
         $player->merge(['language' => 'en']);
-        $this->container->set('expansion.framework.core.storage.player', $this->getMockPlayerStorage($player));
+        $this->container->set('expansion.storage.player', $this->getMockPlayerStorage($player));
 
         $chatNotification = $this->getChatNotificationHelper();
         $chatNotification->sendMessage('expansion_core.test_color', 'toto', ['%test%' => 'Toto']);
@@ -45,14 +45,14 @@ class ChatNotificationTest extends TestCore
             4 => ['Lang' => 'en', 'Text' => '$z' . $colorCode . 'This is a test translation : Toto'],
         ];
 
-        $dedicatedConnection = $this->container->get('expansion.framework.core.services.dedicated_connection');
+        $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
         $dedicatedConnection->expects($this->once())
             ->method('chatSendServerMessage')
             ->with($translate, null);
 
         $player = new Player();
         $player->merge(['language' => 'en']);
-        $this->container->set('expansion.framework.core.storage.player', $this->getMockPlayerStorage($player));
+        $this->container->set('expansion.storage.player', $this->getMockPlayerStorage($player));
 
         $chatNotification = $this->getChatNotificationHelper();
         $chatNotification->sendMessage('expansion_core.test_color', null, ['%test%' => 'Toto']);
@@ -64,6 +64,6 @@ class ChatNotificationTest extends TestCore
      */
     protected function getChatNotificationHelper()
     {
-        return $this->container->get('expansion.framework.core.helpers.chat_notification');
+        return $this->container->get('expansion.helper.chat_notification');
     }
 }

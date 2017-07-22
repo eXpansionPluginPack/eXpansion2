@@ -15,7 +15,7 @@ class RunCommandTest extends TestCore
     public function testRun()
     {
         $applicationMock = $this->createMock(RunInterface::class);
-        $this->container->set('expansion.framework.core.services.application', $applicationMock);
+        $this->container->set('expansion.service.application', $applicationMock);
 
         $applicationMock
             ->expects($this->once())->method('init')
@@ -36,7 +36,7 @@ class RunCommandTest extends TestCore
     public function testDebugRun()
     {
         $applicationMock = $this->createMock(RunInterface::class);
-        $this->container->set('expansion.framework.core.services.application_debug', $applicationMock);
+        $this->container->set('expansion.service.application_debug', $applicationMock);
 
         $applicationMock
             ->expects($this->once())->method('init')

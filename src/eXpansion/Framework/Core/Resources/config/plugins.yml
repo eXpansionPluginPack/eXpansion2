@@ -3,48 +3,53 @@ services:
     expansion.framework.core.plugins.gui_handler:
         class: 'eXpansion\Framework\Core\Plugins\GuiHandler'
         arguments:
-            - "@expansion.framework.core.services.dedicated_connection"
+            - "@expansion.service.dedicated_connection"
             - "@logger"
-            - "@expansion.framework.core.services.console"
+            - "@expansion.service.console"
         tags:
-            - {name: expansion.plugin, data_provider: expansion.timer_data}
+            - {name: expansion.plugin, data_provider: exp.timer}
             - {name: expansion.plugin, data_provider: expansion.user_group}
+            - {name: expansion.plugin, data_provider: mp.legacy.player}
 
     expansion.framework.core.plugins.gui.action_factory:
         class: 'eXpansion\Framework\Core\Plugins\Gui\ActionFactory'
         arguments:
             - "%expansion.framework.core.model.gui.action.class%"
         tags:
-            - {name: expansion.plugin, data_provider: expansion.manialink_page_answer}
+            - {name: expansion.plugin, data_provider: mp.legacy.manialink}
 
     # Defining plugins to keep groups up to date. You normally never need these services.
     expansion.framework.core.plugins.user_group.all_players:
         class: eXpansion\Framework\Core\Plugins\UserGroups\AllPlayers
         arguments:
             - '@expansion.framework.core.user_groups.all_players'
+            - '@expansion.storage.player'
         tags:
-            - {name: expansion.plugin, data_provider: expansion.player_data}
+            - {name: expansion.plugin, data_provider: mp.legacy.player}
 
     expansion.framework.core.plugins.user_group.players:
         class: eXpansion\Framework\Core\Plugins\UserGroups\Players
         arguments:
             - '@expansion.framework.core.user_groups.players'
+            - '@expansion.storage.player'
         tags:
-            - {name: expansion.plugin, data_provider: expansion.player_data}
+            - {name: expansion.plugin, data_provider: mp.legacy.player}
 
     expansion.framework.core.plugins.user_group.spectators:
         class: eXpansion\Framework\Core\Plugins\UserGroups\Spectators
         arguments:
             - '@expansion.framework.core.user_groups.spectators'
+            - '@expansion.storage.player'
+
         tags:
-            - {name: expansion.plugin, data_provider: expansion.player_data}
+            - {name: expansion.plugin, data_provider: mp.legacy.player}
 
     expansion.framework.core.plugins.script_adapter:
         class: eXpansion\Framework\Core\Plugins\ScriptAdapter
         arguments:
-            - '@expansion.framework.core.services.application.dispatcher'
+            - '@expansion.service.dispatcher'
         tags:
-            - {name: expansion.plugin, data_provider: expansion.script}
+            - {name: expansion.plugin, data_provider: mp.legacy.script}
 
     #
     # Default Chat commands

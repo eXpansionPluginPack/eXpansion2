@@ -19,6 +19,6 @@ services:
             index_4: null
         calls:
             - [setMenuScriptFactory, ['@expansion.framework.core.gui.scripts.menu']]
-            - [setAdminGroupsHelper, ['@expansion.framework.admin_groups.helpers.groups']]
+            - [setAdminGroupsHelper, ['@expansion.helper.admingroups']]
         tags:
             - {name: expansion.plugin, data_provider: expansion.user_group}

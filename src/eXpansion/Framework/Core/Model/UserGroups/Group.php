@@ -45,8 +45,6 @@ class Group
             $this->persistent = true;
         }
 
-        print_r("new group:".$name."\n");
-
         $this->dispatcher = $dispatcher;
     }
 

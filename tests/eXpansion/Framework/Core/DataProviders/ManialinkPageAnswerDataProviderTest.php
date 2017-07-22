@@ -2,7 +2,7 @@
 
 namespace Tests\eXpansion\Framework\Core\DataProviders;
 
-use eXpansion\Framework\Core\DataProviders\Listener\ManialinkPageAnswerDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyManialink;
 use eXpansion\Framework\Core\DataProviders\ManialinkPageAnswerDataProvider;
 use Tests\eXpansion\Framework\Core\TestCore;
 
@@ -11,8 +11,8 @@ class ManialinkPageAnswerDataProviderTest extends TestCore
 
     public function testDispatch()
     {
-        /** @var ManialinkPageAnswerDataListenerInterface|object $mockPlugin */
-        $mockPlugin = $this->createMock(ManialinkPageAnswerDataListenerInterface::class);
+        /** @var ListenerInterfaceMpLegacyManialink|object $mockPlugin */
+        $mockPlugin = $this->createMock(ListenerInterfaceMpLegacyManialink::class);
         $mockPlugin->expects($this->once())
             ->method('onPlayerManialinkPageAnswer')
             ->with('test', 'action', ['val1' => 'test1', 'val2' => 'test2']);

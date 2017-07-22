@@ -3,15 +3,15 @@
 namespace eXpansion\Bundle\CustomChat\Plugins;
 
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
-use eXpansion\Framework\Core\DataProviders\Listener\ApplicationDataListenerInterface;
-use eXpansion\Framework\Core\DataProviders\Listener\ChatDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use Maniaplanet\DedicatedServer\Connection;
 
 
-class CustomChat implements ApplicationDataListenerInterface, ChatDataListenerInterface, StatusAwarePluginInterface
+class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacyChat, StatusAwarePluginInterface
 {
     /** @var Connection */
     protected $connection;

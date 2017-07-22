@@ -7,7 +7,6 @@ services:
           - '@eXpansion.local_records.gui.window.race_factory'
           - '@eXpansion.local_records.plugins.race_records'
 
-
     eXpansion.local_records.plugins.chat_commands.records:
         class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
         arguments:

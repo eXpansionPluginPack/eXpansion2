@@ -2,7 +2,7 @@
 
 namespace eXpansion\Framework\Core\Plugins\Gui;
 
-use eXpansion\Framework\Core\DataProviders\Listener\ManialinkPageAnswerDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyManialink;
 use eXpansion\Framework\Core\Model\Gui\Action;
 use eXpansion\Framework\Core\Model\Gui\Manialink;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
@@ -13,7 +13,7 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
  * @package eXpansion\Framework\Core\Plugins\Gui
  * @author Oliver de Cramer
  */
-class ActionFactory implements ManialinkPageAnswerDataListenerInterface
+class ActionFactory implements ListenerInterfaceMpLegacyManialink
 {
     protected $class;
 

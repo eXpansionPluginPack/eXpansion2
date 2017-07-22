@@ -158,7 +158,7 @@ class AdminGroups
      */
     public function isAdmin($login)
     {
-        return (strpos($this->getLoginUserGroups($login)->getName(), 'admin:') === 0) ? true : false;
+        return ($this->getLoginUserGroups($login)->getName() !== "admin:guest") ? true : false;
     }
 
 }

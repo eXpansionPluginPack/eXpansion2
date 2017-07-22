@@ -4,8 +4,8 @@
 namespace Tests\eXpansion\Framework\Core\Services;
 
 use eXpansion\Framework\Core\DataProviders\ChatDataProvider;
-use eXpansion\Framework\Core\DataProviders\Listener\ChatDataListenerInterface;
-use eXpansion\Framework\Core\DataProviders\Listener\PlayerDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Core\DataProviders\MapDataProvider;
 use eXpansion\Framework\Core\DataProviders\PlayerDataProvider;
 use eXpansion\Framework\Core\Exceptions\DataProvider\UncompatibleException;
@@ -14,6 +14,8 @@ use eXpansion\Framework\Core\Services\DataProviderManager;
 use eXpansion\Framework\Core\Services\PluginManager;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use Maniaplanet\DedicatedServer\Structures\GameInfos;
+use Maniaplanet\DedicatedServer\Structures\PlayerDetailedInfo;
+use Maniaplanet\DedicatedServer\Structures\PlayerInfo;
 use Tests\eXpansion\Framework\Core\TestCore;
 use Tests\eXpansion\Framework\Core\TestHelpers\PlayerDataTrait;
 
@@ -56,17 +58,17 @@ class DataProviderManagerTest extends TestCore
         $compatibilities = [];
         $compatibilities[] = $this->getCompatibility('TM', 'script', 'TimeAttack.script.txt');
         $dataProviderManager
-            ->registerDataProvider('dp1-1', 'dp1', ChatDataListenerInterface::class, $compatibilities, $listner);
+            ->registerDataProvider('dp1-1', 'dp1', ListenerInterfaceMpLegacyChat::class, $compatibilities, $listner);
 
         $compatibilities = [];
         $compatibilities[] = $this->getCompatibility('TM');
         $dataProviderManager
-            ->registerDataProvider('dp1-2', 'dp1', ChatDataListenerInterface::class, $compatibilities, $listner);
+            ->registerDataProvider('dp1-2', 'dp1', ListenerInterfaceMpLegacyChat::class, $compatibilities, $listner);
 
         $compatibilities = [];
         $compatibilities[] = $this->getCompatibility('TM2');
         $dataProviderManager
-            ->registerDataProvider('dp2-2', 'dp2', ChatDataListenerInterface::class, $compatibilities, $listner);
+            ->registerDataProvider('dp2-2', 'dp2', ListenerInterfaceMpLegacyChat::class, $compatibilities, $listner);
     }
 
     public function testPreferenceDataProvider()
@@ -104,7 +106,7 @@ class DataProviderManagerTest extends TestCore
         $dataProviderManager = $this->getDataProviderManager();
         $player = $this->getPlayer('test1', false);
 
-        $pluginMock = $this->createMock(ChatDataListenerInterface::class);
+        $pluginMock = $this->createMock(ListenerInterfaceMpLegacyChat::class);
         $this->container->set('p1', $pluginMock);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $dataProviderMock */
@@ -122,7 +124,7 @@ class DataProviderManagerTest extends TestCore
         $this->prepareProviders();
         $dataProviderManager = $this->getDataProviderManager();
 
-        $pluginMock = $this->createMock(PlayerDataListenerInterface::class);
+        $pluginMock = $this->createMock(ListenerInterfaceMpLegacyPlayer::class);
         $this->container->set('p1', $pluginMock);
 
         $this->expectException(UncompatibleException::class);
@@ -134,6 +136,18 @@ class DataProviderManagerTest extends TestCore
     {
         $this->prepareProviders();
         $dataProviderManager = $this->getDataProviderManager();
+
+        $connectionMock = $this->container->get('expansion.service.dedicated_connection');
+        /** @var \PHPUnit_Framework_MockObject_MockObject $connectionMock */
+        $connectionMock->method('getPlayerList')
+            ->withAnyParameters()
+            ->willReturn([new PlayerInfo()]);
+        $connectionMock->method('getPlayerInfo')
+            ->withAnyParameters()
+            ->willReturn(new PlayerInfo());
+        $connectionMock->method('getDetailedPlayerInfo')
+            ->withAnyParameters()
+            ->willReturn(new PlayerDetailedInfo());
 
         $pManagerMock = $this->createMock(PluginManager::class);
         $pManagerMock->expects($this->any())->method('isPluginEnabled')->willReturn(true);
@@ -170,6 +184,6 @@ class DataProviderManagerTest extends TestCore
     {
 
 
-        return $this->container->get('expansion.framework.core.services.data_provider_manager');
+        return $this->container->get('expansion.service.data_provider_manager');
     }
 }

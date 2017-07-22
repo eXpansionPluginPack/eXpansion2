@@ -4,7 +4,7 @@
 namespace Tests\eXpansion\Framework\Core\DataProviders;
 
 
-use eXpansion\Framework\Core\DataProviders\Listener\TimerDataListenerInterface;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\DataProviders\TimerDataProvider;
 use Tests\eXpansion\Framework\Core\TestCore;
 
@@ -22,7 +22,7 @@ class TimerDataProviderTest extends TestCore
     {
         parent::setUp();
 
-        $this->pluginMock = $this->createMock(TimerDataListenerInterface::class);
+        $this->pluginMock = $this->createMock(ListenerInterfaceExpTimer::class);
         $this->timerDataProvider = $this->container->get('expansion.framework.core.data_providers.timer_data_provider');
     }
 

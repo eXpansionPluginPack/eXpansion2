@@ -5,12 +5,12 @@ services:
             - '__'
             - '__'
             - []
-            - '@expansion.framework.admin_groups.helpers.groups'
-            - '@expansion.framework.core.services.dedicated_connection'
-            - '@expansion.framework.core.helpers.chat_notification'
-            - '@expansion.framework.core.storage.player'
+            - '@expansion.helper.admingroups'
+            - '@expansion.service.dedicated_connection'
+            - '@expansion.helper.chat_notification'
+            - '@expansion.storage.player'
             - '@logger'
-            - '@expansion.framework.core.helpers.time'
+            - '@expansion.helper.time'
 
     expansion.admin_chat.chat_command.restart:
         class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
@@ -284,3 +284,31 @@ services:
               - [setDescription, ["expansion_admin_chat.loadguestlist.description"]]
               - [setChatMessage, ["expansion_admin_chat.loadguestlist.msg"]]
               - [setFunctionName, ["loadGuestList"]]
+
+    expansion.admin_chat.chat_command.password:
+          class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
+          parent: expansion.admin_chat.chat_command.base
+          arguments:
+              index_0: "password"
+              index_1: "password"
+              index_2: ['pass']
+          calls:
+              - [setParameterDescription, ['New server join password']]
+              - [setDescription, ["expansion_admin_chat.password.description"]]
+              - [setChatMessage, ["expansion_admin_chat.password.msg"]]
+              - [setFunctionName, ["setServerPassword"]]
+              - [setPublic, [false]]
+
+    expansion.admin_chat.chat_command.specpass:
+          class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
+          parent: expansion.admin_chat.chat_command.base
+          arguments:
+              index_0: "specpassword"
+              index_1: "specpassword"
+              index_2: ['specpass']
+          calls:
+              - [setParameterDescription, ['New server spectator join password']]
+              - [setDescription, ["expansion_admin_chat.specpass.description"]]
+              - [setChatMessage, ["expansion_admin_chat.specpass.msg"]]
+              - [setFunctionName, ["setServerPasswordForSpectator"]]
+              - [setPublic, [false]]

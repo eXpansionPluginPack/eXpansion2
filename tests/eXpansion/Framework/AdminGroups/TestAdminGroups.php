@@ -39,19 +39,19 @@ class TestAdminGroups extends TestCore
     {
         return [
             'master_admin' => [
-                'logins' => ['toto1', 'toto2'],
+                'logins' => ['toto1', 'toto2']
             ],
             'admin' => [
                 'logins' => ['toto10', 'toto11'],
-                'permissions' => ['p10', 'p11'],
+                'permissions' => ['p10', 'p11']
             ],
             'operator' => [
                 'logins' => ['toto20', 'toto21'],
-                'permissions' => ['p20', 'p21'],
+                'permissions' => ['p20', 'p21']
             ],
             'empty' => [
                 'logins' => [],
-                'permissions' => ['p20'],
+                'permissions' => ['p20']
             ]
         ];
     }
@@ -62,6 +62,6 @@ class TestAdminGroups extends TestCore
      */
     protected function getAdminGroupHelper()
     {
-        return $this->container->get('expansion.framework.admin_groups.helpers.groups');
+        return $this->container->get('expansion.helper.admingroups');
     }
 }

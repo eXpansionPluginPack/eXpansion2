@@ -4,9 +4,9 @@ services:
     expansion.framework.core.listener.base_storage_update:
         class: 'eXpansion\Framework\Core\Listener\BaseStorageUpdateListener'
         arguments:
-            - '@expansion.framework.core.services.dedicated_connection'
+            - '@expansion.service.dedicated_connection'
             - "@expansion.framework.core.storage.game_data"
-            - '@expansion.framework.core.services.application.dispatcher'
+            - '@expansion.service.dispatcher'
         tags:
             - { name: kernel.event_listener, event: maniaplanet.game.BeginMap }
             - { name: kernel.event_listener, event: maniaplanet.game.expansion.before_init }
