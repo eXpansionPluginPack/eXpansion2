@@ -75,14 +75,14 @@ class AdminReturnCommandTest extends \PHPUnit_Framework_TestCase
         $this->adminCommand->setFunctionName('getServerPlanets');
     }
 
-    public function setFunctionName()
+    public function testSetFunctionName()
     {
         $this->assertEquals('getServerPlanets', $this->adminCommand->getFunctionName());
     }
 
-    public function setChatMessage()
+    public function testSetChatMessage()
     {
-        $this->assertEquals('message', $this->adminCommand->getChatMessage());
+        $this->assertEquals('server has %planets% planets', $this->adminCommand->getChatMessage());
     }
 
     public function testDescription()

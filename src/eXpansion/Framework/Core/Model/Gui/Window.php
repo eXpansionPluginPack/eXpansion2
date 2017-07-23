@@ -23,8 +23,7 @@ class Window extends Widget implements Container
         $sizeY,
         $posX = null,
         $posY = null
-    )
-    {
+    ) {
         parent::__construct($group, $translationHelper, $name, $sizeX, $sizeY, $posX, $posY);
 
         $this->translationHelper = $translationHelper;
@@ -84,6 +83,13 @@ class Window extends Widget implements Container
         $windowFrame->addChild($this->closeButton);
 
         //body
+        $body = new Quad();
+        $body->setSize($sizeX, $sizeY - $titleHeight)
+            ->setPosition(0, -$titleHeight)
+            ->setBackgroundColor("222")
+            ->setOpacity(0.8);
+        $windowFrame->addChild($body);
+
         $body = new Quad_Bgs1();
         $body->setSize($sizeX, $sizeY - $titleHeight)
             ->setPosition(0, -$titleHeight)
