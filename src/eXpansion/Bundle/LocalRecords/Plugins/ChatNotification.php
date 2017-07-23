@@ -211,17 +211,21 @@ class ChatNotification implements RecordsDataListener
 
     protected function getSecuredBy(Record $record, Record $oldRecord)
     {
-        $securedBy = $this->timeFormater->timeToText($oldRecord->getScore() - $record->getScore(), true);
+        if ($oldRecord->getScore()) {
+            $securedBy = $this->timeFormater->timeToText($oldRecord->getScore() - $record->getScore(), true);
 
-        if (substr($securedBy, 0, 4) === "00:0") {
-            $securedBy = substr($securedBy, 4);
-        } else {
-            if (substr($securedBy, 0, 3) === "00:") {
-                $securedBy = substr($securedBy, 3);
+            if (substr($securedBy, 0, 4) === "00:0") {
+                $securedBy = substr($securedBy, 4);
+            } else {
+                if (substr($securedBy, 0, 3) === "00:") {
+                    $securedBy = substr($securedBy, 3);
+                }
             }
+
+            return '-' . $securedBy;
         }
 
-        return '-'.$securedBy;
+        return $securedBy = $this->timeFormater->timeToText(0);
     }
 
     protected function messageFirstPlaceNew(Record $record)
