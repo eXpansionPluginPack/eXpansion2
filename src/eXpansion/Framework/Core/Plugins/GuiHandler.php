@@ -193,8 +193,9 @@ class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserG
 
         foreach ($this->hideIndividualQueu as $login => $manialinks) {
             foreach ($manialinks as $id => $manialink) {
-                if (!in_array($login, $this->disconnectedLogins))
-                yield ['logins' => $login, 'ml' => '<manialink id="'.$id.'" />'];
+                if (!in_array($login, $this->disconnectedLogins)) {
+                                yield ['logins' => $login, 'ml' => '<manialink id="'.$id.'" />'];
+                }
             }
         }
     }

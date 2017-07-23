@@ -50,13 +50,13 @@ class ManiaScriptFactory
     {
         $className = $this->className;
 
-        $filePath = $this->fileLocator->locate('@' . $this->relativePath);
+        $filePath = $this->fileLocator->locate('@'.$this->relativePath);
 
         return new $className($filePath, $params);
     }
 
     public function getFileLocation() {
-        return $this->fileLocator->locate('@' . $this->relativePath);
+        return $this->fileLocator->locate('@'.$this->relativePath);
     }
 
 }

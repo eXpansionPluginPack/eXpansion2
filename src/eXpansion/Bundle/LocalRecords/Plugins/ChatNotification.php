@@ -241,6 +241,10 @@ class ChatNotification implements RecordsDataListener
         );
     }
 
+    /**
+     * @param string $message
+     * @param null|integer $recipe
+     */
     protected function sendMessage($message, $recipe, $params)
     {
         $this->chatNotification->sendMessage(
