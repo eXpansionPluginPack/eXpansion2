@@ -34,6 +34,9 @@ class WindowHelpFactory extends WindowFactory
     /** @var ChatCommandDataProvider */
     protected $chatCommandDataPovider;
 
+    /** @var WindowHelpDetailsFactory */
+    protected $windowHelpDetailsFactory;
+
     /**
      * @param GridBuilderFactory $gridBuilderFactory
      */
@@ -58,9 +61,20 @@ class WindowHelpFactory extends WindowFactory
         $this->chatCommands = $chatCommands;
     }
 
+    /**
+     * @param ChatCommandDataProvider $chatCommandDataPovider
+     */
     public function setChatCommandDataProvide($chatCommandDataPovider)
     {
         $this->chatCommandDataPovider = $chatCommandDataPovider;
+    }
+
+    /**
+     * @param WindowHelpDetailsFactory $windowHelpDetailsFactory
+     */
+    public function setWindowDescriptionFactory(WindowHelpDetailsFactory $windowHelpDetailsFactory)
+    {
+        $this->windowHelpDetailsFactory = $windowHelpDetailsFactory;
     }
 
     /**
@@ -73,6 +87,12 @@ class WindowHelpFactory extends WindowFactory
 
         $helpButton = new Label();
         $helpButton->setText('')
+            ->setSize(6, 6)
+            ->setAreaColor("0000")
+            ->setAreaFocusColor("0000");
+
+        $desctiptionButton = new Label();
+        $desctiptionButton->setText('')
             ->setSize(6, 6)
             ->setAreaColor("0000")
             ->setAreaFocusColor("0000");
@@ -93,7 +113,14 @@ class WindowHelpFactory extends WindowFactory
                 false,
                 true
             )
-            ->addActionColumn('help', '', 5, array($this, 'callbackHelp'), $helpButton);
+            ->addActionColumn('help', '', 5, array($this, 'callbackHelp'), $helpButton)
+            ->addActionColumn(
+                'description',
+                '',
+                5,
+                array($this, 'callbackDescription'),
+                $desctiptionButton
+            );
 
         $manialink->setData('grid', $gridBuilder);
     }
@@ -159,5 +186,20 @@ class WindowHelpFactory extends WindowFactory
     public function callbackHelp($login, $params, $arguments)
     {
         $this->chatCommandDataPovider->onPlayerChat(0, $login, '/'.$arguments['command'].' -h', true);
+    }
+
+    /**
+     * Callbacked called when description button is pressed.
+     *
+     * @param $login
+     * @param $params
+     * @param $arguments
+     */
+    public function callbackDescription($login, $params, $arguments)
+    {
+        $chatCommands = $this->chatCommands->getChatCommands();
+        $this->windowHelpDetailsFactory->setCurrentCommand($chatCommands[$arguments['command']]);
+
+        $this->windowHelpDetailsFactory->create($login);
     }
 }

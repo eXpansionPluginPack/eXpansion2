@@ -165,10 +165,14 @@ class GridBuilder
      * @param integer $widthCoefficiency
      * @param $action
      * @param Label $renderer
+     *
+     * @return $this
      */
     public function addActionColumn($key, $name, $widthCoefficiency, $action, $renderer)
     {
         $this->columns[] = new ActionColumn($key, $name, $widthCoefficiency, $action, $renderer);
+
+        return $this;
     }
 
     /**
