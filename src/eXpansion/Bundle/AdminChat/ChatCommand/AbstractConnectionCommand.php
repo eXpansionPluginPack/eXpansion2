@@ -100,4 +100,12 @@ abstract class AbstractConnectionCommand extends AbstractAdminChatCommand
         return $groupName;
     }
 
+    /**
+     * @return bool
+     */
+    public function getPublic()
+    {
+        return $this->isPublic;
+    }
+
 }

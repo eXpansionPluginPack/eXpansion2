@@ -8,7 +8,7 @@
 
 namespace Tests\eXpansion\Bundle\AdminChat\ChatCommand;
 
-use eXpansion\Bundle\AdminChat\ChatCommand\ReasonUserCommand;
+use eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\Time;
@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Tests\eXpansion\Framework\Core\TestHelpers\PlayerDataTrait;
 
-class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
+class AdminCommandTest extends \PHPUnit_Framework_TestCase
 {
     use PlayerDataTrait;
 
@@ -35,8 +35,8 @@ class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $inputMock;
 
-    /** @var ReasonUserCommand */
-    protected $reasonCommand;
+    /** @var AdminCommand  */
+    protected $adminCommand;
 
     /**
      *
@@ -57,9 +57,9 @@ class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->inputMock = $this->getMockBuilder(InputInterface::class)->disableOriginalConstructor()->getMock();
 
-        $this->reasonCommand = new ReasonUserCommand(
+        $this->adminCommand = new AdminCommand(
             'toto',
-            'toto',
+            'skip',
             [],
             $this->getMockBuilder(AdminGroups::class)->disableOriginalConstructor()->getMock(),
             $this->connectionMock,
@@ -69,30 +69,30 @@ class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
             $this->getMockBuilder(Time::class)->disableOriginalConstructor()->getMock()
         );
 
-        $this->reasonCommand->setParameterLoginDescription('login description');
-        $this->reasonCommand->setParameterReasonDescription('reason description');
-        $this->reasonCommand->setDescription('description');
-        $this->reasonCommand->setChatMessage('message');
-        $this->reasonCommand->setFunctionName('ban');
+        $this->adminCommand->setDescription('description');
+        $this->adminCommand->setChatMessage('%adminlevel% %admin% skips the map.');
+        $this->adminCommand->setFunctionName('nextMap');
+    }
+
+    public function setFunctionName()
+    {
+        $this->assertEquals('nextMap', $this->adminCommand->getFunctionName());
+    }
+     public function setChatMessage()
+    {
+        $this->assertEquals('%adminlevel% %admin% skips the map.', $this->adminCommand->getChatMessage());
     }
 
     public function testDescription()
     {
-        $this->assertEquals('description', $this->reasonCommand->getDescription());
+        $this->assertEquals('description', $this->adminCommand->getDescription());
     }
 
+    /**
+     *
+     */
     public function testExectute()
     {
-        $this->inputMock
-            ->expects($this->at(0))
-            ->method('getArgument')
-            ->with('login')
-            ->willReturn('test');
-        $this->inputMock
-            ->expects($this->at(1))
-            ->method('getArgument')
-            ->with('reason')
-            ->willReturn('reason');
 
         $this->playerStorageMock
             ->method("getPlayerInfo")
@@ -104,14 +104,12 @@ class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->connectionMock->expects($this->once())->method('ban')->with('test', 'reason');
+        $this->connectionMock->expects($this->once())->method('nextMap')->with();
 
-        $this->chatNotificationMock->expects($this->once())->method('sendMessage')->with(
-            'message', null,
-            ['%adminLevel%' => 'Admin', '%admin%' => '$ffftest', '%player%' => '$ffftest', '%reason%' => 'reason']
-        );
+        $this->chatNotificationMock->expects($this->once())->method('sendMessage')
+            ->with('%adminlevel% %admin% skips the map.', null, ['%adminLevel%' => 'Admin', '%admin%' => '$ffftest']);
 
-        $this->reasonCommand->execute(
+        $this->adminCommand->execute(
             'test',
             $this->inputMock
         );

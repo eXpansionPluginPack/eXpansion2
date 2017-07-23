@@ -8,18 +8,17 @@
 
 namespace Tests\eXpansion\Bundle\AdminChat\ChatCommand;
 
-use eXpansion\Bundle\AdminChat\ChatCommand\ReasonUserCommand;
+use eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
-use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Tests\eXpansion\Framework\Core\TestHelpers\PlayerDataTrait;
 
-class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
+class OneParameterCommandTest extends \PHPUnit_Framework_TestCase
 {
     use PlayerDataTrait;
 
@@ -35,8 +34,8 @@ class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $inputMock;
 
-    /** @var ReasonUserCommand */
-    protected $reasonCommand;
+    /** @var OneParameterCommand */
+    protected $oneParameterCommand;
 
     /**
      *
@@ -57,7 +56,7 @@ class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->inputMock = $this->getMockBuilder(InputInterface::class)->disableOriginalConstructor()->getMock();
 
-        $this->reasonCommand = new ReasonUserCommand(
+        $this->oneParameterCommand = new OneParameterCommand(
             'toto',
             'toto',
             [],
@@ -69,16 +68,15 @@ class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
             $this->getMockBuilder(Time::class)->disableOriginalConstructor()->getMock()
         );
 
-        $this->reasonCommand->setParameterLoginDescription('login description');
-        $this->reasonCommand->setParameterReasonDescription('reason description');
-        $this->reasonCommand->setDescription('description');
-        $this->reasonCommand->setChatMessage('message');
-        $this->reasonCommand->setFunctionName('ban');
+        $this->oneParameterCommand->setParameterDescription('parameter description');
+        $this->oneParameterCommand->setDescription('parameter description');
+        $this->oneParameterCommand->setChatMessage('%adminLevel% %admin% sets server name %parameter%');
+        $this->oneParameterCommand->setFunctionName('setServerName');
     }
 
     public function testDescription()
     {
-        $this->assertEquals('description', $this->reasonCommand->getDescription());
+        $this->assertEquals('parameter description', $this->oneParameterCommand->getDescription());
     }
 
     public function testExectute()
@@ -86,13 +84,8 @@ class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
         $this->inputMock
             ->expects($this->at(0))
             ->method('getArgument')
-            ->with('login')
-            ->willReturn('test');
-        $this->inputMock
-            ->expects($this->at(1))
-            ->method('getArgument')
-            ->with('reason')
-            ->willReturn('reason');
+            ->with('parameter')
+            ->willReturn('testname');
 
         $this->playerStorageMock
             ->method("getPlayerInfo")
@@ -104,14 +97,14 @@ class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->connectionMock->expects($this->once())->method('ban')->with('test', 'reason');
+        $this->connectionMock->expects($this->once())->method('setServerName')->with('testname');
 
         $this->chatNotificationMock->expects($this->once())->method('sendMessage')->with(
-            'message', null,
-            ['%adminLevel%' => 'Admin', '%admin%' => '$ffftest', '%player%' => '$ffftest', '%reason%' => 'reason']
+            '%adminLevel% %admin% sets server name %parameter%', null,
+            ['%adminLevel%' => 'Admin', '%admin%' => '$ffftest', '%parameter%' => 'testname']
         );
 
-        $this->reasonCommand->execute(
+        $this->oneParameterCommand->execute(
             'test',
             $this->inputMock
         );
