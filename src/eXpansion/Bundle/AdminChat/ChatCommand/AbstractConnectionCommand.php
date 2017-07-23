@@ -76,7 +76,7 @@ abstract class AbstractConnectionCommand extends AbstractAdminChatCommand
      */
     public function setPublic($bool)
     {
-        $this->isPublic = (bool)$bool;
+        $this->isPublic = (bool) $bool;
     }
 
     /**

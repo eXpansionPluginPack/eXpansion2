@@ -23,7 +23,7 @@ class RecordHandler
      */
     const EVENT_TYPE_FIRST_TIME = 'first_time';
     const EVENT_TYPE_SAME_SCORE = 'same_score';
-    const EVENT_TYPE_SAME_POS =   'same_position';
+    const EVENT_TYPE_SAME_POS = 'same_position';
     const EVENT_TYPE_BETTER_POS = 'better_position';
 
     /**

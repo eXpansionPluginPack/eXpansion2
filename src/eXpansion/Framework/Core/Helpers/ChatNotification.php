@@ -85,10 +85,10 @@ class ChatNotification implements ChatNotificationInterface
      * Usage: used for retrieving partials for chat messages
      *  * defaults to English locale, without parameters
      *
-     * @param $messageId
+     * @param string $messageId
      * @param array $parameters
      * @param string $locale
-     * @return mixed
+     * @return string
      */
     public function getMessage($messageId, $parameters = [], $locale = "en")
     {

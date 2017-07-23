@@ -10,10 +10,7 @@ use FML\Controls\Label;
 use FML\Controls\Quad;
 use FML\Controls\Quads\Quad_Bgs1;
 use FML\Controls\Quads\Quad_Bgs1InRace;
-use FML\Elements\Dico;
-use FML\Elements\Format;
 use FML\Types\Container;
-use FML\Types\Renderable;
 
 class Window extends Widget implements Container
 {
