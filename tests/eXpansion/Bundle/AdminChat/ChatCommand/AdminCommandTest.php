@@ -74,11 +74,11 @@ class AdminCommandTest extends \PHPUnit_Framework_TestCase
         $this->adminCommand->setFunctionName('nextMap');
     }
 
-    public function setFunctionName()
+    public function testSetFunctionName()
     {
         $this->assertEquals('nextMap', $this->adminCommand->getFunctionName());
     }
-     public function setChatMessage()
+     public function testSetChatMessage()
     {
         $this->assertEquals('%adminlevel% %admin% skips the map.', $this->adminCommand->getChatMessage());
     }

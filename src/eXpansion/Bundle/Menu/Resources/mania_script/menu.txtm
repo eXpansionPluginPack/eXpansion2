@@ -130,11 +130,13 @@ Void onButtonOut(CMlControl Element) {
 
 ***FML_OnInit***
 ***
-     declare isMenuOpen for Page = False;
-     declare isClosing for Page = True;
-     declare animDuration for Page = 300;
+    declare isMenuOpen for Page = False;
+    declare isClosing for Page = True;
+    declare animDuration for Page = 300;
 	isClosing = True;
 	InitialHide();
+	declare CMlFrame Exp_Window <=> (Page.GetFirstChild("Window") as CMlFrame);
+    Exp_Window.ZIndex = 10000.;
 ***
 
 ***FML_KeyPress***

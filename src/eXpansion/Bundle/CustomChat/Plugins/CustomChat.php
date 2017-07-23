@@ -61,12 +61,14 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
 
             try {
                 $color = '$ff0';
+                $separator = '';
                 if ($this->adminGroups->isAdmin($player->getLogin())) {
-                    $color = '$f90';
+                    $color = '$ff0';
+                    $separator = '';
                 }
 
                 $this->connection->chatSendServerMessage(
-                    '$fff$<'.$nick.'$z$s$>  '.$color.$force.$text,
+                    '$fff$<'.$nick.'$z$s$> '.$separator.' '.$color.$force.$text,
                     null
                 );
                 $this->console->writeln('$ff0['.$from.'$ff0] '.$text);
