@@ -8,7 +8,8 @@
 
 namespace Tests\eXpansion\Bundle\AdminChat\ChatCommand;
 
-use eXpansion\Bundle\AdminChat\ChatCommand\ReasonUserCommand;
+use eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand;
+use eXpansion\Bundle\AdminChat\ChatCommand\AdminReturnCommand;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\Time;
@@ -19,7 +20,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Tests\eXpansion\Framework\Core\TestHelpers\PlayerDataTrait;
 
-class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
+class AdminReturnCommandTest extends \PHPUnit_Framework_TestCase
 {
     use PlayerDataTrait;
 
@@ -35,8 +36,8 @@ class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $inputMock;
 
-    /** @var ReasonUserCommand */
-    protected $reasonCommand;
+    /** @var AdminReturnCommand */
+    protected $adminCommand;
 
     /**
      *
@@ -57,9 +58,9 @@ class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->inputMock = $this->getMockBuilder(InputInterface::class)->disableOriginalConstructor()->getMock();
 
-        $this->reasonCommand = new ReasonUserCommand(
+        $this->adminCommand = new AdminReturnCommand(
             'toto',
-            'toto',
+            'planets',
             [],
             $this->getMockBuilder(AdminGroups::class)->disableOriginalConstructor()->getMock(),
             $this->connectionMock,
@@ -69,30 +70,40 @@ class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
             $this->getMockBuilder(Time::class)->disableOriginalConstructor()->getMock()
         );
 
-        $this->reasonCommand->setParameterLoginDescription('login description');
-        $this->reasonCommand->setParameterReasonDescription('reason description');
-        $this->reasonCommand->setDescription('description');
-        $this->reasonCommand->setChatMessage('message');
-        $this->reasonCommand->setFunctionName('ban');
+        $this->adminCommand->setDescription('description');
+        $this->adminCommand->setChatMessage('server has %planets% planets');
+        $this->adminCommand->setFunctionName('getServerPlanets');
+    }
+
+    public function setFunctionName()
+    {
+        $this->assertEquals('getServerPlanets', $this->adminCommand->getFunctionName());
+    }
+
+    public function setChatMessage()
+    {
+        $this->assertEquals('message', $this->adminCommand->getChatMessage());
     }
 
     public function testDescription()
     {
-        $this->assertEquals('description', $this->reasonCommand->getDescription());
+        $this->assertEquals('description', $this->adminCommand->getDescription());
     }
 
-    public function testExectute()
+    public function testSetPublic()
     {
-        $this->inputMock
-            ->expects($this->at(0))
-            ->method('getArgument')
-            ->with('login')
-            ->willReturn('test');
-        $this->inputMock
-            ->expects($this->at(1))
-            ->method('getArgument')
-            ->with('reason')
-            ->willReturn('reason');
+        $this->adminCommand->setPublic(true);
+        $this->assertTrue($this->adminCommand->getPublic());
+
+        $this->adminCommand->setPublic(false);
+        $this->assertFalse($this->adminCommand->getPublic());
+    }
+
+    /**
+     *
+     */
+    public function testExectutePublic()
+    {
 
         $this->playerStorageMock
             ->method("getPlayerInfo")
@@ -104,14 +115,39 @@ class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->connectionMock->expects($this->once())->method('ban')->with('test', 'reason');
+        $this->connectionMock->expects($this->once())->method('getServerPlanets');
 
-        $this->chatNotificationMock->expects($this->once())->method('sendMessage')->with(
-            'message', null,
-            ['%adminLevel%' => 'Admin', '%admin%' => '$ffftest', '%player%' => '$ffftest', '%reason%' => 'reason']
+        $this->chatNotificationMock->expects($this->once())->method('sendMessage')
+            ->with('server has %planets% planets', null, ['%adminLevel%' => 'Admin', '%admin%' => '$ffftest', '%return%' => 0]);
+
+        $this->adminCommand->execute(
+            'test',
+            $this->inputMock
         );
+    }    public function testExectutePrivate()
+    {
 
-        $this->reasonCommand->execute(
+        $this->playerStorageMock
+            ->method("getPlayerInfo")
+            ->with('test')
+            ->willReturn(
+                $this->getPlayer(
+                    'test',
+                    false
+                )
+            );
+
+        $this->connectionMock->expects($this->once())->method('getServerPlanets');
+        // test personal message
+
+        $this->adminCommand->setPublic(false);
+
+        $this->connectionMock->expects($this->once())->method('getServerPlanets')->with();
+        $this->chatNotificationMock->expects($this->once())->method('sendMessage')
+            ->with('server has %planets% planets', 'test', ['%adminLevel%' => 'Admin', '%admin%' => '$ffftest', '%return%' => 0]);
+
+
+        $this->adminCommand->execute(
             'test',
             $this->inputMock
         );
