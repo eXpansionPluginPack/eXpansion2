@@ -43,6 +43,6 @@ class SymfonyEventAdapter implements EventProcessorInterface
     {
         $event = new DedicatedEvent();
         $event->setParameters($params);
-        $this->symfonyEventDispatcher->dispatch("maniaplanet.game." . $eventName, $event);
+        $this->symfonyEventDispatcher->dispatch("maniaplanet.game.".$eventName, $event);
     }
 }

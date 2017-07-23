@@ -62,7 +62,7 @@ class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMap
     }
 
     /**
-     * @return array
+     * @return Map[]
      */
     public function getMaps()
     {

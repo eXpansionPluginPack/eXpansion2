@@ -58,7 +58,7 @@ class LineFactory
     public function create($totalWidth, $columns, $index = 0, $height = 5.0, $autoNewLine = false, $maxLines = 1)
     {
         $totalCoef
-            = ($totalWidth - 1) / array_reduce($columns, function ($carry, $item) {
+            = ($totalWidth - 1) / array_reduce($columns, function($carry, $item) {
                 return $carry + $item['width'];
             });
 

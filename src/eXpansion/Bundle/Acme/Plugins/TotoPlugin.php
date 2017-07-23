@@ -2,12 +2,10 @@
 
 namespace eXpansion\Bundle\Acme\Plugins;
 
-use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Console;
-use eXpansion\Framework\Core\Storage\Data\Player;
 
 /**
  * TotoPlugin is a test plugin to be removed.
