@@ -100,5 +100,21 @@ services:
             - [setDataCollectionFactory, ['@expansion.framework.core.model.gui.grid.data_collection_factory.array']]
             - [setChatCommands, ['@expansion.service.chat_commands']]
             - [setChatCommandDataProvide, ['@expansion.framework.core.data_providers.chat_command_data_provider']]
+            - [setWindowDescriptionFactory, ['@expansion.framework.core.plugins.gui.window_help_description_factory']]
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.user_group}
+
+    expansion.framework.core.plugins.gui.window_help_description_factory:
+        parent: "expansion.framework.core.plugins.gui.window_factory"
+        class: 'eXpansion\Framework\Core\Plugins\Gui\WindowHelpDetailsFactory'
+        arguments:
+            index_0: 'expansion_core.windows.chat_commands_description.title'
+            index_1: 180
+            index_2: 90
+            index_3: null
+            index_4: null
+        calls:
+            - [setLineFactory, ['@expansion.framework.core.gui.element.factory.line']]
+            - [setTitleLineFactory, ['@expansion.framework.core.gui.element.factory.title_line']]
         tags:
             - {name: expansion.plugin, data_provider: expansion.user_group}

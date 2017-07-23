@@ -44,15 +44,18 @@ class LineFactory
     /**
      * Create a multi column line.
      *
-     * @param $totalWidth
-     * @param $columns
+     * @param float $totalWidth
+     * @param array $columns
+     * @param int   $index
+     * @param float $height
+     * @param bool  $autoNewLine
+     * @param int   $maxLines
      *
-     * @param int $index
      * @return Frame
      *
      * @throws \Exception
      */
-    public function create($totalWidth, $columns, $index = 0)
+    public function create($totalWidth, $columns, $index = 0, $height = 5.0, $autoNewLine = false, $maxLines = 1)
     {
         $totalCoef
             = ($totalWidth - 1) / array_reduce($columns, function ($carry, $item) {
@@ -60,13 +63,13 @@ class LineFactory
             });
 
         $frame = new Frame();
-        $frame->setHeight(5);
+        $frame->setHeight($height);
         $frame->setWidth($totalWidth);
 
         $postX = 1;
         foreach ($columns as $columnData) {
             if (isset($columnData['text'])) {
-                $element = $this->createTextColumn($totalCoef, $columnData, $postX);
+                $element = $this->createTextColumn($totalCoef, $columnData, $postX, $height, $autoNewLine, $maxLines);
             } elseif (isset($columnData['renderer'])) {
                 $element = $this->createRendererColumn($columnData, $postX);
             }
@@ -83,7 +86,7 @@ class LineFactory
             $postX += $columnData["width"] * $totalCoef;
         }
 
-        $frame->addChild($this->backGroundFactory->create($totalWidth, 5, $index));
+        $frame->addChild($this->backGroundFactory->create($totalWidth, $height, $index));
 
         return $frame;
     }
@@ -92,18 +95,24 @@ class LineFactory
      * @param float $totalCoef
      * @param array $columnData
      * @param float $postX
+     * @param float $height
+     * @param bool  $autoNewLine
+     * @param int   $maxLines
      *
      * @return Label
      */
-    protected function createTextColumn($totalCoef, $columnData, $postX)
+    protected function createTextColumn($totalCoef, $columnData, $postX, $height, $autoNewLine = false, $maxLines = 1)
     {
         $label = $this->labelFactory->create(
             $columnData['text'],
             AssociativeArray::getFromKey($columnData, 'translatable', false),
             $this->type
         );
+        $label->setHeight($height - 1);
         $label->setWidth(($columnData["width"] * $totalCoef) - 0.5);
         $label->setPosition($postX, -0.5);
+        $label->setAutoNewLine($autoNewLine);
+        $label->setMaxLines($maxLines);
 
         return $label;
     }
