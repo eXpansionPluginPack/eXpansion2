@@ -2,6 +2,7 @@
 
 namespace eXpansion\Bundle\Acme\Plugins;
 
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyMaplist;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\Helpers\Time;
@@ -9,7 +10,7 @@ use eXpansion\Framework\Core\Services\Console;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
-class Test implements ListenerInterfaceMpLegacyMaplist, ListenerInterfaceExpTimer
+class Test implements ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer
 {
     /** @var Connection */
     protected $connection;

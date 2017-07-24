@@ -4,7 +4,9 @@ services:
         arguments:
             - '@expansion.service.console'
             - '@expansion.bundle.acme.plugins.gui.windowFactory'
-            - '@expansion.helper.usergroups'
+            - '@expansion.framework.core.user_groups.players'
+        tags:
+            - {name: expansion.plugin, data_provider: exp.application}
 
     expansion.bundle.acme.plugins.test:
         class: eXpansion\Bundle\Acme\Plugins\Test

@@ -45,8 +45,8 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
         $text = trim($text);
         $from = trim($player->getNickName());
 
-        if ($player->getPlayerId() === 0) {
-            $from = '';
+        if ($player->getPlayerId() == 0) {
+            return;
         }
 
         if ($player->getPlayerId() != 0 && substr($text, 0, 1) != "/" && $this->enabled) {
