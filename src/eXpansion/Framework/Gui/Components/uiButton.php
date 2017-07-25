@@ -5,10 +5,13 @@ namespace eXpansion\Framework\Gui\Components;
 use eXpansion\Framework\Core\Helpers\ColorConversion;
 use FML\Controls\Frame;
 use FML\Controls\Quad;
+use FML\Script\Features\ScriptFeature;
 use FML\Script\Script;
+use FML\Script\ScriptLabel;
 use FML\Types\Renderable;
+use FML\Types\ScriptFeatureable;
 
-class uiButton extends abstractUiElement
+class uiButton extends abstractUiElement implements ScriptFeatureable
 {
     private $type;
 
@@ -53,18 +56,18 @@ class uiButton extends abstractUiElement
     public function render(\DOMDocument $domDocument)
     {
         $buttonFrame = new Frame();
-        $buttonFrame->setPosition($this->posX, $this->posY, $this->posZ)
-            ->addClasses(['uiContainer', 'uiButton']);
+        $buttonFrame->setAlign("center", "center")
+            ->setPosition($this->posX + ($this->sizeX / 2), $this->posY - ($this->sizeY / 2), $this->posZ)
+            ->addClasses(['uiContainer', 'uiButton'])
+            ->addDataAttribute("action", $this->action);
 
         if ($this->type == self::TYPE_DECORATED) {
-            echo "decorated!";
-            //<quad size="26 9" style="Bgs1" colorize="d00" substyle="BgColorContour"
             $quad = new Quad();
             $this->backColor = null;
             $quad->setStyles("Bgs1", "BgColorContour")
                 ->setColorize($this->borderColor)
                 ->setSize($this->sizeX, $this->sizeY)
-                ->setPosition($this->sizeX / 2, -$this->sizeY / 2)
+                //->setPosition(-$this->sizeX / 2, $this->sizeY / 2)
                 ->setAlign("center", "center2");
             $buttonFrame->addChild($quad);
         }
@@ -75,12 +78,9 @@ class uiButton extends abstractUiElement
             ->setAreaColor($this->backColor)
             ->setAreaFocusColor($this->focusColor)
             ->setTextColor($this->textColor)
-            ->setAlign("center", "center2")
-            ->setPosition($this->sizeX / 2, -$this->sizeY / 2);
-
-        if ($this->action !== null) {
-            $label->setAction($this->action);
-        }
+            ->addClass('uiButtonElement')
+            ->setAlign("center", "center2");
+            //->setPosition(-$this->sizeX / 2, $this->sizeY / 2);
 
         $buttonFrame->addChild($label);
 
@@ -90,15 +90,38 @@ class uiButton extends abstractUiElement
     }
 
     /**
+     * Get the Script Features
+     *
+     * @return ScriptFeature[]
+     */
+    public function getScriptFeatures()
+    {
+        return ScriptFeature::collect($this);
+    }
+
+    /**
      * Prepare the given Script for rendering by adding the needed Labels, etc.
      *
-     * @param Script $script Script to prepare
-     * @return static
-     *
+     * @param Script $script Script to prepar
+     * @return void
      */
     public function prepare(Script $script)
     {
-        // TODO: Implement prepare() method.
+        $script->addCustomScriptLabel(ScriptLabel::MouseClick, $this->getScriptMouseClick());
+    }
+
+    private function getScriptMouseClick()
+    {
+        return /** language=textmate  prefix=#RequireContext\n */
+            <<<'EOD'
+            if (Event.Control.HasClass("uiButtonElement") ) {
+                if (Event.Control.Parent.HasClass("uiButton")) {
+                      Event.Control.Parent.RelativeScale = 0.75;
+                      AnimMgr.Add(Event.Control.Parent, "<elem scale=\"1.\" />", 200, CAnimManager::EAnimManagerEasing::QuadIn); 
+                      TriggerPageAction(Event.Control.Parent.DataAttributeGet("action"));
+                }                
+            }
+EOD;
     }
 
     /**
@@ -255,4 +278,16 @@ class uiButton extends abstractUiElement
         $this->sizeX = $x;
         $this->sizeY = $y;
     }
+
+    public function getHeight()
+    {
+        return $this->sizeY;
+    }
+
+    public function getWidth()
+    {
+        return $this->sizeX;
+    }
+
+
 }

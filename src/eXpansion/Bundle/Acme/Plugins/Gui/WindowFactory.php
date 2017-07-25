@@ -7,6 +7,8 @@ use eXpansion\Framework\Core\Plugins\Gui\WindowFactory as BaseWindowFactory;
 use eXpansion\Framework\Gui\Components\uiButton;
 use eXpansion\Framework\Gui\Components\uiCheckbox;
 use eXpansion\Framework\Gui\Components\uiLabel;
+use eXpansion\Framework\Gui\Layouts\layoutLine;
+use eXpansion\Framework\Gui\Layouts\layoutRow;
 
 class WindowFactory extends BaseWindowFactory
 {
@@ -17,24 +19,31 @@ class WindowFactory extends BaseWindowFactory
         $label = new uiLabel("Test", uiLabel::TYPE_NORMAL);
         $manialink->addChild($label);
 
-        $checkbox = new uiCheckbox("test checkbox 1 ", "checkbox1");
-        $checkbox->setPosition(10, -5);
-        $manialink->addChild($checkbox);
+        $checkbox = new uiCheckbox("test checkbox 1", "checkbox1");
+        $checkbox2 = new uiCheckbox("test checkbox 2", "checkbox2");
 
-        $checkbox = new uiCheckbox("test checkbox 2", "checkbox2");
-        $checkbox->setPosition(10, -10);
-        $manialink->addChild($checkbox);
+        $line1 = new layoutRow(0, 0, [$checkbox, $checkbox2], 0);
 
         $ok = new uiButton("Apply", uiButton::TYPE_DECORATED);
-        $ok->setPosition(10, -25)
-            ->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'ok'], ["ok" => "ok"]));
-        $manialink->addChild($ok);
+        $ok->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'ok'], ["ok" => "ok"]));
 
-        $ok = new uiButton("Cancel");
-        $ok->setPosition(40, -25)
-            ->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'ok'], ["ok" => "cancel"]));
-        $manialink->addChild($ok);
+        $cancel = new uiButton("Cancel");
+        $cancel->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'ok'], ["ok" => "cancel"]));
 
+        $line2 = new layoutLine(0, 0, [$ok, $cancel], 1);
+
+
+        $line3 = new layoutRow(55, 0, [], 1);
+
+        for ($x = 0; $x < 10; $x++) {
+            $btn = new uiCheckbox('box'.$x, 'cb_'.$x);
+            $line3->addElement($btn);
+        }
+
+        $manialink->addChild($line3);
+
+        $row = new layoutRow(0, -10, [$line1, $line2], 0);
+        $manialink->addChild($row);
     }
 
 
@@ -43,6 +52,8 @@ class WindowFactory extends BaseWindowFactory
         var_dump($login);
         print_r($params);
         print_r($args);
+
+
     }
 
 

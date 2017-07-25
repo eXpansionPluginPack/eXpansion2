@@ -55,4 +55,32 @@ abstract class abstractUiElement extends ScriptFeature implements Renderable
      */
     abstract public function render(\DOMDocument $domDocument);
 
+    /**
+     * @return int
+     */
+    public function getX()
+    {
+        return $this->posX;
+    }
+
+    /**
+     * @return int
+     */
+    public function getY()
+    {
+        return $this->posY;
+    }
+
+    /**
+     * @return int
+     */
+    public function getZ()
+    {
+        return $this->posZ;
+    }
+
+
+    abstract public function getHeight();
+
+    abstract public function getWidth();
 }

@@ -4,10 +4,10 @@ namespace eXpansion\Framework\Gui\Components;
 
 use FML\Controls\Entry;
 use FML\Controls\Frame;
+use FML\Controls\Labels\Label_Text;
 use FML\Script\Features\ScriptFeature;
 use FML\Script\Script;
 use FML\Script\ScriptLabel;
-use FML\Types\Renderable;
 use FML\Types\ScriptFeatureable;
 
 class uiCheckbox extends abstractUiElement implements ScriptFeatureable
@@ -29,6 +29,9 @@ class uiCheckbox extends abstractUiElement implements ScriptFeatureable
      */
     private $disabled = false;
 
+    private $width = 30;
+    private $height = 6;
+
 
     /**
      * uiCheckbox constructor.
@@ -43,6 +46,7 @@ class uiCheckbox extends abstractUiElement implements ScriptFeatureable
         $this->name = $name;
         $this->checked = $checked;
         $this->disabled = $disabled;
+
     }
 
 
@@ -75,32 +79,29 @@ class uiCheckbox extends abstractUiElement implements ScriptFeatureable
         $entry->setPosition(900, 900)
             ->setName($this->name);
 
-        $checkedLabel = new uiLabel('✔');
-        $checkedLabel->setTextSize(4)
+        $checkedBackground = new uiLabel('⬜');
+        $checkedBackground->setTextSize(4)
             ->setAlign('center', 'center2')
             ->setSize(6, 6)
-            ->setPosition(3.5, -2);
-        $checkedLabel->setScriptEvents(true)
-            ->addClass('uiElement')
-            ->setVisible(true);
-        $checkedBackground = clone $checkedLabel;
+            ->setPosition(3, -3);
+        $checkedBackground->setScriptEvents(true)
+            ->addClass('uiCheckboxElement');
 
-        $checkedLabel->addClass('uiChecked');
+        $checkedLabel = clone $checkedBackground;
+        $checkedLabel->setText('✔')->setPosition(3.5, -2)->setScale(0);
 
-
-        $checkedBackground->setText('⬜')->setVisible(true)->setPosition(3, -3);
-
-        $label = new uiLabel($this->getText());
-        $label->setTranslate(true)
-            ->setPosition(6, -2.5)
-            ->setScriptEvents(true)
-            ->addClasses(['uiElement']);
-
+        $label = new uiLabel();
+        $label->setTranslate(false)
+            ->setAlign("left", "center2")
+            ->setPosition(6, -3)
+            ->setSize($this->width - 6, $this->height)
+            ->setText($this->getText());
 
         $containerFrame->addChild($entry);
+        $containerFrame->addChild($label);
         $containerFrame->addChild($checkedLabel);
         $containerFrame->addChild($checkedBackground);
-        $containerFrame->addChild($label);
+
 
         return $containerFrame->render($domDocument);
     }
@@ -199,7 +200,7 @@ EOD;
     {
         return /** language=textmate  prefix=#RequireContext\n */
             <<<'EOD'
-            if (Event.Control.HasClass("uiElement") ) {
+            if (Event.Control.HasClass("uiCheckboxElement") ) {
                 if (Event.Control.Parent.HasClass("uiCheckbox")) {									
                         uiToggleCheckbox(Event.Control.Parent);	
                 }
@@ -218,22 +219,17 @@ EOD;
   
           
 Void uiRenderCheckbox(CMlFrame frame) {
-	foreach (uiControl  in frame.Controls) {		
-			if (uiControl.HasClass("uiChecked")) {
-				if (frame.DataAttributeGet("checked") == "1") {
-						uiControl.Show();
-					} else {
-						uiControl.Hide();
-					}
-			}
-			if (uiControl is CMlEntry) {
-			declare entry <=> (uiControl as CMlEntry);
-				entry.Value = frame.DataAttributeGet("checked") ;							
-			}
-		}
+    declare uiControl = frame.Controls[2];
+	if (frame.DataAttributeGet("checked") == "1") {
+       AnimMgr.Add(uiControl, "<frame scale=\"1.\" />", 250, CAnimManager::EAnimManagerEasing::BackOut);            
+    } else {
+       AnimMgr.Add(uiControl, "<frame scale=\"0.\" />", 100, CAnimManager::EAnimManagerEasing::BackIn);
+	}
+        declare CMlEntry entry = (frame.Controls[0] as CMlEntry);
+	    entry.Value = frame.DataAttributeGet("checked") ;  
 }	
 
-Void uiToggleCheckbox(CMlFrame frame) {
+Void uiToggleCheckbox(CMlFrame frame) { 
 	if  (frame.DataAttributeGet("checked") == "1") {
 		frame.DataAttributeSet("checked", "0");
 	} else {
@@ -253,5 +249,21 @@ EOD;
     public function getScriptFeatures()
     {
         return ScriptFeature::collect($this);
+    }
+
+    public function setSize($x, $y)
+    {
+        $this->width = $x;
+        $this->height = $y;
+    }
+
+    public function getHeight()
+    {
+        return $this->height;
+    }
+
+    public function getWidth()
+    {
+        return $this->width;
     }
 }

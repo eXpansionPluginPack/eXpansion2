@@ -28,7 +28,6 @@ class uiLabel extends Label
         switch ($type) {
             case self::TYPE_NORMAL:
                 $this->setTextSize(2)
-                    ->setStyle("TextInfo")
                     ->setHeight(5);
                 break;
             case self::TYPE_TITLE:
@@ -54,19 +53,13 @@ class uiLabel extends Label
      */
     public function render(\DOMDocument $domDocument)
     {
-        $text = "";
-        if ($this->getTranslate() === true) {
-            $text = $this->getText();
-            $this->setTextId($text);
-            $this->setText(null);
-        }
+        /*  $text = "";
+          if ($this->getTranslate() === true) {
+              $text = $this->getText();
+              $this->setTextId($text);
+              $this->setText(null);
+          } */
 
-        $xml = parent::render($domDocument);
-
-        if ($this->getTranslate() === true) {
-            $this->setText($text);
-        }
-
-        return $xml;
+        return parent::render($domDocument);
     }
 }

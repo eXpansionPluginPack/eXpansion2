@@ -35,7 +35,7 @@
         }
 
   if (Exp_CloseWindow) {
-        AnimMgr.Add(Exp_Window, "<frame scale=\"0.\" />", 200, CAnimManager::EAnimManagerEasing::SineOut);
+        AnimMgr.Add(Exp_Window, "<frame scale=\"0.\" />", 200, CAnimManager::EAnimManagerEasing::Linear);
     }
 
     if (Exp_OpenWindow && Exp_lastAction + 200 <= Now ) {
