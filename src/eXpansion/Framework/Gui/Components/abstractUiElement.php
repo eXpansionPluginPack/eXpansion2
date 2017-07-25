@@ -11,6 +11,9 @@ abstract class abstractUiElement extends ScriptFeature implements Renderable
     protected $posY = 0;
     protected $posZ = 0;
 
+    protected $width;
+    protected $height;
+
     /**
      * @param int $posX
      * @param int $posY
@@ -79,8 +82,48 @@ abstract class abstractUiElement extends ScriptFeature implements Renderable
         return $this->posZ;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getWidth()
+    {
+        return $this->width;
+    }
 
-    abstract public function getHeight();
+    /**
+     * @param mixed $width
+     */
+    public function setWidth($width)
+    {
+        $this->width = $width;
 
-    abstract public function getWidth();
+        return $this;
+    }
+
+    /**
+     * @param mixed $height
+     * @return abstractUiElement
+     */
+    public function setHeight($height)
+    {
+        $this->height = $height;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHeight()
+    {
+        return $this->height;
+    }
+
+    public function setSize($x, $y)
+    {
+        $this->width = $x;
+        $this->height = $y;
+    }
+
+
 }

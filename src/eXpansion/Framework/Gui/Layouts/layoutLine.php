@@ -11,6 +11,8 @@ use FML\Types\ScriptFeatureable;
 
 class layoutLine implements Renderable, ScriptFeatureable
 {
+    private $frameClasses = [];
+
     private $width = 0;
     private $height = 0;
     /** @var Control[] */
@@ -60,6 +62,7 @@ class layoutLine implements Renderable, ScriptFeatureable
     {
         $frame = new Frame();
         $frame->setPosition($this->startX, $this->startY);
+        $frame->addClasses($this->frameClasses);
 
         $startX = 0;
         foreach ($this->elements as $idx => $element) {
@@ -158,10 +161,15 @@ class layoutLine implements Renderable, ScriptFeatureable
         $this->height = $height;
     }
 
-    public function addElement($element)
+    public function addChild($element)
     {
         $this->elements[] = $element;
         $this->width += $element->getWidth() + $this->margin;
         $this->height += $element->getHeight();
+    }
+
+    public function addClass($class)
+    {
+        $this->frameClasses [] = $class;
     }
 }

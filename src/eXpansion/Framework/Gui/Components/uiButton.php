@@ -32,13 +32,11 @@ class uiButton extends abstractUiElement implements ScriptFeatureable
     const COLOR_PRIMARY = "3af";
     const COLOR_SECONDARY = "000";
 
-    private $sizeX = 26;
-    private $sizeY = 9;
-
     public function __construct($text = "button", $type = self::TYPE_DEFAULT)
     {
         $this->text = $text;
         $this->type = $type;
+        $this->setSize(26, 8);
     }
 
 
@@ -57,7 +55,7 @@ class uiButton extends abstractUiElement implements ScriptFeatureable
     {
         $buttonFrame = new Frame();
         $buttonFrame->setAlign("center", "center")
-            ->setPosition($this->posX + ($this->sizeX / 2), $this->posY - ($this->sizeY / 2), $this->posZ)
+            ->setPosition($this->posX + ($this->width / 2), $this->posY - ($this->height / 2), $this->posZ)
             ->addClasses(['uiContainer', 'uiButton'])
             ->addDataAttribute("action", $this->action);
 
@@ -66,21 +64,21 @@ class uiButton extends abstractUiElement implements ScriptFeatureable
             $this->backColor = null;
             $quad->setStyles("Bgs1", "BgColorContour")
                 ->setColorize($this->borderColor)
-                ->setSize($this->sizeX, $this->sizeY)
-                //->setPosition(-$this->sizeX / 2, $this->sizeY / 2)
+                ->setSize($this->width, $this->height)
+                //->setPosition(-$this->width / 2, $this->height / 2)
                 ->setAlign("center", "center2");
             $buttonFrame->addChild($quad);
         }
 
         $label = new uiLabel($this->getText(), uiLabel::TYPE_TITLE);
-        $label->setSize($this->sizeX, $this->sizeY)
+        $label->setSize($this->width, $this->height)
             ->setScriptEvents(true)
             ->setAreaColor($this->backColor)
             ->setAreaFocusColor($this->focusColor)
             ->setTextColor($this->textColor)
             ->addClass('uiButtonElement')
             ->setAlign("center", "center2");
-            //->setPosition(-$this->sizeX / 2, $this->sizeY / 2);
+        //->setPosition(-$this->width / 2, $this->height / 2);
 
         $buttonFrame->addChild($label);
 
@@ -235,59 +233,5 @@ EOD;
     {
         $this->text = $text;
     }
-
-    /**
-     * @return int
-     */
-    public function getSizeX()
-    {
-        return $this->sizeX;
-    }
-
-    /**
-     * @param int $sizeX
-     */
-    public function setSizeX($sizeX)
-    {
-        $this->sizeX = $sizeX;
-    }
-
-    /**
-     * @return int
-     */
-    public function getSizeY()
-    {
-        return $this->sizeY;
-    }
-
-    /**
-     * @param int $sizeY
-     */
-    public function setSizeY($sizeY)
-    {
-        $this->sizeY = $sizeY;
-    }
-
-    /**
-     * sets control size
-     * @param int $x
-     * @param int $y
-     */
-    public function setSize($x, $y)
-    {
-        $this->sizeX = $x;
-        $this->sizeY = $y;
-    }
-
-    public function getHeight()
-    {
-        return $this->sizeY;
-    }
-
-    public function getWidth()
-    {
-        return $this->sizeX;
-    }
-
 
 }

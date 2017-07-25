@@ -29,10 +29,6 @@ class uiCheckbox extends abstractUiElement implements ScriptFeatureable
      */
     private $disabled = false;
 
-    private $width = 30;
-    private $height = 6;
-
-
     /**
      * uiCheckbox constructor.
      * @param string $text
@@ -46,7 +42,8 @@ class uiCheckbox extends abstractUiElement implements ScriptFeatureable
         $this->name = $name;
         $this->checked = $checked;
         $this->disabled = $disabled;
-
+        $this->setWidth(30);
+        $this->setHeight(6);
     }
 
 
@@ -255,15 +252,5 @@ EOD;
     {
         $this->width = $x;
         $this->height = $y;
-    }
-
-    public function getHeight()
-    {
-        return $this->height;
-    }
-
-    public function getWidth()
-    {
-        return $this->width;
     }
 }

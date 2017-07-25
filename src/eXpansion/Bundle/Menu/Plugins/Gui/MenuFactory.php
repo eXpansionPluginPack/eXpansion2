@@ -148,6 +148,7 @@ class MenuFactory extends WidgetFactory
         $manialink->addChild($btnFrame);
 
         $manialink->addChild($bgFrame);
+
         $manialink->getFmlManialink()->addChild($this->menuScriptFactory->createScript(["settingsId" => $openSettingsId]));
     }
 

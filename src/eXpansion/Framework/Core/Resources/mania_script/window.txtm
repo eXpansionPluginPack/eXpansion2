@@ -1,3 +1,5 @@
+#Include "TextLib" as TextLib
+#Include "MathLib" as MathLib
 
 ***FML_OnInit***
 ***

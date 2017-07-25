@@ -6,6 +6,7 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Plugins\Gui\WindowFactory as BaseWindowFactory;
 use eXpansion\Framework\Gui\Components\uiButton;
 use eXpansion\Framework\Gui\Components\uiCheckbox;
+use eXpansion\Framework\Gui\Components\uiDropdown;
 use eXpansion\Framework\Gui\Components\uiLabel;
 use eXpansion\Framework\Gui\Layouts\layoutLine;
 use eXpansion\Framework\Gui\Layouts\layoutRow;
@@ -37,13 +38,25 @@ class WindowFactory extends BaseWindowFactory
 
         for ($x = 0; $x < 10; $x++) {
             $btn = new uiCheckbox('box'.$x, 'cb_'.$x);
-            $line3->addElement($btn);
+            $line3->addChild($btn);
         }
 
         $manialink->addChild($line3);
 
         $row = new layoutRow(0, -10, [$line1, $line2], 0);
         $manialink->addChild($row);
+
+
+        $dropdown = new uiDropdown("dropdown",["option1" => 1, "option2" => 2]);
+        $dropdown->setPosition(0,-30);
+        $manialink->addChild($dropdown);
+
+        $dropdown = new uiDropdown("style",["tech" => "tech", "fullspeed" => "fullspeed", "speedtech" => "speedtech"]);
+        $dropdown->setPosition(40,-30);
+
+
+        $manialink->addChild($dropdown);
+
     }
 
 
