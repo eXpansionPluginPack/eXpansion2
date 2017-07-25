@@ -24,7 +24,6 @@ class WindowFactory extends BaseWindowFactory
 
         $checkbox = new uiCheckbox("test checkbox 1", "checkbox1");
         $checkbox2 = new uiCheckbox("test checkbox 2", "checkbox2");
-
         $line1 = new layoutRow(0, 0, [$checkbox, $checkbox2], 0);
 
         $ok = new uiButton("Apply", uiButton::TYPE_DECORATED);
