@@ -8,8 +8,10 @@ use eXpansion\Framework\Gui\Components\uiButton;
 use eXpansion\Framework\Gui\Components\uiCheckbox;
 use eXpansion\Framework\Gui\Components\uiDropdown;
 use eXpansion\Framework\Gui\Components\uiLabel;
+use eXpansion\Framework\Gui\Components\uiLine;
 use eXpansion\Framework\Gui\Layouts\layoutLine;
 use eXpansion\Framework\Gui\Layouts\layoutRow;
+use FML\Controls\Quad;
 
 class WindowFactory extends BaseWindowFactory
 {
@@ -47,15 +49,37 @@ class WindowFactory extends BaseWindowFactory
         $manialink->addChild($row);
 
 
-        $dropdown = new uiDropdown("dropdown",["option1" => 1, "option2" => 2]);
-        $dropdown->setPosition(0,-30);
+        $dropdown = new uiDropdown("dropdown", ["option1" => 1, "option2" => 2]);
+        $dropdown->setPosition(0, -30);
         $manialink->addChild($dropdown);
 
-        $dropdown = new uiDropdown("style",["tech" => "tech", "fullspeed" => "fullspeed", "speedtech" => "speedtech"]);
-        $dropdown->setPosition(40,-30);
-
-
+        $dropdown = new uiDropdown("style", ["tech" => "tech", "fullspeed" => "fullspeed", "speedtech" => "speedtech"]);
+        $dropdown->setPosition(40, -30);
         $manialink->addChild($dropdown);
+
+
+        $quad = new Quad();
+        $quad->setPosition(20, -40)
+            ->setAlign("center", "center")
+            ->setSize(2,2)
+            ->setBackgroundColor("0f0");
+        $manialink->addChild($quad);
+
+        $quad = new Quad();
+        $quad->setPosition(40, -20)
+            ->setAlign("center", "center")
+            ->setSize(2,2)
+            ->setBackgroundColor("0ff");
+        $manialink->addChild($quad);
+
+        $line = new uiLine(20.1, -40);
+        $line->to(20.1, 0);
+        $manialink->addChild($line);
+
+        $line = new uiLine(20, -40);
+        $line->to(40, -20);
+
+        $manialink->addChild($line);
 
     }
 
