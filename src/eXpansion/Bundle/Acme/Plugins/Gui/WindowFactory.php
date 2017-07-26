@@ -96,10 +96,7 @@ class WindowFactory extends BaseWindowFactory
 
     public function ok($login, $params, $args)
     {
-        var_dump($login);
-        print_r($params);
-        print_r($args);
+        // do nothing at the moment
     }
-
 
 }

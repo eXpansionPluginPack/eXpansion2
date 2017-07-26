@@ -225,6 +225,7 @@ class GridBuilder
         $this->dataCollection->setPageSize(floor(($frame->getHeight() + $posY - $lineHeight - 2) / $lineHeight));
 
         $lines = $this->dataCollection->getData($this->currentPage);
+        $idx = 0;
         foreach ($lines as $i => $lineData) {
             $data = [];
             foreach ($this->columns as $columnData) {
@@ -245,7 +246,7 @@ class GridBuilder
                     ];
                 }
             }
-            $line = $this->lineFactory->create($frame->getWidth(), $data, $i);
+            $line = $this->lineFactory->create($frame->getWidth(), $data, $idx++);
             $line->setPosition(0, $posY);
             $frame->addChild($line);
             $posY -= $lineHeight;

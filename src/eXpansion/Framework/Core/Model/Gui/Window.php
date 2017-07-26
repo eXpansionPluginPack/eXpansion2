@@ -36,7 +36,7 @@ class Window extends Widget implements Container
 
         // Frame to handle the content of the window.
         $this->contentFrame->setPosition(2, -$titleHeight - 2);
-        // $this->contentFrame->setSize($sizeX - 4, $sizeY - $titleHeight - 4);
+        $this->contentFrame->setSize($sizeX - 4, $sizeY - $titleHeight - 4);
         $windowFrame->addChild($this->contentFrame);
 
         // Title bar & title.

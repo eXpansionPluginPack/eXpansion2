@@ -66,6 +66,7 @@ class RecordsWindowFactory extends WindowFactory
             );
 
         $manialink->setData('grid', $gridBuilder);
+
     }
 
     /**

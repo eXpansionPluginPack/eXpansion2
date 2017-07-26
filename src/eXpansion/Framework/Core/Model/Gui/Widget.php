@@ -68,7 +68,7 @@ class Widget extends Manialink implements Container
         // Frame to handle the content of the window.
         $this->contentFrame = new Frame();
         $this->contentFrame->setPosition(0, 0);
-   //     $this->contentFrame->setSize($sizeX, $sizeY);
+        $this->contentFrame->setSize($sizeX, $sizeY);
         $windowFrame->addChild($this->contentFrame);
 
         $this->windowFrame = $windowFrame;

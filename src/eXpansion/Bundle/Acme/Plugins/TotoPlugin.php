@@ -2,6 +2,7 @@
 
 namespace eXpansion\Bundle\Acme\Plugins;
 
+use eXpansion\Framework\AdminGroups\Plugins\GroupsPlugin;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
@@ -43,10 +44,10 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
      */
     public function setStatus($status)
     {
-        echo "status";
-
         if ($status) {
-            $this->mlFactory->create($this->playersGroup);
+            foreach ($this->playersGroup->getLogins() as $login) {
+                $this->mlFactory->create($login);
+            }
         } else {
             $this->mlFactory->destroy($this->playersGroup);
         }
@@ -69,7 +70,7 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
      */
     public function onApplicationReady()
     {
-       // $this->mlFactory->create($this->playersGroup);
+        // $this->mlFactory->create($this->playersGroup);
     }
 
     /**
