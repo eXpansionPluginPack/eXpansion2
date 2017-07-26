@@ -16,7 +16,7 @@ use Maniaplanet\DedicatedServer\Structures\Map;
 class Test implements ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, StatusAwarePluginInterface
 {
 
-    public $memoryMsg;
+    static public $memoryMsg;
     /** @var Connection */
     protected $connection;
 
@@ -95,8 +95,7 @@ class Test implements ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, S
                 $msg .= ' $0f0('.round($diff / 1024)."kb)";
             }
 
-            $this->memoryMsg = $msg;
-            $this->mlFactory->setMemory($msg);
+            self::$memoryMsg = $msg;
             $this->mlFactory->update($this->players);
             // $this->console->writeln($msg);
         }
