@@ -79,6 +79,8 @@ class uiButton extends abstractUiElement implements ScriptFeatureable
             ->addClass('uiButtonElement')
             ->setAlign("center", "center2");
         //->setPosition(-$this->width / 2, $this->height / 2);
+        $label->setDataAttributes($this->_dataAttributes);
+        $label->addClasses($this->_classes);
 
         $buttonFrame->addChild($label);
 

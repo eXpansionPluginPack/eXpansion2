@@ -83,6 +83,7 @@ class uiCheckbox extends abstractUiElement implements ScriptFeatureable
             ->setPosition(3, -3);
         $checkedBackground->setScriptEvents(true)
             ->addClass('uiCheckboxElement');
+        $checkedBackground->setDataAttributes($this->_dataAttributes)->addClasses($this->_classes);
 
         $checkedLabel = clone $checkedBackground;
         $checkedLabel->setText('✔')->setPosition(3.5, -2)->setScale(0);

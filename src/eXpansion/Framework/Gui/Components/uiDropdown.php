@@ -167,7 +167,9 @@ EOD;
         $baseLabel->setAreaColor("000")->setAreaFocusColor("333")
             ->setScriptEvents(true)->addClass("uiSelectElement")
             ->setSize($this->width, $this->height)
-            ->setTextPrefix(" ");
+            ->setTextPrefix(" ")
+            ->addClasses($this->_classes)
+            ->setDataAttributes($this->_dataAttributes);
 
         $labelTitle = clone $baseLabel;
         $labelTitle->setText("Select...")

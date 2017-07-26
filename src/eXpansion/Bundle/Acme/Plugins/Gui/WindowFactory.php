@@ -9,9 +9,11 @@ use eXpansion\Framework\Gui\Components\uiCheckbox;
 use eXpansion\Framework\Gui\Components\uiDropdown;
 use eXpansion\Framework\Gui\Components\uiLabel;
 use eXpansion\Framework\Gui\Components\uiLine;
+use eXpansion\Framework\Gui\Components\uiTooltip;
 use eXpansion\Framework\Gui\Layouts\layoutLine;
 use eXpansion\Framework\Gui\Layouts\layoutRow;
 use FML\Controls\Quad;
+use FML\Script\Features\Tooltip;
 
 class WindowFactory extends BaseWindowFactory
 {
@@ -19,14 +21,25 @@ class WindowFactory extends BaseWindowFactory
     protected function createContent(ManialinkInterface $manialink)
     {
         parent::createContent($manialink);
+
+        $tooltip = new uiTooltip();
+        $manialink->addChild($tooltip);
+
+
         $label = new uiLabel("Test", uiLabel::TYPE_NORMAL);
+        $tooltip->addTooltip($label, "tooltip test");
+
         $manialink->addChild($label);
 
         $checkbox = new uiCheckbox("test checkbox 1", "checkbox1");
+        $tooltip->addTooltip($checkbox, "testing 123");
+
         $checkbox2 = new uiCheckbox("test checkbox 2", "checkbox2");
+        $tooltip->addTooltip($checkbox2, "testing");
         $line1 = new layoutRow(0, 0, [$checkbox, $checkbox2], 0);
 
         $ok = new uiButton("Apply", uiButton::TYPE_DECORATED);
+        $tooltip->addTooltip($ok, "ridicolously long description text is here!");
         $ok->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'ok'], ["ok" => "ok"]));
 
         $cancel = new uiButton("Cancel");

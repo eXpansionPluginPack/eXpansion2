@@ -7,6 +7,8 @@ use FML\Types\Renderable;
 
 abstract class abstractUiElement extends ScriptFeature implements Renderable
 {
+    protected $_classes = [];
+    protected $_dataAttributes = [];
     protected $posX = 0;
     protected $posY = 0;
     protected $posZ = 0;
@@ -125,5 +127,14 @@ abstract class abstractUiElement extends ScriptFeature implements Renderable
         $this->height = $y;
     }
 
+    public function addDataAttribute($name, $value)
+    {
+        $this->_dataAttributes[$name] = $value;
+    }
+
+    public function addClass($name)
+    {
+        $this->_classes[] = $name;
+    }
 
 }
