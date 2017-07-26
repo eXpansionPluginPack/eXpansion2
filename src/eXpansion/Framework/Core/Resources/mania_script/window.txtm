@@ -9,12 +9,16 @@
     declare CMlLabel Exp_Title <=> (Page.GetFirstChild("TitleText") as CMlLabel);
     declare Exp_CloseWindow = False;
     declare Exp_OpenWindow for LocalUser = True;
-    declare Vec2[Text] Exp_PositionCache for LocalUser = Vec2[Text];
+
     declare Vec2 Exp_Offset = <0., 0.>;
     declare Real Exp_zIndex = 0.;
+
     declare Ident Exp_activeWindow for LocalUser = Exp_Window.Id;
+    declare Vec2[Text] Exp_PositionCache for LocalUser = Vec2[Text];
+
     declare Boolean Exp_MoveWindow = False;
     declare Integer Exp_lastAction = Now;
+    declare Exp_CloseWindowToggle = True;
 
     Exp_activeWindow = Exp_Window.Id;
     Exp_OpenWindow = True;
@@ -28,16 +32,21 @@
 
 ***FML_Loop***
 ***
-       if (Exp_OpenWindow) {
-            if (Exp_activeWindow == Exp_Window.Id) {
-                   Exp_Window.ZIndex = 1.;
-               } else {
-                   Exp_Window.ZIndex = -1.;
-               }
-        }
 
-  if (Exp_CloseWindow) {
-        AnimMgr.Add(Exp_Window, "<frame scale=\"0.\" />", 200, CAnimManager::EAnimManagerEasing::Linear);
+     if (Exp_OpenWindow) {
+        if (Exp_activeWindow == Exp_Window.Id) {
+           Exp_Window.ZIndex = 1.;
+        } else {
+           Exp_Window.ZIndex = -1.;
+        }
+    }
+
+    if (Exp_CloseWindow) {
+        if (Exp_CloseWindowToggle) {
+            Exp_CloseWindowToggle = False;
+       //     AnimMgr.Add(Exp_Window, "<frame scale=\"0.\" />", 250, CAnimManager::EAnimManagerEasing::BackIn);
+            Exp_Window.Hide();
+        }
     }
 
     if (Exp_OpenWindow && Exp_lastAction + 200 <= Now ) {
@@ -45,38 +54,32 @@
         Exp_lastAction = 0;
     }
 
-    if (Exp_CloseWindow && Exp_lastAction + 200 <= Now ) {
-        Exp_CloseWindow = False;
+    if (Exp_CloseWindow && Exp_lastAction + 250 <= Now ) {
         TriggerPageAction(Exp_CloseButton.DataAttributeGet("action"));
         continue;
     }
 
-     if (PendingEvents.count != 0) {
-        foreach (Event in PendingEvents) {
-            if ( (Event.Type == CMlEvent::Type::MouseClick && Event.ControlId == "Close")  ||
-               (Event.Type == CMlEvent::Type::KeyPress && Event.KeyCode == 35) ) {
-                Exp_CloseWindow = True;
-                Exp_lastAction = Now;
-            }
-
-            if ( (Event.Type == CMlEvent::Type::MouseClick && Event.ControlId == "Open") ) {
-                Exp_lastAction = Now;
-                Exp_OpenWindow = True;
-            }
+    foreach (Event in PendingEvents) {
+        if ( (Event.Type == CMlEvent::Type::KeyPress && Event.KeyCode == 36) ||
+            (Event.Type == CMlEvent::Type::MouseClick && Event.ControlId == "Close")
+            ) {
+            Exp_CloseWindow = True;
+            Exp_lastAction = Now;
         }
+
+        if (Event.Type == CMlEvent::Type::MouseClick && Event.ControlId == "Title")  {
+            Exp_Offset = Exp_Window.RelativePosition_V3 - <MouseX, MouseY>;
+            Exp_MoveWindow = True;
+            Exp_activeWindow = Exp_Window.Id;
+        }
+
+        if (Event.Type == CMlEvent::Type::MouseClick && Event.ControlId == "WindowBg")  {
+            Exp_activeWindow = Exp_Window.Id;
+        }
+
     }
 
     if (MouseLeftButton == True) {
-        foreach (Event in PendingEvents) {
-            if (Event.Type == CMlEvent::Type::MouseClick && Event.ControlId == "Title")  {
-                Exp_Offset = <Exp_Window.RelativePosition_V3.X - MouseX, Exp_Window.RelativePosition_V3.Y - MouseY>;
-                Exp_MoveWindow = True;
-                Exp_activeWindow = Exp_Window.Id;
-            }
-            if (Event.Type == CMlEvent::Type::MouseClick && Event.ControlId == "WindowBg")  {
-                Exp_activeWindow = Exp_Window.Id;
-            }
-        }
         if (Exp_activeWindow == Exp_Window.Id) {
             Exp_Window.ZIndex = 1.;
         } else {
@@ -88,8 +91,7 @@
 
     if (Exp_MoveWindow) {
             Exp_Window.ZIndex = 1.;
-            Exp_Window.RelativePosition_V3.X = MouseX + Exp_Offset.X;
-            Exp_Window.RelativePosition_V3.Y = MouseY + Exp_Offset.Y;
+            Exp_Window.RelativePosition_V3 = <MouseX, MouseY> +  Exp_Offset;
             Exp_PositionCache[Exp_Title.Value] = Exp_Window.RelativePosition_V3;
     }
 ***

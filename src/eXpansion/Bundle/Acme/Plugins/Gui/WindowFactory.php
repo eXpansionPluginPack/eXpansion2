@@ -13,7 +13,6 @@ use eXpansion\Framework\Gui\Components\uiTooltip;
 use eXpansion\Framework\Gui\Layouts\layoutLine;
 use eXpansion\Framework\Gui\Layouts\layoutRow;
 use FML\Controls\Quad;
-use FML\Script\Features\Tooltip;
 
 class WindowFactory extends BaseWindowFactory
 {
@@ -24,7 +23,6 @@ class WindowFactory extends BaseWindowFactory
 
         $tooltip = new uiTooltip();
         $manialink->addChild($tooltip);
-
 
         $label = new uiLabel("Test", uiLabel::TYPE_NORMAL);
         $tooltip->addTooltip($label, "tooltip test");
@@ -101,8 +99,6 @@ class WindowFactory extends BaseWindowFactory
         var_dump($login);
         print_r($params);
         print_r($args);
-
-
     }
 
 
