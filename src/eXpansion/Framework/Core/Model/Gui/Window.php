@@ -14,6 +14,7 @@ use FML\Types\Container;
 
 class Window extends Widget implements Container
 {
+
     public function __construct(
         Group $group,
         ManiaScriptFactory $windowManiaScriptFactory,

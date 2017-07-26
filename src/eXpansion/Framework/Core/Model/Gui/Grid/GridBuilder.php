@@ -1,6 +1,7 @@
 <?php
 
 namespace eXpansion\Framework\Core\Model\Gui\Grid;
+
 use eXpansion\Framework\Core\Model\Gui\Action;
 use eXpansion\Framework\Core\Model\Gui\Factory\LineFactory;
 use eXpansion\Framework\Core\Model\Gui\Factory\PagerFactory;
@@ -72,9 +73,9 @@ class GridBuilder
      * GridBuilder constructor.
      *
      * @param ActionFactory $actionFactory
-     * @param LineFactory   $lineFactory
-     * @param LineFactory   $titleLineFactory
-     * @param PagerFactory  $pagerFactory
+     * @param LineFactory $lineFactory
+     * @param LineFactory $titleLineFactory
+     * @param PagerFactory $pagerFactory
      */
     public function __construct(
         ActionFactory $actionFactory,
@@ -87,7 +88,7 @@ class GridBuilder
         $this->lineFactory = $lineFactory;
         $this->pagerFactory = $pagerFactory;
 
-        $this->pageKey = spl_object_hash($this)."_key";
+        $this->pageKey = "key_".spl_object_hash($this);
     }
 
     /**
@@ -212,7 +213,7 @@ class GridBuilder
             $data[] = [
                 'text' => $columnData->getName(),
                 'width' => $columnData->getWidthCoeficiency(),
-                'translatable' => true
+                'translatable' => true,
             ];
         }
 
@@ -233,7 +234,7 @@ class GridBuilder
                     $data[] = [
                         'text' => $this->dataCollection->getLineData($lineData, $columnData->getKey()),
                         'width' => $columnData->getWidthCoeficiency(),
-                        'translatable' => $columnData->getTranslatable()
+                        'translatable' => $columnData->getTranslatable(),
                     ];
                 } elseif ($columnData instanceof ActionColumn) {
                     $action = $this->actionFactory

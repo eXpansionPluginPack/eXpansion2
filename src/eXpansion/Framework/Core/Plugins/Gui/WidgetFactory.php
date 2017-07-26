@@ -86,4 +86,6 @@ class WidgetFactory extends ManialinkFactory {
 
         return $manialink;
     }
+
+
 }

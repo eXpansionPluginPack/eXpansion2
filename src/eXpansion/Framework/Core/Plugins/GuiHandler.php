@@ -78,12 +78,12 @@ class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserG
     public function addToDisplay(ManialinkInterface $manialink)
     {
         $userGroup = $manialink->getUserGroup()->getName();
-
-        if (AssociativeArray::getFromKey($this->hideQueu, [$userGroup, $manialink->getId()])) {
-            unset($this->hideQueu[$userGroup][$manialink->getId()]);
+        $id = $manialink->getId();
+        if (AssociativeArray::getFromKey($this->hideQueu, [$userGroup, $id])) {
+            unset($this->hideQueu[$userGroup][$id]);
         }
 
-        $this->displayQueu[$userGroup][$manialink->getId()] = $manialink;
+        $this->displayQueu[$userGroup][$id] = $manialink;
     }
 
     /**
@@ -94,16 +94,17 @@ class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserG
     public function addToHide(ManialinkInterface $manialink)
     {
         $userGroup = $manialink->getUserGroup()->getName();
+        $id = $manialink->getId();
 
-        if (AssociativeArray::getFromKey($this->displayQueu, [$userGroup, $manialink->getId()])) {
-            unset($this->displayQueu[$userGroup][$manialink->getId()]);
+        if (AssociativeArray::getFromKey($this->displayQueu, [$userGroup, $id])) {
+            unset($this->displayQueu[$userGroup][$id]);
         }
 
-        if (AssociativeArray::getFromKey($this->displayeds, [$userGroup, $manialink->getId()])) {
-            unset($this->displayeds[$userGroup][$manialink->getId()]);
+        if (AssociativeArray::getFromKey($this->displayeds, [$userGroup, $id])) {
+            unset($this->displayeds[$userGroup][$id]);
         }
 
-        $this->hideQueu[$userGroup][$manialink->getId()] = $manialink;
+        $this->hideQueu[$userGroup][$id] = $manialink;
     }
 
     /**
@@ -194,7 +195,7 @@ class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserG
         foreach ($this->hideIndividualQueu as $login => $manialinks) {
             foreach ($manialinks as $id => $manialink) {
                 if (!in_array($login, $this->disconnectedLogins)) {
-                                yield ['logins' => $login, 'ml' => '<manialink id="'.$id.'" />'];
+                    yield ['logins' => $login, 'ml' => '<manialink id="'.$id.'" />'];
                 }
             }
         }

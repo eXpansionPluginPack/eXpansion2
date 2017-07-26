@@ -71,14 +71,14 @@ class WindowFactory extends BaseWindowFactory
         $quad = new Quad();
         $quad->setPosition(20, -40)
             ->setAlign("center", "center")
-            ->setSize(2,2)
+            ->setSize(2, 2)
             ->setBackgroundColor("0f0");
         $manialink->addChild($quad);
 
         $quad = new Quad();
         $quad->setPosition(40, -20)
             ->setAlign("center", "center")
-            ->setSize(2,2)
+            ->setSize(2, 2)
             ->setBackgroundColor("0ff");
         $manialink->addChild($quad);
 

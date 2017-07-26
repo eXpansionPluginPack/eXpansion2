@@ -108,7 +108,7 @@ class Console
                 $end = "";
             }
 
-            $out = self::white.$this->stripStyles(reset($split)).$out.$end;
+            $out = self::white.$this->stripStyles(reset($split)).$out.$end.self::normal;
         } else {
             $out = $this->stripStyles($string);
         }
@@ -130,7 +130,7 @@ class Console
         if ($newline) {
             $nl = "\n";
         }
-        echo $msg.self::normal.$nl;
+        echo $msg.$nl;
     }
 
     /**
@@ -152,7 +152,6 @@ class Console
 
         $lightness = 100 * $hsl[2];
         $attr = 0;
-
         // if color has saturation
         if ($hsl[1] > 0) {
             $h = $hsl[0];

@@ -49,7 +49,8 @@ class Manialink implements ManialinkInterface
         $this->sizeY = $sizeY;
         $this->posX = $posX;
         $this->posY = $posY;
-        $this->id = spl_object_hash($this);
+        $this->id = uniqid("ml_", true);
+   //     $this->id = spl_object_hash($this);
     }
 
     /**

@@ -39,6 +39,9 @@ class Widget extends Manialink implements Container
     /** @var Frame */
     protected $windowFrame;
 
+    /** @var array[] */
+    protected $cachedMessages = [];
+
     public function __construct(
         Group $group,
         Translations $translationHelper,
@@ -71,6 +74,10 @@ class Widget extends Manialink implements Container
         $this->contentFrame->setSize($sizeX, $sizeY);
         $windowFrame->addChild($this->contentFrame);
 
+        $toggleInterfaceF9 = new ToggleInterface("F9");
+        $this->manialink->getScript()
+            ->addFeature($toggleInterfaceF9);
+
         $this->windowFrame = $windowFrame;
     }
 
@@ -99,10 +106,6 @@ class Widget extends Manialink implements Container
     {
         $this->addDictionaryInformation();
 
-        $toggleInterfaceF9 = new ToggleInterface("F9");
-        $this->manialink->getScript()
-            ->addFeature($toggleInterfaceF9);
-
         return $this->manialink->__toString();
     }
 
@@ -111,9 +114,9 @@ class Widget extends Manialink implements Container
      */
     protected function addDictionaryInformation()
     {
-        $translations = array();
-        $this->getDictionaryInformation($this->manialink, $translations);
+        $translations = [];
         $this->dictionary->removeAllEntries();
+        $this->getDictionaryInformation($this->manialink, $translations);
 
         foreach ($translations as $msgId => $messages) {
             foreach ($messages as $message) {
@@ -132,11 +135,20 @@ class Widget extends Manialink implements Container
     {
         foreach ($control->getChildren() as $child) {
             if ($child instanceof Label && $child->getTranslate()) {
-                $textId = 'exp_'.md5($child->getTextId());
-                $translations[$textId] = $this->translationHelper->getTranslations($child->getTextId(), []);
+                $id = $child->getTextId();
 
-                // Replaces with text id that can be used in the xml.
-                $child->setTextId($textId);
+                if (!isset($this->cachedMessages[$id])) {
+                    $textId = 'exp_'.md5($id);
+
+                    $messages = $this->translationHelper->getTranslations($child->getTextId(), []);
+                    $translations[$textId] = $messages;
+                    $this->cachedMessages[$textId] = $messages;
+
+                    // Replaces with text id that can be used in the xml.
+                    $child->setTextId($textId);
+                } else {
+                    $translations[$id] = $this->cachedMessages[$id];
+                }
             } else {
                 if ($child instanceof Frame) {
                     $this->getDictionaryInformation($child, $translations);
@@ -276,4 +288,6 @@ class Widget extends Manialink implements Container
     {
         return $this->contentFrame;
     }
+
+
 }
