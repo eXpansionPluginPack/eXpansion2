@@ -78,7 +78,6 @@ class Translations
     public function getTranslations($id, $parameters = [])
     {
         $messages = [];
-        // $parameters = array_merge($this->replacementPatterns, $parameters);
 
         foreach ($this->supportedLocales as $locale) {
             $message = $this->getTranslation($id, $parameters, $locale);

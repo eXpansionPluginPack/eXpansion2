@@ -33,6 +33,14 @@ class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMap
     /** @var ChatNotification */
     protected $chatNotification;
 
+    /**
+     * Maps constructor.
+     * @param Connection $connection
+     * @param Console $console
+     * @param AdminGroups $adminGroups
+     * @param MapStorage $mapStorage
+     * @param ChatNotification $chatNotification
+     */
     function __construct(
         Connection $connection,
         Console $console,
@@ -56,9 +64,7 @@ class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMap
      */
     public function setStatus($status)
     {
-        if (!$status) {
 
-        }
     }
 
     /**
@@ -81,11 +87,19 @@ class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMap
 
     }
 
+    /**
+     * @param $currentMap
+     * @param $previousMap
+     */
     public function onExpansionMapChange($currentMap, $previousMap)
     {
         // TODO: Implement onExpansionMapChange() method.
     }
 
+    /**
+     * @param $nextMap
+     * @param $previousNextMap
+     */
     public function onExpansionNextMapChange($nextMap, $previousNextMap)
     {
         // TODO: Implement onExpansionNextMapChange() method.
@@ -98,7 +112,8 @@ class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMap
      */
     public function onBeginMap(Map $map)
     {
-        $this->chatNotification->sendMessage('expansion_maps.chat.onbeginmap', null, ['%name%' => $map->name, '%author%' => $map->author]);
+        $this->chatNotification->sendMessage('expansion_maps.chat.onbeginmap', null,
+            ['%name%' => $map->name, '%author%' => $map->author]);
     }
 
     /**

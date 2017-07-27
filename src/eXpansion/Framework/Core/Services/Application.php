@@ -3,7 +3,6 @@
 namespace eXpansion\Framework\Core\Services;
 
 use eXpansion\Framework\Core\Services\Application\AbstractApplication;
-use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -20,7 +19,7 @@ class Application extends AbstractApplication {
     /**
      * Initialize eXpansion.
      *
-     * @param ConsoleOutputInterface $console
+     * @param OutputInterface $console
      *
      * @return $this
      */

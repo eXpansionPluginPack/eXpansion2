@@ -17,14 +17,10 @@ class ColorConversion
      * @param int $g
      * @param int $b
      *
-     * @return array(h,s,l);
+     * @return array(<float>,<float>,<float>)
      */
     public static function rgbToHsl($r, $g, $b)
     {
-        $oldR = $r;
-        $oldG = $g;
-        $oldB = $b;
-
         $r /= 255;
         $g /= 255;
         $b /= 255;
@@ -60,18 +56,14 @@ class ColorConversion
     /**
      * Originally from https://gist.github.com/brandonheyer/5254516#file-rgbtohsl-php
      *
-     * @param int $h
-     * @param int $s
-     * @param int $l
+     * @param float $h
+     * @param float $s
+     * @param float $l
      *
-     * @return array(r,g,b)
+     * @return array(<int>,<int>,<int>)
      */
     public static function hslToRgb($h, $s, $l)
     {
-        $r = 0;
-        $g = 0;
-        $b = 0;
-
         $c = (1 - abs(2 * $l - 1)) * $s;
         $x = $c * (1 - abs(fmod(($h / 60), 2) - 1));
         $m = $l - ($c / 2);

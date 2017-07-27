@@ -25,6 +25,12 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
     /** @var bool */
     protected $enabled = true;
 
+    /**
+     * CustomChat constructor.
+     * @param Connection $connection
+     * @param Console $console
+     * @param AdminGroups $adminGroups
+     */
     function __construct(Connection $connection, Console $console, AdminGroups $adminGroups)
     {
         $this->connection = $connection;

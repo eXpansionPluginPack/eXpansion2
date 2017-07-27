@@ -38,20 +38,18 @@ class uiLine extends abstractUiElement
      * uiLine constructor.
      * @param float $x
      * @param float $y
-     * @param float $tx
-     * @param float $ty
      */
     public function __construct($x, $y)
     {
 
-        $this->x = $x + 180;
-        $this->y = $y + 90;
+        $this->x = $x + 180.;
+        $this->y = $y + 90.;
     }
 
     public function to($tx, $ty)
     {
-        $this->tx = $tx + 180;
-        $this->ty = $ty + 90;
+        $this->tx = $tx + 180.;
+        $this->ty = $ty + 90.;
         $this->to = true;
     }
 

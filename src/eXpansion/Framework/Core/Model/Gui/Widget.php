@@ -18,7 +18,7 @@ use FML\Types\Renderable;
 class Widget extends Manialink implements Container
 {
 
-    /** @var  ManiaScript */
+    /** @var  string */
     protected $scriptData;
 
     /** @var Translations */

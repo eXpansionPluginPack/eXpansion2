@@ -9,7 +9,6 @@ use eXpansion\Framework\Gui\Components\uiCheckbox;
 use eXpansion\Framework\Gui\Components\uiDropdown;
 use eXpansion\Framework\Gui\Components\uiInput;
 use eXpansion\Framework\Gui\Components\uiLabel;
-use eXpansion\Framework\Gui\Components\uiLine;
 use eXpansion\Framework\Gui\Components\uiTextbox;
 use eXpansion\Framework\Gui\Components\uiTooltip;
 use eXpansion\Framework\Gui\Layouts\layoutLine;

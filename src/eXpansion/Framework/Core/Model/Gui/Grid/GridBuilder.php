@@ -2,7 +2,6 @@
 
 namespace eXpansion\Framework\Core\Model\Gui\Grid;
 
-use eXpansion\Framework\Core\Model\Gui\Action;
 use eXpansion\Framework\Core\Model\Gui\Factory\LineFactory;
 use eXpansion\Framework\Core\Model\Gui\Factory\PagerFactory;
 use eXpansion\Framework\Core\Model\Gui\Grid\Column\AbstractColumn;
@@ -12,6 +11,7 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
 use FML\Controls\Frame;
+use FML\Controls\Label;
 
 
 /**

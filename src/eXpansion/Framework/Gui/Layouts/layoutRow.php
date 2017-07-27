@@ -5,35 +5,44 @@ namespace eXpansion\Framework\Gui\Layouts;
 use FML\Controls\Control;
 use FML\Controls\Frame;
 use FML\Script\Features\ScriptFeature;
-use FML\Types\Container;
 use FML\Types\Renderable;
 use FML\Types\ScriptFeatureable;
 
 class layoutRow implements Renderable, ScriptFeatureable
 {
     private $frameClasses = [];
-
+    /**
+     * @var float|int
+     */
     private $height = 0;
+    /**
+     * @var float|int
+     */
     private $width = 0;
 
     /** @var Control[] */
     private $elements = [];
 
-    private $margin = 1;
     /**
-     * @var
+     * @var float|int
+     */
+    private $margin = 1;
+
+    /**
+     * @var float|int
      */
     private $startX;
+
     /**
-     * @var
+     * @var float|int
      */
     private $startY;
 
     /**
      * layoutLine constructor.
-     * @param $startX
-     * @param $startY
-     * @param Control[] $elements
+     * @param float $startX
+     * @param float $startY
+     * @param object[] $elements
      * @param int $margin
      * @throws \Exception
      */
@@ -65,7 +74,7 @@ class layoutRow implements Renderable, ScriptFeatureable
         $frame = new Frame();
         $frame->setPosition($this->startX, $this->startY);
         $frame->addClasses($this->frameClasses);
-        
+
         $startY = 0;
         foreach ($this->elements as $idx => $element) {
             $element->setY($startY);
@@ -166,6 +175,9 @@ class layoutRow implements Renderable, ScriptFeatureable
         return $this->width;
     }
 
+    /**
+     * @param object $element
+     */
     public function addChild($element)
     {
         $this->elements[] = $element;

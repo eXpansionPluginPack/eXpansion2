@@ -3,7 +3,6 @@
 namespace eXpansion\Framework\Core\Services;
 
 use eXpansion\Framework\Core\Helpers\ColorConversion;
-use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -46,7 +45,7 @@ class Console
     const bold = self::b_white;
 
 
-    /** @var ConsoleOutputInterface */
+    /** @var OutputInterface */
     protected $consoleOutput;
 
     /** @var boolean Color console enabled */
@@ -66,9 +65,9 @@ class Console
     /**
      * Initialize service with the console output.
      *
-     * @param ConsoleOutputInterface $consoleOutput
+     * @param OutputInterface $consoleOutput
      */
-    public function init(ConsoleOutputInterface $consoleOutput)
+    public function init(OutputInterface $consoleOutput)
     {
         $this->consoleOutput = $consoleOutput;
     }
@@ -125,7 +124,6 @@ class Console
      */
     protected function ansiOut($msg, $newline)
     {
-        // $this->consoleOutput->write($msg . self::normal, $newline, ConsoleOutputInterface::OUTPUT_RAW);
         $nl = "";
         if ($newline) {
             $nl = "\n";

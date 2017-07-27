@@ -64,7 +64,7 @@ class MapStorageTest extends TestCore
 
     /**
      *
-     * @return MapStorage
+     * @return MapStorage|object
      */
     protected function getMapStorage()
     {

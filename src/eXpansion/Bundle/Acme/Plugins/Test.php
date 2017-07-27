@@ -3,7 +3,6 @@
 namespace eXpansion\Bundle\Acme\Plugins;
 
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
-use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyMaplist;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
@@ -16,7 +15,9 @@ use Maniaplanet\DedicatedServer\Structures\Map;
 class Test implements ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, StatusAwarePluginInterface
 {
 
+    /** @var  string */
     static public $memoryMsg;
+
     /** @var Connection */
     protected $connection;
 
@@ -28,6 +29,8 @@ class Test implements ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, S
 
     /** @var float|int */
     private $previousMemoryValue = 0;
+
+    /** @var int */
     private $startMemValue = 0;
 
     /**
@@ -39,6 +42,14 @@ class Test implements ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, S
      */
     private $players;
 
+    /**
+     * Test constructor.
+     * @param Connection $connection
+     * @param Console $console
+     * @param Time $time
+     * @param ManialinkFactory $mlFactory
+     * @param Group $players
+     */
     function __construct(
         Connection $connection,
         Console $console,
@@ -51,7 +62,6 @@ class Test implements ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, S
         $this->time = $time;
         $this->mlFactory = $mlFactory;
         $this->players = $players;
-        $this->startMemValue = memory_get_usage(true);
     }
 
     public function onBeginMap(Map $map)
@@ -89,7 +99,7 @@ class Test implements ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, S
             }
 
             $diff = ($mem - $this->startMemValue);
-            if ($this->startMemValue  < $diff) {
+            if ($this->startMemValue < $diff) {
                 $msg .= ' $f00('.round($diff / 1024)."kb)";
             } else {
                 $msg .= ' $0f0('.round($diff / 1024)."kb)";
@@ -112,17 +122,25 @@ class Test implements ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, S
      */
     public function onMapListModified($oldMaps, $currentMapUid, $nextMapUid, $isListModified)
     {
-        // TODO: Implement onMapListModified() method.
+
     }
 
+    /**
+     * @param $currentMap
+     * @param $previousMap
+     */
     public function onExpansionMapChange($currentMap, $previousMap)
     {
-        // TODO: Implement onExpansionMapChange() method.
+
     }
 
+    /**
+     * @param $nextMap
+     * @param $previousNextMap
+     */
     public function onExpansionNextMapChange($nextMap, $previousNextMap)
     {
-        // TODO: Implement onExpansionNextMapChange() method.
+
     }
 
     /**
@@ -135,15 +153,9 @@ class Test implements ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, S
     public function setStatus($status)
     {
         if ($status) {
+            $this->startMemValue = memory_get_usage(true);
             $this->mlFactory->create($this->players);
         }
     }
 
-    /**
-     * @return mixed
-     */
-    public function getMemoryMsg()
-    {
-        return $this->memoryMsg;
-    }
 }

@@ -13,30 +13,35 @@ class layoutLine implements Renderable, ScriptFeatureable
 {
     private $frameClasses = [];
 
-    private $width = 0;
-    private $height = 0;
+    /** @var float */
+    private $width = 0.;
+
+    /** @var float */
+    private $height = 0.;
+
     /** @var Control[] */
     private $elements = [];
 
-    private $margin = 2;
+    /** @var float */
+    private $margin = 2.;
     /**
-     * @var
+     * @var float
      */
-    private $startX = 0;
+    private $startX = 0.;
     /**
-     * @var
+     * @var float
      */
-    private $startY = 0;
+    private $startY = 0.;
 
     /**
      * layoutLine constructor.
-     * @param $startX
-     * @param $startY
-     * @param Control[] $elements
-     * @param $margin
+     * @param float $startX
+     * @param float $startY
+     * @param object[] $elements
+     * @param float $margin
      * @throws \Exception
      */
-    public function __construct($startX, $startY, $elements = [], $margin = 0)
+    public function __construct($startX, $startY, $elements = [], $margin = 0.)
     {
         if (!is_array($elements)) {
             throw new \Exception('not an array');
@@ -114,7 +119,7 @@ class layoutLine implements Renderable, ScriptFeatureable
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getX()
     {
@@ -161,6 +166,9 @@ class layoutLine implements Renderable, ScriptFeatureable
         $this->height = $height;
     }
 
+    /**
+     * @param object $element
+     */
     public function addChild($element)
     {
         $this->elements[] = $element;
