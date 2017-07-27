@@ -7,8 +7,10 @@ use eXpansion\Framework\Core\Plugins\Gui\WindowFactory as BaseWindowFactory;
 use eXpansion\Framework\Gui\Components\uiButton;
 use eXpansion\Framework\Gui\Components\uiCheckbox;
 use eXpansion\Framework\Gui\Components\uiDropdown;
+use eXpansion\Framework\Gui\Components\uiInput;
 use eXpansion\Framework\Gui\Components\uiLabel;
 use eXpansion\Framework\Gui\Components\uiLine;
+use eXpansion\Framework\Gui\Components\uiTextbox;
 use eXpansion\Framework\Gui\Components\uiTooltip;
 use eXpansion\Framework\Gui\Layouts\layoutLine;
 use eXpansion\Framework\Gui\Layouts\layoutRow;
@@ -45,7 +47,6 @@ class WindowFactory extends BaseWindowFactory
 
         $line2 = new layoutLine(0, 0, [$ok, $cancel], 1);
 
-
         $line3 = new layoutRow(55, 0, [], 1);
 
         for ($x = 0; $x < 10; $x++) {
@@ -60,11 +61,11 @@ class WindowFactory extends BaseWindowFactory
 
 
         $dropdown = new uiDropdown("dropdown", ["option1" => 1, "option2" => 2]);
-        $dropdown->setPosition(0, -30);
+        $dropdown->setPosition(90, 0);
         $manialink->addChild($dropdown);
 
         $dropdown = new uiDropdown("style", ["tech" => "tech", "fullspeed" => "fullspeed", "speedtech" => "speedtech"]);
-        $dropdown->setPosition(40, -30);
+        $dropdown->setPosition(130, 0);
         $manialink->addChild($dropdown);
 
 
@@ -82,14 +83,15 @@ class WindowFactory extends BaseWindowFactory
             ->setBackgroundColor("0ff");
         $manialink->addChild($quad);
 
-        $line = new uiLine(20.1, -40);
-        $line->to(20.1, 0);
-        $manialink->addChild($line);
+        $input = new uiInput("input1", "test text", 30);
+        $input->setPosition(90,-30);
+        $manialink->addChild($input);
 
-        $line = new uiLine(20, -40);
-        $line->to(40, -20);
+        $input = new uiTextbox("input2", "test\ntest2\ntest3\nest4\ntest5", 5, 30);
+        $input->setPosition(130,-30);
 
-        $manialink->addChild($line);
+        $manialink->addChild($input);
+
 
     }
 

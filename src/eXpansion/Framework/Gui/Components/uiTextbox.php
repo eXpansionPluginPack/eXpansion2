@@ -5,10 +5,11 @@ namespace eXpansion\Framework\Gui\Components;
 use FML\Controls\Entry;
 use FML\Controls\Frame;
 use FML\Controls\Quad;
+use FML\Controls\TextEdit;
 use FML\Script\Script;
 use FML\Types\Renderable;
 
-class uiInput extends abstractUiElement implements Renderable
+class uiTextbox extends abstractUiElement implements Renderable
 {
 
     /**
@@ -20,13 +21,18 @@ class uiInput extends abstractUiElement implements Renderable
      */
     protected $default;
 
+    /**
+     * @var int
+     */
+    protected $lines;
 
-    public function __construct($name, $default = "", $width = 30)
+
+    public function __construct($name, $default = "", $lines = 1, $width = 30)
     {
         $this->name = $name;
         $this->default = $default;
-        $this->width = $width;
-        $this->setSize($width, 5);
+        $this->lines = $lines;
+        $this->setSize($width, ($lines * 5)+2);
     }
 
     /**
@@ -38,34 +44,32 @@ class uiInput extends abstractUiElement implements Renderable
     public function render(\DOMDocument $domDocument)
     {
         $frame = new Frame();
-        $frame->setPosition($this->posX, $this->posY)
+        $frame->setPosition($this->posX, $this->posY, $this->posZ)
             ->setSize($this->width, $this->height)
-            ->addClasses(["uiContainer", "uiInput"]);
+            ->addClasses(["uiContainer", "uiTextbox"]);
 
         $quad = new Quad();
-        $quad->setSize($this->width * 2, $this->height * 2)
+        $quad->setSize(($this->width * 2), ($this->height * 2))
             ->setScale(0.5)
-            ->setPosition($this->width / 2, -$this->height/2)
+            ->setPosition(0, 0)
             ->setStyles('Bgs1', 'BgColorContour')
-            ->setAlign("center", "center")
+            ->setAlign("left", "top")
             ->setBackgroundColor('FFFA');
 
-        $input = new Entry();
-        $input->setSize($this->width, $this->height)
-            ->setPosition(0, -$this->height/2)
+        $input = new TextEdit();
+        $input->setSize($this->width, $this->height-2)
+            ->setPosition(1, -1)
             ->setDefault($this->default)
-            ->setSelectText(true)
-            ->setAlign("left", "center2")
+            ->setScriptEvents(true)
+            ->setAlign("left", "top")
             ->addClass("uiInput")
             ->setAreaColor("0000")
             ->setAreaFocusColor('0005')
             ->setTextFormat('Basic')
             ->setName($this->name);
 
-
         $frame->addChild($quad);
         $frame->addChild($input);
-
 
         return $frame->render($domDocument);
     }
@@ -133,5 +137,23 @@ class uiInput extends abstractUiElement implements Renderable
     public function prepare(Script $script)
     {
         // do nothing
+    }
+
+    /**
+     * @return int
+     */
+    public function getLines()
+    {
+        return $this->lines;
+    }
+
+    /**
+     * @param int $lines
+     */
+    public function setLines($lines)
+    {
+        $this->lines = $lines;
+
+        return $this;
     }
 }
