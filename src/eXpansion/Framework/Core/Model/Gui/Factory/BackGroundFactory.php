@@ -27,3 +27,4 @@ class BackGroundFactory
         return $background;
     }
 }
+

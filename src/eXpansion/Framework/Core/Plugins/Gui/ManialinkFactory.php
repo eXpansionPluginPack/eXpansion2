@@ -21,7 +21,7 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
     /** @var  GuiHandler */
     protected $guiHandler;
 
-    /** @var Factory  */
+    /** @var Factory */
     protected $groupFactory;
 
     /** @var ActionFactory */
@@ -33,7 +33,7 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
     /** @var  string */
     protected $className;
 
-    /** @var ManialinkInterface[]  */
+    /** @var ManialinkInterface[] */
     protected $manialinks = [];
 
     /** @var Group[] */
@@ -101,12 +101,15 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
     {
         if (is_string($group)) {
             $group = $this->groupFactory->createForPlayer($group);
-        } else if (is_array($group)) {
-            $group = $this->groupFactory->createForPlayers($group);
+        } else {
+            if (is_array($group)) {
+                $group = $this->groupFactory->createForPlayers($group);
+            }
         }
 
         if (isset($this->manialinks[$group->getName()])) {
             $this->update($group);
+
             return $group;
         }
 
@@ -175,6 +178,7 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
     protected function createManialink(Group $group)
     {
         $className = $this->className;
+
         return new $className($group, $this->name, $this->sizeX, $this->sizeY, $this->posX, $this->posY);
     }
 
@@ -204,4 +208,5 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
     {
         // nothing to do here.
     }
+
 }

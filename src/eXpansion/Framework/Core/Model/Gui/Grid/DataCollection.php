@@ -48,7 +48,7 @@ class DataCollection implements DataCollectionInterface
      *
      * @param int $page The page to get the data for. Pages starts a 1.
      *
-     * @return array()
+     * @return array
      */
     public function getData($page)
     {

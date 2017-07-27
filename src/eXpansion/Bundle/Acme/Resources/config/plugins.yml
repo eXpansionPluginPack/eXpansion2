@@ -4,7 +4,9 @@ services:
         arguments:
             - '@expansion.service.console'
             - '@expansion.bundle.acme.plugins.gui.windowFactory'
-            - '@expansion.helper.usergroups'
+            - '@expansion.framework.core.user_groups.players'
+        tags:
+            - {name: expansion.plugin, data_provider: exp.application}
 
     expansion.bundle.acme.plugins.test:
         class: eXpansion\Bundle\Acme\Plugins\Test
@@ -12,6 +14,8 @@ services:
             - '@expansion.service.dedicated_connection'
             - '@expansion.service.console'
             - '@expansion.helper.time'
+            - '@expansion.bundle.acme.plugins.gui.memorywidget'
+            - '@expansion.framework.core.user_groups.players'
         tags:
             - {name: expansion.plugin, data_provider: mp.legacy.map}
             - {name: expansion.plugin, data_provider: exp.timer}
@@ -25,3 +29,14 @@ services:
             parent : expansion.framework.core.plugins.gui.window_factory
             tags:
                 - {name: expansion.plugin, data_provider: expansion.user_group}
+
+    expansion.bundle.acme.plugins.gui.memorywidget:
+            class: 'eXpansion\Bundle\Acme\Plugins\Gui\MemoryWidgetFactory'
+            arguments:
+                index_0: "memory"
+                index_1: 180
+                index_2: 90
+            parent : expansion.framework.core.plugins.gui.widget_factory
+            tags:
+                - {name: expansion.plugin, data_provider: expansion.user_group}
+

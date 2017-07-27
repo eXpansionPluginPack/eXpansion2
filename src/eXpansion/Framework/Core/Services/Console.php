@@ -3,7 +3,6 @@
 namespace eXpansion\Framework\Core\Services;
 
 use eXpansion\Framework\Core\Helpers\ColorConversion;
-use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -46,7 +45,7 @@ class Console
     const bold = self::b_white;
 
 
-    /** @var ConsoleOutputInterface */
+    /** @var OutputInterface */
     protected $consoleOutput;
 
     /** @var boolean Color console enabled */
@@ -66,9 +65,9 @@ class Console
     /**
      * Initialize service with the console output.
      *
-     * @param ConsoleOutputInterface $consoleOutput
+     * @param OutputInterface $consoleOutput
      */
-    public function init(ConsoleOutputInterface $consoleOutput)
+    public function init(OutputInterface $consoleOutput)
     {
         $this->consoleOutput = $consoleOutput;
     }
@@ -108,7 +107,7 @@ class Console
                 $end = "";
             }
 
-            $out = self::white.$this->stripStyles(reset($split)).$out.$end;
+            $out = self::white.$this->stripStyles(reset($split)).$out.$end.self::normal;
         } else {
             $out = $this->stripStyles($string);
         }
@@ -125,12 +124,11 @@ class Console
      */
     protected function ansiOut($msg, $newline)
     {
-        // $this->consoleOutput->write($msg . self::normal, $newline, ConsoleOutputInterface::OUTPUT_RAW);
         $nl = "";
         if ($newline) {
             $nl = "\n";
         }
-        echo $msg.self::normal.$nl;
+        echo $msg.$nl;
     }
 
     /**
@@ -151,53 +149,52 @@ class Console
         $hsl = ColorConversion::rgbToHsl($r, $g, $b);
 
         $lightness = 100 * $hsl[2];
-        $attr = 0;
 
+        $color = "37";
         // if color has saturation
         if ($hsl[1] > 0) {
             $h = $hsl[0];
-
-            $color = "37";
-
-            if ($h >= 333 && $h <= 360) {
-                $color = "31"; // red
+            if ($h < 20) {
+                $color = "31";
+            } else {
+                if ($h < 70) {
+                    $color = "33"; // yellow
+                } else {
+                    if ($h < 160) {
+                        $color = "32"; // green
+                    } else {
+                        if ($h < 214) {
+                            $color = "36"; // cyan
+                        } else {
+                            if ($h < 284) {
+                                $color = "34"; // blue
+                            } else {
+                                if ($h < 333) {
+                                    $color = "35"; // magenta
+                                } else {
+                                    $color = "31"; // red
+                                }
+                            }
+                        }
+                    }
+                }
             }
-            if ($h >= 284 && $h < 333) {
-                $color = "35"; // magenta
-            }
-            if ($h >= 214 && $h < 284) {
-                $color = "34"; // blue
-            }
-            if ($h >= 160 && $h < 214) {
-                $color = "36"; // cyan
-            }
-            if ($h >= 70 && $h < 160) {
-                $color = "32"; // green
-            }
-            if ($h >= 20 && $h < 70) {
-                $color = "33"; // yellow
-            }
-            if ($h >= 0 && $h < 20) {
-                $color = "31"; // red
-            }
-        } else // color is grayscale
-        {
-            $color = "37";
         }
-
-        if ($lightness >= 95 && $lightness <= 100) {
-            $color = "37";
+        
+        if ($lightness < 10) {
             $attr = "1";
-        }
-        if ($lightness >= 50 && $lightness < 95) {
-            $attr = "1";
-        }
-        if ($lightness >= 30 && $lightness < 50) {
-            $attr = "0";
-        }
-        if ($lightness >= 0 && $lightness < 30) {
             $color = "30";
-            $attr = "1";
+        } else {
+            if ($lightness < 44) {
+                $attr = "0";
+            } else {
+                if ($lightness < 95) {
+                    $attr = "1";
+                } else {
+                    $color = "37";
+                    $attr = "1";
+                }
+            }
         }
 
         return "\e[".$attr.";".$color."m";
@@ -208,7 +205,8 @@ class Console
      *
      * @return OutputInterface
      */
-    public function getConsoleOutput()
+    public
+    function getConsoleOutput()
     {
         return $this->consoleOutput;
     }

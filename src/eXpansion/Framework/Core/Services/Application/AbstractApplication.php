@@ -5,7 +5,6 @@ namespace eXpansion\Framework\Core\Services\Application;
 
 use eXpansion\Framework\Core\Services\Console;
 use Maniaplanet\DedicatedServer\Connection;
-use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class AbstractApplication implements RunInterface
@@ -50,7 +49,7 @@ abstract class AbstractApplication implements RunInterface
     /**
      * Initialize eXpansion.
      *
-     * @param ConsoleOutputInterface $console
+     * @param OutputInterface $console
      *
      * @return $this
      */
@@ -94,7 +93,7 @@ abstract class AbstractApplication implements RunInterface
                 $nextCycleStart += $cycleTime;
             } while ($nextCycleStart < $endCycleTime);
 
-            @time_sleep_until($nextCycleStart);
+            time_sleep_until($nextCycleStart);
 
         } while ($this->isRunning);
     }

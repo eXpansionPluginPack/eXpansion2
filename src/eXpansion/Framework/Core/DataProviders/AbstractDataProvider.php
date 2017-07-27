@@ -22,7 +22,7 @@ abstract class AbstractDataProvider
      *
      * @param string $pluginId The service name of the plugin.
      *
-     * @param Object $pluginService The plugin object.
+     * @param object $pluginService The plugin object.
      */
     public function registerPlugin($pluginId, $pluginService)
     {

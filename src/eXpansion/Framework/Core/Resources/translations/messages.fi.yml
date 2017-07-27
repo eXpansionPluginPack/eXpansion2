@@ -10,7 +10,12 @@ expansion_core:
     no_help: "{info}Ohjeen teksti puuttuu."
 
   windows:
-    chat_commands:
-      title: Komennot
-      column_command: Komento
-      column_description: Selite
+      chat_commands:
+        title: Chat komennot
+        column_command: komento
+        column_description: selite
+      chat_commands_description:
+        title: Chat komentojen selite
+        aliases: Aliakset
+        description: Selite
+        help: Ohje

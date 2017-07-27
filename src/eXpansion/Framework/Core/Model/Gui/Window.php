@@ -14,6 +14,7 @@ use FML\Types\Container;
 
 class Window extends Widget implements Container
 {
+
     public function __construct(
         Group $group,
         ManiaScriptFactory $windowManiaScriptFactory,
@@ -90,18 +91,18 @@ class Window extends Widget implements Container
             ->setOpacity(0.8);
         $windowFrame->addChild($body);
 
-        $body = new Quad_Bgs1();
+        $body = new Quad();
         $body->setSize($sizeX, $sizeY - $titleHeight)
             ->setPosition(0, -$titleHeight)
-            ->setSubStyle(Quad_Bgs1::SUBSTYLE_BgDialogBlur)
+            ->setStyles('Bgs1', 'BgDialogBlur')
             ->setId('WindowBg')
             ->setScriptEvents(true);
         $windowFrame->addChild($body);
 
-        $body = new Quad_Bgs1InRace();
+        $body = new Quad();
         $body->setSize($sizeX + 10, $sizeY + 10)
             ->setPosition(-5, 5)
-            ->setSubStyle(Quad_Bgs1InRace::SUBSTYLE_BgButtonShadow);
+            ->setStyles('Bgs1InRace', 'BgButtonShadow');
         $windowFrame->addChild($body);
 
         // Add maniascript for window handling.

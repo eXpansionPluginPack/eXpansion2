@@ -156,6 +156,7 @@ class WindowHelpDetailsFactory extends WindowFactory
         $manialink->addChild($aliasesTitle);
 
         $posY = 0;
+        $idx = 0;
         foreach ($command->getAliases() as $i => $alias) {
             $aliasesLabel = $this->lineFactory->create(
                 $column2Width - 21,
@@ -167,7 +168,7 @@ class WindowHelpDetailsFactory extends WindowFactory
 
                     ]
                 ],
-                $i
+                $idx++
             );
             $aliasesLabel->setPosition($column1Width + 22, $posY);
             $manialink->addChild($aliasesLabel);

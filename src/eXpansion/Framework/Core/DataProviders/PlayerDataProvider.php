@@ -89,7 +89,7 @@ class PlayerDataProvider extends AbstractDataProvider
     /**
      * When user information changes (changes from spec to player...)
      *
-     * @param PlayerInfo $playerInfo
+     * @param PlayerInfo|array $playerInfo
      */
     public function onPlayerInfoChanged($playerInfo)
     {

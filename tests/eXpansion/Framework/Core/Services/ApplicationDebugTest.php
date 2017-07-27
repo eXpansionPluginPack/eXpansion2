@@ -6,9 +6,6 @@ namespace Tests\eXpansion\Framework\Core\Services;
 
 use eXpansion\Framework\Core\Services\Application;
 use eXpansion\Framework\Core\Services\Console;
-use eXpansion\Framework\Core\Services\DataProviderManager;
-use eXpansion\Framework\Core\Services\PluginManager;
-use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Tests\eXpansion\Framework\Core\TestCore;
 
 

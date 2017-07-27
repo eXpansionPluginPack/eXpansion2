@@ -21,7 +21,7 @@ class ChatCommandDataProvider extends AbstractDataProvider
     /** @var ChatCommands */
     protected $chatCommands;
 
-    /** @var ChatCommands */
+    /** @var ChatNotificationInterface */
     protected $chatNotification;
 
     /** @var ChatOutput */
@@ -86,13 +86,8 @@ class ChatCommandDataProvider extends AbstractDataProvider
         $text = substr($text, 1);
         $cmdAndArgs = explode(' ', $text);
 
-        // Internal dedicated server command to ignore.
-        if ($cmdAndArgs[0] === 'version') {
-            return;
-        }
-
-        // Internal dedicated server command to ignore.
-        if ($cmdAndArgs[0] === 'serverlogin') {
+        // Internal dedicated server commands to ignore.
+        if ($cmdAndArgs[0] === 'version' || $cmdAndArgs[0] === 'serverlogin') {
             return;
         }
 

@@ -5,7 +5,6 @@ namespace Tests\eXpansion\Framework\Core\Command;
 use eXpansion\Framework\Core\Command\DediEventsTestCommand;
 use eXpansion\Framework\Core\Command\RunCommand;
 use eXpansion\Framework\Core\Services\Application\RunInterface;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tests\eXpansion\Framework\Core\TestCore;

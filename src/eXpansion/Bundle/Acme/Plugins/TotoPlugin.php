@@ -2,6 +2,8 @@
 
 namespace eXpansion\Bundle\Acme\Plugins;
 
+use eXpansion\Framework\AdminGroups\Plugins\GroupsPlugin;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
@@ -12,23 +14,22 @@ use eXpansion\Framework\Core\Services\Console;
  *
  * @package eXpansion\Framework\Core\Plugins
  */
-class TotoPlugin implements StatusAwarePluginInterface
+class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginInterface
 {
-    /** @var Console  */
+    /** @var Console */
     protected $console;
 
     /** @var ManialinkFactory */
     protected $mlFactory;
 
-    /** @var Group  */
+    /** @var Group */
     protected $playersGroup;
 
     function __construct(
         Console $console,
         ManialinkFactory $mlFactory,
         Group $players
-    )
-    {
+    ) {
         $this->console = $console;
         $this->mlFactory = $mlFactory;
         $this->playersGroup = $players;
@@ -44,9 +45,41 @@ class TotoPlugin implements StatusAwarePluginInterface
     public function setStatus($status)
     {
         if ($status) {
-            $this->mlFactory->create($this->playersGroup);
+            foreach ($this->playersGroup->getLogins() as $login) {
+            //    $this->mlFactory->create($login);
+            }
         } else {
-            $this->mlFactory->destroy($this->playersGroup);
+               $this->mlFactory->destroy($this->playersGroup);
         }
+    }
+
+    /**
+     * called at eXpansion init
+     *
+     * @return void
+     */
+    public function onApplicationInit()
+    {
+        // TODO: Implement onApplicationInit() method.
+    }
+
+    /**
+     * called when init is done and callbacks are enabled
+     *
+     * @return void
+     */
+    public function onApplicationReady()
+    {
+        // $this->mlFactory->create($this->playersGroup);
+    }
+
+    /**
+     * called when requesting application stop
+     *
+     * @return void
+     */
+    public function onApplicationStop()
+    {
+        // TODO: Implement onApplicationStop() method.
     }
 }
