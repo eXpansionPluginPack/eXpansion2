@@ -149,52 +149,54 @@ class Console
         $hsl = ColorConversion::rgbToHsl($r, $g, $b);
 
         $lightness = 100 * $hsl[2];
-        $attr = 0;
+
+        $color = "37";
         // if color has saturation
         if ($hsl[1] > 0) {
             $h = $hsl[0];
-
-            $color = "37";
-
-            if ($h >= 333 && $h <= 360) {
-                $color = "31"; // red
+            if ($h < 20) {
+                $color = "31";
+            } else {
+                if ($h < 70) {
+                    $color = "33"; // yellow
+                } else {
+                    if ($h < 160) {
+                        $color = "32"; // green
+                    } else {
+                        if ($h < 214) {
+                            $color = "36"; // cyan
+                        } else {
+                            if ($h < 284) {
+                                $color = "34"; // blue
+                            } else {
+                                if ($h < 333) {
+                                    $color = "35"; // magenta
+                                } else {
+                                    $color = "31"; // red
+                                }
+                            }
+                        }
+                    }
+                }
             }
-            if ($h >= 284 && $h < 333) {
-                $color = "35"; // magenta
-            }
-            if ($h >= 214 && $h < 284) {
-                $color = "34"; // blue
-            }
-            if ($h >= 160 && $h < 214) {
-                $color = "36"; // cyan
-            }
-            if ($h >= 70 && $h < 160) {
-                $color = "32"; // green
-            }
-            if ($h >= 20 && $h < 70) {
-                $color = "33"; // yellow
-            }
-            if ($h >= 0 && $h < 20) {
-                $color = "31"; // red
-            }
-        } else // color is grayscale
-        {
-            $color = "37";
         }
 
-        if ($lightness >= 95 && $lightness <= 100) {
-            $color = "37";
+        echo $lightness;
+
+        if ($lightness < 10) {
             $attr = "1";
-        }
-        if ($lightness >= 50 && $lightness < 95) {
-            $attr = "1";
-        }
-        if ($lightness >= 30 && $lightness < 50) {
-            $attr = "0";
-        }
-        if ($lightness >= 0 && $lightness < 30) {
             $color = "30";
-            $attr = "1";
+        } else {
+            if ($lightness < 44) {
+                $attr = "0";
+            } else {
+                if ($lightness < 95) {
+                    $attr = "1";
+                } else {
+                    $color = "37";
+                    $attr = "1";
+                }
+            }
         }
 
         return "\e[".$attr.";".$color."m";
@@ -205,7 +207,8 @@ class Console
      *
      * @return OutputInterface
      */
-    public function getConsoleOutput()
+    public
+    function getConsoleOutput()
     {
         return $this->consoleOutput;
     }
