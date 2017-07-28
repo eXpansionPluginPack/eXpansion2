@@ -62,9 +62,10 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
         $this->updateSize();
     }
 
-    protected function updateSize() {
+    protected function updateSize()
+    {
         $sizeX = 0;
-        $sizeY= 0;
+        $sizeY = 0;
         foreach ($this->elements as $idx => $element) {
             $sizeY += $element->getY() + $element->getHeight() + $this->margin;
 
@@ -99,7 +100,6 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
     public function setY($startY)
     {
         $this->startY = $startY;
-
         return $this;
     }
 
@@ -120,12 +120,13 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
 
         foreach ($this->elements as $idx => $element) {
             $pos = $element->getY();
-            $element->setY($startY + $pos);
-            $startY -= $pos + $element->getHeight() + $this->margin;
+            $element->setY($startY);
+            $startY -= $element->getHeight() - $this->margin;
             $frame->addChild($element);
         }
 
         $frame->setSize($this->getWidth(), $this->getHeight());
+
         return $frame->render($domDocument);
     }
 
@@ -142,6 +143,7 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
                 $features[] = $element->getScriptFeatures();
             }
         }
+
         return ScriptFeature::collect($features);
     }
 

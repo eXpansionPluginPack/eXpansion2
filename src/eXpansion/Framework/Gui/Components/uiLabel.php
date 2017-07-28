@@ -23,7 +23,8 @@ class uiLabel extends Label
         $this->setText($text)
             ->setAreaColor("0000")
             ->setAreaFocusColor('0000')
-            ->setScriptEvents(true);
+            ->setScriptEvents(true)
+            ->setTextColor('fff');
 
         switch ($type) {
             case self::TYPE_NORMAL:

@@ -12,6 +12,7 @@ use FML\Types\ScriptFeatureable;
 
 class uiCheckbox extends abstractUiElement implements ScriptFeatureable
 {
+    protected $scale = 1;
     /**
      * @var string
      */
@@ -67,6 +68,8 @@ class uiCheckbox extends abstractUiElement implements ScriptFeatureable
         $containerFrame = new Frame();
         $containerFrame->setPosition($this->posX, $this->posY)
             ->setZ($this->posZ)
+            ->setSize($this->getWidth(), $this->getHeight())
+            ->setScale($this->scale)
             ->addClasses(['uiContainer', 'uiCheckbox'])
             ->addDataAttribute('checked', $this->isChecked() ? "1" : "0")
             ->addDataAttribute('disabled', $this->isDisabled() ? "1" : "0");
@@ -247,6 +250,22 @@ EOD;
     public function getScriptFeatures()
     {
         return ScriptFeature::collect($this);
+    }
+
+    /**
+     * @return int
+     */
+    public function getScale()
+    {
+        return $this->scale;
+    }
+
+    /**
+     * @param int $scale
+     */
+    public function setScale($scale)
+    {
+        $this->scale = $scale;
     }
 
 }

@@ -73,9 +73,8 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
         $startX = 0;
         $sizeY = 0;
         foreach ($this->elements as $idx => $element) {
-            $pos = $element->getX();
-            $element->setX($startX + $pos);
-            $startX += $pos + $element->getWidth() + $this->margin;
+            $element->setX($startX);
+            $startX += $element->getWidth() + $this->margin;
             if ($element->getY() + $element->getHeight() > $sizeY) {
                 $sizeY = $element->getHeight();
             }
