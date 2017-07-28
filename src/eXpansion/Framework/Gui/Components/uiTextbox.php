@@ -65,8 +65,8 @@ class uiTextbox extends abstractUiElement implements Renderable
             ->addClass("uiInput")
             ->setAreaColor("0000")
             ->setAreaFocusColor('0005')
-            ->setTextFormat('Basic')
-            ->setName($this->name);
+            ->setTextFormat('Basic');
+        $input->setId($this->name);
 
         $frame->addChild($quad);
         $frame->addChild($input);

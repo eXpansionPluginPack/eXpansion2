@@ -1,0 +1,16 @@
+parameters:
+  expansion.gui.components.list:
+    Button: 'eXpansion\Framework\Gui\Components\uiButton'
+    Checkbox: 'eXpansion\Framework\Gui\Components\uiCheckbox'
+    Dropdown: 'eXpansion\Framework\Gui\Components\uiDropdown'
+    Input: 'eXpansion\Framework\Gui\Components\uiInput'
+    Label: 'eXpansion\Framework\Gui\Components\uiLabel'
+    Line: 'eXpansion\Framework\Gui\Components\uiLine'
+    Textbox: 'eXpansion\Framework\Gui\Components\uiTextbox'
+    Tooltip: 'eXpansion\Framework\Gui\Components\uiTooltip'
+
+services:
+  expansion.gui.factory:
+    class: eXpansion\Framework\Gui\Ui\Factory
+    arguments:
+      - '%expansion.gui.components.list%'
