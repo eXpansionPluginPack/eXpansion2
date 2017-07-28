@@ -11,6 +11,9 @@ use FML\Types\Renderable;
 class uiInput extends abstractUiElement implements Renderable
 {
 
+    const TYPE_DEFAULT = "Basic";
+    const TYPE_PASSWORD = "Password";
+
     /**
      * @var string
      */
@@ -20,13 +23,15 @@ class uiInput extends abstractUiElement implements Renderable
      */
     protected $default;
 
+    protected $textFormat = "Basic";
 
-    public function __construct($name, $default = "", $width = 30)
+    public function __construct($name, $default = "", $width = 30, $textFormat = "Basic")
     {
         $this->name = $name;
         $this->default = $default;
         $this->width = $width;
         $this->setSize($width, 5);
+        $this->textFormat = $textFormat;
     }
 
     /**
@@ -45,27 +50,29 @@ class uiInput extends abstractUiElement implements Renderable
         $quad = new Quad();
         $quad->setSize($this->width * 2, $this->height * 2)
             ->setScale(0.5)
-            ->setPosition($this->width / 2, -$this->height/2)
+            ->setPosition($this->width / 2, -$this->height / 2)
             ->setStyles('Bgs1', 'BgColorContour')
             ->setAlign("center", "center")
             ->setBackgroundColor('FFFA');
 
         $input = new Entry();
         $input->setSize($this->width, $this->height)
-            ->setPosition(0, -$this->height/2)
+            ->setPosition(0, -$this->height / 2)
             ->setDefault($this->default)
             ->setSelectText(true)
             ->setAlign("left", "center2")
             ->addClass("uiInput")
-            ->setAreaColor("0000")
-            ->setAreaFocusColor('0005')
-            ->setTextFormat('Basic')
-            ->setName($this->name);
+            ->setAreaColor("0005")
+            ->setAreaFocusColor('000a')
+            ->setTextFormat($this->textFormat)
+            ->setName($this->name)
+            ->setScriptEvents(true)
+            ->addClasses($this->_classes)
+            ->setDataAttributes($this->_dataAttributes);
 
 
         $frame->addChild($quad);
         $frame->addChild($input);
-
 
         return $frame->render($domDocument);
     }
@@ -133,5 +140,24 @@ class uiInput extends abstractUiElement implements Renderable
     public function prepare(Script $script)
     {
         // do nothing
+    }
+
+    /**
+     * @return string
+     */
+    public function getTextFormat()
+    {
+        return $this->textFormat;
+    }
+
+    /**
+     * @param string $textFormat
+     * @return $this
+     */
+    public function setTextFormat($textFormat)
+    {
+        $this->textFormat = $textFormat;
+
+        return $this;
     }
 }

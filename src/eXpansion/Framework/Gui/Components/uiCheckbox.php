@@ -249,9 +249,4 @@ EOD;
         return ScriptFeature::collect($this);
     }
 
-    public function setSize($x, $y)
-    {
-        $this->width = $x;
-        $this->height = $y;
-    }
 }

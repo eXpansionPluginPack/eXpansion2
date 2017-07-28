@@ -180,7 +180,7 @@ class Console
                 }
             }
         }
-        
+
         if ($lightness < 10) {
             $attr = "1";
             $color = "30";

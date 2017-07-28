@@ -4,34 +4,35 @@ namespace eXpansion\Framework\Gui\Layouts;
 
 use FML\Controls\Control;
 use FML\Controls\Frame;
+use FML\Elements\Format;
 use FML\Script\Features\ScriptFeature;
 use FML\Types\Container;
 use FML\Types\Renderable;
 use FML\Types\ScriptFeatureable;
 
-class layoutLine implements Renderable, ScriptFeatureable
+class layoutLine implements Renderable, ScriptFeatureable, Container
 {
-    private $frameClasses = [];
+    protected $frameClasses = [];
 
     /** @var float */
-    private $width = 0.;
+    protected $width = 0.;
 
     /** @var float */
-    private $height = 0.;
+    protected $height = 0.;
 
     /** @var Control[] */
-    private $elements = [];
+    protected $elements = [];
 
     /** @var float */
-    private $margin = 2.;
+    protected $margin = 2.;
     /**
      * @var float
      */
-    private $startX = 0.;
+    protected $startX = 0.;
     /**
      * @var float
      */
-    private $startY = 0.;
+    protected $startY = 0.;
 
     /**
      * layoutLine constructor.
@@ -70,11 +71,17 @@ class layoutLine implements Renderable, ScriptFeatureable
         $frame->addClasses($this->frameClasses);
 
         $startX = 0;
+        $sizeY = 0;
         foreach ($this->elements as $idx => $element) {
-            $element->setX($startX);
-            $startX += $element->getWidth() + $this->margin;
+            $pos = $element->getX();
+            $element->setX($startX + $pos);
+            $startX += $pos + $element->getWidth() + $this->margin;
+            if ($element->getY() + $element->getHeight() > $sizeY) {
+                $sizeY = $element->getHeight();
+            }
             $frame->addChild($element);
         }
+        $frame->setSize($startX, $sizeY);
 
         return $frame->render($domDocument);
     }
@@ -169,15 +176,99 @@ class layoutLine implements Renderable, ScriptFeatureable
     /**
      * @param object $element
      */
-    public function addChild($element)
+    public function addChild(Renderable $element)
     {
         $this->elements[] = $element;
         $this->width += $element->getWidth() + $this->margin;
         $this->height += $element->getHeight();
     }
 
+    public function getChildren()
+    {
+        return $this->elements;
+    }
+
+
     public function addClass($class)
     {
         $this->frameClasses [] = $class;
+    }
+
+    /**
+     * Add a new child
+     *
+     * @api
+     * @param Renderable $child Child Control to add
+     * @return static
+     * @deprecated Use addChild()
+     * @see        Container::addChild()
+     */
+    public function add(Renderable $child)
+    {
+        // TODO: Implement add() method.
+    }
+
+    /**
+     * Add new children
+     *
+     * @api
+     * @param Renderable[] $children Child Controls to add
+     * @return static
+     */
+    public function addChildren(array $children)
+    {
+        // TODO: Implement addChildren() method.
+    }
+
+    /**
+     * Remove all children
+     *
+     * @api
+     * @return static
+     */
+    public function removeAllChildren()
+    {
+        // TODO: Implement removeAllChildren() method.
+    }
+
+    /**
+     * Remove all children
+     *
+     * @api
+     * @return static
+     * @deprecated Use removeAllChildren()
+     * @see        Container::removeAllChildren()
+     */
+    public function removeChildren()
+    {
+        // TODO: Implement removeChildren() method.
+    }
+
+    /**
+     * Get the Format
+     *
+     * @api
+     * @param bool $createIfEmpty If the format should be created if it doesn't exist yet
+     * @return Format
+     * @deprecated Use Style
+     * @see        Style
+     */
+    public function getFormat($createIfEmpty = true)
+    {
+        // TODO: Implement getFormat() method.
+    }
+
+    /**
+     * Set the Format
+     *
+     * @api
+     * @param Format $format New Format
+     * @return static
+     * @deprecated Use Style
+     * @see        Style
+     */
+    public function setFormat(Format $format = null)
+    {
+        // TODO: Implement setFormat() method.
     }
 }

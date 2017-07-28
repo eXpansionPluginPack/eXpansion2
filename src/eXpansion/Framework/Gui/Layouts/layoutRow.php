@@ -4,39 +4,43 @@ namespace eXpansion\Framework\Gui\Layouts;
 
 use FML\Controls\Control;
 use FML\Controls\Frame;
+use FML\Controls\Quad;
+use FML\Elements\Format;
 use FML\Script\Features\ScriptFeature;
+use FML\Types\Container;
 use FML\Types\Renderable;
 use FML\Types\ScriptFeatureable;
 
-class layoutRow implements Renderable, ScriptFeatureable
+class layoutRow implements Renderable, ScriptFeatureable, Container
 {
-    private $frameClasses = [];
+
+    protected $frameClasses = [];
     /**
      * @var float|int
      */
-    private $height = 0;
+    protected $height = 0;
     /**
      * @var float|int
      */
-    private $width = 0;
+    protected $width = 0;
 
     /** @var Control[] */
-    private $elements = [];
+    protected $elements = [];
 
     /**
      * @var float|int
      */
-    private $margin = 1;
+    protected $margin = 1;
 
     /**
      * @var float|int
      */
-    private $startX;
+    protected $startX;
 
     /**
      * @var float|int
      */
-    private $startY;
+    protected $startY;
 
     /**
      * layoutLine constructor.
@@ -54,14 +58,51 @@ class layoutRow implements Renderable, ScriptFeatureable
 
         $this->margin = $margin;
         $this->elements = $elements;
+        $this->setPosition($startX, $startY);
+        $this->updateSize();
+    }
+
+    protected function updateSize() {
+        $sizeX = 0;
+        $sizeY= 0;
+        foreach ($this->elements as $idx => $element) {
+            $sizeY += $element->getY() + $element->getHeight() + $this->margin;
+
+            if (abs($element->getX()) + $element->getWidth() > $sizeX) {
+                $sizeX = abs($element->getX()) + $element->getWidth();
+            }
+        }
+        $this->setSize($sizeX, $sizeY);
+    }
+
+    public function setPosition($x, $y)
+    {
+        $this->startX = $x;
+        $this->startY = $y;
+    }
+
+    /**
+     * @param mixed $startX
+     * @return
+     */
+    public function setX($startX)
+    {
         $this->startX = $startX;
+
+        return $this;
+    }
+
+    /**
+     * @param mixed $startY
+     * @return
+     */
+    public function setY($startY)
+    {
         $this->startY = $startY;
 
-        foreach ($this->elements as $idx => $element) {
-            $this->width += $element->getWidth();
-            $this->height += $element->getHeight() + $this->margin;
-        }
+        return $this;
     }
+
 
     /**
      * Render the XML element
@@ -76,12 +117,15 @@ class layoutRow implements Renderable, ScriptFeatureable
         $frame->addClasses($this->frameClasses);
 
         $startY = 0;
+
         foreach ($this->elements as $idx => $element) {
-            $element->setY($startY);
-            $startY -= $element->getHeight() + $this->margin;
+            $pos = $element->getY();
+            $element->setY($startY + $pos);
+            $startY -= $pos + $element->getHeight() + $this->margin;
             $frame->addChild($element);
         }
 
+        $frame->setSize($this->getWidth(), $this->getHeight());
         return $frame->render($domDocument);
     }
 
@@ -98,30 +142,7 @@ class layoutRow implements Renderable, ScriptFeatureable
                 $features[] = $element->getScriptFeatures();
             }
         }
-
         return ScriptFeature::collect($features);
-    }
-
-    /**
-     * @param mixed $startX
-     * @return static
-     */
-    public function setX($startX)
-    {
-        $this->startX = $startX;
-
-        return $this;
-    }
-
-    /**
-     * @param mixed $startY
-     * @return static
-     */
-    public function setY($startY)
-    {
-        $this->startY = $startY;
-
-        return $this;
     }
 
     /**
@@ -176,17 +197,106 @@ class layoutRow implements Renderable, ScriptFeatureable
     }
 
     /**
-     * @param object $element
+     * @param Renderable $element
      */
-    public function addChild($element)
+    public function addChild(Renderable $element)
     {
         $this->elements[] = $element;
-        $this->width += $element->getWidth();
-        $this->height += $element->getHeight() + $this->margin;
+        $this->updateSize();
     }
+
+    public function getChildren()
+    {
+        return $this->elements;
+    }
+
 
     public function addClass($class)
     {
         $this->frameClasses[] = $class;
+    }
+
+    /**
+     * Add a new child
+     *
+     * @api
+     * @param Renderable $child Child Control to add
+     * @return static
+     * @deprecated Use addChild()
+     * @see        Container::addChild()
+     */
+    public function add(Renderable $child)
+    {
+        // TODO: Implement add() method.
+    }
+
+    /**
+     * Add new children
+     *
+     * @api
+     * @param Renderable[] $children Child Controls to add
+     * @return static
+     */
+    public function addChildren(array $children)
+    {
+        // TODO: Implement addChildren() method.
+    }
+
+    /**
+     * Remove all children
+     *
+     * @api
+     * @return static
+     */
+    public function removeAllChildren()
+    {
+        // TODO: Implement removeAllChildren() method.
+    }
+
+    /**
+     * Remove all children
+     *
+     * @api
+     * @return static
+     * @deprecated Use removeAllChildren()
+     * @see        Container::removeAllChildren()
+     */
+    public function removeChildren()
+    {
+        // TODO: Implement removeChildren() method.
+    }
+
+    /**
+     * Get the Format
+     *
+     * @api
+     * @param bool $createIfEmpty If the format should be created if it doesn't exist yet
+     * @return Format
+     * @deprecated Use Style
+     * @see        Style
+     */
+    public function getFormat($createIfEmpty = true)
+    {
+        // TODO: Implement getFormat() method.
+    }
+
+    /**
+     * Set the Format
+     *
+     * @api
+     * @param Format $format New Format
+     * @return static
+     * @deprecated Use Style
+     * @see        Style
+     */
+    public function setFormat(Format $format = null)
+    {
+        // TODO: Implement setFormat() method.
+    }
+
+    private function setSize($sizeX, $sizeY)
+    {
+        $this->width = $sizeX;
+        $this->height = $sizeY;
     }
 }

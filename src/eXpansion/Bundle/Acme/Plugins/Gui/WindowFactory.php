@@ -13,6 +13,7 @@ use eXpansion\Framework\Gui\Components\uiTextbox;
 use eXpansion\Framework\Gui\Components\uiTooltip;
 use eXpansion\Framework\Gui\Layouts\layoutLine;
 use eXpansion\Framework\Gui\Layouts\layoutRow;
+use eXpansion\Framework\Gui\Layouts\layoutScrollable;
 use FML\Controls\Quad;
 
 class WindowFactory extends BaseWindowFactory
@@ -50,47 +51,49 @@ class WindowFactory extends BaseWindowFactory
 
         for ($x = 0; $x < 10; $x++) {
             $btn = new uiCheckbox('box'.$x, 'cb_'.$x);
+            $btn->setPosition(0, 0);
+            $tooltip->addTooltip($btn, "long description that should go over the bounding box".$x);
             $line3->addChild($btn);
         }
+        $btn = new uiCheckbox('box11', 'cb_11');
+        $btn->setPosition(20, 0);
+        $line3->addChild($btn);
 
-        $manialink->addChild($line3);
+        $btn = new uiCheckbox('box11', 'cb_11');
+        $btn->setPosition(50, 0);
+        $line3->addChild($btn);
+
+        $scrollable = new layoutScrollable($line3, 55, 30);
+        $scrollable->setAxis(true, true);
+        $manialink->addChild($scrollable);
+
 
         $row = new layoutRow(0, -10, [$line1, $line2], 0);
-        $manialink->addChild($row);
+
+        $scrollable = new layoutScrollable($row, 40, 30);
+        $scrollable->setAxis(true, true);
+        $manialink->addChild($scrollable);
 
 
         $dropdown = new uiDropdown("dropdown", ["option1" => 1, "option2" => 2]);
-        $dropdown->setPosition(90, 0);
+        $dropdown->setPosition(97, 0);
+        $tooltip->addTooltip($dropdown, "test");
         $manialink->addChild($dropdown);
 
         $dropdown = new uiDropdown("style", ["tech" => "tech", "fullspeed" => "fullspeed", "speedtech" => "speedtech"]);
         $dropdown->setPosition(130, 0);
         $manialink->addChild($dropdown);
 
-
-        $quad = new Quad();
-        $quad->setPosition(20, -40)
-            ->setAlign("center", "center")
-            ->setSize(2, 2)
-            ->setBackgroundColor("0f0");
-        $manialink->addChild($quad);
-
-        $quad = new Quad();
-        $quad->setPosition(40, -20)
-            ->setAlign("center", "center")
-            ->setSize(2, 2)
-            ->setBackgroundColor("0ff");
-        $manialink->addChild($quad);
-
-        $input = new uiInput("input1", "test text", 30);
-        $input->setPosition(90,-30);
+        
+        $input = new uiInput("input1", "test text", 30, "Password");
+        $input->setPosition(130, -20);
+        $tooltip->addTooltip($input, "test");
         $manialink->addChild($input);
 
         $input = new uiTextbox("input2", "test\ntest2\ntest3\nest4\ntest5", 5, 30);
-        $input->setPosition(130,-30);
-
+        $input->setPosition(130, -30);
+        $tooltip->addTooltip($input, "test2");
         $manialink->addChild($input);
-
 
     }
 

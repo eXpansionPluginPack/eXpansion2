@@ -27,6 +27,14 @@ class uiTextbox extends abstractUiElement implements Renderable
     protected $lines;
 
 
+    /**
+     *
+     *
+     * @param $name
+     * @param string $default
+     * @param int $lines
+     * @param int $width
+     */
     public function __construct($name, $default = "", $lines = 1, $width = 30)
     {
         $this->name = $name;
@@ -56,17 +64,20 @@ class uiTextbox extends abstractUiElement implements Renderable
             ->setAlign("left", "top")
             ->setBackgroundColor('FFFA');
 
+
         $input = new TextEdit();
         $input->setSize($this->width, $this->height-2)
             ->setPosition(1, -1)
             ->setDefault($this->default)
-            ->setScriptEvents(true)
             ->setAlign("left", "top")
             ->addClass("uiInput")
-            ->setAreaColor("0000")
-            ->setAreaFocusColor('0005')
+            ->setAreaColor("0005")
+            ->setAreaFocusColor('000a')
             ->setTextFormat('Basic')
-            ->setName($this->name);
+            ->setName($this->name)
+            ->setScriptEvents(true)
+            ->addClasses($this->_classes)
+            ->setDataAttributes($this->_dataAttributes);
 
         $frame->addChild($quad);
         $frame->addChild($input);
