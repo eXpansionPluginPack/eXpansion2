@@ -74,7 +74,7 @@ class uiTextbox extends abstractUiElement implements Renderable
             ->setAreaColor("0005")
             ->setAreaFocusColor('000a')
             ->setTextFormat('Basic')
-            ->setName($this->name)
+          //  ->setName($this->name) // @todo enable when FML gets fixed
             ->setScriptEvents(true)
             ->addClasses($this->_classes)
             ->setDataAttributes($this->_dataAttributes);

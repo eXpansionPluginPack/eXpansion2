@@ -84,7 +84,7 @@ class WindowFactory extends BaseWindowFactory
         $dropdown->setPosition(130, 0);
         $manialink->addChild($dropdown);
 
-        
+
         $input = new uiInput("input1", "test text", 30, "Password");
         $input->setPosition(130, -20);
         $tooltip->addTooltip($input, "test");
