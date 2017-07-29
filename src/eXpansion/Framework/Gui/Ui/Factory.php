@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Gui\Ui;
 
+use eXpansion\Framework\Core\Model\Gui\Factory\BackGroundFactory;
 use eXpansion\Framework\Gui\Components\UiButton;
 use eXpansion\Framework\Gui\Components\uiCheckbox;
 use eXpansion\Framework\Gui\Components\uiDropdown;
@@ -14,6 +15,7 @@ use eXpansion\Framework\Gui\Layouts\layoutLine;
 use eXpansion\Framework\Gui\Layouts\layoutRow;
 
 use eXpansion\Framework\Core\Exceptions\UnknownMethodException;
+use FML\Controls\Frame;
 
 /**
  * Class Factory
@@ -33,6 +35,11 @@ use eXpansion\Framework\Core\Exceptions\UnknownMethodException;
  *
  * @method layoutLine createLayoutLine($startX, $startY, $elements = [], $margin = 0.);
  * @method layoutRow createLayoutRow($startX, $startY, $elements = [], $margin = 0.);
+ *
+ * @method Frame createBackground($width, $height, $index = 0)
+ * @method Frame createTitleBackground($width, $height, $index = 0)
+ * @method Frame createPager($width, $currentPageNumber, $lastPageNumber, $actionFirstPage, $actionPreviousPage, $actionNextPage, $actionLastPage)
+ * @method Frame createGridLine($totalWidth, $columns, $index = 0, $height = 5.0, $autoNewLine = false, $maxLines = 1)
  */
 class Factory
 {
@@ -42,13 +49,20 @@ class Factory
     protected $classes;
 
     /**
+     * @var BackGroundFactory[]
+     */
+    protected $factories;
+
+    /**
      * Factory constructor.
      *
      * @param $classes
+     * @param $factories
      */
-    public function __construct($classes)
+    public function __construct($classes, $factories)
     {
         $this->classes = $classes;
+        $this->factories = $factories;
     }
 
     /**
@@ -67,6 +81,10 @@ class Factory
             if (isset($this->classes[$name])) {
                 $class = $this->classes[$name];
                 return new $class(...$arguments);
+            }
+
+            if (isset($this->factories[$name])) {
+                return $this->factories[$name]->create(...$arguments);
             }
         }
 

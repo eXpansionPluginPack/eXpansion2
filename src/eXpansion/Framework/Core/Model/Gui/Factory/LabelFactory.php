@@ -1,7 +1,8 @@
 <?php
 
 namespace eXpansion\Framework\Core\Model\Gui\Factory;
-use FML\Controls\Label;
+
+use eXpansion\Framework\Gui\Components\uiLabel;
 
 /**
  * Class LineBuilder
@@ -16,19 +17,12 @@ class LabelFactory
 
     public function create($text, $translate = false, $type = self::TYPE_NORMAL)
     {
-        $label = new Label();
-        $label->setTextSize(2)
-            ->setHeight(4)
-            ->setTranslate($translate);
+        $label = new uiLabel($text, $type);
 
         if ($translate) {
             $label->setTextId($text);
         } else {
             $label->setText($text);
-        }
-
-        if ($type == self::TYPE_TITLE) {
-            $label->setTextFont('file://Media/Font/BiryaniDemiBold.Font.gbx');
         }
 
         return $label;
