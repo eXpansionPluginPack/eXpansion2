@@ -23,20 +23,24 @@ services:
     expansion.bundle.acme.plugins.gui.windowFactory:
             class: 'eXpansion\Bundle\Acme\Plugins\Gui\WindowFactory'
             arguments:
-                index_0: "test window"
-                index_1: 180
-                index_2: 90
-            parent : expansion.framework.core.plugins.gui.window_factory
+                -  "test window"
+                -  180
+                -  90
+                - null
+                - null
+                - '@expansion.gui.context.window'
             tags:
                 - {name: expansion.plugin, data_provider: expansion.user_group}
 
     expansion.bundle.acme.plugins.gui.memorywidget:
             class: 'eXpansion\Bundle\Acme\Plugins\Gui\MemoryWidgetFactory'
             arguments:
-                index_0: "memory"
-                index_1: 180
-                index_2: 90
-            parent : expansion.framework.core.plugins.gui.widget_factory
+                - "memory"
+                - 180
+                - 90
+                - null
+                - null
+                - '@expansion.gui.context.widget'
             tags:
                 - {name: expansion.plugin, data_provider: expansion.user_group}
 

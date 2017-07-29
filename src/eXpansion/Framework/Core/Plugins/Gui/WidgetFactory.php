@@ -5,6 +5,7 @@ use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Model\Gui\Manialink;
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
 use eXpansion\Framework\Core\Model\Gui\Widget;
+use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\GuiHandler;
@@ -25,16 +26,12 @@ class WidgetFactory extends ManialinkFactory {
     /**
      * WidgetFactory constructor.
      *
-     * @param               $name
-     * @param               $sizeX
-     * @param               $sizeY
-     * @param null          $posX
-     * @param null          $posY
-     * @param GuiHandler    $guiHandler
-     * @param Factory       $groupFactory
-     * @param ActionFactory $actionFactory
-     * @param Translations  $translationsHelper
-     * @param string        $className
+     * @param                      $name
+     * @param                      $sizeX
+     * @param                      $sizeY
+     * @param null                 $posX
+     * @param null                 $posY
+     * @param WidgetFactoryContext $context
      */
     public function __construct(
         $name,
@@ -42,11 +39,7 @@ class WidgetFactory extends ManialinkFactory {
         $sizeY,
         $posX,
         $posY,
-        GuiHandler $guiHandler,
-        Factory $groupFactory,
-        ActionFactory $actionFactory,
-        Translations $translationsHelper,
-        $className = Widget::class
+        WidgetFactoryContext $context
     ) {
         // Hack for FML to use default MP alignements.
         Control::clearDefaultAlign();
@@ -57,13 +50,10 @@ class WidgetFactory extends ManialinkFactory {
             $sizeY,
             $posX,
             $posY,
-            $guiHandler,
-            $groupFactory,
-            $actionFactory,
-            $className
+            $context
         );
 
-        $this->translationsHelper = $translationsHelper;
+        $this->translationsHelper = $context->getTranslationsHelper();
     }
 
     /**
@@ -73,6 +63,7 @@ class WidgetFactory extends ManialinkFactory {
      */
     protected function createManialink(Group $group)
     {
+
         $className = $this->className;
         $manialink = new $className(
             $group,

@@ -9,16 +9,15 @@ services:
 
 
     expansion.framework.core.plugins.gui.menu:
-        parent: "expansion.framework.core.plugins.gui.widget_factory"
         class: eXpansion\Bundle\Menu\Plugins\Gui\MenuFactory
         arguments:
-            index_0: 'Menu Factory'
-            index_1: 0
-            index_2: 0
-            index_3: null
-            index_4: null
-        calls:
-            - [setMenuScriptFactory, ['@expansion.framework.core.gui.scripts.menu']]
-            - [setAdminGroupsHelper, ['@expansion.helper.admingroups']]
+            - 'Menu Factory'
+            - 0
+            - 0
+            - null
+            - null
+            - '@expansion.gui.context.widget'
+            - '@expansion.framework.core.gui.scripts.menu'
+            - '@expansion.helper.admingroups'
         tags:
             - {name: expansion.plugin, data_provider: expansion.user_group}
