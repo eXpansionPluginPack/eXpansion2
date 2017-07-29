@@ -2,6 +2,7 @@
 
 namespace Tests\eXpansion\Framework\Core\Plugins\Gui;
 
+use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryContext;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
@@ -126,15 +127,20 @@ class ManialinkFactoryTest extends TestCore
 
     protected function getManialinkFactory()
     {
+        $context = new ManialinkFactoryContext(
+            'eXpansion\Framework\Core\Model\Gui\Manialink',
+            $this->guiHandlerMock,
+            $this->userGroupFactoryMock,
+            $this->actionFactoryMock
+        );
+
         return new ManialinkFactory(
             'test',
             2,
             2,
             null,
             null,
-            $this->guiHandlerMock,
-            $this->userGroupFactoryMock,
-            $this->actionFactoryMock
+            $context
         );
     }
 }

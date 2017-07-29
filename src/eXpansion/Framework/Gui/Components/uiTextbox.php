@@ -2,7 +2,6 @@
 
 namespace eXpansion\Framework\Gui\Components;
 
-use FML\Controls\Entry;
 use FML\Controls\Frame;
 use FML\Controls\Quad;
 use FML\Controls\TextEdit;

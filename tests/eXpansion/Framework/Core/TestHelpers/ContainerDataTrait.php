@@ -20,12 +20,9 @@ trait ContainerDataTrait
         // Call all setters;
         foreach ($props as $prop)
         {
-            foreach ($props as $prop)
-            {
-                if (!in_array($prop->getName(), $ignore) && in_array('set' . ucfirst($prop->getName()), $methods)) {
-                    $method = 'set' . ucfirst($prop->getName());
-                    $object->$method('value-' . $prop->getName());
-                }
+            if (!in_array($prop->getName(), $ignore) && in_array('set' . ucfirst($prop->getName()), $methods)) {
+                $method = 'set' . ucfirst($prop->getName());
+                $object->$method('value-' . $prop->getName());
             }
         }
 

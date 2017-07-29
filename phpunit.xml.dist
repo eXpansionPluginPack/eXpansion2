@@ -30,6 +30,8 @@
                 <directory>src/*/*/DependencyInjection</directory>
                 <directory>src/*/*/*/DependencyInjection</directory>
 
+                <directory>src/eXpansion/Framework/Gui/Components</directory> <!-- Doesen't need testint FML wrappers are here && the Factory actually tests for failure -->
+
                 <directory>src/eXpansion/Bundle/Acme</directory> <!-- Acme plugin doesen't need tests,  it's for developpers to see only -->
 
                 <directory>src/eXpansion/Bundle/Emotes</directory> <!-- Need to finalize bundle to write tests -->

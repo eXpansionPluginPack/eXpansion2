@@ -4,6 +4,7 @@ namespace eXpansion\Framework\Core\Plugins\Gui;
 
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpUserGroup;
 use eXpansion\Framework\Core\Model\Gui\Manialink;
+use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryContext;
 use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryInterface;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
@@ -52,17 +53,14 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
     protected $posY;
 
     /**
-     * GroupManialinkFactory constructor.
+     * ManialinkFactory constructor.
      *
-     * @param GuiHandler $guiHandler
-     * @param Factory $groupFactory
-     * @param ActionFactory $actionFactory
-     * @param $name
-     * @param $sizeX
-     * @param $sizeY
-     * @param null $posX
-     * @param null $posY
-     * @param string $className
+     * @param                         $name
+     * @param                         $sizeX
+     * @param                         $sizeY
+     * @param null                    $posX
+     * @param null                    $posY
+     * @param ManialinkFactoryContext $context
      */
     public function __construct(
         $name,
@@ -70,10 +68,7 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
         $sizeY,
         $posX = null,
         $posY = null,
-        GuiHandler $guiHandler,
-        Factory $groupFactory,
-        ActionFactory $actionFactory,
-        $className = Manialink::class
+        ManialinkFactoryContext $context
     ) {
         if (is_null($posX)) {
             $posX = $sizeX / -2;
@@ -83,11 +78,11 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
             $posY = $sizeY / 2;
         }
 
-        $this->guiHandler = $guiHandler;
-        $this->groupFactory = $groupFactory;
-        $this->actionFactory = $actionFactory;
+        $this->guiHandler = $context->getGuiHandler();
+        $this->groupFactory = $context->getGroupFactory();
+        $this->actionFactory = $context->getActionFactory();
+        $this->className = $context->getClassName();
         $this->name = $name;
-        $this->className = $className;
         $this->sizeX = $sizeX;
         $this->sizeY = $sizeY;
         $this->posX = $posX;

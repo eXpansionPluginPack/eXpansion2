@@ -13,6 +13,13 @@ use FML\Controls\Quads\Quad_BgsPlayerCard;
  */
 class BackGroundFactory
 {
+    /**
+     * @param     $width
+     * @param     $height
+     * @param int $index
+     *
+     * @return Quad
+     */
     public function create($width, $height, $index = 0)
     {
         $index = $index % 2;

@@ -5,6 +5,7 @@ use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Model\Gui\Manialink;
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
 use eXpansion\Framework\Core\Model\Gui\Window;
+use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\GuiHandler;
 use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
@@ -24,17 +25,12 @@ class WindowFactory extends WidgetFactory {
     /**
      * WindowFactory constructor.
      *
-     * @param                    $name
-     * @param                    $sizeX
-     * @param                    $sizeY
-     * @param null               $posX
-     * @param null               $posY
-     * @param GuiHandler         $guiHandler
-     * @param Factory            $groupFactory
-     * @param ActionFactory      $actionFactory
-     * @param ManiaScriptFactory $windowManiaScriptFactory
-     * @param Translations       $translationsHelper
-     * @param string             $className
+     * @param                      $name
+     * @param                      $sizeX
+     * @param                      $sizeY
+     * @param null                 $posX
+     * @param null                 $posY
+     * @param WindowFactoryContext $context
      */
     public function __construct(
         $name,
@@ -42,12 +38,7 @@ class WindowFactory extends WidgetFactory {
         $sizeY,
         $posX,
         $posY,
-        GuiHandler $guiHandler,
-        Factory $groupFactory,
-        ActionFactory $actionFactory,
-        ManiaScriptFactory $windowManiaScriptFactory,
-        Translations $translationsHelper,
-        $className = Window::class
+        WindowFactoryContext $context
     ) {
         parent::__construct(
             $name,
@@ -55,14 +46,10 @@ class WindowFactory extends WidgetFactory {
             $sizeY,
             $posX,
             $posY,
-            $guiHandler,
-            $groupFactory,
-            $actionFactory,
-            $translationsHelper,
-            $className
+            $context
         );
 
-        $this->windowManiaScriptFactory = $windowManiaScriptFactory;
+        $this->windowManiaScriptFactory = $context->getWindowManiaScriptFactory();
     }
 
 
@@ -75,6 +62,7 @@ class WindowFactory extends WidgetFactory {
     protected function createManialink(Group $group)
     {
         $className = $this->className;
+
         $manialink = new $className(
             $group,
             $this->windowManiaScriptFactory,

@@ -6,6 +6,7 @@ use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Model\ChatCommand\AbstractChatCommand;
 use eXpansion\Framework\Core\Model\Gui\Factory\LineFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
+use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 
 /**
  * Class WindowHelpDetailsFactory
@@ -18,38 +19,28 @@ class WindowHelpDetailsFactory extends WindowFactory
     /** @var AbstractChatCommand */
     protected $currentCommand = null;
 
-    /** @var  Translations */
-    protected $translationsHelper;
-
     /** @var LineFactory */
     protected $lineFactory;
 
     /** @var LineFactory */
     protected $titleLineFactory;
 
-    /**
-     * @param LineFactory $lineFactory
-     */
-    public function setLineFactory($lineFactory)
-    {
-        $this->lineFactory = $lineFactory;
-    }
+    public function __construct(
+        $name,
+        $sizeX,
+        $sizeY,
+        $posX,
+        $posY,
+        WindowFactoryContext $context,
+        LineFactory $lineFactory,
+        LineFactory $titleLineFactory
+    ) {
+        parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
 
-    /**
-     * @param LineFactory $titleLineFactory
-     */
-    public function setTitleLineFactory($titleLineFactory)
-    {
+        $this->lineFactory = $lineFactory;
         $this->titleLineFactory = $titleLineFactory;
     }
 
-    /**
-     * @param Translations $translationsHelper
-     */
-    public function setTranslationsHelper($translationsHelper)
-    {
-        $this->translationsHelper = $translationsHelper;
-    }
 
     /**
      * @inheritdoc

@@ -13,16 +13,17 @@ use FML\Types\ScriptFeatureable;
 
 class uiDropdown extends abstractUiElement implements ScriptFeatureable
 {
+    /** @var int */
     protected $selectedIndex;
+
+    /** @var bool  */
     protected $isOpened;
-    /**
-     * @var
-     */
-    private $name;
-    /**
-     * @var
-     */
-    private $options;
+
+    /** @var string */
+    protected $name;
+
+    /** @var string[] */
+    protected $options;
 
     /**
      * uiDropdown constructor.
@@ -53,7 +54,7 @@ class uiDropdown extends abstractUiElement implements ScriptFeatureable
         $script->addCustomScriptLabel(ScriptLabel::OnInit, $this->getScriptInit());
     }
 
-    private function getScriptInit()
+    protected function getScriptInit()
     {
         return /** language=textmate  prefix=#RequireContext\n */
             <<<'EOD'
@@ -70,7 +71,7 @@ EOD;
     /**
      * @return string
      */
-    private function getScriptMouseClick()
+    protected function getScriptMouseClick()
     {
         return /** language=textmate  prefix=#RequireContext\n */
             <<<'EOD'
@@ -91,7 +92,7 @@ EOD;
     /**
      * @return string
      */
-    private function getScriptDropdown()
+    protected function getScriptDropdown()
     {
         return /** @lang textmate */
             <<<'EOD'

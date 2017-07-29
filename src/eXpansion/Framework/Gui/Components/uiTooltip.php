@@ -42,7 +42,6 @@ class uiTooltip extends abstractUiElement implements ScriptFeatureable
             $control->addClass("tooltip");
             return;
         }
-
     }
 
     /**

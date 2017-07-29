@@ -9,6 +9,7 @@ use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionFactory;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilder;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
+use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use FML\Controls\Frame;
 
 
@@ -31,6 +32,25 @@ class RecordsWindowFactory extends WindowFactory
 
     /** @var Time */
     protected $timeFormatter;
+
+
+    public function __construct(
+        $name,
+        $sizeX,
+        $sizeY,
+        $posX,
+        $posY,
+        WindowFactoryContext $context,
+        GridBuilderFactory $gridBuilderFactory,
+        DataCollectionFactory $dataCollectionFactory,
+        Time $time
+    ) {
+        parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
+
+        $this->gridBuilderFactory = $gridBuilderFactory;
+        $this->dataCollectionFactory = $dataCollectionFactory;
+        $this->timeFormatter = $time;
+    }
 
     /**
      * @inheritdoc
@@ -103,30 +123,6 @@ class RecordsWindowFactory extends WindowFactory
         }
 
         return $recordsData;
-    }
-
-    /**
-     * @param GridBuilderFactory $gridBuilderFactory
-     */
-    public function setGridBuilderFactory($gridBuilderFactory)
-    {
-        $this->gridBuilderFactory = $gridBuilderFactory;
-    }
-
-    /**
-     * @param DataCollectionFactory $dataCollectionFactory
-     */
-    public function setDataCollectionFactory($dataCollectionFactory)
-    {
-        $this->dataCollectionFactory = $dataCollectionFactory;
-    }
-
-    /**
-     * @param Time $time
-     */
-    public function setTimerFormatter(Time $time)
-    {
-        $this->timeFormatter = $time;
     }
 
     /**

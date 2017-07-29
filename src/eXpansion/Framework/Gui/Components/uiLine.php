@@ -12,27 +12,27 @@ class uiLine extends abstractUiElement
     /**
      * @var float
      */
-    private $x;
+    protected $x;
     /**
      * @var float
      */
-    private $y;
+    protected $y;
     /**
      * @var float
      */
-    private $tx;
+    protected $tx;
     /**
      * @var float
      */
-    private $ty;
+    protected $ty;
 
-    private $color = "f00";
+    protected $color = "f00";
 
-    private $stoke = 0.25;
+    protected $stoke = 0.25;
 
-    private $to = false;
+    protected $to = false;
 
-    private $rotate = 0;
+    protected $rotate = 0;
 
     /**
      * uiLine constructor.

@@ -9,6 +9,7 @@ use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionFactory;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilder;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
+use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Services\ChatCommands;
 use FML\Controls\Frame;
 use FML\Controls\Label;
@@ -37,45 +38,28 @@ class WindowHelpFactory extends WindowFactory
     /** @var WindowHelpDetailsFactory */
     protected $windowHelpDetailsFactory;
 
-    /**
-     * @param GridBuilderFactory $gridBuilderFactory
-     */
-    public function setGridBuilderFactory($gridBuilderFactory)
-    {
+    public function __construct(
+        $name,
+        $sizeX,
+        $sizeY,
+        $posX,
+        $posY,
+        WindowFactoryContext $context,
+        GridBuilderFactory $gridBuilderFactory,
+        DataCollectionFactory $dataCollectionFactory,
+        ChatCommands $chatCommands,
+        ChatCommandDataProvider $chatCommandDataProvider,
+        WindowHelpDetailsFactory $windowHelpDetailsFactory
+    ) {
+        parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
+
         $this->gridBuilderFactory = $gridBuilderFactory;
-    }
-
-    /**
-     * @param DataCollectionFactory $dataCollectionFactory
-     */
-    public function setDataCollectionFactory($dataCollectionFactory)
-    {
         $this->dataCollectionFactory = $dataCollectionFactory;
-    }
-
-    /**
-     * @param ChatCommands $chatCommands
-     */
-    public function setChatCommands($chatCommands)
-    {
         $this->chatCommands = $chatCommands;
-    }
-
-    /**
-     * @param ChatCommandDataProvider $chatCommandDataPovider
-     */
-    public function setChatCommandDataProvide($chatCommandDataPovider)
-    {
-        $this->chatCommandDataPovider = $chatCommandDataPovider;
-    }
-
-    /**
-     * @param WindowHelpDetailsFactory $windowHelpDetailsFactory
-     */
-    public function setWindowDescriptionFactory(WindowHelpDetailsFactory $windowHelpDetailsFactory)
-    {
+        $this->chatCommandDataPovider = $chatCommandDataProvider;
         $this->windowHelpDetailsFactory = $windowHelpDetailsFactory;
     }
+
 
     /**
      * @inheritdoc
