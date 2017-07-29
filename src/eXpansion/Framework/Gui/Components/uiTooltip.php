@@ -16,6 +16,9 @@ class uiTooltip extends abstractUiElement implements ScriptFeatureable
 
     protected $element;
 
+    /**
+     * uiTooltip constructor.
+     */
     public function __construct()
     {
 
@@ -31,14 +34,12 @@ class uiTooltip extends abstractUiElement implements ScriptFeatureable
             $control->addDataAttribute("tooltip", $text);
             $control->addClass("tooltip");
             $control->setScriptEvents(true);
-
             return;
         }
 
         if ($control instanceof abstractUiElement) {
             $control->addDataAttribute("tooltip", $text);
             $control->addClass("tooltip");
-
             return;
         }
 
@@ -74,8 +75,13 @@ class uiTooltip extends abstractUiElement implements ScriptFeatureable
        ***FML_Loop***
        ***
        if (exp_tooltip_move) {         
-            // exp_tooltip.RelativePosition_V3 =  <MouseX, MouseY> - exp_tooltip_rel + <0., 10.>;				
+            // exp_tooltip.RelativePosition_V3 =  <MouseX, MouseY> - exp_tooltip_rel + <0., 10.>;
+                                 
+            if (exp_tooltip_rel.Y > -10.) {
+                exp_tooltip.RelativePosition_V3 = exp_tooltip_rel + <4., 0.>;
+            } else { 
                exp_tooltip.RelativePosition_V3 = exp_tooltip_rel + <4., 10.>;
+            }
             if (exp_tooltip_delay + 1000 < Now) {
                 if (exp_tooltip_toggle) {
                     AnimMgr.Add(exp_tooltip.Controls[0], "<elem scale=\"1\" />",  250, CAnimManager::EAnimManagerEasing::BackOut);
@@ -90,6 +96,7 @@ class uiTooltip extends abstractUiElement implements ScriptFeatureable
        ***
        if (Event.Control != Null) {
 			if (Event.Control.HasClass("tooltip") )  {
+			log(Now ^ "ok");
 			declare tooltipLabel = (exp_tooltip.Controls[0] as CMlLabel);
 			declare text = Event.Control.DataAttributeGet("tooltip");
 			declare sizeX = tooltipLabel.ComputeWidth(text);			 			    						       
@@ -98,7 +105,7 @@ class uiTooltip extends abstractUiElement implements ScriptFeatureable
             (exp_tooltip.Controls[1] as CMlQuad).Size.X = sizeX;                            
             exp_tooltip_move = True;
             exp_tooltip_delay = Now;
-            // exp_tooltip_toggle = True;	                    		            
+            // exp_tooltip_toggle = True;
             // exp_tooltip_rel = Event.Control.RelativePosition_V3 + Exp_Window.RelativePosition_V3;
             exp_tooltip_rel = Event.Control.AbsolutePosition_V3 - Exp_Window.RelativePosition_V3;                                                  
             }

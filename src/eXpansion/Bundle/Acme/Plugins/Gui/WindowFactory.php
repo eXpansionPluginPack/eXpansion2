@@ -4,6 +4,7 @@ namespace eXpansion\Bundle\Acme\Plugins\Gui;
 
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Plugins\Gui\WindowFactory as BaseWindowFactory;
+use eXpansion\Framework\Gui\Components\uiAnimation;
 use eXpansion\Framework\Gui\Components\uiButton;
 use eXpansion\Framework\Gui\Components\uiCheckbox;
 use eXpansion\Framework\Gui\Components\uiDropdown;
@@ -13,6 +14,8 @@ use eXpansion\Framework\Gui\Components\uiTextbox;
 use eXpansion\Framework\Gui\Components\uiTooltip;
 use eXpansion\Framework\Gui\Layouts\layoutLine;
 use eXpansion\Framework\Gui\Layouts\layoutRow;
+use eXpansion\Framework\Gui\Layouts\layoutScrollable;
+use FML\Controls\Label;
 use FML\Controls\Quad;
 
 class WindowFactory extends BaseWindowFactory
@@ -25,10 +28,22 @@ class WindowFactory extends BaseWindowFactory
         $tooltip = new uiTooltip();
         $manialink->addChild($tooltip);
 
-        $label = new uiLabel("Test", uiLabel::TYPE_NORMAL);
-        $tooltip->addTooltip($label, "tooltip test");
+        $animation = new uiAnimation();
+        $manialink->addChild($animation);
 
+        $label = new uiLabel("test");
+        $label->setOpacity(0);
+        $tooltip->addTooltip($label, "tooltip test");
+        $animation->addAnimation($label, "opacity='1'", 1000, 0, "Linear");
         $manialink->addChild($label);
+
+        $label = new uiLabel("test2");
+        $label->setPosition(0, -5);
+        $label->setOpacity(0);
+        $tooltip->addTooltip($label, "tooltip test");
+        $animation->addAnimation($label, "opacity='1'", 1000, 500, "Linear");
+        $manialink->addChild($label);
+
 
         $checkbox = new uiCheckbox("test checkbox 1", "checkbox1");
         $tooltip->addTooltip($checkbox, "testing 123");
@@ -50,17 +65,32 @@ class WindowFactory extends BaseWindowFactory
 
         for ($x = 0; $x < 10; $x++) {
             $btn = new uiCheckbox('box'.$x, 'cb_'.$x);
+            $tooltip->addTooltip($btn, "long description that should go over the bounding box".$x);
             $line3->addChild($btn);
         }
+        $btn = new uiCheckbox('box11', 'cb_11');
+        $btn->setPosition(20, 0);
+        $line3->addChild($btn);
 
-        $manialink->addChild($line3);
+        $btn = new uiCheckbox('box11', 'cb_11');
+        $btn->setPosition(50, 0);
+        $line3->addChild($btn);
+
+        $scrollable = new layoutScrollable($line3, 55, 30);
+        $scrollable->setAxis(true, true);
+        $manialink->addChild($scrollable);
+
 
         $row = new layoutRow(0, -10, [$line1, $line2], 0);
-        $manialink->addChild($row);
+
+        $scrollable = new layoutScrollable($row, 40, 30);
+        $scrollable->setAxis(true, true);
+        $manialink->addChild($scrollable);
 
 
         $dropdown = new uiDropdown("dropdown", ["option1" => 1, "option2" => 2]);
-        $dropdown->setPosition(90, 0);
+        $dropdown->setPosition(97, 0);
+        $tooltip->addTooltip($dropdown, "test");
         $manialink->addChild($dropdown);
 
         $dropdown = new uiDropdown("style", ["tech" => "tech", "fullspeed" => "fullspeed", "speedtech" => "speedtech"]);
@@ -68,36 +98,23 @@ class WindowFactory extends BaseWindowFactory
         $manialink->addChild($dropdown);
 
 
-        $quad = new Quad();
-        $quad->setPosition(20, -40)
-            ->setAlign("center", "center")
-            ->setSize(2, 2)
-            ->setBackgroundColor("0f0");
-        $manialink->addChild($quad);
-
-        $quad = new Quad();
-        $quad->setPosition(40, -20)
-            ->setAlign("center", "center")
-            ->setSize(2, 2)
-            ->setBackgroundColor("0ff");
-        $manialink->addChild($quad);
-
-        $input = new uiInput("input1", "test text", 30);
-        $input->setPosition(90,-30);
+        $input = new uiInput("input1", "test text", 30, "Password");
+        $input->setPosition(130, -20);
+        $tooltip->addTooltip($input, "test");
         $manialink->addChild($input);
 
         $input = new uiTextbox("input2", "test\ntest2\ntest3\nest4\ntest5", 5, 30);
-        $input->setPosition(130,-30);
-
+        $input->setPosition(130, -30);
+        $tooltip->addTooltip($input, "test2");
         $manialink->addChild($input);
 
-
+        file_put_contents("c:/temp/window.xml", $manialink->getXml());
     }
 
 
     public function ok($login, $params, $args)
     {
-        // do nothing at the moment
+
     }
 
 }

@@ -93,7 +93,7 @@ abstract class AbstractApplication implements RunInterface
                 $nextCycleStart += $cycleTime;
             } while ($nextCycleStart < $endCycleTime);
 
-            time_sleep_until($nextCycleStart);
+           @time_sleep_until($nextCycleStart);
 
         } while ($this->isRunning);
     }

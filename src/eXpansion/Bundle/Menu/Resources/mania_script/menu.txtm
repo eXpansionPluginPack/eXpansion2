@@ -1,14 +1,10 @@
-// global variables
-/* declare Boolean isClosing;
-declare Boolean isMenuOpen;
-declare Integer animDuration;
-*/
 
 // functions
 Void show()  {
      declare isMenuOpen for Page = True;
      declare isClosing for Page = False;
      declare animDuration for Page = 300;
+     declare menu_lastAction for Page = -1;
      isMenuOpen = True;
      isClosing = False;
 	 Audio.PlaySoundEvent( CAudioManager::ELibSound::ShowDialog  , 0, 0.);
@@ -27,6 +23,9 @@ Void show()  {
         Button.RelativeScale = 1.;
         AnimMgr.Add(Button, "<quad opacity=\"1.\" />", animDuration, CAnimManager::EAnimManagerEasing::QuadIn);
     }
+    declare CMlFrame Exp_Window <=> (Page.GetFirstChild("Window") as CMlFrame);
+    Exp_Window.Show();
+
     declare CMlQuad mainBg <=> (Page.GetFirstChild("mainBg") as CMlQuad);
     mainBg.Show();
 
@@ -36,6 +35,7 @@ Void hide(CMlControl ClickedElem) {
     declare isMenuOpen for Page = False;
     declare isClosing for Page = True;
     declare animDuration for Page = 300;
+    declare menu_lastAction for Page = -1;
     isMenuOpen = False;
     isClosing = True;
     Audio.PlaySoundEvent( CAudioManager::ELibSound::Valid, 0, 0.);
@@ -64,15 +64,19 @@ Void hide(CMlControl ClickedElem) {
     foreach (Elem in Page.GetClassChildren_Result) {
         AnimMgr.Add(Elem, "<elem opacity=\"0\" />",  animDuration, CAnimManager::EAnimManagerEasing::Linear);
     }
+
     declare CMlQuad mainBg <=> (Page.GetFirstChild("mainBg") as CMlQuad);
     mainBg.Hide();
+    menu_lastAction = Now;
 }
 
 Void InitialHide() {
     declare isMenuOpen for Page = True;
     declare isClosing for Page = False;
     declare animDuration for Page = 300;
+    declare menu_lastAction for Page = -1;
 
+    menu_lastAction = Now;
     isClosing = True;
     isMenuOpen = False;
     declare CMlFrame frame <=> (Page.GetFirstChild("buttons") as CMlFrame);
@@ -105,6 +109,8 @@ Void InitialHide() {
             El.Opacity = 0.;
         }
     }
+    declare CMlFrame Exp_Window <=> (Page.GetFirstChild("Window") as CMlFrame);
+    Exp_Window.Hide();
 }
 
 Void onButtonOver(CMlControl Element) {
@@ -133,6 +139,8 @@ Void onButtonOut(CMlControl Element) {
     declare isMenuOpen for Page = False;
     declare isClosing for Page = True;
     declare animDuration for Page = 300;
+    declare menu_lastAction for Page = -1;
+    declare CMlQuad mainBg <=> (Page.GetFirstChild("mainBg") as CMlQuad);
 	isClosing = True;
 	InitialHide();
 	declare CMlFrame Exp_Window <=> (Page.GetFirstChild("Window") as CMlFrame);
@@ -153,6 +161,14 @@ Void onButtonOut(CMlControl Element) {
 
 ***FML_Loop***
 ***
+
+    if (isClosing && menu_lastAction != -1) {
+        if (Now > menu_lastAction + animDuration) {
+            Exp_Window.Hide();
+            menu_lastAction = -1;
+        }
+    }
+
     if (isClosing == False) {
         // handle pending events
         foreach (Event in PendingEvents) {
