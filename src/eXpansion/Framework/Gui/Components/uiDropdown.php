@@ -13,15 +13,16 @@ use FML\Types\ScriptFeatureable;
 
 class uiDropdown extends abstractUiElement implements ScriptFeatureable
 {
+    /** @var int */
     protected $selectedIndex;
+
+    /** @var bool  */
     protected $isOpened;
-    /**
-     * @var
-     */
+
+    /** @var string */
     protected $name;
-    /**
-     * @var
-     */
+
+    /** @var string[] */
     protected $options;
 
     /**

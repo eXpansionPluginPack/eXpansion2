@@ -23,6 +23,9 @@ class WidgetFactory extends ManialinkFactory {
     /** @var Translations */
     protected $translationsHelper;
 
+    /** @var \eXpansion\Framework\Gui\Ui\Factory  */
+    protected $uiFactory;
+
     /**
      * WidgetFactory constructor.
      *
@@ -54,6 +57,7 @@ class WidgetFactory extends ManialinkFactory {
         );
 
         $this->translationsHelper = $context->getTranslationsHelper();
+        $this->uiFactory = $context->getUiFactory();
     }
 
     /**

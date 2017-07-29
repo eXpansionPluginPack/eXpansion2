@@ -2,10 +2,12 @@
 
 
 namespace eXpansion\Framework\Core\Model\Gui;
+
 use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Core\Plugins\GuiHandler;
 use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
+use \eXpansion\Framework\Gui\Ui\Factory as UiFactory;
 
 
 /**
@@ -36,9 +38,10 @@ class WindowFactoryContext extends WidgetFactoryContext
         Factory $groupFactory,
         ActionFactory $actionFactory,
         Translations $translations,
+        UiFactory $uiFactory,
         ManiaScriptFactory $maniaScriptFactory
     ) {
-        parent::__construct($className, $guiHandler, $groupFactory, $actionFactory, $translations);
+        parent::__construct($className, $guiHandler, $groupFactory, $actionFactory, $translations, $uiFactory);
 
         $this->windowManiaScriptFactory = $maniaScriptFactory;
     }

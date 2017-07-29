@@ -41,7 +41,6 @@ class uiTooltip extends abstractUiElement implements ScriptFeatureable
 
             return;
         }
-
     }
 
     /**

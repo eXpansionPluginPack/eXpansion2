@@ -25,6 +25,7 @@ services:
             - "@expansion.framework.core.user_groups.factory"
             - "@expansion.framework.core.plugins.gui.action_factory"
             - "@expansion.helper.translations"
+            - "@expansion.gui.component.factory"
 
 
     expansion.gui.context.window:
@@ -35,6 +36,7 @@ services:
             - "@expansion.framework.core.user_groups.factory"
             - "@expansion.framework.core.plugins.gui.action_factory"
             - "@expansion.helper.translations"
+            - "@expansion.gui.component.factory"
             - "@expansion.framework.core.mania_script.window_factory"
 
     #

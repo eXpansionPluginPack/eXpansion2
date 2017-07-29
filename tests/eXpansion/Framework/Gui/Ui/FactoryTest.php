@@ -11,8 +11,11 @@ namespace Tests\eXpansion\Framework\Gui\Ui;
 use eXpansion\Framework\Gui\Components\uiButton;
 use eXpansion\Framework\Gui\Components\uiLabel;
 use eXpansion\Framework\Gui\Ui\Factory;
+use FML\Script\Features\ScriptFeature;
+use FML\Script\Script;
 use FML\Types\Renderable;
 use Tests\eXpansion\Framework\Core\TestCore;
+use Tests\eXpansion\Framework\Core\TestHelpers\ContainerDataTrait;
 
 class FactoryTest extends TestCore
 {
@@ -63,5 +66,10 @@ class FactoryTest extends TestCore
 
         $this->assertInstanceOf(Renderable::class, $element);
         $this->assertInstanceOf(\DOMElement::class, $element->render($doc));
+
+        if ($element instanceof ScriptFeature)
+        {
+            $element->prepare(new Script());
+        }
     }
 }
