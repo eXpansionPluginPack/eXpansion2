@@ -15,19 +15,19 @@ class uiCheckbox extends abstractUiElement implements ScriptFeatureable
     /**
      * @var string
      */
-    private $text;
+    protected $text;
     /**
      * @var string
      */
-    private $name;
+    protected $name;
     /**
      * @var bool
      */
-    private $checked = false;
+    protected $checked = false;
     /**
      * @var bool
      */
-    private $disabled = false;
+    protected $disabled = false;
 
     /**
      * uiCheckbox constructor.
@@ -178,7 +178,7 @@ class uiCheckbox extends abstractUiElement implements ScriptFeatureable
         $script->addCustomScriptLabel(ScriptLabel::OnInit, $this->getScriptInit());
     }
 
-    private function getScriptInit()
+    protected function getScriptInit()
     {
         return /** language=textmate  prefix=#RequireContext\n */
             <<<'EOD'
@@ -194,7 +194,7 @@ EOD;
     /**
      * @return string
      */
-    private function getScriptMouseClick()
+    protected function getScriptMouseClick()
     {
         return /** language=textmate  prefix=#RequireContext\n */
             <<<'EOD'
@@ -210,7 +210,7 @@ EOD;
     /**
      * @return string
      */
-    private function getScriptRenderCheckbox()
+    protected function getScriptRenderCheckbox()
     {
         return /** @lang textmate */
             <<<'EOD'

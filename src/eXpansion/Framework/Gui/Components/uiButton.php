@@ -13,15 +13,15 @@ use FML\Types\ScriptFeatureable;
 
 class uiButton extends abstractUiElement implements ScriptFeatureable
 {
-    private $type;
+    protected $type;
 
-    private $textColor = "eee";
-    private $backColor = self::COLOR_DEFAULT;
-    private $focusColor = "bbb";
-    private $borderColor = "fff";
+    protected $textColor = "eee";
+    protected $backColor = self::COLOR_DEFAULT;
+    protected $focusColor = "bbb";
+    protected $borderColor = "fff";
 
-    private $action = null;
-    private $text = "button";
+    protected $action = null;
+    protected $text = "button";
 
     const TYPE_DECORATED = "decorated";
     const TYPE_DEFAULT = "default";
@@ -110,7 +110,7 @@ class uiButton extends abstractUiElement implements ScriptFeatureable
         $script->addCustomScriptLabel(ScriptLabel::MouseClick, $this->getScriptMouseClick());
     }
 
-    private function getScriptMouseClick()
+    protected function getScriptMouseClick()
     {
         return /** language=textmate  prefix=#RequireContext\n */
             <<<'EOD'

@@ -18,11 +18,11 @@ class uiDropdown extends abstractUiElement implements ScriptFeatureable
     /**
      * @var
      */
-    private $name;
+    protected $name;
     /**
      * @var
      */
-    private $options;
+    protected $options;
 
     /**
      * uiDropdown constructor.
@@ -53,7 +53,7 @@ class uiDropdown extends abstractUiElement implements ScriptFeatureable
         $script->addCustomScriptLabel(ScriptLabel::OnInit, $this->getScriptInit());
     }
 
-    private function getScriptInit()
+    protected function getScriptInit()
     {
         return /** language=textmate  prefix=#RequireContext\n */
             <<<'EOD'
@@ -70,7 +70,7 @@ EOD;
     /**
      * @return string
      */
-    private function getScriptMouseClick()
+    protected function getScriptMouseClick()
     {
         return /** language=textmate  prefix=#RequireContext\n */
             <<<'EOD'
@@ -91,7 +91,7 @@ EOD;
     /**
      * @return string
      */
-    private function getScriptDropdown()
+    protected function getScriptDropdown()
     {
         return /** @lang textmate */
             <<<'EOD'
