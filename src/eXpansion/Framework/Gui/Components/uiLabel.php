@@ -55,13 +55,35 @@ class uiLabel extends Label
     public function render(\DOMDocument $domDocument)
     {
         if ($this->getTranslate() === true) {
-            if (!$this->getTextId()) {
-                $text = $this->getText();
-                $this->setTextId($text);
+            if ($this->getText()) {
                 $this->setText(null);
             }
         }
 
         return parent::render($domDocument);
     }
+
+    public function setTranslate($translate)
+    {
+        if ($translate) {
+            $text = $this->getText();
+            if ($text) {
+                $this->setText(null);
+                $this->setTextId($text);
+            }
+        }
+
+        parent::setTranslate($translate);
+
+        return $this;
+    }
+
+    public function setTextId($textId)
+    {
+        $this->setTranslate(true);
+        parent::setTextId($textId);
+
+        return $this;
+    }
+
 }

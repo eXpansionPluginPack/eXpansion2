@@ -35,8 +35,7 @@ class Translations
         array $supportedLocales,
         $colorCodes,
         $glyphIcons
-    )
-    {
+    ) {
         $this->translator = $translator;
         $this->supportedLocales = $supportedLocales;
 
