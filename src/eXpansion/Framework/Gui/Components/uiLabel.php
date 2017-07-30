@@ -54,12 +54,13 @@ class uiLabel extends Label
      */
     public function render(\DOMDocument $domDocument)
     {
-        /*  $text = "";
-          if ($this->getTranslate() === true) {
-              $text = $this->getText();
-              $this->setTextId($text);
-              $this->setText(null);
-          } */
+        if ($this->getTranslate() === true) {
+            if (!$this->getTextId()) {
+                $text = $this->getText();
+                $this->setTextId($text);
+                $this->setText(null);
+            }
+        }
 
         return parent::render($domDocument);
     }

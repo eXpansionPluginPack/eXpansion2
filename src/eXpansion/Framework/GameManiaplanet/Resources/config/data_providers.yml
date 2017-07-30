@@ -5,6 +5,11 @@ parameters:
     expansion.framework.game_maniaplanet.data_providers.match.class: eXpansion\Framework\GameManiaplanet\DataProviders\MatchDataProvider
     expansion.framework.game_maniaplanet.data_providers.match.interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMatch
 
+    expansion.framework.game_maniaplanet.data_providers.podium.class: eXpansion\Framework\GameManiaplanet\DataProviders\PodiumDataProvider
+    expansion.framework.game_maniaplanet.data_providers.podium.interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptPodium
+
+
+
 services:
     expansion.framework.game_maniaplanet.data_providers.map:
         class: "%expansion.framework.game_maniaplanet.data_providers.map.class%"
@@ -35,3 +40,11 @@ services:
             - {name: expansion.dataprovider.listener, event_name: Maniaplanet.StartRound_End, method: onStartRoundEnd}
             - {name: expansion.dataprovider.listener, event_name: Maniaplanet.EndRound_Start, method: onEndRoundStart}
             - {name: expansion.dataprovider.listener, event_name: Maniaplanet.EndRound_End, method: onEndRoundEnd}
+
+    expansion.framework.game_maniaplanet.data_providers.podium:
+        class: "%expansion.framework.game_maniaplanet.data_providers.podium.class%"
+        tags:
+            - {name: expansion.dataprovider, provider: "mp.script.podium", interface: "%expansion.framework.game_maniaplanet.data_providers.podium.interface%"}
+            - {name: expansion.dataprovider.compatibility, title: ALL, gamemode: script}
+            - {name: expansion.dataprovider.listener, event_name: Maniaplanet.Podium_Start, method: onPodiumStart}
+            - {name: expansion.dataprovider.listener, event_name: Maniaplanet.Podium_End, method: onPodiumEnd}

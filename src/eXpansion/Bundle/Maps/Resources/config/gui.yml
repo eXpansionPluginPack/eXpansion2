@@ -1,6 +1,6 @@
 services:
-    eXpansion.maps.gui.window.mapslist_factory:
-        class: 'eXpansion\Bundle\Maps\Plugins\Gui\MapsWindowFactory'
+    expansion.bundle.maps.gui.window.mapslist_factory:
+        class: eXpansion\Bundle\Maps\Plugins\Gui\MapsWindowFactory
         arguments:
             - 'expansion_maps.gui.window.title'
             - 160
@@ -11,5 +11,30 @@ services:
             - '@expansion.framework.core.model.gui.grid.builder_factory'
             - '@expansion.framework.core.model.gui.grid.data_collection_factory.array'
             - '@expansion.helper.time'
+            - '@expansion.bundle.maps.plugins.jukebox'
+        call:
+            - [setGridBuilderFactory, ['@expansion.framework.core.model.gui.grid.builder_factory']]
+            - [setDataCollectionFactory, ['@expansion.framework.core.model.gui.grid.data_collection_factory.array']]
+            - [setTimerFormatter, ['@expansion.helper.time']]
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.user_group}
+
+    expansion.bundle.maps.gui.window.jukebox_factory:
+        class: eXpansion\Bundle\Maps\Plugins\Gui\JukeboxWindowFactory
+        arguments:
+            - 'expansion_maps.gui.window.jbtitle'
+            - 160
+            - 90
+            - null
+            - null
+            - '@expansion.gui.context.window'
+            - '@expansion.framework.core.model.gui.grid.builder_factory'
+            - '@expansion.framework.core.model.gui.grid.data_collection_factory.array'
+            - '@expansion.helper.time'
+            - '@eXpansion.bundle.maps.services.jukeboxservice'
+        call:
+            - [setGridBuilderFactory, ['@expansion.framework.core.model.gui.grid.builder_factory']]
+            - [setDataCollectionFactory, ['@expansion.framework.core.model.gui.grid.data_collection_factory.array']]
+            - [setTimerFormatter, ['@expansion.helper.time']]
         tags:
             - {name: expansion.plugin, data_provider: expansion.user_group}
