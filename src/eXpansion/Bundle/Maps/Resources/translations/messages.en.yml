@@ -26,6 +26,7 @@ expansion_maps:
           clear: "clear"
       window:
           title: 'Server Maps'
+          jbtitle: 'Jukebox'
           column:
               index: '#'
               name: 'Name'
@@ -33,3 +34,4 @@ expansion_maps:
               goldtime: 'Time'
               nickname: 'Nickname'
               drop: 'Drop'
+              wish: 'Add'

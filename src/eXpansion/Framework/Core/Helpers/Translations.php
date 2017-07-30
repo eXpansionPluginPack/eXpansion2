@@ -80,10 +80,10 @@ class Translations
 
         foreach ($this->supportedLocales as $locale) {
             $message = $this->getTranslation($id, $parameters, $locale);
-            $messages[] = array(
+            $messages[] = [
                 "Lang" => lcfirst($locale),
                 "Text" => $message,
-            );
+            ];
         }
 
         return $messages;

@@ -31,9 +31,12 @@ abstract class GridWindowFactory extends WindowFactory
     protected $timeFormatter;
 
     /**
-     * @var
+     * @var GridBuilder
      */
     protected $gridBuilder;
+
+    /** @var  Frame */
+    protected $gridFrame;
 
     /**
      * @inheritdoc
@@ -41,6 +44,10 @@ abstract class GridWindowFactory extends WindowFactory
     protected function createContent(ManialinkInterface $manialink)
     {
         parent::createContent($manialink);
+        $gridFrame = new Frame();
+        $manialink->setData("gridFrame",$gridFrame);
+
+        $manialink->getContentFrame()->addChild($manialink->getData('gridFrame'));
         $this->createGrid($manialink);
     }
 
@@ -59,14 +66,19 @@ abstract class GridWindowFactory extends WindowFactory
     {
         /** @var Frame $contentFrame */
         $contentFrame = $manialink->getContentFrame();
-        $contentFrame->removeAllChildren();
+
+        $manialink->getData('gridFrame')->removeAllChildren();
 
         $collection = $this->dataCollectionFactory->create($this->getData());
         $collection->setPageSize(20);
 
         /** @var GridBuilder $gridBuilder */
         $gridBuilder = $manialink->getData('grid');
-        $contentFrame->addChild($gridBuilder->build($contentFrame->getWidth(), $contentFrame->getHeight()));
+        $gridBuilder->setDataCollection($collection);
+
+        $manialink->getData("gridFrame")->addChild($gridBuilder->build($contentFrame->getWidth(), $contentFrame->getHeight()));
+
+        parent::updateContent($manialink);
     }
 
     /**
@@ -80,9 +92,11 @@ abstract class GridWindowFactory extends WindowFactory
     /**
      * @return array
      */
-    public function getData() {
+    public function getData()
+    {
         return $this->genericData;
     }
+
     /**
      * @param GridBuilderFactory $gridBuilderFactory
      */

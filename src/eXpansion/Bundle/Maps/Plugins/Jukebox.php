@@ -77,7 +77,7 @@ class Jukebox implements ListenerInterfaceMpScriptPodium, ListenerInterfaceMpLeg
     public function jukeboxCommand($login, $action)
     {
         switch ($action) {
-            case "view":
+            case "list":
             case "show":
                 $this->view($login);
                 break;

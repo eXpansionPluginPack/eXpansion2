@@ -2,6 +2,8 @@
 
 namespace eXpansion\Framework\Gui\Components;
 
+use DOMDocument;
+use DOMElement;
 use FML\Controls\Label;
 
 class uiLabel extends Label
@@ -52,6 +54,7 @@ class uiLabel extends Label
      * @param DOMDocument $domDocument
      * @return DOMElement
      */
+
     public function render(\DOMDocument $domDocument)
     {
         if ($this->getTranslate() === true) {
@@ -68,8 +71,8 @@ class uiLabel extends Label
         if ($translate) {
             $text = $this->getText();
             if ($text) {
-                $this->setText(null);
-                $this->setTextId($text);
+                parent::setText(null);
+                parent::setTextId($text);
             }
         }
 
@@ -80,8 +83,8 @@ class uiLabel extends Label
 
     public function setTextId($textId)
     {
+        $this->setText($textId);
         $this->setTranslate(true);
-        parent::setTextId($textId);
 
         return $this;
     }

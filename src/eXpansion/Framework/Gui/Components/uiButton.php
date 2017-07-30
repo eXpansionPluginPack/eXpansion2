@@ -82,8 +82,9 @@ class uiButton extends abstractUiElement implements ScriptFeatureable
             ->setTextColor($this->textColor)
             ->addClass('uiButtonElement')
             ->setAlign("center", "center2");
+
         if ($this->translate) {
-            $label->setTextId($this->getText())->setTranslate(true);
+            $label->setTranslate(true);
         }
         $label->setDataAttributes($this->_dataAttributes);
         $label->addClasses($this->_classes);
