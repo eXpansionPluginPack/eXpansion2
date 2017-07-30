@@ -7,6 +7,7 @@ parameters:
   expansion.gui.components.line.class: 'eXpansion\Framework\Gui\Components\uiLine'
   expansion.gui.components.textbox.class: 'eXpansion\Framework\Gui\Components\uiTextbox'
   expansion.gui.components.tooltip.class: 'eXpansion\Framework\Gui\Components\uiTooltip'
+  expansion.gui.components.animation.class: 'eXpansion\Framework\Gui\Components\uiAnimation'
   expansion.gui.layout.line.class: 'eXpansion\Framework\Gui\Layouts\layoutLine'
   expansion.gui.layout.row.class: 'eXpansion\Framework\Gui\Layouts\layoutRow'
 
@@ -19,6 +20,7 @@ parameters:
     Line:     '%expansion.gui.components.line.class%'
     Textbox:  '%expansion.gui.components.textbox.class%'
     Tooltip:  '%expansion.gui.components.tooltip.class%'
+    Animation:  '%expansion.gui.components.animation.class%'
     LayoutLine:  '%expansion.gui.layout.line.class%'
     LayoutRow:  '%expansion.gui.layout.row.class%'
 

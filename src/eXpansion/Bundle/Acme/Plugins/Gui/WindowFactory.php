@@ -25,19 +25,19 @@ class WindowFactory extends BaseWindowFactory
     {
         parent::createContent($manialink);
 
-        $tooltip = new uiTooltip();
+        $tooltip = $this->uiFactory->createTooltip();
         $manialink->addChild($tooltip);
 
-        $animation = new uiAnimation();
+        $animation = $this->uiFactory->createAnimation();
         $manialink->addChild($animation);
 
-        $label = new uiLabel("test");
+        $label = $this->uiFactory->createLabel("test");
         $label->setOpacity(0);
         $tooltip->addTooltip($label, "tooltip test");
         $animation->addAnimation($label, "opacity='1'", 1000, 0, "Linear");
         $manialink->addChild($label);
 
-        $label = new uiLabel("test2");
+        $label = $this->uiFactory->createLabel("test2");
         $label->setPosition(0, -5);
         $label->setOpacity(0);
         $tooltip->addTooltip($label, "tooltip test");
@@ -45,18 +45,18 @@ class WindowFactory extends BaseWindowFactory
         $manialink->addChild($label);
 
 
-        $checkbox = new uiCheckbox("test checkbox 1", "checkbox1");
+        $checkbox = $this->uiFactory->createCheckbox("test checkbox 1", "checkbox1");
         $tooltip->addTooltip($checkbox, "testing 123");
 
-        $checkbox2 = new uiCheckbox("test checkbox 2", "checkbox2");
+        $checkbox2 = $this->uiFactory->createCheckbox("test checkbox 2", "checkbox2");
         $tooltip->addTooltip($checkbox2, "testing");
         $line1 = new layoutRow(0, 0, [$checkbox, $checkbox2], 0);
 
-        $ok = new uiButton("Apply", uiButton::TYPE_DECORATED);
+        $ok = $this->uiFactory->createButton("Apply", uiButton::TYPE_DECORATED);
         $tooltip->addTooltip($ok, "ridicolously long description text is here!");
         $ok->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'ok'], ["ok" => "ok"]));
 
-        $cancel = new uiButton("Cancel");
+        $cancel = $this->uiFactory->createButton("Cancel");
         $cancel->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'ok'], ["ok" => "cancel"]));
 
         $line2 = new layoutLine(0, 0, [$ok, $cancel], 1);
@@ -64,15 +64,15 @@ class WindowFactory extends BaseWindowFactory
         $line3 = new layoutRow(55, 0, [], 1);
 
         for ($x = 0; $x < 10; $x++) {
-            $btn = new uiCheckbox('box'.$x, 'cb_'.$x);
+            $btn = $this->uiFactory->createCheckbox('box'.$x, 'cb_'.$x);
             $tooltip->addTooltip($btn, "long description that should go over the bounding box".$x);
             $line3->addChild($btn);
         }
-        $btn = new uiCheckbox('box11', 'cb_11');
+        $btn = $this->uiFactory->createCheckbox('box11', 'cb_11');
         $btn->setPosition(20, 0);
         $line3->addChild($btn);
 
-        $btn = new uiCheckbox('box11', 'cb_11');
+        $btn = $this->uiFactory->createCheckbox('box11', 'cb_11');
         $btn->setPosition(50, 0);
         $line3->addChild($btn);
 
@@ -88,27 +88,27 @@ class WindowFactory extends BaseWindowFactory
         $manialink->addChild($scrollable);
 
 
-        $dropdown = new uiDropdown("dropdown", ["option1" => 1, "option2" => 2]);
+        $dropdown = $this->uiFactory->createDropdown("dropdown", ["option1" => 1, "option2" => 2]);
         $dropdown->setPosition(97, 0);
         $tooltip->addTooltip($dropdown, "test");
         $manialink->addChild($dropdown);
 
-        $dropdown = new uiDropdown("style", ["tech" => "tech", "fullspeed" => "fullspeed", "speedtech" => "speedtech"]);
+        $dropdown = $this->uiFactory->createDropdown("style", ["tech" => "tech", "fullspeed" => "fullspeed", "speedtech" => "speedtech"]);
         $dropdown->setPosition(130, 0);
         $manialink->addChild($dropdown);
 
 
-        $input = new uiInput("input1", "test text", 30, "Password");
+        $input = $this->uiFactory->createInput("input1", "test text", 30, "Password");
         $input->setPosition(130, -20);
         $tooltip->addTooltip($input, "test");
         $manialink->addChild($input);
 
-        $input = new uiTextbox("input2", "test\ntest2\ntest3\nest4\ntest5", 5, 30);
+        $input = $this->uiFactory->createTextbox("input2", "test\ntest2\ntest3\nest4\ntest5", 5, 30);
         $input->setPosition(130, -30);
         $tooltip->addTooltip($input, "test2");
         $manialink->addChild($input);
 
-        file_put_contents("c:/temp/window.xml", $manialink->getXml());
+        file_put_contents("var/window.xml", $manialink->getXml());
     }
 
 
@@ -116,5 +116,4 @@ class WindowFactory extends BaseWindowFactory
     {
 
     }
-
 }

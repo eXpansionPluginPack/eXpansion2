@@ -3,6 +3,7 @@
 namespace eXpansion\Framework\Gui\Ui;
 
 use eXpansion\Framework\Core\Model\Gui\Factory\BackGroundFactory;
+use eXpansion\Framework\Gui\Components\uiAnimation;
 use eXpansion\Framework\Gui\Components\UiButton;
 use eXpansion\Framework\Gui\Components\uiCheckbox;
 use eXpansion\Framework\Gui\Components\uiDropdown;
@@ -32,6 +33,7 @@ use FML\Controls\Frame;
  * @method uiLine createLine($x, $y)
  * @method uiTextbox createTextbox($name, $default = "", $lines = 1, $width = 30)
  * @method uiTooltip createTooltip()
+ * @method uiAnimation createAnimation()
  *
  * @method layoutLine createLayoutLine($startX, $startY, $elements = [], $margin = 0.);
  * @method layoutRow createLayoutRow($startX, $startY, $elements = [], $margin = 0.);
