@@ -139,8 +139,6 @@ class Widget extends Manialink implements Container
         foreach ($control->getChildren() as $child) {
             if (($child instanceof Label
                     || $child instanceof uiLabel
-                    || $child instanceof uiButton
-                    || $child instanceof uiCheckbox
                 ) && $child->getTranslate()) {
                 $id = $child->getTextId();
 
