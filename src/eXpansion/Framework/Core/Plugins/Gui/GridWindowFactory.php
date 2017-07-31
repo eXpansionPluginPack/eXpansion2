@@ -38,6 +38,18 @@ abstract class GridWindowFactory extends WindowFactory
     /** @var  Frame */
     protected $gridFrame;
 
+    /** @var  float|null */
+    protected $gridWidth;
+
+    /** @var  float|null */
+    protected $gridHeight;
+
+    /** @var  float|null */
+    protected $gridPosX = 0.;
+
+    /** @var  float|null */
+    protected $gridPosY = 0;
+
     /**
      * @inheritdoc
      */
@@ -45,7 +57,7 @@ abstract class GridWindowFactory extends WindowFactory
     {
         parent::createContent($manialink);
         $gridFrame = new Frame();
-        $manialink->setData("gridFrame",$gridFrame);
+        $manialink->setData("gridFrame", $gridFrame);
 
         $manialink->getContentFrame()->addChild($manialink->getData('gridFrame'));
         $this->createGrid($manialink);
@@ -76,7 +88,18 @@ abstract class GridWindowFactory extends WindowFactory
         $gridBuilder = $manialink->getData('grid');
         $gridBuilder->setDataCollection($collection);
 
-        $manialink->getData("gridFrame")->addChild($gridBuilder->build($contentFrame->getWidth(), $contentFrame->getHeight()));
+        if (!$this->gridHeight) {
+            $this->gridHeight = $contentFrame->getHeight();
+        }
+
+        if (!$this->gridWidth) {
+            $this->gridWidth = $contentFrame->getWidth();
+        }
+
+        $manialink->getData('gridFrame')->setPosition($this->gridPosX, $this->gridPosY);
+
+        $manialink->getData("gridFrame")->addChild($gridBuilder->build($this->gridWidth,
+            $this->gridHeight));
 
         parent::updateContent($manialink);
     }
@@ -121,5 +144,17 @@ abstract class GridWindowFactory extends WindowFactory
         $this->timeFormatter = $time;
     }
 
+
+    public function setGridSize($x, $y)
+    {
+        $this->gridWidth = $x;
+        $this->gridHeight = $y;
+    }
+
+    public function setGridPosition($x, $y)
+    {
+        $this->gridPosX = $x;
+        $this->gridPosY = $y;
+    }
 
 }

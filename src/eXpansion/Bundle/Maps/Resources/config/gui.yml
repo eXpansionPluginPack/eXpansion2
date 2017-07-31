@@ -32,6 +32,7 @@ services:
             - '@expansion.framework.core.model.gui.grid.data_collection_factory.array'
             - '@expansion.helper.time'
             - '@eXpansion.bundle.maps.services.jukeboxservice'
+            - '@expansion.helper.admingroups'
         call:
             - [setGridBuilderFactory, ['@expansion.framework.core.model.gui.grid.builder_factory']]
             - [setDataCollectionFactory, ['@expansion.framework.core.model.gui.grid.data_collection_factory.array']]

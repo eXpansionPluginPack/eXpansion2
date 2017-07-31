@@ -4,6 +4,8 @@ namespace eXpansion\Framework\Core\Model\Gui;
 
 use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
+use eXpansion\Framework\Gui\Components\uiButton;
+use eXpansion\Framework\Gui\Components\uiCheckbox;
 use eXpansion\Framework\Gui\Components\uiLabel;
 use FML\Controls\Frame;
 use FML\Controls\Label;
@@ -135,7 +137,11 @@ class Widget extends Manialink implements Container
     protected function getDictionaryInformation($control, &$translations)
     {
         foreach ($control->getChildren() as $child) {
-            if (($child instanceof Label || $child instanceof uiLabel) && $child->getTranslate()) {
+            if (($child instanceof Label
+                    || $child instanceof uiLabel
+                    || $child instanceof uiButton
+                    || $child instanceof uiCheckbox
+                ) && $child->getTranslate()) {
                 $id = $child->getTextId();
 
                 if (!isset($this->cachedMessages[$id])) {

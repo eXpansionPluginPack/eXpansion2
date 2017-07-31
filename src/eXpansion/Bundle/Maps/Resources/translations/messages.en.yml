@@ -17,9 +17,6 @@ expansion_jukebox:
 
 
 expansion_maps:
-  chat:
-
-
   gui:
       button:
           drop: "drop"

@@ -7,6 +7,7 @@ use eXpansion\Bundle\Acme\Plugins\Gui\WindowFactory;
 use eXpansion\Bundle\LocalRecords\Entity\Record;
 use eXpansion\Bundle\Maps\Plugins\Jukebox;
 use eXpansion\Bundle\Maps\Services\JukeboxService;
+use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionFactory;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilder;
@@ -47,9 +48,10 @@ class JukeboxWindowFactory extends GridWindowFactory
      * @var JukeboxService
      */
     private $jukeboxService;
-
-    /** @var  Group */
-    private $group;
+    /**
+     * @var AdminGroups
+     */
+    private $adminGroups;
 
     /**
      * MapsWindowFactory constructor.
@@ -63,6 +65,7 @@ class JukeboxWindowFactory extends GridWindowFactory
      * @param DataCollectionFactory $dataCollectionFactory
      * @param Time $time
      * @param JukeboxService $jukeboxService
+     * @param AdminGroups $adminGroups
      */
     public function __construct(
         $name,
@@ -74,7 +77,8 @@ class JukeboxWindowFactory extends GridWindowFactory
         GridBuilderFactory $gridBuilderFactory,
         DataCollectionFactory $dataCollectionFactory,
         Time $time,
-        JukeboxService $jukeboxService
+        JukeboxService $jukeboxService,
+        AdminGroups $adminGroups
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
 
@@ -84,6 +88,7 @@ class JukeboxWindowFactory extends GridWindowFactory
         $this->sizeX = $sizeX;
         $this->sizeY = $sizeY;
         $this->jukeboxService = $jukeboxService;
+        $this->adminGroups = $adminGroups;
     }
 
     public function setJukeboxPlugin(Jukebox $plugin)
@@ -134,59 +139,61 @@ class JukeboxWindowFactory extends GridWindowFactory
             )
             ->addActionColumn('map', 'expansion_maps.gui.window.column.drop', 2, array($this, 'callbackDropMap'),
                 $queueButton);
-
-
+        $contentFrame = $manialink->getContentFrame();
+        $this->setGridSize($contentFrame->getWidth(), $contentFrame->getHeight() - 12);
+        $this->setGridPosition(0, -10);
         $manialink->setData('grid', $gridBuilder);
-        $this->group = $manialink->getUserGroup();
     }
 
     public function callbackClear($login)
     {
         $this->jukeboxPlugin->clear($login);
-        $this->updateMaps();
-        $this->update($this->group);
+        $group = $this->groupFactory->createForPlayer($login);
+        $this->update($group);
     }
 
     public function callbackDrop($login)
     {
 
         $this->jukeboxPlugin->drop($login, null);
-        $this->updateMaps();
-        $this->update($this->group);
+        $group = $this->groupFactory->createForPlayer($login);
+        $this->update($group);
     }
 
     public function callbackDropMap($login, $params, $args)
     {
         $this->jukeboxPlugin->drop($login, $args['map']);
-        $this->updateMaps();
-        $this->update($this->group);
+        $group = $this->groupFactory->createForPlayer($login);
+        $this->update($group);
     }
 
     public function createContent(ManialinkInterface $manialink)
     {
         parent::createContent($manialink);
-         /*
-        $line = $this->uiFactory->createLayoutLine(0, -10, [], 2);
 
-        $dropButton = $this->uiFactory->createButton("close", uiButton::TYPE_DECORATED);
+        $line = $this->uiFactory->createLayoutLine(0, 0, [], 2);
+
+        $dropButton = $this->uiFactory->createButton("expansion_maps.gui.button.drop", uiButton::TYPE_DECORATED);
         $dropButton->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackDrop'], null));
         $line->addChild($dropButton);
 
         $clearButton = $this->uiFactory->createButton("expansion_maps.gui.button.clear");
-        $clearButton->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackClear'], null))
+        $clearButton->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackClear'],
+            null))
             ->setFocusColor('f00')
             ->setBorderColor('d00')
             ->setTextColor('fff')
             ->setTranslate(true);
 
-        $line->addChild($clearButton);
-
-        $manialink->addChild($dropButton);
-        $manialink->addChild($line); */
+        if ($this->adminGroups->hasPermission($manialink->getUserGroup(), "jukebox")) {
+            $line->addChild($clearButton);
+        }
+        $manialink->addChild($line);
     }
 
     protected function updateContent(ManialinkInterface $manialink)
     {
+        $this->updateMaps();
         parent::updateContent($manialink);
     }
 
