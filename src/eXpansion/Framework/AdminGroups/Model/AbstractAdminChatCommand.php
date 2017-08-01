@@ -61,10 +61,21 @@ abstract class AbstractAdminChatCommand extends AbstractChatCommand
      */
     public function validate($login, $parameter)
     {
-        if (!$this->adminGroupsHelper->hasPermission($login, $this->permission)) {
+        if (!$this->hasPermission($login)) {
             return 'expansion_admingroups.chat_commands.no_permission';
         }
 
         return '';
+    }
+
+    /**
+     * Check of a player has permission to use chat command.
+     *
+     * @param string $login
+     *
+     * @return bool
+     */
+    public function hasPermission($login) {
+        return $this->adminGroupsHelper->hasPermission($login, $this->permission);
     }
 }

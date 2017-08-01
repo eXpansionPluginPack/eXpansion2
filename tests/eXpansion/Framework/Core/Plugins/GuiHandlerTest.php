@@ -13,10 +13,12 @@ use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\GuiHandler;
 use Tests\eXpansion\Framework\Core\TestCore;
 use Tests\eXpansion\Framework\Core\TestHelpers\ManialinkDataTrait;
+use Tests\eXpansion\Framework\Core\TestHelpers\PlayerDataTrait;
 
 class GuiHandlerTest extends TestCore
 {
     use ManialinkDataTrait;
+    use PlayerDataTrait;
 
     public function testSendManialink()
     {
@@ -121,7 +123,7 @@ class GuiHandlerTest extends TestCore
         $guiHanlder->onPostLoop();
     }
 
-    public function testDisconnectConnect()
+    public function testGroupRemoveUser()
     {
         $logins = ['test1', 'test2'];
         $manialink = $this->getManialink($logins);
@@ -147,7 +149,6 @@ class GuiHandlerTest extends TestCore
         $logins = ['test1', 'test2'];
         $manialink = $this->getManialink($logins);
 
-
         /** @var \PHPUnit_Framework_MockObject_MockObject $dedicatedConnection */
         $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
         $dedicatedConnection->expects($this->once())
@@ -162,6 +163,28 @@ class GuiHandlerTest extends TestCore
         $guiHanlder->onExpansionGroupDestroy($manialink->getUserGroup(), 'test1');
 
         $this->assertEmpty($guiHanlder->getDisplayeds());
+    }
+
+    public function testDisconnect()
+    {
+        $logins = ['test1', 'test2'];
+        $manialink = $this->getManialink($logins);
+
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject $dedicatedConnection */
+        $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
+        $dedicatedConnection->expects($this->once())
+            ->method('sendDisplayManialinkPage')
+            ->withConsecutive([$logins, $manialink->getXml()]);
+
+        /** @var GuiHandler $guiHanlder */
+        $guiHanlder = $this->container->get('expansion.framework.core.plugins.gui_handler');
+        $guiHanlder->addToDisplay($manialink);
+
+        $guiHanlder->onPostLoop();
+        $guiHanlder->onExpansionGroupRemoveUser($manialink->getUserGroup(), 'test1');
+        $guiHanlder->onPlayerDisconnect($this->getPlayer('test1', false), '');
+        $guiHanlder->onPostLoop();
     }
 
     public function testExtreme()
@@ -220,5 +243,14 @@ class GuiHandlerTest extends TestCore
 
         $guiHanlder->onPreLoop();
         $guiHanlder->onEverySecond();
+        $guiHanlder->onPlayerConnect($this->getPlayer('test', false));
+        $guiHanlder->onPlayerInfoChanged(
+            $this->getPlayer('test', false),
+            $this->getPlayer('test', false)
+        );
+        $guiHanlder->onPlayerAlliesChanged(
+            $this->getPlayer('test', false),
+            $this->getPlayer('test', false)
+        );
     }
 }

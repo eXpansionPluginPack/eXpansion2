@@ -4,6 +4,7 @@ namespace eXpansion\Framework\Core\Plugins\Gui;
 
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpUserGroup;
 use eXpansion\Framework\Core\Model\Gui\Manialink;
+use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryContext;
 use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryInterface;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
@@ -21,7 +22,7 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
     /** @var  GuiHandler */
     protected $guiHandler;
 
-    /** @var Factory  */
+    /** @var Factory */
     protected $groupFactory;
 
     /** @var ActionFactory */
@@ -33,7 +34,7 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
     /** @var  string */
     protected $className;
 
-    /** @var ManialinkInterface[]  */
+    /** @var ManialinkInterface[] */
     protected $manialinks = [];
 
     /** @var Group[] */
@@ -52,17 +53,14 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
     protected $posY;
 
     /**
-     * GroupManialinkFactory constructor.
+     * ManialinkFactory constructor.
      *
-     * @param GuiHandler $guiHandler
-     * @param Factory $groupFactory
-     * @param ActionFactory $actionFactory
-     * @param $name
-     * @param $sizeX
-     * @param $sizeY
-     * @param null $posX
-     * @param null $posY
-     * @param string $className
+     * @param                         $name
+     * @param                         $sizeX
+     * @param                         $sizeY
+     * @param null                    $posX
+     * @param null                    $posY
+     * @param ManialinkFactoryContext $context
      */
     public function __construct(
         $name,
@@ -70,10 +68,7 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
         $sizeY,
         $posX = null,
         $posY = null,
-        GuiHandler $guiHandler,
-        Factory $groupFactory,
-        ActionFactory $actionFactory,
-        $className = Manialink::class
+        ManialinkFactoryContext $context
     ) {
         if (is_null($posX)) {
             $posX = $sizeX / -2;
@@ -83,11 +78,11 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
             $posY = $sizeY / 2;
         }
 
-        $this->guiHandler = $guiHandler;
-        $this->groupFactory = $groupFactory;
-        $this->actionFactory = $actionFactory;
+        $this->guiHandler = $context->getGuiHandler();
+        $this->groupFactory = $context->getGroupFactory();
+        $this->actionFactory = $context->getActionFactory();
+        $this->className = $context->getClassName();
         $this->name = $name;
-        $this->className = $className;
         $this->sizeX = $sizeX;
         $this->sizeY = $sizeY;
         $this->posX = $posX;
@@ -101,8 +96,16 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
     {
         if (is_string($group)) {
             $group = $this->groupFactory->createForPlayer($group);
-        } else if (is_array($group)) {
-            $group = $this->groupFactory->createForPlayers($group);
+        } else {
+            if (is_array($group)) {
+                $group = $this->groupFactory->createForPlayers($group);
+            }
+        }
+
+        if (isset($this->manialinks[$group->getName()])) {
+            $this->update($group);
+
+            return $group;
         }
 
         $this->manialinks[$group->getName()] = $this->createManialink($group);
@@ -170,6 +173,7 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
     protected function createManialink(Group $group)
     {
         $className = $this->className;
+
         return new $className($group, $this->name, $this->sizeX, $this->sizeY, $this->posX, $this->posY);
     }
 
@@ -199,4 +203,5 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
     {
         // nothing to do here.
     }
+
 }

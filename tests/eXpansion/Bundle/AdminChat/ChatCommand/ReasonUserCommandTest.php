@@ -35,7 +35,7 @@ class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $inputMock;
 
-    /** @var ReasonUserCommand  */
+    /** @var ReasonUserCommand */
     protected $reasonCommand;
 
     /**
@@ -107,7 +107,8 @@ class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock->expects($this->once())->method('ban')->with('test', 'reason');
 
         $this->chatNotificationMock->expects($this->once())->method('sendMessage')->with(
-            'message', null, ['%adminLevel%' => 'Admin', '%admin%' => '$ffftest', '%player%' => '$ffftest', '%reason%' => 'reason']
+            'message', null,
+            ['%adminLevel%' => 'Admin', '%admin%' => '$ffftest', '%player%' => '$ffftest', '%reason%' => 'reason']
         );
 
         $this->reasonCommand->execute(

@@ -76,7 +76,7 @@ abstract class AbstractConnectionCommand extends AbstractAdminChatCommand
      */
     public function setPublic($bool)
     {
-        $this->isPublic = (bool)$bool;
+        $this->isPublic = (bool) $bool;
     }
 
     /**
@@ -98,6 +98,14 @@ abstract class AbstractConnectionCommand extends AbstractAdminChatCommand
         }
 
         return $groupName;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getPublic()
+    {
+        return $this->isPublic;
     }
 
 }

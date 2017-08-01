@@ -24,6 +24,11 @@ services:
             - '@expansion.service.dedicated_connection'
             - '@expansion.helper.chat_notification'
 
+    expansion.helper.http:
+        class: 'eXpansion\Framework\Core\Helpers\Http'
+        tags:
+            - { name: kernel.event_listener, event: expansion.post_loop }
+
     expansion.helper.data.array_filter:
         class: 'eXpansion\Framework\Core\Helpers\Data\ArrayFilter'
 

@@ -14,3 +14,8 @@ expansion_core:
       title: Chat Commands
       column_command: Command
       column_description: Description
+    chat_commands_description:
+      title: Chat Command Description
+      aliases: Aliases
+      description: Description
+      help: Help

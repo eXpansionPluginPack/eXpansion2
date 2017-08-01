@@ -8,6 +8,7 @@
 
 namespace Tests\eXpansion\Framework\Core\Helpers\Data;
 
+use eXpansion\Framework\Core\Exceptions\Data\Filter\InvalidFilterTypeException;
 use eXpansion\Framework\Core\Helpers\Data\ArrayFilter;
 use eXpansion\Framework\Core\Model\Data\FilterInterface;
 use Tests\eXpansion\Framework\Core\TestCore;
@@ -67,6 +68,17 @@ class ArrayFilterTest extends TestCore
             FilterInterface::FILTER_LOGIC_OR
         );
         $this->assertCount(1, $results);
+    }
+
+    public function testInalidFilter()
+    {
+        $this->expectException(InvalidFilterTypeException::class);
+
+        $this->getResults(
+            [
+                'name' => ['yop yop filter', 'test name - 1'],
+            ]
+        );
     }
 
     protected function getTestData()

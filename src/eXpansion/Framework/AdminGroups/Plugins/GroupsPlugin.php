@@ -4,8 +4,10 @@ namespace eXpansion\Framework\AdminGroups\Plugins;
 
 use eXpansion\Framework\AdminGroups\Services\AdminGroupConfiguration;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
+use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
 use eXpansion\Framework\Core\Storage\Data\Player;
+use eXpansion\Framework\Core\Storage\PlayerStorage;
 
 /**
  * Class GroupsPlugin will keep the admin groups uptodate with the proper player information.
@@ -13,13 +15,16 @@ use eXpansion\Framework\Core\Storage\Data\Player;
  * @package eXpansion\Bundle\AdminGroupConfiguration\Plugins;
  * @author oliver de Cramer <oliverde8@gmail.com>
  */
-class GroupsPlugin implements ListenerInterfaceMpLegacyPlayer
+class GroupsPlugin implements ListenerInterfaceMpLegacyPlayer, StatusAwarePluginInterface
 {
     /** @var  AdminGroupConfiguration */
     protected $adminGroupConfiguration;
 
     /** @var  Factory */
     protected $userGroupFactory;
+
+    /** @var  PlayerStorage */
+    protected $playerStorage;
 
     /**
      * GroupsPlugin constructor.
@@ -29,16 +34,30 @@ class GroupsPlugin implements ListenerInterfaceMpLegacyPlayer
      */
     public function __construct(
         AdminGroupConfiguration $adminGroupConfiguration,
-        Factory $userGroupFactory
+        Factory $userGroupFactory,
+        PlayerStorage $playerStorage
     ) {
         $this->adminGroupConfiguration = $adminGroupConfiguration;
         $this->userGroupFactory = $userGroupFactory;
+        $this->playerStorage = $playerStorage;
 
+        // Create a user group for each admin group & for guest players.
         foreach ($this->adminGroupConfiguration->getGroups() as $groupName) {
             $this->userGroupFactory->create("admin:$groupName");
         }
-
         $this->userGroupFactory->create('admin:guest');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setStatus($status)
+    {
+        if ($status && !empty($this->playerStorage->getOnline())) {
+            foreach ($this->playerStorage->getOnline() as $player) {
+                $this->onPlayerConnect($player);
+            }
+        }
     }
 
     /**

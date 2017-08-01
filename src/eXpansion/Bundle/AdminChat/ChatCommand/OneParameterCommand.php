@@ -48,6 +48,30 @@ class OneParameterCommand extends AbstractConnectionCommand
     protected $functionName;
 
     /**
+     * @return string
+     */
+    public function getParameterDescription()
+    {
+        return $this->parameterDescription;
+    }
+
+    /**
+     * @return string
+     */
+    public function getChatMessage()
+    {
+        return $this->chatMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFunctionName()
+    {
+        return $this->functionName;
+    }
+
+    /**
      * @inheritdoc
      */
     protected function configure()

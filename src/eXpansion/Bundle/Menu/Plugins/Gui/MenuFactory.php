@@ -6,6 +6,7 @@ use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
 use eXpansion\Framework\Core\Model\Gui\Widget;
+use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
 use FML\Controls\Frame;
 use FML\Controls\Label;
@@ -26,21 +27,22 @@ class MenuFactory extends WidgetFactory
     /** @var  AdminGroups */
     protected $adminGroupsHelper;
 
-    /**
-     * @param ManiaScriptFactory $menuScriptFactory
-     */
-    public function setMenuScriptFactory($menuScriptFactory)
-    {
-        $this->menuScriptFactory = $menuScriptFactory;
-    }
+    public function __construct(
+        $name,
+        $sizeX,
+        $sizeY,
+        $posX,
+        $posY,
+        WidgetFactoryContext $context,
+        ManiaScriptFactory $menuScriptFactory,
+        AdminGroups $adminGroupsHelper
+    ){
+        parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
 
-    /**
-     * @param AdminGroups $adminGroupsHelper
-     */
-    public function setAdminGroupsHelper($adminGroupsHelper)
-    {
+        $this->menuScriptFactory = $menuScriptFactory;
         $this->adminGroupsHelper = $adminGroupsHelper;
     }
+
 
     /**
      * @param ManialinkInterface|Widget $manialink
@@ -148,6 +150,7 @@ class MenuFactory extends WidgetFactory
         $manialink->addChild($btnFrame);
 
         $manialink->addChild($bgFrame);
+
         $manialink->getFmlManialink()->addChild($this->menuScriptFactory->createScript(["settingsId" => $openSettingsId]));
     }
 

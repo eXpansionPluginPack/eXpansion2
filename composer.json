@@ -30,6 +30,7 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "maniaplanet/dedicated-server-api": "dev-master",
         "oliverde8/associative-array-simplified": "^1.0.0",
+        "oliverde8/asynchronous-jobs": "^1.0",
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0.2",
         "steeffeen/fancymanialinks": "dev-master",

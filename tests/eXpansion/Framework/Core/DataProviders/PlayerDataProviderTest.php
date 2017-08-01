@@ -3,7 +3,6 @@
 
 namespace Tests\eXpansion\Framework\Core\DataProviders;
 
-use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Core\DataProviders\PlayerDataProvider;
 use eXpansion\Framework\Core\Storage\Data\Player;
@@ -24,29 +23,32 @@ class PlayerDataProviderTest extends TestCore
         parent::setUp();
 
         $this->player = new PlayerInfo();
-    }
 
-    public function testOnRun()
-    {
         /** @var \PHPUnit_Framework_MockObject_MockObject $connectionMock */
         $connectionMock = $this->container->get('expansion.service.dedicated_connection');
         $connectionMock->method('getPlayerList')
             ->withAnyParameters()
             ->willReturn([$this->player]);
+    }
 
+    public function testOnRun()
+    {
         $player = new Player();
-        $this->container->set('expansion.storage.player', $this->getMockPlayerStorage($player));
+        $playerStorage = $this->getMockPlayerStorage($player);
+        $this->container->set('expansion.storage.player', $playerStorage);
+
+        $playerStorage->expects($this->once())
+            ->method('onPlayerConnect')
+            ->withConsecutive([$player]);
 
         $plugin = $this->createMock(ListenerInterfaceMpLegacyPlayer::class);
-        $plugin->expects($this->once())
+        $plugin->expects($this->never())
             ->method('onPlayerConnect')
             ->withConsecutive([$player]);
 
         /** @var PlayerDataProvider $dataProvider */
         $dataProvider = $this->container->get('expansion.framework.core.data_providers.player_data_provider');
         $dataProvider->registerPlugin('p1', $plugin);
-
-        $dataProvider->onRun();
     }
 
     public function testOnPlayerConnect()
@@ -74,7 +76,7 @@ class PlayerDataProviderTest extends TestCore
             ->getMock();
         $playerStorage->method('getPlayerInfo')
             ->willThrowException(new \Exception());
-        $this->container->set('expansion.storage.player',$playerStorage);
+        $this->container->set('expansion.storage.player', $playerStorage);
 
         $plugin = $this->createMock(ListenerInterfaceMpLegacyPlayer::class);
         $plugin->expects($this->never())
@@ -85,6 +87,25 @@ class PlayerDataProviderTest extends TestCore
         $dataProvider->registerPlugin('p1', $plugin);
 
         $dataProvider->onPlayerConnect('test', false);
+    }
+
+    /** @todo create test for application stop */
+    public function _OnServerDisconnect()
+    {
+        $dedicatedPlayer = new \Maniaplanet\DedicatedServer\Structures\PlayerDetailedInfo();
+        $dedicatedPlayer->playerId = 0;
+        $dedicatedPlayer->login = "server";
+
+        $player = new Player();
+        $player->merge($dedicatedPlayer);
+
+        $this->container->set('expansion.storage.player', $this->getMockPlayerStorage($player));
+
+        $plugin = $this->createMock(ListenerInterfaceMpLegacyPlayer::class);
+        $plugin->expects($this->once())
+            ->method('onPlayerDisconnect')
+            ->withConsecutive([$player]);
+
     }
 
     public function testOnPlayerDisconnect()

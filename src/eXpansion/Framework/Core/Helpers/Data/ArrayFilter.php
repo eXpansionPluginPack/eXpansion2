@@ -64,15 +64,12 @@ class ArrayFilter implements FilterInterface
         switch ($filterType) {
             case self::FILTER_TYPE_EQ:
                 return $valueToCheck == $value;
-                break;
 
             case self::FILTER_TYPE_NEQ:
                 return $valueToCheck != $value;
-                break;
 
             case self::FILTER_TYPE_LIKE:
                 return strpos($value, $valueToCheck) !== false;
-                break;
 
             default :
                 throw new InvalidFilterTypeException("Filter type '$filterType' is unknown'");

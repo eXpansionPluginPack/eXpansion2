@@ -217,7 +217,7 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
      */
     protected function dispatchEvent($eventData)
     {
-        $event = $this->eventPrefix . '.' . $eventData['event'];
+        $event = $this->eventPrefix.'.'.$eventData['event'];
         unset($eventData['event']);
 
         $this->dispatcher->dispatch($event, [$eventData]);

@@ -4,9 +4,11 @@ namespace eXpansion\Framework\Core\Plugins;
 
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpUserGroup;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Storage\Data\Player;
 use Maniaplanet\DedicatedServer\Connection;
 use Monolog\Logger;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
@@ -17,7 +19,7 @@ use oliverde8\AssociativeArraySimplified\AssociativeArray;
  * @package eXpansion\Framework\Core\Plugins\Gui
  * @author Oliver de Cramer
  */
-class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserGroup
+class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserGroup, ListenerInterfaceMpLegacyPlayer
 {
     /** @var Connection */
     protected $connection;
@@ -46,8 +48,8 @@ class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserG
     /** @var String[][] */
     protected $hideIndividualQueu = [];
 
-    private $groupsBuffer = [];
-    private $windowsBuffer = [];
+    /** @var String[] */
+    protected $disconnectedLogins = [];
 
     /**
      * GuiHandler constructor.
@@ -76,12 +78,12 @@ class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserG
     public function addToDisplay(ManialinkInterface $manialink)
     {
         $userGroup = $manialink->getUserGroup()->getName();
-
-        if (AssociativeArray::getFromKey($this->hideQueu, [$userGroup, $manialink->getId()])) {
-            unset($this->hideQueu[$userGroup][$manialink->getId()]);
+        $id = $manialink->getId();
+        if (AssociativeArray::getFromKey($this->hideQueu, [$userGroup, $id])) {
+            unset($this->hideQueu[$userGroup][$id]);
         }
 
-        $this->displayQueu[$userGroup][$manialink->getId()] = $manialink;
+        $this->displayQueu[$userGroup][$id] = $manialink;
     }
 
     /**
@@ -92,16 +94,17 @@ class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserG
     public function addToHide(ManialinkInterface $manialink)
     {
         $userGroup = $manialink->getUserGroup()->getName();
+        $id = $manialink->getId();
 
-        if (AssociativeArray::getFromKey($this->displayQueu, [$userGroup, $manialink->getId()])) {
-            unset($this->displayQueu[$userGroup][$manialink->getId()]);
+        if (AssociativeArray::getFromKey($this->displayQueu, [$userGroup, $id])) {
+            unset($this->displayQueu[$userGroup][$id]);
         }
 
-        if (AssociativeArray::getFromKey($this->displayeds, [$userGroup, $manialink->getId()])) {
-            unset($this->displayeds[$userGroup][$manialink->getId()]);
+        if (AssociativeArray::getFromKey($this->displayeds, [$userGroup, $id])) {
+            unset($this->displayeds[$userGroup][$id]);
         }
 
-        $this->hideQueu[$userGroup][$manialink->getId()] = $manialink;
+        $this->hideQueu[$userGroup][$id] = $manialink;
     }
 
     /**
@@ -137,6 +140,7 @@ class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserG
         $this->individualQueu = [];
         $this->hideQueu = [];
         $this->hideIndividualQueu = [];
+        $this->disconnectedLogins = [];
     }
 
     /**
@@ -180,6 +184,8 @@ class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserG
         foreach ($this->hideQueu as $manialinks) {
             foreach ($manialinks as $id => $manialink) {
                 $logins = $manialink->getUserGroup()->getLogins();
+                $logins = array_diff($logins, $this->disconnectedLogins);
+
                 if (!empty($logins)) {
                     yield ['logins' => $logins, 'ml' => '<manialink id="'.$id.'" />'];
                 }
@@ -188,9 +194,21 @@ class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserG
 
         foreach ($this->hideIndividualQueu as $login => $manialinks) {
             foreach ($manialinks as $id => $manialink) {
-                yield ['logins' => $login, 'ml' => '<manialink id="'.$id.'" />'];
+                if (!in_array($login, $this->disconnectedLogins)) {
+                    yield ['logins' => $login, 'ml' => '<manialink id="'.$id.'" />'];
+                }
             }
         }
+    }
+
+    /**
+     * List of all manialinks that are currently displayed.
+     *
+     * @return ManialinkInterface[][]
+     */
+    public function getDisplayeds()
+    {
+        return $this->displayeds;
     }
 
     /**
@@ -213,28 +231,6 @@ class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserG
      */
     public function onEverySecond()
     {
-        $groups = array_keys($this->displayeds);
-        if ($groups !== $this->groupsBuffer) {
-            $this->console->writeln('groups ('.count($this->displayeds).') $0f0'.implode(",",
-                    $groups));
-        }
-
-        $windows = [];
-        foreach ($this->displayeds as $group => $ml) {
-            foreach ($ml as $mlId => $manialink) {
-                $windows[$group][] = $mlId;
-            }
-        }
-
-        if ($windows !== $this->windowsBuffer) {
-            foreach ($windows as $group => $data) {
-                $this->console->writeln('windows in group '.$group.':$0f0'.implode(",", $data));
-            }
-        }
-
-        $this->windowsBuffer = $windows;
-        $this->groupsBuffer = $groups;
-
     }
 
     /**
@@ -249,8 +245,6 @@ class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserG
             foreach ($this->displayeds[$group] as $mlId => $manialink) {
                 $this->individualQueu[$loginAdded][$mlId] = $manialink;
             }
-        } else {
-            $this->console->writeln('player added to group, but group not found: $ff0'.$group);
         }
     }
 
@@ -280,20 +274,27 @@ class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserG
     }
 
     /**
-     * List of all manialinks that are currently displayed.
-     *
-     * @return ManialinkInterface[][]
-     */
-    public function getDisplayeds()
-    {
-        return $this->displayeds;
-    }
-
-    /**
      * @param int $charLimit
      */
     public function setCharLimit($charLimit)
     {
         $this->charLimit = $charLimit;
+    }
+
+    public function onPlayerConnect(Player $player)
+    {
+    }
+
+    public function onPlayerDisconnect(Player $player, $disconnectionReason)
+    {
+        $this->disconnectedLogins[] = $player->getLogin();
+    }
+
+    public function onPlayerInfoChanged(Player $oldPlayer, Player $player)
+    {
+    }
+
+    public function onPlayerAlliesChanged(Player $oldPlayer, Player $player)
+    {
     }
 }

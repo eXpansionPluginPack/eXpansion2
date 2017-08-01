@@ -10,6 +10,7 @@ use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionFactory;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilder;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
+use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\GridWindowFactory;
 use FML\Controls\Frame;
 use Maniaplanet\DedicatedServer\Structures\Map;
@@ -23,7 +24,6 @@ use Maniaplanet\DedicatedServer\Structures\Map;
  */
 class MapsWindowFactory extends GridWindowFactory
 {
-
     /** @var GridBuilderFactory */
     protected $gridBuilderFactory;
 
@@ -32,6 +32,25 @@ class MapsWindowFactory extends GridWindowFactory
 
     /** @var Time */
     protected $timeFormatter;
+
+    public function __construct(
+        $name,
+        $sizeX,
+        $sizeY,
+        $posX,
+        $posY,
+        WindowFactoryContext $context,
+        GridBuilderFactory $gridBuilderFactory,
+        DataCollectionFactory $dataCollectionFactory,
+        Time $time
+    ) {
+        parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
+
+        $this->gridBuilderFactory = $gridBuilderFactory;
+        $this->dataCollectionFactory = $dataCollectionFactory;
+        $this->timeFormatter = $time;
+    }
+
 
     /**
      * @param ManialinkInterface $manialink

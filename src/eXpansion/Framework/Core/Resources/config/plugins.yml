@@ -7,8 +7,9 @@ services:
             - "@logger"
             - "@expansion.service.console"
         tags:
-            - {name: expansion.plugin, data_provider:exp.timer}
+            - {name: expansion.plugin, data_provider: exp.timer}
             - {name: expansion.plugin, data_provider: expansion.user_group}
+            - {name: expansion.plugin, data_provider: mp.legacy.player}
 
     expansion.framework.core.plugins.gui.action_factory:
         class: 'eXpansion\Framework\Core\Plugins\Gui\ActionFactory'
@@ -22,13 +23,15 @@ services:
         class: eXpansion\Framework\Core\Plugins\UserGroups\AllPlayers
         arguments:
             - '@expansion.framework.core.user_groups.all_players'
+            - '@expansion.storage.player'
         tags:
             - {name: expansion.plugin, data_provider: mp.legacy.player}
 
     expansion.framework.core.plugins.user_group.players:
         class: eXpansion\Framework\Core\Plugins\UserGroups\Players
         arguments:
-            - '@expansion.helper.usergroups'
+            - '@expansion.framework.core.user_groups.players'
+            - '@expansion.storage.player'
         tags:
             - {name: expansion.plugin, data_provider: mp.legacy.player}
 
@@ -36,6 +39,8 @@ services:
         class: eXpansion\Framework\Core\Plugins\UserGroups\Spectators
         arguments:
             - '@expansion.framework.core.user_groups.spectators'
+            - '@expansion.storage.player'
+
         tags:
             - {name: expansion.plugin, data_provider: mp.legacy.player}
 
@@ -63,3 +68,10 @@ services:
             - 'help'
             - ['h']
             - '@expansion.framework.core.plugins.gui.window_help_factory'
+
+    expansion.framework.core.plugins.start_greeter:
+        class: 'eXpansion\Framework\Core\Plugins\StartGreeter'
+        arguments:
+            - "@expansion.helper.chat_notification"
+        tags:
+            - {name: expansion.plugin, data_provider: exp.application}

@@ -1,7 +1,7 @@
 e_xpansion_core:
     parameters:
         core_chat_color_codes:
-#default set of colors
+            # default set of colors
             default: '$dee'
             muted: '$999'
             info: '$add'
@@ -10,18 +10,18 @@ e_xpansion_core:
             danger: '$daa'
             error: '$d77'
             variable: '$fff'
-#ui defaults
+            # ui defaults
             primary: '$3af'
             secondary: '$fff'
             highlight: '$fff'
-#admin set of colors
+            # admin set of colors
             admin_info: '$aff'
-#special colors
+            # special colors
             separator: '$3af'
             record: '$0f3'
             record_top: '$0d3'
             record_rank: '$afa'
-#for unit test, dont change
+            # for unit test, dont change
             test: '$f00'
         core_chat_glyph_icons:
             test: '✔'

@@ -271,7 +271,7 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($eventData);
     }
 
-    public function testWorseNewTime()
+    public function testWorseNewTimeIngored()
     {
         $records = [
             $this->createRecord('toto1', 10),
@@ -286,6 +286,23 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
 
         $eventData = $recordHandler->addRecord('toto4', 40, [5,9]);
         $this->assertNull($eventData);
+    }
+
+    public function testWorseNewTime()
+    {
+        $records = [
+            $this->createRecord('toto1', 10),
+            $this->createRecord('toto2', 20),
+            $this->createRecord('toto3', 30),
+        ];
+
+        $this->recordRepositoryMock->expects($this->at(0))->method('findBy')->willReturn($records);
+
+        $recordHandler = $this->getRecordHandler(5);
+        $recordHandler->loadForMap('', 1);
+
+        $eventData = $recordHandler->addRecord('toto4', 40, [5,9]);
+        $this->assertCount(4, $eventData['records']);
     }
 
     public function testForScores()
@@ -305,6 +322,20 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(RecordHandler::EVENT_TYPE_BETTER_POS, $eventData[RecordHandler::COL_EVENT]);
         $this->assertEquals(1, $eventData[RecordHandler::COL_POS]);
         $this->assertEquals(3, $eventData[RecordHandler::COL_OLD_POS]);
+    }
+
+    public function testInsertNew()
+    {
+        $records = [
+            $this->createRecord('toto1', 10),
+        ];
+        $this->recordRepositoryMock->expects($this->at(0))->method('findBy')->willReturn($records);
+
+        $recordHandler = $this->getRecordHandler(10, RecordHandler::ORDER_ASC);
+        $recordHandler->loadForMap('', 1);
+
+        $recordHandler->addRecord('toto4', 8, [5,15]);
+        $this->assertNull($eventData = $recordHandler->addRecord('toto4', 12, [5,15]));
     }
 
     public function testSave()

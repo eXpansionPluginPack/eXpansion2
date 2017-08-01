@@ -182,7 +182,7 @@ class Record
      */
     public function setCheckpointTimes($checkpointTimes)
     {
-         $this->setCheckpoints(implode(',', $checkpointTimes));
+            $this->setCheckpoints(implode(',', $checkpointTimes));
     }
 
     /**

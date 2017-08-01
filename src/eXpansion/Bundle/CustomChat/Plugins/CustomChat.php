@@ -25,6 +25,12 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
     /** @var bool */
     protected $enabled = true;
 
+    /**
+     * CustomChat constructor.
+     * @param Connection $connection
+     * @param Console $console
+     * @param AdminGroups $adminGroups
+     */
     function __construct(Connection $connection, Console $console, AdminGroups $adminGroups)
     {
         $this->connection = $connection;
@@ -45,8 +51,8 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
         $text = trim($text);
         $from = trim($player->getNickName());
 
-        if ($player->getPlayerId() === 0) {
-            $from = '';
+        if ($player->getPlayerId() == 0) {
+            return;
         }
 
         if ($player->getPlayerId() != 0 && substr($text, 0, 1) != "/" && $this->enabled) {
@@ -61,12 +67,14 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
 
             try {
                 $color = '$ff0';
+                $separator = '';
                 if ($this->adminGroups->isAdmin($player->getLogin())) {
-                    $color = '$f90';
+                    $color = '$ff0';
+                    $separator = '';
                 }
 
                 $this->connection->chatSendServerMessage(
-                    '$fff$<'.$nick.'$z$s$>  '.$color.$force.$text,
+                    '$fff$<'.$nick.'$z$s$> '.$separator.' '.$color.$force.$text,
                     null
                 );
                 $this->console->writeln('$ff0['.$from.'$ff0] '.$text);

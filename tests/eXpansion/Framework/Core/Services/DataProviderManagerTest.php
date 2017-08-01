@@ -14,6 +14,8 @@ use eXpansion\Framework\Core\Services\DataProviderManager;
 use eXpansion\Framework\Core\Services\PluginManager;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use Maniaplanet\DedicatedServer\Structures\GameInfos;
+use Maniaplanet\DedicatedServer\Structures\PlayerDetailedInfo;
+use Maniaplanet\DedicatedServer\Structures\PlayerInfo;
 use Tests\eXpansion\Framework\Core\TestCore;
 use Tests\eXpansion\Framework\Core\TestHelpers\PlayerDataTrait;
 
@@ -134,6 +136,18 @@ class DataProviderManagerTest extends TestCore
     {
         $this->prepareProviders();
         $dataProviderManager = $this->getDataProviderManager();
+
+        $connectionMock = $this->container->get('expansion.service.dedicated_connection');
+        /** @var \PHPUnit_Framework_MockObject_MockObject $connectionMock */
+        $connectionMock->method('getPlayerList')
+            ->withAnyParameters()
+            ->willReturn([new PlayerInfo()]);
+        $connectionMock->method('getPlayerInfo')
+            ->withAnyParameters()
+            ->willReturn(new PlayerInfo());
+        $connectionMock->method('getDetailedPlayerInfo')
+            ->withAnyParameters()
+            ->willReturn(new PlayerDetailedInfo());
 
         $pManagerMock = $this->createMock(PluginManager::class);
         $pManagerMock->expects($this->any())->method('isPluginEnabled')->willReturn(true);

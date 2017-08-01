@@ -22,7 +22,7 @@ class AppKernel extends Kernel
         $bundles[] = new \eXpansion\Bundle\Menu\MenuBundle();
 
         /* Register test bundles. */
-        // $bundles[] = new \eXpansion\Bundle\Acme\AcmeBundle();
+        $bundles[] = new \eXpansion\Bundle\Acme\AcmeBundle();
 
         return $bundles;
     }
@@ -43,6 +43,7 @@ class AppKernel extends Kernel
             new \eXpansion\Framework\AdminGroups\eXpansionAdminGroupsBundle(),
             new \eXpansion\Framework\GameTrackmania\eXpansionGameTrackmaniaBundle(),
             new \eXpansion\Framework\GameManiaplanet\eXpansionGameManiaplanetBundle(),
+            new \eXpansion\Framework\Gui\eXpansionGuiBundle(),
         ];
 
         // Also add debug help bundles.

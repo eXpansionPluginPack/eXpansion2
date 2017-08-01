@@ -41,6 +41,22 @@ class AdminCommand extends AbstractConnectionCommand
     protected $functionName;
 
     /**
+     * @return string
+     */
+    public function getFunctionName()
+    {
+        return $this->functionName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getChatMessage()
+    {
+        return $this->chatMessage;
+    }
+
+    /**
      * @inheritdoc
      */
     protected function configure()

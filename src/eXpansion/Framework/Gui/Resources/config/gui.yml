@@ -1,0 +1,36 @@
+parameters:
+  expansion.gui.components.button.class: 'eXpansion\Framework\Gui\Components\uiButton'
+  expansion.gui.components.checkbox.class: 'eXpansion\Framework\Gui\Components\uiCheckbox'
+  expansion.gui.components.dropdown.class: 'eXpansion\Framework\Gui\Components\uiDropdown'
+  expansion.gui.components.input.class: 'eXpansion\Framework\Gui\Components\uiInput'
+  expansion.gui.components.label.class: 'eXpansion\Framework\Gui\Components\uiLabel'
+  expansion.gui.components.line.class: 'eXpansion\Framework\Gui\Components\uiLine'
+  expansion.gui.components.textbox.class: 'eXpansion\Framework\Gui\Components\uiTextbox'
+  expansion.gui.components.tooltip.class: 'eXpansion\Framework\Gui\Components\uiTooltip'
+  expansion.gui.components.animation.class: 'eXpansion\Framework\Gui\Components\uiAnimation'
+  expansion.gui.layout.line.class: 'eXpansion\Framework\Gui\Layouts\layoutLine'
+  expansion.gui.layout.row.class: 'eXpansion\Framework\Gui\Layouts\layoutRow'
+
+  expansion.gui.components.list:
+    Button:   '%expansion.gui.components.button.class%'
+    Checkbox: '%expansion.gui.components.checkbox.class%'
+    Dropdown: '%expansion.gui.components.dropdown.class%'
+    Input:    '%expansion.gui.components.input.class%'
+    Label:    '%expansion.gui.components.label.class%'
+    Line:     '%expansion.gui.components.line.class%'
+    Textbox:  '%expansion.gui.components.textbox.class%'
+    Tooltip:  '%expansion.gui.components.tooltip.class%'
+    Animation:  '%expansion.gui.components.animation.class%'
+    LayoutLine:  '%expansion.gui.layout.line.class%'
+    LayoutRow:  '%expansion.gui.layout.row.class%'
+
+services:
+  expansion.gui.component.factory:
+    class: eXpansion\Framework\Gui\Ui\Factory
+    arguments:
+      - '%expansion.gui.components.list%'
+      -
+        Background: '@expansion.framework.core.gui.element.factory.back_ground'
+        TitleBackground: '@expansion.framework.core.gui.element.factory.title_back_ground'
+        GridLine: '@expansion.framework.core.gui.element.factory.line'
+        Pager: '@expansion.framework.core.gui.element.factory.pager'

@@ -9,7 +9,7 @@ services:
             - '@expansion.service.dispatcher'
             - 'all_players'
 
-    expansion.helper.usergroups:
+    expansion.framework.core.user_groups.players:
         class: '%expansion.framework.core.model.user_groups.group.class%'
         arguments:
             - '@expansion.service.dispatcher'

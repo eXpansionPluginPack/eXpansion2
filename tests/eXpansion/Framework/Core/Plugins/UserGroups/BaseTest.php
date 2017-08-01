@@ -182,7 +182,7 @@ class BaseTest extends TestCore
      */
     protected function getPlayersGroup()
     {
-        return $this->container->get('expansion.helper.usergroups');
+        return $this->container->get('expansion.framework.core.user_groups.players');
     }
 
 

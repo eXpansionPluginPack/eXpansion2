@@ -1,7 +1,7 @@
 <?php
 
 namespace eXpansion\Framework\Core\Model\Gui\Grid;
-use eXpansion\Framework\Core\Model\Gui\Action;
+
 use eXpansion\Framework\Core\Model\Gui\Factory\LineFactory;
 use eXpansion\Framework\Core\Model\Gui\Factory\PagerFactory;
 use eXpansion\Framework\Core\Model\Gui\Grid\Column\AbstractColumn;
@@ -11,6 +11,7 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
 use FML\Controls\Frame;
+use FML\Controls\Label;
 
 
 /**
@@ -72,9 +73,9 @@ class GridBuilder
      * GridBuilder constructor.
      *
      * @param ActionFactory $actionFactory
-     * @param LineFactory   $lineFactory
-     * @param LineFactory   $titleLineFactory
-     * @param PagerFactory  $pagerFactory
+     * @param LineFactory $lineFactory
+     * @param LineFactory $titleLineFactory
+     * @param PagerFactory $pagerFactory
      */
     public function __construct(
         ActionFactory $actionFactory,
@@ -87,7 +88,7 @@ class GridBuilder
         $this->lineFactory = $lineFactory;
         $this->pagerFactory = $pagerFactory;
 
-        $this->pageKey = spl_object_hash($this)."_key";
+        $this->pageKey = "key_".spl_object_hash($this);
     }
 
     /**
@@ -165,10 +166,14 @@ class GridBuilder
      * @param integer $widthCoefficiency
      * @param $action
      * @param Label $renderer
+     *
+     * @return $this
      */
     public function addActionColumn($key, $name, $widthCoefficiency, $action, $renderer)
     {
         $this->columns[] = new ActionColumn($key, $name, $widthCoefficiency, $action, $renderer);
+
+        return $this;
     }
 
     /**
@@ -208,7 +213,7 @@ class GridBuilder
             $data[] = [
                 'text' => $columnData->getName(),
                 'width' => $columnData->getWidthCoeficiency(),
-                'translatable' => true
+                'translatable' => true,
             ];
         }
 
@@ -221,6 +226,7 @@ class GridBuilder
         $this->dataCollection->setPageSize(floor(($frame->getHeight() + $posY - $lineHeight - 2) / $lineHeight));
 
         $lines = $this->dataCollection->getData($this->currentPage);
+        $idx = 0;
         foreach ($lines as $i => $lineData) {
             $data = [];
             foreach ($this->columns as $columnData) {
@@ -228,7 +234,7 @@ class GridBuilder
                     $data[] = [
                         'text' => $this->dataCollection->getLineData($lineData, $columnData->getKey()),
                         'width' => $columnData->getWidthCoeficiency(),
-                        'translatable' => $columnData->getTranslatable()
+                        'translatable' => $columnData->getTranslatable(),
                     ];
                 } elseif ($columnData instanceof ActionColumn) {
                     $action = $this->actionFactory
@@ -241,7 +247,7 @@ class GridBuilder
                     ];
                 }
             }
-            $line = $this->lineFactory->create($frame->getWidth(), $data, $i);
+            $line = $this->lineFactory->create($frame->getWidth(), $data, $idx++);
             $line->setPosition(0, $posY);
             $frame->addChild($line);
             $posY -= $lineHeight;

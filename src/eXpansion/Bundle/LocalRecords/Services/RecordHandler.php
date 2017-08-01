@@ -23,7 +23,7 @@ class RecordHandler
      */
     const EVENT_TYPE_FIRST_TIME = 'first_time';
     const EVENT_TYPE_SAME_SCORE = 'same_score';
-    const EVENT_TYPE_SAME_POS =   'same_position';
+    const EVENT_TYPE_SAME_POS = 'same_position';
     const EVENT_TYPE_BETTER_POS = 'better_position';
 
     /**
@@ -176,6 +176,7 @@ class RecordHandler
     public function addRecord($login, $score, $checkpoints) {
         $oldPosition = isset($this->positionPerPlayer[$login]) ? $this->positionPerPlayer[$login] : count($this->records) + 1;
         $record = isset($this->recordsPerPlayer[$login]) ? $this->recordsPerPlayer[$login] : $this->getNewRecord($login);
+        $this->recordsPerPlayer[$login] = $record;
 
         $oldRecord = clone $record;
         $this->updateRecordStats($record, $score);
@@ -210,21 +211,23 @@ class RecordHandler
         }
 
         if ($firstTime || $this->compareNewScore($record, $score)) {
-
-            $betterRecordIndex = $oldPosition - 2;
+            $recordIndex = $oldPosition - 1;
             $newPosition = $oldPosition;
 
-            while ($betterRecordIndex >= 0 && $this->compareNewScore($this->records[$betterRecordIndex], $score)) {
-                $previousRecord = $this->records[$betterRecordIndex];
+            $this->records[$recordIndex] = $record;
+            $this->positionPerPlayer[$record->getPlayerLogin()] = $oldPosition;
 
-                $this->records[$betterRecordIndex] = $record;
-                $this->records[$betterRecordIndex+1] = $previousRecord;
+            while ($recordIndex > 0 && $this->compareNewScore($this->records[$recordIndex - 1], $score)) {
+                $previousRecord = $this->records[$recordIndex - 1];
 
-                $newPosition = $betterRecordIndex + 1;
-                $this->positionPerPlayer[$record->getPlayerLogin()] = $betterRecordIndex + 1;
-                $this->positionPerPlayer[$previousRecord->getPlayerLogin()] = $betterRecordIndex + 2;
+                $this->records[$recordIndex - 1] = $record;
+                $this->records[$recordIndex] = $previousRecord;
 
-                $betterRecordIndex--;
+                $newPosition = $recordIndex;
+                $this->positionPerPlayer[$record->getPlayerLogin()] = $recordIndex;
+                $this->positionPerPlayer[$previousRecord->getPlayerLogin()] = $recordIndex + 1;
+
+                $recordIndex--;
             }
 
             $record->setScore($score);
@@ -235,7 +238,7 @@ class RecordHandler
             $this->records = array_slice($this->records, 0, $this->nbRecords);
 
             if ($newPosition <= $this->nbRecords) {
-                if ($newPosition != $oldPosition) {
+                if ($newPosition != $oldPosition || $firstTime) {
                     return [
                         self::COL_EVENT => self::EVENT_TYPE_BETTER_POS,
                         self::COL_RECORD => $record,

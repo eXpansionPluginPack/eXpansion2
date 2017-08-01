@@ -7,51 +7,37 @@ parameters:
 services:
 
     #
-    # BASE GUI Services to make everything work.
+    # GUI Contexes to put everything together.
     #
-
-    expansion.framework.core.gui.manialink.test:
-        class: 'eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory'
+    expansion.gui.context.manialink:
+        class: 'eXpansion\Framework\Core\Model\Gui\ManialinkFactoryContext'
         arguments:
-            - "test-manialink"
-            - 2.5
-            - 2.5
-            - null
-            - null
+            - "%expansion.framework.core.model.gui.manialink.class%"
             - "@expansion.framework.core.plugins.gui_handler"
             - "@expansion.framework.core.user_groups.factory"
             - "@expansion.framework.core.plugins.gui.action_factory"
-        tags:
-            - {name: expansion.plugin, data_provider: expansion.user_group}
 
-    expansion.framework.core.plugins.gui.widget_factory:
-        abstract: true
+    expansion.gui.context.widget:
+        class: 'eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext'
         arguments:
-            - no_name
-            - 180
-            - 90
-            - null
-            - null
-            - "@expansion.framework.core.plugins.gui_handler"
-            - "@expansion.framework.core.user_groups.factory"
-            - "@expansion.framework.core.plugins.gui.action_factory"
-            - "@expansion.helper.translations"
             - "%expansion.framework.core.model.gui.widget.class%"
-
-    expansion.framework.core.plugins.gui.window_factory:
-        abstract: true
-        arguments:
-            - no_name
-            - 180
-            - 90
-            - null
-            - null
             - "@expansion.framework.core.plugins.gui_handler"
             - "@expansion.framework.core.user_groups.factory"
             - "@expansion.framework.core.plugins.gui.action_factory"
-            - "@expansion.framework.core.mania_script.window_factory"
             - "@expansion.helper.translations"
+            - "@expansion.gui.component.factory"
+
+
+    expansion.gui.context.window:
+        class: 'eXpansion\Framework\Core\Model\Gui\WindowFactoryContext'
+        arguments:
             - "%expansion.framework.core.model.gui.window.class%"
+            - "@expansion.framework.core.plugins.gui_handler"
+            - "@expansion.framework.core.user_groups.factory"
+            - "@expansion.framework.core.plugins.gui.action_factory"
+            - "@expansion.helper.translations"
+            - "@expansion.gui.component.factory"
+            - "@expansion.framework.core.mania_script.window_factory"
 
     #
     # GUI Element factories
@@ -87,18 +73,32 @@ services:
     # Default window factories.
     #
     expansion.framework.core.plugins.gui.window_help_factory:
-        parent: "expansion.framework.core.plugins.gui.window_factory"
         class: 'eXpansion\Framework\Core\Plugins\Gui\WindowHelpFactory'
         arguments:
-            index_0: 'expansion_core.windows.chat_commands.title'
-            index_1: 180
-            index_2: 90
-            index_3: null
-            index_4: null
-        calls:
-            - [setGridBuilderFactory, ['@expansion.framework.core.model.gui.grid.builder_factory']]
-            - [setDataCollectionFactory, ['@expansion.framework.core.model.gui.grid.data_collection_factory.array']]
-            - [setChatCommands, ['@expansion.service.chat_commands']]
-            - [setChatCommandDataProvide, ['@expansion.framework.core.data_providers.chat_command_data_provider']]
+            - 'expansion_core.windows.chat_commands.title'
+            - 180
+            - 90
+            - null
+            - null
+            - '@expansion.gui.context.window'
+            - '@expansion.framework.core.model.gui.grid.builder_factory'
+            - '@expansion.framework.core.model.gui.grid.data_collection_factory.array'
+            - '@expansion.service.chat_commands'
+            - '@expansion.framework.core.data_providers.chat_command_data_provider'
+            - '@expansion.framework.core.plugins.gui.window_help_description_factory'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.user_group}
+
+    expansion.framework.core.plugins.gui.window_help_description_factory:
+        class: 'eXpansion\Framework\Core\Plugins\Gui\WindowHelpDetailsFactory'
+        arguments:
+            - 'expansion_core.windows.chat_commands_description.title'
+            - 180
+            - 90
+            - null
+            - null
+            - '@expansion.gui.context.window'
+            - '@expansion.framework.core.gui.element.factory.line'
+            - '@expansion.framework.core.gui.element.factory.title_line'
         tags:
             - {name: expansion.plugin, data_provider: expansion.user_group}

@@ -3,7 +3,6 @@
 namespace eXpansion\Framework\Core\Services;
 
 use eXpansion\Framework\Core\Services\Application\AbstractApplication;
-use Symfony\Component\Console\Output\ConsoleOutputInterface;
 
 /**
  * eXpansion Application main routine.

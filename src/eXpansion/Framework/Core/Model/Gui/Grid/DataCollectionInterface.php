@@ -15,7 +15,7 @@ interface DataCollectionInterface
      *
      * @param int $page The page to get the data for.
      *
-     * @return array()
+     * @return array
      */
     public function getData($page);
 
