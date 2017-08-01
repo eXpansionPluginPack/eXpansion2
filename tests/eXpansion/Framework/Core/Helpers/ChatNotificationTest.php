@@ -58,6 +58,41 @@ class ChatNotificationTest extends TestCore
         $chatNotification->sendMessage('expansion_core.test_color', null, ['%test%' => 'Toto']);
     }
 
+    public function testSendMessageToList()
+    {
+        $colorCodes = $this->container->getParameter('expansion.config.core_chat_color_codes');
+        $colorCode = $colorCodes['test'];
+
+        $translate = [
+            0 => ['Lang' => 'fr', 'Text' => '$z' . $colorCode . 'Ceci est une trad de test : Toto'],
+            1 => ['Lang' => 'de', 'Text' => '$z' . $colorCode . 'This is a test translation : Toto'],
+            2 => ['Lang' => 'fi', 'Text' => '$z' . $colorCode . 'Tämä on testikäännös : Toto'],
+            3 => ['Lang' => 'nl', 'Text' => '$z' . $colorCode . 'This is a test translation : Toto'],
+            4 => ['Lang' => 'en', 'Text' => '$z' . $colorCode . 'This is a test translation : Toto'],
+        ];
+
+
+        $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
+        $dedicatedConnection->expects($this->once())
+            ->method('chatSendServerMessage')
+            ->with($translate, 'toto1,toto2');
+
+        $chatNotification = $this->getChatNotificationHelper();
+        $chatNotification->sendMessage('expansion_core.test_color', ['toto1', 'toto2'], ['%test%' => 'Toto']);
+    }
+
+    public function testGetMessage()
+    {
+        $colorCodes = $this->container->getParameter('expansion.config.core_chat_color_codes');
+        $colorCode = $colorCodes['test'];
+
+        $chatNotification = $this->getChatNotificationHelper();
+        $translation = $chatNotification->getMessage('expansion_core.test_color', ['%test%' => 'Toto'], 'en');
+
+        $this->assertEquals('$z' . $colorCode . 'This is a test translation : Toto', $translation);
+
+    }
+
 
     /**
      * @return ChatNotification

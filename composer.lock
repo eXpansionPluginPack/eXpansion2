@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9aedd2ed104bf890f74f332e5708a406",
+    "content-hash": "ec31eb7ab54bb73d300b4d0122e0f82e",
     "packages": [
         {
             "name": "bluepsyduck/maniascript",
@@ -1145,6 +1145,48 @@
             ],
             "description": "Allow simplified manupulation of recursive associative arrays.",
             "time": "2017-02-17T10:14:26+00:00"
+        },
+        {
+            "name": "oliverde8/asynchronous-jobs",
+            "version": "1.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/oliverde8/PHP-AsynchronousJobs.git",
+                "reference": "5c847a32d50cee0e5eb442b1c74f1838ce3bd226"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/oliverde8/PHP-AsynchronousJobs/zipball/5c847a32d50cee0e5eb442b1c74f1838ce3bd226",
+                "reference": "5c847a32d50cee0e5eb442b1c74f1838ce3bd226",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*"
+            },
+            "bin": [
+                "bin/AsynchronousJobsRun.php"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "oliverde8\\AsynchronousJobs\\": "src/AsynchronousJobs"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Oliver de Cramer",
+                    "homepage": "http://oliver-decramer.com"
+                }
+            ],
+            "description": "Execute new php instances easily as you would threads.",
+            "time": "2016-03-14T18:52:29+00:00"
         },
         {
             "name": "paragonie/random_compat",
