@@ -19,9 +19,12 @@ class uiButton extends abstractUiElement implements ScriptFeatureable
     protected $backColor = self::COLOR_DEFAULT;
     protected $focusColor = "bbb";
     protected $borderColor = "fff";
+    protected $translate = false;
 
     protected $action = null;
     protected $text = "button";
+    protected $scale = 1.;
+
 
     const TYPE_DECORATED = "decorated";
     const TYPE_DEFAULT = "default";
@@ -57,7 +60,8 @@ class uiButton extends abstractUiElement implements ScriptFeatureable
         $buttonFrame->setAlign("center", "center")
             ->setPosition($this->posX + ($this->width / 2), $this->posY - ($this->height / 2), $this->posZ)
             ->addClasses(['uiContainer', 'uiButton'])
-            ->addDataAttribute("action", $this->action);
+            ->addDataAttribute("action", $this->action)
+            ->setScale($this->scale);
 
         if ($this->type == self::TYPE_DECORATED) {
             $quad = new Quad();
@@ -78,7 +82,10 @@ class uiButton extends abstractUiElement implements ScriptFeatureable
             ->setTextColor($this->textColor)
             ->addClass('uiButtonElement')
             ->setAlign("center", "center2");
-        //->setPosition(-$this->width / 2, $this->height / 2);
+
+        if ($this->translate) {
+            $label->setTranslate(true);
+        }
         $label->setDataAttributes($this->_dataAttributes);
         $label->addClasses($this->_classes);
 
@@ -138,6 +145,8 @@ EOD;
     public function setType($type)
     {
         $this->type = $type;
+
+        return $this;
     }
 
     /**
@@ -154,6 +163,8 @@ EOD;
     public function setTextColor($textColor)
     {
         $this->textColor = $textColor;
+
+        return $this;
     }
 
     /**
@@ -170,6 +181,8 @@ EOD;
     public function setBackgroundColor($backColor)
     {
         $this->backColor = $backColor;
+
+        return $this;
     }
 
     /**
@@ -186,6 +199,8 @@ EOD;
     public function setBorderColor($borderColor)
     {
         $this->borderColor = $borderColor;
+
+        return $this;
     }
 
     /**
@@ -202,6 +217,8 @@ EOD;
     public function setAction($action)
     {
         $this->action = $action;
+
+        return $this;
     }
 
     /**
@@ -218,6 +235,8 @@ EOD;
     public function setFocusColor($focusColor)
     {
         $this->focusColor = $focusColor;
+
+        return $this;
     }
 
     /**
@@ -234,6 +253,45 @@ EOD;
     public function setText($text)
     {
         $this->text = $text;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getScale()
+    {
+        return $this->scale;
+    }
+
+    /**
+     * @param float $scale
+     */
+    public function setScale($scale)
+    {
+        $this->scale = $scale;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getTranslate()
+    {
+        return $this->translate;
+
+    }
+
+    /**
+     * @param bool $translate
+     */
+    public function setTranslate($translate)
+    {
+        $this->translate = $translate;
+
+        return $this;
     }
 
 }

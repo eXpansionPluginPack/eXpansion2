@@ -112,8 +112,7 @@ class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMap
      */
     public function onBeginMap(Map $map)
     {
-        $this->chatNotification->sendMessage('expansion_maps.chat.onbeginmap', null,
-            ['%name%' => $map->name, '%author%' => $map->author]);
+
     }
 
     /**

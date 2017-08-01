@@ -95,7 +95,6 @@ class uiTooltip extends abstractUiElement implements ScriptFeatureable
        ***
        if (Event.Control != Null) {
 			if (Event.Control.HasClass("tooltip") )  {
-			log(Now ^ "ok");
 			declare tooltipLabel = (exp_tooltip.Controls[0] as CMlLabel);
 			declare text = Event.Control.DataAttributeGet("tooltip");
 			declare sizeX = tooltipLabel.ComputeWidth(text);			 			    						       

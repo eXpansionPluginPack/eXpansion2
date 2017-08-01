@@ -1,17 +1,33 @@
 services:
-    eXpansion.maps.chat_commands.mapslist:
+    expansion.bundle.maps.chat_commands.mapslist:
         class: eXpansion\Bundle\Maps\ChatCommand\MapsList
         arguments:
-          - 'maps'
-          - ['list']
-          - '@eXpansion.maps.gui.window.mapslist_factory'
-          - '@eXpansion.bundle.maps.plugins.maps'
+            - 'maps'
+            - ['list']
+            - '@expansion.bundle.maps.gui.window.mapslist_factory'
+            - '@expansion.bundle.maps.plugins.maps'
 
-    eXpansion.maps.plugins.chat_commands.mapslist:
+    expansion.bundle.maps.plugins.chat_commands.mapslist:
         class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
         arguments:
             -
-              - '@eXpansion.maps.chat_commands.mapslist'
+              - '@expansion.bundle.maps.chat_commands.mapslist'
         tags:
             - {name: expansion.plugin, data_provider: expansion.chat_command_data}
             - {name: expansion.plugin.parent, parent: expansion.bundle.maps.plugins.maps}
+
+    expansion.bundle.maps.chat_commands.jukebox:
+        class: eXpansion\Bundle\Maps\ChatCommand\Jukebox
+        arguments:
+            - 'jukebox'
+            - ['jb']
+            - '@expansion.bundle.maps.plugins.jukebox'
+
+    expansion.bundle.maps.plugins.chat_commands.jukebox:
+        class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
+        arguments:
+            -
+              - '@eXpansion.bundle.maps.chat_commands.jukebox'
+        tags:
+            - {name: expansion.plugin, data_provider: expansion.chat_command_data}
+            - {name: expansion.plugin.parent, parent: expansion.bundle.maps.plugins.jukebox}

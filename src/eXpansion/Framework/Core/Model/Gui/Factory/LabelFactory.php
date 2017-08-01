@@ -20,6 +20,7 @@ class LabelFactory
         $label = new uiLabel($text, $type);
 
         if ($translate) {
+            $label->setTranslate(true);
             $label->setTextId($text);
         } else {
             $label->setText($text);

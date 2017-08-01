@@ -96,6 +96,11 @@ class Manialink implements ManialinkInterface
     {
     }
 
+    public function removeChild(Renderable $child)
+    {
+
+    }
+
     /**
      * @inheritdoc
      */

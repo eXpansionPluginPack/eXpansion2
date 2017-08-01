@@ -10,3 +10,17 @@ services:
         tags:
           - {name: expansion.plugin, data_provider: mp.legacy.maplist}
           - {name: expansion.plugin, data_provider: mp.legacy.map}
+
+    expansion.bundle.maps.plugins.jukebox:
+        class: eXpansion\Bundle\Maps\Plugins\Jukebox
+        arguments:
+          - '@expansion.service.dedicated_connection'
+          - '@expansion.helper.chat_notification'
+          - '@expansion.bundle.maps.services.jukeboxservice'
+          - '@expansion.helper.admingroups'
+          - '@expansion.storage.player'
+          - '@expansion.storage.map'
+          - '@expansion.bundle.maps.gui.window.jukebox_factory'
+        tags:
+          - {name: expansion.plugin, data_provider: mp.script.podium}
+          - {name: expansion.plugin, data_provider: mp.legacy.map}

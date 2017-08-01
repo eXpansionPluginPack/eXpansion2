@@ -93,12 +93,30 @@ class AdminGroups
     /**
      * Checks if a login or player has a certain permission or not.
      *
-     * @param string|Player $login Login of the player to check for permission.
+     * @param string|Group|Player $login Login of the player to check for permission.
      * @param string $permission The permission to check for.
      *
      * @return bool
      */
-    public function hasPermission($login, $permission)
+    public function hasPermission($recipient, $permission)
+    {
+
+        if ($recipient instanceof Group) {
+            $check = true;
+            foreach ($recipient->getLogins() as $login) {
+                if ($this->hasLoginPermission($login, $permission) === false) {
+                    $check = false;
+                    echo "$login false";
+                }
+            }
+
+            return $check;
+        } else {
+            return $this->hasLoginPermission($recipient, $permission);
+        }
+    }
+
+    protected function hasLoginPermission($login, $permission)
     {
         if ($login instanceof Player) {
             $login = $login->getLogin();
@@ -106,6 +124,7 @@ class AdminGroups
 
         return $this->adminGroupConfiguration->hasPermission($login, $permission);
     }
+
 
     /**
      * Check if a group has a certain permission or not.
