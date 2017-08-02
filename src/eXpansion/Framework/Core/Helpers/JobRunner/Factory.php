@@ -21,23 +21,25 @@ class Factory
      */
     public function getJobRunner()
     {
-        return JobRunner::getInstance('expansion', 'php', 'var/tmp/asnychronous');
+        return JobRunner::getInstance('expansion', PHP_BINARY, 'var/tmp/asynchronous');
     }
 
     /**
      * @param $url
      * @param $callback
-     * @param null $additionalData
+     * @param null|mixed $additionalData
      * @param array $options
      *
+     * @param array|\stdClass $parameters one dimensional array or \stdClass with post key-value pairs
      * @return CallbackCurl
      */
-    public function createCurlJob($url, $callback, $additionalData = null, $options = [])
+    public function createCurlJob($url, $callback, $additionalData = null, $options = [], $parameters = [])
     {
         $curlJob = new CallbackCurl();
         $curlJob->setCallback($callback);
         $curlJob->setUrl($url);
         $curlJob->setOptions($options);
+        $curlJob->setParameters($parameters);
         $curlJob->__additionalData = $additionalData;
 
         return $curlJob;

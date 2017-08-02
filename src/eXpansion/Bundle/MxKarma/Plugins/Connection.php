@@ -20,8 +20,10 @@
 namespace eXpansion\Bundle\MxKarma\Plugins;
 
 use eXpansion\Bundle\MxKarma\Entity\MxRating;
+use eXpansion\Framework\Core\Helpers\Http;
 use eXpansion\Framework\Core\Services\Application\Dispatcher;
 use Maniaplanet\DedicatedServer\Structures\GameInfos;
+use oliverde8\AsynchronousJobs\Job\CallbackCurl;
 
 /**
  * Description of Connection
@@ -31,7 +33,8 @@ use Maniaplanet\DedicatedServer\Structures\GameInfos;
 class Connection
 {
 
-    private $address = "http://karma.mania-exchange.com/api2/";
+   // private $address = "http://karma.mania-exchange.com/api2/";
+    private $address = "http://localhost/index.html?";
 
     private $connected = false;
 
@@ -53,9 +56,10 @@ class Connection
      *
      * @param Dispatcher $dispatcher
      */
-    public function __construct(Dispatcher $dispatcher)
+    public function __construct(Dispatcher $dispatcher, Http $http)
     {
         $this->dispatcher = $dispatcher;
+        $this->http = $http;
     }
 
 
@@ -75,18 +79,14 @@ class Connection
             "testMode" => "true",
         );
 
-        $this->httpGet(
+        $this->http->get(
             $this->buildUrl("startSession", $params),
             array($this, "xConnect")
         );
     }
 
-    public function xConnect($answer, $httpCode)
+    public function xConnect( $answer)
     {
-
-        if ($httpCode != 200) {
-            return;
-        }
 
         $data = $this->getObject($answer);
 
@@ -100,7 +100,7 @@ class Connection
         $outHash = hash("sha512", ($this->apiKey.$this->sessionSeed));
 
         $params = array("sessionKey" => $this->sessionKey, "activationHash" => $outHash);
-        $this->dataAccess->httpGet(
+        $this->http->call(
             $this->buildUrl("activateSession", $params),
             array($this, "xActivate"),
             array(),
@@ -124,7 +124,7 @@ class Connection
 
         if ($data->activated) {
             $this->connected = true;
-           //  Dispatcher::dispatch(new MXKarmaEvent(MXKarmaEvent::ON_CONNECTED));
+            //  Dispatcher::dispatch(new MXKarmaEvent(MXKarmaEvent::ON_CONNECTED));
         }
     }
 
@@ -192,7 +192,7 @@ class Connection
             return;
         }
 
-      //  Dispatcher::dispatch(new MXKarmaEvent(MXKarmaEvent::ON_VOTE_SAVE, $data->updated));
+        //  Dispatcher::dispatch(new MXKarmaEvent(MXKarmaEvent::ON_VOTE_SAVE, $data->updated));
     }
 
     /**
@@ -317,18 +317,8 @@ class Connection
     private function buildUrl($method, $params)
     {
         $url = $this->address.$method;
-        $first = true;
-        $buffer = "";
-        foreach ($params as $key => $value) {
-            $prefix = "&";
-            if ($first) {
-                $first = false;
-                $prefix = "?";
-            }
-            $buffer .= $prefix.$key."=".rawurlencode($value);
-        }
 
-        return $url.$buffer;
+        return $url."?".http_build_query($params);
     }
 
     /**
