@@ -15,6 +15,18 @@ expansion_jukebox:
           help: "usage /jukebox :number:  or /jukebox drop, for admins also /jukebox clear"
           description: "numeric value adds map with index to jukebox, keyword 'drop' will drop your wish, and for admins keyword 'clear' will clear all maps from queue"
 
+expansion_mx:
+  command:
+      add:
+          description: "mania-exchange id for map"
+          help: "Adds map from mania-excahange. usage //add :number:"
+  chat:
+      nopermission: "|error| {error}You don't have enough permissions to add map from Mania-Exchange."
+      apierror: "|error| {error}Mania-Exchange Api Error: \"{highlight}%message% {error}\" ({highlight}%status%{error})"
+      httperror: "|error| {error}Mania-Exchange Http Error: \"{highlight}%message% {error}\" ({highlight}%status%{error})"
+      success: "|admin| {info}Map {variable}%mapname% {info}by {variable}%mapauthor% {info}added successfully from Mania-Exchange."
+      start: "|admin| {info}Download starting for {highlight}%id% {info}from {highlight}%site% {info}Mania-Exchange."
+      dedicatedexception: "|error| {error} Dedicated Server error: {highlight}%message%"
 
 expansion_maps:
   gui:

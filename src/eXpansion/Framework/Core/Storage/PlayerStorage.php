@@ -64,6 +64,8 @@ class PlayerStorage implements ListenerInterfaceMpLegacyPlayer, ListenerInterfac
                 return $this->playerFactory->createPlayer($playerInformation, $playerDetails);
             } catch (UnknownPlayerException $e) {
                 // @todo log unknown player error
+                echo "unknown player $login\n";
+
                 return new Player();
             }
         }
@@ -145,7 +147,6 @@ class PlayerStorage implements ListenerInterfaceMpLegacyPlayer, ListenerInterfac
     {
         return $this->spectators;
     }
-
 
 
     public function onPreLoop()

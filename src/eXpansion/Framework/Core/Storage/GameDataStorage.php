@@ -1,7 +1,10 @@
 <?php
 
 namespace eXpansion\Framework\Core\Storage;
+
 use Maniaplanet\DedicatedServer\Structures\GameInfos;
+use Maniaplanet\DedicatedServer\Structures\ServerOptions;
+use Maniaplanet\DedicatedServer\Structures\SystemInfos;
 use Maniaplanet\DedicatedServer\Structures\Version;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
 
@@ -23,6 +26,12 @@ class GameDataStorage
      * Constant used for unknown titles.
      */
     const TITLE_UNKNOWN = 'unknown';
+
+    /** @var  SystemInfos */
+    protected $systemInfo;
+
+    /** @var  ServerOptions */
+    protected $serverOptions;
 
     /** @var  GameInfos */
     protected $gameInfos;
@@ -102,5 +111,38 @@ class GameDataStorage
     public function getTitle()
     {
         return $this->titles->get($this->getVersion()->titleId, self::TITLE_UNKNOWN);
+    }
+
+    /**
+     * @return ServerOptions
+     */
+    public function getServerOptions()
+    {
+        return $this->serverOptions;
+    }
+
+    /**
+     * @param ServerOptions $serverOptions
+     */
+    public function setServerOptions($serverOptions)
+    {
+        $this->serverOptions = $serverOptions;
+    }
+
+    /**
+     * @param Systeminfos $systemInfo
+     */
+    public function setSystemInfo(Systeminfos $systemInfo)
+    {
+
+        $this->systemInfo = $systemInfo;
+    }
+
+    /**
+     * @return SystemInfos
+     */
+    public function getSystemInfo()
+    {
+        return $this->systemInfo;
     }
 }

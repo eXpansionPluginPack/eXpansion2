@@ -1,9 +1,9 @@
 parameters:
     expansion.storage.player.class: eXpansion\Framework\Core\Storage\PlayerStorage
     expansion.storage.map.class: eXpansion\Framework\Core\Storage\MapStorage
-    expansion.framework.core.storage.game_data.class: eXpansion\Framework\Core\Storage\GameDataStorage
+    expansion.storage.gamedata.class: eXpansion\Framework\Core\Storage\GameDataStorage
 
-    expansion.framework.core.storage.game_data.mode.codes:
+    expansion.storage.gamedata.mode.codes:
         0 : script
         1 : round
         2 : timeattack
@@ -12,7 +12,7 @@ parameters:
         5 : cup
         6 : stunts
 
-    expansion.framework.core.storage.game_data.titles:
+    expansion.storage.gamedata.titles:
         'TMStadium@nadeo': 'TM'
         'TMStadium':       'TM'
         'TMValley@nadeo':  'TM'
@@ -38,11 +38,11 @@ services:
         arguments:
             - "@expansion.service.dedicated_connection"
 
-    expansion.framework.core.storage.game_data:
-        class: "%expansion.framework.core.storage.game_data.class%"
+    expansion.storage.gamedata:
+        class: "%expansion.storage.gamedata.class%"
         arguments:
-          - "%expansion.framework.core.storage.game_data.mode.codes%"
-          - "%expansion.framework.core.storage.game_data.titles%"
+          - "%expansion.storage.gamedata.mode.codes%"
+          - "%expansion.storage.gamedata.titles%"
 
     expansion.framework.core.storage.data.player.factory:
         class: "%expansion.framework.core.storage.data.player.factory%"

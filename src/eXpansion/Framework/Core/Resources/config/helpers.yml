@@ -1,9 +1,9 @@
 services:
     expansion.helper.time:
-        class: 'eXpansion\Framework\Core\Helpers\Time'
+        class: eXpansion\Framework\Core\Helpers\Time
 
     expansion.helper.translations:
-        class: 'eXpansion\Framework\Core\Helpers\Translations'
+        class: eXpansion\Framework\Core\Helpers\Translations
         arguments:
             - '@translator'
             - ['fr', 'de', 'fi', 'nl', 'en']
@@ -11,7 +11,7 @@ services:
             - '%expansion.config.core_chat_glyph_icons%'
 
     expansion.helper.chat_notification:
-        class: 'eXpansion\Framework\Core\Helpers\ChatNotification'
+        class: eXpansion\Framework\Core\Helpers\ChatNotification
         arguments:
             - '@expansion.service.dedicated_connection'
             - '@expansion.helper.translations'
@@ -19,15 +19,15 @@ services:
             - '@expansion.service.console'
 
     expansion.helper.chat_output:
-        class: 'eXpansion\Framework\Core\Helpers\ChatOutput'
+        class: eXpansion\Framework\Core\Helpers\ChatOutput
         arguments:
             - '@expansion.service.dedicated_connection'
             - '@expansion.helper.chat_notification'
 
     expansion.helper.http:
-        class: 'eXpansion\Framework\Core\Helpers\Http'
-        tags:
-            - { name: kernel.event_listener, event: expansion.post_loop }
+        class: eXpansion\Framework\Core\Helpers\Http
+        arguments: ['@expansion.service.jobrunner.factory']
+
 
     expansion.helper.data.array_filter:
         class: 'eXpansion\Framework\Core\Helpers\Data\ArrayFilter'

@@ -2,6 +2,10 @@
 
 namespace eXpansion\Framework\Core\Helpers\JobRunner;
 
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
+use eXpansion\Framework\Core\Helpers\Structures\HttpRequest;
+use eXpansion\Framework\Core\Helpers\Structures\HttpResult;
 use oliverde8\AsynchronousJobs\Job;
 use oliverde8\AsynchronousJobs\Job\CallbackCurl;
 use oliverde8\AsynchronousJobs\JobRunner;
@@ -14,7 +18,7 @@ use oliverde8\AsynchronousJobs\JobRunner;
  * @copyright 2017 Smile
  * @package Tests\eXpansion\Framework\Core\Helpers\JobRunner
  */
-class Factory
+class Factory implements ListenerInterfaceExpTimer
 {
     /**
      * @return JobRunner
@@ -35,12 +39,12 @@ class Factory
      */
     public function createCurlJob($url, $callback, $additionalData = null, $options = [], $parameters = [])
     {
-        $curlJob = new CallbackCurl();
+        $curlJob = new HttpRequest();
         $curlJob->setCallback($callback);
         $curlJob->setUrl($url);
         $curlJob->setOptions($options);
         $curlJob->setParameters($parameters);
-        $curlJob->__additionalData = $additionalData;
+        $curlJob->setAdditionalData($additionalData);
 
         return $curlJob;
     }
@@ -54,11 +58,18 @@ class Factory
     }
 
 
-    /**
-     * On each loop check for finished jobs.
-     */
-    public function onExpansionPostLoop()
+    public function onPreLoop()
+    {
+
+    }
+
+    public function onPostLoop()
     {
         $this->getJobRunner()->proccess();
+    }
+
+    public function onEverySecond()
+    {
+
     }
 }

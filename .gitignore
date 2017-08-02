@@ -17,3 +17,4 @@
 /.idea/
 composer.phar
 /app/config/plugins/*.yml
+/tmp/

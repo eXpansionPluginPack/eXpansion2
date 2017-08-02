@@ -24,3 +24,16 @@ services:
         tags:
           - {name: expansion.plugin, data_provider: mp.script.podium}
           - {name: expansion.plugin, data_provider: mp.legacy.map}
+
+    expansion.bundle.maps.plugins.maniaexchange:
+        class: eXpansion\Bundle\Maps\Plugins\ManiaExchange
+        arguments:
+          - '@expansion.service.dedicated_connection'
+          - '@expansion.helper.chat_notification'
+          - '@expansion.helper.http'
+          - '@expansion.helper.admingroups'
+          - '@expansion.storage.gamedata'
+          - '@expansion.service.console'
+          - '@expansion.bundle.maps.services.jukeboxservice'
+        tags:
+          - {name: expansion.plugin, data_provider: exp.application}

@@ -36,7 +36,7 @@ class DataProviderManagerTest extends TestCore
         $gameDataStorageMock->method('getGameModeCode')->willReturn('script');
         $gameDataStorageMock->method('getGameInfos')->willReturn($gameInfos);
 
-        $this->container->set('expansion.framework.core.storage.game_data', $gameDataStorageMock);
+        $this->container->set('expansion.storage.gamedata', $gameDataStorageMock);
     }
 
 

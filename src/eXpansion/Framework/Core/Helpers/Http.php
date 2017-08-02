@@ -3,6 +3,9 @@
 namespace eXpansion\Framework\Core\Helpers;
 
 use eXpansion\Framework\Core\Helpers\JobRunner\Factory;
+use eXpansion\Framework\Core\Helpers\Structures\HttpRequest;
+use eXpansion\Framework\Core\Helpers\Structures\HttpResult;
+use eXpansion\Framework\Core\Services\Application\AbstractApplication;
 use oliverde8\AsynchronousJobs\Job\CallbackCurl;
 use oliverde8\AsynchronousJobs\JobRunner;
 
@@ -58,7 +61,9 @@ class Http
     public function get($url, callable $callback, $additionalData = null, $options = [])
     {
         $options[CURLOPT_FOLLOWLOCATION] = true;
-        $additionalData['_callback'] = $callback;
+        $options[CURLOPT_USERAGENT] = "eXpansionPluginPack v " . AbstractApplication::EXPANSION_VERSION;
+
+        $additionalData['callback'] = $callback;
 
         $this->call($url, [$this, 'process'], $additionalData, $options);
     }
@@ -77,6 +82,7 @@ class Http
     {
         $options[CURLOPT_POST] = true;
         $options[CURLOPT_FOLLOWLOCATION] = true;
+        $options[CURLOPT_USERAGENT] = "eXpansionPluginPack v " . AbstractApplication::EXPANSION_VERSION;
 
         $query = '';
         if (!empty($postFields)) {
@@ -85,7 +91,7 @@ class Http
         $options[CURLOPT_URL] = $url;
         $options[CURLOPT_POSTFIELDS] = $query;
 
-        $additionalData['_callback'] = $callback;
+        $additionalData['callback'] = $callback;
 
         $curlJob = $this->factory->createCurlJob($url, [$this, 'process'], $additionalData, $options, $postFields);
 
@@ -93,15 +99,15 @@ class Http
         $this->factory->startJob($curlJob);
     }
 
-    public function process(CallbackCurl $curl)
+    public function process(HttpRequest $curl)
     {
+        $data = $curl->getData();
+        $additionalData = $curl->getAdditionalData();
+        $callback = $additionalData['callback'];
+        unset($additionalData['callback']);
 
-        $curl->getData();
-        $curl->getCurlInfo();
-        $curl->getCurlError();
-
-        print_r($curl->__additionalData);
-
+        $obj = new HttpResult($data['response'], $data['curlInfo'], $curl->getCurlError(), $additionalData);
+        call_user_func($callback, $obj);
     }
 
 
