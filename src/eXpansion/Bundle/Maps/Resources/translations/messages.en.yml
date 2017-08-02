@@ -4,8 +4,8 @@ expansion_jukebox:
       removemap: '|info| {info}Map dropped from jukebox {variable}%mapname%{info} wished by {variable}%nickname%{info}. Queue lenght: {variable}%length%'
       noremove: "|warning| {warning}You can't remove map %mapname% {warning}from queue."
       noadd: "|warning| {warning}You can't add map %mapname% {warning}to queue, since you already have map at queue."
-      nomap: '|error| {error} No map was not found.'
-      nopermission: "|error| {error} You don't have enough permissions to clear jukebox."
+      nomap: '|error| {error}No map was not found.'
+      nopermission: "|error| {error}You don't have enough permissions to clear jukebox."
       clear: "|info| {admin_info}%adminlevel% %admin% {admin_info}clears the Jukebox queue!"
       nextjbmap: '|info| {info}Next map {variable}%mapname%{info} by {variable}%mapauthor% {info} wished by {variable}%nickname%{info}. Queue lenght: {variable}%length%'
       nextmap: '|info| {info}Next map {variable}%name%{info} by {variable}%author%'
@@ -18,17 +18,35 @@ expansion_jukebox:
 expansion_mx:
   command:
       add:
-          description: "mania-exchange id for map"
-          help: "Adds map from mania-excahange. usage //add :number:"
+          description: "Adds a map from Mania-Exchange. usage //add 3 tm or //add 3 sm"
+          mxid: "numeric value of Mania-Exchange map id"
+          site: "accepts tm or sm"
+      remove:
+          description: "removes map current map or map with index"
+          index: "numeric value from /maps or 'this'"
   chat:
       nopermission: "|error| {error}You don't have enough permissions to add map from Mania-Exchange."
       apierror: "|error| {error}Mania-Exchange Api Error: \"{highlight}%message% {error}\" ({highlight}%status%{error})"
       httperror: "|error| {error}Mania-Exchange Http Error: \"{highlight}%message% {error}\" ({highlight}%status%{error})"
       success: "|admin| {info}Map {variable}%mapname% {info}by {variable}%mapauthor% {info}added successfully from Mania-Exchange."
       start: "|admin| {info}Download starting for {highlight}%id% {info}from {highlight}%site% {info}Mania-Exchange."
-      dedicatedexception: "|error| {error} Dedicated Server error: {highlight}%message%"
+      dedicatedexception: "|error| {error}Dedicated Server error: {highlight}%message%"
+  gui:
+      mxsearch:
+          window:
+              title: "Mania-Exchange: Search"
+          button:
+
+          column:
+
+
+
 
 expansion_maps:
+  chat:
+      nopermission: "|error| {error}You don't have enough permissions to do this."
+      dedicatedexception: "|error| {error}Dedicated Server error: {highlight}%message%"
+      removemap: "|admin| {admin_info}%level% %admin% {admin_info}removes map %map% {admin_info}from current playlist."
   gui:
       button:
           drop: "drop"

@@ -7,6 +7,7 @@ services:
           - '@expansion.helper.admingroups'
           - '@expansion.storage.map'
           - '@expansion.helper.chat_notification'
+          - '@expansion.storage.player'
         tags:
           - {name: expansion.plugin, data_provider: mp.legacy.maplist}
           - {name: expansion.plugin, data_provider: mp.legacy.map}

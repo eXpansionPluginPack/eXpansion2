@@ -10,7 +10,6 @@ use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\Http;
 use eXpansion\Framework\Core\Helpers\Structures\HttpResult;
 use eXpansion\Framework\Core\Helpers\TMString;
-use eXpansion\Framework\Core\Services\Application\AbstractApplication;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use Maniaplanet\DedicatedServer\Connection;
@@ -132,10 +131,9 @@ class ManiaExchange implements ListenerInterfaceExpApplication
             );
 
             return;
-        } else {
-            $mxInfo = new MxInfo($json);
         }
 
+        $mxInfo = new MxInfo($json);
         $additionalData['mxInfo'] = $mxInfo;
 
         if (!$result->hasError()) {

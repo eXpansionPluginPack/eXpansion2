@@ -41,6 +41,7 @@ class BaseStorageUpdateListener
         $this->dispatcher = $dispatcher;
 
         $gameInfos = $this->connection->getCurrentGameInfo();
+
         $serverOptions = $this->connection->getServerOptions();
         $this->gameDataStorage->setServerOptions($serverOptions);
 

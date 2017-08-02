@@ -1,3 +1,91 @@
+parameters:
+    mania_exchange_enumeration.tracksearch:
+             0: "Default"
+             2: "Latest tracks"
+             3: "Recently awarded"
+             4: "Best of the Week"
+             5: "Best of the Month"
+             21: "Best of the Week MXKarma"
+             22: "Best of the Month MXKarma"
+             # 6: "Favorite author tracks (requires user to be logged in)"
+             # 7: "Downloaded tracks (requires user to be logged in)"
+             # 8 : "Awarded tracks (requires user to be logged in)"
+             # 9: "Tracks you uploaded a replay on (requires user to be logged in)"
+             10: "Supporter tracks"
+             # 11: "Duo account tracks"
+             19: "Competitive Tracks of the Week"
+             20: "Competitive Tracks of the Month"
+
+    mania_exchange_enumeration.order:
+              -1: "Default"
+              0: "Track name "
+              1: "Author name"
+             # 2: "Uploaded (newest to oldest)"
+             # 3: "Uploaded (oldest to newest)"
+             # 4: "Updated (newest to oldest)"
+            #  5: "Updated (oldest to newest)"
+              6: "Activity"
+            #  7: "Activity (least recent to most recent)"
+              8: "Awards"
+            #  9: "Awards (least to most)"
+              10: "Comments"
+            #  11: "Comments (least to most)"
+            #  12: "Difficulty (easiest to hardest)"
+              13: "Difficulty"
+              14: "Length"
+            #  15: "Length (longest to shortest)"
+            #  24: "Track value (lowest to highest)"
+              25: "Track value"
+              #26: "Online rating/MXKarma (lowest to highest)"
+              27: "Online rating"
+    mania_exchange_enumeration.operators:
+              -1: "None"
+              0: "Equals"
+              1: "Greater than"
+              2: "Less than"
+              3: "Less than or equal"
+              4: "Greater than or equal"
+    mania_exchange_enumeration.length:
+              -1: "All"
+              0: "15 secs"
+              1: "30 secs"
+              2: "45 secs"
+              3: "1 min"
+             # 4: "1 m 15 s"
+              5: "1 m 30 s"
+             # 6: "1 m 45 s"
+              7: "2 min"
+             # 8: "2 m 30 s"
+              9: "3 min"
+             # 10: "3 m 30 s"
+             # 11: "4 min"
+             # 12: "4 m 30 s"
+              13: "5 min"
+              14: "Long"
+    mania_exchange_enumeration.map_styles_sm:
+              1: "Solo"
+              2: "Team"
+              3: "Versus"
+              4: "Other"
+    mania_exchange_enumeration.map_styles_tm:
+              -1: "All"
+              1: "Race"
+              2: "Fullspeed"
+              3: "Tech"
+              4: "RPG"
+              5: "LOL"
+              6: "Press Forward"
+              7: "Speedtech"
+              8: "Multilap"
+              9: "Offroad"
+              10: "Trial"
+    mania_exchange_enumeration.difficulties:
+              -1: "All"
+              0: "Beginner"
+              1: "Intermediate"
+              2: "Advanced"
+              3: "Expert"
+
 services:
     expansion.bundle.maps.gui.window.mapslist_factory:
         class: eXpansion\Bundle\Maps\Plugins\Gui\MapsWindowFactory
@@ -12,12 +100,8 @@ services:
             - '@expansion.framework.core.model.gui.grid.data_collection_factory.array'
             - '@expansion.helper.time'
             - '@expansion.bundle.maps.plugins.jukebox'
-        calls:
-            - [setGridBuilderFactory, ['@expansion.framework.core.model.gui.grid.builder_factory']]
-            - [setDataCollectionFactory, ['@expansion.framework.core.model.gui.grid.data_collection_factory.array']]
-            - [setTimerFormatter, ['@expansion.helper.time']]
         tags:
-            - {name: expansion.plugin, data_provider: expansion.user_group}
+            - {name: expansion.plugin data_provider: expansion.user_group}
 
     expansion.bundle.maps.gui.window.jukebox_factory:
         class: eXpansion\Bundle\Maps\Plugins\Gui\JukeboxWindowFactory
@@ -33,9 +117,32 @@ services:
             - '@expansion.helper.time'
             - '@eXpansion.bundle.maps.services.jukeboxservice'
             - '@expansion.helper.admingroups'
-        calls:
-            - [setGridBuilderFactory, ['@expansion.framework.core.model.gui.grid.builder_factory']]
-            - [setDataCollectionFactory, ['@expansion.framework.core.model.gui.grid.data_collection_factory.array']]
-            - [setTimerFormatter, ['@expansion.helper.time']]
         tags:
-            - {name: expansion.plugin, data_provider: expansion.user_group}
+            - {name: expansion.plugin data_provider: expansion.user_group}
+
+    expansion.bundle.maps.gui.window.mania_exchange_window_factory:
+        class: eXpansion\Bundle\Maps\Plugins\Gui\ManiaExchangeWindowFactory
+        arguments:
+            - 'expansion_mx.gui.mxsearch.window.title'
+            - 210
+            - 130
+            - null
+            - null
+            - '@expansion.gui.context.window'
+            - '@expansion.framework.core.model.gui.grid.builder_factory'
+            - '@expansion.framework.core.model.gui.grid.data_collection_factory.array'
+            - '@expansion.helper.time'
+            - '@expansion.bundle.maps.plugins.maniaexchange'
+            - '@expansion.helper.http'
+            - '%mania_exchange_enumeration.tracksearch%'
+            - '%mania_exchange_enumeration.order%'
+            - '%mania_exchange_enumeration.length%'
+            - '%mania_exchange_enumeration.map_styles_tm%'
+            - '%mania_exchange_enumeration.map_styles_sm%'
+            - '%mania_exchange_enumeration.difficulties%'
+            - '%mania_exchange_enumeration.operators%'
+
+
+        tags:
+            - {name: expansion.plugin data_provider: expansion.user_group}
+

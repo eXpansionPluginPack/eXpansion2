@@ -48,11 +48,11 @@ class MapStorage
      *
      * @param string $uid The unique id of the map to get.
      *
-     * @return mixed
+     * @return Map
      */
     public function getMap($uid)
     {
-        return AssociativeArray::getFromKey($this->maps, $uid, null);
+        return AssociativeArray::getFromKey($this->maps, $uid,  new Map());
     }
 
     /**
@@ -64,7 +64,8 @@ class MapStorage
      */
     public function getMapByIndex($index)
     {
-        $map = array_slice($this->maps, (int) $index, 1, false);
+        $map = array_slice($this->maps, (int)$index, 1, false);
+
         return end($map);
     }
 

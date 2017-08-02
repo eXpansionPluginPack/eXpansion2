@@ -192,7 +192,6 @@ EOD;
             $idx += 1;
         }
 
-
         $frame->addChild($labelMark);
         $frame->addChild($labelTitle);
         $frame->addChild($entry);
