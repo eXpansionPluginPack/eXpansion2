@@ -42,7 +42,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
         // Start job and wait for it to end.
         $factory->startJob($job);
-        $factory->onExpansionPostLoop();
+        $factory->onPostLoop();
         $jobRunner->waitForAll();
 
         $this->assertTrue($this->triggered);
