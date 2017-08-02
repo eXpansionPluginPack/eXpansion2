@@ -48,5 +48,6 @@ interface ManialinkInterface
      */
     public function getContentFrame();
 
-
+    /** removes child control */
+    public function removeChild(Renderable $child);
 }

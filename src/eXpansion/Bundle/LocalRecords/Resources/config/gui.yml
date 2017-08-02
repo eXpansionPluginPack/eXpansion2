@@ -1,6 +1,6 @@
 services:
     eXpansion.local_records.gui.window.race_factory:
-        class: 'eXpansion\Bundle\LocalRecords\Plugins\Gui\RecordsWindowFactory'
+        class: eXpansion\Bundle\LocalRecords\Plugins\Gui\RecordsWindowFactory
         arguments:
             - 'expansion_local_records.gui.race.window.title'
             - 160

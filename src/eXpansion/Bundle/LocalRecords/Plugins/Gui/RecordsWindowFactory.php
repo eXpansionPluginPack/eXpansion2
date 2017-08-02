@@ -68,11 +68,13 @@ class RecordsWindowFactory extends WindowFactory
                 'position',
                 'expansion_local_records.gui.race.window.column.position',
                 '1',
+                true,
                 true
             )->addTextColumn(
                 'score',
                 'expansion_local_records.gui.race.window.column.score',
                 '3',
+                true,
                 true
             )->addTextColumn(
                 'nickname',
@@ -82,6 +84,7 @@ class RecordsWindowFactory extends WindowFactory
                 'login',
                 'expansion_local_records.gui.race.window.column.login',
                 '4',
+                true,
                 true
             );
 

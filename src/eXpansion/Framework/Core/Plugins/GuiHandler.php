@@ -77,8 +77,10 @@ class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserG
      */
     public function addToDisplay(ManialinkInterface $manialink)
     {
+
         $userGroup = $manialink->getUserGroup()->getName();
         $id = $manialink->getId();
+
         if (AssociativeArray::getFromKey($this->hideQueu, [$userGroup, $id])) {
             unset($this->hideQueu[$userGroup][$id]);
         }

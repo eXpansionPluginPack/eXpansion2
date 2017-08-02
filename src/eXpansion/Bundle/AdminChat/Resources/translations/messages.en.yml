@@ -11,6 +11,10 @@ expansion_admin_chat:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}changes the server name. New server name is {highlight}%parameter%'
     description: '{info}Change the name of the server.'
 
+  set_server_comment:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}changes the server comment. New server comment is {highlight}%parameter%'
+    description: '{info}Change the comment of the server.'
+
   kick:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}kicks {highlight}%player% {admin_info}. Reason: {highlight}%reason%'
     description: '{info}Kick a player from the server.'
@@ -23,7 +27,7 @@ expansion_admin_chat:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}unbans player with login: {highlight}%parameter%'
     description: '{info}Unban a player from the server.'
 
-  cleanban:
+  cleanbanlist:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} cleans the ban list.'
     description: '{info}Cleans the ban list.'
 

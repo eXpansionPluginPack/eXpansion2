@@ -16,6 +16,7 @@ abstract class AbstractApplication implements RunInterface
     const EVENT_STOP = "expansion.stop";
 
     const EXPANSION_VERSION = "2.0.0.0";
+    const SCRIPT_API_VERSION = "2.3.0";
 
     /** @var Connection */
     protected $connection;
@@ -80,7 +81,7 @@ abstract class AbstractApplication implements RunInterface
 
         // need to send this for scripts to start callback handling
         $this->connection->triggerModeScriptEvent("XmlRpc.EnableCallbacks", ["True"]);
-
+        $this->connection->triggerModeScriptEvent("XmlRpc.SetApiVersion", [self::SCRIPT_API_VERSION]);
         $this->dispatcher->dispatch(self::EVENT_READY, []);
 
         $this->console->writeln("And takeoff");

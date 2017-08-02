@@ -58,8 +58,8 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
      * @param                         $name
      * @param                         $sizeX
      * @param                         $sizeY
-     * @param null                    $posX
-     * @param null                    $posY
+     * @param null $posX
+     * @param null $posY
      * @param ManialinkFactoryContext $context
      */
     public function __construct(
@@ -124,8 +124,8 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
     final public function update($group)
     {
         if (isset($this->manialinks[$group->getName()])) {
-            $this->guiHandler->addToDisplay($this->manialinks[$group->getName()]);
             $this->updateContent($this->manialinks[$group->getName()]);
+            $this->guiHandler->addToDisplay($this->manialinks[$group->getName()]);
         }
     }
 

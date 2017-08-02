@@ -30,6 +30,7 @@ e_xpansion_core:
             server: '$afd'
             info: '$fff'
             warning: ''
+            error: '$d77'
             admin: '$fff'
             time: ''
             record: ''

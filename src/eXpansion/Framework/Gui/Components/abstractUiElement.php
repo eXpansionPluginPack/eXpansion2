@@ -125,16 +125,20 @@ abstract class abstractUiElement extends ScriptFeature implements Renderable
     {
         $this->width = $x;
         $this->height = $y;
+
+        return $this;
     }
 
     public function addDataAttribute($name, $value)
     {
         $this->_dataAttributes[$name] = $value;
+        return $this;
     }
 
     public function addClass($name)
     {
         $this->_classes[] = $name;
+        return $this;
     }
 
 }

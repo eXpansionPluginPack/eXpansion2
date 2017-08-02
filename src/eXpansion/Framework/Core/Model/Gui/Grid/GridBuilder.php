@@ -12,6 +12,7 @@ use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
 use FML\Controls\Frame;
 use FML\Controls\Label;
+use FML\Types\Renderable;
 
 
 /**
@@ -165,7 +166,7 @@ class GridBuilder
      * @param string $name
      * @param integer $widthCoefficiency
      * @param $action
-     * @param Label $renderer
+     * @param Renderable $renderer
      *
      * @return $this
      */
@@ -213,7 +214,7 @@ class GridBuilder
             $data[] = [
                 'text' => $columnData->getName(),
                 'width' => $columnData->getWidthCoeficiency(),
-                'translatable' => true,
+                'translatable' => true
             ];
         }
 

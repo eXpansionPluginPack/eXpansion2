@@ -1,6 +1,7 @@
 <?php
 namespace eXpansion\Framework\Core\Model\Gui\Factory;
 
+use eXpansion\Framework\Gui\Components\uiButton;
 use FML\Controls\Control;
 use FML\Controls\Frame;
 use FML\Controls\Quads\Quad_Icons64x64_1;
@@ -53,16 +54,16 @@ class PagerFactory
 
         // Show previous buttons
         if ($currentPageNumber > 2) {
-            $button = Quad_Icons64x64_1::create();
-            $button->setSubStyle(Quad_Icons64x64_1::SUBSTYLE_ArrowFirst)
+            $button = new uiButton("", uiButton::TYPE_DECORATED);
+            $button
                 ->setSize($buttonSize, $buttonSize)
                 ->setPosition(1, 0)
                 ->setAction($actionFirstPage);
             $frame->addChild($button);
         }
         if ($currentPageNumber > 1) {
-            $button = Quad_Icons64x64_1::create();
-            $button->setSubStyle(Quad_Icons64x64_1::SUBSTYLE_ArrowPrev)
+            $button = new uiButton("", uiButton::TYPE_DECORATED);
+            $button
                 ->setSize($buttonSize, $buttonSize)
                 ->setPosition(2 + $buttonSize, 0)
                 ->setAction($actionPreviousPage);
@@ -77,16 +78,16 @@ class PagerFactory
         $frame->addChild($label);
 
         if ($currentPageNumber < $lastPageNumber) {
-            $button = Quad_Icons64x64_1::create();
-            $button->setSubStyle(Quad_Icons64x64_1::SUBSTYLE_ArrowNext)
+            $button = new uiButton("", uiButton::TYPE_DECORATED);
+            $button
                 ->setSize($buttonSize, $buttonSize)
                 ->setPosition($frame->getWidth() - 1 - (2 * $buttonSize), 0)
                 ->setAction($actionNextPage);
             $frame->addChild($button);
         }
         if ($currentPageNumber < $lastPageNumber - 1) {
-            $button = Quad_Icons64x64_1::create();
-            $button->setSubStyle(Quad_Icons64x64_1::SUBSTYLE_ArrowLast)
+            $button = new uiButton("", uiButton::TYPE_DECORATED);
+            $button
                 ->setSize($buttonSize, $buttonSize)
                 ->setPosition($frame->getWidth() - 1 - $buttonSize, 0)
                 ->setAction($actionLastPage);

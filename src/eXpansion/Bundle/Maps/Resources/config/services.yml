@@ -1,0 +1,6 @@
+services:
+  eXpansion.bundle.maps.services.jukeboxservice:
+      class: eXpansion\Bundle\Maps\Services\JukeboxService
+      arguments:
+          - '@expansion.storage.player'
+          - '@expansion.helper.admingroups'

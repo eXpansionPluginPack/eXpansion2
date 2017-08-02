@@ -30,10 +30,28 @@
     }
 ***
 
+***FML_MouseClick***
+***
+if (Event.ControlId == "Close") {
+    Exp_CloseWindow = True;
+    Exp_lastAction = Now;
+}
+
+if (Event.ControlId == "Title")  {
+    Exp_Offset = Exp_Window.RelativePosition_V3 - <MouseX, MouseY>;
+    Exp_MoveWindow = True;
+    Exp_activeWindow = Exp_Window.Id;
+}
+if (Event.ControlId == "WindowBg")  {
+    Exp_activeWindow = Exp_Window.Id;
+}
+***
+
+
 ***FML_Loop***
 ***
 
-     if (Exp_OpenWindow) {
+    if (Exp_OpenWindow) {
         if (Exp_activeWindow == Exp_Window.Id) {
            Exp_Window.ZIndex = 1.;
         } else {
@@ -57,26 +75,6 @@
     if (Exp_CloseWindow && Exp_lastAction + 250 <= Now ) {
         TriggerPageAction(Exp_CloseButton.DataAttributeGet("action"));
         continue;
-    }
-
-    foreach (Event in PendingEvents) {
-        if ( (Event.Type == CMlEvent::Type::KeyPress && Event.KeyCode == 36) ||
-            (Event.Type == CMlEvent::Type::MouseClick && Event.ControlId == "Close")
-            ) {
-            Exp_CloseWindow = True;
-            Exp_lastAction = Now;
-        }
-
-        if (Event.Type == CMlEvent::Type::MouseClick && Event.ControlId == "Title")  {
-            Exp_Offset = Exp_Window.RelativePosition_V3 - <MouseX, MouseY>;
-            Exp_MoveWindow = True;
-            Exp_activeWindow = Exp_Window.Id;
-        }
-
-        if (Event.Type == CMlEvent::Type::MouseClick && Event.ControlId == "WindowBg")  {
-            Exp_activeWindow = Exp_Window.Id;
-        }
-
     }
 
     if (MouseLeftButton == True) {
