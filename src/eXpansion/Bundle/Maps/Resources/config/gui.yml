@@ -123,7 +123,7 @@ services:
     expansion.bundle.maps.gui.window.mania_exchange_window_factory:
         class: eXpansion\Bundle\Maps\Plugins\Gui\ManiaExchangeWindowFactory
         arguments:
-            - 'expansion_mx.gui.mxsearch.window.title'
+            - 'expansion_mx.gui.mxsearch.title'
             - 210
             - 130
             - null

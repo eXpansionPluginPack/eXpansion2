@@ -33,14 +33,18 @@ expansion_mx:
       dedicatedexception: "|error| {error}Dedicated Server error: {highlight}%message%"
   gui:
       mxsearch:
-          window:
-              title: "Mania-Exchange: Search"
+          title: "Mania-Exchange: Search"
           button:
-
+              install: "install"
           column:
-
-
-
+              index: "#"
+              name: "Name"
+              author: "Author"
+              envir: "Envir."
+              awards: '$ff0🏆'
+              length: "Length"
+              style: "Style"
+              add: "Install"
 
 expansion_maps:
   chat:
