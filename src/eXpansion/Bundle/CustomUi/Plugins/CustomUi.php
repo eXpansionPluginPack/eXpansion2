@@ -149,7 +149,7 @@ EOL;
 
     public function onPlayerConnect(Player $player)
     {
-        $this->setCustomUi($player->getLogin());
+
     }
 
     public function onPlayerDisconnect(Player $player, $disconnectionReason)
