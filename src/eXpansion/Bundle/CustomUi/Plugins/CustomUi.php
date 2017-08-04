@@ -96,7 +96,7 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
  		<position visible="true" pos="0 81. 5." />
  		
  		<!-- Checkpoint time information displayed in the middle of the screen when crossing a checkpoint -->
- 		<checkpoint_time visible="false" pos="0. 3. -10." />
+ 		<checkpoint_time visible="true" pos="0. 3. -10." />
  		
  		<!-- The avatar of the last player speaking in the chat displayed above the chat -->
  		<chat_avatar visible="false" />
