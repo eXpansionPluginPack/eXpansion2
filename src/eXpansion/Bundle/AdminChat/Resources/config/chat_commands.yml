@@ -14,7 +14,7 @@ services:
 
     expansion.admin_chat.chat_command.restart:
         class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
-        parent: expansion.admin_chat.chat_command.base
+        parent: 'expansion.admin_chat.chat_command.base'
         arguments:
             index_0: "restart"
             index_1: "restart"
@@ -26,7 +26,7 @@ services:
 
     expansion.admin_chat.chat_command.next:
         class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
-        parent: expansion.admin_chat.chat_command.base
+        parent: 'expansion.admin_chat.chat_command.base'
         arguments:
             index_0: "next"
             index_1: "next"
@@ -38,7 +38,7 @@ services:
 
     expansion.admin_chat.chat_command.set_server_name:
         class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-        parent: expansion.admin_chat.chat_command.base
+        parent: 'expansion.admin_chat.chat_command.base'
         arguments:
             index_0: "setservername"
             index_1: "set_server_name"
@@ -51,7 +51,7 @@ services:
 
     expansion.admin_chat.chat_command.set_server_comment:
         class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-        parent: expansion.admin_chat.chat_command.base
+        parent: 'expansion.admin_chat.chat_command.base'
         arguments:
             index_0: "setservercomment"
             index_1: "set_server_name"
@@ -64,7 +64,7 @@ services:
 
     expansion.admin_chat.chat_command.kick:
         class: eXpansion\Bundle\AdminChat\ChatCommand\ReasonUserCommand
-        parent: expansion.admin_chat.chat_command.base
+        parent: 'expansion.admin_chat.chat_command.base'
         arguments:
             index_0: "kick"
             index_1: "kick"
@@ -78,7 +78,7 @@ services:
 
     expansion.admin_chat.chat_command.ban:
         class: eXpansion\Bundle\AdminChat\ChatCommand\ReasonUserCommand
-        parent: expansion.admin_chat.chat_command.base
+        parent: 'expansion.admin_chat.chat_command.base'
         arguments:
             index_0: "ban"
             index_1: "ban"
@@ -93,7 +93,7 @@ services:
 
     expansion.admin_chat.chat_command.unban:
         class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-        parent: expansion.admin_chat.chat_command.base
+        parent: 'expansion.admin_chat.chat_command.base'
         arguments:
             index_0: "unban"
             index_1: "unban"
@@ -106,7 +106,7 @@ services:
 
     expansion.admin_chat.chat_command.cleanban:
           class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
-          parent: expansion.admin_chat.chat_command.base
+          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
               index_0: "cleanbanlist"
               index_1: "cleanbanlist"
@@ -119,7 +119,7 @@ services:
 
     expansion.admin_chat.chat_command.black:
         class: eXpansion\Bundle\AdminChat\ChatCommand\ReasonUserCommand
-        parent: expansion.admin_chat.chat_command.base
+        parent: 'expansion.admin_chat.chat_command.base'
         arguments:
             index_0: "black"
             index_1: "black"
@@ -133,7 +133,7 @@ services:
 
     expansion.admin_chat.chat_command.unblack:
         class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-        parent: expansion.admin_chat.chat_command.base
+        parent: 'expansion.admin_chat.chat_command.base'
         arguments:
             index_0: "unblack"
             index_1: "unblack"
@@ -146,7 +146,7 @@ services:
 
     expansion.admin_chat.chat_command.cleanblacklist:
           class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
-          parent: expansion.admin_chat.chat_command.base
+          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
               index_0: "cleanblacklist"
               index_1: "cleanblacklist"
@@ -158,7 +158,7 @@ services:
 
     expansion.admin_chat.chat_command.saveblacklist:
           class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          parent: expansion.admin_chat.chat_command.base
+          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
               index_0: "saveblacklist"
               index_1: "saveblacklist"
@@ -171,7 +171,7 @@ services:
 
     expansion.admin_chat.chat_command.loadblacklist:
           class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          parent: expansion.admin_chat.chat_command.base
+          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
               index_0: "loadblacklist"
               index_1: "loadblacklist"
@@ -184,7 +184,7 @@ services:
 
     expansion.admin_chat.chat_command.planets:
           class: eXpansion\Bundle\AdminChat\ChatCommand\AdminReturnCommand
-          parent: expansion.admin_chat.chat_command.base
+          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
               index_0: "planets"
               index_1: "planets"
@@ -197,7 +197,7 @@ services:
 
     expansion.admin_chat.chat_command.ignore:
           class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          parent: expansion.admin_chat.chat_command.base
+          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
               index_0: "ignore"
               index_1: "ignore"
@@ -210,7 +210,7 @@ services:
 
     expansion.admin_chat.chat_command.unignore:
           class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          parent: expansion.admin_chat.chat_command.base
+          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
               index_0: "unignore"
               index_1: "unignore"
@@ -223,7 +223,7 @@ services:
 
     expansion.admin_chat.chat_command.addguest:
           class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          parent: expansion.admin_chat.chat_command.base
+          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
               index_0: "addguest"
               index_1: "addguest"
@@ -236,7 +236,7 @@ services:
 
     expansion.admin_chat.chat_command.removeguest:
           class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          parent: expansion.admin_chat.chat_command.base
+          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
               index_0: "removeguest"
               index_1: "removeguest"
@@ -249,7 +249,7 @@ services:
 
     expansion.admin_chat.chat_command.cleanguestlist:
           class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
-          parent: expansion.admin_chat.chat_command.base
+          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
               index_0: "cleanguestlist"
               index_1: "cleanguestlist"
@@ -261,7 +261,7 @@ services:
 
     expansion.admin_chat.chat_command.saveguestlist:
           class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          parent: expansion.admin_chat.chat_command.base
+          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
               index_0: "saveguestlist"
               index_1: "saveguestlist"
@@ -274,7 +274,7 @@ services:
 
     expansion.admin_chat.chat_command.loadguestlist:
           class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          parent: expansion.admin_chat.chat_command.base
+          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
               index_0: "loadguestlist"
               index_1: "loadguestlist"
@@ -287,7 +287,7 @@ services:
 
     expansion.admin_chat.chat_command.password:
           class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          parent: expansion.admin_chat.chat_command.base
+          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
               index_0: "password"
               index_1: "password"
@@ -301,7 +301,7 @@ services:
 
     expansion.admin_chat.chat_command.specpass:
           class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          parent: expansion.admin_chat.chat_command.base
+          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
               index_0: "specpassword"
               index_1: "specpassword"

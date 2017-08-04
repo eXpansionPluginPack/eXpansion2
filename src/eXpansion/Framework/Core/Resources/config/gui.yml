@@ -81,8 +81,8 @@ services:
             - null
             - null
             - '@expansion.gui.context.window'
-            - '@expansion.framework.core.model.gui.grid.builder_factory'
-            - '@expansion.framework.core.model.gui.grid.data_collection_factory.array'
+            - '@expansion.gui.gridbuilder.factory'
+            - '@expansion.gui.gridbuilder.datacollection.array'
             - '@expansion.service.chat_commands'
             - '@expansion.framework.core.data_providers.chat_command_data_provider'
             - '@expansion.framework.core.plugins.gui.window_help_description_factory'

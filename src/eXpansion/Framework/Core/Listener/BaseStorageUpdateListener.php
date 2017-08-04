@@ -16,13 +16,13 @@ use Maniaplanet\DedicatedServer\Connection;
  */
 class BaseStorageUpdateListener
 {
-    /** @var Connection  */
+    /** @var Connection */
     protected $connection;
 
-    /** @var GameDataStorage  */
+    /** @var GameDataStorage */
     protected $gameDataStorage;
 
-    /** @var DispatcherInterface  */
+    /** @var DispatcherInterface */
     protected $dispatcher;
 
     /**
@@ -31,14 +31,21 @@ class BaseStorageUpdateListener
      * @param GameDataStorage $gameDataStorage
      * @param DispatcherInterface $dispatcher
      */
-    public function __construct(Connection $connection, GameDataStorage $gameDataStorage, DispatcherInterface $dispatcher)
-    {
+    public function __construct(
+        Connection $connection,
+        GameDataStorage $gameDataStorage,
+        DispatcherInterface $dispatcher
+    ) {
         $this->connection = $connection;
         $this->gameDataStorage = $gameDataStorage;
         $this->dispatcher = $dispatcher;
 
         $gameInfos = $this->connection->getCurrentGameInfo();
 
+        $serverOptions = $this->connection->getServerOptions();
+        $this->gameDataStorage->setServerOptions($serverOptions);
+
+        $this->gameDataStorage->setSystemInfo($this->connection->getSystemInfo());
         $this->gameDataStorage->setGameInfos(clone $gameInfos);
         $this->gameDataStorage->setVersion($this->connection->getVersion());
     }
@@ -58,6 +65,10 @@ class BaseStorageUpdateListener
      */
     public function onManiaplanetGameBeginMap(DedicatedEvent $event)
     {
+        $serverOptions = $this->connection->getServerOptions();
+        $this->gameDataStorage->setServerOptions($serverOptions);
+        $this->gameDataStorage->setSystemInfo($this->connection->getSystemInfo());
+
         $newGameInfos = $this->connection->getCurrentGameInfo();
         $prevousGameInfos = $this->gameDataStorage->getGameInfos();
 

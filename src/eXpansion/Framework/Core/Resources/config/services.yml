@@ -1,13 +1,11 @@
 parameters:
     expansion.service.dedicated_connection.class: Maniaplanet\DedicatedServer\Connection
     expansion.service.dedicated_connection.factory.class: eXpansion\Framework\Core\Services\DedicatedConnection\Factory
-
     expansion.service.application.class: eXpansion\Framework\Core\Services\Application
     expansion.service.plugin_manager.class: eXpansion\Framework\Core\Services\PluginManager
     expansion.service.data_provider_manager.class: eXpansion\Framework\Core\Services\DataProviderManager
     expansion.service.console.class: eXpansion\Framework\Core\Services\Console
     expansion.service.chat_commands.class: eXpansion\Framework\Core\Services\ChatCommands
-
     expansion.service.chat_commands.depth: 3
 
 services:
@@ -62,14 +60,14 @@ services:
             - '@service_container'
             - '@expansion.service.model.plugin.plugin_description_factory'
             - '@expansion.service.data_provider_manager'
-            - '@expansion.framework.core.storage.game_data'
+            - '@expansion.storage.gamedata'
             - '@expansion.service.console'
 
     expansion.service.data_provider_manager:
         class: "%expansion.service.data_provider_manager.class%"
         arguments:
             - '@service_container'
-            - '@expansion.framework.core.storage.game_data'
+            - '@expansion.storage.gamedata'
             - '@expansion.service.console'
 
     expansion.service.console:
@@ -86,3 +84,8 @@ services:
         class: 'eXpansion\Framework\Core\Model\Plugin\PluginDescriptionFactory'
         arguments:
             - 'eXpansion\Framework\Core\Model\Plugin\PluginDescription'
+
+    expansion.service.jobrunner.factory:
+        class: eXpansion\Framework\Core\Helpers\JobRunner\Factory
+        tags:
+            - {name: expansion.plugin, data_provider: exp.timer}

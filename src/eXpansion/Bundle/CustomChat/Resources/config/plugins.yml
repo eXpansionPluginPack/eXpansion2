@@ -6,5 +6,5 @@ services:
           - '@expansion.service.console'
           - '@expansion.helper.admingroups'
         tags:
-          - {name: expansion.plugin, data_provider: mp.legacy.chat}
-          - {name: expansion.plugin, data_provider: exp.application}
+          - {name: 'expansion.plugin', data_provider: 'mp.legacy.chat'}
+          - {name: 'expansion.plugin', data_provider: 'exp.application'}

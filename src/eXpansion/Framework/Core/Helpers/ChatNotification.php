@@ -3,6 +3,7 @@
 namespace eXpansion\Framework\Core\Helpers;
 
 use eXpansion\Framework\Core\Model\Helpers\ChatNotificationInterface;
+use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
@@ -51,7 +52,7 @@ class ChatNotification implements ChatNotificationInterface
      * Send message.
      *
      * @param string $messageId
-     * @param string|string[]|null $to
+     * @param string|string[]|Group|null $to
      * @param string[] $parameters
      */
     public function sendMessage($messageId, $to = null, $parameters = [])
@@ -68,7 +69,12 @@ class ChatNotification implements ChatNotificationInterface
             $message = $this->translations->getTranslations($messageId, $parameters);
         }
 
-        if ($to === null) {
+        if ($to instanceof Group) {
+            $to = implode(",", $to->getLogins());
+            $message = $this->translations->getTranslations($messageId, $parameters);
+        }
+
+        if ($to === null || $to instanceof Group) {
             $message = $this->translations->getTranslations($messageId, $parameters);
             $this->console->writeln(end($message)['Text']);
         }

@@ -6,9 +6,11 @@ use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyMaplist;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
+use eXpansion\Framework\Core\Helpers\TMString;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\MapStorage;
+use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
@@ -32,6 +34,10 @@ class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMap
 
     /** @var ChatNotification */
     protected $chatNotification;
+    /**
+     * @var PlayerStorage
+     */
+    private $playerStorage;
 
     /**
      * Maps constructor.
@@ -40,19 +46,22 @@ class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMap
      * @param AdminGroups $adminGroups
      * @param MapStorage $mapStorage
      * @param ChatNotification $chatNotification
+     * @param PlayerStorage $playerStorage
      */
     function __construct(
         Connection $connection,
         Console $console,
         AdminGroups $adminGroups,
         MapStorage $mapStorage,
-        ChatNotification $chatNotification
+        ChatNotification $chatNotification,
+        PlayerStorage $playerStorage
     ) {
         $this->connection = $connection;
         $this->console = $console;
         $this->adminGroups = $adminGroups;
         $this->mapStorage = $mapStorage;
         $this->chatNotification = $chatNotification;
+        $this->playerStorage = $playerStorage;
     }
 
     /**
@@ -73,6 +82,37 @@ class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMap
     public function getMaps()
     {
         return $this->mapStorage->getMaps();
+    }
+
+
+    public function removeMap($login, $index)
+    {
+        if (!$this->adminGroups->hasPermission($login, 'maps')) {
+            $this->chatNotification->sendMessage('expansion_maps.chat.nopermission', $login);
+        }
+        if ($index == "this") {
+            $map = $this->mapStorage->getCurrentMap();
+        } else {
+            if (is_numeric($index)) {
+                $map = $this->mapStorage->getMapByIndex($index);
+            } else {
+                $this->chatNotification->sendMessage('expansion_maps.chat.nopermission', $login);
+
+                return;
+            }
+        }
+
+        $group = $this->adminGroups->getLoginUserGroups($login);
+        $level = $this->adminGroups->getGroupLabel($group->getName());
+        $nickname = $this->playerStorage->getPlayerInfo($login)->getNickName();
+        try {
+            $this->connection->removeMap($map->fileName);
+            $this->chatNotification->sendMessage('expansion_maps.chat.removemap', null,
+                ["%level%" => $level, "%admin%" => $nickname, "%map%" => TMString::trimControls($map->name)]);
+        } catch (\Exception $e) {
+            $this->chatNotification->sendMessage('expansion_maps.chat.dedicatedexception', $group,
+                ["%message%" => $e->getMessage()]);
+        }
     }
 
     /**
@@ -124,4 +164,5 @@ class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMap
     {
         // TODO: Implement onEndMap() method.
     }
+
 }

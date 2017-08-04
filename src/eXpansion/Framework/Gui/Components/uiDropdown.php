@@ -16,7 +16,7 @@ class uiDropdown extends abstractUiElement implements ScriptFeatureable
     /** @var int */
     protected $selectedIndex;
 
-    /** @var bool  */
+    /** @var bool */
     protected $isOpened;
 
     /** @var string */
@@ -192,7 +192,6 @@ EOD;
             $idx += 1;
         }
 
-
         $frame->addChild($labelMark);
         $frame->addChild($labelTitle);
         $frame->addChild($entry);
@@ -231,6 +230,24 @@ EOD;
     public function setSelectedIndex($selectedIndex)
     {
         $this->selectedIndex = $selectedIndex;
+    }
+
+
+    /**
+     * Sets selected index by entry return value
+     * @param $value
+     */
+    public function setSelectedByValue($value)
+    {
+        $x = 0;
+        foreach ($this->options as $idx => $data) {
+            if ($value == $data) {
+                $this->setSelectedIndex($x);
+            }
+            $x++;
+        }
+
+        $this->setSelectedIndex(-1);
     }
 
     /**

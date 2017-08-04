@@ -9,4 +9,4 @@ services:
               - '@expansion.emotes.chat_command.bb'
               - '@expansion.emotes.chat_command.thx'
         tags:
-            - {name: expansion.plugin, data_provider: expansion.chat_command_data}
+            - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}

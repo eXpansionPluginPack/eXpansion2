@@ -1,4 +1,16 @@
 services:
+    expansion.bundle.maps.plugins.chat_commands:
+        class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
+        arguments:
+            -
+              - '@expansion.bundle.maps.chat_commands.mapslist'
+              - '@expansion.bundle.maps.chat_commands.jukebox'
+              - '@expansion.bundle.maps.chat_commands.add'
+              - '@expansion.bundle.maps.chat_commands.remove'
+              - '@expansion.bundle.maps.chat_commands.mxsearch'
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}
+
     expansion.bundle.maps.chat_commands.mapslist:
         class: eXpansion\Bundle\Maps\ChatCommand\MapsList
         arguments:
@@ -7,15 +19,6 @@ services:
             - '@expansion.bundle.maps.gui.window.mapslist_factory'
             - '@expansion.bundle.maps.plugins.maps'
 
-    expansion.bundle.maps.plugins.chat_commands.mapslist:
-        class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
-        arguments:
-            -
-              - '@expansion.bundle.maps.chat_commands.mapslist'
-        tags:
-            - {name: expansion.plugin, data_provider: expansion.chat_command_data}
-            - {name: expansion.plugin.parent, parent: expansion.bundle.maps.plugins.maps}
-
     expansion.bundle.maps.chat_commands.jukebox:
         class: eXpansion\Bundle\Maps\ChatCommand\Jukebox
         arguments:
@@ -23,11 +26,29 @@ services:
             - ['jb']
             - '@expansion.bundle.maps.plugins.jukebox'
 
-    expansion.bundle.maps.plugins.chat_commands.jukebox:
-        class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
+    expansion.bundle.maps.chat_commands.add:
+        class: eXpansion\Bundle\Maps\ChatCommand\Add
         arguments:
-            -
-              - '@eXpansion.bundle.maps.chat_commands.jukebox'
-        tags:
-            - {name: expansion.plugin, data_provider: expansion.chat_command_data}
-            - {name: expansion.plugin.parent, parent: expansion.bundle.maps.plugins.jukebox}
+            - 'addmx'
+            - 'jukebox'
+            - ['add']
+            - '@expansion.helper.admingroups'
+            - '@expansion.bundle.maps.plugins.maniaexchange'
+
+    expansion.bundle.maps.chat_commands.remove:
+        class: eXpansion\Bundle\Maps\ChatCommand\Remove
+        arguments:
+            - 'removemap'
+            - 'jukebox'
+            - ['remove']
+            - '@expansion.helper.admingroups'
+            - '@expansion.bundle.maps.plugins.maps'
+
+    expansion.bundle.maps.chat_commands.mxsearch:
+        class: eXpansion\Bundle\Maps\ChatCommand\MxSearch
+        arguments:
+            - 'search'
+            - 'jukebox'
+            - ['mxsearch']
+            - '@expansion.helper.admingroups'
+            - '@expansion.bundle.maps.gui.window.mania_exchange_window_factory'
