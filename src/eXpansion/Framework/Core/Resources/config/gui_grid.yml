@@ -5,19 +5,19 @@ parameters:
     expansion.framework.core.model.gui.grid.grid_builder.class: 'eXpansion\Framework\Core\Model\Gui\Grid\GridBuilder'
 
 services:
-    expansion.framework.core.model.gui.grid.data_collection_factory.array:
+    expansion.gui.gridbuilder.datacollection.array:
         class: '%expansion.framework.core.model.gui.grid.data_collection_factory.class%'
         arguments:
             - "@expansion.helper.data.array_filter"
             - "%expansion.framework.core.model.gui.grid.data_collection.class%"
 
-    expansion.framework.core.model.gui.grid.data_collection_factory.object:
+    expansion.gui.gridbuilder.datacollection.object:
         class: '%expansion.framework.core.model.gui.grid.data_collection_factory.class%'
         arguments:
             - "@expansion.helper.data.object_filter"
             - "%expansion.framework.core.model.gui.grid.data_collection.class%"
 
-    expansion.framework.core.model.gui.grid.builder_factory:
+    expansion.gui.gridbuilder.factory:
         class: 'eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory'
         arguments:
             - '%expansion.framework.core.model.gui.grid.grid_builder.class%'

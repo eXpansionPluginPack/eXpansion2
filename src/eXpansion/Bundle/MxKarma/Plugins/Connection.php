@@ -20,9 +20,16 @@
 namespace eXpansion\Bundle\MxKarma\Plugins;
 
 use eXpansion\Bundle\MxKarma\Entity\MxRating;
+use eXpansion\Bundle\MxKarma\Entity\MxVote;
 use eXpansion\Framework\Core\Helpers\Http;
+use eXpansion\Framework\Core\Helpers\Structures\HttpResult;
+use eXpansion\Framework\Core\Services\Application\AbstractApplication;
 use eXpansion\Framework\Core\Services\Application\Dispatcher;
+use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Storage\GameDataStorage;
+use eXpansion\Framework\Core\Storage\MapStorage;
 use Maniaplanet\DedicatedServer\Structures\GameInfos;
+use Maniaplanet\DedicatedServer\Structures\Map;
 use oliverde8\AsynchronousJobs\Job\CallbackCurl;
 
 /**
@@ -33,8 +40,13 @@ use oliverde8\AsynchronousJobs\Job\CallbackCurl;
 class Connection
 {
 
-   // private $address = "http://karma.mania-exchange.com/api2/";
-    private $address = "http://localhost/index.html?";
+    const EVENT_CONNECT = "expansion.mxkarma.connect";
+    const EVENT_VOTESAVE = "expansion.mxkarma.votesave";
+    const EVENT_VOTELOAD = 'expansion.mxkarma.voteload';
+    const EVENT_DISCONNECT = 'expansion.mxkarma.disconnect';
+
+    private $address = "http://karma.mania-exchange.com/api2/";
+    private $options = [CURLOPT_HTTPHEADER => ["Content-Type:application/json"]];
 
     private $connected = false;
 
@@ -44,22 +56,47 @@ class Connection
 
     private $apiKey = "";
 
-    /** @var MXRating */
+    /** @var MxRating */
     private $ratings = null;
     /**
      * @var Dispatcher
      */
     private $dispatcher;
+    /**
+     * @var GameDataStorage
+     */
+    private $gameDataStorage;
+    /**
+     * @var MapStorage
+     */
+    private $mapStorage;
+    /**
+     * @var Console
+     */
+    private $console;
+
 
     /**
      * Connection constructor.
      *
      * @param Dispatcher $dispatcher
+     * @param Http $http
+     * @param GameDataStorage $gameDataStorage
+     * @param MapStorage $mapStorage
+     * @param Console $console
      */
-    public function __construct(Dispatcher $dispatcher, Http $http)
-    {
+    public function __construct(
+        Dispatcher $dispatcher,
+        Http $http,
+        GameDataStorage $gameDataStorage,
+        MapStorage $mapStorage,
+        Console $console
+    ) {
         $this->dispatcher = $dispatcher;
         $this->http = $http;
+        $this->gameDataStorage = $gameDataStorage;
+        $this->mapStorage = $mapStorage;
+        $this->console = $console;
     }
 
 
@@ -75,20 +112,31 @@ class Connection
 
         $params = array(
             "serverLogin" => $serverLogin,
-            "applicationIdentifier" => "eXpansion 2.0.0.0",
-            "testMode" => "true",
+            "applicationIdentifier" => "eXpansion v ".AbstractApplication::EXPANSION_VERSION,
+            "testMode" => "false",
         );
-
+        $this->console->writeln('> MxKarma attempting to connect...');
         $this->http->get(
-            $this->buildUrl("startSession", $params),
-            array($this, "xConnect")
+            $this->buildUrl(
+                "startSession", $params),
+            [$this, "xConnect"]
         );
     }
 
-    public function xConnect( $answer)
+    /**
+     * @param HttpResult $result
+     */
+    public function xConnect(HttpResult $result)
     {
 
-        $data = $this->getObject($answer);
+        if ($result->hasError()) {
+            $this->console->writeln('> MxKarma connection $f00 failure: '.$result->getError());
+            $this->disconnect();
+
+            return;
+        }
+
+        $data = $this->getObject($result->getResponse());
 
         if ($data === null) {
             return;
@@ -100,23 +148,25 @@ class Connection
         $outHash = hash("sha512", ($this->apiKey.$this->sessionSeed));
 
         $params = array("sessionKey" => $this->sessionKey, "activationHash" => $outHash);
-        $this->http->call(
+        $this->console->writeln('> MxKarma attempting to activate session...');
+        $this->http->get(
             $this->buildUrl("activateSession", $params),
-            array($this, "xActivate"),
-            array(),
-            "ManiaLive - eXpansionPluginPack",
-            "application/json"
+            [$this, "xActivate"],
+            [],
+            $this->options
         );
     }
 
-    public function xActivate($answer, $httpCode)
+    public function xActivate(HttpResult $result)
     {
 
-        if ($httpCode != 200) {
+        if ($result->hasError()) {
+            $this->console->writeln('> MxKarma connection $f00 failure: '.$result->getError());
+
             return;
         }
 
-        $data = $this->getObject($answer, "onActivate");
+        $data = $this->getObject($result->getResponse());
 
         if ($data === null) {
             return;
@@ -124,44 +174,59 @@ class Connection
 
         if ($data->activated) {
             $this->connected = true;
-            //  Dispatcher::dispatch(new MXKarmaEvent(MXKarmaEvent::ON_CONNECTED));
+            $this->console->writeln('> MxKarma connection $0f0success!');
+            $this->dispatcher->dispatch(self::EVENT_CONNECT, []);
         }
     }
 
-    public function getRatings($players = array(), $getVotesOnly = false)
+    /**
+     * loads votes from server
+     * @param array $players
+     * @param bool $getVotesOnly
+     */
+    public function loadVotes($players = array(), $getVotesOnly = false)
     {
         if (!$this->connected) {
+            $this->console->writeln('> MxKarma trying to load votes when not connected!');
+
             return;
         }
 
+        $this->console->writeln('> MxKarma attempting to load votes...');
         $params = array("sessionKey" => $this->sessionKey);
-        $postData = array(
+        $postData = [
             "gamemode" => $this->getGameMode(),
-            "titleid" => $this->expStorage->titleId,
-            "mapuid" => $this->storage->currentMap->uId,
+            "titleid" => $this->gameDataStorage->getTitle(),
+            "mapuid" => $this->mapStorage->getCurrentMap()->uId,
             "getvotesonly" => $getVotesOnly,
             "playerlogins" => $players,
-        );
-        $this->dataAccess->httpPost(
+        ];
+        $this->http->post(
             $this->buildUrl("getMapRating", $params),
             json_encode($postData),
             array($this, "xGetRatings"),
-            array(),
-            "ManiaLive - eXpansionPluginPack",
-            "application/json"
+            [],
+            $this->options
         );
     }
 
-    public function saveVotes(\Maniaplanet\DedicatedServer\Structures\Map $map, $time, $votes)
+    /**
+     * @param Map $map
+     * @param int $time time in seconds from BeginMap to EndMap
+     * @param MxVote[] $votes
+     */
+    public function saveVotes(Map $map, $time, $votes)
     {
         if (!$this->connected) {
+            $this->console->writeln('> MxKarma not connected.');
+
             return;
         }
 
         $params = array("sessionKey" => $this->sessionKey);
         $postData = array(
             "gamemode" => $this->getGameMode(),
-            "titleid" => $this->expStorage->titleId,
+            "titleid" => $this->gameDataStorage->getTitle(),
             "mapuid" => $map->uId,
             "mapname" => $map->name,
             "mapauthor" => $map->author,
@@ -169,46 +234,52 @@ class Connection
             "maptime" => $time,
             "votes" => $votes,
         );
-        $this->dataAccess->httpPost(
+
+
+        $this->console->writeln('> MxKarma attempting to save votes...');
+        $this->http->post(
             $this->buildUrl("saveVotes", $params),
             json_encode($postData),
-            array($this, "xSaveVotes"),
-            array(),
-            "ManiaLive - eXpansionPluginPack",
-            "application/json"
+            [$this, "xSaveVotes"],
+            [],
+            $this->options
         );
     }
 
-    public function xSaveVotes($answer, $httpCode)
+    /**
+     * @param HttpResult $result
+     */
+    public function xSaveVotes(HttpResult $result)
     {
 
-        if ($httpCode != 200) {
+        if ($result->hasError()) {
+            $this->console->writeln('> MxKarma save votes $f00 failure: '.$result->getError());
             return;
         }
 
-        $data = $this->getObject($answer);
+        $data = $this->getObject($result->getResponse());
 
         if ($data === null) {
             return;
         }
-
-        //  Dispatcher::dispatch(new MXKarmaEvent(MXKarmaEvent::ON_VOTE_SAVE, $data->updated));
+        $this->console->writeln('> MxKarma save votes $0f0success!');
+        $this->dispatcher->dispatch(self::EVENT_VOTESAVE, ["updated" => $data->updated]);
     }
 
     /**
-     * @param $answer
-     * @param $httpCode
-     *
+     * @param HttpResult $result
      * @return MxRating|null
      */
-    public function xGetRatings($answer, $httpCode)
+    public function xGetRatings(HttpResult $result)
     {
 
-        if ($httpCode != 200) {
+        if ($result->hasError()) {
+            $this->console->writeln('> MxKarma load votes $f00 failure: '.$result->getError());
+
             return null;
         }
 
-        $data = $this->getObject($answer);
+        $data = $this->getObject($result->getResponse());
 
         if ($data === null) {
             return null;
@@ -217,14 +288,36 @@ class Connection
         $this->ratings = new MXRating();
         $this->ratings->append($data);
 
+        $this->console->writeln('> MxKarma load $0f0success!');
+        $this->dispatcher->dispatch(self::EVENT_VOTELOAD, ["ratings" => $this->ratings]);
+
         return $this->ratings;
     }
 
+    /**
+     * @return string
+     */
     public function getGameMode()
     {
-        switch ($this->storage->gameInfos->gameMode) {
+        $gamemode = "";
+        switch ($this->gameDataStorage->getGameInfos()->gameMode) {
             case GameInfos::GAMEMODE_SCRIPT:
-                $gamemode = strtolower($this->storage->gameInfos->scriptName);
+                $gamemode = strtolower($this->gameDataStorage->getGameInfos()->scriptName);
+                break;
+            case GameInfos::GAMEMODE_ROUNDS:
+                $gamemode = "Rounds";
+                break;
+            case GameInfos::GAMEMODE_CUP:
+                $gamemode = "Cup";
+                break;
+            case GameInfos::GAMEMODE_TEAM:
+                $gamemode = "Team";
+                break;
+            case GameInfos::GAMEMODE_LAPS:
+                $gamemode = "Laps";
+                break;
+            case GameInfos::GAMEMODE_TIMEATTACK:
+                $gamemode = "TimeAttack";
                 break;
         }
 
@@ -249,59 +342,62 @@ class Connection
     }
 
     /**
-     * @param object $object
+     * @param object $obj
      */
     public function handleErrors($obj)
     {
         switch ($obj->data->code) {
             case 1:
-                echo "internal server error";
+                $this->console->writeln('> MxKarma $fffinternal server error');
                 break;
             case 2:
-                echo "Session key is invalid (not activated, experied or got disabled).";
+                $this->console->writeln('> MxKarma $fffSession key is invalid (not activated, experied or got disabled).');
                 break;
             case 4:
-                echo "Some parameters are not provided.";
+                $this->console->writeln('> MxKarma $fffSome parameters are not provided.');
                 break;
             case 5:
-                echo "API key not found or suspended.";
+                $this->console->writeln('> MxKarma $fffAPI key not found or suspended.');
+                $this->disconnect();
                 break;
             case 6:
-                echo "Server not found or suspended.";
+                $this->console->writeln('> MxKarma $fffServer not found or suspended.');
+                $this->disconnect();
                 break;
             case 7:
-                echo "Cross-server call rejected.";
+                $this->console->writeln('> MxKarma $fffCross-server call rejected.');
                 break;
             case 8:
-                echo "Invalid activation hash provided, session closed.";
-                $this->connected = false;
+                $this->console->writeln('> MxKarma $fffInvalid activation hash provided, session closed.');
+                $this->disconnect();
                 break;
             case 9:
-                echo "Session already active.";
+                $this->console->writeln('> MxKarma $fffSession already active.');
+                $this->disconnect();
                 break;
             case 10:
-                echo "Unsupported Content-Type.";
+                $this->console->writeln('> MxKarma $fffUnsupported Content-Type.');
                 break;
             case 11:
-                echo "Too many logins requested.";
+                $this->console->writeln('> MxKarma $fffToo many logins requested.');
                 break;
             case 12:
-                echo "Invalid JSON or invalid structure.";
+                $this->console->writeln('> MxKarma $fffInvalid JSON or invalid structure.');
                 break;
             case 13:
-                echo "Malformed vote request.";
+                $this->console->writeln('> MxKarma $fffMalformed vote request.');
                 break;
             case 14:
-                echo "no votes cast - please do not make requests if there are no votes!";
+                $this->console->writeln('> MxKarma $fffno votes cast - please do not make requests if there are no votes!');
                 break;
             case 15:
-                echo "too many import votes - request a limit raise if needed";
+                $this->console->writeln('> MxKarma $ffftoo many import votes - request a limit raise if needed');
                 break;
             case 16:
-                echo "Import rejected.";
+                $this->console->writeln('> MxKarma $fffImport rejected.');
                 break;
             default:
-                echo "unknown error";
+                $this->console->writeln('> MxKarma $fffUnknown api error');
                 break;
         }
 
@@ -329,19 +425,16 @@ class Connection
         return $this->connected;
     }
 
+
     /**
-     * @param $url
-     * @param callable $callback
+     *
      */
-    public function httpGet($url, callable $callback)
+    public function disconnect()
     {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_HEADER, "application/json");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $output = curl_exec($ch);
-        $httpCode = curl_getinfo($ch)["http_code"];
-        curl_close($ch);
-        call_user_func($callback, $output, $httpCode);
+        $this->connected = false;
+        $this->console->writeln('> MxKarma $f00disconnected!');
+        $this->dispatcher->dispatch(self::EVENT_DISCONNECT, []);
     }
+
 
 }

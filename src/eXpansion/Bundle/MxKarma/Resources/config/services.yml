@@ -1,0 +1,12 @@
+services:
+     expansion.bundle.mxkarma.data_providers.mxkarmadataprovider:
+          class: eXpansion\Bundle\MxKarma\DataProviders\MxKarmaDataProvider
+
+          tags:
+            - {name: 'expansion.dataprovider', provider: "exp.plugin.mxkarma", interface: eXpansion\Bundle\MxKarma\DataProviders\Listeners\ListenerInterfaceMxKarma}
+            - {name: 'expansion.dataprovider.compatibility', title: 'TM'}
+            - {name: 'expansion.dataprovider.listener', event_name: 'expansion.mxkarma.connect', method: 'onMxKarmaConnect'}
+            - {name: 'expansion.dataprovider.listener', event_name: 'expansion.mxkarma.voteload', method: 'onMxKarmaVoteLoad'}
+            - {name: 'expansion.dataprovider.listener', event_name: 'expansion.mxkarma.votesave', method: 'onMxKarmaVoteSave'}
+            - {name: 'expansion.dataprovider.listener', event_name: 'expansion.mxkarma.disconnect', method: 'onMxKarmaDisconnect'}
+

@@ -157,6 +157,6 @@ class GridBuilderTest extends TestCore
      */
     protected function createBuilder()
     {
-        return $this->container->get('expansion.framework.core.model.gui.grid.builder_factory')->create();
+        return $this->container->get('expansion.gui.gridbuilder.factory')->create();
     }
 }

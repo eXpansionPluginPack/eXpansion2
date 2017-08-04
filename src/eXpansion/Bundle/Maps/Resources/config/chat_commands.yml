@@ -5,8 +5,8 @@ services:
             -
               - '@expansion.bundle.maps.chat_commands.mapslist'
         tags:
-            - {name: expansion.plugin, data_provider: expansion.chat_command_data}
-            - {name: expansion.plugin.parent, parent: expansion.bundle.maps.plugins.maps}
+            - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}
+            - {name: 'expansion.plugin.parent', parent: 'expansion.bundle.maps.plugins.maps'}
 
     expansion.bundle.maps.chat_commands.mapslist:
         class: eXpansion\Bundle\Maps\ChatCommand\MapsList
@@ -29,8 +29,8 @@ services:
             -
               - '@eXpansion.bundle.maps.chat_commands.jukebox'
         tags:
-            - {name: expansion.plugin, data_provider: expansion.chat_command_data}
-            - {name: expansion.plugin.parent, parent: expansion.bundle.maps.plugins.jukebox}
+            - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}
+            - {name: 'expansion.plugin.parent', parent: 'expansion.bundle.maps.plugins.jukebox'}
 
     expansion.bundle.maps.plugins.chat_commands.add:
         class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
@@ -38,7 +38,7 @@ services:
             -
               - '@expansion.bundle.maps.chat_commands.add'
         tags:
-            - {name: expansion.plugin, data_provider: expansion.chat_command_data}
+            - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}
 
     expansion.bundle.maps.chat_commands.add:
         class: eXpansion\Bundle\Maps\ChatCommand\Add
@@ -55,7 +55,7 @@ services:
             -
               - '@expansion.bundle.maps.chat_commands.remove'
         tags:
-            - {name: expansion.plugin, data_provider: expansion.chat_command_data}
+            - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}
 
     expansion.bundle.maps.chat_commands.remove:
         class: eXpansion\Bundle\Maps\ChatCommand\Remove
@@ -72,7 +72,7 @@ services:
             -
               - '@expansion.bundle.maps.chat_commands.mxsearch'
         tags:
-            - {name: expansion.plugin, data_provider: expansion.chat_command_data}
+            - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}
 
     expansion.bundle.maps.chat_commands.mxsearch:
         class: eXpansion\Bundle\Maps\ChatCommand\MxSearch

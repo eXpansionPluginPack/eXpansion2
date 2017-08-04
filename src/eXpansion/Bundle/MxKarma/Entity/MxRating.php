@@ -2,6 +2,8 @@
 
 namespace eXpansion\Bundle\MxKarma\Entity;
 
+use ArrayObject;
+
 class MxRating
 {
     /** @var int */
@@ -16,7 +18,7 @@ class MxRating
     /** @var int */
     protected $modeVoteAverage;
 
-    /** @var string[login, number] */
+    /** @var mxVote[] */
     protected $votes = array();
 
     public function append($object)
@@ -34,7 +36,7 @@ class MxRating
         }
         if (is_array($object->votes)) {
             foreach ($object->votes as $vote) {
-                $this->votes[] = $vote;
+                $this->votes[$vote->login] = new MxVote($vote);
             }
         }
     }
@@ -48,11 +50,14 @@ class MxRating
     }
 
     /**
-     * @param string $votes
+     * @param MxVote[] $votes
+     * @return $this
      */
     public function setVotes($votes)
     {
         $this->votes = $votes;
+
+        return $this;
     }
 
     /**
@@ -65,10 +70,13 @@ class MxRating
 
     /**
      * @param int $modeVoteAverage
+     * @return $this
      */
     public function setModeVoteAverage($modeVoteAverage)
     {
         $this->modeVoteAverage = $modeVoteAverage;
+
+        return $this;
     }
 
     /**
@@ -81,10 +89,13 @@ class MxRating
 
     /**
      * @param int $modeVoteCount
+     * @return $this
      */
     public function setModeVoteCount($modeVoteCount)
     {
         $this->modeVoteCount = $modeVoteCount;
+
+        return $this;
     }
 
     /**
@@ -97,10 +108,13 @@ class MxRating
 
     /**
      * @param int $voteAverage
+     * @return $this
      */
     public function setVoteAverage($voteAverage)
     {
         $this->voteAverage = $voteAverage;
+
+        return $this;
     }
 
     /**
@@ -113,9 +127,12 @@ class MxRating
 
     /**
      * @param int $voteCount
+     * @return $this
      */
     public function setVoteCount($voteCount)
     {
         $this->voteCount = $voteCount;
+
+        return $this;
     }
 }

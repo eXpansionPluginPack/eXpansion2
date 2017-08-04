@@ -100,7 +100,7 @@ class DataCollectionTest extends TestCore
      */
     protected function getObjectDataCollectionFactory()
     {
-        return $this->container->get('expansion.framework.core.model.gui.grid.data_collection_factory.object');
+        return $this->container->get('expansion.gui.gridbuilder.datacollection.object');
     }
 
     /**
@@ -108,6 +108,6 @@ class DataCollectionTest extends TestCore
      */
     protected function getArrayDataCollectionFactory()
     {
-        return $this->container->get('expansion.framework.core.model.gui.grid.data_collection_factory.array');
+        return $this->container->get('expansion.gui.gridbuilder.datacollection.array');
     }
 }

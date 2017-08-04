@@ -61,7 +61,7 @@ class Http
     public function get($url, callable $callback, $additionalData = null, $options = [])
     {
         $options[CURLOPT_FOLLOWLOCATION] = true;
-        $options[CURLOPT_USERAGENT] = "eXpansionPluginPack v " . AbstractApplication::EXPANSION_VERSION;
+        $options[CURLOPT_USERAGENT] = "eXpansionPluginPack v ".AbstractApplication::EXPANSION_VERSION;
 
         $additionalData['callback'] = $callback;
 
@@ -72,7 +72,7 @@ class Http
      * Make a post http query.
      *
      * @param string $url address
-     * @param array $postFields array<string, string>
+     * @param string|array $postFields
      * @param callable $callback callback with returning datas
      * @param null|mixed $additionalData If you need to pass additional metadata.
      *                                   You will get this back in the callback.
@@ -82,18 +82,21 @@ class Http
     {
         $options[CURLOPT_POST] = true;
         $options[CURLOPT_FOLLOWLOCATION] = true;
-        $options[CURLOPT_USERAGENT] = "eXpansionPluginPack v " . AbstractApplication::EXPANSION_VERSION;
+        $options[CURLOPT_USERAGENT] = "eXpansionPluginPack v ".AbstractApplication::EXPANSION_VERSION;
 
         $query = '';
-        if (!empty($postFields)) {
-            $query = '?'.http_build_query($postFields);
+        if (is_array($postFields)) {
+            $query = http_build_query($postFields, '', '&');
+        } else {
+            $query = $postFields;
         }
+
         $options[CURLOPT_URL] = $url;
         $options[CURLOPT_POSTFIELDS] = $query;
 
         $additionalData['callback'] = $callback;
 
-        $curlJob = $this->factory->createCurlJob($url, [$this, 'process'], $additionalData, $options, $postFields);
+        $curlJob = $this->factory->createCurlJob($url, [$this, 'process'], $additionalData, $options);
 
         // Start job execution.
         $this->factory->startJob($curlJob);

@@ -7,5 +7,5 @@ services:
             - '@expansion.helper.chat_notification'
             - '@expansion.helper.admingroups'
         tags:
-            - {name: expansion.plugin, data_provider: mp.legacy.player}
+            - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
 

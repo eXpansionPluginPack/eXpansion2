@@ -20,4 +20,4 @@ services:
             - '@expansion.framework.core.gui.scripts.menu'
             - '@expansion.helper.admingroups'
         tags:
-            - {name: expansion.plugin, data_provider: expansion.user_group}
+            - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}

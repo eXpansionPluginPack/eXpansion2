@@ -5,4 +5,4 @@ services:
             - '@expansion.helper.admingroups'
             - '@expansion.framework.core.plugins.gui.menu'
         tags:
-            - {name: expansion.plugin, data_provider: mp.legacy.map}
+            - {name: 'expansion.plugin', data_provider: 'mp.legacy.map'}

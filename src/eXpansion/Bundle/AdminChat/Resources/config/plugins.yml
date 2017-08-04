@@ -37,4 +37,4 @@ services:
               - '@expansion.admin_chat.chat_command.specpass'
 
         tags:
-            - {name: expansion.plugin, data_provider: expansion.chat_command_data}
+            - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}

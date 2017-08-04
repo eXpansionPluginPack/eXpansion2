@@ -9,8 +9,8 @@ services:
           - '@expansion.helper.chat_notification'
           - '@expansion.storage.player'
         tags:
-          - {name: expansion.plugin, data_provider: mp.legacy.maplist}
-          - {name: expansion.plugin, data_provider: mp.legacy.map}
+          - {name: 'expansion.plugin', data_provider: 'mp.legacy.maplist'}
+          - {name: 'expansion.plugin', data_provider: 'mp.legacy.map'}
 
     expansion.bundle.maps.plugins.jukebox:
         class: eXpansion\Bundle\Maps\Plugins\Jukebox
@@ -23,8 +23,8 @@ services:
           - '@expansion.storage.map'
           - '@expansion.bundle.maps.gui.window.jukebox_factory'
         tags:
-          - {name: expansion.plugin, data_provider: mp.script.podium}
-          - {name: expansion.plugin, data_provider: mp.legacy.map}
+          - {name: 'expansion.plugin', data_provider: 'mp.script.podium'}
+          - {name: 'expansion.plugin', data_provider: 'mp.legacy.map'}
 
     expansion.bundle.maps.plugins.maniaexchange:
         class: eXpansion\Bundle\Maps\Plugins\ManiaExchange
@@ -37,4 +37,4 @@ services:
           - '@expansion.service.console'
           - '@expansion.bundle.maps.services.jukeboxservice'
         tags:
-          - {name: expansion.plugin, data_provider: exp.application}
+          - {name: 'expansion.plugin', data_provider: 'exp.application'}

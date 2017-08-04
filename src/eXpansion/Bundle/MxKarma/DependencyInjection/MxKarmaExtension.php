@@ -29,5 +29,6 @@ class MxKarmaExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator([__DIR__.'/../Resources/config', './app/config/plugins']));
         $loader->load('plugins.yml');
         $loader->load('mxkarma.yml');
+        $loader->load('services.yml');
     }
 }

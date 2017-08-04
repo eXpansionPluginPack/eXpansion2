@@ -3,6 +3,9 @@
 namespace eXpansion\Bundle\MxKarma\Plugins;
 
 
+use eXpansion\Bundle\MxKarma\DataProviders\Listeners\ListenerInterfaceMxKarma;
+use eXpansion\Bundle\MxKarma\Entity\MxRating;
+use eXpansion\Bundle\MxKarma\Entity\MxVote;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
@@ -10,13 +13,23 @@ use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Application\Dispatcher;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
+use eXpansion\Framework\Core\Storage\PlayerStorage;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMap;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMatch;
 use Maniaplanet\DedicatedServer\Structures\Map;
 use Symfony\Component\Yaml\Yaml;
 use eXpansion\Bundle\MxKarma\Plugins\Connection as MxConnection;
 
-class MxKarma implements ListenerInterfaceMpScriptMatch, StatusAwarePluginInterface, ListenerInterfaceMpLegacyChat, ListenerInterfaceExpApplication
+class MxKarma implements StatusAwarePluginInterface, ListenerInterfaceMpScriptMap,
+    ListenerInterfaceMpLegacyChat, ListenerInterfaceExpApplication, ListenerInterfaceMxKarma
 {
+
+
+    /** @var MxVote */
+    protected $changedVotes = [];
+
+    /** @var  int */
+    private $startTime;
     /**
      * @var object
      */
@@ -40,11 +53,30 @@ class MxKarma implements ListenerInterfaceMpScriptMatch, StatusAwarePluginInterf
      */
     private $mxKarma;
 
+    /** @var  MxRating */
+    private $mxRating;
+
+    /** @var  MxVote[] */
+    private $votes;
+    /**
+     * @var PlayerStorage
+     */
+    private $playerStorage;
+
+    /**
+     * MxKarma constructor.
+     * @param Connection $mxKarma
+     * @param Console $console
+     * @param ChatNotification $chatNotification
+     * @param Dispatcher $dispatcher
+     * @param PlayerStorage $playerStorage
+     */
     public function __construct(
         MxConnection $mxKarma,
         Console $console,
         ChatNotification $chatNotification,
-        Dispatcher $dispatcher
+        Dispatcher $dispatcher,
+        PlayerStorage $playerStorage
     ) {
 
         $this->config = (object)Yaml::parse(file_get_contents('./app/config/plugins/mxkarma.yml'))['parameters'];
@@ -52,7 +84,23 @@ class MxKarma implements ListenerInterfaceMpScriptMatch, StatusAwarePluginInterf
         $this->dispatcher = $dispatcher;
         $this->chatNotification = $chatNotification;
         $this->mxKarma = $mxKarma;
+        $this->playerStorage = $playerStorage;
     }
+
+    public function setVote($login, $vote)
+    {
+        $player = $this->playerStorage->getPlayerInfo($login);
+
+        $obj = [
+            "login" => $login,
+            "nickname" => $player->getNickName(),
+            "vote" => $vote,
+        ];
+
+        $this->changedVotes[$player->getLogin()] = new MxVote((object)$obj);
+        $this->chatNotification->sendMessage('expansion_mxkarma.chat.votechanged', $login);
+    }
+
 
     /**
      * Set the status of the plugin
@@ -67,32 +115,6 @@ class MxKarma implements ListenerInterfaceMpScriptMatch, StatusAwarePluginInterf
     }
 
     /**
-     * Callback sent when the "StartMatch" section start.
-     *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time Server time when the callback was sent
-     *
-     * @return mixed
-     */
-    public function onStartMatchStart($count, $time)
-    {
-        // TODO: Implement onStartMatchStart() method.
-    }
-
-    /**
-     * Callback sent when the "StartMatch" section end.
-     *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time Server time when the callback was sent
-     *
-     * @return mixed
-     */
-    public function onStartMatchEnd($count, $time)
-    {
-        // TODO: Implement onStartMatchEnd() method.
-    }
-
-    /**
      * Called when a player chats.
      *
      * @param Player $player
@@ -102,8 +124,23 @@ class MxKarma implements ListenerInterfaceMpScriptMatch, StatusAwarePluginInterf
      */
     public function onPlayerChat(Player $player, $text)
     {
-        // TODO: Implement onPlayerChat() method.
+        if ($player->getPlayerId() === 0) {
+            return;
+        }
+        if (substr($text, 0, 1) == "/") {
+            return;
+        }
+
+        if ($text == "++") {
+            $this->setVote($player->getLogin(), 100);
+        }
+
+        if ($text == "--") {
+            $this->setVote($player->getLogin(), 0);
+        }
+
     }
+
 
     /**
      * called at eXpansion init
@@ -122,6 +159,7 @@ class MxKarma implements ListenerInterfaceMpScriptMatch, StatusAwarePluginInterf
      */
     public function onApplicationReady()
     {
+        $this->startTime = time();
         $this->mxKarma->connect($this->config->serverlogin, $this->config->apikey);
 
     }
@@ -137,132 +175,110 @@ class MxKarma implements ListenerInterfaceMpScriptMatch, StatusAwarePluginInterf
     }
 
     /**
-     * Callback sent when the "EndMatch" section start.
      *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time Server time when the callback was sent
-     *
-     * @return mixed
      */
-    public function onEndMatchStart($count, $time)
+    public function onMxKarmaConnect()
     {
-        // TODO: Implement onEndMatchStart() method.
+        $this->mxKarma->loadVotes(array_keys($this->playerStorage->getOnline()), false);
     }
 
     /**
-     * Callback sent when the "EndMatch" section end.
-     *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time Server time when the callback was sent
-     *
+     * @param MxRating $ratings
      * @return mixed
      */
-    public function onEndMatchEnd($count, $time)
+    public function onMxKarmaVoteLoad(MxRating $mxRating)
     {
-        // TODO: Implement onEndMatchEnd() method.
+
+        /** @var MxRating $mxRating */
+        $this->mxRating = $mxRating;
+        $this->changedVotes = [];
+        print_r($mxRating);
+
+        $this->votes = $mxRating->getVotes();
+
     }
 
     /**
-     * Callback sent when the "StartTurn" section start.
-     *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time Server time when the callback was sent
-     *
+     * @param MxVote[] $updatedVotes
      * @return mixed
      */
-    public function onStartTurnStart($count, $time)
+    public function onMxKarmaVoteSave($updatedVotes)
     {
-        // TODO: Implement onStartTurnStart() method.
+        // TODO: Implement onMxKarmaVoteSave() method.
+    }
+
+    public function onMxKarmaDisconnect()
+    {
+        // TODO: Implement onMxKarmaDisconnect() method.
     }
 
     /**
-     * Callback sent when the "StartTurn" section end.
+     * Callback sent when the "StartMap" section start.
      *
      * @param int $count Each time this section is played, this number is incremented by one
      * @param int $time Server time when the callback was sent
+     * @param boolean $restarted true if the map was restarted, false otherwise
+     * @param Map $map Map started with.
      *
      * @return mixed
      */
-    public function onStartTurnEnd($count, $time)
+    public function onStartMapStart($count, $time, $restarted, Map $map)
     {
-        // TODO: Implement onStartTurnEnd() method.
+        // TODO: Implement onStartMapStart() method.
     }
 
     /**
-     * Callback sent when the "EndMatch" section start.
+     * Callback sent when the "StartMap" section end.
      *
      * @param int $count Each time this section is played, this number is incremented by one
      * @param int $time Server time when the callback was sent
+     * @param boolean $restarted true if the map was restarted, false otherwise
+     * @param Map $map Map started with.
      *
      * @return mixed
      */
-    public function onEndTurnStart($count, $time)
+    public function onStartMapEnd($count, $time, $restarted, Map $map)
     {
-        // TODO: Implement onEndTurnStart() method.
+        $this->startTime = time();
+        $this->mxKarma->loadVotes(array_keys($this->playerStorage->getOnline()), false);
     }
 
     /**
-     * Callback sent when the "EndMatch" section end.
+     * Callback sent when the "EndMap" section start.
      *
      * @param int $count Each time this section is played, this number is incremented by one
      * @param int $time Server time when the callback was sent
+     * @param boolean $restarted true if the map was restarted, false otherwise
+     * @param Map $map Map started with.
      *
      * @return mixed
      */
-    public function onEndTurnEnd($count, $time)
+    public function onEndMapStart($count, $time, $restarted, Map $map)
     {
-        // TODO: Implement onEndTurnEnd() method.
+
     }
 
     /**
-     * Callback sent when the "StartRound" section start.
+     * Callback sent when the "EndMap" section end.
      *
      * @param int $count Each time this section is played, this number is incremented by one
      * @param int $time Server time when the callback was sent
+     * @param boolean $restarted true if the map was restarted, false otherwise
+     * @param Map $map Map started with.
      *
      * @return mixed
      */
-    public function onStartRoundStart($count, $time)
+    public function onEndMapEnd($count, $time, $restarted, Map $map)
     {
-        // TODO: Implement onStartRoundStart() method.
+
+        if (!empty($this->changedVotes)) {
+            $votes = [];
+            foreach ($this->changedVotes as $vote) {
+                $votes[] = $vote;
+            }
+
+            $this->mxKarma->saveVotes($map, (time() - $this->startTime), $votes);
+        }
     }
 
-    /**
-     * Callback sent when the "StartRound" section end.
-     *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time Server time when the callback was sent
-     *
-     * @return mixed
-     */
-    public function onStartRoundEnd($count, $time)
-    {
-        // TODO: Implement onStartRoundEnd() method.
-    }
-
-    /**
-     * Callback sent when the "EndMatch" section start.
-     *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time Server time when the callback was sent
-     *
-     * @return mixed
-     */
-    public function onEndRoundStart($count, $time)
-    {
-        // TODO: Implement onEndRoundStart() method.
-    }
-
-    /**
-     * Callback sent when the "EndMatch" section end.
-     *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time Server time when the callback was sent
-     *
-     * @return mixed
-     */
-    public function onEndRoundEnd($count, $time)
-    {
-        // TODO: Implement onEndRoundEnd() method.
-    }
 }
