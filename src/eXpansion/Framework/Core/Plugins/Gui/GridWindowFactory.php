@@ -66,7 +66,6 @@ abstract class GridWindowFactory extends WindowFactory
 
     /**
      * @param ManialinkInterface $manialink
-     * @return mixed
      */
     abstract protected function createGrid(ManialinkInterface $manialink);
 

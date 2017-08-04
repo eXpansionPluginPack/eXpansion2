@@ -68,10 +68,6 @@ class Add extends AdminChatCommand
         $this->plugin->addMap($login, $id, $site);
     }
 
-    public function setMxPlugin(ManiaExchange $plugin)
-    {
-        $this->plugin = $plugin;
-    }
 }
 
 

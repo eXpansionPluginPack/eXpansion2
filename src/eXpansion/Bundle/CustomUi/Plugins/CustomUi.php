@@ -33,21 +33,34 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
         $this->playerStorage = $playerStorage;
     }
 
-
-    public function setCustomUi($login)
+    /**
+     * Set the status of the plugin
+     *
+     * @param boolean $status
+     *
+     * @return null
+     */
+    public function setStatus($status)
     {
-        if ($login == null) {
-            foreach ($this->playerStorage->getOnline() as $player) {
-                $this->sendCustomUi($player->getLogin(), true);
-            }
-            $this->connection->executeMulticall();
-        } else {
-            $this->sendCustomUi($login, false);
-        }
+
     }
 
+    /**
+     * called at eXpansion init
+     *
+     * @return void
+     */
+    public function onApplicationInit()
+    {
+        // TODO: Implement onApplicationInit() method.
+    }
 
-    public function sendCustomUi($login, $multicall)
+    /**
+     * called when init is done and callbacks are enabled
+     *
+     * @return void
+     */
+    public function onApplicationReady()
     {
         $properties = /** @lang XML */
             <<<EOL
@@ -121,39 +134,7 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
  	</ui_properties>
 EOL;
 
-        $this->connection->triggerModeScriptEvent('Trackmania.UI.SetProperties', [$properties], $multicall);
-    }
-
-    /**
-     * Set the status of the plugin
-     *
-     * @param boolean $status
-     *
-     * @return null
-     */
-    public function setStatus($status)
-    {
-
-    }
-
-    /**
-     * called at eXpansion init
-     *
-     * @return void
-     */
-    public function onApplicationInit()
-    {
-        // TODO: Implement onApplicationInit() method.
-    }
-
-    /**
-     * called when init is done and callbacks are enabled
-     *
-     * @return void
-     */
-    public function onApplicationReady()
-    {
-        $this->setCustomUi(null);
+        $this->connection->triggerModeScriptEvent('Trackmania.UI.SetProperties', [$properties]);
     }
 
     /**

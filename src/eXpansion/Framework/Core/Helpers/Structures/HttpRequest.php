@@ -6,10 +6,11 @@ use oliverde8\AsynchronousJobs\Job\CallbackCurl;
 
 class HttpRequest extends CallbackCurl
 {
+    /** @var  mixed */
     public $__additionalData;
 
     /**
-     * @return null
+     * @return mixed
      */
     public function getAdditionalData()
     {
@@ -17,7 +18,7 @@ class HttpRequest extends CallbackCurl
     }
 
     /**
-     * @param null $additionalData
+     * @param mixed $additionalData
      */
     public function setAdditionalData($additionalData)
     {

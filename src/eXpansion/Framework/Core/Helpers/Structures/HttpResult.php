@@ -11,7 +11,7 @@ class HttpResult
     protected $error;
 
     /** @var  string */
-    protected $response;
+    protected $response = "";
 
     /** @var  mixed */
     protected $additionalData;

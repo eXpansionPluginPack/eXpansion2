@@ -58,10 +58,6 @@ class Remove extends AdminChatCommand
         $this->plugin->removeMap($login, $index);
     }
 
-    public function setMxPlugin(ManiaExchange $plugin)
-    {
-        $this->plugin = $plugin;
-    }
 }
 
 

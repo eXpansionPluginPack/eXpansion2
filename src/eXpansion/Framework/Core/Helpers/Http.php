@@ -84,7 +84,6 @@ class Http
         $options[CURLOPT_FOLLOWLOCATION] = true;
         $options[CURLOPT_USERAGENT] = "eXpansionPluginPack v ".AbstractApplication::EXPANSION_VERSION;
 
-        $query = '';
         if (is_array($postFields)) {
             $query = http_build_query($postFields, '', '&');
         } else {
@@ -102,6 +101,10 @@ class Http
         $this->factory->startJob($curlJob);
     }
 
+    /**
+     * processes the request return value
+     * @param HttpRequest $curl
+     */
     public function process(HttpRequest $curl)
     {
         $data = $curl->getData();

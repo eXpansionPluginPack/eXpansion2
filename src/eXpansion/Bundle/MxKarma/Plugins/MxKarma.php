@@ -15,17 +15,19 @@ use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMap;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMatch;
 use Maniaplanet\DedicatedServer\Structures\Map;
 use Symfony\Component\Yaml\Yaml;
 use eXpansion\Bundle\MxKarma\Plugins\Connection as MxConnection;
 
-class MxKarma implements StatusAwarePluginInterface, ListenerInterfaceMpScriptMap,
-    ListenerInterfaceMpLegacyChat, ListenerInterfaceExpApplication, ListenerInterfaceMxKarma
+class MxKarma implements StatusAwarePluginInterface,
+    ListenerInterfaceMpScriptMap,
+    ListenerInterfaceMpLegacyChat,
+    ListenerInterfaceExpApplication,
+    ListenerInterfaceMxKarma
 {
 
 
-    /** @var MxVote */
+    /** @var MxVote[] */
     protected $changedVotes = [];
 
     /** @var  int */
@@ -87,6 +89,11 @@ class MxKarma implements StatusAwarePluginInterface, ListenerInterfaceMpScriptMa
         $this->playerStorage = $playerStorage;
     }
 
+    /**
+     * sets vote value
+     * @param $login
+     * @param $vote
+     */
     public function setVote($login, $vote)
     {
         $player = $this->playerStorage->getPlayerInfo($login);
@@ -183,17 +190,14 @@ class MxKarma implements StatusAwarePluginInterface, ListenerInterfaceMpScriptMa
     }
 
     /**
-     * @param MxRating $ratings
+     * @param MxRating $mxRating
      * @return mixed
      */
     public function onMxKarmaVoteLoad(MxRating $mxRating)
     {
 
-        /** @var MxRating $mxRating */
         $this->mxRating = $mxRating;
         $this->changedVotes = [];
-        print_r($mxRating);
-
         $this->votes = $mxRating->getVotes();
 
     }

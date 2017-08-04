@@ -36,8 +36,13 @@ class MxSearch extends AdminChatCommand
      * @param AdminGroups $adminGroupsHelper
      * @param ManiaExchangeWindowFactory $exchangeWindowFactory
      */
-    public function __construct($command, $permission, $aliases = [], AdminGroups $adminGroupsHelper, ManiaExchangeWindowFactory $exchangeWindowFactory)
-    {
+    public function __construct(
+        $command,
+        $permission,
+        $aliases = [],
+        AdminGroups $adminGroupsHelper,
+        ManiaExchangeWindowFactory $exchangeWindowFactory
+    ) {
         parent::__construct($command, $permission, $aliases, $adminGroupsHelper);
 
         $this->exchangeWindowFactory = $exchangeWindowFactory;

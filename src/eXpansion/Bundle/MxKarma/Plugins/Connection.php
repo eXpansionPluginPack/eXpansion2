@@ -75,6 +75,8 @@ class Connection
      */
     private $console;
 
+    /** @var Http */
+    private $http;
 
     /**
      * Connection constructor.
@@ -162,7 +164,6 @@ class Connection
 
         if ($result->hasError()) {
             $this->console->writeln('> MxKarma connection $f00 failure: '.$result->getError());
-
             return;
         }
 
@@ -254,6 +255,7 @@ class Connection
 
         if ($result->hasError()) {
             $this->console->writeln('> MxKarma save votes $f00 failure: '.$result->getError());
+
             return;
         }
 
@@ -327,7 +329,7 @@ class Connection
     /**
      * @param string $data json data
      *
-     * @return null
+     * @return object|null
      */
     public function getObject($data)
     {

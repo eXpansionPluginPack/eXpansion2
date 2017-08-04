@@ -153,7 +153,6 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
 
     /**
      * @param ManialinkInterface $manialink
-     * @return mixed
      */
     protected function createGrid(ManialinkInterface $manialink)
     {
@@ -234,7 +233,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $author->setHeight(6);
 
         $search = $this->uiFactory->createButton('🔍 Search', uiButton::TYPE_DECORATED);
-        $search->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackSearch'], null));
+        $search->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackSearch'], []));
         $search->setHeight(6);
 
         $line = $this->uiFactory->createLayoutLine(64, -14, [$mapname, $author, $search], 2);
@@ -296,39 +295,34 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $content = $manialink->getContentFrame();
         $this->setGridSize($content->getWidth(), $content->getHeight() - 24);
         $manialink->setData('grid', $gridBuilder);
-
+        $this->gridBuilder = $gridBuilder;
     }
 
-
-    public function findIndex($arr, $search)
-    {
-        $x = 0;
-        foreach ($arr as $idx => $value) {
-            if ($value == $search) {
-                return $x;
-            }
-            $x++;
-        }
-
-        return -1;
-    }
-
+    /**
+     * @param $login
+     * @param $params
+     * @param $args
+     */
     public function callbackAdd($login, $params, $args)
     {
         $this->mxPlugin->addMap($login, $args['mxid'], $params['site']);
     }
 
-    public function callbackSearch($login, $params, $args)
+    /**
+     * @param $login
+     * @param $params
+     */
+    public function callbackSearch($login, $params)
     {
         $params = (object)$params;
 
-        $this->modebox->setSelectedIndex($this->findIndex($this->tracksearch, $params->mode));
-        $this->orderbox->setSelectedIndex($this->findIndex($this->order, $params->order));
-        $this->opbox->setSelectedIndex($this->findIndex($this->operator, $params->operator));
-        $this->lengthBox->setSelectedIndex($this->findIndex($this->length, $params->length));
-        $this->stylebox->setSelectedIndex($this->findIndex($this->map_styles_tm, $params->style));
-        $this->difficultiesBox->setSelectedIndex($this->findIndex($this->difficulties, $params->difficulties));
-        $this->tpackBox->setSelectedIndex($this->findIndex($this->tpack, $params->tpack));
+        $this->modebox->setSelectedByValue($params->mode);
+        $this->orderbox->setSelectedByValue($params->order);
+        $this->opbox->setSelectedByValue($params->operator);
+        $this->lengthBox->setSelectedByValue($params->length);
+        $this->stylebox->setSelectedByValue($params->style);
+        $this->difficultiesBox->setSelectedByValue($params->difficulties);
+        $this->tpackBox->setSelectedByValue($params->tpack);
 
         $options = "";
 
@@ -349,9 +343,12 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
     }
 
 
+    /**
+     * @param HttpResult $result
+     */
     public function setMaps(HttpResult $result)
     {
-
+        $this->gridBuilder->goToFirstPage();
 
         if ($result->hasError()) {
             echo $result->getError();
