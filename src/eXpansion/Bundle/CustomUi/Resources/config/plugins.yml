@@ -1,0 +1,9 @@
+services:
+    expansion.bundle.custom_chat.plugins.custom_ui:
+        class: eXpansion\Bundle\CustomUi\Plugins\CustomUi
+        arguments:
+          - '@expansion.service.dedicated_connection'
+          - '@expansion.storage.player'
+        tags:
+          - {name: 'expansion.plugin', data_provider: 'exp.application'}
+          - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
