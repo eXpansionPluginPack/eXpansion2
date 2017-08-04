@@ -74,16 +74,16 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
  		<checkpoint_list visible="true" pos="48. -52. 5." />
  		
  		<!-- Small scores table displayed at the end of race of the round based modes (Rounds, Cup, ...) on the right of the screen -->
- 		<round_scores visible="true" pos="-158.5 40. 150." />
+ 		<round_scores visible="true" pos="-158.5 40. 5." />
  		
  		<!-- Race time left displayed at the bottom right of the screen -->
- 		<countdown visible="true" pos="153. -30. 5." />
+ 		<countdown visible="true" pos="153. -40. 5." />
  		
  		<!-- 3, 2, 1, Go! message displayed on the middle of the screen when spawning --> 		
  		<go visible="true" />
  		
  		<!-- Current race chrono displayed at the bottom center of the screen -->
- 		<chrono visible="true" pos="0. 80. -5." />
+ 		<chrono visible="true" pos="0. 84. -5." />
  		
  		<!-- Speed and distance raced displayed in the bottom right of the screen -->
  		<speed_and_distance visible="true" pos="137. -69. 5." />
@@ -92,7 +92,7 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
  		<personal_best_and_rank visible="false" pos="157. -24. 5." />
  		
  		<!-- Current position in the map ranking displayed at the bottom right of the screen -->
- 		<position visible="true" pos="150.5 -28. 5." />
+ 		<position visible="true" pos="0 81. 5." />
  		
  		<!-- Checkpoint time information displayed in the middle of the screen when crossing a checkpoint -->
  		<checkpoint_time visible="false" pos="0. 3. -10." />
