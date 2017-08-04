@@ -67,8 +67,9 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
  			The server chat displayed on the bottom left of the screen
  			The offset values range from 0. to -3.2 for x and from 0. to 1.8 for y
  			The linecount property must be between 0 and 40
+ 			use offset 0 1.55 for upper corner 
  		-->
- 		<chat visible="true" offset="0. 1.55" linecount="6" />
+ 		<chat visible="true" offset="0. 0." linecount="7" />
  		
  		<!-- Time of the players at the current checkpoint displayed at the bottom of the screen -->
  		<checkpoint_list visible="true" pos="48. -52. 5." />
