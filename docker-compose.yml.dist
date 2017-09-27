@@ -1,0 +1,27 @@
+
+php:
+    build: docker/php
+    volumes:
+        - ./:/var/www/expansion
+    links:
+        - mysql
+        - dedicated
+
+dedicated:
+    build: docker/mp_dedicated
+    environment:
+        MP_LOGIN: login
+        MP_PASSWORD: password
+    volumes:
+        - ./docker/data/mp:/var/maniaplanet/UserData
+
+mysql:
+    image: mysql:5.7
+    environment:
+        MYSQL_ROOT_PASSWORD: ""
+        MYSQL_DATABASE: expansion
+        MYSQL_USER: root
+        MYSQL_PASSWORD: ""
+        MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:
+        - ./docker/data/mysql:/var/lib/mysql
