@@ -9,11 +9,22 @@
 namespace Tests\eXpansion\Framework\Core\Helpers;
 
 use eXpansion\Framework\Core\Helpers\ChatNotification;
+use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
+use eXpansion\Framework\Core\Storage\PlayerStorage;
+use Symfony\Component\Console\Output\NullOutput;
 use Tests\eXpansion\Framework\Core\TestCore;
 
 class ChatNotificationTest extends TestCore
 {
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->container->get(Console::class)->init(new NullOutput());
+    }
+
+
     public function testSendMessageLogin() {
 
         $colorCodes = $this->container->getParameter('expansion.config.core_chat_color_codes');
@@ -26,7 +37,7 @@ class ChatNotificationTest extends TestCore
 
         $player = new Player();
         $player->merge(['language' => 'en']);
-        $this->container->set('expansion.storage.player', $this->getMockPlayerStorage($player));
+        $this->container->set(PlayerStorage::class, $this->getMockPlayerStorage($player));
 
         $chatNotification = $this->getChatNotificationHelper();
         $chatNotification->sendMessage('expansion_core.test_color', 'toto', ['%test%' => 'Toto']);
@@ -52,7 +63,7 @@ class ChatNotificationTest extends TestCore
 
         $player = new Player();
         $player->merge(['language' => 'en']);
-        $this->container->set('expansion.storage.player', $this->getMockPlayerStorage($player));
+        $this->container->set(PlayerStorage::class, $this->getMockPlayerStorage($player));
 
         $chatNotification = $this->getChatNotificationHelper();
         $chatNotification->sendMessage('expansion_core.test_color', null, ['%test%' => 'Toto']);
@@ -99,6 +110,6 @@ class ChatNotificationTest extends TestCore
      */
     protected function getChatNotificationHelper()
     {
-        return $this->container->get('expansion.helper.chat_notification');
+        return $this->container->get(ChatNotification::class);
     }
 }

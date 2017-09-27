@@ -5,6 +5,7 @@ namespace Tests\eXpansion\Framework\Core\Model\UserGoups;
 
 
 use eXpansion\Framework\Core\Model\UserGroups\Group;
+use eXpansion\Framework\Core\Services\Application\Dispatcher;
 use Tests\eXpansion\Framework\Core\TestCore;
 
 
@@ -13,7 +14,7 @@ class GroupTest extends TestCore
 
     public function testPersistentGroup()
     {
-        $group = new Group($this->container->get('expansion.service.dispatcher'), "test");
+        $group = new Group("test", $this->container->get(Dispatcher::class));
 
         $group->addLogin('l1');
         $group->addLogin('l2');
@@ -29,7 +30,7 @@ class GroupTest extends TestCore
 
     public function testNonPersistentGroup()
     {
-        $group = new Group($this->container->get('expansion.service.dispatcher'));
+        $group = new Group(null, $this->container->get(Dispatcher::class));
         $this->assertFalse($group->isPersistent());
     }
 }

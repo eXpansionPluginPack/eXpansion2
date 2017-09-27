@@ -5,6 +5,7 @@ namespace Tests\eXpansion\Framework\Core\DataProviders;
 
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
 use eXpansion\Framework\Core\Storage\Data\Player;
+use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Tests\eXpansion\Framework\Core\TestCore;
 
 class ChatDataProviderTest extends TestCore
@@ -12,7 +13,7 @@ class ChatDataProviderTest extends TestCore
     public function testOnPlayerChat()
     {
         $player = new Player();
-        $this->container->set('expansion.storage.player', $this->getMockPlayerStorage($player));
+        $this->container->set(PlayerStorage::class, $this->getMockPlayerStorage($player));
 
         $plugin = $this->createMock(ListenerInterfaceMpLegacyChat::class);
         $plugin->method('onPlayerChat')
@@ -28,7 +29,7 @@ class ChatDataProviderTest extends TestCore
     public function testRemovePlugin()
     {
         $player = new Player();
-        $this->container->set('expansion.storage.player', $this->getMockPlayerStorage($player));
+        $this->container->set(PlayerStorage::class, $this->getMockPlayerStorage($player));
 
         $pluginA = $this->createMock(ListenerInterfaceMpLegacyChat::class);
         $pluginA->expects($this->once())

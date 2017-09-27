@@ -9,6 +9,7 @@
 namespace Tests\eXpansion\Framework\Core\Model\Gui;
 
 use eXpansion\Framework\Core\Exceptions\Gui\MissingCloseActionException;
+use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Model\Gui\Action;
 use eXpansion\Framework\Core\Model\Gui\ManiaScript;
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
@@ -75,7 +76,7 @@ class WindowTest extends TestCore
     protected function getWindow()
     {
         $factory = $this->container->get('expansion.framework.core.mania_script.window_factory');
-        $translation = $this->container->get('expansion.helper.translations');
+        $translation = $this->container->get(Translations::class);
 
         return new Window($this->getSpectatorsGroup(), $factory, $translation, 'test', 10, 20);
     }

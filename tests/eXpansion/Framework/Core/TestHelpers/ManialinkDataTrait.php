@@ -6,6 +6,7 @@ namespace Tests\eXpansion\Framework\Core\TestHelpers;
 
 use eXpansion\Framework\Core\Model\Gui\Manialink;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
+use eXpansion\Framework\Core\Services\Application\Dispatcher;
 
 trait ManialinkDataTrait
 {
@@ -16,7 +17,7 @@ trait ManialinkDataTrait
      */
     protected function getManialink($logins)
     {
-        $group = new Group($this->container->get('expansion.service.dispatcher'), "test");
+        $group = new Group("test", $this->container->get(Dispatcher::class));
         foreach ($logins as $login) {
             $group->addLogin($login);
         }

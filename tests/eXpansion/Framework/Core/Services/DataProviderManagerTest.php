@@ -9,6 +9,7 @@ use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPla
 use eXpansion\Framework\Core\DataProviders\MapDataProvider;
 use eXpansion\Framework\Core\DataProviders\PlayerDataProvider;
 use eXpansion\Framework\Core\Exceptions\DataProvider\UncompatibleException;
+use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Services\DataProviderManager;
 
 use eXpansion\Framework\Core\Services\PluginManager;
@@ -16,6 +17,7 @@ use eXpansion\Framework\Core\Storage\GameDataStorage;
 use Maniaplanet\DedicatedServer\Structures\GameInfos;
 use Maniaplanet\DedicatedServer\Structures\PlayerDetailedInfo;
 use Maniaplanet\DedicatedServer\Structures\PlayerInfo;
+use Maniaplanet\DedicatedServer\Structures\Version;
 use Tests\eXpansion\Framework\Core\TestCore;
 use Tests\eXpansion\Framework\Core\TestHelpers\PlayerDataTrait;
 
@@ -35,8 +37,18 @@ class DataProviderManagerTest extends TestCore
         $gameDataStorageMock->method('getTitle')->willReturn('TM');
         $gameDataStorageMock->method('getGameModeCode')->willReturn('script');
         $gameDataStorageMock->method('getGameInfos')->willReturn($gameInfos);
+        $gameDataStorageMock->method('getVersion')->willReturn(new Version());
 
-        $this->container->set('expansion.storage.gamedata', $gameDataStorageMock);
+        $this->container->set(GameDataStorage::class, $gameDataStorageMock);
+
+        $this->container->set(
+            DataProviderManager::class,
+            new DataProviderManager(
+                $this->container,
+                $gameDataStorageMock,
+                $this->container->get(Console::class)
+            )
+        );
     }
 
 
@@ -142,6 +154,9 @@ class DataProviderManagerTest extends TestCore
         $connectionMock->method('getPlayerList')
             ->withAnyParameters()
             ->willReturn([new PlayerInfo()]);
+        $connectionMock->method('getVersion')
+            ->withAnyParameters()
+            ->willReturn([new Version()]);
         $connectionMock->method('getPlayerInfo')
             ->withAnyParameters()
             ->willReturn(new PlayerInfo());
@@ -182,8 +197,6 @@ class DataProviderManagerTest extends TestCore
      */
     protected function getDataProviderManager()
     {
-
-
-        return $this->container->get('expansion.service.data_provider_manager');
+        return $this->container->get(DataProviderManager::class);
     }
 }

@@ -49,6 +49,4 @@ class ChatOutputTest extends TestCore
         $chatOutput->isDecorated();
         $chatOutput->getFormatter();
     }
-
-
 }

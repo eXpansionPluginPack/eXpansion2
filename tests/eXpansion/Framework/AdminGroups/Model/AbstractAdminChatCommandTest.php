@@ -8,6 +8,7 @@
 
 namespace Tests\eXpansion\Framework\AdminGroups\Model;
 
+use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use Tests\eXpansion\Framework\AdminGroups\TestAdminGroups;
 use Tests\eXpansion\Framework\AdminGroups\TestHelpers\AdminChatCommand;
 
@@ -15,7 +16,7 @@ class AbstractAdminChatCommandTest extends TestAdminGroups
 {
     public function testChatCommand()
     {
-        $adminHelper = $this->container->get('expansion.helper.admingroups');
+        $adminHelper = $this->getAdminGroupHelper();
 
         $chat = new AdminChatCommand('restart', 'p10', ['res'], $adminHelper);
 

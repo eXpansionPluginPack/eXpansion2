@@ -23,7 +23,7 @@ class LabelFactoryTest extends TestCore
      */
     protected function getLabelFactory()
     {
-        return $this->container->get('expansion.framework.core.gui.element.factory.label');
+        return $this->container->get(LabelFactory::class);
     }
 
 }

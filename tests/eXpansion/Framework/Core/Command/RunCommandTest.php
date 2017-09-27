@@ -4,7 +4,9 @@ namespace Tests\eXpansion\Framework\Core\Command;
 
 use eXpansion\Framework\Core\Command\DediEventsTestCommand;
 use eXpansion\Framework\Core\Command\RunCommand;
+use eXpansion\Framework\Core\Services\Application;
 use eXpansion\Framework\Core\Services\Application\RunInterface;
+use eXpansion\Framework\Core\Services\ApplicationDebug;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tests\eXpansion\Framework\Core\TestCore;
@@ -13,8 +15,9 @@ class RunCommandTest extends TestCore
 {
     public function testRun()
     {
-        $applicationMock = $this->createMock(RunInterface::class);
-        $this->container->set('expansion.service.application', $applicationMock);
+        $applicationMock = $this->getMockBuilder(Application::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $applicationMock
             ->expects($this->once())->method('init')
@@ -22,7 +25,7 @@ class RunCommandTest extends TestCore
             ->willReturn($applicationMock);
         $applicationMock->expects($this->once())->method('run');
 
-        $command = new RunCommand();
+        $command = new RunCommand($applicationMock);
         $command->setContainer($this->container);
         $this->consoleApplication->add($command);
 
@@ -34,8 +37,9 @@ class RunCommandTest extends TestCore
 
     public function testDebugRun()
     {
-        $applicationMock = $this->createMock(RunInterface::class);
-        $this->container->set('expansion.service.application_debug', $applicationMock);
+        $applicationMock = $this->getMockBuilder(ApplicationDebug::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $applicationMock
             ->expects($this->once())->method('init')
@@ -43,7 +47,7 @@ class RunCommandTest extends TestCore
             ->willReturn($applicationMock);
         $applicationMock->expects($this->once())->method('run');
 
-        $command = new DediEventsTestCommand();
+        $command = new DediEventsTestCommand($applicationMock);
         $command->setContainer($this->container);
         $this->consoleApplication->add($command);
 

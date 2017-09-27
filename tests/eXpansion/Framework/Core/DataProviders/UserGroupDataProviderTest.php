@@ -11,6 +11,7 @@ namespace Tests\eXpansion\Framework\Core\DataProviders;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpUserGroup;
 use eXpansion\Framework\Core\DataProviders\UserGroupDataProvider;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
+use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
 use Tests\eXpansion\Framework\Core\TestCore;
 
 class UserGroupDataProviderTest extends TestCore
@@ -18,7 +19,7 @@ class UserGroupDataProviderTest extends TestCore
     public function testPlayerAdded()
     {
         /** @var Group $group */
-        $group = $this->container->get('expansion.framework.core.user_groups.factory')->createForPlayers(['test']);
+        $group = $this->container->get(Factory::class)->createForPlayers(['test']);
 
         $mockPlugin = $this->createMock(ListenerInterfaceExpUserGroup::class);
         $mockPlugin->expects($this->once())
@@ -32,7 +33,7 @@ class UserGroupDataProviderTest extends TestCore
     public function testPlayerRemove()
     {
         /** @var Group $group */
-        $group = $this->container->get('expansion.framework.core.user_groups.factory')->createForPlayers(['test']);
+        $group = $this->container->get(Factory::class)->createForPlayers(['test']);
 
         $mockPlugin = $this->createMock(ListenerInterfaceExpUserGroup::class);
         $mockPlugin->expects($this->once())
@@ -46,7 +47,7 @@ class UserGroupDataProviderTest extends TestCore
     public function testDestroy()
     {
         /** @var Group $group */
-        $group = $this->container->get('expansion.framework.core.user_groups.factory')->createForPlayers(['test']);
+        $group = $this->container->get(Factory::class)->createForPlayers(['test']);
 
         $mockPlugin = $this->createMock(ListenerInterfaceExpUserGroup::class);
         $mockPlugin->expects($this->once())

@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Core\Command;
 
+use eXpansion\Framework\Core\Services\ApplicationDebug;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,6 +14,22 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class DediEventsTestCommand extends ContainerAwareCommand
 {
+    /** @var  ApplicationDebug */
+    protected $expansionApplicationDebug;
+
+    /**
+     * DediEventsTestCommand constructor.
+     *
+     * @param ApplicationDebug $expansionApplicationDebug
+     */
+    public function __construct(ApplicationDebug $expansionApplicationDebug)
+    {
+        parent::__construct();
+
+        $this->expansionApplicationDebug = $expansionApplicationDebug;
+    }
+
+
     protected function configure()
     {
         $this->setName('eXpansion:test:dedicated')
@@ -21,7 +38,7 @@ class DediEventsTestCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getContainer()->get('expansion.service.application_debug')
+        $this->expansionApplicationDebug
             ->init($output)
             ->run();
     }

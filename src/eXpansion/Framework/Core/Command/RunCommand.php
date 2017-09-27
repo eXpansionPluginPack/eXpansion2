@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Core\Command;
 
+use eXpansion\Framework\Core\Services\Application;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,6 +14,22 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class RunCommand extends ContainerAwareCommand
 {
+    /** @var Application */
+    protected $expansionApplication;
+
+    /**
+     * RunCommand constructor.
+     *
+     * @param Application $expansionApplication
+     */
+    public function __construct(Application $expansionApplication)
+    {
+        parent::__construct();
+
+        $this->expansionApplication = $expansionApplication;
+    }
+
+
     protected function configure()
     {
         $this->setName('eXpansion:run')
@@ -21,7 +38,7 @@ class RunCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getContainer()->get('expansion.service.application')
+        $this->expansionApplication
             ->init($output)
             ->run();
     }

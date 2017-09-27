@@ -12,7 +12,7 @@ class TitleBackGroundFactoryTest extends TestCore
     public function testCreate()
     {
         /** @var TitleBackGroundFactory $factory */
-        $factory = $this->container->get('expansion.framework.core.gui.element.factory.title_back_ground');
+        $factory = $this->container->get(TitleBackGroundFactory::class);
 
         $this->assertInstanceOf(Renderable::class, $factory->create(10,  4, 0));
     }

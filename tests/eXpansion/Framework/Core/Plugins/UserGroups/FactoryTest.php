@@ -52,6 +52,6 @@ class FactoryTest extends TestCore
      */
     protected function getGroupFactory()
     {
-        return $this->container->get('expansion.framework.core.user_groups.factory');
+        return $this->container->get(Factory::class);
     }
 }

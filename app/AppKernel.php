@@ -11,21 +11,21 @@ class AppKernel extends Kernel
         $bundles = $this->registerCoreBundles();
 
         /* Register eXpansion Base Bundles */
-        $bundles[] = new \eXpansion\Bundle\CustomChat\CustomChatBundle();
-        $bundles[] = new \eXpansion\Bundle\CustomUi\CustomUiBundle();
-        $bundles[] = new \eXpansion\Bundle\AdminChat\AdminChatBundle();
+//        $bundles[] = new \eXpansion\Bundle\CustomChat\CustomChatBundle();
+//        $bundles[] = new \eXpansion\Bundle\CustomUi\CustomUiBundle();
+//        $bundles[] = new \eXpansion\Bundle\AdminChat\AdminChatBundle();
 
         /* Register eXpansion Plugins */
-        $bundles[] = new \eXpansion\Bundle\LocalRecords\LocalRecordsBundle();
-        $bundles[] = new \eXpansion\Bundle\Maps\MapsBundle();
-        $bundles[] = new \eXpansion\Bundle\JoinLeaveMessages\JoinLeaveMessagesBundle();
-        $bundles[] = new \eXpansion\Bundle\Emotes\EmotesBundle();
-        $bundles[] = new \eXpansion\Bundle\Menu\MenuBundle();
+//        $bundles[] = new \eXpansion\Bundle\LocalRecords\LocalRecordsBundle();
+//        $bundles[] = new \eXpansion\Bundle\Maps\MapsBundle();
+//        $bundles[] = new \eXpansion\Bundle\JoinLeaveMessages\JoinLeaveMessagesBundle();
+//        $bundles[] = new \eXpansion\Bundle\Emotes\EmotesBundle();
+//        $bundles[] = new \eXpansion\Bundle\Menu\MenuBundle();
       //  $bundles[] = new \eXpansion\Bundle\MxKarma\MxKarmaBundle();
 
 
         /* Register test bundles. */
-        $bundles[] = new \eXpansion\Bundle\Acme\AcmeBundle();
+//        $bundles[] = new \eXpansion\Bundle\Acme\AcmeBundle();
 
         return $bundles;
     }

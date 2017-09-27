@@ -11,7 +11,7 @@ class BackGroundFactoryTest extends TestCore
     public function testCreate()
     {
         /** @var BackGroundFactory $factory */
-        $factory = $this->container->get('expansion.framework.core.gui.element.factory.back_ground');
+        $factory = $this->container->get(BackGroundFactory::class);
 
         $this->assertInstanceOf(Renderable::class, $factory->create(10,  4, 0));
         $this->assertInstanceOf(Renderable::class, $factory->create(10,  4, 1));

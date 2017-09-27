@@ -48,7 +48,7 @@ class TestCore extends KernelTestCase
         $consoleMock = $this->getMockBuilder(Console::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->container->set('expansion.service.console', $consoleMock);
+        $this->container->set(Console::class, $consoleMock);
 
         $outputMock = $this->getMockBuilder(OutputInterface::class)->getMock();
         $consoleMock->method('getConsoleOutput')->willReturn($outputMock);
@@ -71,6 +71,6 @@ class TestCore extends KernelTestCase
      */
     protected function getChatOutputHelper()
     {
-        return $this->container->get('expansion.helper.chat_output');
+        return $this->container->get(ChatOutput::class);
     }
 }

@@ -8,7 +8,9 @@
 
 namespace Tests\eXpansion\Framework\AdminGroups;
 
+use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\AdminGroups\Services\AdminGroupConfiguration;
+use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
 use Tests\eXpansion\Framework\Core\TestCore;
 
 
@@ -62,6 +64,8 @@ class TestAdminGroups extends TestCore
      */
     protected function getAdminGroupHelper()
     {
-        return $this->container->get('expansion.helper.admingroups');
+        return new AdminGroups(
+            $this->getAdminGroupConfigurationService(), $this->container->get(Factory::class)
+        );
     }
 }

@@ -18,7 +18,7 @@ class ActionFactoryTest extends TestCore
         $manialink = $this->getManialink(['test1']);
 
         /** @var ActionFactory $actionFactory */
-        $actionFactory = $this->container->get('expansion.framework.core.plugins.gui.action_factory');
+        $actionFactory = $this->container->get(ActionFactory::class);
         $actionId = $actionFactory->createManialinkAction($manialink, array($this, 'actionCall'), ['testParam']);
         $actionFactory->onPlayerManialinkPageAnswer('test1', $actionId, ['entry' => 'value1']);
 
@@ -30,7 +30,7 @@ class ActionFactoryTest extends TestCore
         $manialink = $this->getManialink(['test1']);
 
         /** @var ActionFactory $actionFactory */
-        $actionFactory = $this->container->get('expansion.framework.core.plugins.gui.action_factory');
+        $actionFactory = $this->container->get(ActionFactory::class);
         $actionId = $actionFactory->createManialinkAction($manialink, array($this, 'actionCall'), ['testParam']);
         $actionFactory->destroyManialinkActions($manialink);
         $actionFactory->onPlayerManialinkPageAnswer('test1', $actionId, ['entry' => 'value1']);

@@ -30,7 +30,7 @@ services:
     arguments:
       - '%expansion.gui.components.list%'
       -
-        Background: '@expansion.framework.core.gui.element.factory.back_ground'
-        TitleBackground: '@expansion.framework.core.gui.element.factory.title_back_ground'
-        GridLine: '@expansion.framework.core.gui.element.factory.line'
-        Pager: '@expansion.framework.core.gui.element.factory.pager'
+        Background: '@eXpansion\Framework\Core\Model\Gui\Factory\BackGroundFactory'
+        TitleBackground: '@eXpansion\Framework\Core\Model\Gui\Factory\TitleBackGroundFactory'
+        GridLine: '@eXpansion\Framework\Core\Model\Gui\Factory\LineFactory'
+        Pager: '@eXpansion\Framework\Core\Model\Gui\Factory\PagerFactory'

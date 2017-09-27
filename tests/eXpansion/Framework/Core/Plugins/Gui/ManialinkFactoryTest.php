@@ -37,8 +37,8 @@ class ManialinkFactoryTest extends TestCore
 
     public function testCreateForGroup()
     {
-        $group = new Group($this->dispatcherMock, 'test');
-        $group2 = new Group($this->dispatcherMock, 'test2');
+        $group = new Group('test', $this->dispatcherMock);
+        $group2 = new Group('test2', $this->dispatcherMock);
 
         $mlFactory = $this->getManialinkFactory();
 
@@ -50,8 +50,8 @@ class ManialinkFactoryTest extends TestCore
 
     public function testCreateForLogin()
     {
-        $group = new Group($this->dispatcherMock, 'test1');
-        $group2 = new Group($this->dispatcherMock, 'test2');
+        $group = new Group('test1', $this->dispatcherMock);
+        $group2 = new Group('test2', $this->dispatcherMock);
 
         $this->userGroupFactoryMock->method('createForPlayer')
             ->withConsecutive(['test1'], ['test2'])
@@ -67,7 +67,7 @@ class ManialinkFactoryTest extends TestCore
 
     public function testCreateForLogins()
     {
-        $group = new Group($this->dispatcherMock, 'test1');
+        $group = new Group('test1', $this->dispatcherMock);
 
         $this->userGroupFactoryMock->method('createForPlayers')
             ->with(['test1', 'test2'])
@@ -82,7 +82,7 @@ class ManialinkFactoryTest extends TestCore
 
     public function testDestory()
     {
-        $group = new Group($this->dispatcherMock, 'test1');
+        $group = new Group('test1', $this->dispatcherMock);
 
         $this->userGroupFactoryMock->method('createForPlayers')
             ->with(['test1', 'test2'])
@@ -100,7 +100,7 @@ class ManialinkFactoryTest extends TestCore
 
     public function testGroupDestory()
     {
-        $group = new Group($this->dispatcherMock, 'test1');
+        $group = new Group('test1', $this->dispatcherMock);
 
         $this->userGroupFactoryMock->method('createForPlayers')
             ->with(['test1', 'test2'])
@@ -118,7 +118,7 @@ class ManialinkFactoryTest extends TestCore
 
     public function testEmptyMethods()
     {
-        $group = new Group($this->dispatcherMock, 'test1');
+        $group = new Group('test1', $this->dispatcherMock);
         $mlFactory = $this->getManialinkFactory();
 
         $mlFactory->onExpansionGroupAddUser($group, 'test1');

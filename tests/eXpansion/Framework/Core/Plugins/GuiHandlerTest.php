@@ -11,6 +11,7 @@ namespace Tests\eXpansion\Framework\Core\Plugins;
 use eXpansion\Framework\Core\Model\Gui\Manialink;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\GuiHandler;
+use eXpansion\Framework\Core\Services\Console;
 use Tests\eXpansion\Framework\Core\TestCore;
 use Tests\eXpansion\Framework\Core\TestHelpers\ManialinkDataTrait;
 use Tests\eXpansion\Framework\Core\TestHelpers\PlayerDataTrait;
@@ -33,7 +34,7 @@ class GuiHandlerTest extends TestCore
             ->with($logins, $manialink->getXml());
 
         /** @var GuiHandler $guiHanlder */
-        $guiHanlder = $this->container->get('expansion.framework.core.plugins.gui_handler');
+        $guiHanlder = $this->container->get(GuiHandler::class);
         $guiHanlder->addToDisplay($manialink);
 
         $guiHanlder->onPostLoop();
@@ -52,7 +53,7 @@ class GuiHandlerTest extends TestCore
             ->with($logins, '<manialink id="' . $manialink->getId() . '" />');
 
         /** @var GuiHandler $guiHanlder */
-        $guiHanlder = $this->container->get('expansion.framework.core.plugins.gui_handler');
+        $guiHanlder = $this->container->get(GuiHandler::class);
         $guiHanlder->addToHide($manialink);
 
         $guiHanlder->onPostLoop();
@@ -72,7 +73,7 @@ class GuiHandlerTest extends TestCore
             ->with($logins, $manialink->getXml());
 
         /** @var GuiHandler $guiHanlder */
-        $guiHanlder = $this->container->get('expansion.framework.core.plugins.gui_handler');
+        $guiHanlder = $this->container->get(GuiHandler::class);
         $guiHanlder->addToDisplay($manialink);
         $guiHanlder->addToHide($manialink);
         $guiHanlder->addToDisplay($manialink);
@@ -94,7 +95,7 @@ class GuiHandlerTest extends TestCore
             ->withConsecutive([$logins, $manialink->getXml()], [$logins, '<manialink id="' . $manialink->getId() . '" />']);
 
         /** @var GuiHandler $guiHanlder */
-        $guiHanlder = $this->container->get('expansion.framework.core.plugins.gui_handler');
+        $guiHanlder = $this->container->get(GuiHandler::class);
         $guiHanlder->addToDisplay($manialink);
         $guiHanlder->onPostLoop();
 
@@ -115,7 +116,7 @@ class GuiHandlerTest extends TestCore
             ->withConsecutive([$logins, $manialink->getXml()], ['test3', $manialink->getXml()]);
 
         /** @var GuiHandler $guiHanlder */
-        $guiHanlder = $this->container->get('expansion.framework.core.plugins.gui_handler');
+        $guiHanlder = $this->container->get(GuiHandler::class);
         $guiHanlder->addToDisplay($manialink);
 
         $guiHanlder->onPostLoop();
@@ -136,7 +137,7 @@ class GuiHandlerTest extends TestCore
             ->withConsecutive([$logins, $manialink->getXml()], ['test1', '<manialink id="' . $manialink->getId() . '" />']);
 
         /** @var GuiHandler $guiHanlder */
-        $guiHanlder = $this->container->get('expansion.framework.core.plugins.gui_handler');
+        $guiHanlder = $this->container->get(GuiHandler::class);
         $guiHanlder->addToDisplay($manialink);
 
         $guiHanlder->onPostLoop();
@@ -156,7 +157,7 @@ class GuiHandlerTest extends TestCore
             ->with($logins, $manialink->getXml());
 
         /** @var GuiHandler $guiHanlder */
-        $guiHanlder = $this->container->get('expansion.framework.core.plugins.gui_handler');
+        $guiHanlder = $this->container->get(GuiHandler::class);
         $guiHanlder->addToDisplay($manialink);
 
         $guiHanlder->onPostLoop();
@@ -178,7 +179,7 @@ class GuiHandlerTest extends TestCore
             ->withConsecutive([$logins, $manialink->getXml()]);
 
         /** @var GuiHandler $guiHanlder */
-        $guiHanlder = $this->container->get('expansion.framework.core.plugins.gui_handler');
+        $guiHanlder = $this->container->get(GuiHandler::class);
         $guiHanlder->addToDisplay($manialink);
 
         $guiHanlder->onPostLoop();
@@ -199,7 +200,7 @@ class GuiHandlerTest extends TestCore
             ->withAnyParameters();
         $logins = ['test1', 'test2'];
 
-        $guiHanlder = $this->container->get('expansion.framework.core.plugins.gui_handler');
+        $guiHanlder = $this->container->get(GuiHandler::class);
         $guiHanlder->setCharLimit(160);
 
         for ($i = 0; $i < 2; $i++) {
@@ -222,10 +223,10 @@ class GuiHandlerTest extends TestCore
         $logins = ['test1', 'test2'];
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $loggerMock */
-        $loggerMock = $this->container->get('expansion.service.console');
+        $loggerMock = $this->container->get(Console::class);
         $loggerMock->expects($this->exactly(2))->method('writeln');
 
-        $guiHanlder = $this->container->get('expansion.framework.core.plugins.gui_handler');
+        $guiHanlder = $this->container->get(GuiHandler::class);
         $guiHanlder->setCharLimit(160);
 
         for ($i = 0; $i < 2; $i++) {
@@ -239,7 +240,7 @@ class GuiHandlerTest extends TestCore
     public function testEmptyMethods()
     {
         /** @var GuiHandler $guiHanlder */
-        $guiHanlder = $this->container->get('expansion.framework.core.plugins.gui_handler');
+        $guiHanlder = $this->container->get(GuiHandler::class);
 
         $guiHanlder->onPreLoop();
         $guiHanlder->onEverySecond();

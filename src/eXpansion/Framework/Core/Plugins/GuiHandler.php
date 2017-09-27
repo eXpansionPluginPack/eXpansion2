@@ -10,8 +10,8 @@ use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use Maniaplanet\DedicatedServer\Connection;
-use Monolog\Logger;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class GuiHandler will send manialinks to player as needed.
@@ -24,7 +24,7 @@ class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserG
     /** @var Connection */
     protected $connection;
 
-    /** @var Logger */
+    /** @var LoggerInterface */
     protected $logger;
 
     /** @var Console */
@@ -56,7 +56,7 @@ class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserG
      *
      * @param Connection $connection
      */
-    public function __construct(Connection $connection, Logger $logger, Console $console, $charLimit = 262144)
+    public function __construct(Connection $connection, LoggerInterface $logger, Console $console, $charLimit = 262144)
     {
         $this->connection = $connection;
 

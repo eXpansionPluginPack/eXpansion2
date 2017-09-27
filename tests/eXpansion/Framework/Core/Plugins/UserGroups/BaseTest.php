@@ -142,7 +142,7 @@ class BaseTest extends TestCore
      */
     protected function getAllPlayersGroupPlugin()
     {
-        return $this->container->get('expansion.framework.core.plugins.user_group.all_players');
+        return $this->container->get(AllPlayers::class);
     }
 
     /**
@@ -158,7 +158,7 @@ class BaseTest extends TestCore
      */
     protected function getSpectatorsGroupPlugin()
     {
-        return $this->container->get('expansion.framework.core.plugins.user_group.spectators');
+        return $this->container->get(Spectators::class);
     }
 
     /**
@@ -174,7 +174,7 @@ class BaseTest extends TestCore
      */
     protected function getPlayersGroupPlugin()
     {
-        return $this->container->get('expansion.framework.core.plugins.user_group.players');
+        return $this->container->get(Players::class);
     }
 
     /**
