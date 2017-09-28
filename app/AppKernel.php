@@ -18,7 +18,7 @@ class AppKernel extends Kernel
         /* Register eXpansion Plugins */
 //        $bundles[] = new \eXpansion\Bundle\LocalRecords\LocalRecordsBundle();
 //        $bundles[] = new \eXpansion\Bundle\Maps\MapsBundle();
-//        $bundles[] = new \eXpansion\Bundle\JoinLeaveMessages\JoinLeaveMessagesBundle();
+        $bundles[] = new \eXpansion\Bundle\JoinLeaveMessages\JoinLeaveMessagesBundle();
         $bundles[] = new \eXpansion\Bundle\Emotes\EmotesBundle();
 //        $bundles[] = new \eXpansion\Bundle\Menu\MenuBundle();
       //  $bundles[] = new \eXpansion\Bundle\MxKarma\MxKarmaBundle();

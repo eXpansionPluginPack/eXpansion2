@@ -1,11 +1,7 @@
 services:
-    expansion.framework.core.plugins.joinleave:
+    eXpansion\Bundle\JoinLeaveMessages\Plugins\JoinLeaveMessages:
+        autowire: true
         class: eXpansion\Bundle\JoinLeaveMessages\Plugins\JoinLeaveMessages
-        arguments:
-            - '@expansion.service.dedicated_connection'
-            - '@expansion.service.console'
-            - '@expansion.helper.chat_notification'
-            - '@expansion.helper.admingroups'
         tags:
             - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
 
