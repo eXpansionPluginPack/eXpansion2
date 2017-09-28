@@ -44,7 +44,7 @@ class RaceRecordsTest extends \PHPUnit_Framework_TestCase
 
         $this->dispatcher = $this->getMockBuilder(Dispatcher::class)->disableOriginalConstructor()->getMock();
 
-        $this->playersGroup = new Group($this->dispatcher);
+        $this->playersGroup = new Group(null, $this->dispatcher);
     }
 
     public function testActivation()

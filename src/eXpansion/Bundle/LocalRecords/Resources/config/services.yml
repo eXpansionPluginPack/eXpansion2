@@ -2,7 +2,11 @@ parameters:
     eXpansion.local_records.nb_records: 100
 
 services:
-    eXpansion.local_records.repository.record:
+    _defaults:
+        autowire: true
+        public: true
+
+    eXpansion\Bundle\LocalRecords\Repository\RecordRepository:
         class: Doctrine\ORM\EntityRepository
         factory: ["@doctrine.orm.entity_manager", getRepository]
         arguments: ['LocalRecordsBundle:Record']
@@ -13,18 +17,18 @@ services:
     eXpansion.local_records.services.race_record_handler_factory:
         class: eXpansion\Bundle\LocalRecords\Services\RecordHandlerFactory
         arguments:
-            - '@eXpansion.local_records.repository.record'
+            - '@eXpansion\Bundle\LocalRecords\Repository\RecordRepository'
             - ASC
             - '%eXpansion.local_records.nb_records%'
 
     # Plugins to save race records in all TM gamemodes.
-    eXpansion.local_records.plugins.race_records:
+    expansion.local_records.plugins.race_records:
         class: eXpansion\Bundle\LocalRecords\Plugins\RaceRecords
         arguments:
             - '@eXpansion.local_records.services.race_record_handler_factory'
             - '@eXpansion.framework.core.user_groups.all_players'
-            - '@expansion.storage.map'
-            - '@expansion.service.dispatcher'
+            - '@eXpansion\Framework\Core\Storage\MapStorage'
+            - '@eXpansion\Framework\Core\Services\Application\Dispatcher'
             - 'expansion.local_records.race'
         tags:
             - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
@@ -49,9 +53,9 @@ services:
     eXpansion.local_records.plugins.race_records_notifications:
         class: eXpansion\Bundle\LocalRecords\Plugins\ChatNotification
         arguments:
-            - '@expansion.helper.chat_notification'
-            - '@expansion.storage.player'
-            - '@expansion.helper.time'
+            - '@eXpansion\Framework\Core\Helpers\ChatNotification'
+            - '@eXpansion\Framework\Core\Storage\PlayerStorage'
+            - '@eXpansion\Framework\Core\Helpers\Time'
             - 'expansion_local_records.chat.race'
             - 20
         tags:
