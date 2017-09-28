@@ -29,8 +29,7 @@ services:
         class: 'eXpansion\Framework\Core\Model\Gui\WindowFactoryContext'
         arguments:
             $className: "%expansion.framework.core.model.gui.window.class%"
-
-
+            $maniaScriptFactory: '@expansion.framework.core.mania_script.window_factory'
 
     #
     # GUI Element factories
