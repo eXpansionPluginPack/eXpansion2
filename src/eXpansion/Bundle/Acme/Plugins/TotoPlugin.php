@@ -2,10 +2,9 @@
 
 namespace eXpansion\Bundle\Acme\Plugins;
 
-use eXpansion\Framework\AdminGroups\Plugins\GroupsPlugin;
+use eXpansion\Bundle\Acme\Plugins\Gui\WindowFactory;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
-use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Console;
 
@@ -19,16 +18,16 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
     /** @var Console */
     protected $console;
 
-    /** @var ManialinkFactory */
+    /** @var WindowFactory */
     protected $mlFactory;
 
     /** @var Group */
     protected $playersGroup;
 
     function __construct(
+        Group $players,
         Console $console,
-        ManialinkFactory $mlFactory,
-        Group $players
+        WindowFactory $mlFactory
     ) {
         $this->console = $console;
         $this->mlFactory = $mlFactory;
