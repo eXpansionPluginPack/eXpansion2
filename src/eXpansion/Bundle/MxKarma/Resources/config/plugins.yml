@@ -1,21 +1,11 @@
 services:
-   expansion.framework.core.plugins.mxkarma.connection:
-        class: eXpansion\Bundle\MxKarma\Plugins\Connection
-        arguments:
-            - '@expansion.service.dispatcher'
-            - '@expansion.helper.http'
-            - '@expansion.storage.gamedata'
-            - '@expansion.storage.map'
-            - '@expansion.service.console'
+    _defaults:
+        autowire: true
 
-   expansion.framework.core.plugins.mxkarma:
-        class: eXpansion\Bundle\MxKarma\Plugins\MxKarma
-        arguments:
-            - '@expansion.framework.core.plugins.mxkarma.connection'
-            - '@expansion.service.console'
-            - '@expansion.helper.chat_notification'
-            - '@expansion.service.dispatcher'
-            - '@expansion.storage.player'
+    eXpansion\Bundle\MxKarma\Plugins\:
+        resource: '../../Plugins/*'
+
+    eXpansion\Bundle\MxKarma\Plugins\MxKarma:
         tags:
             - {name: 'expansion.plugin', data_provider: 'exp.application'}
             - {name: 'expansion.plugin', data_provider: 'mp.script.map'}
