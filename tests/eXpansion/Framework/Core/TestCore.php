@@ -38,7 +38,6 @@ class TestCore extends KernelTestCase
 
         $this->container = $kernel->getContainer();
 
-        $this->consoleApplication = new Application($kernel);
 
         $dedicatedConnectionMock = $this->getMockBuilder('Maniaplanet\DedicatedServer\Connection')
             ->disableOriginalConstructor()
@@ -53,6 +52,7 @@ class TestCore extends KernelTestCase
         $outputMock = $this->getMockBuilder(OutputInterface::class)->getMock();
         $consoleMock->method('getConsoleOutput')->willReturn($outputMock);
 
+        $this->consoleApplication = new Application($kernel);
     }
 
     protected function getMockPlayerStorage($player)

@@ -61,6 +61,7 @@ class AdminCommandTest extends \PHPUnit_Framework_TestCase
             'toto',
             'skip',
             [],
+            'nextMap',
             $this->getMockBuilder(AdminGroups::class)->disableOriginalConstructor()->getMock(),
             $this->connectionMock,
             $this->chatNotificationMock,
@@ -69,23 +70,6 @@ class AdminCommandTest extends \PHPUnit_Framework_TestCase
             $this->getMockBuilder(Time::class)->disableOriginalConstructor()->getMock()
         );
 
-        $this->adminCommand->setDescription('description');
-        $this->adminCommand->setChatMessage('%adminlevel% %admin% skips the map.');
-        $this->adminCommand->setFunctionName('nextMap');
-    }
-
-    public function testSetFunctionName()
-    {
-        $this->assertEquals('nextMap', $this->adminCommand->getFunctionName());
-    }
-     public function testSetChatMessage()
-    {
-        $this->assertEquals('%adminlevel% %admin% skips the map.', $this->adminCommand->getChatMessage());
-    }
-
-    public function testDescription()
-    {
-        $this->assertEquals('description', $this->adminCommand->getDescription());
     }
 
     /**
@@ -107,7 +91,7 @@ class AdminCommandTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock->expects($this->once())->method('nextMap')->with();
 
         $this->chatNotificationMock->expects($this->once())->method('sendMessage')
-            ->with('%adminlevel% %admin% skips the map.', null, ['%adminLevel%' => 'Admin', '%admin%' => '$ffftest']);
+            ->with('expansion_admin_chat.nextmap.msg', null, ['%adminLevel%' => 'Admin', '%admin%' => '$ffftest']);
 
         $this->adminCommand->execute(
             'test',

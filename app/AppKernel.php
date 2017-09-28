@@ -13,7 +13,7 @@ class AppKernel extends Kernel
         /* Register eXpansion Base Bundles */
 //        $bundles[] = new \eXpansion\Bundle\CustomChat\CustomChatBundle();
 //        $bundles[] = new \eXpansion\Bundle\CustomUi\CustomUiBundle();
-//        $bundles[] = new \eXpansion\Bundle\AdminChat\AdminChatBundle();
+        $bundles[] = new \eXpansion\Bundle\AdminChat\AdminChatBundle();
 
         /* Register eXpansion Plugins */
 //        $bundles[] = new \eXpansion\Bundle\LocalRecords\LocalRecordsBundle();
@@ -25,7 +25,7 @@ class AppKernel extends Kernel
 
 
         /* Register test bundles. */
-//        $bundles[] = new \eXpansion\Bundle\Acme\AcmeBundle();
+        $bundles[] = new \eXpansion\Bundle\Acme\AcmeBundle();
 
         return $bundles;
     }

@@ -60,6 +60,8 @@ class OneParameterCommandTest extends \PHPUnit_Framework_TestCase
             'toto',
             'toto',
             [],
+            'setServerName',
+            'parameter description',
             $this->getMockBuilder(AdminGroups::class)->disableOriginalConstructor()->getMock(),
             $this->connectionMock,
             $this->chatNotificationMock,
@@ -67,16 +69,6 @@ class OneParameterCommandTest extends \PHPUnit_Framework_TestCase
             $this->getMockBuilder(LoggerInterface::class)->disableOriginalConstructor()->getMock(),
             $this->getMockBuilder(Time::class)->disableOriginalConstructor()->getMock()
         );
-
-        $this->oneParameterCommand->setParameterDescription('parameter description');
-        $this->oneParameterCommand->setDescription('parameter description');
-        $this->oneParameterCommand->setChatMessage('%adminLevel% %admin% sets server name %parameter%');
-        $this->oneParameterCommand->setFunctionName('setServerName');
-    }
-
-    public function testDescription()
-    {
-        $this->assertEquals('parameter description', $this->oneParameterCommand->getDescription());
     }
 
     public function testExectute()
@@ -100,7 +92,7 @@ class OneParameterCommandTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock->expects($this->once())->method('setServerName')->with('testname');
 
         $this->chatNotificationMock->expects($this->once())->method('sendMessage')->with(
-            '%adminLevel% %admin% sets server name %parameter%', null,
+            'expansion_admin_chat.setservername.msg', null,
             ['%adminLevel%' => 'Admin', '%admin%' => '$ffftest', '%parameter%' => 'testname']
         );
 
