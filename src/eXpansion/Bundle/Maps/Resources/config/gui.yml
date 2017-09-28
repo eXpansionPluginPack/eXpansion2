@@ -71,60 +71,50 @@ parameters:
               3: "Expert"
 
 services:
+    _defaults:
+        autowire: true
+        public: true
+
     expansion.bundle.maps.gui.window.mapslist_factory:
         class: eXpansion\Bundle\Maps\Plugins\Gui\MapsWindowFactory
         arguments:
-            - 'expansion_maps.gui.window.title'
-            - 160
-            - 90
-            - null
-            - null
-            - '@expansion.gui.context.window'
-            - '@expansion.gui.gridbuilder.factory'
-            - '@expansion.gui.gridbuilder.datacollection.array'
-            - '@expansion.helper.time'
-            - '@expansion.bundle.maps.plugins.jukebox'
+            $name:  'expansion_maps.gui.window.title'
+            $sizeX: 160
+            $sizeY: 90
+            $posX:  null
+            $posY:  null
+            $dataCollectionFactory: '@expansion.gui.gridbuilder.datacollection.array'
         tags:
             - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}
 
     expansion.bundle.maps.gui.window.jukebox_factory:
         class: eXpansion\Bundle\Maps\Plugins\Gui\JukeboxWindowFactory
         arguments:
-            - 'expansion_maps.gui.window.jbtitle'
-            - 160
-            - 90
-            - null
-            - null
-            - '@expansion.gui.context.window'
-            - '@expansion.gui.gridbuilder.factory'
-            - '@expansion.gui.gridbuilder.datacollection.array'
-            - '@expansion.helper.time'
-            - '@expansion.bundle.maps.services.jukeboxservice'
-            - '@expansion.helper.admingroups'
+            $name:  'expansion_maps.gui.window.jbtitle'
+            $sizeX: 160
+            $sizeY: 90
+            $posX:  null
+            $posY:  null
+            $dataCollectionFactory: '@expansion.gui.gridbuilder.datacollection.array'
         tags:
             - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}
 
     expansion.bundle.maps.gui.window.mania_exchange_window_factory:
         class: eXpansion\Bundle\Maps\Plugins\Gui\ManiaExchangeWindowFactory
         arguments:
-            - 'expansion_mx.gui.mxsearch.title'
-            - 210
-            - 130
-            - null
-            - null
-            - '@expansion.gui.context.window'
-            - '@expansion.gui.gridbuilder.factory'
-            - '@expansion.gui.gridbuilder.datacollection.array'
-            - '@expansion.helper.time'
-            - '@expansion.bundle.maps.plugins.maniaexchange'
-            - '@expansion.helper.http'
-            - '%mania_exchange_enumeration.tracksearch%'
-            - '%mania_exchange_enumeration.order%'
-            - '%mania_exchange_enumeration.length%'
-            - '%mania_exchange_enumeration.map_styles_tm%'
-            - '%mania_exchange_enumeration.map_styles_sm%'
-            - '%mania_exchange_enumeration.difficulties%'
-            - '%mania_exchange_enumeration.operators%'
+            $name:  'expansion_mx.gui.mxsearch.title'
+            $sizeX: 210
+            $sizeY: 130
+            $posX:  null
+            $posY:  null
+            $dataCollectionFactory: '@expansion.gui.gridbuilder.datacollection.array'
+            $tracksearch: '%mania_exchange_enumeration.tracksearch%'
+            $order: '%mania_exchange_enumeration.order%'
+            $length: '%mania_exchange_enumeration.length%'
+            $mapStylesTm: '%mania_exchange_enumeration.map_styles_tm%'
+            $mapStylesSm: '%mania_exchange_enumeration.map_styles_sm%'
+            $difficulties: '%mania_exchange_enumeration.difficulties%'
+            $operator: '%mania_exchange_enumeration.operators%'
         tags:
             - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}
 

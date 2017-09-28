@@ -73,11 +73,11 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
     /**
      * @var array
      */
-    private $map_styles_tm;
+    private $mapStylesTm;
     /**
      * @var array
      */
-    private $map_style_sm;
+    private $mapStylesSm;
     /**
      * @var array
      */
@@ -94,6 +94,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
 
     /**
      * ManiaExchangeWindowFactory constructor.
+     *
      * @param $name
      * @param $sizeX
      * @param $sizeY
@@ -108,8 +109,8 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
      * @param $tracksearch
      * @param $order
      * @param $length
-     * @param $map_styles_tm
-     * @param $map_style_sm
+     * @param $mapStylesTm
+     * @param $mapStylesSm
      * @param $difficulties
      * @param $operator
      */
@@ -128,8 +129,8 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $tracksearch,
         $order,
         $length,
-        $map_styles_tm,
-        $map_style_sm,
+        $mapStylesTm,
+        $mapStylesSm,
         $difficulties,
         $operator
 
@@ -144,8 +145,8 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
 
         $this->order = array_flip($order);
         $this->length = array_flip($length);
-        $this->map_styles_tm = array_flip($map_styles_tm);
-        $this->map_style_sm = array_flip($map_style_sm);
+        $this->mapStylesTm = array_flip($mapStylesTm);
+        $this->mapStylesSm = array_flip($mapStylesSm);
         $this->difficulties = array_flip($difficulties);
         $this->operator = array_flip($operator);
         $this->http = $http;
@@ -200,7 +201,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $manialink->addChild($label);
 
         $x += 32;
-        $this->stylebox = $this->uiFactory->createDropdown("style", $this->map_styles_tm, 0);
+        $this->stylebox = $this->uiFactory->createDropdown("style", $this->mapStylesTm, 0);
         $this->stylebox->setPosition($x, -6, 2);
         $manialink->addChild($this->stylebox);
 
