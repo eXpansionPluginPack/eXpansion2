@@ -8,7 +8,7 @@ php:
         - dedicated
 
 dedicated:
-    build: docker/mp_dedicated
+    image: docker/mp-dedicated
     environment:
         MP_LOGIN: login
         MP_PASSWORD: password
