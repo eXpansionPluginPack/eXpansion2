@@ -14,7 +14,7 @@ eXpansion Core, reducing its surface area, and to allow greater freedom for
 bundle maintainers to ship releases at their own cadence, rather than
 being held to the cadence of eXpansion releases.
 
-Some Core bundles are provided as they are considered assential for the existance
+Some Core bundles are provided as they are considered essential for the existance
 of the controller. 
 
 If you are unsure of whether your contribution should be implemented contact us.
@@ -63,6 +63,7 @@ a ticket number.
 ````
 
 ## Submitting Changes
+
 * Push your changes to a topic branch in your fork of the repository.
 * Submit a pull request to the repository in the puppetlabs organization.
 * The core team looks at Pull Requests on a regular basis
