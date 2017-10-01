@@ -9,6 +9,11 @@ parameters:
     expansion.service.chat_commands.depth: 3
 
 services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
     expansion.service.dedicated_connection.factory:
         class: "%expansion.service.dedicated_connection.factory.class%"
         arguments:
@@ -21,71 +26,51 @@ services:
     expansion.service.dedicated_connection:
         class: "%expansion.service.dedicated_connection.class%"
         factory: "expansion.service.dedicated_connection.factory:createConnection"
+    Maniaplanet\DedicatedServer\Connection: "@expansion.service.dedicated_connection"
 
-    expansion.service.application:
+    eXpansion\Framework\Core\Services\Application:
         class: "%expansion.service.application.class%"
-        arguments:
-            - '@expansion.service.dispatcher'
-            - '@expansion.service.dedicated_connection'
-            - '@expansion.service.console'
 
-    expansion.service.application_debug:
+    eXpansion\Framework\Core\Services\ApplicationDebug:
         class: eXpansion\Framework\Core\Services\ApplicationDebug
-        arguments:
-            - '@expansion.service.application.dispatch_logger'
-            - '@expansion.service.dedicated_connection'
-            - '@expansion.service.console'
 
-    expansion.service.dispatcher:
+    eXpansion\Framework\Core\Services\Application\Dispatcher:
         class: eXpansion\Framework\Core\Services\Application\Dispatcher
-        arguments:
-            - '@expansion.service.data_provider_manager'
-            - '@expansion.service.plugin_manager'
         calls:
-            - [addEventProcesseor, ['@expansion.service.symfony_event_adapter']]
+            - [addEventProcesseor, ['@eXpansion\Framework\Core\Services\SymfonyEventAdapter']]
 
-    expansion.service.symfony_event_adapter:
+    eXpansion\Framework\Core\Services\Application\DispatcherInterface: '@eXpansion\Framework\Core\Services\Application\Dispatcher'
+
+
+    eXpansion\Framework\Core\Services\SymfonyEventAdapter:
         class: eXpansion\Framework\Core\Services\SymfonyEventAdapter
-        arguments:
-            - '@event_dispatcher'
 
-    expansion.service.application.dispatch_logger:
+    eXpansion\Framework\Core\Services\Application\DispatchLogger:
         class: eXpansion\Framework\Core\Services\Application\DispatchLogger
-        arguments:
-            - '@expansion.service.console'
 
-    expansion.service.plugin_manager:
+    eXpansion\Framework\Core\Services\PluginManager:
         class: "%expansion.service.plugin_manager.class%"
-        arguments:
-            - '@service_container'
-            - '@expansion.service.model.plugin.plugin_description_factory'
-            - '@expansion.service.data_provider_manager'
-            - '@expansion.storage.gamedata'
-            - '@expansion.service.console'
 
-    expansion.service.data_provider_manager:
+    eXpansion\Framework\Core\Services\DataProviderManager:
         class: "%expansion.service.data_provider_manager.class%"
-        arguments:
-            - '@service_container'
-            - '@expansion.storage.gamedata'
-            - '@expansion.service.console'
 
-    expansion.service.console:
+    eXpansion\Framework\Core\Services\Console:
         class: "%expansion.service.console.class%"
+        public: true
         arguments:
             - '%color_enabled%'
 
-    expansion.service.chat_commands:
+    eXpansion\Framework\Core\Services\ChatCommands:
         class: "%expansion.service.chat_commands.class%"
         arguments:
           - '%expansion.service.chat_commands.depth%'
 
-    expansion.service.model.plugin.plugin_description_factory:
+    eXpansion\Framework\Core\Model\Plugin\PluginDescriptionFactory:
         class: 'eXpansion\Framework\Core\Model\Plugin\PluginDescriptionFactory'
         arguments:
             - 'eXpansion\Framework\Core\Model\Plugin\PluginDescription'
 
-    expansion.service.jobrunner.factory:
+    eXpansion\Framework\Core\Helpers\JobRunner\Factory:
         class: eXpansion\Framework\Core\Helpers\JobRunner\Factory
         tags:
             - {name: expansion.plugin, data_provider: exp.timer}

@@ -35,7 +35,7 @@ class PlayerDataProviderTest extends TestCore
     {
         $player = new Player();
         $playerStorage = $this->getMockPlayerStorage($player);
-        $this->container->set('expansion.storage.player', $playerStorage);
+        $this->container->set(PlayerStorage::class, $playerStorage);
 
         $playerStorage->expects($this->once())
             ->method('onPlayerConnect')
@@ -54,7 +54,7 @@ class PlayerDataProviderTest extends TestCore
     public function testOnPlayerConnect()
     {
         $player = $this->getPlayer('test', false);
-        $this->container->set('expansion.storage.player', $this->getMockPlayerStorage($player));
+        $this->container->set(PlayerStorage::class, $this->getMockPlayerStorage($player));
 
         $plugin = $this->createMock(ListenerInterfaceMpLegacyPlayer::class);
         $plugin->expects($this->once())
@@ -76,7 +76,7 @@ class PlayerDataProviderTest extends TestCore
             ->getMock();
         $playerStorage->method('getPlayerInfo')
             ->willThrowException(new \Exception());
-        $this->container->set('expansion.storage.player', $playerStorage);
+        $this->container->set(PlayerStorage::class, $playerStorage);
 
         $plugin = $this->createMock(ListenerInterfaceMpLegacyPlayer::class);
         $plugin->expects($this->never())
@@ -99,7 +99,7 @@ class PlayerDataProviderTest extends TestCore
         $player = new Player();
         $player->merge($dedicatedPlayer);
 
-        $this->container->set('expansion.storage.player', $this->getMockPlayerStorage($player));
+        $this->container->set(PlayerStorage::class, $this->getMockPlayerStorage($player));
 
         $plugin = $this->createMock(ListenerInterfaceMpLegacyPlayer::class);
         $plugin->expects($this->once())
@@ -111,7 +111,7 @@ class PlayerDataProviderTest extends TestCore
     public function testOnPlayerDisconnect()
     {
         $player = $this->getPlayer('test', false);
-        $this->container->set('expansion.storage.player', $this->getMockPlayerStorage($player));
+        $this->container->set(PlayerStorage::class, $this->getMockPlayerStorage($player));
 
         $plugin = $this->createMock(ListenerInterfaceMpLegacyPlayer::class);
         $plugin->expects($this->once())
@@ -128,7 +128,7 @@ class PlayerDataProviderTest extends TestCore
     public function testOnPlayerInfoChanged()
     {
         $player = $this->getPlayer('test', false);
-        $this->container->set('expansion.storage.player', $this->getMockPlayerStorage($player));
+        $this->container->set(PlayerStorage::class, $this->getMockPlayerStorage($player));
 
         $plugin = $this->createMock(ListenerInterfaceMpLegacyPlayer::class);
         $plugin->expects($this->once())
@@ -146,7 +146,7 @@ class PlayerDataProviderTest extends TestCore
     public function testOnPlayerAlliesChanged()
     {
         $player = $this->getPlayer('test', false);
-        $this->container->set('expansion.storage.player', $this->getMockPlayerStorage($player));
+        $this->container->set(PlayerStorage::class, $this->getMockPlayerStorage($player));
 
         $plugin = $this->createMock(ListenerInterfaceMpLegacyPlayer::class);
         $plugin->expects($this->once())

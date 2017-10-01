@@ -2,11 +2,11 @@
 
 namespace eXpansion\Bundle\Acme\Plugins;
 
+use eXpansion\Bundle\Acme\Plugins\Gui\MemoryWidgetFactory;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
-use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Console;
 use Maniaplanet\DedicatedServer\Connection;
@@ -34,7 +34,7 @@ class Test implements ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, S
     private $startMemValue = 0;
 
     /**
-     * @var ManialinkFactory
+     * @var MemoryWidgetFactory
      */
     private $mlFactory;
     /**
@@ -47,15 +47,15 @@ class Test implements ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, S
      * @param Connection $connection
      * @param Console $console
      * @param Time $time
-     * @param ManialinkFactory $mlFactory
+     * @param MemoryWidgetFactory $mlFactory
      * @param Group $players
      */
     function __construct(
+        Group $players,
         Connection $connection,
         Console $console,
         Time $time,
-        ManialinkFactory $mlFactory,
-        Group $players
+        MemoryWidgetFactory $mlFactory
     ) {
         $this->connection = $connection;
         $this->console = $console;

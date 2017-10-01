@@ -48,7 +48,7 @@ class PagerFactoryTest extends TestCore
      */
     protected function getPagerFactory()
     {
-        return $this->container->get('expansion.framework.core.gui.element.factory.pager');
+        return $this->container->get(PagerFactory::class);
     }
 
 }

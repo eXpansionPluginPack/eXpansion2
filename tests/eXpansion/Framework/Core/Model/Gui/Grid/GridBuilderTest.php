@@ -4,6 +4,7 @@ namespace Tests\eXpansion\Framework\Core\Model\Gui\Grid;
 
 use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionInterface;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilder;
+use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Plugins\Gui\WindowFactory;
 use FML\Controls\Label;
@@ -157,6 +158,6 @@ class GridBuilderTest extends TestCore
      */
     protected function createBuilder()
     {
-        return $this->container->get('expansion.gui.gridbuilder.factory')->create();
+        return $this->container->get(GridBuilderFactory::class)->create();
     }
 }

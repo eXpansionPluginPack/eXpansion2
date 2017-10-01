@@ -1,8 +1,6 @@
 services:
-    expansion.framework.core.plugins.menu:
+    eXpansion\Bundle\Menu\Plugins\Menu:
         class: eXpansion\Bundle\Menu\Plugins\Menu
-        arguments:
-            - '@expansion.helper.admingroups'
-            - '@expansion.framework.core.plugins.gui.menu'
+        autowire: true
         tags:
             - {name: 'expansion.plugin', data_provider: 'mp.legacy.map'}

@@ -178,6 +178,7 @@ class DataProviderManager
     public function registerPlugin($provider, $pluginId, $title, $mode, $script)
     {
         $providerId = $this->getCompatibleProviderId($provider, $title, $mode, $script);
+
         /** @var AbstractDataProvider $providerService */
         $providerService = $this->container->get($providerId);
         $pluginService = $this->container->get($pluginId);

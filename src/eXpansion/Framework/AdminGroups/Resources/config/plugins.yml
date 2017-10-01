@@ -1,9 +1,10 @@
 services:
-    expansion.framework.admin_groups.plugins.groups:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    eXpansion\Framework\AdminGroups\Plugins\GroupsPlugin:
         class: eXpansion\Framework\AdminGroups\Plugins\GroupsPlugin
-        arguments:
-            - '@expansion.framework.admin_groups.services.admin_group_configuration'
-            - '@expansion.framework.core.user_groups.factory'
-            - '@expansion.storage.player'
         tags:
             - {name: expansion.plugin, data_provider: mp.legacy.player}

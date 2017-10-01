@@ -3,10 +3,13 @@ parameters:
     expansion.framework.game_trackmania.data_providers.base.interface: eXpansion\Framework\GameTrackmania\DataProviders\Listener\BaseDataListenerInterface
 
 services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
     expansion.framework.game_trackmania.data_providers.base:
         class: "%expansion.framework.game_trackmania.data_providers.base.class%"
-        arguments:
-            - "@expansion.storage.player"
         tags:
             - {name: expansion.dataprovider, provider: "tm.script.race", interface: "%expansion.framework.game_trackmania.data_providers.base.interface%"}
             - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script}

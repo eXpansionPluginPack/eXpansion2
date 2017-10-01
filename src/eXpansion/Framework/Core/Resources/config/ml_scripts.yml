@@ -7,7 +7,7 @@ parameters:
 services:
   expansion.framework.core.mania_script.window_factory:
     class: '%expansion.framework.core.model.gui.mania_scrip_factory.class%'
+    autowire: true
     arguments:
-      - '%expansion.framework.core.mania_script.window.path%'
-      - '@file_locator'
-      - '%expansion.framework.core.model.gui.mania_script.class%'
+      $relativePath: '%expansion.framework.core.mania_script.window.path%'
+      $className: '%expansion.framework.core.model.gui.mania_script.class%'

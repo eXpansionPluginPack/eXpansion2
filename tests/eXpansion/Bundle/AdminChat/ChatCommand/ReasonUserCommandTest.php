@@ -61,6 +61,9 @@ class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
             'toto',
             'toto',
             [],
+            'ban',
+            'login description',
+            'reason description',
             $this->getMockBuilder(AdminGroups::class)->disableOriginalConstructor()->getMock(),
             $this->connectionMock,
             $this->chatNotificationMock,
@@ -68,17 +71,6 @@ class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
             $this->getMockBuilder(LoggerInterface::class)->disableOriginalConstructor()->getMock(),
             $this->getMockBuilder(Time::class)->disableOriginalConstructor()->getMock()
         );
-
-        $this->reasonCommand->setParameterLoginDescription('login description');
-        $this->reasonCommand->setParameterReasonDescription('reason description');
-        $this->reasonCommand->setDescription('description');
-        $this->reasonCommand->setChatMessage('message');
-        $this->reasonCommand->setFunctionName('ban');
-    }
-
-    public function testDescription()
-    {
-        $this->assertEquals('description', $this->reasonCommand->getDescription());
     }
 
     public function testExectute()
@@ -107,7 +99,7 @@ class ReasonUserCommandTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock->expects($this->once())->method('ban')->with('test', 'reason');
 
         $this->chatNotificationMock->expects($this->once())->method('sendMessage')->with(
-            'message', null,
+            'expansion_admin_chat.ban.msg', null,
             ['%adminLevel%' => 'Admin', '%admin%' => '$ffftest', '%player%' => '$ffftest', '%reason%' => 'reason']
         );
 

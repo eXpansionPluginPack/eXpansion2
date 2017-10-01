@@ -25,16 +25,16 @@ class Translations
     /**
      * Translations constructor.
      *
-     * @param       $translator
      * @param array $supportedLocales
      * @param       $colorCodes
      * @param       $glyphIcons
+     * @param       $translator
      */
     public function __construct(
-        $translator,
         array $supportedLocales,
         $colorCodes,
-        $glyphIcons
+        $glyphIcons,
+        Translator $translator
     ) {
         $this->translator = $translator;
         $this->supportedLocales = $supportedLocales;

@@ -25,17 +25,17 @@ class Records extends AbstractChatCommand
     /**
      * Records constructor.
      *
-     * @param                      $command
-     * @param array                $aliases
+     * @param $command
+     * @param array $aliases
+     * @param BaseRecords $recordsPlugin
      * @param RecordsWindowFactory $recordsWindowFactory
      */
     public function __construct(
         $command,
         array $aliases = [],
-        RecordsWindowFactory $recordsWindowFactory,
-        BaseRecords $recordsPlugin
-    )
-    {
+        BaseRecords $recordsPlugin,
+        RecordsWindowFactory $recordsWindowFactory
+    ) {
         parent::__construct($command, $aliases);
 
         $this->recordsWindowFactory = $recordsWindowFactory;

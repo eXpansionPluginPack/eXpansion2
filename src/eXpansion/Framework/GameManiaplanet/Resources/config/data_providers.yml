@@ -8,13 +8,14 @@ parameters:
     expansion.framework.game_maniaplanet.data_providers.podium.class: eXpansion\Framework\GameManiaplanet\DataProviders\PodiumDataProvider
     expansion.framework.game_maniaplanet.data_providers.podium.interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptPodium
 
-
-
 services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
     expansion.framework.game_maniaplanet.data_providers.map:
         class: "%expansion.framework.game_maniaplanet.data_providers.map.class%"
-        arguments:
-            - "@expansion.storage.map"
         tags:
             - {name: expansion.dataprovider, provider: "mp.script.map", interface: "%expansion.framework.game_maniaplanet.data_providers.map.interface%"}
             - {name: expansion.dataprovider.compatibility, title: ALL, gamemode: script}

@@ -33,16 +33,28 @@ class RecordsWindowFactory extends WindowFactory
     /** @var Time */
     protected $timeFormatter;
 
-
+    /**
+     * RecordsWindowFactory constructor.
+     *
+     * @param $name
+     * @param $sizeX
+     * @param $sizeY
+     * @param null $posX
+     * @param null $posY
+     * @param DataCollectionFactory $dataCollectionFactory
+     * @param WindowFactoryContext $context
+     * @param GridBuilderFactory $gridBuilderFactory
+     * @param Time $time
+     */
     public function __construct(
         $name,
         $sizeX,
         $sizeY,
         $posX,
         $posY,
+        DataCollectionFactory $dataCollectionFactory,
         WindowFactoryContext $context,
         GridBuilderFactory $gridBuilderFactory,
-        DataCollectionFactory $dataCollectionFactory,
         Time $time
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);

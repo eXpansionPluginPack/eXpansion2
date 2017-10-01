@@ -62,6 +62,7 @@ class AdminReturnCommandTest extends \PHPUnit_Framework_TestCase
             'toto',
             'planets',
             [],
+            'getServerPlanets',
             $this->getMockBuilder(AdminGroups::class)->disableOriginalConstructor()->getMock(),
             $this->connectionMock,
             $this->chatNotificationMock,
@@ -69,35 +70,8 @@ class AdminReturnCommandTest extends \PHPUnit_Framework_TestCase
             $this->getMockBuilder(LoggerInterface::class)->disableOriginalConstructor()->getMock(),
             $this->getMockBuilder(Time::class)->disableOriginalConstructor()->getMock()
         );
-
-        $this->adminCommand->setDescription('description');
-        $this->adminCommand->setChatMessage('server has %planets% planets');
-        $this->adminCommand->setFunctionName('getServerPlanets');
     }
 
-    public function testSetFunctionName()
-    {
-        $this->assertEquals('getServerPlanets', $this->adminCommand->getFunctionName());
-    }
-
-    public function testSetChatMessage()
-    {
-        $this->assertEquals('server has %planets% planets', $this->adminCommand->getChatMessage());
-    }
-
-    public function testDescription()
-    {
-        $this->assertEquals('description', $this->adminCommand->getDescription());
-    }
-
-    public function testSetPublic()
-    {
-        $this->adminCommand->setPublic(true);
-        $this->assertTrue($this->adminCommand->getPublic());
-
-        $this->adminCommand->setPublic(false);
-        $this->assertFalse($this->adminCommand->getPublic());
-    }
 
     /**
      *
@@ -118,13 +92,15 @@ class AdminReturnCommandTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock->expects($this->once())->method('getServerPlanets');
 
         $this->chatNotificationMock->expects($this->once())->method('sendMessage')
-            ->with('server has %planets% planets', null, ['%adminLevel%' => 'Admin', '%admin%' => '$ffftest', '%return%' => 0]);
+            ->with('expansion_admin_chat.getserverplanets.msg', null, ['%adminLevel%' => 'Admin', '%admin%' => '$ffftest', '%return%' => 0]);
 
         $this->adminCommand->execute(
             'test',
             $this->inputMock
         );
-    }    public function testExectutePrivate()
+    }
+
+    public function testExectutePrivate()
     {
 
         $this->playerStorageMock
@@ -144,7 +120,7 @@ class AdminReturnCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->connectionMock->expects($this->once())->method('getServerPlanets')->with();
         $this->chatNotificationMock->expects($this->once())->method('sendMessage')
-            ->with('server has %planets% planets', 'test', ['%adminLevel%' => 'Admin', '%admin%' => '$ffftest', '%return%' => 0]);
+            ->with('expansion_admin_chat.getserverplanets.msg', 'test', ['%adminLevel%' => 'Admin', '%admin%' => '$ffftest', '%return%' => 0]);
 
 
         $this->adminCommand->execute(

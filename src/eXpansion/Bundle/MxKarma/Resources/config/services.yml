@@ -1,7 +1,6 @@
 services:
      expansion.bundle.mxkarma.data_providers.mxkarmadataprovider:
           class: eXpansion\Bundle\MxKarma\DataProviders\MxKarmaDataProvider
-
           tags:
             - {name: 'expansion.dataprovider', provider: "exp.plugin.mxkarma", interface: eXpansion\Bundle\MxKarma\DataProviders\Listeners\ListenerInterfaceMxKarma}
             - {name: 'expansion.dataprovider.compatibility', title: 'TM'}

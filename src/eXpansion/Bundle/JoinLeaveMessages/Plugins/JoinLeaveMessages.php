@@ -14,12 +14,13 @@ class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
 {
     /** @var Connection */
     protected $connection;
+
     /** @var Console */
     protected $console;
-    /** @var bool $enabled is output enabled */
-    private $enabled = true;
+
     /** @var ChatNotification $chat */
     protected $chat;
+
     /** @var AdminGroups */
     protected $adminGroups;
 
@@ -39,17 +40,6 @@ class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
         $this->console = $console;
         $this->chat = $chatNotification;
         $this->adminGroups = $adminGroups;
-    }
-
-//#region Callbacks
-
-    /**
-     * @inheritdoc
-     */
-    public function onRun()
-    {
-        // @todo make this callback work!
-        $this->enabled = true;
     }
 
     /**
@@ -104,6 +94,4 @@ class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
     public function onPlayerAlliesChanged(Player $oldPlayer, Player $player)
     {
     }
-//#endregion
-
 }

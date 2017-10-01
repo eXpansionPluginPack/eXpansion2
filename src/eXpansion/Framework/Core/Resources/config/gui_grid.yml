@@ -17,11 +17,8 @@ services:
             - "@expansion.helper.data.object_filter"
             - "%expansion.framework.core.model.gui.grid.data_collection.class%"
 
-    expansion.gui.gridbuilder.factory:
+    eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory:
         class: 'eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory'
+        autowire: true
         arguments:
-            - '%expansion.framework.core.model.gui.grid.grid_builder.class%'
-            - '@expansion.framework.core.plugins.gui.action_factory'
-            - '@expansion.framework.core.gui.element.factory.line'
-            - '@expansion.framework.core.gui.element.factory.title_line'
-            - '@expansion.framework.core.gui.element.factory.pager'
+            $class: '%expansion.framework.core.model.gui.grid.grid_builder.class%'

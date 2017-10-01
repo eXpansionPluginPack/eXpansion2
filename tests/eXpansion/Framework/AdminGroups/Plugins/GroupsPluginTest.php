@@ -11,6 +11,7 @@ namespace Tests\eXpansion\Framework\AdminGroups\Plugins;
 use eXpansion\Framework\AdminGroups\Plugins\GroupsPlugin;
 use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
 use eXpansion\Framework\Core\Storage\Data\Player;
+use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Tests\eXpansion\Framework\AdminGroups\TestAdminGroups;
 
 
@@ -25,7 +26,11 @@ class GroupsPluginTest extends TestAdminGroups
     public function testPlayerConnect()
     {
         /** @var GroupsPlugin $plugin */
-        $plugin = $this->container->get('expansion.framework.admin_groups.plugins.groups');
+        $plugin = new GroupsPlugin(
+            $this->getAdminGroupConfigurationService(),
+            $this->container->get(Factory::class),
+            $this->container->get(PlayerStorage::class)
+        );
 
         $userGroupFactory = $this->getUserGroupFactory();
 
@@ -67,7 +72,7 @@ class GroupsPluginTest extends TestAdminGroups
     public function testDummyMethods()
     {
         /** @var GroupsPlugin $plugin */
-        $plugin = $this->container->get('expansion.framework.admin_groups.plugins.groups');
+        $plugin = $this->container->get(GroupsPlugin::class);
 
         $playerM = new Player();
 
@@ -82,6 +87,6 @@ class GroupsPluginTest extends TestAdminGroups
     protected function getUserGroupFactory()
     {
         /** @var Factory $group */
-        return $this->container->get('expansion.framework.core.user_groups.factory');
+        return $this->container->get(Factory::class);
     }
 }

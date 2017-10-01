@@ -1,314 +1,225 @@
 services:
-    expansion.admin_chat.chat_command.base:
-        class: eXpansion\Bundle\AdminChat\ChatCommand\AbstractConnectionCommand
-        arguments:
-            - '__'
-            - '__'
-            - []
-            - '@expansion.helper.admingroups'
-            - '@expansion.service.dedicated_connection'
-            - '@expansion.helper.chat_notification'
-            - '@expansion.storage.player'
-            - '@logger'
-            - '@expansion.helper.time'
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
 
     expansion.admin_chat.chat_command.restart:
-        class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
-        parent: 'expansion.admin_chat.chat_command.base'
+        class: 'eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand'
         arguments:
-            index_0: "restart"
-            index_1: "restart"
-            index_2: ['res', 'restartmap']
-        calls:
-            - [setDescription, ["expansion_admin_chat.restart.description"]]
-            - [setChatMessage, ["expansion_admin_chat.restart.msg"]]
-            - [setFunctionName, ["restartMap"]]
+            $command:     "restart"
+            $permission:  "restart"
+            $aliases:     ['res', 'restartmap']
+            $functionName: "restartMap"
 
     expansion.admin_chat.chat_command.next:
-        class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
-        parent: 'expansion.admin_chat.chat_command.base'
+        class: 'eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand'
         arguments:
-            index_0: "next"
-            index_1: "next"
-            index_2: ['skip', 'nextmap']
-        calls:
-            - [setDescription, ["expansion_admin_chat.next.description"]]
-            - [setChatMessage, ["expansion_admin_chat.next.msg"]]
-            - [setFunctionName, ["nextMap"]]
+            $command:      "next"
+            $permission:   "next"
+            $aliases:      ['skip', 'nextmap']
+            $functionName: "nextMap"
+
 
     expansion.admin_chat.chat_command.set_server_name:
         class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-        parent: 'expansion.admin_chat.chat_command.base'
         arguments:
-            index_0: "setservername"
-            index_1: "set_server_name"
-            index_2: ['name']
-        calls:
-            - [setParameterDescription, ['sets new server name, uses "" if spaces used.']]
-            - [setDescription, ["expansion_admin_chat.set_server_name.description"]]
-            - [setChatMessage, ["expansion_admin_chat.set_server_name.msg"]]
-            - [setFunctionName, ["setServerName"]]
+            $command:              "setservername"
+            $permission:           "set_server_name"
+            $aliases:              ['name']
+            $functionName:         "setServerName"
+            $parameterDescription: 'sets new server name, uses "" if spaces used.'
 
     expansion.admin_chat.chat_command.set_server_comment:
         class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-        parent: 'expansion.admin_chat.chat_command.base'
         arguments:
-            index_0: "setservercomment"
-            index_1: "set_server_name"
-            index_2: ['comment']
-        calls:
-            - [setParameterDescription, ['sets new server comment, use "" if spaces used.']]
-            - [setDescription, ["expansion_admin_chat.set_server_comment.description"]]
-            - [setChatMessage, ["expansion_admin_chat.set_server_comment.msg"]]
-            - [setFunctionName, ["setServerComment"]]
+            $command:              "setservercomment"
+            $permission:           "set_server_name"
+            $aliases:              ['comment']
+            $functionName:         "setServerName"
+            $parameterDescription: 'sets new server comment, use "" if spaces used.'
+
 
     expansion.admin_chat.chat_command.kick:
         class: eXpansion\Bundle\AdminChat\ChatCommand\ReasonUserCommand
-        parent: 'expansion.admin_chat.chat_command.base'
         arguments:
-            index_0: "kick"
-            index_1: "kick"
-            index_2: []
-        calls:
-            - [setParameterLoginDescription, ["Login of player to kick."]]
-            - [setParameterReasonDescription, ["The reason for kicking."]]
-            - [setDescription, ["expansion_admin_chat.kick.description"]]
-            - [setChatMessage, ["expansion_admin_chat.kick.msg"]]
-            - [setFunctionName, ["kick"]]
+            $command:                    "kick"
+            $permission:                 "kick"
+            $aliases:                    []
+            $functionName:               "kick"
+            $parameterLoginDescription:  'Login of player to kick.'
+            $parameterReasonDescription: 'The reason for kicking.'
 
+    #
+    # Commands to ban/unban a player and clean ban list.
+    #
     expansion.admin_chat.chat_command.ban:
         class: eXpansion\Bundle\AdminChat\ChatCommand\ReasonUserCommand
-        parent: 'expansion.admin_chat.chat_command.base'
         arguments:
-            index_0: "ban"
-            index_1: "ban"
-            index_2: []
-        calls:
-            - [setParameterLoginDescription, ["Login of player to ban."]]
-            - [setParameterReasonDescription, ["The reason for banning."]]
-            - [setDescription, ["expansion_admin_chat.ban.description"]]
-            - [setChatMessage, ["expansion_admin_chat.ban.msg"]]
-            - [setFunctionName, ["ban"]]
-
+            $command:              "ban"
+            $permission:           "ban"
+            $aliases:              []
+            $functionName:         "ban"
+            $parameterLoginDescription: 'Login of player to ban.'
+            $parameterReasonDescription: 'The reason for banning.'
 
     expansion.admin_chat.chat_command.unban:
         class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-        parent: 'expansion.admin_chat.chat_command.base'
         arguments:
-            index_0: "unban"
-            index_1: "unban"
-            index_2: []
-        calls:
-            - [setParameterDescription, ['unban player by login']]
-            - [setDescription, ["expansion_admin_chat.unban.description"]]
-            - [setChatMessage, ["expansion_admin_chat.unban.msg"]]
-            - [setFunctionName, ["unBan"]]
+            $command:              "unban"
+            $permission:           "unban"
+            $aliases:              []
+            $functionName:         "unBan"
+            $parameterDescription: "Login of the player to unban"
+
 
     expansion.admin_chat.chat_command.cleanban:
           class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
-          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
-              index_0: "cleanbanlist"
-              index_1: "cleanbanlist"
-              index_2: []
-          calls:
-              - [setDescription, ["expansion_admin_chat.cleanbanlist.description"]]
-              - [setChatMessage, ["expansion_admin_chat.cleanbanlist.msg"]]
-              - [setFunctionName, ["cleanBanList"]]
+              $command:      "cleanbanlist"
+              $permission:   "cleanbanlist"
+              $aliases:      []
+              $functionName: "cleanBanList"
 
-
+    #
+    # Command to black/unblack a player and manage the blacklist
+    #
     expansion.admin_chat.chat_command.black:
         class: eXpansion\Bundle\AdminChat\ChatCommand\ReasonUserCommand
-        parent: 'expansion.admin_chat.chat_command.base'
         arguments:
-            index_0: "black"
-            index_1: "black"
-            index_2: []
-        calls:
-            - [setParameterLoginDescription, ["Login of player to black."]]
-            - [setParameterReasonDescription, ["The reason for black listing."]]
-            - [setDescription, ["expansion_admin_chat.black.description"]]
-            - [setChatMessage, ["expansion_admin_chat.black.msg"]]
-            - [setFunctionName, ["banAndBlackList"]]
+            $command:              "black"
+            $permission:           "black"
+            $aliases:              []
+            $functionName:         "banAndBlackList"
+            $parameterLoginDescription: 'Login of player to black.'
+            $parameterReasonDescription: 'The reason for black listing.'
 
     expansion.admin_chat.chat_command.unblack:
         class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-        parent: 'expansion.admin_chat.chat_command.base'
         arguments:
-            index_0: "unblack"
-            index_1: "unblack"
-            index_2: []
-        calls:
-            - [setParameterDescription, ['Unblack Player by login']]
-            - [setDescription, ["expansion_admin_chat.unblack.description"]]
-            - [setChatMessage, ["expansion_admin_chat.unblack.msg"]]
-            - [setFunctionName, ["unBlacklist"]]
+           $command:      "unblack"
+           $permission:   "unblack"
+           $aliases:      []
+           $functionName:         "unBlacklist"
+           $parameterDescription: "Login of the player to unblack"
 
     expansion.admin_chat.chat_command.cleanblacklist:
           class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
-          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
-              index_0: "cleanblacklist"
-              index_1: "cleanblacklist"
-              index_2: []
-          calls:
-              - [setDescription, ["expansion_admin_chat.cleanblacklist.description"]]
-              - [setChatMessage, ["expansion_admin_chat.cleanblacklist.msg"]]
-              - [setFunctionName, ["cleanBlackList"]]
+              $command:      "cleanblacklist"
+              $permission:   "cleanblacklist"
+              $aliases:      []
+              $functionName: "cleanBlackList"
 
     expansion.admin_chat.chat_command.saveblacklist:
           class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
-              index_0: "saveblacklist"
-              index_1: "saveblacklist"
-              index_2: []
-          calls:
-              - [setParameterDescription, ['Filename to save the list']]
-              - [setDescription, ["expansion_admin_chat.saveblacklist.description"]]
-              - [setChatMessage, ["expansion_admin_chat.saveblacklist.msg"]]
-              - [setFunctionName, ["saveBlackList"]]
+              $command:      "saveblacklist"
+              $permission:   "saveblacklist"
+              $aliases:      []
+              $functionName:         "saveBlackList"
+              $parameterDescription: "Filename to save the list"
 
     expansion.admin_chat.chat_command.loadblacklist:
           class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
-              index_0: "loadblacklist"
-              index_1: "loadblacklist"
-              index_2: []
-          calls:
-              - [setParameterDescription, ['Filename to load the list']]
-              - [setDescription, ["expansion_admin_chat.loadblacklist.description"]]
-              - [setChatMessage, ["expansion_admin_chat.loadblacklist.msg"]]
-              - [setFunctionName, ["loadBlackList"]]
+              $command:      "loadblacklist"
+              $permission:   "loadblacklist"
+              $aliases:      []
+              $functionName:         "loadBlackList"
+              $parameterDescription: "Filename to load the list"
 
-    expansion.admin_chat.chat_command.planets:
-          class: eXpansion\Bundle\AdminChat\ChatCommand\AdminReturnCommand
-          parent: 'expansion.admin_chat.chat_command.base'
-          arguments:
-              index_0: "planets"
-              index_1: "planets"
-              index_2: []
-          calls:
-              - [setDescription, ["expansion_admin_chat.planets.description"]]
-              - [setChatMessage, ["expansion_admin_chat.planets.msg"]]
-              - [setFunctionName, ["getServerPlanets"]]
-              - [setPublic, [false]]
-
+    #
+    # Command to ignore/unignore users and manage the list.
+    #
     expansion.admin_chat.chat_command.ignore:
           class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
-              index_0: "ignore"
-              index_1: "ignore"
-              index_2: []
-          calls:
-              - [setParameterDescription, ['Ignores player by login']]
-              - [setDescription, ["expansion_admin_chat.ignore.description"]]
-              - [setChatMessage, ["expansion_admin_chat.ignore.msg"]]
-              - [setFunctionName, ["ignore"]]
+              $command:              "ignore"
+              $permission:           "ignore"
+              $aliases:              []
+              $functionName:         "ignore"
+              $parameterDescription: "Login of the player to ignore."
 
     expansion.admin_chat.chat_command.unignore:
           class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
-              index_0: "unignore"
-              index_1: "unignore"
-              index_2: []
-          calls:
-              - [setParameterDescription, ['Unignores player by login']]
-              - [setDescription, ["expansion_admin_chat.unignore.description"]]
-              - [setChatMessage, ["expansion_admin_chat.unignore.msg"]]
-              - [setFunctionName, ["unignore"]]
+              $command:              "unignore"
+              $permission:           "unignore"
+              $aliases:              []
+              $functionName:         "unignore"
+              $parameterDescription: "Login of the player to unignore."
 
+    #
+    # Command to add/remove guests and manage the list
+    #
     expansion.admin_chat.chat_command.addguest:
           class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
-              index_0: "addguest"
-              index_1: "addguest"
-              index_2: []
-          calls:
-              - [setParameterDescription, ['Add a guest by login']]
-              - [setDescription, ["expansion_admin_chat.addguest.description"]]
-              - [setChatMessage, ["expansion_admin_chat.addguest.msg"]]
-              - [setFunctionName, ["addGuest"]]
+              $command:              "addguest"
+              $permission:           "addguest"
+              $aliases:              []
+              $functionName:         "addGuest"
+              $parameterDescription: "Login of the player to add a player to your guest list."
 
     expansion.admin_chat.chat_command.removeguest:
           class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
-              index_0: "removeguest"
-              index_1: "removeguest"
-              index_2: []
-          calls:
-              - [setParameterDescription, ['Remove a guest by login']]
-              - [setDescription, ["expansion_admin_chat.removeguest.description"]]
-              - [setChatMessage, ["expansion_admin_chat.removeguest.msg"]]
-              - [setFunctionName, ["removeGuest"]]
+              $command:              "removeguest"
+              $permission:           "removeguest"
+              $aliases:              []
+              $functionName:         "removeGuest"
+              $parameterDescription: "Login of the player to remove from the guestlist."
 
     expansion.admin_chat.chat_command.cleanguestlist:
           class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
-          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
-              index_0: "cleanguestlist"
-              index_1: "cleanguestlist"
-              index_2: []
-          calls:
-              - [setDescription, ["expansion_admin_chat.cleanguestlist.description"]]
-              - [setChatMessage, ["expansion_admin_chat.cleanguestlist.msg"]]
-              - [setFunctionName, ["cleanGuestList"]]
+              $command:              "cleanguestlist"
+              $permission:           "cleanguestlist"
+              $aliases:              []
+              $functionName:         "cleanGuestList"
 
     expansion.admin_chat.chat_command.saveguestlist:
           class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
-              index_0: "saveguestlist"
-              index_1: "saveguestlist"
-              index_2: []
-          calls:
-              - [setParameterDescription, ['Filename to save the list']]
-              - [setDescription, ["expansion_admin_chat.saveguestlist.description"]]
-              - [setChatMessage, ["expansion_admin_chat.saveguestlist.msg"]]
-              - [setFunctionName, ["saveGuestList"]]
+              $command:              "saveguestlist"
+              $permission:           "saveguestlist"
+              $aliases:              []
+              $functionName:         "saveGuestList"
+              $parameterDescription: "Filename to save the list"
 
     expansion.admin_chat.chat_command.loadguestlist:
           class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
-              index_0: "loadguestlist"
-              index_1: "loadguestlist"
-              index_2: []
-          calls:
-              - [setParameterDescription, ['Filename to load the list']]
-              - [setDescription, ["expansion_admin_chat.loadguestlist.description"]]
-              - [setChatMessage, ["expansion_admin_chat.loadguestlist.msg"]]
-              - [setFunctionName, ["loadGuestList"]]
+              $command:              "loadguestlist"
+              $permission:           "loadguestlist"
+              $aliases:              []
+              $functionName:         "loadGuestList"
+              $parameterDescription: "Filename to load the list"
+
+    expansion.admin_chat.chat_command.planets:
+          class: eXpansion\Bundle\AdminChat\ChatCommand\AdminReturnCommand
+          arguments:
+              $command:              "planets"
+              $permission:           "planets"
+              $aliases:              []
+              $functionName:         "getServerPlanets"
 
     expansion.admin_chat.chat_command.password:
           class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
-              index_0: "password"
-              index_1: "password"
-              index_2: ['pass']
-          calls:
-              - [setParameterDescription, ['New server join password']]
-              - [setDescription, ["expansion_admin_chat.password.description"]]
-              - [setChatMessage, ["expansion_admin_chat.password.msg"]]
-              - [setFunctionName, ["setServerPassword"]]
-              - [setPublic, [false]]
+              $command:              "password"
+              $permission:           "password"
+              $aliases:              ['pass']
+              $functionName:         "setServerPasswordForPlayer"
+              $parameterDescription: "New server join password"
 
     expansion.admin_chat.chat_command.specpass:
           class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          parent: 'expansion.admin_chat.chat_command.base'
           arguments:
-              index_0: "specpassword"
-              index_1: "specpassword"
-              index_2: ['specpass']
-          calls:
-              - [setParameterDescription, ['New server spectator join password']]
-              - [setDescription, ["expansion_admin_chat.specpass.description"]]
-              - [setChatMessage, ["expansion_admin_chat.specpass.msg"]]
-              - [setFunctionName, ["setServerPasswordForSpectator"]]
-              - [setPublic, [false]]
+              $command:              "specpassword"
+              $permission:           "specpassword"
+              $aliases:              ['specpass']
+              $functionName:         "setServerPasswordForSpectator"
+              $parameterDescription: "New server spectator join password"

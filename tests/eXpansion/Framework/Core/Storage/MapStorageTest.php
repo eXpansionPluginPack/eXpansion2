@@ -68,6 +68,6 @@ class MapStorageTest extends TestCore
      */
     protected function getMapStorage()
     {
-        return $this->container->get('expansion.storage.map');
+        return $this->container->get(MapStorage::class);
     }
 }

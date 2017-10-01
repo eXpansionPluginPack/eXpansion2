@@ -3,6 +3,7 @@
 namespace eXpansion\Framework\Core\Services;
 
 use eXpansion\Framework\Core\Helpers\ColorConversion;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -205,9 +206,12 @@ class Console
      *
      * @return OutputInterface
      */
-    public
-    function getConsoleOutput()
+    public function getConsoleOutput()
     {
+        if (is_null($this->consoleOutput)) {
+            $this->consoleOutput = new NullOutput();
+        }
+
         return $this->consoleOutput;
     }
 }

@@ -1,0 +1,32 @@
+
+php:
+    build: docker/php
+    volumes:
+        - ./:/var/www/expansion
+    links:
+        - mysql
+        - dedicated
+
+dedicated:
+    image: oliverde8/mp-dedicated:TmCanyon
+    environment:
+        MP_LOGIN: login
+        MP_PASSWORD: password
+    ports:
+        - "2350:2350"
+        - "2350:2350/udp"
+    volumes:
+        - ./docker/data/UserData/Maps:/var/maniaplanet/UserData/Maps
+        - ./docker/data/UserData/Config:/var/maniaplanet/UserData/Config
+        - ./docker/data/UserData/Scripts:/var/maniaplanet/UserData/Scripts
+
+mysql:
+    image: mysql:5.7
+    environment:
+        MYSQL_ROOT_PASSWORD: ""
+        MYSQL_DATABASE: expansion
+        MYSQL_USER: root
+        MYSQL_PASSWORD: ""
+        MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:
+        - ./docker/data/mysql:/var/lib/mysql

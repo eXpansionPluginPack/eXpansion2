@@ -20,10 +20,7 @@ class ChatCommandsTest extends TestCore
         $plugin = new ChatCommandPlugin([$commands]);
 
         $service = $this->getChatCommandService();
-
-
         $service->registerPlugin('test', $plugin);
-
 
         $this->assertEquals([$commands,[]], $service->getChatCommand(['test']));
         $this->assertEquals([$commands,[]], $service->getChatCommand(['t']));
@@ -62,6 +59,6 @@ class ChatCommandsTest extends TestCore
      */
     protected function getChatCommandService()
     {
-        return $this->container->get('expansion.service.chat_commands');
+        return $this->container->get(ChatCommands::class);
     }
 }

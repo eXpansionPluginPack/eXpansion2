@@ -1,8 +1,4 @@
 parameters:
-    expansion.storage.player.class: eXpansion\Framework\Core\Storage\PlayerStorage
-    expansion.storage.map.class: eXpansion\Framework\Core\Storage\MapStorage
-    expansion.storage.gamedata.class: eXpansion\Framework\Core\Storage\GameDataStorage
-
     expansion.storage.gamedata.mode.codes:
         0 : script
         1 : round
@@ -22,29 +18,23 @@ parameters:
         'TMLagoon@nadeo':  'TM'
         'TMLagoon':        'TM'
 
-
     expansion.framework.core.storage.data.player.class: eXpansion\Framework\Core\Storage\Data\Player
-    expansion.framework.core.storage.data.player.factory: eXpansion\Framework\Core\Storage\Data\PlayerFactory
 
 services:
-    expansion.storage.player:
-        class: "%expansion.storage.player.class%"
-        arguments:
-            - "@expansion.service.dedicated_connection"
-            - "@expansion.framework.core.storage.data.player.factory"
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
 
-    expansion.storage.map:
-        class: "%expansion.storage.map.class%"
-        arguments:
-            - "@expansion.service.dedicated_connection"
+    eXpansion\Framework\Core\Storage\:
+        resource: "../../Storage/*"
+        exclude: "../../Storage/Data/"
 
-    expansion.storage.gamedata:
-        class: "%expansion.storage.gamedata.class%"
+    eXpansion\Framework\Core\Storage\GameDataStorage:
         arguments:
-          - "%expansion.storage.gamedata.mode.codes%"
-          - "%expansion.storage.gamedata.titles%"
+            $gameModeCodes: "%expansion.storage.gamedata.mode.codes%"
+            $titles: "%expansion.storage.gamedata.titles%"
 
-    expansion.framework.core.storage.data.player.factory:
-        class: "%expansion.framework.core.storage.data.player.factory%"
+    eXpansion\Framework\Core\Storage\Data\PlayerFactory:
         arguments:
-            - "%expansion.framework.core.storage.data.player.class%"
+            $class: "%expansion.framework.core.storage.data.player.class%"

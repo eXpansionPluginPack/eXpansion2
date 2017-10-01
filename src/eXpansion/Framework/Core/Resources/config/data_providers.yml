@@ -30,10 +30,13 @@ parameters:
     expansion.framework.core.data_providers.application_data_provider.interface: eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication
 
 services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
     expansion.framework.core.data_providers.chat_data_provider:
         class: "%expansion.framework.core.data_providers.chat_data_provider.class%"
-        arguments:
-            - "@expansion.storage.player"
         tags:
             - {name: 'expansion.dataprovider', provider: "mp.legacy.chat", interface: "%expansion.framework.core.data_providers.chat_data_provider.interface%"}
             - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
@@ -41,10 +44,6 @@ services:
 
     expansion.framework.core.data_providers.chat_command_data_provider:
         class: "%expansion.framework.core.data_providers.chat_command_data_provider.class%"
-        arguments:
-            - "@expansion.service.chat_commands"
-            - "@expansion.helper.chat_notification"
-            - "@expansion.helper.chat_output"
         tags:
             - {name: 'expansion.dataprovider', provider: "expansion.chat_command_data", interface: "%expansion.framework.core.data_providers.chat_command_data_provider.interface%"}
             - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
@@ -52,10 +51,6 @@ services:
 
     expansion.framework.core.data_providers.player_data_provider:
         class: "%expansion.framework.core.data_providers.player_data_provider.class%"
-        arguments:
-            - "@expansion.storage.player"
-            - "@expansion.service.dedicated_connection"
-            - "@expansion.service.application"
         tags:
             - {name: 'expansion.dataprovider', provider: "mp.legacy.player", interface: "%expansion.framework.core.data_providers.player_data_provider.interface%"}
             - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
@@ -66,9 +61,6 @@ services:
 
     expansion.framework.core.data_providers.map_data_provider:
         class: "%expansion.framework.core.data_providers.map_data_provider.class%"
-        arguments:
-            - "@expansion.storage.map"
-            - "@expansion.service.dedicated_connection"
         tags:
             - {name: 'expansion.dataprovider', provider: "mp.legacy.maplist", interface: "%expansion.framework.core.data_providers.map_data_provider.interface%"}
             - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
@@ -76,9 +68,6 @@ services:
 
     expansion.framework.core.data_providers.match_data_provider:
         class: "%expansion.framework.core.data_providers.match_data_provider.class%"
-        arguments:
-            - "@expansion.storage.player"
-            - "@expansion.service.dedicated_connection"
         tags:
             - {name: 'expansion.dataprovider', provider: "mp.legacy.map", interface: "%expansion.framework.core.data_providers.match_data_provider.interface%"}
             - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}

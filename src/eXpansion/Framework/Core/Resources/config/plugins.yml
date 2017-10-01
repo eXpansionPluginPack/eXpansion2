@@ -1,53 +1,52 @@
 services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    #
     # Plugins for Graphical user interfaces.
-    expansion.framework.core.plugins.gui_handler:
+    #
+    eXpansion\Framework\Core\Plugins\GuiHandler:
         class: 'eXpansion\Framework\Core\Plugins\GuiHandler'
-        arguments:
-            - "@expansion.service.dedicated_connection"
-            - "@logger"
-            - "@expansion.service.console"
         tags:
             - {name: expansion.plugin, data_provider: exp.timer}
             - {name: expansion.plugin, data_provider: expansion.user_group}
             - {name: expansion.plugin, data_provider: mp.legacy.player}
 
-    expansion.framework.core.plugins.gui.action_factory:
+    eXpansion\Framework\Core\Plugins\Gui\ActionFactory:
         class: 'eXpansion\Framework\Core\Plugins\Gui\ActionFactory'
         arguments:
-            - "%expansion.framework.core.model.gui.action.class%"
+            $class: "%expansion.framework.core.model.gui.action.class%"
         tags:
             - {name: expansion.plugin, data_provider: mp.legacy.manialink}
 
+    #
     # Defining plugins to keep groups up to date. You normally never need these services.
-    expansion.framework.core.plugins.user_group.all_players:
+    #
+    eXpansion\Framework\Core\Plugins\UserGroups\AllPlayers:
         class: eXpansion\Framework\Core\Plugins\UserGroups\AllPlayers
         arguments:
-            - '@expansion.framework.core.user_groups.all_players'
-            - '@expansion.storage.player'
+            $userGroup: '@expansion.framework.core.user_groups.all_players'
         tags:
             - {name: expansion.plugin, data_provider: mp.legacy.player}
 
-    expansion.framework.core.plugins.user_group.players:
+    eXpansion\Framework\Core\Plugins\UserGroups\Players:
         class: eXpansion\Framework\Core\Plugins\UserGroups\Players
         arguments:
-            - '@expansion.framework.core.user_groups.players'
-            - '@expansion.storage.player'
+            $userGroup: '@expansion.framework.core.user_groups.players'
         tags:
             - {name: expansion.plugin, data_provider: mp.legacy.player}
 
-    expansion.framework.core.plugins.user_group.spectators:
+    eXpansion\Framework\Core\Plugins\UserGroups\Spectators:
         class: eXpansion\Framework\Core\Plugins\UserGroups\Spectators
         arguments:
-            - '@expansion.framework.core.user_groups.spectators'
-            - '@expansion.storage.player'
-
+           $userGroup: '@expansion.framework.core.user_groups.spectators'
         tags:
             - {name: expansion.plugin, data_provider: mp.legacy.player}
 
-    expansion.framework.core.plugins.script_adapter:
+    eXpansion\Framework\Core\Plugins\ScriptAdapter:
         class: eXpansion\Framework\Core\Plugins\ScriptAdapter
-        arguments:
-            - '@expansion.service.dispatcher'
         tags:
             - {name: expansion.plugin, data_provider: mp.legacy.script}
 
@@ -65,13 +64,13 @@ services:
     expansion.framework.core.chat_command.help:
         class:  eXpansion\Framework\Core\ChatCommand\Help
         arguments:
-            - 'help'
-            - ['h']
-            - '@expansion.framework.core.plugins.gui.window_help_factory'
+            $command: 'help'
+            $aliases: ['h']
 
-    expansion.framework.core.plugins.start_greeter:
+    #
+    # Plugin that displays information about expansion on start.
+    #
+    eXpansion\Framework\Core\Plugins\StartGreeter:
         class: 'eXpansion\Framework\Core\Plugins\StartGreeter'
-        arguments:
-            - "@expansion.helper.chat_notification"
         tags:
             - {name: expansion.plugin, data_provider: exp.application}

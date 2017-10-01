@@ -1,33 +1,19 @@
 services:
-    expansion.helper.time:
-        class: eXpansion\Framework\Core\Helpers\Time
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
 
-    expansion.helper.translations:
+    eXpansion\Framework\Core\Helpers\:
+        resource: '../../Helpers/*'
+        exclude: '../../Helpers/{Data,Structures}'
+
+    eXpansion\Framework\Core\Helpers\Translations:
         class: eXpansion\Framework\Core\Helpers\Translations
         arguments:
-            - '@translator'
-            - ['fr', 'de', 'fi', 'nl', 'en']
-            - '%expansion.config.core_chat_color_codes%'
-            - '%expansion.config.core_chat_glyph_icons%'
-
-    expansion.helper.chat_notification:
-        class: eXpansion\Framework\Core\Helpers\ChatNotification
-        arguments:
-            - '@expansion.service.dedicated_connection'
-            - '@expansion.helper.translations'
-            - '@expansion.storage.player'
-            - '@expansion.service.console'
-
-    expansion.helper.chat_output:
-        class: eXpansion\Framework\Core\Helpers\ChatOutput
-        arguments:
-            - '@expansion.service.dedicated_connection'
-            - '@expansion.helper.chat_notification'
-
-    expansion.helper.http:
-        class: eXpansion\Framework\Core\Helpers\Http
-        arguments: ['@expansion.service.jobrunner.factory']
-
+            $supportedLocales: ['fr', 'de', 'fi', 'nl', 'en']
+            $colorCodes: '%expansion.config.core_chat_color_codes%'
+            $glyphIcons: '%expansion.config.core_chat_glyph_icons%'
 
     expansion.helper.data.array_filter:
         class: 'eXpansion\Framework\Core\Helpers\Data\ArrayFilter'

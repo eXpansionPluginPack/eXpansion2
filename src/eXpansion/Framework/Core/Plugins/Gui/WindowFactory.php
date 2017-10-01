@@ -36,8 +36,8 @@ class WindowFactory extends WidgetFactory {
         $name,
         $sizeX,
         $sizeY,
-        $posX,
-        $posY,
+        $posX = null,
+        $posY = null,
         WindowFactoryContext $context
     ) {
         parent::__construct(

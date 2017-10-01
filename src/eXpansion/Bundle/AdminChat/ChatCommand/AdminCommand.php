@@ -4,6 +4,7 @@ namespace eXpansion\Bundle\AdminChat\ChatCommand;
 
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
+use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Monolog\Logger;
@@ -41,36 +42,46 @@ class AdminCommand extends AbstractConnectionCommand
     protected $functionName;
 
     /**
-     * @return string
+     * AdminCommand constructor.
+     *
+     * @param $command
+     * @param string $permission
+     * @param array $aliases
+     * @param ChatNotification $functionName
+     * @param AdminGroups $adminGroupsHelper
+     * @param Connection $connection
+     * @param ChatNotification $chatNotification
+     * @param PlayerStorage $playerStorage
+     * @param LoggerInterface $logger
+     * @param Time $timeHelper
      */
-    public function getFunctionName()
-    {
-        return $this->functionName;
-    }
+    public function __construct(
+        $command,
+        $permission,
+        array $aliases = [],
+        $functionName,
+        AdminGroups $adminGroupsHelper,
+        Connection $connection,
+        ChatNotification $chatNotification,
+        PlayerStorage $playerStorage,
+        LoggerInterface $logger,
+        Time $timeHelper
+    ) {
+        parent::__construct(
+            $command,
+            $permission,
+            $aliases,
+            $adminGroupsHelper,
+            $connection,
+            $chatNotification,
+            $playerStorage,
+            $logger,
+            $timeHelper
+        );
 
-    /**
-     * @return string
-     */
-    public function getChatMessage()
-    {
-        return $this->chatMessage;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function configure()
-    {
-        parent::configure();
-
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getDescription()
-    {
-        return $this->description;
+        $this->description = 'expansion_admin_chat.' . strtolower($functionName) . '.description';
+        $this->chatMessage = 'expansion_admin_chat.' . strtolower($functionName) . '.msg';
+        $this->functionName = $functionName;
     }
 
     /**
@@ -89,29 +100,4 @@ class AdminCommand extends AbstractConnectionCommand
 
         $this->connection->{$this->functionName}();
     }
-
-    /**
-     * @param string $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @param string $chatMessage
-     */
-    public function setChatMessage($chatMessage)
-    {
-        $this->chatMessage = $chatMessage;
-    }
-
-    /**
-     * @param string $functionName
-     */
-    public function setFunctionName($functionName)
-    {
-        $this->functionName = $functionName;
-    }
-
 }

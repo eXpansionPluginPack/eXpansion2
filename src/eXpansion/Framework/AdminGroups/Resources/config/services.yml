@@ -1,5 +1,10 @@
 services:
-    expansion.framework.admin_groups.services.admin_group_configuration:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    eXpansion\Framework\AdminGroups\Services\AdminGroupConfiguration:
         class: eXpansion\Framework\AdminGroups\Services\AdminGroupConfiguration
         arguments:
-            - '%expansion.framework.admin_groups.groups%'
+            $config: '%expansion.framework.admin_groups.groups%'

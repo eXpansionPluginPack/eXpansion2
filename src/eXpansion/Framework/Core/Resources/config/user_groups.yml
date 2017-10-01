@@ -2,30 +2,30 @@ parameters:
     expansion.framework.core.model.user_groups.group.class: eXpansion\Framework\Core\Model\UserGroups\Group
 
 services:
-    # Defining core user groups.
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
     expansion.framework.core.user_groups.all_players:
         class: '%expansion.framework.core.model.user_groups.group.class%'
         arguments:
-            - '@expansion.service.dispatcher'
-            - 'all_players'
+            $name: 'all_players'
 
     expansion.framework.core.user_groups.players:
         class: '%expansion.framework.core.model.user_groups.group.class%'
         arguments:
-            - '@expansion.service.dispatcher'
-            - 'players'
+            $name: 'players'
 
     expansion.framework.core.user_groups.spectators:
         class: '%expansion.framework.core.model.user_groups.group.class%'
         arguments:
-            - '@expansion.service.dispatcher'
-            - 'spectators'
+            $name: 'spectators'
 
-    expansion.framework.core.user_groups.factory:
+    eXpansion\Framework\Core\Plugins\UserGroups\Factory:
         class: eXpansion\Framework\Core\Plugins\UserGroups\Factory
         arguments:
-            - '@expansion.service.dispatcher'
-            - '%expansion.framework.core.model.user_groups.group.class%'
+            $class: '%expansion.framework.core.model.user_groups.group.class%'
         tags:
             - {name: expansion.plugin, data_provider: expansion.user_group}
             - {name: expansion.plugin, data_provider: mp.legacy.player}

@@ -6,99 +6,65 @@ parameters:
 
 services:
 
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true:
+
     #
     # GUI Contexes to put everything together.
     #
-    expansion.gui.context.manialink:
+    eXpansion\Framework\Core\Model\Gui\ManialinkFactoryContext:
         class: 'eXpansion\Framework\Core\Model\Gui\ManialinkFactoryContext'
         arguments:
-            - "%expansion.framework.core.model.gui.manialink.class%"
-            - "@expansion.framework.core.plugins.gui_handler"
-            - "@expansion.framework.core.user_groups.factory"
-            - "@expansion.framework.core.plugins.gui.action_factory"
+            $className: "%expansion.framework.core.model.gui.manialink.class%"
 
-    expansion.gui.context.widget:
+    eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext:
         class: 'eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext'
         arguments:
-            - "%expansion.framework.core.model.gui.widget.class%"
-            - "@expansion.framework.core.plugins.gui_handler"
-            - "@expansion.framework.core.user_groups.factory"
-            - "@expansion.framework.core.plugins.gui.action_factory"
-            - "@expansion.helper.translations"
-            - "@expansion.gui.component.factory"
+            $className: "%expansion.framework.core.model.gui.widget.class%"
 
 
-    expansion.gui.context.window:
+    eXpansion\Framework\Core\Model\Gui\WindowFactoryContext:
         class: 'eXpansion\Framework\Core\Model\Gui\WindowFactoryContext'
         arguments:
-            - "%expansion.framework.core.model.gui.window.class%"
-            - "@expansion.framework.core.plugins.gui_handler"
-            - "@expansion.framework.core.user_groups.factory"
-            - "@expansion.framework.core.plugins.gui.action_factory"
-            - "@expansion.helper.translations"
-            - "@expansion.gui.component.factory"
-            - "@expansion.framework.core.mania_script.window_factory"
+            $className: "%expansion.framework.core.model.gui.window.class%"
+            $maniaScriptFactory: '@expansion.framework.core.mania_script.window_factory'
 
     #
     # GUI Element factories
     #
-    expansion.framework.core.gui.element.factory.label:
-        class: 'eXpansion\Framework\Core\Model\Gui\Factory\LabelFactory'
-
-    expansion.framework.core.gui.element.factory.back_ground:
-        class: 'eXpansion\Framework\Core\Model\Gui\Factory\BackGroundFactory'
-
-    expansion.framework.core.gui.element.factory.title_back_ground:
-        class: 'eXpansion\Framework\Core\Model\Gui\Factory\TitleBackGroundFactory'
-
-    expansion.framework.core.gui.element.factory.line:
-        class: 'eXpansion\Framework\Core\Model\Gui\Factory\LineFactory'
-        arguments:
-            - '@expansion.framework.core.gui.element.factory.back_ground'
-            - '@expansion.framework.core.gui.element.factory.label'
+    eXpansion\Framework\Core\Model\Gui\Factory\:
+            resource: '../../Model/Gui/Factory/*'
 
     expansion.framework.core.gui.element.factory.title_line:
         class: 'eXpansion\Framework\Core\Model\Gui\Factory\LineFactory'
         arguments:
-            - '@expansion.framework.core.gui.element.factory.title_back_ground'
-            - '@expansion.framework.core.gui.element.factory.label'
-            - 'title'
+            $type: 'title'
 
-    expansion.framework.core.gui.element.factory.pager:
-        class: 'eXpansion\Framework\Core\Model\Gui\Factory\PagerFactory'
-        arguments:
-            - '@expansion.framework.core.gui.element.factory.label'
 
     #
     # Default window factories.
     #
-    expansion.framework.core.plugins.gui.window_help_factory:
+    eXpansion\Framework\Core\Plugins\Gui\WindowHelpFactory:
         class: 'eXpansion\Framework\Core\Plugins\Gui\WindowHelpFactory'
         arguments:
-            - 'expansion_core.windows.chat_commands.title'
-            - 180
-            - 90
-            - null
-            - null
-            - '@expansion.gui.context.window'
-            - '@expansion.gui.gridbuilder.factory'
-            - '@expansion.gui.gridbuilder.datacollection.array'
-            - '@expansion.service.chat_commands'
-            - '@expansion.framework.core.data_providers.chat_command_data_provider'
-            - '@expansion.framework.core.plugins.gui.window_help_description_factory'
+            $name:  'expansion_core.windows.chat_commands.title'
+            $sizeX: 180
+            $sizeY: 90
+            $posX:  null
+            $posY:  null
+            $dataCollectionFactory: "@expansion.gui.gridbuilder.datacollection.array"
         tags:
             - {name: expansion.plugin, data_provider: expansion.user_group}
 
-    expansion.framework.core.plugins.gui.window_help_description_factory:
+    eXpansion\Framework\Core\Plugins\Gui\WindowHelpDetailsFactory:
         class: 'eXpansion\Framework\Core\Plugins\Gui\WindowHelpDetailsFactory'
         arguments:
-            - 'expansion_core.windows.chat_commands_description.title'
-            - 180
-            - 90
-            - null
-            - null
-            - '@expansion.gui.context.window'
-            - '@expansion.framework.core.gui.element.factory.line'
-            - '@expansion.framework.core.gui.element.factory.title_line'
+            $name: 'expansion_core.windows.chat_commands_description.title'
+            $sizeX: 180
+            $sizeY: 90
+            $posX: null
+            $posY: null
         tags:
             - {name: expansion.plugin, data_provider: expansion.user_group}

@@ -28,10 +28,10 @@ class Factory implements ListenerInterfaceExpUserGroup, ListenerInterfaceMpLegac
     /**
      * IndividualUserGroups constructor.
      *
-     * @param DispatcherInterface $dispatcher
      * @param string $class
+     * @param DispatcherInterface $dispatcher
      */
-    public function __construct(DispatcherInterface $dispatcher, $class)
+    public function __construct($class, DispatcherInterface $dispatcher)
     {
         $this->class = $class;
         $this->dispatcher = $dispatcher;
@@ -49,7 +49,7 @@ class Factory implements ListenerInterfaceExpUserGroup, ListenerInterfaceMpLegac
         if (!isset($this->groups[$login])) {
             $class = $this->class;
             /** @var Group $group */
-            $group = new $class($this->dispatcher);
+            $group = new $class(null, $this->dispatcher);
 
             $this->groups[$login] = $group;
             $group->addLogin($login);
@@ -69,7 +69,7 @@ class Factory implements ListenerInterfaceExpUserGroup, ListenerInterfaceMpLegac
     {
         $class = $this->class;
         /** @var Group $group */
-        $group = new $class($this->dispatcher);
+        $group = new $class(null, $this->dispatcher);
 
         $this->groups[$group->getName()] = $group;
         foreach ($logins as $login) {
@@ -89,7 +89,7 @@ class Factory implements ListenerInterfaceExpUserGroup, ListenerInterfaceMpLegac
     {
         $class = $this->class;
         /** @var Group $group */
-        $group = new $class($this->dispatcher, $name);
+        $group = new $class($name, $this->dispatcher);
         $this->groups[$group->getName()] = $group;
 
         return $group;

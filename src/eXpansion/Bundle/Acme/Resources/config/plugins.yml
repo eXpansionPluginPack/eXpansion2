@@ -1,46 +1,41 @@
 services:
-    expansion.bundle.acme.plugins.totot:
-        class: eXpansion\Bundle\Acme\Plugins\TotoPlugin
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    eXpansion\Bundle\Acme\Plugins\:
+        resource: '../../Plugins/*'
+
+    eXpansion\Bundle\Acme\Plugins\TotoPlugin:
         arguments:
-            - '@expansion.service.console'
-            - '@expansion.bundle.acme.plugins.gui.windowFactory'
-            - '@expansion.framework.core.user_groups.players'
+            $players: '@expansion.framework.core.user_groups.players'
         tags:
             - {name: 'expansion.plugin', data_provider: 'exp.application'}
 
-    expansion.bundle.acme.plugins.test:
-        class: eXpansion\Bundle\Acme\Plugins\Test
+    eXpansion\Bundle\Acme\Plugins\Test:
         arguments:
-            - '@expansion.service.dedicated_connection'
-            - '@expansion.service.console'
-            - '@expansion.helper.time'
-            - '@expansion.bundle.acme.plugins.gui.memorywidget'
-            - '@expansion.framework.core.user_groups.players'
+            $players: '@expansion.framework.core.user_groups.players'
         tags:
             - {name: 'expansion.plugin', data_provider: 'mp.legacy.map'}
             - {name: 'expansion.plugin', data_provider: 'exp.timer'}
 
-    expansion.bundle.acme.plugins.gui.windowFactory:
-            class: 'eXpansion\Bundle\Acme\Plugins\Gui\WindowFactory'
+    eXpansion\Bundle\Acme\Plugins\Gui\WindowFactory:
             arguments:
-                -  "test window"
-                -  180
-                -  90
-                - null
-                - null
-                - '@expansion.gui.context.window'
+                $name:  "test window"
+                $sizeX:  180
+                $sizeY:  90
             tags:
                 - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}
 
-    expansion.bundle.acme.plugins.gui.memorywidget:
+    eXpansion\Bundle\Acme\Plugins\Gui\MemoryWidgetFactory:
             class: 'eXpansion\Bundle\Acme\Plugins\Gui\MemoryWidgetFactory'
             arguments:
-                - "memory"
-                - 180
-                - 90
-                - null
-                - null
-                - '@expansion.gui.context.widget'
+                $name:  "memory"
+                $posX: 180
+                $posY: 90
+                $sizeX: null
+                $sizeY: null
             tags:
                 - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}
-

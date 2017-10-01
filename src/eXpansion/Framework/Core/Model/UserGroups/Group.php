@@ -32,10 +32,10 @@ class Group
     /**
      * Group constructor.
      *
-     * @param DispatcherInterface $dispatcher
      * @param string $name
+     * @param DispatcherInterface $dispatcher
      */
-    public function __construct(DispatcherInterface $dispatcher, $name = null)
+    public function __construct( $name = null, DispatcherInterface $dispatcher)
     {
         if (is_null($name)) {
             $this->name = spl_object_hash($this);

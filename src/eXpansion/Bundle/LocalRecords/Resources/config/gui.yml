@@ -1,15 +1,13 @@
 services:
-    eXpansion.local_records.gui.window.race_factory:
+    eXpansion\Bundle\LocalRecords\Plugins\Gui\RecordsWindowFactory:
         class: eXpansion\Bundle\LocalRecords\Plugins\Gui\RecordsWindowFactory
+        autowire: true
         arguments:
-            - 'expansion_local_records.gui.race.window.title'
-            - 160
-            - 90
-            - null
-            - null
-            - '@expansion.gui.context.window'
-            - '@expansion.gui.gridbuilder.factory'
-            - '@expansion.gui.gridbuilder.datacollection.array'
-            - '@expansion.helper.time'
+            $name:  'expansion_local_records.gui.race.window.title'
+            $sizeX: 160
+            $sizeY: 90
+            $posX:  null
+            $posY:  null
+            $dataCollectionFactory: '@expansion.gui.gridbuilder.datacollection.array'
         tags:
             - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}

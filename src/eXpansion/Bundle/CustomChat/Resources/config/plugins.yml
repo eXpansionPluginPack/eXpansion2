@@ -1,10 +1,7 @@
 services:
-    expansion.bundle.custom_chat.plugins.custom_chat:
+    eXpansion\Bundle\CustomChat\Plugins\CustomChat:
         class: eXpansion\Bundle\CustomChat\Plugins\CustomChat
-        arguments:
-          - '@expansion.service.dedicated_connection'
-          - '@expansion.service.console'
-          - '@expansion.helper.admingroups'
+        autowire: true
         tags:
           - {name: 'expansion.plugin', data_provider: 'mp.legacy.chat'}
           - {name: 'expansion.plugin', data_provider: 'exp.application'}

@@ -117,6 +117,6 @@ class PlayerStorageTest extends TestCore
      */
     protected function getPlayerStorage()
     {
-        return $this->container->get('expansion.storage.player');
+        return $this->container->get(PlayerStorage::class);
     }
 }

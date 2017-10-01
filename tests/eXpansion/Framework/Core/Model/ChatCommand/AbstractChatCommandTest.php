@@ -8,6 +8,7 @@
 
 namespace Tests\eXpansion\Framework\Core\Model\ChatCommand;
 
+use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Model\ChatCommand\AbstractChatCommand;
 use eXpansion\Framework\Core\Model\Helpers\ChatNotificationInterface;
 use Symfony\Component\Console\Exception\RuntimeException;
@@ -23,7 +24,7 @@ class AbstractChatCommandTest extends TestCore
         $notification = $this->getMockBuilder(ChatNotificationInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->container->set('expansion.helper.chat_notification', $notification);
+        $this->container->set(ChatNotification::class, $notification);
     }
 
     public function testModel()
@@ -71,6 +72,6 @@ class AbstractChatCommandTest extends TestCore
      */
     protected function getChatNotificationMock()
     {
-        return $this->container->get('expansion.helper.chat_notification');
+        return $this->container->get(ChatNotification::class);
     }
 }

@@ -3,15 +3,15 @@ expansion_admin_chat:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}restarts the map!'
     description: 'Replay current map.'
 
-  next:
+  nextmap:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}skips the map!'
     description: '{info} Skip current map & go to the next map.'
 
-  set_server_name:
+  setservername:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}changes the server name. New server name is {highlight}%parameter%'
     description: '{info}Change the name of the server.'
 
-  set_server_comment:
+  setservercomment:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}changes the server comment. New server comment is {highlight}%parameter%'
     description: '{info}Change the comment of the server.'
 
@@ -51,7 +51,7 @@ expansion_admin_chat:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}loads black list. File name: {highlight}%parameter%'
     description: '{info}Loads black list. File is relative to server config directory.'
 
-  planets:
+  getserverplanets:
     msg: '|info| {admin_info}Server has {highlight}%return% {admin_info}planets.'
     description: '{info}Show server planets.'
 
@@ -83,11 +83,11 @@ expansion_admin_chat:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}loads guest list. File name: {highlight}%parameter%'
     description: '{info}Loads guest list. File is relative to server config directory.'
 
-  password:
+  setserverpasswordforplayer:
     msg: '|admin| {admin_info}New join password for server is: "{highlight}%parameter%{admin_info}"'
     description: '{info}Sets new server password'
 
-  specpass:
+  ssetserverpasswordforspectator:
     msg: '|admin| {admin_info}New spectators join password for server is: "{highlight}%parameter%{admin_info}"'
     description: '{info}Sets new specator password'
 

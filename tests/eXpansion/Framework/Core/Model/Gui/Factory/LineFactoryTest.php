@@ -33,7 +33,7 @@ class LineFactoryTest extends TestCore
      */
     protected function getLineFactory()
     {
-        return $this->container->get('expansion.framework.core.gui.element.factory.line');
+        return $this->container->get(LineFactory::class);
     }
 
 }
