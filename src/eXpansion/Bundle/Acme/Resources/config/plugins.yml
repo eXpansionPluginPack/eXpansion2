@@ -1,10 +1,12 @@
 services:
 
-    eXpansion\Bundle\Acme\Plugins\:
-        resource: '../../Plugins/*'
+    _defaults:
         autowire: true
         autoconfigure: true
-        public: false
+        public: true
+
+    eXpansion\Bundle\Acme\Plugins\:
+        resource: '../../Plugins/*'
 
     eXpansion\Bundle\Acme\Plugins\TotoPlugin:
         arguments:
@@ -31,7 +33,9 @@ services:
             class: 'eXpansion\Bundle\Acme\Plugins\Gui\MemoryWidgetFactory'
             arguments:
                 $name:  "memory"
-                $sizeX: 180
-                $sizeY: 90
+                $posX: 180
+                $posY: 90
+                $sizeX: null
+                $sizeY: null
             tags:
                 - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}

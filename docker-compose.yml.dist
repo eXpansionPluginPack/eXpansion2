@@ -8,12 +8,17 @@ php:
         - dedicated
 
 dedicated:
-    image: docker/mp-dedicated
+    image: oliverde8/mp-dedicated:TmCanyon
     environment:
         MP_LOGIN: login
         MP_PASSWORD: password
+    ports:
+        - "2350:2350"
+        - "2350:2350/udp"
     volumes:
-        - ./docker/data/mp:/var/maniaplanet/UserData
+        - ./docker/data/UserData/Maps:/var/maniaplanet/UserData/Maps
+        - ./docker/data/UserData/Config:/var/maniaplanet/UserData/Config
+        - ./docker/data/UserData/Scripts:/var/maniaplanet/UserData/Scripts
 
 mysql:
     image: mysql:5.7

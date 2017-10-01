@@ -80,8 +80,14 @@ abstract class AbstractApplication implements RunInterface
         $this->connection->enableCallbacks(true);
 
         // need to send this for scripts to start callback handling
-        $this->connection->triggerModeScriptEvent("XmlRpc.EnableCallbacks", ["True"]);
-        $this->connection->triggerModeScriptEvent("XmlRpc.SetApiVersion", [self::SCRIPT_API_VERSION]);
+        try {
+            $this->connection->triggerModeScriptEvent("XmlRpc.EnableCallbacks", ["True"]);
+            $this->connection->triggerModeScriptEvent("XmlRpc.SetApiVersion", [self::SCRIPT_API_VERSION]);
+        } catch (\Exception $exception) {
+            $this->connection->saveMatchSettings('MatchSettings/eXpansion-mode-fail-' . date(DATE_ISO8601) . '.txt');
+            throw $exception;
+        }
+
         $this->dispatcher->dispatch(self::EVENT_READY, []);
 
         $this->console->writeln("And takeoff");

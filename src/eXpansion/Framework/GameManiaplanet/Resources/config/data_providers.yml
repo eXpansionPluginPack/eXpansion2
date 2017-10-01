@@ -12,7 +12,7 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: false
+        public: true
 
     expansion.framework.game_maniaplanet.data_providers.map:
         class: "%expansion.framework.game_maniaplanet.data_providers.map.class%"

@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Core\DependencyInjection\Compiler;
 
+use eXpansion\Framework\Core\Services\PluginManager;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -19,7 +20,7 @@ class PluginPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has('expansion.service.plugin_manager')) {
+        if (!$container->has(PluginManager::class)) {
             return;
         }
 
@@ -42,7 +43,7 @@ class PluginPass implements CompilerPassInterface
         }
 
         // Get the data provider manager service definition to register data providers into.
-        $definition = $container->getDefinition('expansion.service.plugin_manager');
+        $definition = $container->getDefinition(PluginManager::class);
 
         foreach ($pluginsData as $pluginId => $data)
         {

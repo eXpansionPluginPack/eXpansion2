@@ -19,5 +19,6 @@ RUN docker-php-ext-install pdo pdo_mysql
 
 # Add a alias to lake it easier to use sf commands
 RUN echo 'alias sf="php bin/console"' >> ~/.bashrc
-
 WORKDIR /var/www/expansion
+
+ENTRYPOINT ["sleep","720m"]

@@ -26,7 +26,7 @@ services:
         class: eXpansion\Bundle\LocalRecords\Plugins\RaceRecords
         arguments:
             - '@eXpansion.local_records.services.race_record_handler_factory'
-            - '@eXpansion.framework.core.user_groups.all_players'
+            - '@expansion.framework.core.user_groups.all_players'
             - '@eXpansion\Framework\Core\Storage\MapStorage'
             - '@eXpansion\Framework\Core\Services\Application\Dispatcher'
             - 'expansion.local_records.race'
