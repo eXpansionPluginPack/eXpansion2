@@ -47,6 +47,7 @@ class AppKernel extends Kernel
             new \eXpansion\Framework\GameTrackmania\eXpansionGameTrackmaniaBundle(),
             new \eXpansion\Framework\GameManiaplanet\eXpansionGameManiaplanetBundle(),
             new \eXpansion\Framework\Gui\eXpansionGuiBundle(),
+            new \eXpansion\Framework\PlayersBundle\eXpansionFrameworkPlayersBundle(),
         ];
 
         // Also add debug help bundles.
