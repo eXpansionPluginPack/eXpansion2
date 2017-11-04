@@ -109,7 +109,7 @@ class uiButton extends abstractUiElement implements ScriptFeatureable
     /**
      * Prepare the given Script for rendering by adding the needed Labels, etc.
      *
-     * @param Script $script Script to prepar
+     * @param Script $script Script to prepare
      * @return void
      */
     public function prepare(Script $script)

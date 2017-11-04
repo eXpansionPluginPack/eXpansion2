@@ -14,6 +14,50 @@ use FML\Types\ScriptFeatureable;
 class uiAnimation extends abstractUiElement implements ScriptFeatureable
 {
 
+    const QuadIn = "QuadIn";
+    const QuadOut = "QuadOut";
+    const QuadInOut = "QuadInOut";
+
+    const CubicIn = "CubicIn";
+    const CubicOut = "CubicOut";
+    const CubicInOut = "CubicInOut";
+
+    const QuartIn = "QuartIn";
+    const QuartOut = "QuartOut";
+    const QuartInOut = "QuartInOut";
+
+    const QuintIn = "QuintIn";
+    const QuintOut = "QuintOut";
+    const QuintInOut = "QuintInOut";
+
+    const SineIn = "SineIn";
+    const SineOut = "SineOut";
+    const SineInOut = "SineInOut";
+
+    const ExpIn = "ExpIn";
+    const ExpOut = "ExpOut";
+    const ExpInOut = "ExpInOut";
+
+    const CircIn = "CircIn";
+    const CircOut = "CircOut";
+    const CircInOut = "CircInOut";
+
+    const BackIn = "BackIn";
+    const BackOut = "BackOut";
+    const BackInOut = "BackInOut";
+
+    const ElasticIn = "ElasticIn";
+    const ElasticOut = "ElasticOut";
+    const ElasticInOut = "ElasticInOut";
+
+    const Elastic2In = "Elastic2In";
+    const Elastic2Out = "Elastic2Out";
+    const Elastic2InOut = "Elastic2InOut";
+
+    const BounceIn = "BounceIn";
+    const BounceOut = "BounceOut";
+    const BounceInOut = "BounceInOut";
+
     protected $element;
 
     /**
@@ -217,6 +261,7 @@ EOL;
     {
         $quad = new Quad();
         $quad->setVisible(false);
+
         return $quad->render($domDocument);
     }
 }
