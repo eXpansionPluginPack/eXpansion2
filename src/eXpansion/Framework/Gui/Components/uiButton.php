@@ -68,7 +68,8 @@ class uiButton extends abstractUiElement implements ScriptFeatureable
             $this->backColor = null;
             $quad->setStyles("Bgs1", "BgColorContour")
                 ->setColorize($this->borderColor)
-                ->setSize($this->width, $this->height)
+                ->setSize($this->width*1.33, $this->height*1.33)
+                ->setScale(0.75)
                 //->setPosition(-$this->width / 2, $this->height / 2)
                 ->setAlign("center", "center2");
             $buttonFrame->addChild($quad);

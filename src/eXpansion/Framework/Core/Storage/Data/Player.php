@@ -525,6 +525,6 @@ class Player
      */
     public function __toString()
     {
-        return $this->getLogin();
+        return $this->login;
     }
 }

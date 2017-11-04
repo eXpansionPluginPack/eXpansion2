@@ -62,7 +62,8 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
      */
     public function onApplicationReady()
     {
-        $properties = /** @lang XML */
+        $properties =
+            /** @lang XML */
             <<<EOL
     <ui_properties>
  		<!-- The map name and author displayed in the top right of the screen when viewing the scores table -->
@@ -134,7 +135,7 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
  	</ui_properties>
 EOL;
 
-        $this->connection->triggerModeScriptEvent('Trackmania.UI.SetProperties', [$properties]);
+       // $this->connection->triggerModeScriptEvent('Trackmania.UI.SetProperties', [$properties]);
     }
 
     /**

@@ -6,7 +6,9 @@ namespace eXpansion\Bundle\Menu\Plugins;
 use eXpansion\Bundle\Menu\Plugins\Gui\MenuFactory;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
+use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
+use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
 
@@ -18,8 +20,8 @@ use Maniaplanet\DedicatedServer\Structures\Map;
  */
 class Menu implements StatusAwarePluginInterface, ListenerInterfaceMpLegacyMap
 {
-    /** @var  AdminGroups */
-    protected $adminGroups;
+    /** @var  PlayerStorage */
+    protected $playerStorage;
 
     /** @var MenuFactory */
     protected $menuGuiFactory;
@@ -27,12 +29,12 @@ class Menu implements StatusAwarePluginInterface, ListenerInterfaceMpLegacyMap
     /**
      * Menu constructor.
      *
-     * @param AdminGroups $adminGroups
+     * @param Group $userGroups
      * @param MenuFactory $menuGuiFactory
      */
-    public function __construct(AdminGroups $adminGroups, MenuFactory $menuGuiFactory)
+    public function __construct(PlayerStorage $playerStorage, MenuFactory $menuGuiFactory)
     {
-        $this->adminGroups = $adminGroups;
+        $this->playerStorage = $playerStorage;
         $this->menuGuiFactory = $menuGuiFactory;
     }
 
@@ -58,8 +60,8 @@ class Menu implements StatusAwarePluginInterface, ListenerInterfaceMpLegacyMap
      */
     protected function displayMenu()
     {
-        foreach ($this->adminGroups->getUserGroups() as $userGroup) {
-            $this->menuGuiFactory->create($userGroup);
+        foreach ($this->playerStorage->getOnline() as $player) {
+            $this->menuGuiFactory->create($player);
         }
     }
 

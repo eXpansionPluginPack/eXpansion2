@@ -8,6 +8,7 @@ use FML\Controls\Label;
 use FML\Controls\Quad;
 use FML\Script\Features\ScriptFeature;
 use FML\Script\Script;
+use FML\Script\ScriptInclude;
 use FML\Types\Container;
 use FML\Types\ScriptFeatureable;
 
@@ -95,6 +96,7 @@ class uiAnimation extends abstractUiElement implements ScriptFeatureable
      */
     public function prepare(Script $script)
     {
+        $script->setScriptInclude(ScriptInclude::TextLib);
         $script->addScriptFunction("exp_AnimationFunctions", $this->getFunctions());
     }
 

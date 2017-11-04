@@ -23,19 +23,8 @@ Void onButtonOut(CMlControl Element) {
     Exp_Window.ZIndex = 10000.;
 ***
 
-***FML_KeyPress***
-***
-    // 36 for esc, 31 for numpad /
-    if (Event.KeyCode == 36) {
-        if (isMenuOpen) {
-            hide(Null);
-    }
-***
-
 ***FML_Loop***
 ***
-
-    if (isClosing == False) {
         // handle pending events
         foreach (Event in PendingEvents) {
 
@@ -48,5 +37,4 @@ Void onButtonOut(CMlControl Element) {
                 onButtonOut(Event.Control);
             }
         } // events
-    }
 ***

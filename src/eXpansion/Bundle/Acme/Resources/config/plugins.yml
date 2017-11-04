@@ -33,9 +33,9 @@ services:
             class: 'eXpansion\Bundle\Acme\Plugins\Gui\MemoryWidgetFactory'
             arguments:
                 $name:  "memory"
-                $posX: 180
-                $posY: 90
-                $sizeX: null
-                $sizeY: null
+                $posX: 80
+                $posY: -60
+                $sizeX: 80
+                $sizeY: 80
             tags:
                 - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}

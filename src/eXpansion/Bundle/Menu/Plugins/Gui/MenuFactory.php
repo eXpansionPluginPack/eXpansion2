@@ -66,11 +66,61 @@ class MenuFactory extends WidgetFactory
     protected function updateContent(ManialinkInterface $manialink)
     {
         // Do stuff Here.
-        echo "update\n";
-
         $manialink->removeAllChildren();
+        $manialink->getFmlManialink()->getScript()->addScriptFunction("",
+            <<<EOL
+    
+    Void onButtonOver(CMlControl Element) {
+        Audio.PlaySoundEvent( CAudioManager::ELibSound::ScoreIncrease, 0, 0.);
 
-        $button = $this->uiFactory->createButton("Menu", uiButton::TYPE_DECORATED);
+	if (Element is CMlLabel) {
+            declare El = (Element as CMlLabel);
+	}
+
+	if (Element.HasClass("noAnim") == False) {
+        AnimMgr.Add(Element, "<elem scale=\"1.3\" />", 300, CAnimManager::EAnimManagerEasing::ElasticOut);
+	}
+}
+
+Void onButtonOut(CMlControl Element) {
+        if (Element.HasClass("noAnim") == False) {
+            AnimMgr.Add(Element, "<elem scale=\"1.0\" />", 300, CAnimManager::EAnimManagerEasing::ElasticOut);
+		}
+    }
+
+
+***FML_OnInit***
+***
+	declare CMlFrame Exp_Window <=> (Page.GetFirstChild("Window") as CMlFrame);
+    Exp_Window.ZIndex = 10000.;
+***
+
+***FML_Loop***
+***
+
+
+        // handle pending events
+        foreach (Event in PendingEvents) {
+
+            // mouse hover states
+            if (Event.Type == CMlScriptEvent::Type::MouseOver && Event.Control.HasClass("menuItem")) {
+                onButtonOver(Event.Control);
+            }
+
+            if (Event.Type == CMlScriptEvent::Type::MouseOut && Event.Control.HasClass("menuItem")) {
+                onButtonOut(Event.Control);
+            }
+        }
+***
+
+EOL
+        );
+
+
+        $button = $this->uiFactory->createButton("Admin", uiButton::TYPE_DECORATED);
+        $button->setPosition(-150, 70);
+        $button->setScale(1);
+
         $button->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'createMenu'],
             [$manialink]));
         $manialink->addChild($button);
@@ -79,29 +129,44 @@ class MenuFactory extends WidgetFactory
 
     public function createMenu($login, $input, $args)
     {
-        $frame = Frame::create();
         $manialink = $args[0];
-
         $anim = $this->uiFactory->createAnimation();
-        $menuButtons = $this->uiFactory->createLayoutRow(0, 30);
 
-        $btn = $this->uiFactory->createLabel("Test", uiLabel::TYPE_NORMAL);
-        $btn->addClass('menuItem')
-            ->setAlign("center", "top");
-        $btn->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "hide"], [$manialink]));
+
+        $frame = Frame::create();
+
+        $menuButtons = $this->uiFactory->createLayoutRow(0, 20);
+        $menuButtons->setAlign("center", "top");
+
+
+        $basebtn = $this->uiFactory->createLabel("", uiLabel::TYPE_TITLE);
+        $basebtn->addClass('menuItem')
+            ->setOpacity(0)
+            ->setSize(60, 8)
+            ->setScriptEvents(true)
+            ->setAlign("center", "center");
+
+        $btn = clone $basebtn;
+        $btn->setText("");
+        $btn->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "doHide"], [$manialink]));
+        $menuButtons->addChild($btn);
+
+        $btn = clone $basebtn;
+        $btn->setText("Close menu");
+        $btn->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "doHide"], [$manialink]));
         $menuButtons->addChild($btn);
 
         $delay = 0;
         foreach ($menuButtons->getChildren() as $btn) {
-            $anim->addAnimation($btn, "", 300, $delay, uiAnimation::BackOut);
+            $anim->addAnimation($btn, "opacity='1'", 500, $delay, "Linear");
             $delay += 50;
         }
 
         $frame->addChild($menuButtons);
         $frame->addChild($this->createHeader("Server Menu"));
+        $frame->addChild($anim);
 
         $this->currentMenuView = $frame;
-
         $group = $this->groupFactory->createForPlayer($login);
         $this->update($group);
 
@@ -109,8 +174,9 @@ class MenuFactory extends WidgetFactory
 
     protected function createHeader($title = "Server Menu")
     {
+        $anim = $this->uiFactory->createAnimation();
+
         $headerFrame = Frame::create("background");
-        $headerFrame->setZ(100);
 
         $baseLabel = new Label();
         $baseLabel->setAreaColor("0000")
@@ -139,8 +205,10 @@ class MenuFactory extends WidgetFactory
             ->setPosition(0, 28)
             ->setSize(100, 0.5)
             ->setAlign("center", "center")
-            ->setBackgroundColor("fff");
+            ->setBackgroundColor("fff")
+            ->setOpacity(0);
         $headerFrame->addChild($quad);
+        $anim->addAnimation($quad, "opacity='1'", 300, 0, "Linear");
 
         $quad = new Quad();
         $quad->addClass("bg")
@@ -148,15 +216,23 @@ class MenuFactory extends WidgetFactory
             ->setPosition(0, 0)
             ->setSize(322, 182);
         $quad->setAlign("center", "center")
-            ->setStyles("Bgs1", "BgDialogBlur");
+            ->setStyles("Bgs1", "BgDialogBlur")
+            ->setOpacity(0);
+
+        $anim->addAnimation($quad, "opacity='1'", 300, 0, "Linear");
         $headerFrame->addChild($quad);
 
         return $headerFrame;
     }
 
-    public function hide($manialink)
+    public function doHide($login, $input, $args)
     {
-        $this->hide($manialink);
+        $manialink = $args[0];
+
+        $this->currentMenuView = Frame::create();
+
+        $group = $this->groupFactory->createForPlayer($login);
+        $this->update($group);
     }
 
 

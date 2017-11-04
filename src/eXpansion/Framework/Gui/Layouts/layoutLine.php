@@ -33,6 +33,8 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
      * @var float
      */
     protected $startY = 0.;
+    protected $hAlign = "left";
+    protected $vAlign = "top";
 
     /**
      * layoutLine constructor.
@@ -67,6 +69,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
     public function render(\DOMDocument $domDocument)
     {
         $frame = new Frame();
+        $frame->setAlign($this->hAlign, $this->vAlign);
         $frame->setPosition($this->startX, $this->startY);
         $frame->addClasses($this->frameClasses);
 
@@ -80,7 +83,8 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
             }
             $frame->addChild($element);
         }
-        $frame->setSize($startX, $sizeY);
+
+        //  $frame->setSize($startX, $sizeY);
 
         return $frame->render($domDocument);
     }
@@ -270,4 +274,11 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
     {
         // TODO: Implement setFormat() method.
     }
+
+    public function setAlign($hAling = "left", $vAlign = "top")
+    {
+        $this->halign = $hAling;
+        $this->valign = $vAlign;
+    }
+
 }
