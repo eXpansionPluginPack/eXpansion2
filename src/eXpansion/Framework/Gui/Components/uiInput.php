@@ -174,8 +174,7 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
     protected function getScriptMouseClick()
     {
         return <<<EOL
-             if (Event.Control.HasClass("uiInput") ) {
-                 log("editing");
+             if (Event.Control.HasClass("uiInput") ) {              
                  declare CMlFrame frame <=> Event.Control.Parent;
                  (frame.Controls[1] as CMlEntry).StartEdition();               
             }					
