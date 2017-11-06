@@ -17,9 +17,9 @@ services:
     eXpansion.local_records.services.race_record_handler_factory:
         class: eXpansion\Bundle\LocalRecords\Services\RecordHandlerFactory
         arguments:
-            - '@eXpansion\Bundle\LocalRecords\Repository\RecordRepository'
-            - ASC
-            - '%eXpansion.local_records.nb_records%'
+            $recordRepository: '@eXpansion\Bundle\LocalRecords\Repository\RecordRepository'
+            $ordering: ASC
+            $nbRecords: '%eXpansion.local_records.nb_records%'
 
     # Plugins to save race records in all TM gamemodes.
     expansion.local_records.plugins.race_records:

@@ -6,6 +6,7 @@ use eXpansion\Framework\Core\Helpers\ChatNotification as ChatNotificationHelper;
 use eXpansion\Bundle\LocalRecords\DataProviders\Listener\RecordsDataListener;
 use eXpansion\Bundle\LocalRecords\Entity\Record;
 use eXpansion\Framework\Core\Helpers\Time;
+use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 
 
@@ -22,6 +23,10 @@ class ChatNotification implements RecordsDataListener
 
     /** @var Time */
     protected $timeFormater;
+
+
+    /** @var PlayerStorage */
+    protected $playerStorage;
 
     /** @var string */
     protected $translationPrefix;
@@ -40,11 +45,13 @@ class ChatNotification implements RecordsDataListener
     public function __construct(
         ChatNotificationHelper $chatNotification,
         Time $timeFormater,
+        PlayerStorage $playerStorage,
         $translationPrefix,
         $positionForPublicMessage
     ) {
         $this->chatNotification = $chatNotification;
         $this->timeFormater = $timeFormater;
+        $this->playerStorage = $playerStorage;
         $this->translationPrefix = $translationPrefix;
         $this->positionForPublicMessage = $positionForPublicMessage;
     }
@@ -64,13 +71,16 @@ class ChatNotification implements RecordsDataListener
                 '%score%' => $this->timeFormater->timeToText($firstRecord->getScore(), true),
             ]);
 
+            $online = $this->playerStorage->getOnline();
             $count = count($records);
             for ($i = 1; $i < $count; $i++) {
-                $this->sendMessage('loaded.any', $records[$i]->getPlayer()->getLogin(), [
-                    '%nickname%' => $records[$i]->getPlayer()->getNickname(),
-                    '%score%' => $this->timeFormater->timeToText($records[$i]->getScore(), true),
-                    '%position%' => $i + 1,
-                ]);
+                if (isset($online[$records[$i]->getPlayer()->getLogin()])) {
+                    $this->sendMessage('loaded.any', $records[$i]->getPlayer()->getLogin(), [
+                        '%nickname%' => $records[$i]->getPlayer()->getNickname(),
+                        '%score%' => $this->timeFormater->timeToText($records[$i]->getScore(), true),
+                        '%position%' => $i + 1,
+                    ]);
+                }
             }
         }
     }
@@ -171,7 +181,7 @@ class ChatNotification implements RecordsDataListener
         // Check to who to send.
         $to = null;
         if ($position > $this->positionForPublicMessage) {
-            $to = $record->getPlayer();
+            $to = $record->getPlayer()->getLogin();
         }
 
         // Check which message to send.
@@ -224,7 +234,7 @@ class ChatNotification implements RecordsDataListener
             'new.top1',
             null,
             [
-                '%nickname%' => $record->getPlayer()->getNickName(),
+                '%nickname%' => $record->getPlayer()->getNickname(),
                 '%score%' => $this->timeFormater->timeToText($record->getScore(), true),
                 '%position%' => 1,
             ]
@@ -238,7 +248,7 @@ class ChatNotification implements RecordsDataListener
     protected function sendMessage($message, $recipe, $params)
     {
         $this->chatNotification->sendMessage(
-            $this->translationPrefix.'.'.$message,
+            $this->translationPrefix . '.' . $message,
             $recipe,
             $params
         );

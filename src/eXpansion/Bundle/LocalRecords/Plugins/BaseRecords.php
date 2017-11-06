@@ -243,7 +243,7 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
      */
     public function onEndMatchStart($count, $time)
     {
-        // TODO: Implement onEndMatchStart() method.
+        // Nothing
     }
 
     /**
@@ -256,7 +256,7 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
      */
     public function onEndMatchEnd($count, $time)
     {
-        // TODO: Implement onEndMatchEnd() method.
+        // Nothing
     }
 
     /**
@@ -269,7 +269,7 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
      */
     public function onStartTurnStart($count, $time)
     {
-        // TODO: Implement onStartTurnStart() method.
+        // Nothing
     }
 
     /**
@@ -282,7 +282,7 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
      */
     public function onStartTurnEnd($count, $time)
     {
-        // TODO: Implement onStartTurnEnd() method.
+        // Nothing
     }
 
     /**
@@ -295,7 +295,7 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
      */
     public function onEndTurnStart($count, $time)
     {
-        // TODO: Implement onEndTurnStart() method.
+        // Nothing
     }
 
     /**
@@ -308,7 +308,7 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
      */
     public function onEndTurnEnd($count, $time)
     {
-        // TODO: Implement onEndTurnEnd() method.
+        // Nothing
     }
 
     /**
@@ -321,7 +321,7 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
      */
     public function onStartRoundStart($count, $time)
     {
-        // TODO: Implement onStartRoundStart() method.
+        // Nothing
     }
 
     /**
@@ -334,7 +334,7 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
      */
     public function onStartRoundEnd($count, $time)
     {
-        // TODO: Implement onStartRoundEnd() method.
+        // Nothing
     }
 
     /**
@@ -347,7 +347,7 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
      */
     public function onEndRoundStart($count, $time)
     {
-        // TODO: Implement onEndRoundStart() method.
+        // Nothing
     }
 
     /**
@@ -360,6 +360,6 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
      */
     public function onEndRoundEnd($count, $time)
     {
-        // TODO: Implement onEndRoundEnd() method.
+        // Nothing
     }
 }
