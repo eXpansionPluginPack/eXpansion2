@@ -9,6 +9,8 @@ use \eXpansion\Framework\Core\Storage\Data\Player as PlayerData;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\Core\Storage\Rankings;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMatch;
+use eXpansion\Framework\GameManiaplanet\ScriptMethods\GetScores;
+use eXpansion\Framework\GameManiaplanet\ScriptMethods\GetScoresInterface;
 use eXpansion\Framework\PlayersBundle\Repository\PlayerRepository;
 use \eXpansion\Framework\PlayersBundle\Entity\Player as PlayerEntity;
 
@@ -24,8 +26,8 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
     /** @var PlayerRepository */
     protected $playerRepository;
 
-    /** @var Rankings  */
-    protected $rankingsStorage;
+    /** @var GetScores  */
+    protected $getScores;
 
     /** @var PlayerStorage */
     protected $playerStorage;
@@ -40,12 +42,16 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
      * Player constructor.
      *
      * @param PlayerRepository $playerRepository
-     * @param Rankings         $rankings
+     * @param GetScoresInterface $getScores
+     * @param PlayerStorage $playerStorage
      */
-    public function __construct(PlayerRepository $playerRepository, Rankings $rankings, PlayerStorage $playerStorage)
-    {
+    public function __construct(
+        PlayerRepository $playerRepository,
+        GetScoresInterface $getScores,
+        PlayerStorage $playerStorage
+    ) {
         $this->playerRepository = $playerRepository;
-        $this->rankingsStorage = $rankings;
+        $this->getScores = $getScores;
         $this->playerStorage = $playerStorage;
     }
 
@@ -99,17 +105,26 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
      */
     public function onEndMatchEnd($count, $time)
     {
-        $rankings = $this->rankingsStorage->getCurrentRankings();
-        foreach ($rankings as $ranking) {
-            if ($ranking->rank ==1 /*&& sizeof($rankings) > 1*/) {
-                $player = $this->getPlayer($ranking->login);
-                $player->setWins($player->getWins() + 1);
+        $object = $this;
+        $this->getScores->get(function ($scores) use($object) {
+            $object->updateWithScores($scores);
+        });
+    }
 
-                $this->updatePlayer($player);
-                $this->playerRepository->save([$player]);
-            }
-        }
+    /**
+     * Update when scores is available.
+     *
+     * @param $scores
+     */
+    public function updateWithScores($scores)
+    {
+        // Update the winner player.
+        $player = $this->getPlayer($scores['winnerplayer']);
+        $player->setWins($player->getWins() + 1);
+        $this->updatePlayer($player);
+        $this->playerRepository->save([$player]);
 
+        // Update remaining players.
         foreach ($this->loggedInPlayers as $player) {
             $this->updatePlayer($player);
         }

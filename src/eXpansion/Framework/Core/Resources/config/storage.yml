@@ -35,10 +35,6 @@ services:
             $gameModeCodes: "%expansion.storage.gamedata.mode.codes%"
             $titles: "%expansion.storage.gamedata.titles%"
 
-    eXpansion\Framework\Core\Storage\Rankings:
-        tags:
-            - {name: expansion.plugin, data_provider: exp.timer}
-
     eXpansion\Framework\Core\Storage\Data\PlayerFactory:
         arguments:
             $class: "%expansion.framework.core.storage.data.player.class%"

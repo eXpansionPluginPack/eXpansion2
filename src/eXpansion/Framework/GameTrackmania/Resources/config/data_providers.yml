@@ -14,3 +14,10 @@ services:
             - {name: expansion.dataprovider, provider: "tm.script.race", interface: "%expansion.framework.game_trackmania.data_providers.base.interface%"}
             - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script}
             - {name: expansion.dataprovider.listener, event_name: Trackmania.Event.WayPoint, method: onWayPoint}
+
+    expansion.framework.game_trackmania.data_providers.method_get_scores:
+        class: eXpansion\Framework\GameTrackmania\DataProviders\MethodGetScoresDataProvider
+        tags:
+            - {name: expansion.dataprovider, provider: 'mp.method.get_scores', interface: eXpansion\Framework\Core\ScriptMethods\AbstractScriptMethod}
+            - {name: expansion.dataprovider.compatibility, title: TM}
+            - {name: expansion.dataprovider.listener, event_name: Trackmania.Scores, method: setScores}
