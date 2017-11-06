@@ -123,6 +123,19 @@ class RaceRecordsTest extends \PHPUnit_Framework_TestCase
         $raceRecords->onStartMatchEnd(0, 0);
         $raceRecords->onPlayerEndLap(0, 0, 0, 0, 0, 0, 0, 0, 0);
         $raceRecords->onPlayerWayPoint(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0);
+        $raceRecords->onEndMatchStart(0, 0);
+        $raceRecords->onEndMatchEnd(0, 0);
+        $raceRecords->onStartTurnStart(0, 0);
+        $raceRecords->onStartTurnEnd(0, 0);
+        $raceRecords->onEndTurnStart(0, 0);
+        $raceRecords->onEndTurnEnd(0, 0);
+        $raceRecords->onStartRoundStart(0, 0);
+        $raceRecords->onStartRoundEnd(0, 0);
+        $raceRecords->onEndRoundStart(0, 0);
+        $raceRecords->onEndRoundEnd(0, 0);
+        $raceRecords->getRecordsHandler();
+
+
     }
 
 

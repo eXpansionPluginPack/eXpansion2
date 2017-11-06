@@ -5,13 +5,17 @@ namespace Tests\eXpansion\Bundle\LocalRecords\Plugins;
 use eXpansion\Bundle\LocalRecords\Entity\Record;
 use eXpansion\Bundle\LocalRecords\Plugins\ChatNotification;
 use eXpansion\Framework\Core\Helpers\Time;
-use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
+use eXpansion\Framework\PlayersBundle\Entity\Player;
+use eXpansion\Framework\PlayersBundle\Storage\PlayerDb;
 
 class ChatNotificationTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $chatNotificationHelper;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $playerDbStorage;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $playerStorage;
@@ -26,10 +30,18 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
         $this->chatNotificationHelper = $this->getMockBuilder(\eXpansion\Framework\Core\Helpers\ChatNotification::class)
             ->disableOriginalConstructor()->getMock();
 
+        $this->playerDbStorage = $this->getMockBuilder(PlayerDb::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->playerDbStorage->method('get')->willReturnCallback(function($login) {
+            $player = new Player();
+            $player->setLogin($login);
+            $player->setNickname($login . ' - ' . 'nick');
+
+            return $player;
+        });
+
         $this->playerStorage = $this->getMockBuilder(PlayerStorage::class)
             ->disableOriginalConstructor()->getMock();
-        $this->playerStorage->method('getPlayerInfo')->willReturn(new Player());
-
 
         $this->timeFormatter = $this->getMockBuilder(Time::class)->getMock();
     }
@@ -53,7 +65,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'prefix.loaded.top1',
                 null,
-                ['%nickname%' => 'toto-1', '%score%' => null]
+                ['%nickname%' => 'toto-1 - nick', '%score%' => null]
             );
         $this->chatNotificationHelper
             ->expects($this->at(1))
@@ -61,7 +73,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'prefix.loaded.any',
                 'toto-2',
-                ['%nickname%' => null, '%score%' => null, '%position%' => 2]
+                ['%nickname%' => 'toto-2 - nick', '%score%' => null, '%position%' => 2]
             );
         $this->chatNotificationHelper
             ->expects($this->at(2))
@@ -69,7 +81,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'prefix.loaded.any',
                 'toto-4',
-                ['%nickname%' => null, '%score%' => null, '%position%' => 4]
+                ['%nickname%' => 'toto-4 - nick', '%score%' => null, '%position%' => 4]
             );
 
         $cnotificaiton = $this->getChatNotification();
@@ -92,7 +104,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'prefix.new.top1',
                 null,
-                ['%nickname%' => null, '%score%' => null, '%position%' => 1]
+                ['%nickname%' => 'toto - nick', '%score%' => null, '%position%' => 1]
             );
 
         $cnotificaiton->onLocalRecordsFirstRecord($this->getRecord('toto', 10), [], 1);
@@ -107,7 +119,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'prefix.new.top1',
                 null,
-                ['%nickname%' => null, '%score%' => null, '%position%' => 1]
+                ['%nickname%' => 'toto - nick', '%score%' => null, '%position%' => 1]
             );
 
         $cnotificaiton->onLocalRecordsBetterPosition(
@@ -127,7 +139,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'prefix.better.top1',
                 null,
-                ['%nickname%' => null, '%score%' => null, '%position%' => 1, '%old_position%' => 2, '%by%' => '-']
+                ['%nickname%' => 'toto - nick', '%score%' => null, '%position%' => 1, '%old_position%' => 2, '%by%' => '-']
             );
 
         $cnotificaiton->onLocalRecordsBetterPosition(
@@ -147,7 +159,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'prefix.better.top5',
                 null,
-                ['%nickname%' => null, '%score%' => null, '%position%' => 4, '%old_position%' => 7, '%by%' => '-']
+                ['%nickname%' => 'toto - nick', '%score%' => null, '%position%' => 4, '%old_position%' => 7, '%by%' => '-']
             );
 
         $cnotificaiton->onLocalRecordsBetterPosition(
@@ -166,7 +178,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'prefix.better.any',
                 null,
-                ['%nickname%' => null, '%score%' => null, '%position%' => 8, '%old_position%' => 10, '%by%' => '-']
+                ['%nickname%' => 'toto - nick', '%score%' => null, '%position%' => 8, '%old_position%' => 10, '%by%' => '-']
             );
 
         $cnotificaiton->onLocalRecordsBetterPosition(
@@ -185,7 +197,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'prefix.new.any',
                 null,
-                ['%nickname%' => null, '%score%' => null, '%position%' => 8, '%old_position%' => null, '%by%' => '-']
+                ['%nickname%' => 'toto - nick', '%score%' => null, '%position%' => 8, '%old_position%' => null, '%by%' => '-']
             );
 
         $cnotificaiton->onLocalRecordsBetterPosition(
@@ -205,7 +217,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'prefix.better.any',
                 'toto',
-                ['%nickname%' => null, '%score%' => null, '%position%' => 12, '%old_position%' => 30, '%by%' => '-']
+                ['%nickname%' => 'toto - nick', '%score%' => null, '%position%' => 12, '%old_position%' => 30, '%by%' => '-']
             );
 
         $cnotificaiton->onLocalRecordsBetterPosition(
@@ -226,7 +238,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'prefix.secures.top1',
                 null,
-                ['%nickname%' => null, '%score%' => null, '%position%' => 1, '%by%' => '-']
+                ['%nickname%' => 'toto - nick', '%score%' => null, '%position%' => 1, '%by%' => '-']
             );
 
         $cnotificaiton->onLocalRecordsSamePosition(
@@ -246,7 +258,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'prefix.secures.top5',
                 null,
-                ['%nickname%' => null, '%score%' => null, '%position%' => 5, '%by%' => '-']
+                ['%nickname%' => 'toto - nick', '%score%' => null, '%position%' => 5, '%by%' => '-']
             );
 
         $cnotificaiton->onLocalRecordsSamePosition(
@@ -267,7 +279,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'prefix.secures.any',
                 null,
-                ['%nickname%' => null, '%score%' => null, '%position%' => 8, '%by%' => '-']
+                ['%nickname%' => 'toto - nick', '%score%' => null, '%position%' => 8, '%by%' => '-']
             );
 
         $cnotificaiton->onLocalRecordsSamePosition(
@@ -288,14 +300,15 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'prefix.secures.any',
                 'toto',
-                ['%nickname%' => null, '%score%' => null, '%position%' => 30, '%by%' => '-']
+                ['%nickname%' => 'toto - nick', '%score%' => null, '%position%' => 30, '%by%' => '-']
             );
 
         $cnotificaiton->onLocalRecordsSamePosition(
             $this->getRecord('toto', 10),
             $this->getRecord('toto', 8),
             [],
-            30);
+            30
+        );
     }
 
     public function testBy()
@@ -309,7 +322,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'prefix.secures.any',
                 'toto',
-                ['%nickname%' => null, '%score%' => '00:10.00', '%position%' => 30, '%by%' => '-10.00']
+                ['%nickname%' => 'toto - nick', '%score%' => '00:10.00', '%position%' => 30, '%by%' => '-10.00']
             );
 
         $cnotificaiton->onLocalRecordsSamePosition(
@@ -330,7 +343,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'prefix.secures.any',
                 'toto',
-                ['%nickname%' => null, '%score%' => '00:01.00', '%position%' => 30, '%by%' => '-1.00']
+                ['%nickname%' => 'toto - nick', '%score%' => '00:01.00', '%position%' => 30, '%by%' => '-1.00']
             );
 
         $cnotificaiton->onLocalRecordsSamePosition(
@@ -355,8 +368,8 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
     {
         return new ChatNotification(
             $this->chatNotificationHelper,
-            $this->playerStorage,
             $this->timeFormatter,
+            $this->playerStorage,
             'prefix',
             10
         );
@@ -365,7 +378,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
     protected function getRecord($login, $score)
     {
         $record = new Record();
-        $record->setPlayerLogin($login);
+        $record->setPlayer($this->playerDbStorage->get($login));
         $record->setScore($score);
 
         return $record;
