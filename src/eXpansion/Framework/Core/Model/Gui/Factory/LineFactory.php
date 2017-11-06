@@ -2,6 +2,9 @@
 
 namespace eXpansion\Framework\Core\Model\Gui\Factory;
 
+use eXpansion\Framework\Gui\Components\uiCheckbox;
+use eXpansion\Framework\Gui\Components\uiInput;
+use eXpansion\Framework\Gui\Components\uiTooltip;
 use FML\Controls\Control;
 use FML\Controls\Frame;
 use FML\Controls\Label;
@@ -46,10 +49,10 @@ class LineFactory
      *
      * @param float $totalWidth
      * @param array $columns
-     * @param int   $index
+     * @param int $index
      * @param float $height
-     * @param bool  $autoNewLine
-     * @param int   $maxLines
+     * @param bool $autoNewLine
+     * @param int $maxLines
      *
      * @return Frame
      *
@@ -58,7 +61,7 @@ class LineFactory
     public function create($totalWidth, $columns, $index = 0, $height = 5.0, $autoNewLine = false, $maxLines = 1)
     {
         $totalCoef
-            = ($totalWidth - 1) / array_reduce($columns, function($carry, $item) {
+            = ($totalWidth - 1) / array_reduce($columns, function ($carry, $item) {
                 return $carry + $item['width'];
             });
 
@@ -70,6 +73,8 @@ class LineFactory
         foreach ($columns as $columnData) {
             if (isset($columnData['text'])) {
                 $element = $this->createTextColumn($totalCoef, $columnData, $postX, $height, $autoNewLine, $maxLines);
+            } elseif (isset($columnData['input'])) {
+                $element = $this->createInputColumn($totalCoef, $columnData, $postX);
             } elseif (isset($columnData['renderer'])) {
                 $element = $this->createRendererColumn($columnData, $postX);
             }
@@ -96,8 +101,8 @@ class LineFactory
      * @param array $columnData
      * @param float $postX
      * @param float $height
-     * @param bool  $autoNewLine
-     * @param int   $maxLines
+     * @param bool $autoNewLine
+     * @param int $maxLines
      *
      * @return Label
      */
@@ -116,6 +121,35 @@ class LineFactory
 
         return $label;
     }
+
+
+    protected function createInputColumn($totalCoef, $columnData, $postX)
+    {
+        /** @var uiTooltip $tooltip */
+        $tooltip = $columnData['tooltip'];
+        $value = $columnData['input'];
+        $i = $columnData['index'];
+        $type = gettype($value);
+
+        if ($type == "boolean") {
+            $element = new uiCheckbox("", "entry_".$i."_boolean", true);
+            if ($value === false) {
+                $element = new uiCheckbox("", "entry_".$i."_boolean", false);
+            }
+            $element->setY(3);
+        } else {
+            $element = new uiInput("entry_".$i."_".$type);
+            $element->setDefault($value);
+        }
+        $element->setPosition($postX, -0.5);
+        $element->setWidth(($columnData["width"] * $totalCoef) - 0.5);
+        $element->setHeight(4);
+
+        $tooltip->addTooltip($element, $type);
+
+        return $element;
+    }
+
 
     /**
      * @param $columnData

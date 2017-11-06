@@ -10,4 +10,7 @@ expansion_admin:
       window:
           scriptsettings:
               title: 'Script Settings'
+              column:
+                  name: 'Setting Name'
+                  value: 'Setting Value'
 
