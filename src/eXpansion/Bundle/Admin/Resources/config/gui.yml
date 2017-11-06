@@ -1,0 +1,18 @@
+parameters:
+
+services:
+    _defaults:
+        autowire: true
+        public: true
+
+    expansion.bundle.admin.gui.window.scriptsettings_factory:
+        class: eXpansion\Bundle\Admin\Plugins\Gui\ScriptSettingsWindowFactory
+        arguments:
+            $name:  'Script Settings'
+            $sizeX: 160
+            $sizeY: 90
+            $posX:  null
+            $posY:  null
+            $dataCollectionFactory: '@expansion.gui.gridbuilder.datacollection.array'
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}

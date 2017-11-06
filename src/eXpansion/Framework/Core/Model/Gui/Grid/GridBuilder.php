@@ -6,10 +6,13 @@ use eXpansion\Framework\Core\Model\Gui\Factory\LineFactory;
 use eXpansion\Framework\Core\Model\Gui\Factory\PagerFactory;
 use eXpansion\Framework\Core\Model\Gui\Grid\Column\AbstractColumn;
 use eXpansion\Framework\Core\Model\Gui\Grid\Column\ActionColumn;
+use eXpansion\Framework\Core\Model\Gui\Grid\Column\InputColumn;
 use eXpansion\Framework\Core\Model\Gui\Grid\Column\TextColumn;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
+use eXpansion\Framework\Gui\Components\uiDropdown;
+use eXpansion\Framework\Gui\Components\uiInput;
 use FML\Controls\Frame;
 use FML\Controls\Label;
 use FML\Types\Renderable;
@@ -17,8 +20,6 @@ use FML\Types\Renderable;
 
 /**
  * Class GridBuilder
- *
- * @TODO Add possibility to add actions on elements.
  *
  * @package eXpansion\Framework\Core\Model\Gui\Grid;
  * @author  oliver de Cramer <oliverde8@gmail.com>
@@ -69,6 +70,10 @@ class GridBuilder
 
     /** @var string[] */
     protected $temporaryActions = [];
+
+    /** @var array */
+    protected $temporaryEntries = [];
+
 
     /**
      * GridBuilder constructor.
@@ -160,6 +165,23 @@ class GridBuilder
     }
 
     /**
+     * @param      string $key
+     * @param      string $name
+     * @param      integer $widthCoefficiency
+     * @param bool $sortable
+     * @param bool $translatable
+     *
+     * @return $this
+     */
+    public function addInputColumn($key, $name, $widthCoefficiency)
+    {
+        $this->columns[] = new InputColumn($key, $name, $widthCoefficiency);
+
+        return $this;
+    }
+
+
+    /**
      * Add an action into a column.
      *
      * @param string $key
@@ -207,6 +229,7 @@ class GridBuilder
         $frame->setSize($width, $height);
 
         $posY = 0.;
+
         // Generating headers.
         // TODO if sortable create actions...
         $data = [];
@@ -214,7 +237,7 @@ class GridBuilder
             $data[] = [
                 'text' => $columnData->getName(),
                 'width' => $columnData->getWidthCoeficiency(),
-                'translatable' => true
+                'translatable' => true,
             ];
         }
 
@@ -246,6 +269,26 @@ class GridBuilder
                         'width' => $columnData->getWidthCoeficiency(),
                         'action' => $action,
                     ];
+                } elseif ($columnData instanceof InputColumn) {
+                    $value = $this->dataCollection->getLineData($lineData, $columnData->getKey());
+                    $type = gettype($value);
+
+                    if ($type == "boolean") {
+                        $renderer = new uiDropdown("entry_".$i,
+                            ["Yes" => "B_true", "No" => "B_false"]);
+                        $renderer->setSelectedIndex(0);
+                        if ($value === false) {
+                            $renderer->setSelectedIndex(1);
+                        }
+                    } else {
+                        $renderer = new uiInput("entry_".$i);
+                        $renderer->setDefault($value);
+                    }
+
+                    $data[] = [
+                        'renderer' => $renderer,
+                        'width' => $columnData->getWidthCoeficiency(),
+                    ];
                 }
             }
             $line = $this->lineFactory->create($frame->getWidth(), $data, $idx++);
@@ -276,16 +319,18 @@ class GridBuilder
     /**
      * Action callback to go to the first page.
      */
-    public function goToFirstPage()
+    public function goToFirstPage($login = null, $entries = [])
     {
+        $this->updateDataCollection($entries);
         $this->changePage(1);
     }
 
     /**
      * Action callback to go to the previous page.
      */
-    public function goToPreviousPage()
+    public function goToPreviousPage($login = null, $entries = [])
     {
+        $this->updateDataCollection($entries);
         if ($this->currentPage - 1 >= 1) {
             $this->changePage($this->currentPage - 1);
         }
@@ -294,8 +339,9 @@ class GridBuilder
     /**
      * Action callback to go to the next page.
      */
-    public function goToNextPage()
+    public function goToNextPage($login = null, $entries = [])
     {
+        $this->updateDataCollection($entries);
         if ($this->currentPage + 1 <= $this->dataCollection->getLastPageNumber()) {
             $this->changePage($this->currentPage + 1);
         }
@@ -304,9 +350,43 @@ class GridBuilder
     /**
      * Action callback to go to the last page.
      */
-    public function goToLastPage()
+    public function goToLastPage($login = null, $entries = [])
     {
+        $this->updateDataCollection($entries);
         $this->changePage($this->dataCollection->getLastPageNumber());
+    }
+
+    protected function updateDataCollection($entries)
+    {
+
+        $data = [];
+        $start = ($this->currentPage - 1) * $this->dataCollection->getPageSize();
+        foreach ($entries as $key => $value) {
+            $castedValue = (string)$value;
+
+            if (is_numeric($value)) {
+                $castedValue = (int)$value;
+            }
+            if ($value == "B_true") {
+                $castedValue = true;
+            }
+            if ($value == "B_false") {
+                $castedValue = false;
+            }
+
+            $data[(int)str_replace("entry_", "", $key)] = $castedValue;
+        }
+
+        $lines = $this->dataCollection->getData($this->currentPage);
+        foreach ($lines as $i => $lineData) {
+            $newData = $lineData;
+            foreach ($this->columns as $columnData) {
+                if ($columnData instanceof InputColumn) {
+                    $newData[$columnData->getKey()] = $data[$i];
+                }
+            }
+            $this->dataCollection->setDataByIndex($start + $i, $newData);
+        }
     }
 
     /**

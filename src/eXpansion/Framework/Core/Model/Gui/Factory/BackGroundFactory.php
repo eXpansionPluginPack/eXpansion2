@@ -24,7 +24,7 @@ class BackGroundFactory
     {
         $index = $index % 2;
 
-        $background = new Quad();
+        $background = Quad::create();
         $background->setSize($width, $height);
         if ($index == 0) {
             $background->setBackgroundColor("eee5");

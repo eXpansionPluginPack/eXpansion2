@@ -13,19 +13,19 @@ use eXpansion\Framework\Core\Model\Data\FilterInterface;
  */
 class DataCollection implements DataCollectionInterface
 {
-    /** @var array  */
+    /** @var array */
     protected $data;
 
     /** @var  array|null */
     protected $filteredData;
 
-    /** @var FilterInterface  */
+    /** @var FilterInterface */
     protected $filterHelper;
 
     /** @var array */
     protected $filters;
 
-    /** @var array  */
+    /** @var array */
     protected $sort = [];
 
     /** @var int */
@@ -61,7 +61,7 @@ class DataCollection implements DataCollectionInterface
     /**
      * Read data on a certain line
      *
-     * @param mixed  $lineData
+     * @param mixed $lineData
      * @param string $key
      *
      * @return string
@@ -87,13 +87,13 @@ class DataCollection implements DataCollectionInterface
     /**
      * Set filters & sorting to apply to the data.
      *
-     * @param array $filters    List of filters with the fallowing format :
+     * @param array $filters List of filters with the fallowing format :
      *                          ['key_to_filter'=> ['type_of_filter' , 'wordl"]]
      *                          For the possible types of filters check FilterInstance constants.
      *                          Example to find a map or author containing the keyword "hello"
      *                          ['name'=> ['like', 'hello"], 'author_loin'=> ['like', 'hello"]]
-     * @param string $sortField  Field to sort on
-     * @param string $sortOrder  Order DESC or ASC.
+     * @param string $sortField Field to sort on
+     * @param string $sortOrder Order DESC or ASC.
      *
      * @return $this
      */
@@ -105,6 +105,24 @@ class DataCollection implements DataCollectionInterface
         $this->sort[$sortField] = $sortOrder;
 
         return $this;
+    }
+
+    /**
+     * sets new data to line
+     *
+     * @param $index
+     * @param $data
+     */
+    public function setDataByIndex($line, $data)
+    {
+        echo "old data at index $line:\n";
+        print_r($this->data[$line]);
+
+        $this->data[$line] = $data;
+        echo "new date:\n";
+
+        print_r($this->data[$line]);
+        $this->filteredData = null;
     }
 
     /**
@@ -143,9 +161,17 @@ class DataCollection implements DataCollectionInterface
         if (is_null($this->filteredData)) {
             $this->filteredData = $this->filterHelper->filterData(
                 $this->data,
-                    $this->filters,
-                    FilterInterface::FILTER_LOGIC_OR
+                $this->filters,
+                FilterInterface::FILTER_LOGIC_OR
             );
         }
+    }
+
+    /**
+     * @return int
+     */
+    public function getPageSize()
+    {
+        return $this->pageSize;
     }
 }

@@ -1,0 +1,13 @@
+expansion_admin:
+  chat:
+      nopermission: "|error| {error}You don't have enough permissions to do this."
+      dedicatedexception: "|error| {error}Dedicated Server error: {highlight}%message%"
+      removemap: "|admin| {admin_info}%level% %admin% {admin_info}removes map %map% {admin_info}from current playlist."
+  gui:
+      button:
+          drop: "drop"
+          clear: "clear"
+      window:
+          scriptsettings:
+              title: 'Script Settings'
+

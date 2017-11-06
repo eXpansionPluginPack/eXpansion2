@@ -68,6 +68,7 @@ class uiInput extends abstractUiElement implements Renderable
             ->setName($this->name)
             ->setScriptEvents(true)
             ->addClasses($this->_classes)
+            ->setTextSize(2)
             ->setDataAttributes($this->_dataAttributes);
 
 

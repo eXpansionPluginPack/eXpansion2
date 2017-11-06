@@ -26,7 +26,10 @@ class uiDropdown extends abstractUiElement implements ScriptFeatureable
     protected $options;
 
     /**
-     * uiDropdown constructor.
+     * uiDropdown constructor \n
+     *
+     * Options ["display name" => "value"], both needs to be string
+     *
      * @param string $name
      * @param array $options
      * @param int $selectedIndex

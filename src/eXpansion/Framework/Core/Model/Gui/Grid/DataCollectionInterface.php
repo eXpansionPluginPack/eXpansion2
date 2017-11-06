@@ -22,7 +22,7 @@ interface DataCollectionInterface
     /**
      * Read data on a certain line
      *
-     * @param mixed  $lineData
+     * @param mixed $lineData
      * @param string $key
      *
      * @return string
@@ -61,9 +61,23 @@ interface DataCollectionInterface
     public function setPageSize($size);
 
     /**
+     * Get the number of elements to display on each page.
+     * @return int
+     */
+    public function getPageSize();
+
+    /**
      * Reset current filters & sorting.
      *
      * @return $this
      */
     public function reset();
+
+    /**
+     * Set data at index
+     * @param $index
+     * @param $data
+     */
+    public function setDataByIndex($index, $data);
+
 }

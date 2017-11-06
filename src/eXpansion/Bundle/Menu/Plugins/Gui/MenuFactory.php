@@ -73,16 +73,16 @@ class MenuFactory extends WidgetFactory
     Void onButtonOver(CMlControl Element) {
         Audio.PlaySoundEvent( CAudioManager::ELibSound::ScoreIncrease, 0, 0.);
 
-	if (Element is CMlLabel) {
-            declare El = (Element as CMlLabel);
-	}
+        if (Element is CMlLabel) {
+                declare El = (Element as CMlLabel);
+        }
+    
+        if (Element.HasClass("noAnim") == False) {
+            AnimMgr.Add(Element, "<elem scale=\"1.3\" />", 300, CAnimManager::EAnimManagerEasing::ElasticOut);
+        }
+    }   
 
-	if (Element.HasClass("noAnim") == False) {
-        AnimMgr.Add(Element, "<elem scale=\"1.3\" />", 300, CAnimManager::EAnimManagerEasing::ElasticOut);
-	}
-}
-
-Void onButtonOut(CMlControl Element) {
+    Void onButtonOut(CMlControl Element) {
         if (Element.HasClass("noAnim") == False) {
             AnimMgr.Add(Element, "<elem scale=\"1.0\" />", 300, CAnimManager::EAnimManagerEasing::ElasticOut);
 		}

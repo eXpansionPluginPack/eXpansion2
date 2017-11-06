@@ -1,6 +1,6 @@
 <?php
 
-namespace eXpansion\Bundle\AdminChat;
+namespace eXpansion\Bundle\Admin;
 
 use eXpansion\Framework\Core\DependencyInjection\Compiler\DataProviderPass;
 use eXpansion\Framework\Core\DependencyInjection\Compiler\PluginPass;
@@ -10,8 +10,9 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 /**
  * Class EmotesBundle
  *
- * @package eXpansion\Bundle\AdminChatBundle
+ * @package eXpansion\Bundle\AdminBundle
  */
-class AdminChatBundle extends Bundle
+class AdminBundle extends Bundle
 {
+
 }
