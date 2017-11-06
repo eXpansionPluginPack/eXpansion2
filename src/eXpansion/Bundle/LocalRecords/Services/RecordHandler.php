@@ -98,7 +98,7 @@ class RecordHandler
      *
      * @param string $login
      *
-     * @return bool
+     * @return integer|null
      */
     public function getPlayerPosition($login)
     {
@@ -121,7 +121,7 @@ class RecordHandler
      * Load records for a certain map.
      *
      * @param $mapUid
-     * @param $nbLaps
+     * @param integer $nbLaps
      */
     public function loadForMap($mapUid, $nbLaps)
     {
@@ -298,7 +298,7 @@ class RecordHandler
      * Update Records statistics.
      *
      * @param Record $record
-     * @param        $score
+     * @param        integer $score
      */
     protected function updateRecordStats(Record $record, $score)
     {
