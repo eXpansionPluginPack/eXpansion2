@@ -112,7 +112,7 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
     public function onEndMatchEnd($count, $time)
     {
         $object = $this;
-        $this->getScores->get(function ($scores) use($object) {
+        $this->getScores->get(function($scores) use($object) {
             $object->updateWithScores($scores);
         });
     }

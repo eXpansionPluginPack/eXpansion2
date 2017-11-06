@@ -6,7 +6,6 @@ use eXpansion\Framework\Core\Helpers\ChatNotification as ChatNotificationHelper;
 use eXpansion\Bundle\LocalRecords\DataProviders\Listener\RecordsDataListener;
 use eXpansion\Bundle\LocalRecords\Entity\Record;
 use eXpansion\Framework\Core\Helpers\Time;
-use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 
 
@@ -222,7 +221,7 @@ class ChatNotification implements RecordsDataListener
                 }
             }
 
-            return '-' . $securedBy;
+            return '-'.$securedBy;
         }
 
         return $securedBy = $this->timeFormater->timeToText(0);
@@ -248,7 +247,7 @@ class ChatNotification implements RecordsDataListener
     protected function sendMessage($message, $recipe, $params)
     {
         $this->chatNotification->sendMessage(
-            $this->translationPrefix . '.' . $message,
+            $this->translationPrefix.'.'.$message,
             $recipe,
             $params
         );
