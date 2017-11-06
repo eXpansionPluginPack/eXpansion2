@@ -7,10 +7,8 @@ use eXpansion\Framework\Core\Helpers\TMString;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use \eXpansion\Framework\Core\Storage\Data\Player as PlayerData;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
-use eXpansion\Framework\Core\Storage\Rankings;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMatch;
 use eXpansion\Framework\GameManiaplanet\ScriptMethods\GetScores;
-use eXpansion\Framework\GameManiaplanet\ScriptMethods\GetScoresInterface;
 use eXpansion\Framework\PlayersBundle\Repository\PlayerRepository;
 use \eXpansion\Framework\PlayersBundle\Entity\Player as PlayerEntity;
 
@@ -42,12 +40,12 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
      * Player constructor.
      *
      * @param PlayerRepository $playerRepository
-     * @param GetScoresInterface $getScores
+     * @param GetScores $getScores
      * @param PlayerStorage $playerStorage
      */
     public function __construct(
         PlayerRepository $playerRepository,
-        GetScoresInterface $getScores,
+        GetScores $getScores,
         PlayerStorage $playerStorage
     ) {
         $this->playerRepository = $playerRepository;
@@ -82,7 +80,6 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
             $player->setNicknameStripped(TMString::trimStyles($playerData->getNickName()));
 
             $update = true;
-
         }
         $player->setPath($playerData->getPath());
 
@@ -138,7 +135,7 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
             $this->updatePlayer($player);
         }
 
-        $this->playerRepository->save($this->loggedInPlayers);
+        $this->playerRepository->save(array_values($this->loggedInPlayers));
     }
 
     /**

@@ -20,7 +20,6 @@ class PlayerRepository extends \Doctrine\ORM\EntityRepository
     public function findByLogin($login)
     {
         $player = $this->findOneBy(['login' => $login]);
-
         return $player;
     }
 
