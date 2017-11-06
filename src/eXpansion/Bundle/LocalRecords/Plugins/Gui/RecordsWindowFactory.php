@@ -131,8 +131,8 @@ class RecordsWindowFactory extends WindowFactory
         foreach ($this->recordsData as $i => $record) {
             $recordsData[] = [
                 'position' => $i + 1,
-                'nickname' => $record->getPlayerLogin(),
-                'login' => $record->getPlayerLogin(),
+                'nickname' => $record->getPlayer()->getNickname(),
+                'login' => $record->getPlayer()->getNickname(),
                 'score' => $this->timeFormatter->timeToText($record->getScore(), true),
             ];
         }

@@ -1,8 +1,10 @@
 <?php
 
 namespace eXpansion\Bundle\LocalRecords\Services;
+
 use eXpansion\Bundle\LocalRecords\Entity\Record;
 use eXpansion\Bundle\LocalRecords\Repository\RecordRepository;
+use eXpansion\Framework\PlayersBundle\Storage\PlayerDb;
 
 /**
  * Class RecordHandler
@@ -45,6 +47,9 @@ class RecordHandler
     /** @var  RecordRepository */
     protected $recordRepository;
 
+    /** @var PlayerDb */
+    protected $playerDb;
+
     /** @var Record[] */
     protected $records;
 
@@ -57,19 +62,27 @@ class RecordHandler
     /** @var int */
     protected $currentNbLaps;
 
+    /** @var string */
     protected $currentMapUid;
 
     /**
-     * RaceRecordHandler constructor.
+     * RecordHandler constructor.
      *
      * @param RecordRepository $recordRepository
-     * @param int $nbRecords
+     * @param PlayerDb $playerDb
+     * @param $nbRecords
+     * @param string $ordering
      */
-    public function __construct(RecordRepository $recordRepository, $nbRecords, $ordering = self::ORDER_ASC)
-    {
+    public function __construct(
+        RecordRepository $recordRepository,
+        PlayerDb $playerDb,
+        $nbRecords,
+        $ordering = self::ORDER_ASC
+    ) {
         $this->recordRepository = $recordRepository;
         $this->nbRecords = $nbRecords;
         $this->ordering = $ordering;
+        $this->playerDb = $playerDb;
     }
 
     /**
@@ -127,8 +140,8 @@ class RecordHandler
         $position = 1;
         foreach ($this->records as $record)
         {
-            $this->recordsPerPlayer[$record->getPlayerLogin()] = $record;
-            $this->positionPerPlayer[$record->getPlayerLogin()] = $position++;
+            $this->recordsPerPlayer[$record->getPlayer()->getLogin()] = $record;
+            $this->positionPerPlayer[$record->getPlayer()->getLogin()] = $position++;
         }
     }
 
@@ -144,14 +157,15 @@ class RecordHandler
         $logins = array_diff(array_keys($this->recordsPerPlayer), $logins);
 
         if (!empty($logins)) {
+            /** @var Record[] $records */
             $records = $this->recordRepository->findBy(
-                ['mapUid' => $mapUid, 'nbLaps' => $nbLaps, 'playerLogin' => $logins],
+                ['mapUid' => $mapUid, 'nbLaps' => $nbLaps, 'player.login' => $logins],
                 ['score' => $this->getScoreOrdering()],
                 $this->nbRecords
             );
 
             foreach ($records as $record) {
-                $this->recordsPerPlayer[$record->getPlayerLogin()] = $record;
+                $this->recordsPerPlayer[$record->getPlayer()->getLogin()] = $record;
             }
         }
     }
@@ -187,8 +201,8 @@ class RecordHandler
             $record->setCheckpointTimes($checkpoints);
 
             $this->records[0] = $record;
-            $this->positionPerPlayer[$record->getPlayerLogin()] = 1;
-            $this->recordsPerPlayer[$record->getPlayerLogin()] = $record;
+            $this->positionPerPlayer[$record->getPlayer()->getLogin()] = 1;
+            $this->recordsPerPlayer[$record->getPlayer()->getLogin()] = $record;
 
             return [
                 self::COL_EVENT => self::EVENT_TYPE_FIRST_TIME,
@@ -215,7 +229,7 @@ class RecordHandler
             $newPosition = $oldPosition;
 
             $this->records[$recordIndex] = $record;
-            $this->positionPerPlayer[$record->getPlayerLogin()] = $oldPosition;
+            $this->positionPerPlayer[$record->getPlayer()->getLogin()] = $oldPosition;
 
             while ($recordIndex > 0 && $this->compareNewScore($this->records[$recordIndex - 1], $score)) {
                 $previousRecord = $this->records[$recordIndex - 1];
@@ -224,8 +238,8 @@ class RecordHandler
                 $this->records[$recordIndex] = $previousRecord;
 
                 $newPosition = $recordIndex;
-                $this->positionPerPlayer[$record->getPlayerLogin()] = $recordIndex;
-                $this->positionPerPlayer[$previousRecord->getPlayerLogin()] = $recordIndex + 1;
+                $this->positionPerPlayer[$record->getPlayer()->getLogin()] = $recordIndex;
+                $this->positionPerPlayer[$previousRecord->getPlayer()->getLogin()] = $recordIndex + 1;
 
                 $recordIndex--;
             }
@@ -265,14 +279,14 @@ class RecordHandler
     /**
      * Get a new record instance.
      *
-     * @param $login
+     * @param string $login
      *
      * @return Record
      */
     protected function getNewRecord($login)
     {
         $record = new Record();
-        $record->setPlayerLogin($login);
+        $record->setPlayer($this->playerDb->get($login));
         $record->setNbLaps($this->currentNbLaps);
         $record->setNbFinish(0);
         $record->setMapUid($this->currentMapUid);

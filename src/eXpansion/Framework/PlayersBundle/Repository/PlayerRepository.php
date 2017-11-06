@@ -39,6 +39,7 @@ class PlayerRepository extends \Doctrine\ORM\EntityRepository
             $this->getEntityManager()->persist($player);
         }
 
+        $this->getEntityManager()->clear();
         $this->getEntityManager()->flush();
     }
 }

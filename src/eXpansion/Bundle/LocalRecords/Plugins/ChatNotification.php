@@ -20,9 +20,6 @@ class ChatNotification implements RecordsDataListener
     /** @var ChatNotificationHelper */
     protected $chatNotification;
 
-    /** @var  PlayerStorage */
-    protected $playerStorage;
-
     /** @var Time */
     protected $timeFormater;
 
@@ -36,20 +33,17 @@ class ChatNotification implements RecordsDataListener
      * ChatNotification constructor.
      *
      * @param ChatNotificationHelper $chatNotification
-     * @param PlayerStorage $playerStorage
      * @param Time $timeFormater
      * @param string $translationPrefix
      * @param int $positionForPublicMessage
      */
     public function __construct(
         ChatNotificationHelper $chatNotification,
-        PlayerStorage $playerStorage,
         Time $timeFormater,
         $translationPrefix,
         $positionForPublicMessage
     ) {
         $this->chatNotification = $chatNotification;
-        $this->playerStorage = $playerStorage;
         $this->timeFormater = $timeFormater;
         $this->translationPrefix = $translationPrefix;
         $this->positionForPublicMessage = $positionForPublicMessage;
@@ -66,21 +60,17 @@ class ChatNotification implements RecordsDataListener
             $firstRecord = $records[0];
 
             $this->sendMessage('loaded.top1', null, [
-                '%nickname%' => $firstRecord->getPlayerLogin(), // TODO get player nickname from database.
+                '%nickname%' => $firstRecord->getPlayer()->getNickname(),
                 '%score%' => $this->timeFormater->timeToText($firstRecord->getScore(), true),
             ]);
 
-
-            $onlinePlayers = $this->playerStorage->getOnline();
             $count = count($records);
             for ($i = 1; $i < $count; $i++) {
-                if (isset($onlinePlayers[$records[$i]->getPlayerLogin()])) {
-                    $this->sendMessage('loaded.any', $records[$i]->getPlayerLogin(), [
-                        '%nickname%' => $onlinePlayers[$records[$i]->getPlayerLogin()]->getNickName(),
-                        '%score%' => $this->timeFormater->timeToText($records[$i]->getScore(), true),
-                        '%position%' => $i + 1,
-                    ]);
-                }
+                $this->sendMessage('loaded.any', $records[$i]->getPlayer()->getLogin(), [
+                    '%nickname%' => $records[$i]->getPlayer()->getNickname(),
+                    '%score%' => $this->timeFormater->timeToText($records[$i]->getScore(), true),
+                    '%position%' => $i + 1,
+                ]);
             }
         }
     }
@@ -132,7 +122,7 @@ class ChatNotification implements RecordsDataListener
         // Check to who to send.
         $to = null;
         if ($position > $this->positionForPublicMessage) {
-            $to = $record->getPlayerLogin();
+            $to = $record->getPlayer()->getLogin();
         }
 
         // Check which message to send.
@@ -157,7 +147,7 @@ class ChatNotification implements RecordsDataListener
             $msg,
             $to,
             [
-                '%nickname%' => $this->playerStorage->getPlayerInfo($record->getPlayerLogin())->getNickName(),
+                '%nickname%' => $record->getPlayer()->getNickName(),
                 '%score%' => $this->timeFormater->timeToText($record->getScore(), true),
                 '%position%' => $position,
                 '%old_position%' => $oldPosition,
@@ -181,7 +171,7 @@ class ChatNotification implements RecordsDataListener
         // Check to who to send.
         $to = null;
         if ($position > $this->positionForPublicMessage) {
-            $to = $record->getPlayerLogin();
+            $to = $record->getPlayer();
         }
 
         // Check which message to send.
@@ -201,7 +191,7 @@ class ChatNotification implements RecordsDataListener
             $msg,
             $to,
             [
-                '%nickname%' => $this->playerStorage->getPlayerInfo($record->getPlayerLogin())->getNickName(),
+                '%nickname%' => $record->getPlayer()->getNickName(),
                 '%score%' => $this->timeFormater->timeToText($record->getScore(), true),
                 '%position%' => $position,
                 '%by%' => $securedBy,
@@ -234,7 +224,7 @@ class ChatNotification implements RecordsDataListener
             'new.top1',
             null,
             [
-                '%nickname%' => $this->playerStorage->getPlayerInfo($record->getPlayerLogin())->getNickName(),
+                '%nickname%' => $record->getPlayer()->getNickName(),
                 '%score%' => $this->timeFormater->timeToText($record->getScore(), true),
                 '%position%' => 1,
             ]
@@ -243,7 +233,7 @@ class ChatNotification implements RecordsDataListener
 
     /**
      * @param string $message
-     * @param null|integer $recipe
+     * @param null|string $recipe
      */
     protected function sendMessage($message, $recipe, $params)
     {

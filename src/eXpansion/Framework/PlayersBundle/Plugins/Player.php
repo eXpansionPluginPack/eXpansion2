@@ -73,18 +73,27 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
     public function onPlayerConnect(PlayerData $playerData)
     {
         $player = $this->playerRepository->findByLogin($playerData->getLogin());
+        $update = false;
 
         if (is_null($player)) {
             $player = new PlayerEntity();
             $player->setLogin($playerData->getLogin());
             $player->setNickname($playerData->getNickName());
             $player->setNicknameStripped(TMString::trimStyles($playerData->getNickName()));
+
+            $update = true;
+
         }
         $player->setPath($playerData->getPath());
 
         $this->loggedInPlayers[$player->getLogin()] = $player;
         $this->playerLastUpTime[$player->getLogin()] = time();
         $player->setLastOnline(new \DateTime('now'));
+
+        if ($update) {
+            $this->updatePlayer($player);
+            $this->playerRepository->save([$player]);
+        }
     }
 
     /**
@@ -153,13 +162,13 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
      *
      * @return PlayerEntity
      */
-    protected function getPlayer($login)
+    public function getPlayer($login)
     {
         if (isset($this->loggedInPlayers[$login])) {
             return $this->loggedInPlayers[$login];
         }
 
-        return $this->playerRepository->findByLogin($login);;
+        return $this->playerRepository->findByLogin($login);
     }
 
     /**
