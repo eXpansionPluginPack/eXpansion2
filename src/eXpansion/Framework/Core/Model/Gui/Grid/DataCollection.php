@@ -115,13 +115,7 @@ class DataCollection implements DataCollectionInterface
      */
     public function setDataByIndex($line, $data)
     {
-        echo "old data at index $line:\n";
-        print_r($this->data[$line]);
-
         $this->data[$line] = $data;
-        echo "new date:\n";
-
-        print_r($this->data[$line]);
         $this->filteredData = null;
     }
 
@@ -174,4 +168,15 @@ class DataCollection implements DataCollectionInterface
     {
         return $this->pageSize;
     }
+
+
+    /**
+     * @return array
+     */
+    public function getAll()
+    {
+        return $this->data;
+    }
+
+
 }

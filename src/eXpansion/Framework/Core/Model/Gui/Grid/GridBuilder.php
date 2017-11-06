@@ -11,10 +11,13 @@ use eXpansion\Framework\Core\Model\Gui\Grid\Column\TextColumn;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
+use eXpansion\Framework\Gui\Components\uiCheckbox;
 use eXpansion\Framework\Gui\Components\uiDropdown;
 use eXpansion\Framework\Gui\Components\uiInput;
+use eXpansion\Framework\Gui\Components\uiTooltip;
 use FML\Controls\Frame;
 use FML\Controls\Label;
+use FML\Script\Features\Tooltip;
 use FML\Types\Renderable;
 
 
@@ -224,11 +227,14 @@ class GridBuilder
 
         $lineHeight = 5 + 0.5;
 
+
         $frame = new Frame();
         $frame->setPosition(0, 0);
         $frame->setSize($width, $height);
 
         $posY = 0.;
+        $tooltip = new uiTooltip();
+        $frame->addChild($tooltip);
 
         // Generating headers.
         // TODO if sortable create actions...
@@ -255,6 +261,7 @@ class GridBuilder
             $data = [];
             foreach ($this->columns as $columnData) {
                 if ($columnData instanceof TextColumn) {
+
                     $data[] = [
                         'text' => $this->dataCollection->getLineData($lineData, $columnData->getKey()),
                         'width' => $columnData->getWidthCoeficiency(),
@@ -274,16 +281,17 @@ class GridBuilder
                     $type = gettype($value);
 
                     if ($type == "boolean") {
-                        $renderer = new uiDropdown("entry_".$i,
-                            ["Yes" => "B_true", "No" => "B_false"]);
-                        $renderer->setSelectedIndex(0);
+                        $renderer = new uiCheckbox("", "entry_".$i."_boolean", true);
                         if ($value === false) {
-                            $renderer->setSelectedIndex(1);
+                            $renderer = new uiCheckbox("", "entry_".$i."_boolean", false);
                         }
+                        $renderer->setY(3);
                     } else {
-                        $renderer = new uiInput("entry_".$i);
+                        $renderer = new uiInput("entry_".$i."_".$type);
                         $renderer->setDefault($value);
                     }
+
+                    $tooltip->addTooltip($renderer, $type);
 
                     $data[] = [
                         'renderer' => $renderer,
@@ -356,25 +364,18 @@ class GridBuilder
         $this->changePage($this->dataCollection->getLastPageNumber());
     }
 
-    protected function updateDataCollection($entries)
+    /** updates dataCollection from entries
+     *
+     */
+    public function updateDataCollection($entries)
     {
 
         $data = [];
         $start = ($this->currentPage - 1) * $this->dataCollection->getPageSize();
         foreach ($entries as $key => $value) {
-            $castedValue = (string)$value;
-
-            if (is_numeric($value)) {
-                $castedValue = (int)$value;
-            }
-            if ($value == "B_true") {
-                $castedValue = true;
-            }
-            if ($value == "B_false") {
-                $castedValue = false;
-            }
-
-            $data[(int)str_replace("entry_", "", $key)] = $castedValue;
+            $array = explode("_", str_replace("entry_", "", $key));
+            setType($value, $array[1]);
+            $data[$array[0]] = $value;
         }
 
         $lines = $this->dataCollection->getData($this->currentPage);
@@ -387,6 +388,15 @@ class GridBuilder
             }
             $this->dataCollection->setDataByIndex($start + $i, $newData);
         }
+    }
+
+    /** get dataCollection
+     *
+     * @return DataCollectionInterface
+     */
+    public function getDataCollection()
+    {
+        return $this->dataCollection;
     }
 
     /**

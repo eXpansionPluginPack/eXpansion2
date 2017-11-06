@@ -80,4 +80,12 @@ interface DataCollectionInterface
      */
     public function setDataByIndex($index, $data);
 
+    /**
+     * gets everything from datacollection
+     * @return array|mixed
+     */
+
+    public function getAll();
+
+
 }
