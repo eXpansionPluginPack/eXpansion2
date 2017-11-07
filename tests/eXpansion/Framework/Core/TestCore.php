@@ -48,7 +48,7 @@ class TestCore extends KernelTestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->container->set(Console::class, $consoleMock);
-
+!
         $outputMock = $this->getMockBuilder(OutputInterface::class)->getMock();
         $consoleMock->method('getConsoleOutput')->willReturn($outputMock);
 

@@ -208,6 +208,14 @@ class GuiHandler implements
     }
 
     /**
+     * @param int $charLimit
+     */
+    public function setCharLimit($charLimit)
+    {
+        $this->charLimit = $charLimit;
+    }
+
+    /**
      * List of all manialinks that are currently displayed.
      *
      * @return ManialinkInterface[][]
