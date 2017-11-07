@@ -13,6 +13,7 @@ services:
             - {name: expansion.plugin, data_provider: exp.timer}
             - {name: expansion.plugin, data_provider: expansion.user_group}
             - {name: expansion.plugin, data_provider: mp.legacy.player}
+    eXpansion\Framework\Core\Plugins\GuiHandlerInterface: '@eXpansion\Framework\Core\Plugins\GuiHandler'
 
     eXpansion\Framework\Core\Plugins\Gui\ActionFactory:
         class: 'eXpansion\Framework\Core\Plugins\Gui\ActionFactory'

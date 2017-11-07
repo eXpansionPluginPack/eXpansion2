@@ -3,9 +3,8 @@
 namespace eXpansion\Framework\Core\Model\Gui;
 
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
-use eXpansion\Framework\Core\Plugins\GuiHandler;
+use eXpansion\Framework\Core\Plugins\GuiHandlerInterface;
 use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
-
 
 /**
  * Class ManialinkFactoryContext
@@ -18,7 +17,7 @@ class ManialinkFactoryContext
     /** @var  string */
     protected $className;
 
-    /** @var  GuiHandler */
+    /** @var  GuiHandlerInterface */
     protected $guiHandler;
 
     /** @var Factory */
@@ -30,11 +29,11 @@ class ManialinkFactoryContext
     /**
      * ManialinkFactoryContext constructor.
      *
-     * @param GuiHandler    $guiHandler
-     * @param Factory       $groupFactory
-     * @param ActionFactory $actionFactory
+     * @param GuiHandlerInterface $guiHandler
+     * @param Factory             $groupFactory
+     * @param ActionFactory       $actionFactory
      */
-    public function __construct($className, GuiHandler $guiHandler, Factory $groupFactory, ActionFactory $actionFactory)
+    public function __construct($className, GuiHandlerInterface $guiHandler, Factory $groupFactory, ActionFactory $actionFactory)
     {
         $this->className = $className;
         $this->guiHandler = $guiHandler;
@@ -51,7 +50,7 @@ class ManialinkFactoryContext
     }
 
     /**
-     * @return GuiHandler
+     * @return GuiHandlerInterface
      */
     public function getGuiHandler()
     {

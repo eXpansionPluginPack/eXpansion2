@@ -19,7 +19,11 @@ use Psr\Log\LoggerInterface;
  * @package eXpansion\Framework\Core\Plugins\Gui
  * @author Oliver de Cramer
  */
-class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserGroup, ListenerInterfaceMpLegacyPlayer
+class GuiHandler implements
+    ListenerInterfaceExpTimer,
+    ListenerInterfaceExpUserGroup,
+    ListenerInterfaceMpLegacyPlayer,
+    GuiHandlerInterface
 {
     /** @var Connection */
     protected $connection;
@@ -273,14 +277,6 @@ class GuiHandler implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserG
         if (isset($this->displayeds[$group->getName()])) {
             unset($this->displayeds[$group->getName()]);
         }
-    }
-
-    /**
-     * @param int $charLimit
-     */
-    public function setCharLimit($charLimit)
-    {
-        $this->charLimit = $charLimit;
     }
 
     public function onPlayerConnect(Player $player)
