@@ -7,7 +7,7 @@ use \eXpansion\Framework\PlayersBundle\Plugins\Player as PlayerPlugin;
 /**
  * Class Player
  *
- * @author    de Cramer Oliver<oldec@smile.fr>
+ * @author    de Cramer Oliver<oliverde8@gmail.com>
  * @copyright 2017 Smile
  * @package eXpansion\Framework\PlayersBundle\Storage
  */

@@ -2,7 +2,7 @@
 /**
  * File ReasonUserCommandTest.php
  *
- * @author    de Cramer Oliver<oldec@smile.fr>
+ * @author    de Cramer Oliver<oliverde8@gmail.com>
  * @copyright 2017 Smile
  */
 

@@ -7,7 +7,7 @@ use eXpansion\Framework\Core\DataProviders\MethodScriptDataProviderInterface;
 /**
  * Class AbstractScriptMethod
  *
- * @author    de Cramer Oliver<oldec@smile.fr>
+ * @author    de Cramer Oliver<oliverde8@gmail.com>
  * @copyright 2017 Smile
  * @package eXpansion\Framework\Core\ScriptMethods
  */

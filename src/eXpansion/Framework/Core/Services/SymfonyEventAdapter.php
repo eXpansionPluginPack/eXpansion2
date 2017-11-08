@@ -12,7 +12,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 /**
  * Class StorageProvider
  *
- * @author    de Cramer Oliver<oldec@smile.fr>
+ * @author    de Cramer Oliver<oliverde8@gmail.com>
  * @copyright 2017 Smile
  * @package eXpansion\Framework\Core\Services
  */

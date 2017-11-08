@@ -8,7 +8,7 @@ use eXpansion\Framework\Core\ScriptMethods\AbstractScriptMethod;
 /**
  * Class GetScores
  *
- * @author    de Cramer Oliver<oldec@smile.fr>
+ * @author    de Cramer Oliver<oliverde8@gmail.com>
  * @copyright 2017 Smile
  * @package eXpansion\Framework\GameManiaplanet\ScriptMethods
  */

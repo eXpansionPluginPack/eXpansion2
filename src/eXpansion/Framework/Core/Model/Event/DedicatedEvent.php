@@ -7,7 +7,7 @@ use Symfony\Component\EventDispatcher\Event as BaseEvent;
 /**
  * Class Event
  *
- * @author    de Cramer Oliver<oldec@smile.fr>
+ * @author    de Cramer Oliver<oliverde8@gmail.com>
  * @copyright 2017 Smile
  * @package eXpansion\Framework\Core\Model
  */
