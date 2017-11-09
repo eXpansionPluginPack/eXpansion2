@@ -10,6 +10,7 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\GuiHandler;
 use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
+use eXpansion\Framework\Core\Storage\Data\Player;
 
 /**
  * Class ManialiveFactory allow the creation of manialinks.
@@ -96,11 +97,14 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
     {
         if (is_string($group)) {
             $group = $this->groupFactory->createForPlayer($group);
+        } elseif ($group instanceof Player) {
+            $group = $this->groupFactory->createForPlayer((string)$group);
         } else {
             if (is_array($group)) {
                 $group = $this->groupFactory->createForPlayers($group);
             }
         }
+
 
         if (isset($this->manialinks[$group->getName()])) {
             $this->update($group);

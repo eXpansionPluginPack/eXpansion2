@@ -20,7 +20,7 @@ class MemoryWidgetFactory extends WidgetFactory
         $this->memoryMessage = new Label();
         $this->memoryMessage->setTextPrefix('$s')->setText("waiting data...");
 
-        $manialink->getContentFrame()->setScale(0.8)->setPosition(160, -130);
+        $manialink->getContentFrame()->setScale(0.8);
         $manialink->addChild($this->memoryMessage);
 
     }

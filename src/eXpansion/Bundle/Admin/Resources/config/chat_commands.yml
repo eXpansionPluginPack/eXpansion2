@@ -1,0 +1,26 @@
+services:
+    _defaults:
+        autowire: true
+
+    expansion.bundle.admin.plugins.chat_commands:
+          class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
+          arguments:
+              -
+                - '@eXpansion\Bundle\Admin\ChatCommand\ScriptPanel'
+                - '@eXpansion\Bundle\Admin\ChatCommand\ServerPanel'
+          tags:
+              - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}
+
+    eXpansion\Bundle\Admin\ChatCommand\ScriptPanel:
+        class: eXpansion\Bundle\Admin\ChatCommand\ScriptPanel
+        arguments:
+            $command: "script"
+            $permission: 'admin'
+            $aliases: []
+
+    eXpansion\Bundle\Admin\ChatCommand\ServerPanel:
+        class: eXpansion\Bundle\Admin\ChatCommand\ServerPanel
+        arguments:
+            $command: "server"
+            $permission: 'admin'
+            $aliases: []

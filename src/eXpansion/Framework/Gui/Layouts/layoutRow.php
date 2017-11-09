@@ -42,6 +42,10 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
      */
     protected $startY;
 
+    protected $hAlign = "left";
+    protected $vAlign = "top";
+
+
     /**
      * layoutLine constructor.
      * @param float $startX
@@ -100,6 +104,7 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
     public function setY($startY)
     {
         $this->startY = $startY;
+
         return $this;
     }
 
@@ -113,6 +118,7 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
     public function render(\DOMDocument $domDocument)
     {
         $frame = new Frame();
+        $frame->setAlign($this->hAlign, $this->vAlign);
         $frame->setPosition($this->startX, $this->startY);
         $frame->addClasses($this->frameClasses);
 
@@ -124,8 +130,6 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
             $startY -= $element->getHeight() - $this->margin;
             $frame->addChild($element);
         }
-
-        $frame->setSize($this->getWidth(), $this->getHeight());
 
         return $frame->render($domDocument);
     }
@@ -301,4 +305,12 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
         $this->width = $sizeX;
         $this->height = $sizeY;
     }
+
+    public function setAlign($hAling = "left", $vAlign = "top")
+    {
+        $this->halign = $hAling;
+        $this->valign = $vAlign;
+    }
+
+
 }

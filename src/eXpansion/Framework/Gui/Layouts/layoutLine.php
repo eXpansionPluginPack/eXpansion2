@@ -33,6 +33,8 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
      * @var float
      */
     protected $startY = 0.;
+    protected $hAlign = "left";
+    protected $vAlign = "top";
 
     /**
      * layoutLine constructor.
@@ -51,9 +53,12 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
         $this->elements = $elements;
         $this->startX = $startX;
         $this->startY = $startY;
+        $sizeY = 0;
         foreach ($this->elements as $idx => $element) {
             $this->width += $element->getWidth() + $this->margin;
-            $this->height += $element->getHeight();
+            if ($element->getY() + $element->getHeight() > $sizeY) {
+                $this->setHeight($element->getHeight());
+            }
         }
 
     }
@@ -67,6 +72,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
     public function render(\DOMDocument $domDocument)
     {
         $frame = new Frame();
+        $frame->setAlign($this->hAlign, $this->vAlign);
         $frame->setPosition($this->startX, $this->startY);
         $frame->addClasses($this->frameClasses);
 
@@ -76,11 +82,10 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
             $element->setX($startX);
             $startX += $element->getWidth() + $this->margin;
             if ($element->getY() + $element->getHeight() > $sizeY) {
-                $sizeY = $element->getHeight();
+                $this->setHeight($element->getHeight());
             }
             $frame->addChild($element);
         }
-        $frame->setSize($startX, $sizeY);
 
         return $frame->render($domDocument);
     }
@@ -270,4 +275,11 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
     {
         // TODO: Implement setFormat() method.
     }
+
+    public function setAlign($hAling = "left", $vAlign = "top")
+    {
+        $this->halign = $hAling;
+        $this->valign = $vAlign;
+    }
+
 }

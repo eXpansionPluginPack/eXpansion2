@@ -78,6 +78,8 @@ class Widget extends Manialink implements Container
         $windowFrame->addChild($this->contentFrame);
 
         $toggleInterfaceF9 = new ToggleInterface("F9");
+        $toggleInterfaceF9->setControl($windowFrame);
+
         $this->manialink->getScript()
             ->addFeature($toggleInterfaceF9);
 

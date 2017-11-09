@@ -39,7 +39,7 @@ class uiTextbox extends abstractUiElement implements Renderable
         $this->name = $name;
         $this->default = $default;
         $this->lines = $lines;
-        $this->setSize($width, ($lines * 5)+2);
+        $this->setSize($width, ($lines * 5) + 2);
     }
 
     /**
@@ -65,7 +65,7 @@ class uiTextbox extends abstractUiElement implements Renderable
 
 
         $input = new TextEdit();
-        $input->setSize($this->width, $this->height-2)
+        $input->setSize($this->width, $this->height - 2)
             ->setPosition(1, -1)
             ->setDefault($this->default)
             ->setAlign("left", "top")
@@ -73,7 +73,7 @@ class uiTextbox extends abstractUiElement implements Renderable
             ->setAreaColor("0005")
             ->setAreaFocusColor('000a')
             ->setTextFormat('Basic')
-          //  ->setName($this->name) // @todo enable when FML gets fixed
+            //  ->setName($this->name) // @todo enable when FML gets fixed
             ->setScriptEvents(true)
             ->addClasses($this->_classes)
             ->setDataAttributes($this->_dataAttributes);
@@ -165,5 +165,10 @@ class uiTextbox extends abstractUiElement implements Renderable
         $this->lines = $lines;
 
         return $this;
+    }
+
+    public function getHeight()
+    {
+        return $this->height + 2;
     }
 }
