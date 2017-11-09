@@ -8,6 +8,7 @@ use eXpansion\Framework\Gui\Components\UiButton;
 use eXpansion\Framework\Gui\Components\uiCheckbox;
 use eXpansion\Framework\Gui\Components\uiDropdown;
 use eXpansion\Framework\Gui\Components\uiInput;
+use eXpansion\Framework\Gui\Components\uiInputMasked;
 use eXpansion\Framework\Gui\Components\uiLabel;
 use eXpansion\Framework\Gui\Components\uiLine;
 use eXpansion\Framework\Gui\Components\uiTextbox;
@@ -29,6 +30,7 @@ use FML\Controls\Frame;
  * @method uiCheckbox createCheckbox($text, $name, $checked = false, $disabled = false)
  * @method uiDropdown createDropdown($name, $options, $selectedIndex = -1, $isOpened = false)
  * @method uiInput createInput($name, $default = "", $width = 30)
+ * @method uiInputMasked createInputMasked($name, $default = "", $width = 30)
  * @method uiLabel createLabel($text = "", $type = uiLabel::TYPE_NORMAL, $controlId = null)
  * @method uiLine createLine($x, $y)
  * @method uiTextbox createTextbox($name, $default = "", $lines = 1, $width = 30)
@@ -82,6 +84,7 @@ class Factory
 
             if (isset($this->classes[$name])) {
                 $class = $this->classes[$name];
+
                 return new $class(...$arguments);
             }
 

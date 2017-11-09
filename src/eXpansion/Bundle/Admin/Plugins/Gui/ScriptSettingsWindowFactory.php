@@ -21,10 +21,10 @@ use Maniaplanet\DedicatedServer\Connection;
 
 
 /**
- * Class MenuFactory
+ * Class Script settings factory
  *
  * @package eXpansion\Bundle\Menu\Plugins\Gui;
- * @author  oliver de Cramer <oliverde8@gmail.com>
+ * @author reaby
  */
 class ScriptSettingsWindowFactory extends GridWindowFactory
 {
@@ -105,12 +105,20 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
 
     }
 
+    /** Callback for apply button
+     *
+     * @param $login
+     * @param $entries
+     * @param $args
+     */
     public function callbackApply($login, $entries, $args)
     {
         /** @var GridBuilder $grid */
         $grid = $args['grid'];
-        $grid->updateDataCollection($entries);
 
+        $grid->updateDataCollection($entries); // update datacollection
+
+        // build settings array from datacollection
         $settings = [];
         foreach ($grid->getDataCollection()->getAll() as $key => $value) {
             $settings[$value['name']] = $value['value'];
@@ -124,7 +132,9 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
         }
     }
 
-
+    /**
+     * helper function to fetch script settings
+     */
     public function fetchScriptSettings()
     {
         $this->genericData = [];

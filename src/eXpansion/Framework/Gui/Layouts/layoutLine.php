@@ -53,9 +53,12 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
         $this->elements = $elements;
         $this->startX = $startX;
         $this->startY = $startY;
+        $sizeY = 0;
         foreach ($this->elements as $idx => $element) {
             $this->width += $element->getWidth() + $this->margin;
-            $this->height += $element->getHeight();
+            if ($element->getY() + $element->getHeight() > $sizeY) {
+                $this->setHeight($element->getHeight());
+            }
         }
 
     }
@@ -79,12 +82,10 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
             $element->setX($startX);
             $startX += $element->getWidth() + $this->margin;
             if ($element->getY() + $element->getHeight() > $sizeY) {
-                $sizeY = $element->getHeight();
+                $this->setHeight($element->getHeight());
             }
             $frame->addChild($element);
         }
-
-        //  $frame->setSize($startX, $sizeY);
 
         return $frame->render($domDocument);
     }

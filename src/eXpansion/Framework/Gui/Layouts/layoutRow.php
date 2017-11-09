@@ -131,8 +131,6 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
             $frame->addChild($element);
         }
 
-        // $frame->setSize($this->getWidth(), $this->getHeight());
-
         return $frame->render($domDocument);
     }
 

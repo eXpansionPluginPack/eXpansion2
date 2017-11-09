@@ -105,8 +105,12 @@ class ChatCommandDataProvider extends AbstractDataProvider
                 } /** @noinspection PhpUndefinedClassInspection */
                 catch (RuntimeException $e) {
                     $this->chatNotification->sendMessage($e->getMessage(), $login);
+                    // @todo add proper logging
+                    echo $e->getTrace();
                 } catch (\Exception $e) {
                     $this->chatNotification->sendMessage($e->getMessage(), $login);
+                    // @todo add proper logging
+                    echo $e->getTrace();
                 }
             }
         }

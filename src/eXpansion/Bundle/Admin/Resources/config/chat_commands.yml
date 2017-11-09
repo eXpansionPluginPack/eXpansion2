@@ -7,6 +7,7 @@ services:
           arguments:
               -
                 - '@eXpansion\Bundle\Admin\ChatCommand\ScriptPanel'
+                - '@eXpansion\Bundle\Admin\ChatCommand\ServerPanel'
           tags:
               - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}
 
@@ -14,5 +15,12 @@ services:
         class: eXpansion\Bundle\Admin\ChatCommand\ScriptPanel
         arguments:
             $command: "script"
+            $permission: 'admin'
+            $aliases: []
+
+    eXpansion\Bundle\Admin\ChatCommand\ServerPanel:
+        class: eXpansion\Bundle\Admin\ChatCommand\ServerPanel
+        arguments:
+            $command: "server"
             $permission: 'admin'
             $aliases: []
