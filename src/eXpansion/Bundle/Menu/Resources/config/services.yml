@@ -1,0 +1,20 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    eXpansion\Bundle\Menu\DataProviders\MenuItemProvider:
+        class: eXpansion\Bundle\Menu\DataProviders\MenuItemProvider
+        tags:
+          - {name: 'expansion.dataprovider', provider: "exp.menu.items", interface: 'eXpansion\Bundle\Menu\DataProviders\Listener\ListenerMenuItemProviderInterface'}
+          - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
+
+    eXpansion\Bundle\Menu\Services\:
+        resource: '../../Services/*'
+        exclude: '../../Services/Factories/*'
+
+    eXpansion\Bundle\Menu\Services\Factories\:
+        resource: '../../Services/Factories/*'
+        tags:
+          - {name: 'expansion.menu.item.factory'}

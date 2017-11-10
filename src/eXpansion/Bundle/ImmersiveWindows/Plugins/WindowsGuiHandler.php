@@ -13,7 +13,7 @@ use eXpansion\Framework\Core\Storage\Data\Player;
  *  - Prevent more then 1 window to open.
  *  - Change the display
  *
- * @author    de Cramer Oliver<oldec@smile.fr>
+ * @author    de Cramer Oliver<oliverde8@gmail.com>
  * @copyright 2017 Smile
  * @package eXpansion\Bundle\Menu\Plugins
  */

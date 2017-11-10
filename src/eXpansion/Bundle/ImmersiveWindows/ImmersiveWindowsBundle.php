@@ -2,8 +2,7 @@
 
 namespace eXpansion\Bundle\ImmersiveWindows;
 
-use eXpansion\Framework\Core\DependencyInjection\Compiler\DataProviderPass;
-use eXpansion\Framework\Core\DependencyInjection\Compiler\PluginPass;
+use eXpansion\Bundle\ImmersiveWindows\DependencyInjection\Compiler\Override;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -21,6 +20,6 @@ class ImmersiveWindowsBundle extends Bundle
     {
         parent::build($container);
 
-        $container->addCompilerPass(new Pass());
+        $container->addCompilerPass(new Override());
     }
 }
