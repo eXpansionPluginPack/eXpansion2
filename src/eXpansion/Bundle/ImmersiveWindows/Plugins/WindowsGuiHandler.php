@@ -1,6 +1,6 @@
 <?php
 
-namespace eXpansion\Bundle\Menu\Plugins;
+namespace eXpansion\Bundle\ImmersiveWindows\Plugins;
 
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;

@@ -4,9 +4,3 @@ services:
         autowire: true
         tags:
             - {name: 'expansion.plugin', data_provider: 'mp.legacy.map'}
-
-    eXpansion\Bundle\Menu\Plugins\WindowsGuiHandler:
-        class: eXpansion\Bundle\Menu\Plugins\WindowsGuiHandler
-        autowire: true
-        tags:
-            - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}

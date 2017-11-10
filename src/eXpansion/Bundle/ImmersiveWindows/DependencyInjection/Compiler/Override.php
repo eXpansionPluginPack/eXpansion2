@@ -1,8 +1,8 @@
 <?php
 
-namespace eXpansion\Bundle\Menu\DependencyInjection\Compiler;
+namespace eXpansion\Bundle\ImmersiveWindows\DependencyInjection\Compiler;
 
-use eXpansion\Bundle\Menu\Plugins\WindowsGuiHandler;
+use eXpansion\Bundle\ImmersiveWindows\Plugins\WindowsGuiHandler;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\Reference;
  * @copyright 2017 Smile
  * @package eXpansion\Bundle\Menu\DependencyInjection\Compiler
  */
-class Pass implements CompilerPassInterface
+class Override implements CompilerPassInterface
 {
 
     /**

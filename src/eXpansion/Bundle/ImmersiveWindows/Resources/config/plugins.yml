@@ -1,0 +1,6 @@
+sercices:
+    eXpansion\Bundle\ImmersiveWindows\Plugins\WindowsGuiHandler:
+        class: eXpansion\Bundle\ImmersiveWindows\Plugins\WindowsGuiHandler
+        autowire: true
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
