@@ -89,20 +89,14 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
             ->setDataCollection($collection)
             ->setManialinkFactory($this)
             ->addTextColumn(
-                'index',
-                'expansion_admin.gui.window.column.index',
-                1,
-                true,
-                false
-            )->addTextColumn(
                 'name',
-                'expansion_admin.gui.window.column.name',
+                'expansion_admin.gui.window.scriptsettings.column.name',
                 5,
                 true,
                 false
             )->addInputColumn(
                 'value',
-                'expansion_admin.gui.window.column.author',
+                'expansion_admin.gui.window.scriptsettings.column.value',
                 3);
 
         $manialink->setData('grid', $gridBuilder);

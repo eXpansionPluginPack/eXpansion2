@@ -274,23 +274,11 @@ class GridBuilder
                     ];
                 } elseif ($columnData instanceof InputColumn) {
                     $value = $this->dataCollection->getLineData($lineData, $columnData->getKey());
-                    $type = gettype($value);
-
-                    if ($type == "boolean") {
-                        $renderer = new uiCheckbox("", "entry_".$i."_boolean", true);
-                        if ($value === false) {
-                            $renderer = new uiCheckbox("", "entry_".$i."_boolean", false);
-                        }
-                        $renderer->setY(3);
-                    } else {
-                        $renderer = new uiInput("entry_".$i."_".$type);
-                        $renderer->setDefault($value);
-                    }
-
-                    $tooltip->addTooltip($renderer, $type);
 
                     $data[] = [
-                        'renderer' => $renderer,
+                        'input' => $value,
+                        'index' => $i,
+                        'tooltip' => $tooltip,
                         'width' => $columnData->getWidthCoeficiency(),
                     ];
                 }
