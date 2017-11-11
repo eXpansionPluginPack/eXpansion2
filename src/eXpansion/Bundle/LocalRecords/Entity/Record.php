@@ -2,6 +2,8 @@
 
 namespace eXpansion\Bundle\LocalRecords\Entity;
 
+use eXpansion\Framework\PlayersBundle\Entity\Player;
+
 /**
  * Class Record
  *
@@ -16,8 +18,8 @@ class Record
     /** @var string */
     protected $mapUid;
 
-    /** @var int */
-    protected $playerLogin;
+    /** @var Player */
+    protected $player;
 
     /** @var int */
     protected $nbLaps;
@@ -70,19 +72,19 @@ class Record
     }
 
     /**
-     * @return int
+     * @return Player
      */
-    public function getPlayerLogin()
+    public function getPlayer()
     {
-        return $this->playerLogin;
+        return $this->player;
     }
 
     /**
-     * @param int $playerLogin
+     * @param Player $player
      */
-    public function setPlayerLogin($playerLogin)
+    public function setPlayer(Player $player)
     {
-        $this->playerLogin = $playerLogin;
+        $this->player = $player;
     }
 
     /**

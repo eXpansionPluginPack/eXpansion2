@@ -5,7 +5,7 @@ namespace eXpansion\Framework\Core\Services\Application;
 /**
  * interface EventProcessorInterface
  *
- * @author    de Cramer Oliver<oldec@smile.fr>
+ * @author    de Cramer Oliver<oliverde8@gmail.com>
  * @copyright 2017 Smile
  * @package eXpansion\Framework\Core\Services\Application
  */

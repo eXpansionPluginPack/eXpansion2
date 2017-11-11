@@ -13,10 +13,6 @@ eXpansion\Bundle\LocalRecords\Entity\Record:
             type: string
             length: 255
             column: map_uid
-        playerLogin:
-            type: string
-            length: 255
-            column: player_login
         nbLaps:
             type: integer
             column: nb_laps
@@ -41,9 +37,17 @@ eXpansion\Bundle\LocalRecords\Entity\Record:
           nullable: true
         date:
           type: datetime
+
+    manyToOne:
+        player:
+            targetEntity: eXpansion\Framework\PlayersBundle\Entity\Player
+            joinColumn:
+                name: player_id
+                referencedColumnName: id
+
     uniqueConstraints:
         unicity:
-            columns: [map_uid, player_login, nb_laps]
+            columns: [map_uid, player_id, nb_laps]
     indexes:
         score_index:
             columns: [score]

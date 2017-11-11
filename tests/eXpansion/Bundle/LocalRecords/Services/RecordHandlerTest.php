@@ -5,11 +5,16 @@ namespace Tests\eXpansion\Bundle\LocalRecords\Services;
 use eXpansion\Bundle\LocalRecords\Entity\Record;
 use eXpansion\Bundle\LocalRecords\Repository\RecordRepository;
 use eXpansion\Bundle\LocalRecords\Services\RecordHandler;
+use eXpansion\Framework\PlayersBundle\Entity\Player;
+use eXpansion\Framework\PlayersBundle\Storage\PlayerDb;
 
 class RecordHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $recordRepositoryMock;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $playerDbMock;
 
     protected function setUp()
     {
@@ -18,6 +23,17 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
         $this->recordRepositoryMock = $this->getMockBuilder(RecordRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->playerDbMock = $this->getMockBuilder(PlayerDb::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->playerDbMock->method('get')->willReturnCallback(function($login) {
+            $player = new Player();
+            $player->setLogin($login);
+            $player->setNickname($login . ' - ' . 'nick');
+
+            return $player;
+        });
     }
 
     /**
@@ -116,9 +132,9 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
 
         $records =  $recordHandler->getRecords();
         $this->assertCount(3,$records);
-        $this->assertEquals('toto2', $records[0]->getPlayerLogin());
-        $this->assertEquals('toto1', $records[1]->getPlayerLogin());
-        $this->assertEquals('toto3', $records[2]->getPlayerLogin());
+        $this->assertEquals('toto2 - nick', $records[0]->getPlayer()->getNickname());
+        $this->assertEquals('toto1 - nick', $records[1]->getPlayer()->getNickname());
+        $this->assertEquals('toto3 - nick', $records[2]->getPlayer()->getNickname());
         $this->assertEquals(2, $recordHandler->getPlayerPosition('toto1'));
         $this->assertEquals(1, $recordHandler->getPlayerPosition('toto2'));
 
@@ -153,9 +169,9 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
 
         $records =  $recordHandler->getRecords();
         $this->assertCount(3,$records);
-        $this->assertEquals('toto3', $records[0]->getPlayerLogin());
-        $this->assertEquals('toto1', $records[1]->getPlayerLogin());
-        $this->assertEquals('toto2', $records[2]->getPlayerLogin());
+        $this->assertEquals('toto3 - nick', $records[0]->getPlayer()->getNickname());
+        $this->assertEquals('toto1 - nick', $records[1]->getPlayer()->getNickname());
+        $this->assertEquals('toto2 - nick', $records[2]->getPlayer()->getNickname());
 
         $this->assertEquals(2, $recordHandler->getPlayerPosition('toto1'));
         $this->assertEquals(3, $recordHandler->getPlayerPosition('toto2'));
@@ -228,9 +244,9 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
 
         $records =  $recordHandler->getRecords();
         $this->assertCount(3,$records);
-        $this->assertEquals('toto4', $records[0]->getPlayerLogin());
-        $this->assertEquals('toto1', $records[1]->getPlayerLogin());
-        $this->assertEquals('toto2', $records[2]->getPlayerLogin());
+        $this->assertEquals('toto4 - nick', $records[0]->getPlayer()->getNickname());
+        $this->assertEquals('toto1 - nick', $records[1]->getPlayer()->getNickname());
+        $this->assertEquals('toto2 - nick', $records[2]->getPlayer()->getNickname());
 
         $this->assertEquals(1, $recordHandler->getPlayerPosition('toto4'));
         $this->assertEquals(2, $recordHandler->getPlayerPosition('toto1'));
@@ -352,7 +368,7 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
      */
     protected function getRecordHandler($limit = 10, $order = RecordHandler::ORDER_ASC)
     {
-        return new RecordHandler($this->recordRepositoryMock, $limit, $order);
+        return new RecordHandler($this->recordRepositoryMock, $this->playerDbMock, $limit, $order);
     }
 
     /**
@@ -363,8 +379,12 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
      */
     protected function createRecord($login, $score)
     {
+        $player = new Player();
+        $player->setLogin($login);
+        $player->setNickname($login . ' - nick');
+
         $record = new Record();
-        $record->setPlayerLogin($login);
+        $record->setPlayer($player);
         $record->setScore($score);
 
         return $record;

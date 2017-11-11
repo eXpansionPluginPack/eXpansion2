@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        autowire: true
+        public: true
+
+
+    eXpansion\Framework\PlayersBundle\Plugins:
+        class: eXpansion\Framework\PlayersBundle\Plugins\Player
+        tags:
+            - {name: expansion.plugin, data_provider: mp.legacy.player}
+            - {name: expansion.plugin, data_provider: mp.script.match}
