@@ -348,8 +348,8 @@ class GridBuilder
         $this->changePage($this->dataCollection->getLastPageNumber());
     }
 
-    /** updates dataCollection from entries
-     *
+    /**
+     * Updates dataCollection from entries.
      */
     public function updateDataCollection($entries)
     {
