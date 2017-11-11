@@ -5,6 +5,7 @@ namespace eXpansion\Framework\Core\Model\Gui\Grid;
 use eXpansion\Framework\Core\Model\Gui\Factory\LineFactory;
 use eXpansion\Framework\Core\Model\Gui\Factory\PagerFactory;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
+use eXpansion\Framework\Gui\Ui\Factory;
 
 
 /**
@@ -30,6 +31,9 @@ class GridBuilderFactory
     /** @var PagerFactory */
     protected $pagerFactory;
 
+    /** @var PagerFactory */
+    protected $uiFactory;
+
     /**
      * GridBuilderFactory constructor.
      *
@@ -41,7 +45,8 @@ class GridBuilderFactory
         ActionFactory $actionFactory,
         LineFactory $lineFactory,
         LineFactory $titleLineFactory,
-        PagerFactory $pagerFactory
+        PagerFactory $pagerFactory,
+        Factory $uiFactory
     )
     {
         $this->class = $class;
@@ -49,6 +54,7 @@ class GridBuilderFactory
         $this->lineFactory = $lineFactory;
         $this->titleLineFactory = $titleLineFactory;
         $this->pagerFactory = $pagerFactory;
+        $this->uiFactory = $uiFactory;
     }
 
     /**
@@ -57,6 +63,6 @@ class GridBuilderFactory
     public function create()
     {
         $class = $this->class;
-        return new $class($this->actionFactory, $this->lineFactory, $this->titleLineFactory, $this->pagerFactory);
+        return new $class($this->actionFactory, $this->lineFactory, $this->titleLineFactory, $this->pagerFactory, $this->uiFactory);
     }
 }

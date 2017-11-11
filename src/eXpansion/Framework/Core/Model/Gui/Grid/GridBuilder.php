@@ -13,6 +13,7 @@ use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
 use eXpansion\Framework\Gui\Components\uiDropdown;
 use eXpansion\Framework\Gui\Components\uiInput;
+use eXpansion\Framework\Gui\Ui\Factory;
 use FML\Controls\Frame;
 use FML\Types\Renderable;
 
@@ -36,6 +37,9 @@ class GridBuilder
 
     /** @var PagerFactory */
     protected $pagerFactory;
+
+    /** @var Factory */
+    protected $uiFactory;
 
     /** @var DataCollectionInterface */
     protected $dataCollection;
@@ -86,12 +90,14 @@ class GridBuilder
         ActionFactory $actionFactory,
         LineFactory $lineFactory,
         LineFactory $titleLineFactory,
-        PagerFactory $pagerFactory
+        PagerFactory $pagerFactory,
+        Factory $uiFactory
     ) {
         $this->actionFactory = $actionFactory;
         $this->titleLineFactory = $titleLineFactory;
         $this->lineFactory = $lineFactory;
         $this->pagerFactory = $pagerFactory;
+        $this->uiFactory = $uiFactory;
 
         $this->pageKey = "key_".spl_object_hash($this);
     }
@@ -229,7 +235,7 @@ class GridBuilder
         $frame->setSize($width, $height);
 
         $posY = 0.;
-        $tooltip = new uiTooltip();
+        $tooltip = $this->uiFactory->createTooltip();
         $frame->addChild($tooltip);
 
         // Generating headers.
