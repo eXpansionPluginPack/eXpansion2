@@ -43,13 +43,13 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
      * @param                       $name
      * @param                       $sizeX
      * @param                       $sizeY
-     * @param null                  $posX
-     * @param null                  $posY
-     * @param WindowFactoryContext  $context
-     * @param GridBuilderFactory    $gridBuilderFactory
+     * @param null $posX
+     * @param null $posY
+     * @param WindowFactoryContext $context
+     * @param GridBuilderFactory $gridBuilderFactory
      * @param DataCollectionFactory $dataCollectionFactory
-     * @param AdminGroups           $adminGroupsHelper
-     * @param Connection            $connection
+     * @param AdminGroups $adminGroupsHelper
+     * @param Connection $connection
      */
     public function __construct(
         $name,
@@ -107,7 +107,10 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
         $apply->setPosition(($frame->getWidth() - $apply->getWidth()), -($frame->getHeight() - $apply->getHeight()));
 
         $apply->setAction($this->actionFactory->createManialinkAction(
-            $manialink, [$this, "callbackApply"], ["grid" => $manialink->getData('grid')]));
+            $manialink, [$this, "callbackApply"], [
+            "grid" => $manialink->getData('grid'),
+            "manialink" => $manialink,
+        ]));
 
         $manialink->addChild($apply);
 
@@ -134,6 +137,8 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
 
         try {
             $this->connection->setModeScriptSettings($settings);
+            $this->closeManialink($login, $entries, $args);
+
         } catch (\Exception $ex) {
             $this->connection->chatSendServerMessage("error: ".$ex->getMessage());
             $this->console->writeln('$f00Error: $fff'.$ex->getMessage());

@@ -50,4 +50,21 @@ interface ManialinkInterface
 
     /** removes child control */
     public function removeChild(Renderable $child);
+
+    /**
+     * Gets saved manialink data
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function getData($name);
+
+    /**
+     * Sets manialink data
+     *
+     * @param string $name
+     * @param mixed $data
+     */
+    public function setData($name, $data);
+
 }

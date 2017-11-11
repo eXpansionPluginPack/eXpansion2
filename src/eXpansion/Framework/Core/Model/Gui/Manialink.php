@@ -11,10 +11,10 @@ class Manialink implements ManialinkInterface
     use DataStorageTrait;
 
     /** @var string */
-    protected $id;
+    private $id;
 
     /** @var string */
-    protected $name;
+    private $name;
 
     /** @var  Group */
     protected $group;
@@ -32,8 +32,14 @@ class Manialink implements ManialinkInterface
     protected $posY;
 
     /**
-     * Manialive constructor.
+     * Manialink constructor
+     *
      * @param Group $group
+     * @param string $name
+     * @param int $sizeX
+     * @param int $sizeY
+     * @param float|null $posX
+     * @param float|null $posY
      */
     public function __construct(
         Group $group,
@@ -58,9 +64,10 @@ class Manialink implements ManialinkInterface
      */
     public function getXml()
     {
-        return '<?xml version="1.0" encoding="utf-8" standalone="yes" ?>'
+        return /** @lang XML */
+            '<?xml version="1.0" encoding="utf-8" standalone="yes" ?>'
             .'<manialink version="3" id="'.$this->getId().'">'
-            .'<label text="Hello World!" />'
+            .'<label text="This is empty manialink!" />'
             .'</manialink>';
     }
 
