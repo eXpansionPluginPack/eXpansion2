@@ -7,10 +7,14 @@ use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionFactory;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilder;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
+use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\GridWindowFactory;
 use eXpansion\Framework\Core\Services\Console;
 use FML\Controls\Frame;
+use FML\Script\Features\ScriptFeature;
+use FML\Script\Script;
+use FML\Script\ScriptLabel;
 use Maniaplanet\DedicatedServer\Connection;
 
 
@@ -74,7 +78,7 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
     }
 
     /**
-     * @param ManialinkInterface $manialink
+     * @param ManialinkInterface|Window $manialink
      * @return void
      */
     protected function createGrid(ManialinkInterface $manialink)
@@ -103,6 +107,7 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
         $frame = $manialink->getContentFrame();
         $this->setGridSize($frame->getWidth(), $frame->getHeight() - 10);
 
+
         $apply = $this->uiFactory->createButton("Apply");
         $apply->setPosition(($frame->getWidth() - $apply->getWidth()), -($frame->getHeight() - $apply->getHeight()));
 
@@ -112,7 +117,10 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
             "manialink" => $manialink,
         ]));
 
+
         $manialink->addChild($apply);
+
+
 
     }
 
