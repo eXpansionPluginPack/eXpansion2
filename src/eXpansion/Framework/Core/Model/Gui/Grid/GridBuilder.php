@@ -6,19 +6,18 @@ use eXpansion\Framework\Core\Model\Gui\Factory\LineFactory;
 use eXpansion\Framework\Core\Model\Gui\Factory\PagerFactory;
 use eXpansion\Framework\Core\Model\Gui\Grid\Column\AbstractColumn;
 use eXpansion\Framework\Core\Model\Gui\Grid\Column\ActionColumn;
+use eXpansion\Framework\Core\Model\Gui\Grid\Column\InputColumn;
 use eXpansion\Framework\Core\Model\Gui\Grid\Column\TextColumn;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
+use eXpansion\Framework\Gui\Ui\Factory;
 use FML\Controls\Frame;
-use FML\Controls\Label;
 use FML\Types\Renderable;
 
 
 /**
  * Class GridBuilder
- *
- * @TODO Add possibility to add actions on elements.
  *
  * @package eXpansion\Framework\Core\Model\Gui\Grid;
  * @author  oliver de Cramer <oliverde8@gmail.com>
@@ -36,6 +35,9 @@ class GridBuilder
 
     /** @var PagerFactory */
     protected $pagerFactory;
+
+    /** @var Factory */
+    protected $uiFactory;
 
     /** @var DataCollectionInterface */
     protected $dataCollection;
@@ -70,6 +72,10 @@ class GridBuilder
     /** @var string[] */
     protected $temporaryActions = [];
 
+    /** @var array */
+    protected $temporaryEntries = [];
+
+
     /**
      * GridBuilder constructor.
      *
@@ -82,12 +88,14 @@ class GridBuilder
         ActionFactory $actionFactory,
         LineFactory $lineFactory,
         LineFactory $titleLineFactory,
-        PagerFactory $pagerFactory
+        PagerFactory $pagerFactory,
+        Factory $uiFactory
     ) {
         $this->actionFactory = $actionFactory;
         $this->titleLineFactory = $titleLineFactory;
         $this->lineFactory = $lineFactory;
         $this->pagerFactory = $pagerFactory;
+        $this->uiFactory = $uiFactory;
 
         $this->pageKey = "key_".spl_object_hash($this);
     }
@@ -160,6 +168,23 @@ class GridBuilder
     }
 
     /**
+     * @param      string $key
+     * @param      string $name
+     * @param      integer $widthCoefficiency
+     * @param bool $sortable
+     * @param bool $translatable
+     *
+     * @return $this
+     */
+    public function addInputColumn($key, $name, $widthCoefficiency)
+    {
+        $this->columns[] = new InputColumn($key, $name, $widthCoefficiency);
+
+        return $this;
+    }
+
+
+    /**
      * Add an action into a column.
      *
      * @param string $key
@@ -202,11 +227,15 @@ class GridBuilder
 
         $lineHeight = 5 + 0.5;
 
+
         $frame = new Frame();
         $frame->setPosition(0, 0);
         $frame->setSize($width, $height);
 
         $posY = 0.;
+        $tooltip = $this->uiFactory->createTooltip();
+        $frame->addChild($tooltip);
+
         // Generating headers.
         // TODO if sortable create actions...
         $data = [];
@@ -214,7 +243,7 @@ class GridBuilder
             $data[] = [
                 'text' => $columnData->getName(),
                 'width' => $columnData->getWidthCoeficiency(),
-                'translatable' => true
+                'translatable' => true,
             ];
         }
 
@@ -232,6 +261,7 @@ class GridBuilder
             $data = [];
             foreach ($this->columns as $columnData) {
                 if ($columnData instanceof TextColumn) {
+
                     $data[] = [
                         'text' => $this->dataCollection->getLineData($lineData, $columnData->getKey()),
                         'width' => $columnData->getWidthCoeficiency(),
@@ -245,6 +275,15 @@ class GridBuilder
                         'renderer' => clone $columnData->getRenderer(),
                         'width' => $columnData->getWidthCoeficiency(),
                         'action' => $action,
+                    ];
+                } elseif ($columnData instanceof InputColumn) {
+                    $value = $this->dataCollection->getLineData($lineData, $columnData->getKey());
+
+                    $data[] = [
+                        'input' => $value,
+                        'index' => $i,
+                        'tooltip' => $tooltip,
+                        'width' => $columnData->getWidthCoeficiency(),
                     ];
                 }
             }
@@ -276,16 +315,18 @@ class GridBuilder
     /**
      * Action callback to go to the first page.
      */
-    public function goToFirstPage()
+    public function goToFirstPage($login = null, $entries = [])
     {
+        $this->updateDataCollection($entries);
         $this->changePage(1);
     }
 
     /**
      * Action callback to go to the previous page.
      */
-    public function goToPreviousPage()
+    public function goToPreviousPage($login = null, $entries = [])
     {
+        $this->updateDataCollection($entries);
         if ($this->currentPage - 1 >= 1) {
             $this->changePage($this->currentPage - 1);
         }
@@ -294,8 +335,9 @@ class GridBuilder
     /**
      * Action callback to go to the next page.
      */
-    public function goToNextPage()
+    public function goToNextPage($login = null, $entries = [])
     {
+        $this->updateDataCollection($entries);
         if ($this->currentPage + 1 <= $this->dataCollection->getLastPageNumber()) {
             $this->changePage($this->currentPage + 1);
         }
@@ -304,9 +346,45 @@ class GridBuilder
     /**
      * Action callback to go to the last page.
      */
-    public function goToLastPage()
+    public function goToLastPage($login = null, $entries = [])
     {
+        $this->updateDataCollection($entries);
         $this->changePage($this->dataCollection->getLastPageNumber());
+    }
+
+    /**
+     * Updates dataCollection from entries.
+     */
+    public function updateDataCollection($entries)
+    {
+
+        $data = [];
+        $start = ($this->currentPage - 1) * $this->dataCollection->getPageSize();
+        foreach ($entries as $key => $value) {
+            $array = explode("_", str_replace("entry_", "", $key));
+            setType($value, $array[1]);
+            $data[$array[0]] = $value;
+        }
+
+        $lines = $this->dataCollection->getData($this->currentPage);
+        foreach ($lines as $i => $lineData) {
+            $newData = $lineData;
+            foreach ($this->columns as $columnData) {
+                if ($columnData instanceof InputColumn) {
+                    $newData[$columnData->getKey()] = $data[$i];
+                }
+            }
+            $this->dataCollection->setDataByIndex($start + $i, $newData);
+        }
+    }
+
+    /** get dataCollection
+     *
+     * @return DataCollectionInterface
+     */
+    public function getDataCollection()
+    {
+        return $this->dataCollection;
     }
 
     /**

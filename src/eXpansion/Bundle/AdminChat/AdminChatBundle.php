@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 /**
  * Class EmotesBundle
  *
- * @package eXpansion\Bundle\Emotes
+ * @package eXpansion\Bundle\AdminChatBundle
  */
 class AdminChatBundle extends Bundle
 {

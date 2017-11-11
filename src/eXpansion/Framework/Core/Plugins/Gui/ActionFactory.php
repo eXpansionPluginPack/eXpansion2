@@ -4,7 +4,6 @@ namespace eXpansion\Framework\Core\Plugins\Gui;
 
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyManialink;
 use eXpansion\Framework\Core\Model\Gui\Action;
-use eXpansion\Framework\Core\Model\Gui\Manialink;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 
 /**
@@ -98,8 +97,7 @@ class ActionFactory implements ListenerInterfaceMpLegacyManialink
      */
     public function onPlayerManialinkPageAnswer($login, $actionId, array $entryValues)
     {
-        if (isset($this->actions[$actionId]))
-        {
+        if (isset($this->actions[$actionId])) {
             $this->actions[$actionId]->execute($login, $entryValues);
         }
     }

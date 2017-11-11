@@ -32,6 +32,7 @@ class uiCheckbox extends abstractUiElement implements ScriptFeatureable
 
     /**
      * uiCheckbox constructor.
+     *
      * @param string $text
      * @param string $name
      * @param bool $checked
@@ -66,9 +67,9 @@ class uiCheckbox extends abstractUiElement implements ScriptFeatureable
     public function render(\DOMDocument $domDocument)
     {
         $containerFrame = new Frame();
-        $containerFrame->setPosition($this->posX, $this->posY)
+        $containerFrame->setPosition($this->posX-1, $this->posY+1)
             ->setZ($this->posZ)
-            ->setSize($this->getWidth(), $this->getHeight())
+            ->setSize($this->getWidth(), $this->getHeight()+1)
             ->setScale($this->scale)
             ->addClasses(['uiContainer', 'uiCheckbox'])
             ->addDataAttribute('checked', $this->isChecked() ? "1" : "0")
