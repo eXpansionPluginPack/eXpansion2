@@ -25,19 +25,19 @@ services:
     expansion.admin_chat.chat_command.set_server_name:
         class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
         arguments:
-            $command:              "setservername"
+            $command:              "name"
             $permission:           "set_server_name"
-            $aliases:              ['name']
+            $aliases:              []
             $functionName:         "setServerName"
             $parameterDescription: 'sets new server name, uses "" if spaces used.'
 
     expansion.admin_chat.chat_command.set_server_comment:
         class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
         arguments:
-            $command:              "setservercomment"
-            $permission:           "set_server_name"
-            $aliases:              ['comment']
-            $functionName:         "setServerName"
+            $command:              "comment"
+            $permission:           "set_server_comment"
+            $aliases:              []
+            $functionName:         "setServerComment"
             $parameterDescription: 'sets new server comment, use "" if spaces used.'
 
 
