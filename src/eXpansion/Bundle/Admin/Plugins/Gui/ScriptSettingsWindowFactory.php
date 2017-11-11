@@ -4,13 +4,15 @@ namespace eXpansion\Bundle\Admin\Plugins\Gui;
 
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionFactory;
+use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilder;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\GridWindowFactory;
-use eXpansion\Framework\Gui\Components\uiButton;
+use eXpansion\Framework\Core\Services\Console;
 use FML\Controls\Frame;
 use Maniaplanet\DedicatedServer\Connection;
+
 
 /**
  * Class MenuFactory
@@ -20,6 +22,9 @@ use Maniaplanet\DedicatedServer\Connection;
  */
 class ScriptSettingsWindowFactory extends GridWindowFactory
 {
+    /** @var Console */
+    protected $console;
+
     /** @var Connection */
     protected $connection;
 
@@ -56,7 +61,8 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
         GridBuilderFactory $gridBuilderFactory,
         DataCollectionFactory $dataCollectionFactory,
         AdminGroups $adminGroupsHelper,
-        Connection $connection
+        Connection $connection,
+        Console $console
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
         $this->adminGroupsHelper = $adminGroupsHelper;
@@ -64,6 +70,7 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
         $this->gridBuilderFactory = $gridBuilderFactory;
         $this->dataCollectionFactory = $dataCollectionFactory;
         $this->connection = $connection;
+        $this->console = $console;
     }
 
     /**
@@ -74,16 +81,8 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
     {
         $this->fetchScriptSettings();
 
-
         $collection = $this->dataCollectionFactory->create($this->getData());
         $collection->setPageSize(20);
-
-        $tooltip = $this->uiFactory->createTooltip();
-        $manialink->addChild($tooltip);
-
-        $queueButton = $this->uiFactory->createButton('Add', uiButton::TYPE_DECORATED);
-        $queueButton->setTextColor("fff")->setSize(25, 5);
-        $tooltip->addTooltip($queueButton, 'Add map to jukebox');
 
         $gridBuilder = $this->gridBuilderFactory->create();
         $gridBuilder->setManialink($manialink)
@@ -107,12 +106,36 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
                 3);
 
         $manialink->setData('grid', $gridBuilder);
+        $frame = $manialink->getContentFrame();
+        $this->setGridSize($frame->getWidth(), $frame->getHeight() - 10);
+
+        $apply = $this->uiFactory->createButton("Apply");
+        $apply->setPosition(($frame->getWidth() - $apply->getWidth()), -($frame->getHeight() - $apply->getHeight()));
+
+        $apply->setAction($this->actionFactory->createManialinkAction(
+            $manialink, [$this, "callbackApply"], ["grid" => $manialink->getData('grid')]));
+
+        $manialink->addChild($apply);
 
     }
 
-    public function callbackWish($login, $params, $args)
+    public function callbackApply($login, $entries, $args)
     {
+        /** @var GridBuilder $grid */
+        $grid = $args['grid'];
+        $grid->updateDataCollection($entries);
 
+        $settings = [];
+        foreach ($grid->getDataCollection()->getAll() as $key => $value) {
+            $settings[$value['name']] = $value['value'];
+        }
+
+        try {
+            $this->connection->setModeScriptSettings($settings);
+        } catch (\Exception $ex) {
+            $this->connection->chatSendServerMessage("error: ".$ex->getMessage());
+            $this->console->writeln('$f00Error: $fff'.$ex->getMessage());
+        }
     }
 
 

@@ -5,10 +5,13 @@ namespace eXpansion\Framework\Gui\Components;
 use FML\Controls\Entry;
 use FML\Controls\Frame;
 use FML\Controls\Quad;
+use FML\Script\Features\ScriptFeature;
 use FML\Script\Script;
+use FML\Script\ScriptLabel;
 use FML\Types\Renderable;
+use FML\Types\ScriptFeatureable;
 
-class uiInput extends abstractUiElement implements Renderable
+class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
 {
 
     const TYPE_DEFAULT = "Basic";
@@ -53,7 +56,10 @@ class uiInput extends abstractUiElement implements Renderable
             ->setPosition($this->width / 2, -$this->height / 2)
             ->setStyles('Bgs1', 'BgColorContour')
             ->setAlign("center", "center")
-            ->setBackgroundColor('FFFA');
+            ->setBackgroundColor('FFFA')
+            ->addClass("uiInput")
+            ->setScriptEvents(true)
+            ->setDataAttributes($this->_dataAttributes)->addClasses($this->_classes);
 
         $input = new Entry();
         $input->setSize($this->width, $this->height)
@@ -61,16 +67,11 @@ class uiInput extends abstractUiElement implements Renderable
             ->setDefault($this->default)
             ->setSelectText(true)
             ->setAlign("left", "center2")
-            ->addClass("uiInput")
             ->setAreaColor("0005")
             ->setAreaFocusColor('000a')
             ->setTextFormat($this->textFormat)
             ->setName($this->name)
-            ->setScriptEvents(true)
-            ->addClasses($this->_classes)
-            ->setTextSize(2)
-            ->setDataAttributes($this->_dataAttributes);
-
+            ->setTextSize(2);
 
         $frame->addChild($quad);
         $frame->addChild($input);
@@ -136,13 +137,21 @@ class uiInput extends abstractUiElement implements Renderable
      * Prepare the given Script for rendering by adding the needed Labels, etc.
      *
      * @param Script $script Script to prepare
-     * @return static
      */
     public function prepare(Script $script)
     {
-        // do nothing
+        $script->addCustomScriptLabel(ScriptLabel::MouseClick, $this->getScriptMouseClick());
     }
 
+    /**
+     * Get the Script Features
+     *
+     * @return ScriptFeature[]
+     */
+    public function getScriptFeatures()
+    {
+        return ScriptFeature::collect($this);
+    }
     /**
      * @return string
      */
@@ -161,4 +170,18 @@ class uiInput extends abstractUiElement implements Renderable
 
         return $this;
     }
+
+    protected function getScriptMouseClick()
+    {
+        return <<<EOL
+             if (Event.Control.HasClass("uiInput") ) {
+                 log("editing");
+                 declare CMlFrame frame <=> Event.Control.Parent;
+                 (frame.Controls[1] as CMlEntry).StartEdition();               
+            }					
+EOL;
+
+    }
+
+
 }

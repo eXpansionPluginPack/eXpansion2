@@ -9,8 +9,8 @@ services:
         class: eXpansion\Bundle\Admin\Plugins\Gui\ScriptSettingsWindowFactory
         arguments:
             $name:  'Script Settings'
-            $sizeX: 160
-            $sizeY: 90
+            $sizeX: 240
+            $sizeY: 120
             $posX:  null
             $posY:  null
             $dataCollectionFactory: '@expansion.gui.gridbuilder.datacollection.array'
