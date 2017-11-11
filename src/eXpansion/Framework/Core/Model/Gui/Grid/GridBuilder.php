@@ -11,9 +11,6 @@ use eXpansion\Framework\Core\Model\Gui\Grid\Column\TextColumn;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
-use eXpansion\Framework\Gui\Components\uiDropdown;
-use eXpansion\Framework\Gui\Components\uiInput;
-use eXpansion\Framework\Gui\Ui\Factory;
 use FML\Controls\Frame;
 use FML\Types\Renderable;
 
