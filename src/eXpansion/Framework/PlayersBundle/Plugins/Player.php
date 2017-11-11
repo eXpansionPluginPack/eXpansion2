@@ -113,6 +113,9 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
     {
         $object = $this;
         $this->getScores->get(function($scores) use($object) {
+
+            var_dump($scores);
+
             $object->updateWithScores($scores);
         });
     }
@@ -126,9 +129,11 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
     {
         // Update the winner player.
         $player = $this->getPlayer($scores['winnerplayer']);
-        $player->setWins($player->getWins() + 1);
-        $this->updatePlayer($player);
-        $this->playerRepository->save([$player]);
+        if ($player) {
+            $player->setWins($player->getWins() + 1);
+            $this->updatePlayer($player);
+            $this->playerRepository->save([$player]);
+        }
 
         // Update remaining players.
         foreach ($this->loggedInPlayers as $player) {

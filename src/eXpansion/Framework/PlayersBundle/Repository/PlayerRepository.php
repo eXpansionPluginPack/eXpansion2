@@ -35,10 +35,11 @@ class PlayerRepository extends \Doctrine\ORM\EntityRepository
         }
 
         foreach ($players as $player) {
+            var_dump($player->getId());
+            $player = $this->getEntityManager()->merge($player);
             $this->getEntityManager()->persist($player);
         }
 
-        $this->getEntityManager()->clear();
         $this->getEntityManager()->flush();
     }
 }

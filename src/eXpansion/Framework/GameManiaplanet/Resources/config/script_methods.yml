@@ -2,7 +2,7 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: false
+        public: true
 
     eXpansion\Framework\GameManiaplanet\ScriptMethods\GetScores:
         class: eXpansion\Framework\GameManiaplanet\ScriptMethods\GetScores

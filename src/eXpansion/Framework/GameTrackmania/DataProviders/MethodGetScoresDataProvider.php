@@ -60,6 +60,6 @@ class MethodGetScoresDataProvider extends AbstractDataProvider implements Method
      */
     public function setScores($params)
     {
-        $this->dispatch('setScores', [$params]);
+        $this->dispatch('set', [$params]);
     }
 }

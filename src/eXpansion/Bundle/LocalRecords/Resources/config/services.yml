@@ -53,11 +53,8 @@ services:
     eXpansion.local_records.plugins.race_records_notifications:
         class: eXpansion\Bundle\LocalRecords\Plugins\ChatNotification
         arguments:
-            - '@eXpansion\Framework\Core\Helpers\ChatNotification'
-            - '@eXpansion\Framework\Core\Storage\PlayerStorage'
-            - '@eXpansion\Framework\Core\Helpers\Time'
-            - 'expansion_local_records.chat.race'
-            - 20
+            $translationPrefix: 'expansion_local_records.chat.race'
+            $positionForPublicMessage: 20
         tags:
             - {name: 'expansion.plugin', data_provider: 'expansion.local_records.race'}
 

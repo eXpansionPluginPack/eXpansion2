@@ -23,7 +23,7 @@ class AbstractScriptMethod
     protected $dataProvider;
 
     /** @var callback[] */
-    protected $toDispatch;
+    protected $toDispatch = [];
 
     /**
      * Get TM.Scores or SM.Scores.

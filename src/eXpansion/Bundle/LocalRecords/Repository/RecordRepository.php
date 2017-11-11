@@ -25,7 +25,6 @@ class RecordRepository extends EntityRepository
             }
 
             $this->getEntityManager()->flush();
-            $this->getEntityManager()->clear();
         }
     }
 }
