@@ -11,7 +11,7 @@ use FML\Script\ScriptLabel;
 use FML\Types\Renderable;
 use FML\Types\ScriptFeatureable;
 
-class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
+class uiInputMasked extends abstractUiElement implements Renderable, ScriptFeatureable
 {
 
     const TYPE_DEFAULT = "Basic";
@@ -26,9 +26,9 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
      */
     protected $default;
 
-    protected $textFormat = "Basic";
+    protected $textFormat = "Password";
 
-    public function __construct($name, $default = "", $width = 30, $textFormat = "Basic")
+    public function __construct($name, $default = "", $width = 30, $textFormat = "Password")
     {
         $this->name = $name;
         $this->default = $default;
@@ -48,7 +48,7 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
         $frame = new Frame();
         $frame->setPosition($this->posX, $this->posY)
             ->setSize($this->width, $this->height)
-            ->addClasses(["uiContainer", "uiInput"]);
+            ->addClasses(["uiContainer", "uiInputMasked"]);
 
         $quad = new Quad();
         $quad->setSize($this->width * 2, $this->height * 2)
@@ -57,12 +57,12 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
             ->setStyles('Bgs1', 'BgColorContour')
             ->setAlign("center", "center")
             ->setBackgroundColor('FFFA')
-            ->addClass("uiInput")
+            ->addClass("uiInputMasked")
             ->setScriptEvents(true)
             ->setDataAttributes($this->_dataAttributes)->addClasses($this->_classes);
 
         $input = new Entry();
-        $input->setSize($this->width, $this->height)
+        $input->setSize($this->width - 5, $this->height)
             ->setPosition(0, -$this->height / 2)
             ->setDefault($this->default)
             ->setSelectText(true)
@@ -70,11 +70,19 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
             ->setAreaColor("0005")
             ->setAreaFocusColor('000a')
             ->setTextFormat($this->textFormat)
+            ->addDataAttribute('type', 'Password')
             ->setName($this->name)
             ->setTextSize(2);
 
+        $button = new uiButton("", uiButton::TYPE_DECORATED);
+        $button->setSize(5, 5)
+            ->addClass("uiMaskedToggle")
+            ->setPosition($input->getWidth(), 0);
+
+        $frame->addChild($button);
         $frame->addChild($quad);
         $frame->addChild($input);
+
 
         return $frame->render($domDocument);
     }
@@ -135,7 +143,7 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
 
     public function getHeight()
     {
-        return $this->height+2;
+        return $this->height + 2;
     }
 
     /**
@@ -180,10 +188,22 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
     protected function getScriptMouseClick()
     {
         return <<<EOL
-             if (Event.Control.HasClass("uiInput") ) {              
+             if (Event.Control.HasClass("uiInputMasked") ) {              
                  declare CMlFrame frame <=> Event.Control.Parent;
-                 (frame.Controls[1] as CMlEntry).StartEdition();               
-            }					
+                 (frame.Controls[2] as CMlEntry).StartEdition();               
+            }	
+             if (Event.Control.HasClass("uiMaskedToggle") ) {              
+                 declare CMlFrame frame <=> Event.Control.Parent.Parent;
+                 declare CMlEntry input <=> (frame.Controls[2] as CMlEntry);
+                 if (input.DataAttributeGet("type") == "Basic") {
+                   input.DataAttributeSet("type", "Password");
+                   input.TextFormat = CMlEntry::ETextFormat::Password;
+                 } else {
+                   input.DataAttributeSet("type", "Basic");
+                   input.TextFormat = CMlEntry::ETextFormat::Basic;
+                 }               
+            }	
+            				
 EOL;
 
     }

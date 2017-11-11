@@ -16,3 +16,14 @@ services:
             $dataCollectionFactory: '@expansion.gui.gridbuilder.datacollection.array'
         tags:
             - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}
+
+    expansion.bundle.admin.gui.window.serversettings_factory:
+        class: eXpansion\Bundle\Admin\Plugins\Gui\ServerSettingsWindowFactory
+        arguments:
+            $name:  'Server Settings'
+            $sizeX: 240
+            $sizeY: 120
+            $posX:  null
+            $posY:  null
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}
