@@ -32,6 +32,7 @@ class uiCheckbox extends abstractUiElement implements ScriptFeatureable
 
     /**
      * uiCheckbox constructor.
+     *
      * @param string $text
      * @param string $name
      * @param bool $checked

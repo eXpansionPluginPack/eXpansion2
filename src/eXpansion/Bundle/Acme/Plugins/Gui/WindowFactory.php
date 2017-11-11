@@ -76,10 +76,9 @@ class WindowFactory extends BaseWindowFactory
         $btn->setPosition(50, 0);
         $line3->addChild($btn);
 
-        $scrollable = new layoutScrollable($line3, 55, 30);
+        $scrollable = $this->uiFactory->createLayoutRow($line3, 55, 30);
         $scrollable->setAxis(true, true);
         $manialink->addChild($scrollable);
-
 
         $row = new layoutRow(0, -10, [$line1, $line2], 0);
 

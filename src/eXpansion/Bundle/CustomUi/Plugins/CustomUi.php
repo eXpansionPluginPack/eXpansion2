@@ -24,6 +24,7 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
 
     /**
      * CustomUi constructor.
+     *
      * @param Connection $connection
      * @param PlayerStorage $playerStorage
      */
