@@ -11,14 +11,24 @@ namespace eXpansion\Framework\Core\Model\Gui\Grid\Column;
  */
 abstract class AbstractColumn
 {
-    /** @var string  */
+    /** @var bool */
+    protected $sortable = false;
+
+    /** @var string */
     protected $key;
 
-    /** @var string  */
+    /** @var string */
     protected $name;
 
-    /** @var float  */
+    /** @var float */
     protected $widthCoeficiency;
+
+    /** @var string */
+    protected $sortDirection = "ASC";
+    /**
+     * @var bool
+     */
+    protected $sortColumn = false;
 
     /**
      * AbstractColumn constructor.
@@ -80,5 +90,62 @@ abstract class AbstractColumn
     public function setWidthCoeficiency($widthCoeficiency)
     {
         $this->widthCoeficiency = $widthCoeficiency;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getSortable()
+    {
+        return $this->sortable;
+    }
+
+    /**
+     * @param bool $sortable
+     */
+    public function setSortable($sortable)
+    {
+        $this->sortable = $sortable;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSortDirection(): string
+    {
+        return $this->sortDirection;
+    }
+
+    /**
+     * @param string $sortDirection
+     */
+    public function setSortDirection(string $sortDirection)
+    {
+        $this->sortDirection = $sortDirection;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getSortColumn(): bool
+    {
+        return $this->sortColumn;
+    }
+
+    /**
+     * @param bool $sortColumn
+     */
+    public function setSortColumn(bool $sortColumn)
+    {
+        $this->sortColumn = $sortColumn;
+    }
+
+    public function toggleSortDirection()
+    {
+        if ($this->sortDirection == "ASC") {
+            $this->sortDirection = "DESC";
+        } else {
+            $this->sortDirection = "ASC";
+        }
     }
 }

@@ -4,6 +4,7 @@ namespace eXpansion\Framework\Core\Model\Gui\Grid;
 
 use eXpansion\Framework\Core\Model\Gui\Factory\LineFactory;
 use eXpansion\Framework\Core\Model\Gui\Factory\PagerFactory;
+use eXpansion\Framework\Core\Model\Gui\Factory\TitleLineFactory;
 use eXpansion\Framework\Core\Model\Gui\Grid\Column\AbstractColumn;
 use eXpansion\Framework\Core\Model\Gui\Grid\Column\ActionColumn;
 use eXpansion\Framework\Core\Model\Gui\Grid\Column\InputColumn;
@@ -27,7 +28,7 @@ class GridBuilder
     /** @var  ActionFactory */
     protected $actionFactory;
 
-    /** @var LineFactory */
+    /** @var TitleLineFactory */
     protected $titleLineFactory;
 
     /** @var LineFactory */
@@ -81,13 +82,13 @@ class GridBuilder
      *
      * @param ActionFactory $actionFactory
      * @param LineFactory $lineFactory
-     * @param LineFactory $titleLineFactory
+     * @param TitleLineFactory $titleLineFactory
      * @param PagerFactory $pagerFactory
      */
     public function __construct(
         ActionFactory $actionFactory,
         LineFactory $lineFactory,
-        LineFactory $titleLineFactory,
+        TitleLineFactory $titleLineFactory,
         PagerFactory $pagerFactory,
         Factory $uiFactory
     ) {
@@ -237,13 +238,27 @@ class GridBuilder
         $frame->addChild($tooltip);
 
         // Generating headers.
-        // TODO if sortable create actions...
         $data = [];
         foreach ($this->columns as $columnData) {
+            $action = null;
+            $sort = "";
+            if ($columnData->getSortable() && $columnData->getSortColumn()) {
+                $sort = $columnData->getSortDirection();
+
+            }
+            if ($columnData->getSortable()) {
+                $action = $this->actionFactory->createManialinkAction(
+                    $this->manialink,
+                    [$this, 'sortColumn'],
+                    ["key" => $columnData->getKey()]);
+            }
+
             $data[] = [
-                'text' => $columnData->getName(),
+                'title' => $columnData->getName(),
                 'width' => $columnData->getWidthCoeficiency(),
                 'translatable' => true,
+                'sort' => $sort,
+                'action' => $action,
             ];
         }
 
@@ -261,7 +276,6 @@ class GridBuilder
             $data = [];
             foreach ($this->columns as $columnData) {
                 if ($columnData instanceof TextColumn) {
-
                     $data[] = [
                         'text' => $this->dataCollection->getLineData($lineData, $columnData->getKey()),
                         'width' => $columnData->getWidthCoeficiency(),
@@ -395,6 +409,24 @@ class GridBuilder
     protected function changePage($page)
     {
         $this->currentPage = $page;
+        $this->manialinkFactory->update($this->manialink->getUserGroup());
+    }
+
+    public function sortColumn($login, $entries, $args)
+    {
+        foreach ($this->columns as $columnData) {
+            if ($columnData->getKey() == $args['key']) {
+                if ($columnData->getSortColumn()) {
+                    $columnData->toggleSortDirection();
+                } else {
+                    $columnData->setSortColumn(true);
+                }
+                $this->dataCollection->setFiltersAndSort([], $columnData->getKey(), $columnData->getSortDirection());
+            } else {
+                $columnData->setSortColumn(false);
+            }
+        }
+
         $this->manialinkFactory->update($this->manialink->getUserGroup());
     }
 }

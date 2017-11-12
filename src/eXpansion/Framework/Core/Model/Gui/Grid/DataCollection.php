@@ -25,8 +25,8 @@ class DataCollection implements DataCollectionInterface
     /** @var array */
     protected $filters;
 
-    /** @var array */
-    protected $sort = [];
+    /** @var null|array */
+    protected $sort = null;
 
     /** @var int */
     protected $pageSize;
@@ -97,12 +97,14 @@ class DataCollection implements DataCollectionInterface
      *
      * @return $this
      */
-    public function setFiltersAndSort($filters, $sortField, $sortOrder)
+    public function setFiltersAndSort($filters, $sortField = null, $sortOrder = "ASC")
     {
         $this->reset();
 
         $this->filters = $filters;
-        $this->sort[$sortField] = $sortOrder;
+        if ($sortField && $sortOrder) {
+            $this->sort = [$sortField, $sortOrder];
+        }
 
         return $this;
     }
@@ -142,7 +144,7 @@ class DataCollection implements DataCollectionInterface
     {
         $this->filteredData = null;
         $this->filters = [];
-        $this->sort = [];
+        $this->sort = null;
 
         return $this;
     }
@@ -158,6 +160,17 @@ class DataCollection implements DataCollectionInterface
                 $this->filters,
                 FilterInterface::FILTER_LOGIC_OR
             );
+        }
+        if (!is_null($this->sort)) {
+            $sort = $this->sort;
+            uasort($this->filteredData, function ($a, $b) use ($sort) {
+                $comp = (strcmp($a[$sort[0]], $b[$sort[0]]));
+                if ($sort[1] == "DESC") {
+                    return -1 * $comp;
+                } else {
+                    return $comp;
+                }
+            });
         }
     }
 
@@ -177,6 +190,5 @@ class DataCollection implements DataCollectionInterface
     {
         return $this->data;
     }
-
 
 }

@@ -137,9 +137,7 @@ class Widget extends Manialink implements Container
     protected function getDictionaryInformation($control, &$translations)
     {
         foreach ($control->getChildren() as $child) {
-            if (($child instanceof Label
-                    || $child instanceof uiLabel
-                ) && $child->getTranslate()) {
+            if (($child instanceof Label || $child instanceof uiLabel) && $child->getTranslate()) {
                 $id = $child->getTextId();
 
                 if (!isset($this->cachedMessages[$id])) {
@@ -155,7 +153,7 @@ class Widget extends Manialink implements Container
                     $translations[$id] = $this->cachedMessages[$id];
                 }
             } else {
-                if ($child instanceof Frame) {
+                if ($child instanceof Container) {
                     $this->getDictionaryInformation($child, $translations);
                 }
             }
