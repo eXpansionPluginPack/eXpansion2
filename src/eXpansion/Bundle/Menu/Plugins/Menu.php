@@ -3,6 +3,7 @@
 
 namespace eXpansion\Bundle\Menu\Plugins;
 
+use eXpansion\Bundle\Menu\Plugins\Gui\MenuContentFactory;
 use eXpansion\Bundle\Menu\Plugins\Gui\MenuFactory;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
@@ -30,8 +31,11 @@ class Menu implements StatusAwarePluginInterface, ListenerInterfaceMpLegacyMap
      * @param AdminGroups $adminGroups
      * @param MenuFactory $menuGuiFactory
      */
-    public function __construct(AdminGroups $adminGroups, MenuFactory $menuGuiFactory)
-    {
+    public function __construct(
+        AdminGroups $adminGroups,
+        MenuFactory $menuGuiFactory,
+        MenuContentFactory $menuContentFactory
+    ) {
         $this->adminGroups = $adminGroups;
         $this->menuGuiFactory = $menuGuiFactory;
     }

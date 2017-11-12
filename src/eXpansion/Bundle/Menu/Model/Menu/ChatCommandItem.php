@@ -2,10 +2,10 @@
 
 namespace eXpansion\Bundle\Menu\Model\Menu;
 
+use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\DataProviders\ChatCommandDataProvider;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
-use FML\Controls\Quad;
 
 /**
  * Class ChatCommandItem
@@ -26,12 +26,12 @@ class ChatCommandItem extends AbstractItem
      * ChatCommandItem constructor.
      *
      * @param ChatCommandDataProvider $chatCommandDataProvider
-     * @param $chatCommand
-     * @param string $id
-     * @param string $path
-     * @param null|string $labelId
-     * @param Quad $icon
-     * @param null $permission
+     * @param                         $chatCommand
+     * @param string                  $id
+     * @param string                  $path
+     * @param string                  $labelId
+     * @param AdminGroups             $adminGroups
+     * @param null                    $permission
      */
     public function __construct(
         ChatCommandDataProvider $chatCommandDataProvider,
@@ -39,13 +39,12 @@ class ChatCommandItem extends AbstractItem
         $id,
         $path,
         $labelId,
-        Quad $icon,
+        AdminGroups $adminGroups,
         $permission = null
     ) {
+        parent::__construct($id, $path, $labelId, $adminGroups, $permission);
         $this->chatCommand = $chatCommand;
         $this->chatCommandProvider = $chatCommandDataProvider;
-
-        parent::__construct($id, $path, $labelId, $icon, $permission);
     }
 
 
@@ -60,12 +59,12 @@ class ChatCommandItem extends AbstractItem
      */
     public function execute(ManialinkFactory $manialinkFactory, ManialinkInterface $manialink, $login, $answerValues, $args)
     {
+        $manialinkFactory->destroy($manialink->getUserGroup());
         $this->chatCommandProvider->onPlayerChat(
             $login,
             $login,
             $this->chatCommand,
-            false
+            true
         );
-        $manialinkFactory->destroy($login);
     }
 }

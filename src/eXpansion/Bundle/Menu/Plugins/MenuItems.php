@@ -30,38 +30,50 @@ class MenuItems implements ListenerMenuItemProviderInterface
             ParentItem::class,
             'admin',
             'expansion_menu.admin.label',
-            (new Quad_Icons64x64_1())->setSubStyle(Quad_Icons64x64_1::SUBSTYLE_StatePrivate),
             null // Permission are handled by sub elements.
         );
         $root->addChild(
             ChatCommandItem::class,
             'admin/help',
             'expansion_menu.admin.help',
-            (new Quad_UIConstruction_Buttons())->setSubStyle(Quad_UIConstruction_Buttons::SUBSTYLE_Help),
             'admin',
             ['cmd' => '/help']
         );
+        $root->addChild(
+            ChatCommandItem::class,
+            'admin/script_settings',
+            'expansion_menu.admin.script_settings',
+            'admin',
+            ['cmd' => '/admin script']
+        );
+        $root->addChild(
+            ChatCommandItem::class,
+            'admin/server_settings',
+            'expansion_menu.admin.server_settings',
+            'admin',
+            ['cmd' => '/admin server']
+        );
 
+        /*
+         * @TODO put these in plugins that actually defines the commands.
+         */
         $root->addChild(
             ParentItem::class,
             'map',
             'expansion_menu.map.label',
-            (new Quad_Icons64x64_1())->setSubStyle(Quad_Icons64x64_1::SUBSTYLE_StatePrivate),
             null // Permission are handled by sub elements.
         );
         $root->addChild(
             ChatCommandItem::class,
             'map/list',
             'expansion_menu.map.list',
-            (new Quad_UIConstruction_Buttons())->setSubStyle(Quad_UIConstruction_Buttons::SUBSTYLE_Help),
             '',
             ['cmd' => '/list']
         );
         $root->addChild(
             ChatCommandItem::class,
-            'map/list',
+            'map/mx',
             'expansion_menu.map.mx',
-            (new Quad_UIConstruction_Buttons())->setSubStyle(Quad_UIConstruction_Buttons::SUBSTYLE_Help),
             '',
             ['cmd' => '/mx']
         );
@@ -69,7 +81,46 @@ class MenuItems implements ListenerMenuItemProviderInterface
             ChatCommandItem::class,
             'map/recs',
             'expansion_menu.map.recs',
-            (new Quad_UIConstruction_Buttons())->setSubStyle(Quad_UIConstruction_Buttons::SUBSTYLE_Help),
+            '',
+            ['cmd' => '/recs']
+        );
+
+        /**
+         * Test sub and subs.
+         *
+         */
+        $root->addChild(
+            ParentItem::class,
+            'admin/sub',
+            'expansion_menu.admin.sub1',
+            'admin',
+            []
+        );
+        $root->addChild(
+            ParentItem::class,
+            'admin/sub/sub',
+            'expansion_menu.admin.sub2',
+            'admin',
+            []
+        );
+        $root->addChild(
+            ChatCommandItem::class,
+            'admin/sub/sub_button',
+            'expansion_menu.map.recs',
+            '',
+            ['cmd' => '/recs']
+        );
+        $root->addChild(
+            ParentItem::class,
+            'admin/sub/sub/sub',
+            'expansion_menu.admin.sub3',
+            'admin',
+            []
+        );
+        $root->addChild(
+            ChatCommandItem::class,
+            'admin/sub/sub/sub_button',
+            'expansion_menu.map.recs',
             '',
             ['cmd' => '/recs']
         );

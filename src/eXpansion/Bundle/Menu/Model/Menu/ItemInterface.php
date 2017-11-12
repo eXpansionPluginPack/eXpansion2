@@ -35,14 +35,6 @@ interface ItemInterface
      * @return string
      */
     public function getLabelId();
-
-    /**
-     * Icon to display next to the label.
-     *
-     * @return Quad
-     */
-    public function getIcon();
-
     /**
      * Get the permission required to use this menu item.
      *
@@ -62,12 +54,11 @@ interface ItemInterface
     public function execute(ManialinkFactory $manialinkFactory, ManialinkInterface $manialink, $login, $answerValues, $args);
 
     /**
+     * Check if item is visible for a certain group.
      *
-     *
-     * @param Group $group
-     * @param AdminGroups $adminGroups
+     * @param string $login
      *
      * @return mixed
      */
-    public function isVisibleFor(Group $group, AdminGroups $adminGroups);
+    public function isVisibleFor($login);
 }

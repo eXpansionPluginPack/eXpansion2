@@ -2,6 +2,7 @@
 
 namespace eXpansion\Bundle\Menu\Model\Menu;
 use eXpansion\Bundle\Menu\Services\ItemBuilder;
+use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
 use FML\Controls\Quad;
@@ -25,16 +26,21 @@ class ParentItem extends AbstractItem
      * ParentItem constructor.
      *
      * @param ItemBuilder $itemBuilder
-     * @param string $id
-     * @param string $path
-     * @param string $labelId
-     * @param Quad $icon
-     * @param null $permission
+     * @param string      $id
+     * @param string      $path
+     * @param string      $labelId
+     * @param AdminGroups $adminGroups
+     * @param null        $permission
      */
-    public function __construct(ItemBuilder $itemBuilder, $id, $path, $labelId, Quad $icon, $permission = null)
-    {
-        parent::__construct($id, $path, $labelId, $icon, $permission);
-
+    public function __construct(
+        ItemBuilder $itemBuilder,
+        $id,
+        $path,
+        $labelId,
+        AdminGroups $adminGroups,
+        $permission = null
+    ) {
+        parent::__construct($id, $path, $labelId, $adminGroups, $permission);
         $this->itemBuilder = $itemBuilder;
     }
 
@@ -42,10 +48,15 @@ class ParentItem extends AbstractItem
     /**
      * @inheritdoc
      */
-    public function execute(ManialinkFactory $manialinkFactory, ManialinkInterface $manialink, $login, $answerValues, $args)
-    {
-        $manialink->setManialinkId($this->getId());
-        $manialinkFactory->update($login);
+    public function execute(
+        ManialinkFactory $manialinkFactory,
+        ManialinkInterface $manialink,
+        $login,
+        $answerValues,
+        $args
+    ) {
+        $manialink->setData('current_path', $this->getPath());
+        $manialinkFactory->update($manialink->getUserGroup());
     }
 
     /**
@@ -54,13 +65,12 @@ class ParentItem extends AbstractItem
      * @param string $class Class of the item.
      * @param string $id Id of the item
      * @param string $label
-     * @param Quad $icon
      * @param string $permission
      * @param array $options
      *
      * @return ItemInterface
      */
-    public function addChild($class, $id, $label, Quad $icon, $permission, $options =[])
+    public function addChild($class, $id, $label, $permission, $options =[])
     {
         if (is_string($id)) {
             $id = explode('/', $id);
@@ -69,20 +79,18 @@ class ParentItem extends AbstractItem
         if (count($id) == 1) {
             $item = $this->itemBuilder->create(
                 $class,
-                $id[count($id) - 1],
-                $this->getPath() . '/' . $id,
+                $id[0],
+                $this->getPath() . '/' . $id[0],
                 $label,
-                $icon,
-                $permission
+                $permission,
+                $options
             );
-            $this->childItems[$id] = $item;
+            $this->childItems[$id[0]] = $item;
             return $item;
         }
 
-
-        $parent = array_splice($id, 1, count($id) - 2);
-        $child = array_splice($id, 1, count($id) - 2);
-        return $this->getChild($parent)->addChild($class, $child, $label, $icon, $permission, $options);
+        $parent = array_splice($id, 0, count($id) - 1);
+        return $this->getChild($parent)->addChild($class, $id, $label, $permission, $options);
     }
 
     /**
@@ -112,5 +120,39 @@ class ParentItem extends AbstractItem
         }
 
         return null;
+    }
+
+    /**
+     * Get childrens of this parent.
+     *
+     * @return ItemInterface[]
+     */
+    public function getChilds()
+    {
+        return $this->childItems;
+    }
+
+    /**
+     * Check if menu is visible and at least one children is visible.
+     *
+     * @param string $login
+     *
+     * @return bool|mixed
+     */
+    public function isVisibleFor($login)
+    {
+        $personalVisibility = parent::isVisibleFor($login);
+        if (!$personalVisibility) {
+            return $personalVisibility;
+        }
+
+
+        foreach ($this->getChilds() as $childItem) {
+            if ($childItem->isVisibleFor($login)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

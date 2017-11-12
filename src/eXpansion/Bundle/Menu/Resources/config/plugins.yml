@@ -2,12 +2,13 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: false
+        public: true
 
     eXpansion\Bundle\Menu\Plugins\Menu:
         class: eXpansion\Bundle\Menu\Plugins\Menu
         tags:
             - {name: 'expansion.plugin', data_provider: 'mp.legacy.map'}
+            - {name: 'expansion.plugin.parent', parent: 'eXpansion\Bundle\Menu\Plugins\MenuItems'} # Test purpose.
 
     eXpansion\Bundle\Menu\Plugins\MenuItems:
         class: eXpansion\Bundle\Menu\Plugins\MenuItems

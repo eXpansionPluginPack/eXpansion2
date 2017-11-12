@@ -6,6 +6,7 @@ services:
 
     eXpansion\Bundle\Menu\DataProviders\MenuItemProvider:
         class: eXpansion\Bundle\Menu\DataProviders\MenuItemProvider
+        public: true
         tags:
           - {name: 'expansion.dataprovider', provider: "exp.menu.items", interface: 'eXpansion\Bundle\Menu\DataProviders\Listener\ListenerMenuItemProviderInterface'}
           - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}

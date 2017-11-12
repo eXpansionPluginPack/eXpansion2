@@ -1,9 +1,8 @@
 <?php
 
 namespace eXpansion\Bundle\Menu\Model\Menu;
+
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
-use eXpansion\Framework\Core\Model\UserGroups\Group;
-use FML\Controls\Quad;
 
 /**
  * Class AbstractItem
@@ -23,27 +22,28 @@ abstract class AbstractItem implements ItemInterface
     /** @var string */
     private $labelId;
 
-    /** @var Quad */
-    private $icon;
-
     /** @var string|null */
     private $permission;
+
+    /** @var AdminGroups */
+    private $adminGroups;
 
     /**
      * AbstractItem constructor.
      *
-     * @param string $id
-     * @param string $labelId
-     * @param Quad $icon
-     * @param null|string $permission
+     * @param             $id
+     * @param             $path
+     * @param             $labelId
+     * @param AdminGroups $adminGroups
+     * @param null        $permission
      */
-    public function __construct($id, $path, $labelId, Quad $icon, $permission = null)
+    public function __construct($id, $path, $labelId, AdminGroups $adminGroups, $permission = null)
     {
         $this->id = $id;
         $this->path = $path;
         $this->labelId = $labelId;
-        $this->icon = $icon;
         $this->permission = $permission;
+        $this->adminGroups = $adminGroups;
     }
 
     /**
@@ -75,16 +75,6 @@ abstract class AbstractItem implements ItemInterface
     }
 
     /**
-     * Icon to display next to the label.
-     *
-     * @return Quad
-     */
-    public function getIcon()
-    {
-        return $this->icon;
-    }
-
-    /**
      * Get the permission required to use this menu item.
      *
      * @return mixed
@@ -95,19 +85,14 @@ abstract class AbstractItem implements ItemInterface
     }
 
     /**
-     *
-     *
-     * @param Group $group
-     * @param AdminGroups $adminGroups
-     *
-     * @return mixed
+     * @inheritdoc
      */
-    public function isVisibleFor(Group $group, AdminGroups $adminGroups)
+    public function isVisibleFor($login)
     {
         if (is_null($this->permission)) {
             return true;
         }
 
-        return $adminGroups->hasGroupPermission($group, $this->permission);
+        return $this->adminGroups->hasPermission($login, $this->permission);
     }
 }

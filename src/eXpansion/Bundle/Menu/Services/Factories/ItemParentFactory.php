@@ -6,6 +6,7 @@ use eXpansion\Bundle\Menu\Model\Menu\ItemInterface;
 use eXpansion\Bundle\Menu\Model\Menu\ParentItem;
 use eXpansion\Bundle\Menu\Services\ItemBuilder;
 use eXpansion\Bundle\Menu\Services\ItemFactoryInterface;
+use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use FML\Controls\Quad;
 
 /**
@@ -20,14 +21,18 @@ class ItemParentFactory implements ItemFactoryInterface
     /** @var ItemBuilder */
     protected $itemBuilder;
 
+    /** @var AdminGroups */
+    protected $adminGroups;
+
     /**
      * ItemParentFactory constructor.
      *
      * @param ItemBuilder $itemBuilder
      */
-    public function __construct(ItemBuilder $itemBuilder)
+    public function __construct(AdminGroups $adminGroups, ItemBuilder $itemBuilder)
     {
         $this->itemBuilder = $itemBuilder;
+        $this->adminGroups = $adminGroups;
     }
 
     /**
@@ -49,20 +54,19 @@ class ItemParentFactory implements ItemFactoryInterface
      * @param string $id Id of the item
      * @param string $path Path of the item
      * @param string $label
-     * @param Quad $icon
      * @param string $permission
      * @param array $options
      *
      * @return ItemInterface
      */
-    public function build($class, $id, $path, $label, Quad $icon, $permission, $options = [])
+    public function build($class, $id, $path, $label, $permission, $options = [])
     {
         return new ParentItem(
             $this->itemBuilder,
             $id,
             $path,
             $label,
-            $icon,
+            $this->adminGroups,
             $permission
         );
     }

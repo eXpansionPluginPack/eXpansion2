@@ -5,6 +5,7 @@ namespace eXpansion\Bundle\Menu\Services\Factories;
 use eXpansion\Bundle\Menu\Model\Menu\ChatCommandItem;
 use eXpansion\Bundle\Menu\Model\Menu\ItemInterface;
 use eXpansion\Bundle\Menu\Services\ItemFactoryInterface;
+use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\DataProviders\ChatCommandDataProvider;
 use FML\Controls\Quad;
 
@@ -21,14 +22,18 @@ class ItemChatCommandFactory implements ItemFactoryInterface
     /** @var ChatCommandDataProvider */
     protected $chatCommandProvider;
 
+    /** @var AdminGroups */
+    protected $adminGroups;
+
     /**
      * ItemChatCommandFactory constructor.
      *
      * @param ChatCommandDataProvider $chatCommandProvider
      */
-    public function __construct(ChatCommandDataProvider $chatCommandProvider)
+    public function __construct(AdminGroups $adminGroups, ChatCommandDataProvider $chatCommandProvider)
     {
         $this->chatCommandProvider = $chatCommandProvider;
+        $this->adminGroups = $adminGroups;
     }
 
     /**
@@ -50,13 +55,12 @@ class ItemChatCommandFactory implements ItemFactoryInterface
      * @param string $id Id of the item
      * @param string $path Path of the item
      * @param string $label
-     * @param Quad $icon
      * @param string $permission
      * @param array $options
      *
      * @return ItemInterface
      */
-    public function build($class, $id, $path, $label, Quad $icon, $permission, $options = [])
+    public function build($class, $id, $path, $label, $permission, $options = [])
     {
         return new ChatCommandItem(
             $this->chatCommandProvider,
@@ -64,7 +68,7 @@ class ItemChatCommandFactory implements ItemFactoryInterface
             $id,
             $path,
             $label,
-            $icon,
+            $this->adminGroups,
             $permission
         );
     }

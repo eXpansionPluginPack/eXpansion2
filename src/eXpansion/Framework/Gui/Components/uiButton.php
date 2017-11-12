@@ -25,6 +25,7 @@ class uiButton extends abstractUiElement implements ScriptFeatureable
     protected $text = "button";
     protected $scale = 1.;
 
+    protected $label;
 
     const TYPE_DECORATED = "decorated";
     const TYPE_DEFAULT = "default";
@@ -40,6 +41,8 @@ class uiButton extends abstractUiElement implements ScriptFeatureable
         $this->text = $text;
         $this->type = $type;
         $this->setSize(26, 8);
+
+        $this->label = new uiLabel($this->getText(), uiLabel::TYPE_TITLE);
     }
 
 
@@ -74,7 +77,7 @@ class uiButton extends abstractUiElement implements ScriptFeatureable
             $buttonFrame->addChild($quad);
         }
 
-        $label = new uiLabel($this->getText(), uiLabel::TYPE_TITLE);
+        $label = $this->label;
         $label->setSize($this->width, $this->height)
             ->setScriptEvents(true)
             ->setAreaColor($this->backColor)
@@ -289,6 +292,7 @@ EOD;
      */
     public function setTranslate($translate)
     {
+        $this->label->setTranslate($translate);
         $this->translate = $translate;
 
         return $this;

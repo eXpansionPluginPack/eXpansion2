@@ -32,11 +32,10 @@ interface ItemFactoryInterface
      * @param string $id Id of the item
      * @param string $path Path of the item
      * @param string $label
-     * @param Quad $icon
      * @param string $permission
      * @param array $options
      *
      * @return ItemInterface
      */
-    public function build($class, $id, $path, $label, Quad $icon, $permission, $options =[]);
+    public function build($class, $id, $path, $label, $permission, $options =[]);
 }

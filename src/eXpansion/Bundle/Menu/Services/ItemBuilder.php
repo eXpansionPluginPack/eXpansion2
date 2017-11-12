@@ -30,17 +30,16 @@ class ItemBuilder
      * @param string $id
      * @param string $path
      * @param string $label
-     * @param Quad $icon
      * @param string $permission
      * @param array $options
      *
      * @return ItemInterface
      */
-    public function create($class, $id, $path, $label, Quad $icon, $permission, $options =[])
+    public function create($class, $id, $path, $label, $permission, $options =[])
     {
         foreach ($this->itemFactories as $itemFactory) {
             if ($itemFactory->supports($class)) {
-                return $itemFactory->build($class, $id, $path, $label, $icon, $permission, $options);
+                return $itemFactory->build($class, $id, $path, $label, $permission, $options);
             }
         }
     }
