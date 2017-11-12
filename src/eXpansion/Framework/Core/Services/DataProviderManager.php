@@ -115,6 +115,7 @@ class DataProviderManager
             $this->providersByCompatibility[$provider][$compatibility['title']][$compatibility['mode']][$compatibility['script']] = $id;
         }
 
+        $this->providerListeners[$id] = [];
         foreach ($listeners as $eventName => $method) {
             $this->providerListeners[$id][] = new ProviderListener($eventName, $provider, $method);
         }

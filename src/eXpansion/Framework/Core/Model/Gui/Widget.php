@@ -155,7 +155,7 @@ class Widget extends Manialink implements Container
                     $translations[$id] = $this->cachedMessages[$id];
                 }
             } else {
-                if ($child instanceof Frame) {
+                if ($child instanceof Container) {
                     $this->getDictionaryInformation($child, $translations);
                 }
             }

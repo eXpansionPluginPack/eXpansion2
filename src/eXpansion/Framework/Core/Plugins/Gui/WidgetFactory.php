@@ -18,8 +18,8 @@ use FML\Controls\Control;
  * @package eXpansion\Framework\Core\Plugins\Gui
  * @author Oliver de Cramer
  */
-class WidgetFactory extends ManialinkFactory {
-
+class WidgetFactory extends ManialinkFactory
+{
     /** @var Translations */
     protected $translationsHelper;
 
@@ -81,6 +81,4 @@ class WidgetFactory extends ManialinkFactory {
 
         return $manialink;
     }
-
-
 }

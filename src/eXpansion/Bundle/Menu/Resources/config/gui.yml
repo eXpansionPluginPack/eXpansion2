@@ -1,4 +1,7 @@
 services:
+    _defaults:
+        autowire: true
+        public: true
 
     expansion.framework.core.gui.scripts.menu:
         class: '%expansion.framework.core.model.gui.mania_scrip_factory.class%'
@@ -7,16 +10,25 @@ services:
           - '@file_locator'
           - '%expansion.framework.core.model.gui.mania_script.class%'
 
-
     eXpansion\Bundle\Menu\Plugins\Gui\MenuFactory:
         class: eXpansion\Bundle\Menu\Plugins\Gui\MenuFactory
-        autowire: true
         arguments:
             $name:  'Menu Factory'
             $sizeX: 0
             $sizeY: 0
-            $posX:  null
-            $posY:  null
-            $menuScriptFactory: '@expansion.framework.core.gui.scripts.menu'
+            $posX:  -150
+            $posY:  85
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}
+
+    eXpansion\Bundle\Menu\Plugins\Gui\MenuContentFactory:
+        class: eXpansion\Bundle\Menu\Plugins\Gui\MenuContentFactory
+        arguments:
+              $name:  'Menu Content'
+              $sizeX: 0
+              $sizeY: 0
+              $posX:  null
+              $posY:  null
+              $maniaScriptFactory: "@expansion.framework.core.gui.scripts.menu"
         tags:
             - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}
