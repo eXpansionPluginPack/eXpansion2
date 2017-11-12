@@ -40,10 +40,10 @@ class MenuContentFactory extends WidgetFactory
      * @param                      $name
      * @param                      $sizeX
      * @param                      $sizeY
-     * @param null                 $posX
-     * @param null                 $posY
+     * @param null $posX
+     * @param null $posY
      * @param WidgetFactoryContext $context
-     * @param MenuItemProvider     $menuItemProvider*
+     * @param MenuItemProvider $menuItemProvider *
      */
     public function __construct(
         $name,
@@ -144,7 +144,7 @@ class MenuContentFactory extends WidgetFactory
      * Create tabs level menu.
      *
      * @param ManialinkInterface $manialink
-     * @param ParentItem         $rootItem
+     * @param ParentItem $rootItem
      * @param                    $openId
      */
     protected function createTabsMenu(ManialinkInterface $manialink, ParentItem $rootItem, $openId)
@@ -182,9 +182,10 @@ class MenuContentFactory extends WidgetFactory
                 $label->setTranslate(true);
 
                 if ($item->getId() == $openId) {
-                    $underline = $this->uiFactory->createLine($posX - 13, -5);
-                    $underline->to($posX + 13, -5);
-                    $underline->setColor('FFFFFF');
+                    $underline = $this->uiFactory->createLine($posX - 7, -5);
+                    $underline->to($posX + 7, -5);
+                    $underline->setStroke(0.33);
+                    $underline->setColor('fff');
                     $tabsFrame->addChild($underline);
                 }
 
@@ -197,15 +198,15 @@ class MenuContentFactory extends WidgetFactory
     /**
      * Create content for sub menu.
      *
-     * @param Manialink  $manialink
-     * @param Frame      $frame
+     * @param Manialink $manialink
+     * @param Frame $frame
      * @param ParentItem $parentItem
      * @param            $displayLevel
      */
     protected function createSubMenu(Manialink $manialink, Frame $frame, ParentItem $parentItem, $displayLevel)
     {
-        $posX = $displayLevel * (-160.0/3);
-        $posY = ($displayLevel * (-100.0/3)) * 0.5;
+        $posX = $displayLevel * (-160.0 / 3);
+        $posY = ($displayLevel * (-100.0 / 3)) * 0.5;
         $scale = (0.5 / ($displayLevel + 1)) + 0.5;
 
         $contentFrame = new Frame();
@@ -232,22 +233,31 @@ class MenuContentFactory extends WidgetFactory
 
         /* TITLE */
         $titleLabel = $this->uiFactory->createLabel($parentItem->getLabelId(), uiLabel::TYPE_TITLE);
-        $titleLabel->setSize(60, 8);
-        $titleLabel->setPosition(-30, 0);
-        $titleLabel->setTranslate(true);
+        $titleLabel->setTextSize(9)
+            ->setSize(60, 12)
+            ->setPosition(0, 0)
+            ->setTranslate(true)
+            ->setTextColor('fff')
+            ->setHorizontalAlign("center");
+
         $contentFrame->addChild($titleLabel);
 
-        $titleLine = $this->uiFactory->createLine(-30, -8);
-        $titleLine->to(30, -8);
+        $titleLine = $this->uiFactory->createLine(-60 * $scale, -12);
+        $titleLine->setLength(120 * $scale);
+        $titleLine->setStroke(0.33)->setColor('fff');
+
         $contentFrame->addChild($titleLine);
 
-        $posY = -12;
+        $posY = -20;
         foreach ($parentItem->getChilds() as $item) {
             if ($item->isVisibleFor($manialink->getUserGroup())) {
-                $button = $this->uiFactory->createButton($item->getLabelId());
-                $button->setPosition(-25, $posY);
+                $button = $this->uiFactory->createLabel($item->getLabelId());
+                $button->setPosition(0, $posY);
                 $button->setSize(50, 8);
                 $button->setTranslate(true);
+                $button->setTextSize(4);
+                $button->setAlign("center", "center2");
+                $button->addClass('menuItem');
 
                 if ($displayLevel == 0) {
                     $action = $this->actionFactory->createManialinkAction(
@@ -266,11 +276,12 @@ class MenuContentFactory extends WidgetFactory
         if ($displayLevel == 0) {
 
             $button = $this->uiFactory->createButton('expansion_menu.menu_close', uiButton::TYPE_DECORATED);
-            $button->setBackgroundColor(uiButton::COLOR_WARNING);
+            $button->setBorderColor(uiButton::COLOR_WARNING)->setFocusColor(uiButton::COLOR_WARNING);
             $button->setPosition(-25, $posY - 12);
             $button->setSize(50, 8);
             $button->setTranslate(true);
-            $action = $this->actionFactory->createManialinkAction($manialink, [$this, 'callbackClose'], ['ml' =>$manialink]);
+            $action = $this->actionFactory->createManialinkAction($manialink, [$this, 'callbackClose'],
+                ['ml' => $manialink]);
             $button->setAction($action);
             $contentFrame->addChild($button);
         }

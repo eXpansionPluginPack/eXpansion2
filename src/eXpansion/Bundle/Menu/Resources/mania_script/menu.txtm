@@ -1,6 +1,26 @@
 
+***FML_MouseOver***
+***
+    Audio.PlaySoundEvent( CAudioManager::ELibSound::ScoreIncrease   , 0, 0.);
+    if (Event.Control.HasClass("menuItem")) {
+        if (Event.Control.HasClass("noAnim") == False) {
+            AnimMgr.Add(Event.Control, "<elem scale=\"1.3\" />", 300, CAnimManager::EAnimManagerEasing::ElasticOut);
+        }
+    }
+***
+
+***FML_MouseOut***
+***
+	if (Event.Control.HasClass("menuItem")) {
+        if (Event.Control.HasClass("noAnim") == False) {
+            AnimMgr.Add(Event.Control, "<elem scale=\"1.0\" />", 300, CAnimManager::EAnimManagerEasing::ElasticOut);
+        }
+    }
+***
+
 ***FML_OnInit***
 ***
     declare CMlFrame Exp_Window <=> (Page.GetFirstChild("Window") as CMlFrame);
     Exp_Window.ZIndex = 10000.;
 ***
+
