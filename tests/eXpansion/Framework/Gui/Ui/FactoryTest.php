@@ -52,8 +52,6 @@ class FactoryTest extends TestCore
             ['m' => 'createTextbox', 'p' => ['text', 'yoyo']],
             ['m' => 'createTextbox', 'p' => ['text', 'yoyo', 50]],
             ['m' => 'createTextbox', 'p' => ['text', 'yoyo', 50, 10]],
-            ['m' => 'createBackground', 'p' => [10, 10, 0]],
-            ['m' => 'createTitleBackground', 'p' => [10, 10, 0]],
         ];
 
         foreach ($tests as $test) {

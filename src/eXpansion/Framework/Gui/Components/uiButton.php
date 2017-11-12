@@ -5,14 +5,18 @@ namespace eXpansion\Framework\Gui\Components;
 use eXpansion\Framework\Core\Helpers\ColorConversion;
 use FML\Controls\Frame;
 use FML\Controls\Quad;
+use FML\Elements\Format;
 use FML\Script\Features\ScriptFeature;
 use FML\Script\Script;
 use FML\Script\ScriptLabel;
+use FML\Types\Container;
 use FML\Types\Renderable;
 use FML\Types\ScriptFeatureable;
 
-class uiButton extends abstractUiElement implements ScriptFeatureable
+class uiButton extends abstractUiElement implements ScriptFeatureable, Container
 {
+    /** @var  uiLabel */
+    protected $buttonLabel;
     protected $type;
 
     protected $textColor = "eee";
@@ -25,7 +29,6 @@ class uiButton extends abstractUiElement implements ScriptFeatureable
     protected $text = "button";
     protected $scale = 1.;
 
-    protected $label;
 
     const TYPE_DECORATED = "decorated";
     const TYPE_DEFAULT = "default";
@@ -41,8 +44,7 @@ class uiButton extends abstractUiElement implements ScriptFeatureable
         $this->text = $text;
         $this->type = $type;
         $this->setSize(26, 8);
-
-        $this->label = new uiLabel($this->getText(), uiLabel::TYPE_TITLE);
+        $this->buttonLabel = new uiLabel("", uiLabel::TYPE_TITLE);
     }
 
 
@@ -77,8 +79,8 @@ class uiButton extends abstractUiElement implements ScriptFeatureable
             $buttonFrame->addChild($quad);
         }
 
-        $label = $this->label;
-        $label->setSize($this->width, $this->height)
+        $this->buttonLabel->setSize($this->width, $this->height)
+            ->setText($this->getText())
             ->setScriptEvents(true)
             ->setAreaColor($this->backColor)
             ->setAreaFocusColor($this->focusColor)
@@ -86,13 +88,16 @@ class uiButton extends abstractUiElement implements ScriptFeatureable
             ->addClass('uiButtonElement')
             ->setAlign("center", "center2");
 
-        if ($this->translate) {
-            $label->setTranslate(true);
-        }
-        $label->setDataAttributes($this->_dataAttributes);
-        $label->addClasses($this->_classes);
 
-        $buttonFrame->addChild($label);
+        if ($this->translate) {
+            echo "traslate!";
+            $this->buttonLabel->setTextId($this->getText());
+        }
+
+        $this->buttonLabel->setDataAttributes($this->_dataAttributes);
+        $this->buttonLabel->addClasses($this->_classes);
+
+        $buttonFrame->addChild($this->buttonLabel);
 
 
         return $buttonFrame->render($domDocument);
@@ -290,12 +295,118 @@ EOD;
     /**
      * @param bool $translate
      */
-    public function setTranslate($translate)
+    public function setTranslate($translate = true)
     {
-        $this->label->setTranslate($translate);
-        $this->translate = $translate;
+        if ($translate) {
+            $this->buttonLabel->setTextId($this->getText());
+        } else {
+            $this->buttonLabel->setText($this->getText());
+        }
+
+        $this->buttonLabel->setTranslate($translate);
 
         return $this;
     }
 
+    /**
+     * Get the children
+     *
+     * @api
+     * @return Renderable[]
+     */
+    public function getChildren()
+    {
+        return [$this->buttonLabel];
+    }
+
+    /**
+     * Add a new child
+     *
+     * @api
+     * @param Renderable $child Child Control to add
+     * @deprecated
+     * @return static
+     */
+    public function addChild(Renderable $child)
+    {
+        // TODO: Implement addChild() method.
+    }
+
+    /**
+     * Add a new child
+     *
+     * @api
+     * @param Renderable $child Child Control to add
+     * @return static
+     * @deprecated Use addChild()
+     * @see        Container::addChild()
+     */
+    public function add(Renderable $child)
+    {
+        // TODO: Implement add() method.
+    }
+
+    /**
+     * Add new children
+     *
+     * @api
+     * @param Renderable[] $children Child Controls to add
+     * @return static
+     */
+    public function addChildren(array $children)
+    {
+        // TODO: Implement addChildren() method.
+    }
+
+    /**
+     * Remove all children
+     *
+     * @api
+     * @return static
+     */
+    public function removeAllChildren()
+    {
+        // TODO: Implement removeAllChildren() method.
+    }
+
+    /**
+     * Remove all children
+     *
+     * @api
+     * @return static
+     * @deprecated Use removeAllChildren()
+     * @see        Container::removeAllChildren()
+     */
+    public function removeChildren()
+    {
+        // TODO: Implement removeChildren() method.
+    }
+
+    /**
+     * Get the Format
+     *
+     * @api
+     * @param bool $createIfEmpty If the format should be created if it doesn't exist yet
+     * @return Format
+     * @deprecated Use Style
+     * @see        Style
+     */
+    public function getFormat($createIfEmpty = true)
+    {
+        // TODO: Implement getFormat() method.
+    }
+
+    /**
+     * Set the Format
+     *
+     * @api
+     * @param Format $format New Format
+     * @return static
+     * @deprecated Use Style
+     * @see        Style
+     */
+    public function setFormat(Format $format = null)
+    {
+        // TODO: Implement setFormat() method.
+    }
 }

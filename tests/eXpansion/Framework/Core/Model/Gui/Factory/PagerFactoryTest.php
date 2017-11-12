@@ -26,6 +26,7 @@ class PagerFactoryTest extends TestCore
                 '',
                 '',
                 '',
+                '',
                 ''
             )
         );
@@ -35,6 +36,7 @@ class PagerFactoryTest extends TestCore
                 100,
                 10,
                 100,
+                '',
                 '',
                 '',
                 '',

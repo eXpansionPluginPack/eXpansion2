@@ -11,18 +11,16 @@ namespace eXpansion\Framework\Core\Model\Gui\Grid\Column;
  */
 class TextColumn extends AbstractColumn
 {
-    /** @var bool  */
-    protected $sortable;
 
-    /** @var bool  */
+    /** @var bool */
     protected $translatable;
 
     /**
      * TextColumn constructor.
      *
-     * @param string  $key
-     * @param string  $name
-     * @param float   $widthCoeficiency
+     * @param string $key
+     * @param string $name
+     * @param float $widthCoeficiency
      * @param boolean $sortable
      * @param boolean $translatable
      */
@@ -30,24 +28,8 @@ class TextColumn extends AbstractColumn
     {
         parent::__construct($key, $name, $widthCoeficiency);
 
-        $this->sortable = $sortable;
+        $this->setSortable($sortable);
         $this->translatable = $translatable;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getSortable()
-    {
-        return $this->sortable;
-    }
-
-    /**
-     * @param bool $sortable
-     */
-    public function setSortable($sortable)
-    {
-        $this->sortable = $sortable;
     }
 
     /**

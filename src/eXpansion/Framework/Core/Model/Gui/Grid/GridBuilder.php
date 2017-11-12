@@ -4,6 +4,7 @@ namespace eXpansion\Framework\Core\Model\Gui\Grid;
 
 use eXpansion\Framework\Core\Model\Gui\Factory\LineFactory;
 use eXpansion\Framework\Core\Model\Gui\Factory\PagerFactory;
+use eXpansion\Framework\Core\Model\Gui\Factory\TitleLineFactory;
 use eXpansion\Framework\Core\Model\Gui\Grid\Column\AbstractColumn;
 use eXpansion\Framework\Core\Model\Gui\Grid\Column\ActionColumn;
 use eXpansion\Framework\Core\Model\Gui\Grid\Column\InputColumn;
@@ -24,10 +25,11 @@ use FML\Types\Renderable;
  */
 class GridBuilder
 {
+
     /** @var  ActionFactory */
     protected $actionFactory;
 
-    /** @var LineFactory */
+    /** @var TitleLineFactory */
     protected $titleLineFactory;
 
     /** @var LineFactory */
@@ -68,7 +70,8 @@ class GridBuilder
     protected $actionLastPage;
     /** @var string */
     protected $actionFirstPage;
-
+    /** @var  string */
+    protected $actionGotoPage;
     /** @var string[] */
     protected $temporaryActions = [];
 
@@ -81,13 +84,13 @@ class GridBuilder
      *
      * @param ActionFactory $actionFactory
      * @param LineFactory $lineFactory
-     * @param LineFactory $titleLineFactory
+     * @param TitleLineFactory $titleLineFactory
      * @param PagerFactory $pagerFactory
      */
     public function __construct(
         ActionFactory $actionFactory,
         LineFactory $lineFactory,
-        LineFactory $titleLineFactory,
+        TitleLineFactory $titleLineFactory,
         PagerFactory $pagerFactory,
         Factory $uiFactory
     ) {
@@ -133,6 +136,8 @@ class GridBuilder
             ->createManialinkAction($manialink, array($this, 'goToNextPage'), []);
         $this->actionLastPage = $this->actionFactory
             ->createManialinkAction($manialink, array($this, 'goToLastPage'), []);
+        $this->actionGotoPage = $this->actionFactory
+            ->createManialinkAction($manialink, array($this, 'goToPage'), []);
 
         return $this;
     }
@@ -237,13 +242,27 @@ class GridBuilder
         $frame->addChild($tooltip);
 
         // Generating headers.
-        // TODO if sortable create actions...
         $data = [];
         foreach ($this->columns as $columnData) {
+            $action = null;
+            $sort = "";
+            if ($columnData->getSortable() && $columnData->getSortColumn()) {
+                $sort = $columnData->getSortDirection();
+
+            }
+            if ($columnData->getSortable()) {
+                $action = $this->actionFactory->createManialinkAction(
+                    $this->manialink,
+                    [$this, 'sortColumn'],
+                    ["key" => $columnData->getKey()]);
+            }
+
             $data[] = [
-                'text' => $columnData->getName(),
+                'title' => $columnData->getName(),
                 'width' => $columnData->getWidthCoeficiency(),
                 'translatable' => true,
+                'sort' => $sort,
+                'action' => $action,
             ];
         }
 
@@ -261,7 +280,6 @@ class GridBuilder
             $data = [];
             foreach ($this->columns as $columnData) {
                 if ($columnData instanceof TextColumn) {
-
                     $data[] = [
                         'text' => $this->dataCollection->getLineData($lineData, $columnData->getKey()),
                         'width' => $columnData->getWidthCoeficiency(),
@@ -296,7 +314,7 @@ class GridBuilder
         /*
          * Handle the pager.
          */
-        $posY = ($frame->getHeight() - 7) * -1;
+        $posY = ($frame->getHeight() - 9) * -1;
         $pager = $this->pagerFactory->create(
             $frame->getWidth(),
             $this->currentPage,
@@ -304,9 +322,10 @@ class GridBuilder
             $this->actionFirstPage,
             $this->actionPreviousPage,
             $this->actionNextPage,
-            $this->actionLastPage
+            $this->actionLastPage,
+            $this->actionGotoPage
         );
-        $pager->setPosition(0, $posY);
+        $pager->setPosition(($frame->getWidth() - $pager->getWidth()) / 2, $posY);
         $frame->addChild($pager);
 
         return $frame;
@@ -343,6 +362,21 @@ class GridBuilder
         }
     }
 
+    public function goToPage($login = null, $entries = [])
+    {
+        if (array_key_exists("pager_gotopage", $entries)) {
+            if (is_numeric($entries['pager_gotopage'])) {
+                $page = (int)$entries['pager_gotopage'];
+
+                $this->updateDataCollection($entries);
+                if (($page >= 1) && ($page <= $this->dataCollection->getLastPageNumber())) {
+                    $this->changePage($page);
+                }
+            }
+        }
+    }
+
+
     /**
      * Action callback to go to the last page.
      */
@@ -361,9 +395,11 @@ class GridBuilder
         $data = [];
         $start = ($this->currentPage - 1) * $this->dataCollection->getPageSize();
         foreach ($entries as $key => $value) {
-            $array = explode("_", str_replace("entry_", "", $key));
-            setType($value, $array[1]);
-            $data[$array[0]] = $value;
+            if (substr($key, 0, 6) == "entry_") {
+                $array = explode("_", str_replace("entry_", "", $key));
+                setType($value, $array[1]);
+                $data[$array[0]] = $value;
+            }
         }
 
         $lines = $this->dataCollection->getData($this->currentPage);
@@ -395,6 +431,24 @@ class GridBuilder
     protected function changePage($page)
     {
         $this->currentPage = $page;
+        $this->manialinkFactory->update($this->manialink->getUserGroup());
+    }
+
+    public function sortColumn($login, $entries, $args)
+    {
+        foreach ($this->columns as $columnData) {
+            if ($columnData->getKey() == $args['key']) {
+                if ($columnData->getSortColumn()) {
+                    $columnData->toggleSortDirection();
+                } else {
+                    $columnData->setSortColumn(true);
+                }
+                $this->dataCollection->setFiltersAndSort([], $columnData->getKey(), $columnData->getSortDirection());
+            } else {
+                $columnData->setSortColumn(false);
+            }
+        }
+
         $this->manialinkFactory->update($this->manialink->getUserGroup());
     }
 }
