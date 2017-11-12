@@ -13,4 +13,5 @@ expansion_admin:
               column:
                   name: 'Setting Name'
                   value: 'Setting Value'
-
+              button:
+                  apply: 'Apply'

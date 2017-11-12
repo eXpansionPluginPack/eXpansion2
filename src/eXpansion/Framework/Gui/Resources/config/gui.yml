@@ -31,8 +31,3 @@ services:
     class: eXpansion\Framework\Gui\Ui\Factory
     arguments:
       - '%expansion.gui.components.list%'
-      -
-        Background: '@eXpansion\Framework\Core\Model\Gui\Factory\BackGroundFactory'
-        TitleBackground: '@eXpansion\Framework\Core\Model\Gui\Factory\TitleBackGroundFactory'
-        GridLine: '@eXpansion\Framework\Core\Model\Gui\Factory\LineFactory'
-        Pager: '@eXpansion\Framework\Core\Model\Gui\Factory\PagerFactory'

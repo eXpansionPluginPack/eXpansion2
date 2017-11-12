@@ -46,11 +46,11 @@ class MethodGetScoresDataProvider extends AbstractDataProvider implements Method
     /**
      * Request call to fetch scores.
      *
-     * @return null
+     * @return void
      */
     public function request()
     {
-        $this->connection->triggerModeScriptEvent('TriggerModeScriptEventArray', ['Trackmania.GetScores'], [(string) time()]);
+        $this->connection->triggerModeScriptEvent("Trackmania.GetScores", ["responseid" => (string)time()]);
     }
 
     /**

@@ -79,7 +79,7 @@ class TitleLineFactory
         }
 
         $line = $this->uiFactory->createLine(0, -$height);
-        $line->setLength($totalWidth)->setStoke(0.33)->setColor("fff");
+        $line->setLength($totalWidth)->setStroke(0.33)->setColor("fff");
 
         $frame->addChild($line);
 

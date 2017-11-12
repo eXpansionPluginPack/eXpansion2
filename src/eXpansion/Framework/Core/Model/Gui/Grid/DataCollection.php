@@ -160,17 +160,18 @@ class DataCollection implements DataCollectionInterface
                 $this->filters,
                 FilterInterface::FILTER_LOGIC_OR
             );
-        }
-        if (!is_null($this->sort)) {
-            $sort = $this->sort;
-            uasort($this->filteredData, function ($a, $b) use ($sort) {
-                $comp = (strcmp($a[$sort[0]], $b[$sort[0]]));
-                if ($sort[1] == "DESC") {
-                    return -1 * $comp;
-                } else {
-                    return $comp;
-                }
-            });
+
+            if (!is_null($this->sort)) {
+                $sort = $this->sort;
+                uasort($this->filteredData, function ($a, $b) use ($sort) {
+                    $comp = (strcmp($a[$sort[0]], $b[$sort[0]]));
+                    if ($sort[1] == "DESC") {
+                        return -1 * $comp;
+                    } else {
+                        return $comp;
+                    }
+                });
+            }
         }
     }
 

@@ -25,6 +25,7 @@ use FML\Types\Renderable;
  */
 class GridBuilder
 {
+
     /** @var  ActionFactory */
     protected $actionFactory;
 
@@ -69,7 +70,8 @@ class GridBuilder
     protected $actionLastPage;
     /** @var string */
     protected $actionFirstPage;
-
+    /** @var  string */
+    protected $actionGotoPage;
     /** @var string[] */
     protected $temporaryActions = [];
 
@@ -134,6 +136,8 @@ class GridBuilder
             ->createManialinkAction($manialink, array($this, 'goToNextPage'), []);
         $this->actionLastPage = $this->actionFactory
             ->createManialinkAction($manialink, array($this, 'goToLastPage'), []);
+        $this->actionGotoPage = $this->actionFactory
+            ->createManialinkAction($manialink, array($this, 'goToPage'), []);
 
         return $this;
     }
@@ -310,7 +314,7 @@ class GridBuilder
         /*
          * Handle the pager.
          */
-        $posY = ($frame->getHeight() - 7) * -1;
+        $posY = ($frame->getHeight() - 9) * -1;
         $pager = $this->pagerFactory->create(
             $frame->getWidth(),
             $this->currentPage,
@@ -318,9 +322,10 @@ class GridBuilder
             $this->actionFirstPage,
             $this->actionPreviousPage,
             $this->actionNextPage,
-            $this->actionLastPage
+            $this->actionLastPage,
+            $this->actionGotoPage
         );
-        $pager->setPosition(0, $posY);
+        $pager->setPosition(($frame->getWidth() - $pager->getWidth()) / 2, $posY);
         $frame->addChild($pager);
 
         return $frame;
@@ -357,6 +362,21 @@ class GridBuilder
         }
     }
 
+    public function goToPage($login = null, $entries = [])
+    {
+        if (array_key_exists("pager_gotopage", $entries)) {
+            if (is_numeric($entries['pager_gotopage'])) {
+                $page = (int)$entries['pager_gotopage'];
+
+                $this->updateDataCollection($entries);
+                if (($page >= 1) && ($page <= $this->dataCollection->getLastPageNumber())) {
+                    $this->changePage($page);
+                }
+            }
+        }
+    }
+
+
     /**
      * Action callback to go to the last page.
      */
@@ -375,9 +395,11 @@ class GridBuilder
         $data = [];
         $start = ($this->currentPage - 1) * $this->dataCollection->getPageSize();
         foreach ($entries as $key => $value) {
-            $array = explode("_", str_replace("entry_", "", $key));
-            setType($value, $array[1]);
-            $data[$array[0]] = $value;
+            if (substr($key, 0, 6) == "entry_") {
+                $array = explode("_", str_replace("entry_", "", $key));
+                setType($value, $array[1]);
+                $data[$array[0]] = $value;
+            }
         }
 
         $lines = $this->dataCollection->getData($this->currentPage);

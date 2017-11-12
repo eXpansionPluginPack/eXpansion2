@@ -26,6 +26,9 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
      */
     protected $default;
 
+    /** @var null|string */
+    protected $action = null;
+
     protected $textFormat = "Basic";
 
     public function __construct($name, $default = "", $width = 30, $textFormat = "Basic")
@@ -72,6 +75,9 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
             ->setTextFormat($this->textFormat)
             ->setName($this->name)
             ->setTextSize(2);
+        if ($this->action) {
+            $input->addDataAttribute("action", $this->action);
+        }
 
         $frame->addChild($quad);
         $frame->addChild($input);
@@ -135,7 +141,7 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
 
     public function getHeight()
     {
-        return $this->height+2;
+        return $this->height + 2;
     }
 
     /**
@@ -146,6 +152,9 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
     public function prepare(Script $script)
     {
         $script->addCustomScriptLabel(ScriptLabel::MouseClick, $this->getScriptMouseClick());
+        if ($this->action) {
+            $script->addCustomScriptLabel(ScriptLabel::EntrySubmit, $this->getScriptEntrySubmit());
+        }
     }
 
     /**
@@ -186,5 +195,35 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
             }					
 EOL;
 
+    }
+
+    protected function getScriptEntrySubmit()
+    {
+        return <<<EOL
+             if (Event.Control.DataAttributeExists("action") ) {              
+                TriggerPageAction(Event.Control.DataAttributeGet("action"));            
+            }					
+EOL;
+
+    }
+
+
+    /**
+     * @return null|string
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    /**
+     * @param null|string $action
+     * @return $this
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+
+        return $this;
     }
 }

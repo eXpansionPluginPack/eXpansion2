@@ -114,7 +114,7 @@ class uiLine extends abstractUiElement
     /**
      * @param float $stoke
      */
-    public function setStoke($stoke)
+    public function setStroke($stoke)
     {
         $this->stoke = $stoke;
 

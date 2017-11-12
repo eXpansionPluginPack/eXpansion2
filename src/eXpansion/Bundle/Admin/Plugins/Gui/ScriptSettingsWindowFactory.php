@@ -108,7 +108,8 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
         $this->setGridSize($frame->getWidth(), $frame->getHeight() - 10);
 
 
-        $apply = $this->uiFactory->createButton("Apply");
+        $apply = $this->uiFactory->createButton("expansion_admin.gui.window.scriptsettings.button.apply");
+        $apply->setTranslate(true);
         $apply->setPosition(($frame->getWidth() - $apply->getWidth()), -($frame->getHeight() - $apply->getHeight()));
 
         $apply->setAction($this->actionFactory->createManialinkAction(
@@ -119,7 +120,6 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
 
 
         $manialink->addChild($apply);
-
 
 
     }

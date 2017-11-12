@@ -34,10 +34,10 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
      */
     protected $startY = 0.;
 
-    /** @var string  */
+    /** @var string */
     protected $hAlign = "left";
 
-    /** @var string  */
+    /** @var string */
     protected $vAlign = "top";
 
     /**
@@ -225,7 +225,9 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
      */
     public function addChildren(array $children)
     {
-        // TODO: Implement addChildren() method.
+        foreach ($children as $child) {
+            $this->addChild($child);
+        }
     }
 
     /**
@@ -236,7 +238,11 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
      */
     public function removeAllChildren()
     {
-        // TODO: Implement removeAllChildren() method.
+        $this->width = 0;
+        $this->height = 0;
+        $this->elements = [];
+
+        return $this;
     }
 
     /**
@@ -284,6 +290,15 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
     {
         $this->halign = $hAling;
         $this->valign = $vAlign;
+    }
+
+
+    public function setPosition($x, $y)
+    {
+        $this->setX($x);
+        $this->setY($y);
+
+        return $this;
     }
 
 }

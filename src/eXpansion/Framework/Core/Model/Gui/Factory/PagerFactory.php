@@ -1,10 +1,11 @@
 <?php
+
 namespace eXpansion\Framework\Core\Model\Gui\Factory;
 
 use eXpansion\Framework\Gui\Components\uiButton;
-use FML\Controls\Control;
+use eXpansion\Framework\Gui\Ui\Factory as uiFactory;
 use FML\Controls\Frame;
-use FML\Controls\Quads\Quad_Icons64x64_1;
+use FML\Controls\Quad;
 
 /**
  * Class PagerFactory
@@ -14,17 +15,16 @@ use FML\Controls\Quads\Quad_Icons64x64_1;
  */
 class PagerFactory
 {
-    /** @var LabelFactory */
-    protected $labelFactory;
+    /** @var uiFactory */
+    protected $uiFactory;
 
     /**
      * PagerFactory constructor.
-     *
-     * @param LabelFactory $labelFactory
+     * @param uiFactory $uiFactory
      */
-    public function __construct(LabelFactory $labelFactory)
+    public function __construct(uiFactory $uiFactory)
     {
-        $this->labelFactory = $labelFactory;
+        $this->uiFactory = $uiFactory;
     }
 
     /**
@@ -45,54 +45,93 @@ class PagerFactory
         $actionFirstPage,
         $actionPreviousPage,
         $actionNextPage,
-        $actionLastPage
+        $actionLastPage,
+        $actionGotoPage
     ) {
-        $frame = new Frame();
-        $frame->setSize($width, 7);
 
+        $frame = Frame::Create();
+        $frame->setSize($width, 16);
+
+        $pagerLine = $this->uiFactory->createLayoutLine(0, -1);
         $buttonSize = 7;
+
+        $empty = Quad::create();
+        $empty->setOpacity(0)->setSize($buttonSize, $buttonSize);
 
         // Show previous buttons
         if ($currentPageNumber > 2) {
-            $button = new uiButton("", uiButton::TYPE_DECORATED);
+            $button = $this->uiFactory->createButton("", uiButton::TYPE_DECORATED);
             $button
                 ->setSize($buttonSize, $buttonSize)
-                ->setPosition(1, 0)
                 ->setAction($actionFirstPage);
-            $frame->addChild($button);
+        } else {
+            $button = clone $empty;
         }
+
+
+        $pagerLine->addChild($button);
+
         if ($currentPageNumber > 1) {
-            $button = new uiButton("", uiButton::TYPE_DECORATED);
+            $button = $this->uiFactory->createButton("", uiButton::TYPE_DECORATED);
             $button
                 ->setSize($buttonSize, $buttonSize)
-                ->setPosition(2 + $buttonSize, 0)
                 ->setAction($actionPreviousPage);
-            $frame->addChild($button);
+
+        } else {
+            $button = clone $empty;
         }
+        $pagerLine->addChild($button);
+
 
         // Show current page.
-        $label = $this->labelFactory->create("$currentPageNumber / $lastPageNumber");
+
+        $input = $this->uiFactory->createInput('pager_gotopage', $currentPageNumber, 7);
+        $input->setAction($actionGotoPage)->setPosition(0, 1);
+
+        $label = $this->uiFactory->createLabel(" / $lastPageNumber");
         $label->setSize(10, 7);
-        $label->setHorizontalAlign(Control::CENTER);
-        $label->setPosition($frame->getWidth() / 2, 0);
-        $frame->addChild($label);
+
+        $line = $this->uiFactory->createLayoutLine(0, -2);
+        $line->addChildren([$input, $label]);
+
+        if ($lastPageNumber > 1) {
+            $pagerLine->addChild($line);
+        } else {
+            $label->setText("1 / 1");
+            $pagerLine->addChild($label);
+        }
 
         if ($currentPageNumber < $lastPageNumber) {
-            $button = new uiButton("", uiButton::TYPE_DECORATED);
+            $button = $this->uiFactory->createButton("", uiButton::TYPE_DECORATED);
             $button
                 ->setSize($buttonSize, $buttonSize)
-                ->setPosition($frame->getWidth() - 1 - (2 * $buttonSize), 0)
                 ->setAction($actionNextPage);
-            $frame->addChild($button);
+
+        } else {
+            $button = clone $empty;
         }
+        $pagerLine->addChild($button);
+
         if ($currentPageNumber < $lastPageNumber - 1) {
-            $button = new uiButton("", uiButton::TYPE_DECORATED);
+            $button = $this->uiFactory->createButton("", uiButton::TYPE_DECORATED);
             $button
                 ->setSize($buttonSize, $buttonSize)
-                ->setPosition($frame->getWidth() - 1 - $buttonSize, 0)
                 ->setAction($actionLastPage);
-            $frame->addChild($button);
+
+        } else {
+            $button = clone $empty;
         }
+        $pagerLine->addChild($button);
+
+        $pagerLine->setAlign("center", "top");
+        $pagerLine->setX(($width - $pagerLine->getWidth()) / 2);
+
+
+        $borderTop = $this->uiFactory->createLine(0, 0);
+        $borderTop->setLength($width)->setColor("fff");
+
+        $frame->addChild($borderTop);
+        $frame->addChild($pagerLine);
 
         return $frame;
     }
