@@ -19,3 +19,6 @@ services:
         resource: '../../Services/Factories/*'
         tags:
           - {name: 'expansion.menu.item.factory'}
+
+    eXpansion\Bundle\Menu\Gui\:
+        resource: '../../Gui/*'

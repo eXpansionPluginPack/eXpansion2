@@ -42,7 +42,6 @@ class WindowsGuiHandler implements GuiHandlerInterface, ListenerInterfaceMpLegac
             $this->userWindows[$login] = $manialink;
         }
 
-        // TODO edit window content.
         $this->guiHandler->addToDisplay($manialink);
     }
 

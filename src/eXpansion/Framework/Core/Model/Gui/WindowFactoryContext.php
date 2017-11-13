@@ -1,14 +1,13 @@
 <?php
 
-
 namespace eXpansion\Framework\Core\Model\Gui;
 
 use eXpansion\Framework\Core\Helpers\Translations;
+use eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactory;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Core\Plugins\GuiHandler;
 use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
 use \eXpansion\Framework\Gui\Ui\Factory as UiFactory;
-
 
 /**
  * Class WindowFactoryContext
@@ -19,8 +18,8 @@ use \eXpansion\Framework\Gui\Ui\Factory as UiFactory;
 class WindowFactoryContext extends WidgetFactoryContext
 {
 
-    /** @var  ManiaScriptFactory */
-    protected $windowManiaScriptFactory;
+    /** @var  WindowFrameFactory */
+    protected $windowFrameFactory;
 
     /**
      * WindowFactoryContext constructor.
@@ -30,7 +29,7 @@ class WindowFactoryContext extends WidgetFactoryContext
      * @param Factory            $groupFactory
      * @param ActionFactory      $actionFactory
      * @param Translations       $translations
-     * @param ManiaScriptFactory $maniaScriptFactory
+     * @param WindowFrameFactory $windowFrameFactory
      */
     public function __construct(
         $className,
@@ -39,18 +38,18 @@ class WindowFactoryContext extends WidgetFactoryContext
         ActionFactory $actionFactory,
         Translations $translations,
         UiFactory $uiFactory,
-        ManiaScriptFactory $maniaScriptFactory
+        WindowFrameFactory $windowFrameFactory
     ) {
         parent::__construct($className, $guiHandler, $groupFactory, $actionFactory, $translations, $uiFactory);
 
-        $this->windowManiaScriptFactory = $maniaScriptFactory;
+        $this->windowFrameFactory = $windowFrameFactory;
     }
 
     /**
-     * @return ManiaScriptFactory
+     * @return WindowFrameFactory
      */
-    public function getWindowManiaScriptFactory()
+    public function getWindowFrameFactory()
     {
-        return $this->windowManiaScriptFactory;
+        return $this->windowFrameFactory;
     }
 }
