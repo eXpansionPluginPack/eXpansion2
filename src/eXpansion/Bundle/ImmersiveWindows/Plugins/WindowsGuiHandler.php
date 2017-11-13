@@ -7,7 +7,10 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Core\Plugins\GuiHandler;
 use eXpansion\Framework\Core\Plugins\GuiHandlerInterface;
+use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
+use Maniaplanet\DedicatedServer\Connection;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class WindowsGuiHandler, replaces the native GuiHandler only for windows type manialinks in order to :
@@ -21,11 +24,14 @@ use eXpansion\Framework\Core\Storage\Data\Player;
  */
 class WindowsGuiHandler implements GuiHandlerInterface, ListenerInterfaceMpLegacyPlayer
 {
-    /** @var  GuiHandlerInterface */
-    protected $guiHandler;
 
     /** @var Window[] */
     protected $userWindows = [];
+
+    /**
+     * @var GuiHandler
+     */
+    protected $guiHandler;
 
     public function __construct(GuiHandler $guiHandler)
     {

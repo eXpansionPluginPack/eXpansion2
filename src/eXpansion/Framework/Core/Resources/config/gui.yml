@@ -24,7 +24,6 @@ services:
         arguments:
             $className: "%expansion.framework.core.model.gui.widget.class%"
 
-
     eXpansion\Framework\Core\Model\Gui\WindowFactoryContext:
         class: eXpansion\Framework\Core\Model\Gui\WindowFactoryContext
         arguments:

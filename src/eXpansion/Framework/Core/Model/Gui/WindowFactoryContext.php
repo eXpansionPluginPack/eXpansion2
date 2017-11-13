@@ -35,7 +35,7 @@ class WindowFactoryContext extends WidgetFactoryContext
      */
     public function __construct(
         $className,
-        GuiHandler $guiHandler,
+        GuiHandlerInterface $guiHandler,
         Factory $groupFactory,
         ActionFactory $actionFactory,
         Translations $translations,
