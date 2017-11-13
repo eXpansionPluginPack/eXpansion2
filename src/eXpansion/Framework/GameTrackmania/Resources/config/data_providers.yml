@@ -1,19 +1,23 @@
-parameters:
-    expansion.framework.game_trackmania.data_providers.base.class: eXpansion\Framework\GameTrackmania\DataProviders\BaseDataProvider
-    expansion.framework.game_trackmania.data_providers.base.interface: eXpansion\Framework\GameTrackmania\DataProviders\Listener\BaseDataListenerInterface
-
 services:
     _defaults:
         autowire: true
         autoconfigure: true
         public: true
 
-    expansion.framework.game_trackmania.data_providers.base:
-        class: "%expansion.framework.game_trackmania.data_providers.base.class%"
+    expansion.framework.game_trackmania.data_providers.race:
+        class: eXpansion\Framework\GameTrackmania\DataProviders\RaceDataProvider
         tags:
-            - {name: expansion.dataprovider, provider: "tm.script.race", interface: "%expansion.framework.game_trackmania.data_providers.base.interface%"}
+            - {name: expansion.dataprovider, provider: "tm.script.race", interface: eXpansion\Framework\GameTrackmania\DataProviders\Listener\RaceDataListenerInterface}
             - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script}
-            - {name: expansion.dataprovider.listener, event_name: Trackmania.Event.WayPoint, method: onWayPoint}
+            - {name: expansion.dataprovider.listener, event_name: Trackmania.Event.WayPoint, method: onWayPoint }
+
+    expansion.framework.game_trackmania.data_providers.player:
+        class: eXpansion\Framework\GameTrackmania\DataProviders\PlayerEventsDataProvider
+        tags:
+            - {name: expansion.dataprovider, provider: "tm.script.player", interface: eXpansion\Framework\GameTrackmania\DataProviders\Listener\PlayerEventsListenerInterface}
+            - {name: expansion.dataprovider.listener, event_name: Trackmania.Event.StartLine, method: onStartLine}
+            - {name: expansion.dataprovider.listener, event_name: Trackmania.Event.GiveUp, method: onGiveUp}
+            - {name: expansion.dataprovider.listener, event_name: Trackmania.Event.Respawn, method: onRespawn}
 
     expansion.framework.game_trackmania.data_providers.method_get_scores:
         class: eXpansion\Framework\GameTrackmania\DataProviders\MethodGetScoresDataProvider

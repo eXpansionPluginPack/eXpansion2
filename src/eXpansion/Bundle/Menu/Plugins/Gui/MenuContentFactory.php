@@ -276,7 +276,9 @@ class MenuContentFactory extends WidgetFactory
                 $button->setTextSize(4);
                 $button->setAlign("center", "center2");
                 $button->addClass('menuItem');
-
+                if ($item instanceof $parentItem) {
+                    $button->setTextPrefix("⏵ ");
+                }
                 if ($displayLevel == 0) {
                     $action = $this->actionFactory->createManialinkAction(
                         $manialink,
@@ -305,8 +307,7 @@ class MenuContentFactory extends WidgetFactory
         }
     }
 
-    public function createBreadcrumb($items)
-    {
+    public function createBreadcrumb($items) {
         $items = array_reverse($items);
 
         $frame = $this->uiFactory->createLayoutLine(-60, -16, [], 2);

@@ -5,7 +5,7 @@ namespace eXpansion\Framework\GameManiaplanet\DataProviders\Listener;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
 /**
- * Class BaseDataListenerInterface
+ * Class ListenerInterfaceMpScriptMap
  *
  * @package eXpansion\Framework\GameManiaplanet\DataProviders\Listener;
  * @author  oliver de Cramer <oliverde8@gmail.com>

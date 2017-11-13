@@ -6,12 +6,12 @@ use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
 
 
 /**
- * Class BaseDataProvider
+ * Class RaceDataProvider
  *
  * @package eXpansion\Framework\GameTrackmania\DataProviders;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-class BaseDataProvider extends AbstractDataProvider
+class RaceDataProvider extends AbstractDataProvider
 {
     public function onWayPoint($params)
     {
