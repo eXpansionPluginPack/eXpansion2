@@ -1,13 +1,8 @@
-parameters:
-  expansion.framework.core.model.gui.mania_script.class: 'eXpansion\Framework\Core\Model\Gui\ManiaScript'
-  expansion.framework.core.model.gui.mania_scrip_factory.class: 'eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory'
-
-  expansion.framework.core.mania_script.window.path: 'eXpansionCore/Resources/mania_script/window.txtm'
-
 services:
-  expansion.framework.core.mania_script.window_factory:
-    class: '%expansion.framework.core.model.gui.mania_scrip_factory.class%'
+  expansion.framework.core.maniascript.window:
+    class: eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory
     autowire: true
     arguments:
-      $relativePath: '%expansion.framework.core.mania_script.window.path%'
-      $className: '%expansion.framework.core.model.gui.mania_script.class%'
+      $relativePath: 'eXpansion/Core/Resources/maniascript/window.txtm'
+      $className: eXpansion\Framework\Core\Model\Gui\ManiaScript
+

@@ -157,7 +157,7 @@ class GuiHandler implements
         try {
             $this->connection->executeMulticall();
         } catch (\Exception $e) {
-            $this->logger->addError("Couldn't deliver all manialinks : ".$e->getMessage(), ['exception' => $e]);
+            $this->logger->error("Couldn't deliver all manialinks : ".$e->getMessage(), ['exception' => $e]);
             $this->console->writeln('$F00ERROR - Couldn\'t deliver all manialinks : '.$e->getMessage());
         }
     }

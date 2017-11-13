@@ -6,6 +6,7 @@ use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactory;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Core\Plugins\GuiHandler;
+use eXpansion\Framework\Core\Plugins\GuiHandlerInterface;
 use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
 use \eXpansion\Framework\Gui\Ui\Factory as UiFactory;
 
@@ -24,11 +25,12 @@ class WindowFactoryContext extends WidgetFactoryContext
     /**
      * WindowFactoryContext constructor.
      *
-     * @param                    $className
-     * @param GuiHandler         $guiHandler
-     * @param Factory            $groupFactory
-     * @param ActionFactory      $actionFactory
-     * @param Translations       $translations
+     * @param $className
+     * @param GuiHandler $guiHandler
+     * @param Factory $groupFactory
+     * @param ActionFactory $actionFactory
+     * @param Translations $translations
+     * @param UiFactory $uiFactory
      * @param WindowFrameFactory $windowFrameFactory
      */
     public function __construct(
@@ -40,6 +42,7 @@ class WindowFactoryContext extends WidgetFactoryContext
         UiFactory $uiFactory,
         WindowFrameFactory $windowFrameFactory
     ) {
+
         parent::__construct($className, $guiHandler, $groupFactory, $actionFactory, $translations, $uiFactory);
 
         $this->windowFrameFactory = $windowFrameFactory;

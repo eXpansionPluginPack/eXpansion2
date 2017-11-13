@@ -5,6 +5,7 @@ namespace eXpansion\Bundle\ImmersiveWindows\Plugins;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Window;
+use eXpansion\Framework\Core\Plugins\GuiHandler;
 use eXpansion\Framework\Core\Plugins\GuiHandlerInterface;
 use eXpansion\Framework\Core\Storage\Data\Player;
 
@@ -12,6 +13,7 @@ use eXpansion\Framework\Core\Storage\Data\Player;
  * Class WindowsGuiHandler, replaces the native GuiHandler only for windows type manialinks in order to :
  *  - Prevent more then 1 window to open.
  *  - Change the display
+ *
  *
  * @author    de Cramer Oliver<oliverde8@gmail.com>
  * @copyright 2017 Smile
@@ -24,6 +26,11 @@ class WindowsGuiHandler implements GuiHandlerInterface, ListenerInterfaceMpLegac
 
     /** @var Window[] */
     protected $userWindows = [];
+
+    public function __construct(GuiHandler $guiHandler)
+    {
+        $this->guiHandler = $guiHandler;
+    }
 
     /**
      * @inheritdoc

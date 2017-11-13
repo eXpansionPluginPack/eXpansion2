@@ -4,11 +4,11 @@ services:
         public: true
 
     expansion.framework.core.gui.scripts.menu:
-        class: '%expansion.framework.core.model.gui.mania_scrip_factory.class%'
+        class: eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory
         arguments:
-          - 'MenuBundle/Resources/mania_script/menu.txtm'
-          - '@file_locator'
-          - '%expansion.framework.core.model.gui.mania_script.class%'
+            $relativePath: 'MenuBundle/Resources/maniascript/menu.txtm'
+            $className: eXpansion\Framework\Core\Model\Gui\ManiaScript
+
 
     eXpansion\Bundle\Menu\Plugins\Gui\MenuFactory:
         class: eXpansion\Bundle\Menu\Plugins\Gui\MenuFactory

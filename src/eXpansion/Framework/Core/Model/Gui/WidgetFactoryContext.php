@@ -27,11 +27,12 @@ class WidgetFactoryContext extends ManialinkFactoryContext
     /**
      * WidgetFactoryContext constructor.
      *
-     * @param               $className
-     * @param GuiHandler    $guiHandler
-     * @param Factory       $groupFactory
+     * @param $className
+     * @param GuiHandler $guiHandler
+     * @param Factory $groupFactory
      * @param ActionFactory $actionFactory
-     * @param Translations  $translations
+     * @param Translations $translations
+     * @param UiFactory $uiFactory
      */
     public function __construct(
         $className,

@@ -9,7 +9,7 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: true:
+        public: true
 
     #
     # GUI Contexes to put everything together.
@@ -26,10 +26,9 @@ services:
 
 
     eXpansion\Framework\Core\Model\Gui\WindowFactoryContext:
-        class: 'eXpansion\Framework\Core\Model\Gui\WindowFactoryContext'
+        class: eXpansion\Framework\Core\Model\Gui\WindowFactoryContext
         arguments:
             $className: "%expansion.framework.core.model.gui.window.class%"
-            $maniaScriptFactory: '@expansion.framework.core.mania_script.window_factory'
 
     #
     # GUI Element factories
@@ -41,6 +40,12 @@ services:
         class: 'eXpansion\Framework\Core\Model\Gui\Factory\LineFactory'
         arguments:
             $type: 'title'
+
+    eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactory:
+        class: eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactory
+        arguments:
+          $maniaScriptFactory: '@expansion.framework.core.maniascript.window'
+
 
 
     #

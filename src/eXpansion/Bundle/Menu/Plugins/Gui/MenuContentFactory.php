@@ -41,14 +41,15 @@ class MenuContentFactory extends WidgetFactory
     /**
      * MenuContentFactory constructor.
      *
-     * @param                      $name
-     * @param                      $sizeX
-     * @param                      $sizeY
-     * @param null                 $posX
-     * @param null                 $posY
+     * @param $name
+     * @param $sizeX
+     * @param $sizeY
+     * @param null $posX
+     * @param null $posY
      * @param WidgetFactoryContext $context
-     * @param MenuItemProvider     $menuItemProvider
-     * @param MenuTabsFactory      $menuTabsFactory
+     * @param ManiaScriptFactory $maniaScriptFactory
+     * @param MenuItemProvider $menuItemProvider
+     * @param MenuTabsFactory $menuTabsFactory
      */
     public function __construct(
         $name,

@@ -27,7 +27,9 @@ class Window extends Widget implements Container
         parent::__construct($group, $translationHelper, $name, $sizeX, $sizeY, $posX, $posY);
 
         $this->translationHelper = $translationHelper;
-        $this->closeButton = $windowFrameFactory->build($this->manialink, $this->windowFrame, $name, $sizeY, $sizeY);
+
+        $windowFrameFactory->setManialinkInterface($this);
+        $this->closeButton = $windowFrameFactory->build($this->manialink, $this->windowFrame, $name, $sizeX, $sizeY);
     }
 
     /**

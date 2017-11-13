@@ -6,6 +6,7 @@ use eXpansion\Bundle\Menu\Model\Menu\ParentItem;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Gui\Ui\Factory;
+use FML\Controls\Label;
 use FML\Types\Container;
 use FML\Types\Renderable;
 
@@ -51,7 +52,7 @@ class MenuTabsFactory
         $label->setSize(30, 5);
         $label->setTextSize(4);
         $label->setTextColor('FFFFFF');
-        $label->setHorizontalAlign(Label::CENTER);
+        $label->setHorizontalAlign("center");
         $label->setTranslate(true);
         $tabsFrame->addChild($label);
 
