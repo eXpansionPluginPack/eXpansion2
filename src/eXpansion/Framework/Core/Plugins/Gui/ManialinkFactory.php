@@ -91,6 +91,7 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
 
     /**
      * @inheritdoc
+     * @param string|array|Group $group
      */
     final public function create($group)
     {
@@ -119,10 +120,18 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
 
     /**
      * @inheritdoc
-     * @param Group $group
+     * @param string|array|Group $group
      */
     final public function update($group)
     {
+        if (is_string($group)) {
+            $group = $this->groupFactory->createForPlayer($group);
+        } else {
+            if (is_array($group)) {
+                $group = $this->groupFactory->createForPlayers($group);
+            }
+        }
+
         if (isset($this->manialinks[$group->getName()])) {
             $this->updateContent($this->manialinks[$group->getName()]);
             $this->guiHandler->addToDisplay($this->manialinks[$group->getName()]);

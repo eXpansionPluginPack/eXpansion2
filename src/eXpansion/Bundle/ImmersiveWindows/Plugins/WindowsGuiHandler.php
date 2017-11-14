@@ -44,6 +44,7 @@ class WindowsGuiHandler implements GuiHandlerInterface, ListenerInterfaceMpLegac
     public function addToDisplay(ManialinkInterface $manialink)
     {
         $logins = $manialink->getUserGroup()->getLogins();
+
         if (count($logins) == 1 && !$manialink->getUserGroup()->isPersistent()) {
             $login = $logins[0];
 

@@ -1,0 +1,7 @@
+#Include "TextLib" as TextLib
+#Include "MathLib" as MathLib
+
+***FML_OnInit***
+***
+    declare CMlFrame Exp_Window <=> (Page.GetFirstChild("Window") as CMlFrame);
+***

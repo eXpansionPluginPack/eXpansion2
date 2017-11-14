@@ -67,7 +67,8 @@ class WindowFrameFactory extends OriginalWindowFrameFactory
     ) {
         // Creating sub frame to keep all the pieces together. Position needs to be top left corner.
         $frame = new Frame();
-        $frame->setPosition(-144 - $mainFrame->getX(), 82 - $mainFrame->getY());
+
+        $frame->setPosition(-160 - $mainFrame->getX(), 90 - $mainFrame->getY());
         $mainFrame->addChild($frame);
 
         // Creating the tabs.
@@ -82,7 +83,7 @@ class WindowFrameFactory extends OriginalWindowFrameFactory
 
         $closeButton = new Label('Close');
         $closeButton->setSize(6, 6)
-            ->setPosition(132, 72)
+            ->setPosition(0, 0)
             ->setAlign(Label::CENTER, Label::CENTER2)
             ->setText("✖")
             ->setTextColor('fff')
@@ -103,11 +104,12 @@ class WindowFrameFactory extends OriginalWindowFrameFactory
             ->setId("mainBg")
             ->setPosition(0, 0)
             ->setSize(322, 182);
-        $quad->setAlign("center", "center")
+        $quad->setAlign("left", "top")
             ->setStyles("Bgs1", "BgDialogBlur");
         $bgFrame->addChild($quad);
 
         $frame->addChild($bgFrame);
+        $manialink->addChild($this->maniaScriptFactory->createScript(['']));
 
         return $closeButton;
     }

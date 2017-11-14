@@ -15,8 +15,6 @@ services:
             - {name: 'expansion.plugin', data_provider: 'exp.application'}
 
     eXpansion\Bundle\Acme\Plugins\Test:
-        arguments:
-            $players: '@expansion.framework.core.user_groups.players'
         tags:
             - {name: 'expansion.plugin', data_provider: 'mp.legacy.map'}
             - {name: 'expansion.plugin', data_provider: 'exp.timer'}
@@ -33,8 +31,8 @@ services:
             class: 'eXpansion\Bundle\Acme\Plugins\Gui\MemoryWidgetFactory'
             arguments:
                 $name:  "memory"
-                $posX: 180
-                $posY: 90
+                $posX: 80
+                $posY: -55
                 $sizeX: null
                 $sizeY: null
             tags:
