@@ -25,7 +25,9 @@ class HttpTest  extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $factoryMock = $this->getMockBuilder(Factory::class)
+            ->disableOriginalConstructor()
             ->getMock();
+
         $factoryMock->expects($this->once())->method('createCurlJob')
             ->with('url', 'callback', null, ['test' => 'val'])
             ->willReturn($curlMock);

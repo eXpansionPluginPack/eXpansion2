@@ -40,10 +40,10 @@ class MenuContentFactory extends WidgetFactory
      * @param                      $name
      * @param                      $sizeX
      * @param                      $sizeY
-     * @param null                 $posX
-     * @param null                 $posY
+     * @param null $posX
+     * @param null $posY
      * @param WidgetFactoryContext $context
-     * @param MenuItemProvider     $menuItemProvider*
+     * @param MenuItemProvider $menuItemProvider *
      */
     public function __construct(
         $name,
@@ -144,7 +144,7 @@ class MenuContentFactory extends WidgetFactory
      * Create tabs level menu.
      *
      * @param ManialinkInterface $manialink
-     * @param ParentItem         $rootItem
+     * @param ParentItem $rootItem
      * @param                    $openId
      */
     protected function createTabsMenu(ManialinkInterface $manialink, ParentItem $rootItem, $openId)
@@ -169,7 +169,7 @@ class MenuContentFactory extends WidgetFactory
                 $action = $this->actionFactory->createManialinkAction(
                     $manialink,
                     [$this, 'callbackItemClick'],
-                    ['item' => $item, 'ml' => $manialink]
+                    ['item' => $item]
                 );
                 $label = $this->uiFactory->createLabel($item->getLabelId());
 
@@ -197,15 +197,15 @@ class MenuContentFactory extends WidgetFactory
     /**
      * Create content for sub menu.
      *
-     * @param Manialink  $manialink
-     * @param Frame      $frame
+     * @param Manialink $manialink
+     * @param Frame $frame
      * @param ParentItem $parentItem
      * @param            $displayLevel
      */
     protected function createSubMenu(Manialink $manialink, Frame $frame, ParentItem $parentItem, $displayLevel)
     {
-        $posX = $displayLevel * (-160.0/3);
-        $posY = ($displayLevel * (-100.0/3)) * 0.5;
+        $posX = $displayLevel * (-160.0 / 3);
+        $posY = ($displayLevel * (-100.0 / 3)) * 0.5;
         $scale = (0.5 / ($displayLevel + 1)) + 0.5;
 
         $contentFrame = new Frame();
@@ -222,7 +222,7 @@ class MenuContentFactory extends WidgetFactory
             $action = $this->actionFactory->createManialinkAction(
                 $manialink,
                 [$this, 'callbackItemClick'],
-                ['item' => $parentItem, 'ml' => $manialink]
+                ['item' => $parentItem]
             );
 
 
@@ -270,7 +270,7 @@ class MenuContentFactory extends WidgetFactory
             $button->setPosition(-25, $posY - 12);
             $button->setSize(50, 8);
             $button->setTranslate(true);
-            $action = $this->actionFactory->createManialinkAction($manialink, [$this, 'callbackClose'], ['ml' =>$manialink]);
+            $action = $this->actionFactory->createManialinkAction($manialink, [$this, 'callbackClose'], []);
             $button->setAction($action);
             $contentFrame->addChild($button);
         }
@@ -279,15 +279,16 @@ class MenuContentFactory extends WidgetFactory
     /**
      * Callback when an item of the menu is clicked on.
      *
+     * @param ManialinkInterface $manialink
      * @param $login
      * @param $params
      * @param $args
      */
-    public function callbackItemClick($login, $params, $args)
+    public function callbackItemClick(ManialinkInterface $manialink, $login, $params, $args)
     {
         /** @var ItemInterface $item */
         $item = $args['item'];
-        $item->execute($this, $args['ml'], $login, $params, $args);
+        $item->execute($this, $manialink, $login, $params, $args);
     }
 
     /**
@@ -297,8 +298,8 @@ class MenuContentFactory extends WidgetFactory
      * @param $params
      * @param $args
      */
-    public function callbackClose($login, $params, $args)
+    public function callbackClose(ManialinkInterface $manialink, $login, $params, $args)
     {
-        $this->destroy($args['ml']->getUserGroup());
+        $this->destroy($manialink->getUserGroup());
     }
 }

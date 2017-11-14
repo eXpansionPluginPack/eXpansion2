@@ -64,7 +64,6 @@ class HttpResult
     public function __construct($data, $curlInfo, $error, $additionalData)
     {
         $this->response = $data;
-
         $this->curlInfo = new CurlInfo($curlInfo);
         $this->error = $error;
         $this->additionalData = $additionalData;

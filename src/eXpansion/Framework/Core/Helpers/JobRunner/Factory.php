@@ -6,9 +6,11 @@ use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplicat
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\Helpers\Structures\HttpRequest;
 use eXpansion\Framework\Core\Helpers\Structures\HttpResult;
+use eXpansion\Framework\Core\Services\Console;
 use oliverde8\AsynchronousJobs\Job;
 use oliverde8\AsynchronousJobs\Job\CallbackCurl;
 use oliverde8\AsynchronousJobs\JobRunner;
+use Psr\Log\LoggerInterface;
 
 
 /**
@@ -20,12 +22,36 @@ use oliverde8\AsynchronousJobs\JobRunner;
  */
 class Factory implements ListenerInterfaceExpTimer
 {
+
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+    /**
+     * @var Console
+     */
+    private $console;
+
+    public function __construct(LoggerInterface $logger, Console $console)
+    {
+
+        $this->logger = $logger;
+        $this->console = $console;
+    }
+
     /**
      * @return JobRunner
      */
     public function getJobRunner()
     {
-        return JobRunner::getInstance('expansion', PHP_BINARY, 'var/tmp/asynchronous');
+        try {
+            return JobRunner::getInstance('expansion', PHP_BINARY, 'var/tmp/asynchronous/');
+        } catch (\Exception $ex) {
+            $this->console->writeln('PHP exec is not enabled, therefore all http transport is disabled!');
+            $this->logger->critical('PHP exec is not enabled, therefore all http transport is disabled!');
+            exit(1);
+        }
     }
 
     /**

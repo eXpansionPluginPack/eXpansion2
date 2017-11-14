@@ -102,15 +102,14 @@ class JukeboxWindowFactory extends GridWindowFactory
      */
     protected function createGrid(ManialinkInterface $manialink)
     {
-        $collection = $this->dataCollectionFactory->create($this->getData());
-        $collection->setPageSize(20);
+        $this->setData($manialink, $this->updateMaps());
 
         $queueButton = $this->uiFactory->createButton('drop', uiButton::TYPE_DEFAULT);
         $queueButton->setTextColor("000")->setSize(12, 5)->setTranslate(true);
 
         $gridBuilder = $this->gridBuilderFactory->create();
         $gridBuilder->setManialink($manialink)
-            ->setDataCollection($collection)
+            ->setDataCollection($manialink->getData('dataCollection'))
             ->setManialinkFactory($this)
             ->addTextColumn(
                 'index',
@@ -145,32 +144,34 @@ class JukeboxWindowFactory extends GridWindowFactory
         $manialink->setData('grid', $gridBuilder);
     }
 
-    public function callbackClear($login)
+    public function callbackClear(ManialinkInterface $manialink, $login, $entries, $args)
     {
         $this->jukeboxPlugin->clear($login);
         $group = $this->groupFactory->createForPlayer($login);
+        $this->setData($manialink, $this->updateMaps());
         $this->update($group);
     }
 
-    public function callbackDrop($login)
+    public function callbackDrop(ManialinkInterface $manialink, $login, $entries, $args)
     {
 
         $this->jukeboxPlugin->drop($login, null);
         $group = $this->groupFactory->createForPlayer($login);
+        $this->setData($manialink, $this->updateMaps());
         $this->update($group);
+
     }
 
-    public function callbackDropMap($login, $params, $args)
+    public function callbackDropMap(ManialinkInterface $manialink, $login, $params, $args)
     {
         $this->jukeboxPlugin->drop($login, $args['map']);
         $group = $this->groupFactory->createForPlayer($login);
+        $this->setData($manialink, $this->updateMaps());
         $this->update($group);
     }
 
     public function createContent(ManialinkInterface $manialink)
     {
-        parent::createContent($manialink);
-
         $line = $this->uiFactory->createLayoutLine(0, 0, [], 2);
 
         $dropButton = $this->uiFactory->createButton("expansion_maps.gui.button.drop", uiButton::TYPE_DECORATED);
@@ -191,20 +192,15 @@ class JukeboxWindowFactory extends GridWindowFactory
         $manialink->addChild($line);
     }
 
-    protected function updateContent(ManialinkInterface $manialink)
-    {
-        $this->updateMaps();
-        parent::updateContent($manialink);
-    }
-
+    /**
+     * @return array
+     */
     public function updateMaps()
     {
         /**
          * @var string $i
          * @var Map $map
          */
-        $this->setData([]);
-
         $i = 1;
         $data = [];
         foreach ($this->jukeboxService->getMapQueue() as $idx => $jbMap) {
@@ -217,7 +213,8 @@ class JukeboxWindowFactory extends GridWindowFactory
                 'map' => $jbMap,
             ];
         }
-        $this->setData($data);
+
+        return $data;
     }
 
 

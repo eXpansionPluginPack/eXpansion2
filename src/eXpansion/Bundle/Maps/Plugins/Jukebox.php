@@ -97,7 +97,6 @@ class Jukebox implements ListenerInterfaceMpScriptPodium, ListenerInterfaceMpLeg
     public function view($login)
     {
         $this->jukeboxWindowFactory->setJukeboxPlugin($this);
-        $this->jukeboxWindowFactory->updateMaps();
         $this->jukeboxWindowFactory->create($login);
 
     }

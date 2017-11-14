@@ -79,7 +79,7 @@ class GridBuilderTest extends TestCore
         $builder->addTextColumn('id', 'Test', 10);
         $builder->addActionColumn('id2', 'Test', 10, "test", Label::create());
 
-        $builder->goToNextPage();
+        $builder->goToNextPage($this->manialink);
         $builder->build(100, 100);
     }
 
@@ -106,8 +106,8 @@ class GridBuilderTest extends TestCore
         $builder->addTextColumn('id', 'Test', 10);
         $builder->addActionColumn('id2', 'Test', 10, "test", Label::create());
 
-        $builder->goToNextPage();
-        $builder->goToPreviousPage();
+        $builder->goToNextPage($this->manialink);
+        $builder->goToPreviousPage($this->manialink);
         $builder->build(100, 100);
     }
 
@@ -134,8 +134,8 @@ class GridBuilderTest extends TestCore
         $builder->addTextColumn('id', 'Test', 10);
         $builder->addActionColumn('id2', 'Test', 10, "test", Label::create());
 
-        $builder->goToNextPage();
-        $builder->goToFirstPage();
+        $builder->goToNextPage($this->manialink);
+        $builder->goToFirstPage($this->manialink);
         $builder->build(100, 100);
     }
 
@@ -163,7 +163,7 @@ class GridBuilderTest extends TestCore
         $builder->addTextColumn('id', 'Test', 10);
         $builder->addActionColumn('id2', 'Test', 10, "test", Label::create());
 
-        $builder->goToLastPage();
+        $builder->goToLastPage($this->manialink);
         $builder->build(100, 100);
 
         $builder->resetColumns();

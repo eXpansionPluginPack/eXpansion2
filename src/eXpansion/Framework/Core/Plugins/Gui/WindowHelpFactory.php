@@ -161,13 +161,14 @@ class WindowHelpFactory extends WindowFactory
     }
 
     /**
-     * Callbacked called when help button is pressed.
+     * Callback called when help button is pressed.
      *
+     * @param ManialinkInterface $manialink
      * @param $login
      * @param $params
      * @param $arguments
      */
-    public function callbackHelp($login, $params, $arguments)
+    public function callbackHelp(ManialinkInterface $manialink, $login, $params, $arguments)
     {
         $this->chatCommandDataPovider->onPlayerChat(0, $login, '/'.$arguments['command'].' -h', true);
     }
@@ -175,11 +176,12 @@ class WindowHelpFactory extends WindowFactory
     /**
      * Callbacked called when description button is pressed.
      *
+     * @param ManialinkInterface $manialink
      * @param $login
      * @param $params
      * @param $arguments
      */
-    public function callbackDescription($login, $params, $arguments)
+    public function callbackDescription(ManialinkInterface $manialink, $login, $params, $arguments)
     {
         $chatCommands = $this->chatCommands->getChatCommands();
         $this->windowHelpDetailsFactory->setCurrentCommand($chatCommands[$arguments['command']]);
