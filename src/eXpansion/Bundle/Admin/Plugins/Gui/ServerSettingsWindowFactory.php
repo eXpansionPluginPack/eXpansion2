@@ -262,7 +262,7 @@ class ServerSettingsWindowFactory extends WindowFactory
 
     }
 
-    public function callbackApply($login, $entries, $args)
+    public function callbackApply(ManialinkInterface $manialink, $login, $entries, $args)
     {
         /** @var ServerOptions $options */
         $options = $args['options'];
@@ -274,8 +274,8 @@ class ServerSettingsWindowFactory extends WindowFactory
         }
         try {
             $this->connection->setServerOptions($options);
-
             $this->connection->chatSendServerMessage("Done.");
+            $this->closeManialink($manialink);
 
         } catch (\Exception $ex) {
             $this->console->write('$f00Error while setting server options: $fff'.$ex->getMessage());

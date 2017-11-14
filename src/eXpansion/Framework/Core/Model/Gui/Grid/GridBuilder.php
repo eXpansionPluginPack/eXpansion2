@@ -334,7 +334,7 @@ class GridBuilder
     /**
      * Action callback to go to the first page.
      */
-    public function goToFirstPage($login = null, $entries = [])
+    public function goToFirstPage(ManialinkInterface $manialink, $login = null, $entries = [])
     {
         $this->updateDataCollection($entries);
         $this->changePage(1);
@@ -343,7 +343,7 @@ class GridBuilder
     /**
      * Action callback to go to the previous page.
      */
-    public function goToPreviousPage($login = null, $entries = [])
+    public function goToPreviousPage(ManialinkInterface $manialink, $login = null, $entries = [])
     {
         $this->updateDataCollection($entries);
         if ($this->currentPage - 1 >= 1) {
@@ -354,7 +354,7 @@ class GridBuilder
     /**
      * Action callback to go to the next page.
      */
-    public function goToNextPage($login = null, $entries = [])
+    public function goToNextPage(ManialinkInterface $manialink, $login = null, $entries = [])
     {
         $this->updateDataCollection($entries);
         if ($this->currentPage + 1 <= $this->dataCollection->getLastPageNumber()) {
@@ -362,7 +362,7 @@ class GridBuilder
         }
     }
 
-    public function goToPage($login = null, $entries = [])
+    public function goToPage(ManialinkInterface $manialink, $login = null, $entries = [])
     {
         if (array_key_exists("pager_gotopage", $entries)) {
             if (is_numeric($entries['pager_gotopage'])) {
@@ -380,7 +380,7 @@ class GridBuilder
     /**
      * Action callback to go to the last page.
      */
-    public function goToLastPage($login = null, $entries = [])
+    public function goToLastPage(ManialinkInterface $manialink, $login = null, $entries = [])
     {
         $this->updateDataCollection($entries);
         $this->changePage($this->dataCollection->getLastPageNumber());
@@ -434,7 +434,7 @@ class GridBuilder
         $this->manialinkFactory->update($this->manialink->getUserGroup());
     }
 
-    public function sortColumn($login, $entries, $args)
+    public function sortColumn(ManialinkInterface $manialink, $login, $entries, $args)
     {
         foreach ($this->columns as $columnData) {
             if ($columnData->getKey() == $args['key']) {
@@ -449,6 +449,6 @@ class GridBuilder
             }
         }
 
-        $this->manialinkFactory->update($this->manialink->getUserGroup());
+        $this->manialinkFactory->update($manialink->getUserGroup());
     }
 }

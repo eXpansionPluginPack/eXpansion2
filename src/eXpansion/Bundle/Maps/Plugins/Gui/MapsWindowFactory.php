@@ -77,8 +77,7 @@ class MapsWindowFactory extends GridWindowFactory
      */
     protected function createGrid(ManialinkInterface $manialink)
     {
-        $collection = $this->dataCollectionFactory->create($this->getData());
-        $collection->setPageSize(20);
+        $this->setData($manialink, $this->genericData);
 
         $tooltip = $this->uiFactory->createTooltip();
         $manialink->addChild($tooltip);
@@ -89,7 +88,7 @@ class MapsWindowFactory extends GridWindowFactory
 
         $gridBuilder = $this->gridBuilderFactory->create();
         $gridBuilder->setManialink($manialink)
-            ->setDataCollection($collection)
+            ->setDataCollection($manialink->getData('dataCollection'))
             ->setManialinkFactory($this)
             ->addTextColumn(
                 'index',
@@ -123,7 +122,7 @@ class MapsWindowFactory extends GridWindowFactory
     }
 
 
-    public function callbackWish($login, $params, $args)
+    public function callbackWish(ManialinkInterface $manialink, $login, $params, $args)
     {
         $this->jukeboxPlugin->add($login, $args['index']);
     }

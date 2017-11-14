@@ -20,3 +20,8 @@ services:
 
     expansion.helper.data.object_filter:
         class: 'eXpansion\Framework\Core\Helpers\Data\ObjectFilter'
+
+    eXpansion\Framework\Core\Helpers\JobRunner\Factory:
+        class: eXpansion\Framework\Core\Helpers\JobRunner\Factory
+        tags:
+            - {name: expansion.plugin, data_provider: exp.timer}
