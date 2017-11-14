@@ -17,7 +17,7 @@ class MapDataProvider extends AbstractDataProvider
     protected $mapStorage;
 
     /**
-     * BaseDataProvider constructor.
+     * RaceDataProvider constructor.
      *
      * @param MapStorage $mapStorage
      */

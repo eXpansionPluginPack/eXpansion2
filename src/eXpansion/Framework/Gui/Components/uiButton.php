@@ -88,9 +88,7 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
             ->addClass('uiButtonElement')
             ->setAlign("center", "center2");
 
-
         if ($this->translate) {
-            echo "traslate!";
             $this->buttonLabel->setTextId($this->getText());
         }
 

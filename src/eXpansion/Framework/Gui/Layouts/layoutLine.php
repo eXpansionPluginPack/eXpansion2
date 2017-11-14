@@ -14,6 +14,8 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
 {
     protected $frameClasses = [];
 
+    protected $frameId = null;
+
     /** @var float */
     protected $width = 0.;
 
@@ -76,6 +78,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
     public function render(\DOMDocument $domDocument)
     {
         $frame = new Frame();
+        $frame->setId($this->frameId);
         $frame->setAlign($this->hAlign, $this->vAlign);
         $frame->setPosition($this->startX, $this->startY);
         $frame->addClasses($this->frameClasses);
@@ -299,6 +302,22 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
         $this->setY($y);
 
         return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getId()
+    {
+        return $this->frameId;
+    }
+
+    /**
+     * @param null|string $frameId
+     */
+    public function setId($frameId)
+    {
+        $this->frameId = $frameId;
     }
 
 }

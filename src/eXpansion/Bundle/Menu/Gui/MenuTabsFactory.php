@@ -47,6 +47,7 @@ class MenuTabsFactory
      */
     public function createTabsMenu(ManialinkInterface $manialink, Container $tabsFrame, ParentItem $rootItem, $openId)
     {
+
         $label = $this->uiFactory->createLabel("expansion_menu.menu");
         $label->setPosition(0, 0);
         $label->setSize(30, 5);
