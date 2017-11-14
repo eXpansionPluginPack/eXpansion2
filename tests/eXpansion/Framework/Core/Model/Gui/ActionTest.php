@@ -9,18 +9,27 @@
 namespace Tests\eXpansion\Framework\Core\Model\Gui;
 
 use eXpansion\Framework\Core\Model\Gui\Action;
+use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
+use Tests\eXpansion\Framework\Core\TestCore;
+use Tests\eXpansion\Framework\Core\TestHelpers\ManialinkDataTrait;
 
-class ActionTest extends \PHPUnit_Framework_TestCase
+class ActionTest extends TestCore
 {
+    use ManialinkDataTrait;
 
     protected $executed = false;
 
+    protected $manialink;
+
+
     public function testAction()
     {
+        $this->manialink = $this->getManialink(['yop']);
+
         $action = new Action([$this, 'callbackTestAction'], ['toto']);
 
         $this->executed = false;
-        $action->execute('yop', 'lop');
+        $action->execute($this->manialink, 'yop', 'lop');
         $this->assertTrue($this->executed);
     }
 
@@ -28,7 +37,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
     {
         $actionbyIds = array();
 
-        for($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $action = new Action([$this, 'callbackTestAction'], ['toto']);
 
             $this->assertArrayNotHasKey($action->getId(), $actionbyIds);
@@ -36,8 +45,9 @@ class ActionTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function callbackTestAction($login, $answerValues, $arguments)
+    public function callbackTestAction(ManialinkInterface $manialink, $login, $answerValues, $arguments)
     {
+        $this->assertEquals($this->manialink, $manialink);
         $this->assertEquals('yop', $login);
         $this->assertEquals('lop', $answerValues);
         $this->assertEquals(['toto'], $arguments);

@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Core\Plugins\Gui;
 
+use Doctrine\Bundle\DoctrineBundle\ManagerConfigurator;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyManialink;
 use eXpansion\Framework\Core\Model\Gui\Action;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
@@ -22,7 +23,7 @@ class ActionFactory implements ListenerInterfaceMpLegacyManialink
     /** @var Action[][] */
     protected $actionsByManialink = [];
 
-    /** @var Action[] */
+    /** @var ManialinkInterface[] */
     protected $manialinkByAction = [];
 
     /**
@@ -50,7 +51,7 @@ class ActionFactory implements ListenerInterfaceMpLegacyManialink
         $action = new $class($callable, $args);
         $this->actions[$action->getId()] = $action;
         $this->actionsByManialink[$manialink->getId()][$action->getId()] = $action;
-        $this->manialinkByAction[$action->getId()] = $manialink->getId();
+        $this->manialinkByAction[$action->getId()] = $manialink;
 
         return $action->getId();
     }
@@ -80,7 +81,7 @@ class ActionFactory implements ListenerInterfaceMpLegacyManialink
     public function destroyAction($actionId)
     {
         if (isset($this->manialinkByAction[$actionId])) {
-            unset($this->actionsByManialink[$this->manialinkByAction[$actionId]][$actionId]);
+            unset($this->actionsByManialink[$this->manialinkByAction[$actionId]->getId()][$actionId]);
             unset($this->actions[$actionId]);
             unset($this->manialinkByAction[$actionId]);
 
@@ -98,7 +99,7 @@ class ActionFactory implements ListenerInterfaceMpLegacyManialink
     public function onPlayerManialinkPageAnswer($login, $actionId, array $entryValues)
     {
         if (isset($this->actions[$actionId])) {
-            $this->actions[$actionId]->execute($login, $entryValues);
+            $this->actions[$actionId]->execute($this->manialinkByAction[$actionId], $login, $entryValues);
         }
     }
 }

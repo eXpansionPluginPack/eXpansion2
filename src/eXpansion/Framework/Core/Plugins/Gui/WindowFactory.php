@@ -1,9 +1,11 @@
 <?php
 
 namespace eXpansion\Framework\Core\Plugins\Gui;
+
 use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactory;
 use eXpansion\Framework\Core\Model\Gui\Manialink;
+use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
 use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
@@ -18,7 +20,8 @@ use FML\Controls\Control;
  * @package eXpansion\Framework\Core\Plugins\Gui
  * @author Oliver de Cramer
  */
-class WindowFactory extends WidgetFactory {
+class WindowFactory extends WidgetFactory
+{
 
     /** @var WindowFrameFactory */
     protected $windowFrameFactory;
@@ -29,8 +32,8 @@ class WindowFactory extends WidgetFactory {
      * @param                      $name
      * @param                      $sizeX
      * @param                      $sizeY
-     * @param null                 $posX
-     * @param null                 $posY
+     * @param null $posX
+     * @param null $posY
      * @param WindowFactoryContext $context
      */
     public function __construct(
@@ -76,7 +79,7 @@ class WindowFactory extends WidgetFactory {
         $actionId = $this->actionFactory->createManialinkAction(
             $manialink,
             [$this, 'closeManialink'],
-            ['manialink' => $manialink]
+            []
         );
 
         $manialink->setCloseAction($actionId);
@@ -84,10 +87,8 @@ class WindowFactory extends WidgetFactory {
         return $manialink;
     }
 
-    public function closeManialink($login, $answerValues, $arguments)
+    public function closeManialink(ManialinkInterface $manialink)
     {
-        /** @var Manialink $manialink */
-        $manialink = $arguments['manialink'];
         $this->destroy($manialink->getUserGroup());
     }
 }

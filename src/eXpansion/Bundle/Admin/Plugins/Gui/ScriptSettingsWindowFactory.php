@@ -83,14 +83,11 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
      */
     protected function createGrid(ManialinkInterface $manialink)
     {
-        $this->fetchScriptSettings();
-
-        $collection = $this->dataCollectionFactory->create($this->getData());
-        $collection->setPageSize(20);
+        $this->setdata($manialink, $this->fetchScriptSettings());
 
         $gridBuilder = $this->gridBuilderFactory->create();
         $gridBuilder->setManialink($manialink)
-            ->setDataCollection($collection)
+            ->setDataCollection($manialink->getData('dataCollection'))
             ->setManialinkFactory($this)
             ->addTextColumn(
                 'name',
@@ -113,10 +110,7 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
         $apply->setPosition(($frame->getWidth() - $apply->getWidth()), -($frame->getHeight() - $apply->getHeight()));
 
         $apply->setAction($this->actionFactory->createManialinkAction(
-            $manialink, [$this, "callbackApply"], [
-            "grid" => $manialink->getData('grid'),
-            "manialink" => $manialink,
-        ]));
+            $manialink, [$this, "callbackApply"], []));
 
 
         $manialink->addChild($apply);
@@ -130,11 +124,10 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
      * @param $entries
      * @param $args
      */
-    public function callbackApply($login, $entries, $args)
+    public function callbackApply(ManialinkInterface $manialink, $login, $entries, $args)
     {
         /** @var GridBuilder $grid */
-        $grid = $args['grid'];
-
+        $grid = $manialink->getData('grid');
         $grid->updateDataCollection($entries); // update datacollection
 
         // build settings array from datacollection
@@ -145,7 +138,7 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
 
         try {
             $this->connection->setModeScriptSettings($settings);
-            $this->closeManialink($login, $entries, $args);
+            $this->closeManialink($manialink);
 
         } catch (\Exception $ex) {
             $this->connection->chatSendServerMessage("error: ".$ex->getMessage());
@@ -158,7 +151,7 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
      */
     public function fetchScriptSettings()
     {
-        $this->genericData = [];
+        $data = [];
 
         $scriptSettings = $this->connection->getModeScriptSettings();
 
@@ -167,11 +160,13 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
          */
         $i = 1;
         foreach ($scriptSettings as $name => $value) {
-            $this->genericData[] = [
+            $data[] = [
                 'index' => $i++,
                 'name' => $name,
                 'value' => $value,
             ];
         }
+
+        return $data;
     }
 }

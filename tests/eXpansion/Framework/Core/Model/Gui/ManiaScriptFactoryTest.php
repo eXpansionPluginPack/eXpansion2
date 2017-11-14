@@ -18,7 +18,7 @@ class ManiaScriptFactoryTest extends TestCore
     public function testManiaScriptFactory()
     {
         /** @var ManiaScriptFactory $factory */
-        $factory = $this->container->get('expansion.framework.core.mania_script.window_factory');
+        $factory = $this->container->get('expansion.framework.core.mania_script.window');
         $script = $factory->createScript([]);
 
         $this->assertInstanceOf(ManiaScript::class, $script);

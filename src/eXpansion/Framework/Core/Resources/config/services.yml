@@ -70,7 +70,3 @@ services:
         arguments:
             - 'eXpansion\Framework\Core\Model\Plugin\PluginDescription'
 
-    eXpansion\Framework\Core\Helpers\JobRunner\Factory:
-        class: eXpansion\Framework\Core\Helpers\JobRunner\Factory
-        tags:
-            - {name: expansion.plugin, data_provider: exp.timer}

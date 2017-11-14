@@ -10,6 +10,7 @@ use eXpansion\Framework\Core\Helpers\Structures\HttpResult;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Helpers\TMString;
 use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionFactory;
+use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionInterface;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
@@ -157,9 +158,6 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
      */
     protected function createGrid(ManialinkInterface $manialink)
     {
-        $collection = $this->dataCollectionFactory->create($this->getData());
-        $collection->setPageSize(20);
-
         $x = 0;
 
         $tooltip = $this->uiFactory->createTooltip();
@@ -234,7 +232,8 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $author->setHeight(6);
 
         $search = $this->uiFactory->createButton('🔍 Search', uiButton::TYPE_DECORATED);
-        $search->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackSearch'], []));
+        $search->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackSearch'],
+            ["ml" => $manialink]));
         $search->setHeight(6);
 
         $line = $this->uiFactory->createLayoutLine(64, -14, [$mapname, $author, $search], 2);
@@ -245,7 +244,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
 
         $gridBuilder = $this->gridBuilderFactory->create();
         $gridBuilder->setManialink($manialink)
-            ->setDataCollection($collection)
+            ->setDataCollection($manialink->getData('dataCollection'))
             ->setManialinkFactory($this)
             ->addTextColumn(
                 'index',
@@ -300,20 +299,23 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
     }
 
     /**
+     * @param ManialinkInterface $manialink
      * @param $login
      * @param $params
      * @param $args
      */
-    public function callbackAdd($login, $params, $args)
+    public function callbackAdd(ManialinkInterface $manialink, $login, $params, $args)
     {
         $this->mxPlugin->addMap($login, $args['mxid'], $params['site']);
     }
 
     /**
+     * @param ManialinkInterface $manialink
      * @param $login
      * @param $params
+     * @param $arguments
      */
-    public function callbackSearch($login, $params)
+    public function callbackSearch(ManialinkInterface $manialink, $login, $params, $arguments)
     {
         $params = (object)$params;
 
@@ -339,7 +341,8 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
             "&limit=100&gv=1".$options;
 
         $query = 'https://'.$params->site.'.mania-exchange.com/tracksearch2/search?api=on'.$args;
-        $this->http->get($query, [$this, 'setMaps'], ['login' => $login]);
+
+        $this->http->get($query, [$this, 'setMaps'], ['login' => $login, 'ml' => $manialink]);
 
     }
 
@@ -349,7 +352,9 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
      */
     public function setMaps(HttpResult $result)
     {
-        $this->gridBuilder->goToFirstPage();
+        $manialink = $result->getAdditionalData()['ml'];
+
+        $this->gridBuilder->goToFirstPage($manialink);
 
         if ($result->hasError()) {
             echo $result->getError();
@@ -373,8 +378,8 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
             ];
         }
 
-        $this->setData($data);
 
+        $this->setData($manialink, $data);
         $group = $this->groupFactory->createForPlayer($result->getAdditionalData()['login']);
         $this->update($group);
     }

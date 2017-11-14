@@ -61,12 +61,10 @@ abstract class GridWindowFactory extends WindowFactory
 
         $manialink->getContentFrame()->addChild($manialink->getData('gridFrame'));
 
-        $this->createGrid($manialink);
-
-        $collection = $this->dataCollectionFactory->create($this->getData());
-        $collection->setPageSize(20);
+        $collection = $this->dataCollectionFactory->create([]);
         $manialink->setData("dataCollection", $collection);
 
+        $this->createGrid($manialink);
     }
 
 
@@ -107,19 +105,22 @@ abstract class GridWindowFactory extends WindowFactory
     }
 
     /**
+     * @param ManialinkInterface $manialink
      * @param array $data
      */
-    public function setData($data)
+    public function setData(ManialinkInterface $manialink, $data)
     {
-        $this->genericData = $data;
+        $collection = $this->dataCollectionFactory->create($data);
+        $manialink->setData('dataCollection', $collection);
     }
 
     /**
+     * @param ManialinkInterface $manialink
      * @return array
      */
-    public function getData()
+    public function getData(ManialinkInterface $manialink)
     {
-        return $this->genericData;
+        return $manialink->getData('dataCollection')->getAll();
     }
 
     /**

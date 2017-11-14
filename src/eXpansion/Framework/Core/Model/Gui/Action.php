@@ -27,8 +27,8 @@ class Action
         return $this->id;
     }
 
-    public function execute($login, $answerValues)
+    public function execute(ManialinkInterface $manialink, $login, $answerValues)
     {
-        call_user_func_array($this->callable, [$login, $answerValues, $this->args]);
+        call_user_func_array($this->callable, [$manialink, $login, $answerValues, $this->args]);
     }
 }

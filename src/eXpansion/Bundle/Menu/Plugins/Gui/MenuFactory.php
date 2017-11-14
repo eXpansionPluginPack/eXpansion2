@@ -55,7 +55,7 @@ class MenuFactory extends WidgetFactory
     protected function createContent(ManialinkInterface $manialink)
     {
         $button = $this->uiFactory->createButton('expansion_menu.menu_open')
-            ->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'showMenu'], []));
+            ->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackShowMenu'], []));
         $button->setTranslate(true);
         $manialink->addChild($button);
     }
@@ -65,7 +65,7 @@ class MenuFactory extends WidgetFactory
      *
      * @param $login
      */
-    public function showMenu($login)
+    public function callbackShowMenu(ManialinkInterface $manialink, $login)
     {
         $this->menuContentFactory->create($login);
     }
