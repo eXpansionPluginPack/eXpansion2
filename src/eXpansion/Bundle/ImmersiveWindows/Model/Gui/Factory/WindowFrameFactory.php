@@ -7,6 +7,9 @@ use eXpansion\Bundle\Menu\Gui\MenuTabsFactory;
 use eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactory as OriginalWindowFrameFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
+use eXpansion\Framework\Core\Model\Gui\WindowFrameFactoryInterface;
+use eXpansion\Framework\Gui\Components\uiButton;
+use eXpansion\Framework\Gui\Ui\Factory;
 use FML\Controls\Frame;
 use FML\Controls\Label;
 use FML\Controls\Quad;
@@ -19,7 +22,7 @@ use FML\ManiaLink;
  * @copyright 2017 Smile
  * @package eXpansion\Bundle\ImmersiveWindows\Model\Gui\Factory
  */
-class WindowFrameFactory extends OriginalWindowFrameFactory
+class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFrameFactoryInterface
 {
     /** @var MenuTabsFactory */
     protected $menuTabsFactory;
@@ -34,6 +37,13 @@ class WindowFrameFactory extends OriginalWindowFrameFactory
      * @var ManialinkInterface
      */
     protected $manialinkInterface;
+    /**
+     * @var Factory
+     */
+    protected $uiFactory;
+
+    /** @var  uiButton */
+    private $closeButton;
 
     /**
      * WindowFrameFactory constructor.
@@ -41,18 +51,19 @@ class WindowFrameFactory extends OriginalWindowFrameFactory
      * @param ManiaScriptFactory $maniaScriptFactory
      * @param MenuTabsFactory $menuTabsFactory
      * @param MenuItemProvider $menuItemProvider
-     * @param ManialinkInterface $manialink
+     * @param Factory $uiFactory
      */
     public function __construct(
         ManiaScriptFactory $maniaScriptFactory,
         MenuTabsFactory $menuTabsFactory,
-        MenuItemProvider $menuItemProvider
+        MenuItemProvider $menuItemProvider,
+        Factory $uiFactory
     ) {
         parent::__construct($maniaScriptFactory);
         $this->maniaScriptFactory = $maniaScriptFactory;
         $this->menuTabsFactory = $menuTabsFactory;
         $this->menuItemProvider = $menuItemProvider;
-
+        $this->uiFactory = $uiFactory;
     }
 
     /**
@@ -67,9 +78,8 @@ class WindowFrameFactory extends OriginalWindowFrameFactory
     ) {
         // Creating sub frame to keep all the pieces together. Position needs to be top left corner.
         $frame = new Frame();
-
         $frame->setPosition(-160 - $mainFrame->getX(), 90 - $mainFrame->getY());
-        $mainFrame->addChild($frame);
+
 
         // Creating the tabs.
         $mainFrame->addChild(
@@ -80,25 +90,19 @@ class WindowFrameFactory extends OriginalWindowFrameFactory
                 'admin/admin'
             )
         );
+        $mainFrame->addChild($frame);
 
-        $closeButton = new Label('Close');
-        $closeButton->setSize(6, 6)
-            ->setPosition(0, 0)
-            ->setAlign(Label::CENTER, Label::CENTER2)
-            ->setText("✖")
-            ->setTextColor('fff')
-            ->setTextSize(2)
-            ->setTextFont('OswaldMono')
-            ->setScriptEvents(true)
-            ->setAreaColor("FFF")
-            ->setAreaFocusColor('f22');
+        $closeButton = $this->uiFactory->createButton('Close', uiButton::TYPE_DECORATED);
+        $closeButton->setBorderColor(uiButton::COLOR_WARNING)->setFocusColor(uiButton::COLOR_WARNING);
+        $closeButton->setPosition(300, -20);
+        $this->closeButton = $closeButton;
         $frame->addChild($closeButton);
+
 
         /*
          * Adding background frame
          */
         $bgFrame = Frame::create("background");
-
         $quad = new Quad();
         $quad->addClass("bg")
             ->setId("mainBg")
@@ -109,9 +113,13 @@ class WindowFrameFactory extends OriginalWindowFrameFactory
         $bgFrame->addChild($quad);
 
         $frame->addChild($bgFrame);
+
+
+
+
+
         $manialink->addChild($this->maniaScriptFactory->createScript(['']));
 
-        return $closeButton;
     }
 
     /**
@@ -122,5 +130,9 @@ class WindowFrameFactory extends OriginalWindowFrameFactory
         $this->manialinkInterface = $manialinkInterface;
     }
 
+    public function setCloseAction($action)
+    {
+        $this->closeButton->setAction($action);
+    }
 
 }

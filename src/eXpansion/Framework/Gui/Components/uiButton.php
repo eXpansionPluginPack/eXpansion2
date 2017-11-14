@@ -70,7 +70,7 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
 
         if ($this->type == self::TYPE_DECORATED) {
             $quad = new Quad();
-            $this->backColor = null;
+            $this->backColor = 0000;
             $quad->setStyles("Bgs1", "BgColorContour")
                 ->setColorize($this->borderColor)
                 ->setSize($this->width, $this->height)
