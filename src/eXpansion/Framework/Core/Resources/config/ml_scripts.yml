@@ -3,6 +3,6 @@ services:
     class: eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory
     autowire: true
     arguments:
-      $relativePath: 'eXpansion/Core/Resources/maniascript/window.txtm'
+      $relativePath: 'eXpansionCore/Resources/maniascript/window.txtm'
       $className: eXpansion\Framework\Core\Model\Gui\ManiaScript
 
