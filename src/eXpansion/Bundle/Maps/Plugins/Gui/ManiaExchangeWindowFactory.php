@@ -352,7 +352,9 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
      */
     public function setMaps(HttpResult $result)
     {
-        $this->gridBuilder->goToFirstPage();
+        $manialink = $result->getAdditionalData()['ml'];
+
+        $this->gridBuilder->goToFirstPage($manialink);
 
         if ($result->hasError()) {
             echo $result->getError();
@@ -377,7 +379,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         }
 
 
-        $this->setData($result->getAdditionalData()['ml'], $data);
+        $this->setData($manialink, $data);
         $group = $this->groupFactory->createForPlayer($result->getAdditionalData()['login']);
         $this->update($group);
     }

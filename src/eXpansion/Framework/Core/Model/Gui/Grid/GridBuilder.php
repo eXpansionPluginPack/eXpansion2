@@ -434,7 +434,7 @@ class GridBuilder
         $this->manialinkFactory->update($this->manialink->getUserGroup());
     }
 
-    public function sortColumn($login, $entries, $args)
+    public function sortColumn(ManialinkInterface $manialink, $login, $entries, $args)
     {
         foreach ($this->columns as $columnData) {
             if ($columnData->getKey() == $args['key']) {
@@ -449,6 +449,6 @@ class GridBuilder
             }
         }
 
-        $this->manialinkFactory->update($this->manialink->getUserGroup());
+        $this->manialinkFactory->update($manialink->getUserGroup());
     }
 }
