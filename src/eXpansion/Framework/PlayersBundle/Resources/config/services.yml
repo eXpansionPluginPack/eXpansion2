@@ -3,10 +3,5 @@ services:
         autowire: true
         autoconfigure: true
 
-    eXpansion\Framework\PlayersBundle\Repository\PlayerRepository:
-        factory: 'doctrine.orm.entity_manager:getRepository'
-        arguments:
-            - eXpansion\Framework\PlayersBundle\Entity\Player
-
     eXpansion\Framework\PlayersBundle\Storage\:
         resource: '../../Storage/*'

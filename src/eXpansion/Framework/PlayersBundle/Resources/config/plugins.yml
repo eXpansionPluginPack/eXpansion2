@@ -3,7 +3,6 @@ services:
         autowire: true
         public: true
 
-
     eXpansion\Framework\PlayersBundle\Plugins:
         class: eXpansion\Framework\PlayersBundle\Plugins\Player
         tags:

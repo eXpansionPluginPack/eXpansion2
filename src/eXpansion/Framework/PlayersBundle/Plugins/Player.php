@@ -9,8 +9,10 @@ use \eXpansion\Framework\Core\Storage\Data\Player as PlayerData;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMatch;
 use eXpansion\Framework\GameManiaplanet\ScriptMethods\GetScores;
-use eXpansion\Framework\PlayersBundle\Repository\PlayerRepository;
-use \eXpansion\Framework\PlayersBundle\Entity\Player as PlayerEntity;
+use eXpansion\Framework\PlayersBundle\Model\Map\PlayerTableMap;
+use eXpansion\Framework\PlayersBundle\Model\Player as PlayerModel;
+use eXpansion\Framework\PlayersBundle\Model\PlayerQuery;
+use Propel\Runtime\Propel;
 
 
 /**
@@ -21,16 +23,13 @@ use \eXpansion\Framework\PlayersBundle\Entity\Player as PlayerEntity;
  */
 class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScriptMatch, StatusAwarePluginInterface
 {
-    /** @var PlayerRepository */
-    protected $playerRepository;
-
     /** @var GetScores  */
     protected $getScores;
 
     /** @var PlayerStorage */
     protected $playerStorage;
 
-    /** @var PlayerEntity[] */
+    /** @var PlayerModel[] */
     protected $loggedInPlayers = [];
 
     /** @var int[] Timestamp at which player play time was last updated in DB. */
@@ -39,16 +38,13 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
     /**
      * Player constructor.
      *
-     * @param PlayerRepository $playerRepository
      * @param GetScores $getScores
      * @param PlayerStorage $playerStorage
      */
     public function __construct(
-        PlayerRepository $playerRepository,
         GetScores $getScores,
         PlayerStorage $playerStorage
     ) {
-        $this->playerRepository = $playerRepository;
         $this->getScores = $getScores;
         $this->playerStorage = $playerStorage;
     }
@@ -70,17 +66,17 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
      */
     public function onPlayerConnect(PlayerData $playerData)
     {
-        $player = $this->playerRepository->findByLogin($playerData->getLogin());
+        $playerQuery = PlayerQuery::create();
+        $player = $playerQuery->findOneByLogin($playerData->getLogin());
         $update = false;
 
         if (is_null($player)) {
-            $player = new PlayerEntity();
+            $player = new PlayerModel();
             $player->setLogin($playerData->getLogin());
-            $player->setNickname($playerData->getNickName());
-            $player->setNicknameStripped(TMString::trimStyles($playerData->getNickName()));
-
             $update = true;
         }
+        $player->setNickname($playerData->getNickName());
+        $player->setNicknameStripped(TMString::trimStyles($playerData->getNickName()));
         $player->setPath($playerData->getPath());
 
         $this->loggedInPlayers[$player->getLogin()] = $player;
@@ -89,7 +85,7 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
 
         if ($update) {
             $this->updatePlayer($player);
-            $this->playerRepository->save([$player]);
+            $player->save();
         }
     }
 
@@ -98,9 +94,9 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
      */
     public function onPlayerDisconnect(PlayerData $player, $disconnectionReason)
     {
-        $playerEntity = $this->getPlayer($player->getLogin());
-        $this->updatePlayer($playerEntity);
-        $this->playerRepository->save([$playerEntity]);
+        $playerModel = $this->getPlayer($player->getLogin());
+        $this->updatePlayer($playerModel);
+        $playerModel->save();
 
         unset($this->playerLastUpTime[$player->getLogin()]);
         unset($this->loggedInPlayers[$player->getLogin()]);
@@ -127,26 +123,30 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
      */
     public function updateWithScores($scores)
     {
+        $con = Propel::getWriteConnection(PlayerTableMap::DATABASE_NAME);
+        $con->beginTransaction();
+
         // Update the winner player.
         $player = $this->getPlayer($scores['winnerplayer']);
         if ($player) {
             $player->setWins($player->getWins() + 1);
             $this->updatePlayer($player);
-            $this->playerRepository->save([$player]);
+            $player->save();
         }
 
         // Update remaining players.
         foreach ($this->loggedInPlayers as $player) {
             $this->updatePlayer($player);
+            $player->save();
         }
 
-        $this->playerRepository->save(array_values($this->loggedInPlayers));
+        $con->commit();
     }
 
     /**
      * Update player information.
      *
-     * @param PlayerEntity $player Login of the player.
+     * @param PlayerModel $player Login of the player.
      */
     protected function updatePlayer($player)
     {
@@ -162,7 +162,7 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
      *
      * @param string $login Login of the player.
      *
-     * @return PlayerEntity
+     * @return PlayerModel
      */
     public function getPlayer($login)
     {
@@ -170,7 +170,7 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
             return $this->loggedInPlayers[$login];
         }
 
-        return $this->playerRepository->findByLogin($login);
+        return (new PlayerQuery())->findOneByLogin($login);
     }
 
     /**
