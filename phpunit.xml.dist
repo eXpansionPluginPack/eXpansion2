@@ -27,6 +27,12 @@
                 <directory>src/*/Resources</directory>
                 <directory>src/*/*/Resources</directory>
                 <directory>src/*/*/*/Resources</directory>
+
+                <!-- Don't test propel generated content -->
+                <directory>src/*/Model</directory>
+                <directory>src/*/*/Model</directory>
+                <directory>src/*/*/*/Model</directory>
+
                 <directory>src/*/DependencyInjection</directory>
                 <directory>src/*/*/DependencyInjection</directory>
                 <directory>src/*/*/*/DependencyInjection</directory>
