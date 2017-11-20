@@ -5,6 +5,7 @@ namespace eXpansion\Bundle\LocalRecords\Services;
 use eXpansion\Bundle\LocalRecords\Model\Map\RecordTableMap;
 use eXpansion\Bundle\LocalRecords\Model\Record;
 use eXpansion\Bundle\LocalRecords\Model\RecordQuery;
+use eXpansion\Bundle\LocalRecords\Model\RecordQueryBuilder;
 use eXpansion\Framework\PlayersBundle\Storage\PlayerDb;
 use Propel\Runtime\Propel;
 
@@ -46,6 +47,9 @@ class RecordHandler
     /** @var string */
     protected $ordering;
 
+    /** @var RecordQueryBuilder */
+    protected $recordQueryBuilder;
+
     /** @var PlayerDb */
     protected $playerDb;
 
@@ -67,15 +71,18 @@ class RecordHandler
     /**
      * RecordHandler constructor.
      *
+     * @param RecordQueryBuilder $recordQueryBuilder
      * @param PlayerDb $playerDb
-     * @param $nbRecords
+     * @param int $nbRecords
      * @param string $ordering
      */
     public function __construct(
+        RecordQueryBuilder $recordQueryBuilder,
         PlayerDb $playerDb,
         $nbRecords,
         $ordering = self::ORDER_ASC
     ) {
+        $this->recordQueryBuilder = $recordQueryBuilder;
         $this->nbRecords = $nbRecords;
         $this->ordering = $ordering;
         $this->playerDb = $playerDb;
@@ -127,12 +134,8 @@ class RecordHandler
         $this->currentMapUid = $mapUid;
         $this->currentNbLaps = $nbLaps;
 
-        $query = new RecordQuery();
-        $query->filterByMapuid($mapUid);
-        $query->filterByNblaps($nbLaps);
-        $query->orderByScore($this->getScoreOrdering());
-        $query->limit($this->nbRecords);
-        $this->records = $query->find();
+        $this->records = $this->recordQueryBuilder
+            ->getMapRecords($mapUid, $nbLaps, $this->getScoreOrdering(), $this->nbRecords);
 
         $position = 1;
         foreach ($this->records as $record)
@@ -154,13 +157,7 @@ class RecordHandler
         $logins = array_diff(array_keys($this->recordsPerPlayer), $logins);
 
         if (!empty($logins)) {
-            /** @var Record[] $records */
-            $query = new RecordQuery();
-            $query->filterByMapuid($mapUid);
-            $query->filterByNblaps($nbLaps);
-            $query->filterByPlayerLogins($logins);
-            $query->orderByScore($this->getScoreOrdering());
-            $records = $query->find();
+            $records = $this->recordQueryBuilder->getPlayerMapRecords($mapUid, $nbLaps, $logins);
 
             foreach ($records as $record) {
                 $this->recordsPerPlayer[$record->getPlayer()->getLogin()] = $record;

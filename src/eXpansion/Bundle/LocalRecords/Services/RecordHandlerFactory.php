@@ -2,6 +2,7 @@
 
 namespace eXpansion\Bundle\LocalRecords\Services;
 
+use eXpansion\Bundle\LocalRecords\Model\RecordQueryBuilder;
 use eXpansion\Framework\PlayersBundle\Storage\PlayerDb;
 
 
@@ -13,6 +14,9 @@ use eXpansion\Framework\PlayersBundle\Storage\PlayerDb;
  */
 class RecordHandlerFactory
 {
+    /** @var RecordQueryBuilder */
+    protected $recordQueryBuilder;
+
     /** @var PlayerDb */
     protected $playerDb;
 
@@ -34,11 +38,13 @@ class RecordHandlerFactory
      * @param string           $className
      */
     public function __construct(
+        RecordQueryBuilder $recordQueryBuilder,
         PlayerDb $playerDb,
         $ordering,
         $nbRecords,
         $className = RecordHandler::class
     ) {
+        $this->recordQueryBuilder = $recordQueryBuilder;
         $this->playerDb = $playerDb;
         $this->ordering = $ordering;
         $this->nbRecords = $nbRecords;
@@ -51,6 +57,7 @@ class RecordHandlerFactory
         $class = $this->className;
 
         return new $class(
+            $this->recordQueryBuilder,
             $this->playerDb,
             $this->nbRecords,
             $this->ordering

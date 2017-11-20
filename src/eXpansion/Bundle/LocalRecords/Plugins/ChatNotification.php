@@ -2,9 +2,9 @@
 
 namespace eXpansion\Bundle\LocalRecords\Plugins;
 
+use eXpansion\Bundle\LocalRecords\Model\Record;
 use eXpansion\Framework\Core\Helpers\ChatNotification as ChatNotificationHelper;
 use eXpansion\Bundle\LocalRecords\DataProviders\Listener\RecordsDataListener;
-use eXpansion\Bundle\LocalRecords\Entity\Record;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 
@@ -22,7 +22,6 @@ class ChatNotification implements RecordsDataListener
 
     /** @var Time */
     protected $timeFormater;
-
 
     /** @var PlayerStorage */
     protected $playerStorage;

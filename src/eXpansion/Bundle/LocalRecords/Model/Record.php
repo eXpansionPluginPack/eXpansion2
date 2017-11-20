@@ -16,5 +16,23 @@ use eXpansion\Bundle\LocalRecords\Model\Base\Record as BaseRecord;
  */
 class Record extends BaseRecord
 {
+    /**
+     * @inheritdoc
+     */
+    public function getCheckpoints()
+    {
+        $checkPoints = parent::getCheckpoints();
+
+        return json_decode($checkPoints, true);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setCheckpoints($v)
+    {
+        return parent::setCheckpoints(json_encode($v));
+    }
+
 
 }

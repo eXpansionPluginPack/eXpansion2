@@ -6,6 +6,9 @@ services:
         autowire: true
         public: true
 
+    eXpansion\Bundle\LocalRecords\Model\RecordQueryBuilder:
+        class: eXpansion\Bundle\LocalRecords\Model\RecordQueryBuilder
+
     #
     # Services used to handle Records in TA.
     #

@@ -3,5 +3,8 @@ services:
         autowire: true
         autoconfigure: true
 
+    eXpansion\Framework\PlayersBundle\Model\PlayerQueryBuilder:
+        class: eXpansion\Framework\PlayersBundle\Model\PlayerQueryBuilder
+
     eXpansion\Framework\PlayersBundle\Storage\:
         resource: '../../Storage/*'

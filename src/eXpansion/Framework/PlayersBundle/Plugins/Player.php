@@ -9,10 +9,8 @@ use \eXpansion\Framework\Core\Storage\Data\Player as PlayerData;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMatch;
 use eXpansion\Framework\GameManiaplanet\ScriptMethods\GetScores;
-use eXpansion\Framework\PlayersBundle\Model\Map\PlayerTableMap;
 use eXpansion\Framework\PlayersBundle\Model\Player as PlayerModel;
-use eXpansion\Framework\PlayersBundle\Model\PlayerQuery;
-use Propel\Runtime\Propel;
+use eXpansion\Framework\PlayersBundle\Model\PlayerQueryBuilder;
 
 
 /**
@@ -23,6 +21,9 @@ use Propel\Runtime\Propel;
  */
 class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScriptMatch, StatusAwarePluginInterface
 {
+    /** @var PlayerQueryBuilder */
+    protected $playerQueryBuilder;
+
     /** @var GetScores  */
     protected $getScores;
 
@@ -42,9 +43,11 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
      * @param PlayerStorage $playerStorage
      */
     public function __construct(
+        PlayerQueryBuilder $playerQueryBuilder,
         GetScores $getScores,
         PlayerStorage $playerStorage
     ) {
+        $this->playerQueryBuilder = $playerQueryBuilder;
         $this->getScores = $getScores;
         $this->playerStorage = $playerStorage;
     }
@@ -66,8 +69,7 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
      */
     public function onPlayerConnect(PlayerData $playerData)
     {
-        $playerQuery = PlayerQuery::create();
-        $player = $playerQuery->findOneByLogin($playerData->getLogin());
+        $player = $this->playerQueryBuilder->findByLogin($playerData->getLogin());
         $update = false;
 
         if (is_null($player)) {
@@ -85,7 +87,7 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
 
         if ($update) {
             $this->updatePlayer($player);
-            $player->save();
+            $this->playerQueryBuilder->save($player);
         }
     }
 
@@ -96,7 +98,7 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
     {
         $playerModel = $this->getPlayer($player->getLogin());
         $this->updatePlayer($playerModel);
-        $playerModel->save();
+        $this->playerQueryBuilder->save($playerModel);
 
         unset($this->playerLastUpTime[$player->getLogin()]);
         unset($this->loggedInPlayers[$player->getLogin()]);
@@ -109,9 +111,6 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
     {
         $object = $this;
         $this->getScores->get(function($scores) use($object) {
-
-            var_dump($scores);
-
             $object->updateWithScores($scores);
         });
     }
@@ -123,24 +122,17 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
      */
     public function updateWithScores($scores)
     {
-        $con = Propel::getWriteConnection(PlayerTableMap::DATABASE_NAME);
-        $con->beginTransaction();
-
         // Update the winner player.
         $player = $this->getPlayer($scores['winnerplayer']);
         if ($player) {
-            $player->setWins($player->getWins() + 1);
-            $this->updatePlayer($player);
-            $player->save();
+            $this->playerQueryBuilder->save($player);
         }
 
         // Update remaining players.
         foreach ($this->loggedInPlayers as $player) {
             $this->updatePlayer($player);
-            $player->save();
         }
-
-        $con->commit();
+        $this->playerQueryBuilder->saveAll($this->loggedInPlayers);
     }
 
     /**
@@ -170,7 +162,7 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
             return $this->loggedInPlayers[$login];
         }
 
-        return (new PlayerQuery())->findOneByLogin($login);
+        return $this->playerQueryBuilder->findByLogin($login);
     }
 
     /**

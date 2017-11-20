@@ -3,7 +3,7 @@
 
 namespace eXpansion\Bundle\LocalRecords\Plugins\Gui;
 use eXpansion\Bundle\Acme\Plugins\Gui\WindowFactory;
-use eXpansion\Bundle\LocalRecords\Entity\Record;
+use eXpansion\Bundle\LocalRecords\Model\Record;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionFactory;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilder;
