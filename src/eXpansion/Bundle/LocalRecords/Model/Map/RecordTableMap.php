@@ -1,6 +1,6 @@
 <?php
 
-namespace eXpansion\Framework\PlayersBundle\Model\Map;
+namespace eXpansion\Bundle\LocalRecords\Model\Map;
 
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -11,12 +11,12 @@ use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
-use eXpansion\Framework\PlayersBundle\Model\Player;
-use eXpansion\Framework\PlayersBundle\Model\PlayerQuery;
+use eXpansion\Bundle\LocalRecords\Model\Record;
+use eXpansion\Bundle\LocalRecords\Model\RecordQuery;
 
 
 /**
- * This class defines the structure of the 'player' table.
+ * This class defines the structure of the 'record' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use eXpansion\Framework\PlayersBundle\Model\PlayerQuery;
  * (i.e. if it's a text column type).
  *
  */
-class PlayerTableMap extends TableMap
+class RecordTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class PlayerTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'src.eXpansion.Framework.PlayersBundle.Model.Map.PlayerTableMap';
+    const CLASS_NAME = 'src.eXpansion.Bundle.LocalRecords.Model.Map.RecordTableMap';
 
     /**
      * The default database name for this class
@@ -44,22 +44,22 @@ class PlayerTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'player';
+    const TABLE_NAME = 'record';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\eXpansion\\Framework\\PlayersBundle\\Model\\Player';
+    const OM_CLASS = '\\eXpansion\\Bundle\\LocalRecords\\Model\\Record';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'src.eXpansion.Framework.PlayersBundle.Model.Player';
+    const CLASS_DEFAULT = 'src.eXpansion.Bundle.LocalRecords.Model.Record';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 8;
+    const NUM_COLUMNS = 10;
 
     /**
      * The number of lazy-loaded columns
@@ -69,47 +69,57 @@ class PlayerTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 8;
+    const NUM_HYDRATE_COLUMNS = 10;
 
     /**
      * the column name for the id field
      */
-    const COL_ID = 'player.id';
+    const COL_ID = 'record.id';
 
     /**
-     * the column name for the login field
+     * the column name for the mapUid field
      */
-    const COL_LOGIN = 'player.login';
+    const COL_MAPUID = 'record.mapUid';
 
     /**
-     * the column name for the nickname field
+     * the column name for the nbLaps field
      */
-    const COL_NICKNAME = 'player.nickname';
+    const COL_NBLAPS = 'record.nbLaps';
 
     /**
-     * the column name for the nickname_stripped field
+     * the column name for the score field
      */
-    const COL_NICKNAME_STRIPPED = 'player.nickname_stripped';
+    const COL_SCORE = 'record.score';
 
     /**
-     * the column name for the path field
+     * the column name for the nbFinish field
      */
-    const COL_PATH = 'player.path';
+    const COL_NBFINISH = 'record.nbFinish';
 
     /**
-     * the column name for the wins field
+     * the column name for the avgScore field
      */
-    const COL_WINS = 'player.wins';
+    const COL_AVGSCORE = 'record.avgScore';
 
     /**
-     * the column name for the online_time field
+     * the column name for the checkpoints field
      */
-    const COL_ONLINE_TIME = 'player.online_time';
+    const COL_CHECKPOINTS = 'record.checkpoints';
 
     /**
-     * the column name for the last_online field
+     * the column name for the player_id field
      */
-    const COL_LAST_ONLINE = 'player.last_online';
+    const COL_PLAYER_ID = 'record.player_id';
+
+    /**
+     * the column name for the created_at field
+     */
+    const COL_CREATED_AT = 'record.created_at';
+
+    /**
+     * the column name for the updated_at field
+     */
+    const COL_UPDATED_AT = 'record.updated_at';
 
     /**
      * The default string format for model objects of the related table
@@ -123,11 +133,11 @@ class PlayerTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Login', 'Nickname', 'NicknameStripped', 'Path', 'Wins', 'OnlineTime', 'LastOnline', ),
-        self::TYPE_CAMELNAME     => array('id', 'login', 'nickname', 'nicknameStripped', 'path', 'wins', 'onlineTime', 'lastOnline', ),
-        self::TYPE_COLNAME       => array(PlayerTableMap::COL_ID, PlayerTableMap::COL_LOGIN, PlayerTableMap::COL_NICKNAME, PlayerTableMap::COL_NICKNAME_STRIPPED, PlayerTableMap::COL_PATH, PlayerTableMap::COL_WINS, PlayerTableMap::COL_ONLINE_TIME, PlayerTableMap::COL_LAST_ONLINE, ),
-        self::TYPE_FIELDNAME     => array('id', 'login', 'nickname', 'nickname_stripped', 'path', 'wins', 'online_time', 'last_online', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Id', 'Mapuid', 'Nblaps', 'Score', 'Nbfinish', 'Avgscore', 'Checkpoints', 'PlayerId', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'mapuid', 'nblaps', 'score', 'nbfinish', 'avgscore', 'checkpoints', 'playerId', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(RecordTableMap::COL_ID, RecordTableMap::COL_MAPUID, RecordTableMap::COL_NBLAPS, RecordTableMap::COL_SCORE, RecordTableMap::COL_NBFINISH, RecordTableMap::COL_AVGSCORE, RecordTableMap::COL_CHECKPOINTS, RecordTableMap::COL_PLAYER_ID, RecordTableMap::COL_CREATED_AT, RecordTableMap::COL_UPDATED_AT, ),
+        self::TYPE_FIELDNAME     => array('id', 'mapUid', 'nbLaps', 'score', 'nbFinish', 'avgScore', 'checkpoints', 'player_id', 'created_at', 'updated_at', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -137,11 +147,11 @@ class PlayerTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Login' => 1, 'Nickname' => 2, 'NicknameStripped' => 3, 'Path' => 4, 'Wins' => 5, 'OnlineTime' => 6, 'LastOnline' => 7, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'login' => 1, 'nickname' => 2, 'nicknameStripped' => 3, 'path' => 4, 'wins' => 5, 'onlineTime' => 6, 'lastOnline' => 7, ),
-        self::TYPE_COLNAME       => array(PlayerTableMap::COL_ID => 0, PlayerTableMap::COL_LOGIN => 1, PlayerTableMap::COL_NICKNAME => 2, PlayerTableMap::COL_NICKNAME_STRIPPED => 3, PlayerTableMap::COL_PATH => 4, PlayerTableMap::COL_WINS => 5, PlayerTableMap::COL_ONLINE_TIME => 6, PlayerTableMap::COL_LAST_ONLINE => 7, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'login' => 1, 'nickname' => 2, 'nickname_stripped' => 3, 'path' => 4, 'wins' => 5, 'online_time' => 6, 'last_online' => 7, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Mapuid' => 1, 'Nblaps' => 2, 'Score' => 3, 'Nbfinish' => 4, 'Avgscore' => 5, 'Checkpoints' => 6, 'PlayerId' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'mapuid' => 1, 'nblaps' => 2, 'score' => 3, 'nbfinish' => 4, 'avgscore' => 5, 'checkpoints' => 6, 'playerId' => 7, 'createdAt' => 8, 'updatedAt' => 9, ),
+        self::TYPE_COLNAME       => array(RecordTableMap::COL_ID => 0, RecordTableMap::COL_MAPUID => 1, RecordTableMap::COL_NBLAPS => 2, RecordTableMap::COL_SCORE => 3, RecordTableMap::COL_NBFINISH => 4, RecordTableMap::COL_AVGSCORE => 5, RecordTableMap::COL_CHECKPOINTS => 6, RecordTableMap::COL_PLAYER_ID => 7, RecordTableMap::COL_CREATED_AT => 8, RecordTableMap::COL_UPDATED_AT => 9, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'mapUid' => 1, 'nbLaps' => 2, 'score' => 3, 'nbFinish' => 4, 'avgScore' => 5, 'checkpoints' => 6, 'player_id' => 7, 'created_at' => 8, 'updated_at' => 9, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -154,22 +164,23 @@ class PlayerTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('player');
-        $this->setPhpName('Player');
+        $this->setName('record');
+        $this->setPhpName('Record');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\eXpansion\\Framework\\PlayersBundle\\Model\\Player');
-        $this->setPackage('src.eXpansion.Framework.PlayersBundle.Model');
+        $this->setClassName('\\eXpansion\\Bundle\\LocalRecords\\Model\\Record');
+        $this->setPackage('src.eXpansion.Bundle.LocalRecords.Model');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('login', 'Login', 'VARCHAR', false, 255, null);
-        $this->getColumn('login')->setPrimaryString(true);
-        $this->addColumn('nickname', 'Nickname', 'VARCHAR', false, 255, null);
-        $this->addColumn('nickname_stripped', 'NicknameStripped', 'VARCHAR', false, 255, null);
-        $this->addColumn('path', 'Path', 'VARCHAR', false, 255, null);
-        $this->addColumn('wins', 'Wins', 'INTEGER', false, null, null);
-        $this->addColumn('online_time', 'OnlineTime', 'INTEGER', false, null, null);
-        $this->addColumn('last_online', 'LastOnline', 'TIMESTAMP', false, null, null);
+        $this->addColumn('mapUid', 'Mapuid', 'VARCHAR', false, 255, null);
+        $this->addColumn('nbLaps', 'Nblaps', 'INTEGER', false, null, null);
+        $this->addColumn('score', 'Score', 'INTEGER', false, null, null);
+        $this->addColumn('nbFinish', 'Nbfinish', 'INTEGER', false, null, null);
+        $this->addColumn('avgScore', 'Avgscore', 'INTEGER', false, null, null);
+        $this->addColumn('checkpoints', 'Checkpoints', 'LONGVARCHAR', false, null, null);
+        $this->addForeignKey('player_id', 'PlayerId', 'INTEGER', 'player', 'id', false, null, null);
+        $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -177,14 +188,27 @@ class PlayerTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Record', '\\eXpansion\\Bundle\\LocalRecords\\Model\\Record', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('Player', '\\eXpansion\\Framework\\PlayersBundle\\Model\\Player', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':player_id',
     1 => ':id',
   ),
-), null, null, 'Records', false);
+), null, null, null, false);
     } // buildRelations()
+
+    /**
+     *
+     * Gets the list of behaviors registered for this table
+     *
+     * @return array Associative array (name => parameters) of behaviors
+     */
+    public function getBehaviors()
+    {
+        return array(
+            'timestampable' => array('create_column' => 'created_at', 'update_column' => 'updated_at', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+        );
+    } // getBehaviors()
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -243,7 +267,7 @@ class PlayerTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? PlayerTableMap::CLASS_DEFAULT : PlayerTableMap::OM_CLASS;
+        return $withPrefix ? RecordTableMap::CLASS_DEFAULT : RecordTableMap::OM_CLASS;
     }
 
     /**
@@ -257,22 +281,22 @@ class PlayerTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Player object, last column rank)
+     * @return array           (Record object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = PlayerTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = PlayerTableMap::getInstanceFromPool($key))) {
+        $key = RecordTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = RecordTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + PlayerTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + RecordTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = PlayerTableMap::OM_CLASS;
-            /** @var Player $obj */
+            $cls = RecordTableMap::OM_CLASS;
+            /** @var Record $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            PlayerTableMap::addInstanceToPool($obj, $key);
+            RecordTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -295,18 +319,18 @@ class PlayerTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = PlayerTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = PlayerTableMap::getInstanceFromPool($key))) {
+            $key = RecordTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = RecordTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Player $obj */
+                /** @var Record $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                PlayerTableMap::addInstanceToPool($obj, $key);
+                RecordTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -327,23 +351,27 @@ class PlayerTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(PlayerTableMap::COL_ID);
-            $criteria->addSelectColumn(PlayerTableMap::COL_LOGIN);
-            $criteria->addSelectColumn(PlayerTableMap::COL_NICKNAME);
-            $criteria->addSelectColumn(PlayerTableMap::COL_NICKNAME_STRIPPED);
-            $criteria->addSelectColumn(PlayerTableMap::COL_PATH);
-            $criteria->addSelectColumn(PlayerTableMap::COL_WINS);
-            $criteria->addSelectColumn(PlayerTableMap::COL_ONLINE_TIME);
-            $criteria->addSelectColumn(PlayerTableMap::COL_LAST_ONLINE);
+            $criteria->addSelectColumn(RecordTableMap::COL_ID);
+            $criteria->addSelectColumn(RecordTableMap::COL_MAPUID);
+            $criteria->addSelectColumn(RecordTableMap::COL_NBLAPS);
+            $criteria->addSelectColumn(RecordTableMap::COL_SCORE);
+            $criteria->addSelectColumn(RecordTableMap::COL_NBFINISH);
+            $criteria->addSelectColumn(RecordTableMap::COL_AVGSCORE);
+            $criteria->addSelectColumn(RecordTableMap::COL_CHECKPOINTS);
+            $criteria->addSelectColumn(RecordTableMap::COL_PLAYER_ID);
+            $criteria->addSelectColumn(RecordTableMap::COL_CREATED_AT);
+            $criteria->addSelectColumn(RecordTableMap::COL_UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.login');
-            $criteria->addSelectColumn($alias . '.nickname');
-            $criteria->addSelectColumn($alias . '.nickname_stripped');
-            $criteria->addSelectColumn($alias . '.path');
-            $criteria->addSelectColumn($alias . '.wins');
-            $criteria->addSelectColumn($alias . '.online_time');
-            $criteria->addSelectColumn($alias . '.last_online');
+            $criteria->addSelectColumn($alias . '.mapUid');
+            $criteria->addSelectColumn($alias . '.nbLaps');
+            $criteria->addSelectColumn($alias . '.score');
+            $criteria->addSelectColumn($alias . '.nbFinish');
+            $criteria->addSelectColumn($alias . '.avgScore');
+            $criteria->addSelectColumn($alias . '.checkpoints');
+            $criteria->addSelectColumn($alias . '.player_id');
+            $criteria->addSelectColumn($alias . '.created_at');
+            $criteria->addSelectColumn($alias . '.updated_at');
         }
     }
 
@@ -356,7 +384,7 @@ class PlayerTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(PlayerTableMap::DATABASE_NAME)->getTable(PlayerTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(RecordTableMap::DATABASE_NAME)->getTable(RecordTableMap::TABLE_NAME);
     }
 
     /**
@@ -364,16 +392,16 @@ class PlayerTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(PlayerTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(PlayerTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new PlayerTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(RecordTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(RecordTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new RecordTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a Player or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a Record or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Player object or primary key or array of primary keys
+     * @param mixed               $values Criteria or Record object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -384,27 +412,27 @@ class PlayerTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(PlayerTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(RecordTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \eXpansion\Framework\PlayersBundle\Model\Player) { // it's a model object
+        } elseif ($values instanceof \eXpansion\Bundle\LocalRecords\Model\Record) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(PlayerTableMap::DATABASE_NAME);
-            $criteria->add(PlayerTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(RecordTableMap::DATABASE_NAME);
+            $criteria->add(RecordTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = PlayerQuery::create()->mergeWith($criteria);
+        $query = RecordQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            PlayerTableMap::clearInstancePool();
+            RecordTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                PlayerTableMap::removeInstanceFromPool($singleval);
+                RecordTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -412,20 +440,20 @@ class PlayerTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the player table.
+     * Deletes all rows from the record table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return PlayerQuery::create()->doDeleteAll($con);
+        return RecordQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a Player or Criteria object.
+     * Performs an INSERT on the database, given a Record or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Player object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or Record object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -434,22 +462,22 @@ class PlayerTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(PlayerTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(RecordTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from Player object
+            $criteria = $criteria->buildCriteria(); // build Criteria from Record object
         }
 
-        if ($criteria->containsKey(PlayerTableMap::COL_ID) && $criteria->keyContainsValue(PlayerTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.PlayerTableMap::COL_ID.')');
+        if ($criteria->containsKey(RecordTableMap::COL_ID) && $criteria->keyContainsValue(RecordTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.RecordTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = PlayerQuery::create()->mergeWith($criteria);
+        $query = RecordQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -458,7 +486,7 @@ class PlayerTableMap extends TableMap
         });
     }
 
-} // PlayerTableMap
+} // RecordTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-PlayerTableMap::buildTableMap();
+RecordTableMap::buildTableMap();

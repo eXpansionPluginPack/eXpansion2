@@ -7,9 +7,11 @@ use \PDO;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
+use Propel\Runtime\ActiveQuery\ModelJoin;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
+use eXpansion\Bundle\LocalRecords\Model\Record;
 use eXpansion\Framework\PlayersBundle\Model\Player as ChildPlayer;
 use eXpansion\Framework\PlayersBundle\Model\PlayerQuery as ChildPlayerQuery;
 use eXpansion\Framework\PlayersBundle\Model\Map\PlayerTableMap;
@@ -44,6 +46,18 @@ use eXpansion\Framework\PlayersBundle\Model\Map\PlayerTableMap;
  * @method     ChildPlayerQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
  * @method     ChildPlayerQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildPlayerQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ *
+ * @method     ChildPlayerQuery leftJoinRecord($relationAlias = null) Adds a LEFT JOIN clause to the query using the Record relation
+ * @method     ChildPlayerQuery rightJoinRecord($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Record relation
+ * @method     ChildPlayerQuery innerJoinRecord($relationAlias = null) Adds a INNER JOIN clause to the query using the Record relation
+ *
+ * @method     ChildPlayerQuery joinWithRecord($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Record relation
+ *
+ * @method     ChildPlayerQuery leftJoinWithRecord() Adds a LEFT JOIN clause and with to the query using the Record relation
+ * @method     ChildPlayerQuery rightJoinWithRecord() Adds a RIGHT JOIN clause and with to the query using the Record relation
+ * @method     ChildPlayerQuery innerJoinWithRecord() Adds a INNER JOIN clause and with to the query using the Record relation
+ *
+ * @method     \eXpansion\Bundle\LocalRecords\Model\RecordQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildPlayer findOne(ConnectionInterface $con = null) Return the first ChildPlayer matching the query
  * @method     ChildPlayer findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPlayer matching the query, or a new ChildPlayer object populated from the query conditions when no match is found
@@ -530,6 +544,79 @@ abstract class PlayerQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(PlayerTableMap::COL_LAST_ONLINE, $lastOnline, $comparison);
+    }
+
+    /**
+     * Filter the query by a related \eXpansion\Bundle\LocalRecords\Model\Record object
+     *
+     * @param \eXpansion\Bundle\LocalRecords\Model\Record|ObjectCollection $record the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildPlayerQuery The current query, for fluid interface
+     */
+    public function filterByRecord($record, $comparison = null)
+    {
+        if ($record instanceof \eXpansion\Bundle\LocalRecords\Model\Record) {
+            return $this
+                ->addUsingAlias(PlayerTableMap::COL_ID, $record->getPlayerId(), $comparison);
+        } elseif ($record instanceof ObjectCollection) {
+            return $this
+                ->useRecordQuery()
+                ->filterByPrimaryKeys($record->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByRecord() only accepts arguments of type \eXpansion\Bundle\LocalRecords\Model\Record or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Record relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildPlayerQuery The current query, for fluid interface
+     */
+    public function joinRecord($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Record');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Record');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Record relation Record object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \eXpansion\Bundle\LocalRecords\Model\RecordQuery A secondary query class using the current class as primary query
+     */
+    public function useRecordQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinRecord($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Record', '\eXpansion\Bundle\LocalRecords\Model\RecordQuery');
     }
 
     /**

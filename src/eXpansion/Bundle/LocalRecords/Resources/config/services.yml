@@ -6,18 +6,12 @@ services:
         autowire: true
         public: true
 
-    eXpansion\Bundle\LocalRecords\Repository\RecordRepository:
-        class: Doctrine\ORM\EntityRepository
-        factory: ["@doctrine.orm.entity_manager", getRepository]
-        arguments: ['LocalRecordsBundle:Record']
-
     #
     # Services used to handle Records in TA.
     #
     eXpansion.local_records.services.race_record_handler_factory:
         class: eXpansion\Bundle\LocalRecords\Services\RecordHandlerFactory
         arguments:
-            $recordRepository: '@eXpansion\Bundle\LocalRecords\Repository\RecordRepository'
             $ordering: ASC
             $nbRecords: '%eXpansion.local_records.nb_records%'
 

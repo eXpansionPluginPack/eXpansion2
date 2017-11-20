@@ -1,6 +1,6 @@
 <?php
 
-namespace eXpansion\Framework\PlayersBundle\Model\Base;
+namespace eXpansion\Bundle\LocalRecords\Model\Base;
 
 use \DateTime;
 use \Exception;
@@ -10,7 +10,6 @@ use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Propel\Runtime\Collection\Collection;
-use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\BadMethodCallException;
 use Propel\Runtime\Exception\LogicException;
@@ -18,27 +17,25 @@ use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
 use Propel\Runtime\Util\PropelDateTime;
-use eXpansion\Bundle\LocalRecords\Model\Record;
-use eXpansion\Bundle\LocalRecords\Model\RecordQuery;
-use eXpansion\Bundle\LocalRecords\Model\Base\Record as BaseRecord;
+use eXpansion\Bundle\LocalRecords\Model\Record as ChildRecord;
+use eXpansion\Bundle\LocalRecords\Model\RecordQuery as ChildRecordQuery;
 use eXpansion\Bundle\LocalRecords\Model\Map\RecordTableMap;
-use eXpansion\Framework\PlayersBundle\Model\Player as ChildPlayer;
-use eXpansion\Framework\PlayersBundle\Model\PlayerQuery as ChildPlayerQuery;
-use eXpansion\Framework\PlayersBundle\Model\Map\PlayerTableMap;
+use eXpansion\Framework\PlayersBundle\Model\Player;
+use eXpansion\Framework\PlayersBundle\Model\PlayerQuery;
 
 /**
- * Base class that represents a row from the 'player' table.
+ * Base class that represents a row from the 'record' table.
  *
  *
  *
- * @package    propel.generator.src.eXpansion.Framework.PlayersBundle.Model.Base
+ * @package    propel.generator.src.eXpansion.Bundle.LocalRecords.Model.Base
  */
-abstract class Player implements ActiveRecordInterface
+abstract class Record implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\eXpansion\\Framework\\PlayersBundle\\Model\\Map\\PlayerTableMap';
+    const TABLE_MAP = '\\eXpansion\\Bundle\\LocalRecords\\Model\\Map\\RecordTableMap';
 
 
     /**
@@ -75,59 +72,72 @@ abstract class Player implements ActiveRecordInterface
     protected $id;
 
     /**
-     * The value for the login field.
+     * The value for the mapuid field.
      *
      * @var        string
      */
-    protected $login;
+    protected $mapuid;
 
     /**
-     * The value for the nickname field.
-     *
-     * @var        string
-     */
-    protected $nickname;
-
-    /**
-     * The value for the nickname_stripped field.
-     *
-     * @var        string
-     */
-    protected $nickname_stripped;
-
-    /**
-     * The value for the path field.
-     *
-     * @var        string
-     */
-    protected $path;
-
-    /**
-     * The value for the wins field.
+     * The value for the nblaps field.
      *
      * @var        int
      */
-    protected $wins;
+    protected $nblaps;
 
     /**
-     * The value for the online_time field.
+     * The value for the score field.
      *
      * @var        int
      */
-    protected $online_time;
+    protected $score;
 
     /**
-     * The value for the last_online field.
+     * The value for the nbfinish field.
+     *
+     * @var        int
+     */
+    protected $nbfinish;
+
+    /**
+     * The value for the avgscore field.
+     *
+     * @var        int
+     */
+    protected $avgscore;
+
+    /**
+     * The value for the checkpoints field.
+     *
+     * @var        string
+     */
+    protected $checkpoints;
+
+    /**
+     * The value for the player_id field.
+     *
+     * @var        int
+     */
+    protected $player_id;
+
+    /**
+     * The value for the created_at field.
      *
      * @var        DateTime
      */
-    protected $last_online;
+    protected $created_at;
 
     /**
-     * @var        ObjectCollection|Record[] Collection to store aggregation of Record objects.
+     * The value for the updated_at field.
+     *
+     * @var        DateTime
      */
-    protected $collRecords;
-    protected $collRecordsPartial;
+    protected $updated_at;
+
+    /**
+     * @var        Player
+     */
+    protected $aPlayer;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -138,13 +148,7 @@ abstract class Player implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
-     * An array of objects scheduled for deletion.
-     * @var ObjectCollection|Record[]
-     */
-    protected $recordsScheduledForDeletion = null;
-
-    /**
-     * Initializes internal state of eXpansion\Framework\PlayersBundle\Model\Base\Player object.
+     * Initializes internal state of eXpansion\Bundle\LocalRecords\Model\Base\Record object.
      */
     public function __construct()
     {
@@ -239,9 +243,9 @@ abstract class Player implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>Player</code> instance.  If
-     * <code>obj</code> is an instance of <code>Player</code>, delegates to
-     * <code>equals(Player)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>Record</code> instance.  If
+     * <code>obj</code> is an instance of <code>Record</code>, delegates to
+     * <code>equals(Record)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -307,7 +311,7 @@ abstract class Player implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|Player The current object, for fluid interface
+     * @return $this|Record The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -379,67 +383,77 @@ abstract class Player implements ActiveRecordInterface
     }
 
     /**
-     * Get the [login] column value.
+     * Get the [mapuid] column value.
      *
      * @return string
      */
-    public function getLogin()
+    public function getMapuid()
     {
-        return $this->login;
+        return $this->mapuid;
     }
 
     /**
-     * Get the [nickname] column value.
-     *
-     * @return string
-     */
-    public function getNickname()
-    {
-        return $this->nickname;
-    }
-
-    /**
-     * Get the [nickname_stripped] column value.
-     *
-     * @return string
-     */
-    public function getNicknameStripped()
-    {
-        return $this->nickname_stripped;
-    }
-
-    /**
-     * Get the [path] column value.
-     *
-     * @return string
-     */
-    public function getPath()
-    {
-        return $this->path;
-    }
-
-    /**
-     * Get the [wins] column value.
+     * Get the [nblaps] column value.
      *
      * @return int
      */
-    public function getWins()
+    public function getNblaps()
     {
-        return $this->wins;
+        return $this->nblaps;
     }
 
     /**
-     * Get the [online_time] column value.
+     * Get the [score] column value.
      *
      * @return int
      */
-    public function getOnlineTime()
+    public function getScore()
     {
-        return $this->online_time;
+        return $this->score;
     }
 
     /**
-     * Get the [optionally formatted] temporal [last_online] column value.
+     * Get the [nbfinish] column value.
+     *
+     * @return int
+     */
+    public function getNbfinish()
+    {
+        return $this->nbfinish;
+    }
+
+    /**
+     * Get the [avgscore] column value.
+     *
+     * @return int
+     */
+    public function getAvgscore()
+    {
+        return $this->avgscore;
+    }
+
+    /**
+     * Get the [checkpoints] column value.
+     *
+     * @return string
+     */
+    public function getCheckpoints()
+    {
+        return $this->checkpoints;
+    }
+
+    /**
+     * Get the [player_id] column value.
+     *
+     * @return int
+     */
+    public function getPlayerId()
+    {
+        return $this->player_id;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [created_at] column value.
      *
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
@@ -449,12 +463,32 @@ abstract class Player implements ActiveRecordInterface
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getLastOnline($format = NULL)
+    public function getCreatedAt($format = NULL)
     {
         if ($format === null) {
-            return $this->last_online;
+            return $this->created_at;
         } else {
-            return $this->last_online instanceof \DateTimeInterface ? $this->last_online->format($format) : null;
+            return $this->created_at instanceof \DateTimeInterface ? $this->created_at->format($format) : null;
+        }
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [updated_at] column value.
+     *
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getUpdatedAt($format = NULL)
+    {
+        if ($format === null) {
+            return $this->updated_at;
+        } else {
+            return $this->updated_at instanceof \DateTimeInterface ? $this->updated_at->format($format) : null;
         }
     }
 
@@ -462,7 +496,7 @@ abstract class Player implements ActiveRecordInterface
      * Set the value of [id] column.
      *
      * @param int $v new value
-     * @return $this|\eXpansion\Framework\PlayersBundle\Model\Player The current object (for fluent API support)
+     * @return $this|\eXpansion\Bundle\LocalRecords\Model\Record The current object (for fluent API support)
      */
     public function setId($v)
     {
@@ -472,151 +506,195 @@ abstract class Player implements ActiveRecordInterface
 
         if ($this->id !== $v) {
             $this->id = $v;
-            $this->modifiedColumns[PlayerTableMap::COL_ID] = true;
+            $this->modifiedColumns[RecordTableMap::COL_ID] = true;
         }
 
         return $this;
     } // setId()
 
     /**
-     * Set the value of [login] column.
+     * Set the value of [mapuid] column.
      *
      * @param string $v new value
-     * @return $this|\eXpansion\Framework\PlayersBundle\Model\Player The current object (for fluent API support)
+     * @return $this|\eXpansion\Bundle\LocalRecords\Model\Record The current object (for fluent API support)
      */
-    public function setLogin($v)
+    public function setMapuid($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->login !== $v) {
-            $this->login = $v;
-            $this->modifiedColumns[PlayerTableMap::COL_LOGIN] = true;
+        if ($this->mapuid !== $v) {
+            $this->mapuid = $v;
+            $this->modifiedColumns[RecordTableMap::COL_MAPUID] = true;
         }
 
         return $this;
-    } // setLogin()
+    } // setMapuid()
 
     /**
-     * Set the value of [nickname] column.
-     *
-     * @param string $v new value
-     * @return $this|\eXpansion\Framework\PlayersBundle\Model\Player The current object (for fluent API support)
-     */
-    public function setNickname($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->nickname !== $v) {
-            $this->nickname = $v;
-            $this->modifiedColumns[PlayerTableMap::COL_NICKNAME] = true;
-        }
-
-        return $this;
-    } // setNickname()
-
-    /**
-     * Set the value of [nickname_stripped] column.
-     *
-     * @param string $v new value
-     * @return $this|\eXpansion\Framework\PlayersBundle\Model\Player The current object (for fluent API support)
-     */
-    public function setNicknameStripped($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->nickname_stripped !== $v) {
-            $this->nickname_stripped = $v;
-            $this->modifiedColumns[PlayerTableMap::COL_NICKNAME_STRIPPED] = true;
-        }
-
-        return $this;
-    } // setNicknameStripped()
-
-    /**
-     * Set the value of [path] column.
-     *
-     * @param string $v new value
-     * @return $this|\eXpansion\Framework\PlayersBundle\Model\Player The current object (for fluent API support)
-     */
-    public function setPath($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->path !== $v) {
-            $this->path = $v;
-            $this->modifiedColumns[PlayerTableMap::COL_PATH] = true;
-        }
-
-        return $this;
-    } // setPath()
-
-    /**
-     * Set the value of [wins] column.
+     * Set the value of [nblaps] column.
      *
      * @param int $v new value
-     * @return $this|\eXpansion\Framework\PlayersBundle\Model\Player The current object (for fluent API support)
+     * @return $this|\eXpansion\Bundle\LocalRecords\Model\Record The current object (for fluent API support)
      */
-    public function setWins($v)
+    public function setNblaps($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->wins !== $v) {
-            $this->wins = $v;
-            $this->modifiedColumns[PlayerTableMap::COL_WINS] = true;
+        if ($this->nblaps !== $v) {
+            $this->nblaps = $v;
+            $this->modifiedColumns[RecordTableMap::COL_NBLAPS] = true;
         }
 
         return $this;
-    } // setWins()
+    } // setNblaps()
 
     /**
-     * Set the value of [online_time] column.
+     * Set the value of [score] column.
      *
      * @param int $v new value
-     * @return $this|\eXpansion\Framework\PlayersBundle\Model\Player The current object (for fluent API support)
+     * @return $this|\eXpansion\Bundle\LocalRecords\Model\Record The current object (for fluent API support)
      */
-    public function setOnlineTime($v)
+    public function setScore($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->online_time !== $v) {
-            $this->online_time = $v;
-            $this->modifiedColumns[PlayerTableMap::COL_ONLINE_TIME] = true;
+        if ($this->score !== $v) {
+            $this->score = $v;
+            $this->modifiedColumns[RecordTableMap::COL_SCORE] = true;
         }
 
         return $this;
-    } // setOnlineTime()
+    } // setScore()
 
     /**
-     * Sets the value of [last_online] column to a normalized version of the date/time value specified.
+     * Set the value of [nbfinish] column.
+     *
+     * @param int $v new value
+     * @return $this|\eXpansion\Bundle\LocalRecords\Model\Record The current object (for fluent API support)
+     */
+    public function setNbfinish($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->nbfinish !== $v) {
+            $this->nbfinish = $v;
+            $this->modifiedColumns[RecordTableMap::COL_NBFINISH] = true;
+        }
+
+        return $this;
+    } // setNbfinish()
+
+    /**
+     * Set the value of [avgscore] column.
+     *
+     * @param int $v new value
+     * @return $this|\eXpansion\Bundle\LocalRecords\Model\Record The current object (for fluent API support)
+     */
+    public function setAvgscore($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->avgscore !== $v) {
+            $this->avgscore = $v;
+            $this->modifiedColumns[RecordTableMap::COL_AVGSCORE] = true;
+        }
+
+        return $this;
+    } // setAvgscore()
+
+    /**
+     * Set the value of [checkpoints] column.
+     *
+     * @param string $v new value
+     * @return $this|\eXpansion\Bundle\LocalRecords\Model\Record The current object (for fluent API support)
+     */
+    public function setCheckpoints($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->checkpoints !== $v) {
+            $this->checkpoints = $v;
+            $this->modifiedColumns[RecordTableMap::COL_CHECKPOINTS] = true;
+        }
+
+        return $this;
+    } // setCheckpoints()
+
+    /**
+     * Set the value of [player_id] column.
+     *
+     * @param int $v new value
+     * @return $this|\eXpansion\Bundle\LocalRecords\Model\Record The current object (for fluent API support)
+     */
+    public function setPlayerId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->player_id !== $v) {
+            $this->player_id = $v;
+            $this->modifiedColumns[RecordTableMap::COL_PLAYER_ID] = true;
+        }
+
+        if ($this->aPlayer !== null && $this->aPlayer->getId() !== $v) {
+            $this->aPlayer = null;
+        }
+
+        return $this;
+    } // setPlayerId()
+
+    /**
+     * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
-     * @return $this|\eXpansion\Framework\PlayersBundle\Model\Player The current object (for fluent API support)
+     * @return $this|\eXpansion\Bundle\LocalRecords\Model\Record The current object (for fluent API support)
      */
-    public function setLastOnline($v)
+    public function setCreatedAt($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->last_online !== null || $dt !== null) {
-            if ($this->last_online === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->last_online->format("Y-m-d H:i:s.u")) {
-                $this->last_online = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[PlayerTableMap::COL_LAST_ONLINE] = true;
+        if ($this->created_at !== null || $dt !== null) {
+            if ($this->created_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->created_at->format("Y-m-d H:i:s.u")) {
+                $this->created_at = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[RecordTableMap::COL_CREATED_AT] = true;
             }
         } // if either are not null
 
         return $this;
-    } // setLastOnline()
+    } // setCreatedAt()
+
+    /**
+     * Sets the value of [updated_at] column to a normalized version of the date/time value specified.
+     *
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\eXpansion\Bundle\LocalRecords\Model\Record The current object (for fluent API support)
+     */
+    public function setUpdatedAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->updated_at !== null || $dt !== null) {
+            if ($this->updated_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->updated_at->format("Y-m-d H:i:s.u")) {
+                $this->updated_at = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[RecordTableMap::COL_UPDATED_AT] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setUpdatedAt()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -654,32 +732,41 @@ abstract class Player implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : PlayerTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : RecordTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : PlayerTableMap::translateFieldName('Login', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->login = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : RecordTableMap::translateFieldName('Mapuid', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->mapuid = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : PlayerTableMap::translateFieldName('Nickname', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->nickname = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : RecordTableMap::translateFieldName('Nblaps', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->nblaps = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : PlayerTableMap::translateFieldName('NicknameStripped', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->nickname_stripped = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : RecordTableMap::translateFieldName('Score', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->score = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : PlayerTableMap::translateFieldName('Path', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->path = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : RecordTableMap::translateFieldName('Nbfinish', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->nbfinish = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : PlayerTableMap::translateFieldName('Wins', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->wins = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : RecordTableMap::translateFieldName('Avgscore', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->avgscore = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : PlayerTableMap::translateFieldName('OnlineTime', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->online_time = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : RecordTableMap::translateFieldName('Checkpoints', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->checkpoints = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : PlayerTableMap::translateFieldName('LastOnline', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : RecordTableMap::translateFieldName('PlayerId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->player_id = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : RecordTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
-            $this->last_online = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+            $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : RecordTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->updated_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -688,10 +775,10 @@ abstract class Player implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 8; // 8 = PlayerTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 10; // 10 = RecordTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\eXpansion\\Framework\\PlayersBundle\\Model\\Player'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\eXpansion\\Bundle\\LocalRecords\\Model\\Record'), 0, $e);
         }
     }
 
@@ -710,6 +797,9 @@ abstract class Player implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
+        if ($this->aPlayer !== null && $this->player_id !== $this->aPlayer->getId()) {
+            $this->aPlayer = null;
+        }
     } // ensureConsistency
 
     /**
@@ -733,13 +823,13 @@ abstract class Player implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(PlayerTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(RecordTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildPlayerQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildRecordQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -749,8 +839,7 @@ abstract class Player implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->collRecords = null;
-
+            $this->aPlayer = null;
         } // if (deep)
     }
 
@@ -760,8 +849,8 @@ abstract class Player implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see Player::setDeleted()
-     * @see Player::isDeleted()
+     * @see Record::setDeleted()
+     * @see Record::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -770,11 +859,11 @@ abstract class Player implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(PlayerTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(RecordTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildPlayerQuery::create()
+            $deleteQuery = ChildRecordQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -805,7 +894,7 @@ abstract class Player implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(PlayerTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(RecordTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -813,8 +902,20 @@ abstract class Player implements ActiveRecordInterface
             $isInsert = $this->isNew();
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
+                // timestampable behavior
+
+                if (!$this->isColumnModified(RecordTableMap::COL_CREATED_AT)) {
+                    $this->setCreatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                }
+                if (!$this->isColumnModified(RecordTableMap::COL_UPDATED_AT)) {
+                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                }
             } else {
                 $ret = $ret && $this->preUpdate($con);
+                // timestampable behavior
+                if ($this->isModified() && !$this->isColumnModified(RecordTableMap::COL_UPDATED_AT)) {
+                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                }
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -824,7 +925,7 @@ abstract class Player implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                PlayerTableMap::addInstanceToPool($this);
+                RecordTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -850,6 +951,18 @@ abstract class Player implements ActiveRecordInterface
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aPlayer !== null) {
+                if ($this->aPlayer->isModified() || $this->aPlayer->isNew()) {
+                    $affectedRows += $this->aPlayer->save($con);
+                }
+                $this->setPlayer($this->aPlayer);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -859,24 +972,6 @@ abstract class Player implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
-            }
-
-            if ($this->recordsScheduledForDeletion !== null) {
-                if (!$this->recordsScheduledForDeletion->isEmpty()) {
-                    foreach ($this->recordsScheduledForDeletion as $record) {
-                        // need to save related object because we set the relation to null
-                        $record->save($con);
-                    }
-                    $this->recordsScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collRecords !== null) {
-                foreach ($this->collRecords as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
             }
 
             $this->alreadyInSave = false;
@@ -899,39 +994,45 @@ abstract class Player implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[PlayerTableMap::COL_ID] = true;
+        $this->modifiedColumns[RecordTableMap::COL_ID] = true;
         if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . PlayerTableMap::COL_ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . RecordTableMap::COL_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(PlayerTableMap::COL_ID)) {
+        if ($this->isColumnModified(RecordTableMap::COL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'id';
         }
-        if ($this->isColumnModified(PlayerTableMap::COL_LOGIN)) {
-            $modifiedColumns[':p' . $index++]  = 'login';
+        if ($this->isColumnModified(RecordTableMap::COL_MAPUID)) {
+            $modifiedColumns[':p' . $index++]  = 'mapUid';
         }
-        if ($this->isColumnModified(PlayerTableMap::COL_NICKNAME)) {
-            $modifiedColumns[':p' . $index++]  = 'nickname';
+        if ($this->isColumnModified(RecordTableMap::COL_NBLAPS)) {
+            $modifiedColumns[':p' . $index++]  = 'nbLaps';
         }
-        if ($this->isColumnModified(PlayerTableMap::COL_NICKNAME_STRIPPED)) {
-            $modifiedColumns[':p' . $index++]  = 'nickname_stripped';
+        if ($this->isColumnModified(RecordTableMap::COL_SCORE)) {
+            $modifiedColumns[':p' . $index++]  = 'score';
         }
-        if ($this->isColumnModified(PlayerTableMap::COL_PATH)) {
-            $modifiedColumns[':p' . $index++]  = 'path';
+        if ($this->isColumnModified(RecordTableMap::COL_NBFINISH)) {
+            $modifiedColumns[':p' . $index++]  = 'nbFinish';
         }
-        if ($this->isColumnModified(PlayerTableMap::COL_WINS)) {
-            $modifiedColumns[':p' . $index++]  = 'wins';
+        if ($this->isColumnModified(RecordTableMap::COL_AVGSCORE)) {
+            $modifiedColumns[':p' . $index++]  = 'avgScore';
         }
-        if ($this->isColumnModified(PlayerTableMap::COL_ONLINE_TIME)) {
-            $modifiedColumns[':p' . $index++]  = 'online_time';
+        if ($this->isColumnModified(RecordTableMap::COL_CHECKPOINTS)) {
+            $modifiedColumns[':p' . $index++]  = 'checkpoints';
         }
-        if ($this->isColumnModified(PlayerTableMap::COL_LAST_ONLINE)) {
-            $modifiedColumns[':p' . $index++]  = 'last_online';
+        if ($this->isColumnModified(RecordTableMap::COL_PLAYER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'player_id';
+        }
+        if ($this->isColumnModified(RecordTableMap::COL_CREATED_AT)) {
+            $modifiedColumns[':p' . $index++]  = 'created_at';
+        }
+        if ($this->isColumnModified(RecordTableMap::COL_UPDATED_AT)) {
+            $modifiedColumns[':p' . $index++]  = 'updated_at';
         }
 
         $sql = sprintf(
-            'INSERT INTO player (%s) VALUES (%s)',
+            'INSERT INTO record (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -943,26 +1044,32 @@ abstract class Player implements ActiveRecordInterface
                     case 'id':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'login':
-                        $stmt->bindValue($identifier, $this->login, PDO::PARAM_STR);
+                    case 'mapUid':
+                        $stmt->bindValue($identifier, $this->mapuid, PDO::PARAM_STR);
                         break;
-                    case 'nickname':
-                        $stmt->bindValue($identifier, $this->nickname, PDO::PARAM_STR);
+                    case 'nbLaps':
+                        $stmt->bindValue($identifier, $this->nblaps, PDO::PARAM_INT);
                         break;
-                    case 'nickname_stripped':
-                        $stmt->bindValue($identifier, $this->nickname_stripped, PDO::PARAM_STR);
+                    case 'score':
+                        $stmt->bindValue($identifier, $this->score, PDO::PARAM_INT);
                         break;
-                    case 'path':
-                        $stmt->bindValue($identifier, $this->path, PDO::PARAM_STR);
+                    case 'nbFinish':
+                        $stmt->bindValue($identifier, $this->nbfinish, PDO::PARAM_INT);
                         break;
-                    case 'wins':
-                        $stmt->bindValue($identifier, $this->wins, PDO::PARAM_INT);
+                    case 'avgScore':
+                        $stmt->bindValue($identifier, $this->avgscore, PDO::PARAM_INT);
                         break;
-                    case 'online_time':
-                        $stmt->bindValue($identifier, $this->online_time, PDO::PARAM_INT);
+                    case 'checkpoints':
+                        $stmt->bindValue($identifier, $this->checkpoints, PDO::PARAM_STR);
                         break;
-                    case 'last_online':
-                        $stmt->bindValue($identifier, $this->last_online ? $this->last_online->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                    case 'player_id':
+                        $stmt->bindValue($identifier, $this->player_id, PDO::PARAM_INT);
+                        break;
+                    case 'created_at':
+                        $stmt->bindValue($identifier, $this->created_at ? $this->created_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                        break;
+                    case 'updated_at':
+                        $stmt->bindValue($identifier, $this->updated_at ? $this->updated_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1010,7 +1117,7 @@ abstract class Player implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = PlayerTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = RecordTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -1030,25 +1137,31 @@ abstract class Player implements ActiveRecordInterface
                 return $this->getId();
                 break;
             case 1:
-                return $this->getLogin();
+                return $this->getMapuid();
                 break;
             case 2:
-                return $this->getNickname();
+                return $this->getNblaps();
                 break;
             case 3:
-                return $this->getNicknameStripped();
+                return $this->getScore();
                 break;
             case 4:
-                return $this->getPath();
+                return $this->getNbfinish();
                 break;
             case 5:
-                return $this->getWins();
+                return $this->getAvgscore();
                 break;
             case 6:
-                return $this->getOnlineTime();
+                return $this->getCheckpoints();
                 break;
             case 7:
-                return $this->getLastOnline();
+                return $this->getPlayerId();
+                break;
+            case 8:
+                return $this->getCreatedAt();
+                break;
+            case 9:
+                return $this->getUpdatedAt();
                 break;
             default:
                 return null;
@@ -1074,23 +1187,29 @@ abstract class Player implements ActiveRecordInterface
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
-        if (isset($alreadyDumpedObjects['Player'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['Record'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Player'][$this->hashCode()] = true;
-        $keys = PlayerTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['Record'][$this->hashCode()] = true;
+        $keys = RecordTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getLogin(),
-            $keys[2] => $this->getNickname(),
-            $keys[3] => $this->getNicknameStripped(),
-            $keys[4] => $this->getPath(),
-            $keys[5] => $this->getWins(),
-            $keys[6] => $this->getOnlineTime(),
-            $keys[7] => $this->getLastOnline(),
+            $keys[1] => $this->getMapuid(),
+            $keys[2] => $this->getNblaps(),
+            $keys[3] => $this->getScore(),
+            $keys[4] => $this->getNbfinish(),
+            $keys[5] => $this->getAvgscore(),
+            $keys[6] => $this->getCheckpoints(),
+            $keys[7] => $this->getPlayerId(),
+            $keys[8] => $this->getCreatedAt(),
+            $keys[9] => $this->getUpdatedAt(),
         );
-        if ($result[$keys[7]] instanceof \DateTime) {
-            $result[$keys[7]] = $result[$keys[7]]->format('c');
+        if ($result[$keys[8]] instanceof \DateTime) {
+            $result[$keys[8]] = $result[$keys[8]]->format('c');
+        }
+
+        if ($result[$keys[9]] instanceof \DateTime) {
+            $result[$keys[9]] = $result[$keys[9]]->format('c');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1099,20 +1218,20 @@ abstract class Player implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->collRecords) {
+            if (null !== $this->aPlayer) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'records';
+                        $key = 'player';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'records';
+                        $key = 'player';
                         break;
                     default:
-                        $key = 'Records';
+                        $key = 'Player';
                 }
 
-                $result[$key] = $this->collRecords->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->aPlayer->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -1128,11 +1247,11 @@ abstract class Player implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\eXpansion\Framework\PlayersBundle\Model\Player
+     * @return $this|\eXpansion\Bundle\LocalRecords\Model\Record
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = PlayerTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = RecordTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -1143,7 +1262,7 @@ abstract class Player implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\eXpansion\Framework\PlayersBundle\Model\Player
+     * @return $this|\eXpansion\Bundle\LocalRecords\Model\Record
      */
     public function setByPosition($pos, $value)
     {
@@ -1152,25 +1271,31 @@ abstract class Player implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setLogin($value);
+                $this->setMapuid($value);
                 break;
             case 2:
-                $this->setNickname($value);
+                $this->setNblaps($value);
                 break;
             case 3:
-                $this->setNicknameStripped($value);
+                $this->setScore($value);
                 break;
             case 4:
-                $this->setPath($value);
+                $this->setNbfinish($value);
                 break;
             case 5:
-                $this->setWins($value);
+                $this->setAvgscore($value);
                 break;
             case 6:
-                $this->setOnlineTime($value);
+                $this->setCheckpoints($value);
                 break;
             case 7:
-                $this->setLastOnline($value);
+                $this->setPlayerId($value);
+                break;
+            case 8:
+                $this->setCreatedAt($value);
+                break;
+            case 9:
+                $this->setUpdatedAt($value);
                 break;
         } // switch()
 
@@ -1196,31 +1321,37 @@ abstract class Player implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = PlayerTableMap::getFieldNames($keyType);
+        $keys = RecordTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setLogin($arr[$keys[1]]);
+            $this->setMapuid($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setNickname($arr[$keys[2]]);
+            $this->setNblaps($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setNicknameStripped($arr[$keys[3]]);
+            $this->setScore($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setPath($arr[$keys[4]]);
+            $this->setNbfinish($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setWins($arr[$keys[5]]);
+            $this->setAvgscore($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setOnlineTime($arr[$keys[6]]);
+            $this->setCheckpoints($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setLastOnline($arr[$keys[7]]);
+            $this->setPlayerId($arr[$keys[7]]);
+        }
+        if (array_key_exists($keys[8], $arr)) {
+            $this->setCreatedAt($arr[$keys[8]]);
+        }
+        if (array_key_exists($keys[9], $arr)) {
+            $this->setUpdatedAt($arr[$keys[9]]);
         }
     }
 
@@ -1241,7 +1372,7 @@ abstract class Player implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\eXpansion\Framework\PlayersBundle\Model\Player The current object, for fluid interface
+     * @return $this|\eXpansion\Bundle\LocalRecords\Model\Record The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -1261,31 +1392,37 @@ abstract class Player implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(PlayerTableMap::DATABASE_NAME);
+        $criteria = new Criteria(RecordTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(PlayerTableMap::COL_ID)) {
-            $criteria->add(PlayerTableMap::COL_ID, $this->id);
+        if ($this->isColumnModified(RecordTableMap::COL_ID)) {
+            $criteria->add(RecordTableMap::COL_ID, $this->id);
         }
-        if ($this->isColumnModified(PlayerTableMap::COL_LOGIN)) {
-            $criteria->add(PlayerTableMap::COL_LOGIN, $this->login);
+        if ($this->isColumnModified(RecordTableMap::COL_MAPUID)) {
+            $criteria->add(RecordTableMap::COL_MAPUID, $this->mapuid);
         }
-        if ($this->isColumnModified(PlayerTableMap::COL_NICKNAME)) {
-            $criteria->add(PlayerTableMap::COL_NICKNAME, $this->nickname);
+        if ($this->isColumnModified(RecordTableMap::COL_NBLAPS)) {
+            $criteria->add(RecordTableMap::COL_NBLAPS, $this->nblaps);
         }
-        if ($this->isColumnModified(PlayerTableMap::COL_NICKNAME_STRIPPED)) {
-            $criteria->add(PlayerTableMap::COL_NICKNAME_STRIPPED, $this->nickname_stripped);
+        if ($this->isColumnModified(RecordTableMap::COL_SCORE)) {
+            $criteria->add(RecordTableMap::COL_SCORE, $this->score);
         }
-        if ($this->isColumnModified(PlayerTableMap::COL_PATH)) {
-            $criteria->add(PlayerTableMap::COL_PATH, $this->path);
+        if ($this->isColumnModified(RecordTableMap::COL_NBFINISH)) {
+            $criteria->add(RecordTableMap::COL_NBFINISH, $this->nbfinish);
         }
-        if ($this->isColumnModified(PlayerTableMap::COL_WINS)) {
-            $criteria->add(PlayerTableMap::COL_WINS, $this->wins);
+        if ($this->isColumnModified(RecordTableMap::COL_AVGSCORE)) {
+            $criteria->add(RecordTableMap::COL_AVGSCORE, $this->avgscore);
         }
-        if ($this->isColumnModified(PlayerTableMap::COL_ONLINE_TIME)) {
-            $criteria->add(PlayerTableMap::COL_ONLINE_TIME, $this->online_time);
+        if ($this->isColumnModified(RecordTableMap::COL_CHECKPOINTS)) {
+            $criteria->add(RecordTableMap::COL_CHECKPOINTS, $this->checkpoints);
         }
-        if ($this->isColumnModified(PlayerTableMap::COL_LAST_ONLINE)) {
-            $criteria->add(PlayerTableMap::COL_LAST_ONLINE, $this->last_online);
+        if ($this->isColumnModified(RecordTableMap::COL_PLAYER_ID)) {
+            $criteria->add(RecordTableMap::COL_PLAYER_ID, $this->player_id);
+        }
+        if ($this->isColumnModified(RecordTableMap::COL_CREATED_AT)) {
+            $criteria->add(RecordTableMap::COL_CREATED_AT, $this->created_at);
+        }
+        if ($this->isColumnModified(RecordTableMap::COL_UPDATED_AT)) {
+            $criteria->add(RecordTableMap::COL_UPDATED_AT, $this->updated_at);
         }
 
         return $criteria;
@@ -1303,8 +1440,8 @@ abstract class Player implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildPlayerQuery::create();
-        $criteria->add(PlayerTableMap::COL_ID, $this->id);
+        $criteria = ChildRecordQuery::create();
+        $criteria->add(RecordTableMap::COL_ID, $this->id);
 
         return $criteria;
     }
@@ -1366,34 +1503,22 @@ abstract class Player implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \eXpansion\Framework\PlayersBundle\Model\Player (or compatible) type.
+     * @param      object $copyObj An object of \eXpansion\Bundle\LocalRecords\Model\Record (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setLogin($this->getLogin());
-        $copyObj->setNickname($this->getNickname());
-        $copyObj->setNicknameStripped($this->getNicknameStripped());
-        $copyObj->setPath($this->getPath());
-        $copyObj->setWins($this->getWins());
-        $copyObj->setOnlineTime($this->getOnlineTime());
-        $copyObj->setLastOnline($this->getLastOnline());
-
-        if ($deepCopy) {
-            // important: temporarily setNew(false) because this affects the behavior of
-            // the getter/setter methods for fkey referrer objects.
-            $copyObj->setNew(false);
-
-            foreach ($this->getRecords() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addRecord($relObj->copy($deepCopy));
-                }
-            }
-
-        } // if ($deepCopy)
-
+        $copyObj->setMapuid($this->getMapuid());
+        $copyObj->setNblaps($this->getNblaps());
+        $copyObj->setScore($this->getScore());
+        $copyObj->setNbfinish($this->getNbfinish());
+        $copyObj->setAvgscore($this->getAvgscore());
+        $copyObj->setCheckpoints($this->getCheckpoints());
+        $copyObj->setPlayerId($this->getPlayerId());
+        $copyObj->setCreatedAt($this->getCreatedAt());
+        $copyObj->setUpdatedAt($this->getUpdatedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1409,7 +1534,7 @@ abstract class Player implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \eXpansion\Framework\PlayersBundle\Model\Player Clone of current object.
+     * @return \eXpansion\Bundle\LocalRecords\Model\Record Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1422,245 +1547,55 @@ abstract class Player implements ActiveRecordInterface
         return $copyObj;
     }
 
-
     /**
-     * Initializes a collection based on the name of a relation.
-     * Avoids crafting an 'init[$relationName]s' method name
-     * that wouldn't work when StandardEnglishPluralizer is used.
+     * Declares an association between this object and a Player object.
      *
-     * @param      string $relationName The name of the relation to initialize
-     * @return void
-     */
-    public function initRelation($relationName)
-    {
-        if ('Record' == $relationName) {
-            return $this->initRecords();
-        }
-    }
-
-    /**
-     * Clears out the collRecords collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return void
-     * @see        addRecords()
-     */
-    public function clearRecords()
-    {
-        $this->collRecords = null; // important to set this to NULL since that means it is uninitialized
-    }
-
-    /**
-     * Reset is the collRecords collection loaded partially.
-     */
-    public function resetPartialRecords($v = true)
-    {
-        $this->collRecordsPartial = $v;
-    }
-
-    /**
-     * Initializes the collRecords collection.
-     *
-     * By default this just sets the collRecords collection to an empty array (like clearcollRecords());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initRecords($overrideExisting = true)
-    {
-        if (null !== $this->collRecords && !$overrideExisting) {
-            return;
-        }
-
-        $collectionClassName = RecordTableMap::getTableMap()->getCollectionClassName();
-
-        $this->collRecords = new $collectionClassName;
-        $this->collRecords->setModel('\eXpansion\Bundle\LocalRecords\Model\Record');
-    }
-
-    /**
-     * Gets an array of Record objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildPlayer is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|Record[] List of Record objects
+     * @param  Player $v
+     * @return $this|\eXpansion\Bundle\LocalRecords\Model\Record The current object (for fluent API support)
      * @throws PropelException
      */
-    public function getRecords(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function setPlayer(Player $v = null)
     {
-        $partial = $this->collRecordsPartial && !$this->isNew();
-        if (null === $this->collRecords || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collRecords) {
-                // return empty collection
-                $this->initRecords();
-            } else {
-                $collRecords = RecordQuery::create(null, $criteria)
-                    ->filterByPlayer($this)
-                    ->find($con);
-
-                if (null !== $criteria) {
-                    if (false !== $this->collRecordsPartial && count($collRecords)) {
-                        $this->initRecords(false);
-
-                        foreach ($collRecords as $obj) {
-                            if (false == $this->collRecords->contains($obj)) {
-                                $this->collRecords->append($obj);
-                            }
-                        }
-
-                        $this->collRecordsPartial = true;
-                    }
-
-                    return $collRecords;
-                }
-
-                if ($partial && $this->collRecords) {
-                    foreach ($this->collRecords as $obj) {
-                        if ($obj->isNew()) {
-                            $collRecords[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collRecords = $collRecords;
-                $this->collRecordsPartial = false;
-            }
+        if ($v === null) {
+            $this->setPlayerId(NULL);
+        } else {
+            $this->setPlayerId($v->getId());
         }
 
-        return $this->collRecords;
-    }
+        $this->aPlayer = $v;
 
-    /**
-     * Sets a collection of Record objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param      Collection $records A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildPlayer The current object (for fluent API support)
-     */
-    public function setRecords(Collection $records, ConnectionInterface $con = null)
-    {
-        /** @var Record[] $recordsToDelete */
-        $recordsToDelete = $this->getRecords(new Criteria(), $con)->diff($records);
-
-
-        $this->recordsScheduledForDeletion = $recordsToDelete;
-
-        foreach ($recordsToDelete as $recordRemoved) {
-            $recordRemoved->setPlayer(null);
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Player object, it will not be re-added.
+        if ($v !== null) {
+            $v->addRecord($this);
         }
 
-        $this->collRecords = null;
-        foreach ($records as $record) {
-            $this->addRecord($record);
-        }
-
-        $this->collRecords = $records;
-        $this->collRecordsPartial = false;
 
         return $this;
     }
 
+
     /**
-     * Returns the number of related BaseRecord objects.
+     * Get the associated Player object
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
-     * @return int             Count of related BaseRecord objects.
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return Player The associated Player object.
      * @throws PropelException
      */
-    public function countRecords(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function getPlayer(ConnectionInterface $con = null)
     {
-        $partial = $this->collRecordsPartial && !$this->isNew();
-        if (null === $this->collRecords || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collRecords) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getRecords());
-            }
-
-            $query = RecordQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByPlayer($this)
-                ->count($con);
+        if ($this->aPlayer === null && ($this->player_id !== null)) {
+            $this->aPlayer = PlayerQuery::create()->findPk($this->player_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aPlayer->addRecords($this);
+             */
         }
 
-        return count($this->collRecords);
-    }
-
-    /**
-     * Method called to associate a Record object to this object
-     * through the Record foreign key attribute.
-     *
-     * @param  Record $l Record
-     * @return $this|\eXpansion\Framework\PlayersBundle\Model\Player The current object (for fluent API support)
-     */
-    public function addRecord(Record $l)
-    {
-        if ($this->collRecords === null) {
-            $this->initRecords();
-            $this->collRecordsPartial = true;
-        }
-
-        if (!$this->collRecords->contains($l)) {
-            $this->doAddRecord($l);
-
-            if ($this->recordsScheduledForDeletion and $this->recordsScheduledForDeletion->contains($l)) {
-                $this->recordsScheduledForDeletion->remove($this->recordsScheduledForDeletion->search($l));
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Record $record The Record object to add.
-     */
-    protected function doAddRecord(Record $record)
-    {
-        $this->collRecords[]= $record;
-        $record->setPlayer($this);
-    }
-
-    /**
-     * @param  Record $record The Record object to remove.
-     * @return $this|ChildPlayer The current object (for fluent API support)
-     */
-    public function removeRecord(Record $record)
-    {
-        if ($this->getRecords()->contains($record)) {
-            $pos = $this->collRecords->search($record);
-            $this->collRecords->remove($pos);
-            if (null === $this->recordsScheduledForDeletion) {
-                $this->recordsScheduledForDeletion = clone $this->collRecords;
-                $this->recordsScheduledForDeletion->clear();
-            }
-            $this->recordsScheduledForDeletion[]= $record;
-            $record->setPlayer(null);
-        }
-
-        return $this;
+        return $this->aPlayer;
     }
 
     /**
@@ -1670,14 +1605,19 @@ abstract class Player implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aPlayer) {
+            $this->aPlayer->removeRecord($this);
+        }
         $this->id = null;
-        $this->login = null;
-        $this->nickname = null;
-        $this->nickname_stripped = null;
-        $this->path = null;
-        $this->wins = null;
-        $this->online_time = null;
-        $this->last_online = null;
+        $this->mapuid = null;
+        $this->nblaps = null;
+        $this->score = null;
+        $this->nbfinish = null;
+        $this->avgscore = null;
+        $this->checkpoints = null;
+        $this->player_id = null;
+        $this->created_at = null;
+        $this->updated_at = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -1696,24 +1636,33 @@ abstract class Player implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
-            if ($this->collRecords) {
-                foreach ($this->collRecords as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
         } // if ($deep)
 
-        $this->collRecords = null;
+        $this->aPlayer = null;
     }
 
     /**
      * Return the string representation of this object
      *
-     * @return string The value of the 'login' column
+     * @return string
      */
     public function __toString()
     {
-        return (string) $this->getLogin();
+        return (string) $this->exportTo(RecordTableMap::DEFAULT_STRING_FORMAT);
+    }
+
+    // timestampable behavior
+
+    /**
+     * Mark the current object so that the update date doesn't get updated during next save
+     *
+     * @return     $this|ChildRecord The current object (for fluent API support)
+     */
+    public function keepUpdateDateUnchanged()
+    {
+        $this->modifiedColumns[RecordTableMap::COL_UPDATED_AT] = true;
+
+        return $this;
     }
 
     /**

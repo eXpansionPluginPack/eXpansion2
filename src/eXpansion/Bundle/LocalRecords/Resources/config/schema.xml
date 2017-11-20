@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="expansion" namespace="eXpansion\Bundle\LocalRecords\Model" defaultIdMethod="native">
+
+    <table name="record">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+
+        <column name="mapUid" type="varchar" size="255" />
+        <column name="nbLaps" type="integer" />
+        <column name="score" type="integer" />
+        <column name="nbFinish" type="integer" />
+        <column name="avgScore" type="integer" />
+        <column name="checkpoints" type="longvarchar" />
+
+        <column name="player_id" type="integer" />
+        <foreign-key foreignTable="player">
+            <reference local="player_id" foreign="id"/>
+        </foreign-key>
+
+        <behavior name="timestampable" />
+    </table>
+</database>
