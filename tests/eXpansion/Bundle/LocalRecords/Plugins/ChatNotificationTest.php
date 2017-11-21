@@ -2,11 +2,11 @@
 
 namespace Tests\eXpansion\Bundle\LocalRecords\Plugins;
 
-use eXpansion\Bundle\LocalRecords\Entity\Record;
+use eXpansion\Bundle\LocalRecords\Model\Record;
 use eXpansion\Bundle\LocalRecords\Plugins\ChatNotification;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
-use eXpansion\Framework\PlayersBundle\Entity\Player;
+use eXpansion\Framework\PlayersBundle\Model\Player;
 use eXpansion\Framework\PlayersBundle\Storage\PlayerDb;
 
 class ChatNotificationTest extends \PHPUnit_Framework_TestCase

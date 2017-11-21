@@ -2,9 +2,12 @@
 
 namespace eXpansion\Bundle\LocalRecords\Services;
 
-use eXpansion\Bundle\LocalRecords\Entity\Record;
-use eXpansion\Bundle\LocalRecords\Repository\RecordRepository;
+use eXpansion\Bundle\LocalRecords\Model\Map\RecordTableMap;
+use eXpansion\Bundle\LocalRecords\Model\Record;
+use eXpansion\Bundle\LocalRecords\Model\RecordQuery;
+use eXpansion\Bundle\LocalRecords\Model\RecordQueryBuilder;
 use eXpansion\Framework\PlayersBundle\Storage\PlayerDb;
+use Propel\Runtime\Propel;
 
 /**
  * Class RecordHandler
@@ -44,8 +47,8 @@ class RecordHandler
     /** @var string */
     protected $ordering;
 
-    /** @var  RecordRepository */
-    protected $recordRepository;
+    /** @var RecordQueryBuilder */
+    protected $recordQueryBuilder;
 
     /** @var PlayerDb */
     protected $playerDb;
@@ -68,18 +71,18 @@ class RecordHandler
     /**
      * RecordHandler constructor.
      *
-     * @param RecordRepository $recordRepository
+     * @param RecordQueryBuilder $recordQueryBuilder
      * @param PlayerDb $playerDb
-     * @param $nbRecords
+     * @param int $nbRecords
      * @param string $ordering
      */
     public function __construct(
-        RecordRepository $recordRepository,
+        RecordQueryBuilder $recordQueryBuilder,
         PlayerDb $playerDb,
         $nbRecords,
         $ordering = self::ORDER_ASC
     ) {
-        $this->recordRepository = $recordRepository;
+        $this->recordQueryBuilder = $recordQueryBuilder;
         $this->nbRecords = $nbRecords;
         $this->ordering = $ordering;
         $this->playerDb = $playerDb;
@@ -131,11 +134,8 @@ class RecordHandler
         $this->currentMapUid = $mapUid;
         $this->currentNbLaps = $nbLaps;
 
-        $this->records = $this->recordRepository->findBy(
-            ['mapUid' => $mapUid, 'nbLaps' => $nbLaps],
-            ['score' => $this->getScoreOrdering()],
-            $this->nbRecords
-        );
+        $this->records = $this->recordQueryBuilder
+            ->getMapRecords($mapUid, $nbLaps, $this->getScoreOrdering(), $this->nbRecords);
 
         $position = 1;
         foreach ($this->records as $record)
@@ -157,12 +157,7 @@ class RecordHandler
         $logins = array_diff(array_keys($this->recordsPerPlayer), $logins);
 
         if (!empty($logins)) {
-            /** @var Record[] $records */
-            $records = $this->recordRepository->findBy(
-                ['mapUid' => $mapUid, 'nbLaps' => $nbLaps, 'player.login' => $logins],
-                ['score' => $this->getScoreOrdering()],
-                $this->nbRecords
-            );
+            $records = $this->recordQueryBuilder->getPlayerMapRecords($mapUid, $nbLaps, $logins);
 
             foreach ($records as $record) {
                 $this->recordsPerPlayer[$record->getPlayer()->getLogin()] = $record;
@@ -175,7 +170,14 @@ class RecordHandler
      */
     public function save()
     {
-        $this->recordRepository->massSave($this->recordsPerPlayer);
+        $con = Propel::getWriteConnection(RecordTableMap::DATABASE_NAME);
+        $con->beginTransaction();
+
+        foreach ($this->recordsPerPlayer as $record) {
+            $record->save();
+        }
+
+        $con->commit();
     }
 
     /**
@@ -197,8 +199,8 @@ class RecordHandler
 
         if (empty($this->records)) {
             $record->setScore($score);
-            $record->setDate(new \DateTime());
-            $record->setCheckpointTimes($checkpoints);
+            $record->setCreatedAt(new \DateTime());
+            $record->setCheckpoints($checkpoints);
 
             $this->records[0] = $record;
             $this->positionPerPlayer[$record->getPlayer()->getLogin()] = 1;
@@ -245,8 +247,8 @@ class RecordHandler
             }
 
             $record->setScore($score);
-            $record->setDate(new \DateTime());
-            $record->setCheckpointTimes($checkpoints);
+            $record->setUpdatedAt(new \DateTime());
+            $record->setCheckpoints($checkpoints);
 
             // Remove entries whose position is superior to the limit.
             $this->records = array_slice($this->records, 0, $this->nbRecords);

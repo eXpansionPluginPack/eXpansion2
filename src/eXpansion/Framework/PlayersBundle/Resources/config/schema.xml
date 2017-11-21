@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="expansion" namespace="eXpansion\Framework\PlayersBundle\Model" defaultIdMethod="native">
+
+    <table name="player">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+
+        <column name="login" type="varchar" primaryString="1" size="255" />
+        <column name="nickname" type="varchar" size="255" />
+        <column name="nickname_stripped" type="varchar" size="255" />
+        <column name="path" type="varchar" size="255" />
+        <column name="wins" type="integer" />
+        <column name="online_time" type="integer" />
+        <column name="last_online" type="timestamp" />
+    </table>
+
+</database>

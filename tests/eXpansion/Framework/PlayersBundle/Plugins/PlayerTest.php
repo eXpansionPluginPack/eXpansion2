@@ -10,8 +10,8 @@ namespace Tests\eXpansion\Framework\PlayersBundle\Plugins;
 
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\ScriptMethods\GetScores;
+use eXpansion\Framework\PlayersBundle\Model\PlayerQueryBuilder;
 use eXpansion\Framework\PlayersBundle\Plugins\Player;
-use eXpansion\Framework\PlayersBundle\Repository\PlayerRepository;
 use Tests\eXpansion\Framework\Core\TestHelpers\PlayerDataTrait;
 
 class PlayerTest extends \PHPUnit_Framework_TestCase
@@ -19,7 +19,7 @@ class PlayerTest extends \PHPUnit_Framework_TestCase
     use PlayerDataTrait;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $mockPlayerRepository;
+    protected $mockPlayerQueryBuilder;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $mockGetScores;
@@ -34,7 +34,7 @@ class PlayerTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->mockPlayerRepository = $this->getMockBuilder(PlayerRepository::class)
+        $this->mockPlayerQueryBuilder = $this->getMockBuilder(PlayerQueryBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -47,7 +47,7 @@ class PlayerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->player = new Player(
-            $this->mockPlayerRepository,
+            $this->mockPlayerQueryBuilder,
             $this->mockGetScores,
             $this->mockPlayerStorage
         );
@@ -55,12 +55,12 @@ class PlayerTest extends \PHPUnit_Framework_TestCase
 
     public function testLoad()
     {
-        $this->mockPlayerRepository
+        $this->mockPlayerQueryBuilder
             ->expects($this->exactly(2))
             ->method('findByLogin')
             ->with('toto-1')
             ->willReturn(null);
-        $this->mockPlayerRepository
+        $this->mockPlayerQueryBuilder
             ->expects($this->once())
             ->method('save');
 
@@ -78,12 +78,12 @@ class PlayerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnNewPlayerConnect()
     {
-        $this->mockPlayerRepository
+        $this->mockPlayerQueryBuilder
             ->expects($this->exactly(2))
             ->method('findByLogin')
             ->with('toto-1')
             ->willReturn(null);
-        $this->mockPlayerRepository
+        $this->mockPlayerQueryBuilder
             ->expects($this->once())
             ->method('save');
 
@@ -96,15 +96,15 @@ class PlayerTest extends \PHPUnit_Framework_TestCase
 
     public function testExistingPlayerConnect()
     {
-        $player = new \eXpansion\Framework\PlayersBundle\Entity\Player();
+        $player = new \eXpansion\Framework\PlayersBundle\Model\Player();
         $player->setLogin('toto-1');
 
-        $this->mockPlayerRepository
+        $this->mockPlayerQueryBuilder
             ->expects($this->once())
             ->method('findByLogin')
             ->with('toto-1')
             ->willReturn($player);
-        $this->mockPlayerRepository
+        $this->mockPlayerQueryBuilder
             ->expects($this->never())
             ->method('save');
 
@@ -114,12 +114,12 @@ class PlayerTest extends \PHPUnit_Framework_TestCase
 
     public function testDisconnectFreeMemory()
     {
-        $this->mockPlayerRepository
+        $this->mockPlayerQueryBuilder
             ->expects($this->exactly(3))
             ->method('findByLogin')
             ->with('toto-1')
             ->willReturn(null);
-        $this->mockPlayerRepository
+        $this->mockPlayerQueryBuilder
             ->expects($this->exactly(2))
             ->method('save');
 
@@ -134,18 +134,18 @@ class PlayerTest extends \PHPUnit_Framework_TestCase
 
     public function testDisconnectOnlineTime()
     {
-        $player = new \eXpansion\Framework\PlayersBundle\Entity\Player();
+        $player = new \eXpansion\Framework\PlayersBundle\Model\Player();
         $player->setLogin('toto-1');
 
-        $this->mockPlayerRepository
+        $this->mockPlayerQueryBuilder
             ->expects($this->once())
             ->method('findByLogin')
             ->with('toto-1')
             ->willReturn($player);
-        $this->mockPlayerRepository
+        $this->mockPlayerQueryBuilder
             ->expects($this->once())
             ->method('save')
-            ->with([$player]);
+            ->with($player);
 
         $this->player->onPlayerConnect($this->getPlayer('toto-1', false));
         sleep(1);
@@ -156,18 +156,22 @@ class PlayerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnMatchEndWin()
     {
-        $player = new \eXpansion\Framework\PlayersBundle\Entity\Player();
+        $player = new \eXpansion\Framework\PlayersBundle\Model\Player();
         $player->setLogin('toto-1');
 
-        $this->mockPlayerRepository
+        $this->mockPlayerQueryBuilder
             ->expects($this->once())
             ->method('findByLogin')
             ->with('toto-1')
             ->willReturn($player);
-        $this->mockPlayerRepository
-            ->expects($this->exactly(2))
+        $this->mockPlayerQueryBuilder
+            ->expects($this->exactly(1))
             ->method('save')
-            ->with([$player]);
+            ->with($player);
+        $this->mockPlayerQueryBuilder
+            ->expects($this->exactly(1))
+            ->method('saveAll')
+            ->with([$player->getLogin() => $player]);
 
         $this->mockGetScores
             ->expects($this->once())

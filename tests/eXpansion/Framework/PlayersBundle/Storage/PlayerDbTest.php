@@ -16,7 +16,7 @@ class PlayerDbTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $mockPlayerPlugin;
 
-    /** @var \eXpansion\Framework\PlayersBundle\Entity\Player */
+    /** @var \eXpansion\Framework\PlayersBundle\Model\Player */
     protected $playerDb;
 
     protected function setUp()
@@ -30,7 +30,7 @@ class PlayerDbTest extends \PHPUnit_Framework_TestCase
 
     public function testGet()
     {
-        $player = new \eXpansion\Framework\PlayersBundle\Entity\Player();
+        $player = new \eXpansion\Framework\PlayersBundle\Model\Player();
 
         $this->mockPlayerPlugin
             ->expects($this->once())

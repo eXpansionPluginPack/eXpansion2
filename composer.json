@@ -24,9 +24,8 @@
     "require": {
         "php": ">=7.0",
         "bluepsyduck/maniascript": "^1.1",
-        "doctrine/doctrine-bundle": "^1.6",
-        "doctrine/doctrine-cache-bundle": "^1.2",
-        "doctrine/orm": "^2.5",
+        "propel/propel": "2.0.0-alpha6",
+        "propel/propel-bundle": "3.0.0-alpha1",
         "incenteev/composer-parameter-handler": "^2.0",
         "maniaplanet/dedicated-server-api": "^5.0",
         "oliverde8/associative-array-simplified": "^1.0.0",
