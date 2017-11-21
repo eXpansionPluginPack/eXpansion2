@@ -11,8 +11,8 @@ use FML\Types\Container;
 
 class Window extends Widget implements Container
 {
-    /** @var WindowFrameFactoryInterface */
-    private $windowFrameFactory;
+    /** @var Control  */
+    protected $closeButton;
 
     public function __construct(
         Group $group,
@@ -29,12 +29,25 @@ class Window extends Widget implements Container
         $this->translationHelper = $translationHelper;
 
         $windowFrameFactory->setManialinkInterface($this);
-        $windowFrameFactory->build($this->manialink, $this->windowFrame, $name, $sizeX, $sizeY);
-        $this->windowFrameFactory = $windowFrameFactory;
+        $this->closeButton = $windowFrameFactory->build($this->manialink, $this->windowFrame, $name, $sizeX, $sizeY);
     }
 
-    public function setCloseAction($action)
+    /**
+     * Set action to close the window.
+     *
+     * @param $actionId
+     */
+    public function setCloseAction($actionId)
     {
-        $this->windowFrameFactory->setCloseAction($action);
+        $this->closeButton->setDataAttributes(['action' => $actionId]);
+    }
+
+    public function getXml()
+    {
+        if (empty($this->closeButton->getDataAttribute('action'))) {
+            throw new MissingCloseActionException("Close action is missing for window. Check if you are using the proper factory.");
+        }
+
+        return parent::getXml();
     }
 }

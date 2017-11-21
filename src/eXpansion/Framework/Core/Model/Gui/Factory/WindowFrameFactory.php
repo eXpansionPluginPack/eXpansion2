@@ -28,9 +28,6 @@ class WindowFrameFactory implements WindowFrameFactoryInterface
     /** @var ManialinkInterface */
     protected $manialinkInterface;
 
-    /** @var uiButton */
-    private $closeButton;
-
     /**
      * WindowFrameFactory constructor.
      *
@@ -49,7 +46,8 @@ class WindowFrameFactory implements WindowFrameFactoryInterface
      * @param $name
      * @param float $sizeX Size of the inner frame to build the window frame around
      * @param float $sizeY Size of the inner frame to build the window frame around
-     * @return void
+     *
+     * @return Control
      */
     public function build(ManiaLink $manialink, Frame $mainFrame, $name, $sizeX, $sizeY)
     {
@@ -108,8 +106,7 @@ class WindowFrameFactory implements WindowFrameFactoryInterface
             ->setScriptEvents(true)
             ->setAreaColor($titlebarColor)
             ->setAreaFocusColor('f22');
-        $this->closeButton = $closeButton;
-        $frame->addChild($this->closeButton);
+        $frame->addChild($closeButton);
 
 
         //body
@@ -137,6 +134,7 @@ class WindowFrameFactory implements WindowFrameFactoryInterface
         // Add maniascript for window handling.
         $manialink->addChild($this->windowManiaScriptFactory->createScript(['']));
 
+        return $closeButton;
     }
 
     /**
@@ -146,10 +144,4 @@ class WindowFrameFactory implements WindowFrameFactoryInterface
     {
         $this->manialinkInterface = $manialinkInterface;
     }
-
-    public function setCloseAction($action)
-    {
-        $this->closeButton->addDataAttribute("action", $action);
-    }
-
 }

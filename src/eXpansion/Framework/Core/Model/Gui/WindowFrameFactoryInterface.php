@@ -8,8 +8,10 @@
 
 namespace eXpansion\Framework\Core\Model\Gui;
 
+use FML\Controls\Control;
 use FML\ManiaLink;
 use FML\Controls\Frame;
+use FML\Types\Container;
 
 interface WindowFrameFactoryInterface
 {
@@ -21,7 +23,8 @@ interface WindowFrameFactoryInterface
      * @param $name
      * @param float $sizeX Size of the inner frame to build the window frame around
      * @param float $sizeY Size of the inner frame to build the window frame around
-     * @return void
+     *
+     * @return Control
      */
     public function build(Manialink $manialink, Frame $mainFrame, $name, $sizeX, $sizeY);
 
@@ -29,12 +32,4 @@ interface WindowFrameFactoryInterface
      * @param ManialinkInterface $manialinkInterface
      */
     public function setManialinkInterface(ManialinkInterface $manialinkInterface);
-
-    /**
-     * @param string $action
-     * @return void
-     */
-    public function setCloseAction($action);
-
-
 }
