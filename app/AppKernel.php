@@ -22,6 +22,7 @@ class AppKernel extends Kernel
         $bundles[] = new \eXpansion\Bundle\Emotes\EmotesBundle();
         $bundles[] = new \eXpansion\Bundle\Menu\MenuBundle();
         $bundles[] = new \eXpansion\Bundle\Admin\AdminBundle();
+        $bundles[] = new \eXpansion\Bundle\WidgetBestCheckpoints\WidgetBestCheckpointsBundle();
 
 //        $bundles[] = new \eXpansion\Bundle\MxKarma\MxKarmaBundle();
 

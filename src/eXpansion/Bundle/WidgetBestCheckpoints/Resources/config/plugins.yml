@@ -1,0 +1,21 @@
+services:
+    eXpansion\Bundle\WidgetBestCheckpoints\Plugins\BestCheckpoints:
+        class: eXpansion\Bundle\WidgetBestCheckpoints\Plugins\BestCheckpoints
+        autowire: true
+        arguments:
+                $players: '@expansion.framework.core.user_groups.players'
+        tags:
+          - {name: 'expansion.plugin', data_provider: 'exp.application'}
+          - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
+
+    eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\BestCheckpointsWidgetFactory:
+            class: eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\BestCheckpointsWidgetFactory
+            autowire: true
+            arguments:
+                $name:  "BestCheckpoints"
+                $posX: -120
+                $posY: 65
+                $sizeX: null
+                $sizeY: null
+            tags:
+                - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}
