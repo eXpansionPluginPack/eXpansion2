@@ -8,6 +8,7 @@
 
 namespace Tests\eXpansion\Framework\Core\Model\ChatCommand;
 
+use eXpansion\Framework\Core\Exceptions\PlayerException;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Model\ChatCommand\AbstractChatCommand;
 use eXpansion\Framework\Core\Model\Helpers\ChatNotificationInterface;
@@ -63,7 +64,7 @@ class AbstractChatCommandTest extends TestCore
     {
         $cmd2 = new TestChatCommand('test', ['t']);
 
-        $this->expectException(RuntimeException::class);
+        $this->expectException(PlayerException::class);
         $cmd2->run('toto', $this->getChatOutputHelper(), 'test');
     }
 

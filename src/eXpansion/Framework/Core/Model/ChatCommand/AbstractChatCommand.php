@@ -2,7 +2,9 @@
 
 namespace eXpansion\Framework\Core\Model\ChatCommand;
 
+use eXpansion\Framework\Core\Exceptions\PlayerException;
 use eXpansion\Framework\Core\Helpers\ChatOutput;
+use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Helper\DescriptorHelper;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -90,20 +92,25 @@ abstract class AbstractChatCommand implements ChatCommandInterface
      */
     public function run($login, ChatOutput $output, $parameter)
     {
-        $parameter = str_getcsv($parameter, " ", '"');
-        $parameter = array_merge([0 => 1], $parameter);
+        try {
+            $parameter = str_getcsv($parameter, " ", '"');
+            $parameter = array_merge([0 => 1], $parameter);
 
-        $input = new ArgvInput($parameter);
+            $input = new ArgvInput($parameter);
 
-        if (true === $input->hasParameterOption(array('--help', '-h'), true)) {
-            $helper = new DescriptorHelper();
-            $output->getChatNotification()->sendMessage($this->getDescription(), $login);
-            $helper->describe($output, $this->inputDefinition);
-            return '';
+            if (true === $input->hasParameterOption(array('--help', '-h'), true)) {
+                $helper = new DescriptorHelper();
+                $output->getChatNotification()->sendMessage($this->getDescription(), $login);
+                $helper->describe($output, $this->inputDefinition);
+                return '';
+            }
+
+            $input->bind($this->inputDefinition);
+            $input->validate();
+        } catch (RuntimeException $runtimeException) {
+            // These exceptions are thrown by symfony when arguments passed are not correct.
+            throw new PlayerException($runtimeException->getMessage(), $runtimeException->getCode(), $runtimeException);
         }
-
-        $input->bind($this->inputDefinition);
-        $input->validate();
 
         $this->execute($login, $input);
     }

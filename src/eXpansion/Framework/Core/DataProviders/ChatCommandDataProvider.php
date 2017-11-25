@@ -3,6 +3,7 @@
 namespace eXpansion\Framework\Core\DataProviders;
 
 use eXpansion\Framework\Core\DataProviders\Listener\ChatCommandInterface;
+use eXpansion\Framework\Core\Exceptions\PlayerException;
 use eXpansion\Framework\Core\Helpers\ChatOutput;
 use eXpansion\Framework\Core\Model\ChatCommand\AbstractChatCommand;
 use eXpansion\Framework\Core\Model\Helpers\ChatNotificationInterface;
@@ -102,15 +103,9 @@ class ChatCommandDataProvider extends AbstractDataProvider
                 try {
                     $this->chatOutput->setLogin($login);
                     $message = $command->run($login, $this->chatOutput, $parameter);
-                } /** @noinspection PhpUndefinedClassInspection */
-                catch (RuntimeException $e) {
-                    $this->chatNotification->sendMessage($e->getMessage(), $login);
-                    // @todo add proper logging
-                    echo $e->getTrace();
-                } catch (\Exception $e) {
-                    $this->chatNotification->sendMessage($e->getMessage(), $login);
-                    // @todo add proper logging
-                    echo $e->getTrace();
+                } catch (PlayerException $e) {
+                    // Player exceptions are meant to be sent to players, and not crash or even be logged.
+                    $this->chatNotification->sendMessage($e->getTranslatableMessage(), $login);
                 }
             }
         }

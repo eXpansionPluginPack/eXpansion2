@@ -3,53 +3,79 @@
 namespace Tests\eXpansion\Framework\Core\DataProviders;
 
 use eXpansion\Framework\Core\DataProviders\ChatCommandDataProvider;
+use eXpansion\Framework\Core\Exceptions\PlayerException;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
+use eXpansion\Framework\Core\Helpers\ChatOutput;
 use eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin;
 use eXpansion\Framework\Core\Model\Helpers\ChatNotificationInterface;
 use eXpansion\Framework\Core\Services\ChatCommands;
+use Symfony\Component\Console\Output\NullOutput;
 use Tests\eXpansion\Framework\Core\TestCore;
 use Tests\eXpansion\Framework\Core\TestHelpers\Model\TestChatCommand;
 
 class ChatCommandProviderTest extends TestCore
 {
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockChatCommands;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockNotification;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockChatOutput;
+
+    /** @var  ChatCommandDataProvider */
+    protected $chatDataProvider;
+
     protected function setUp()
     {
         parent::setUp();
 
-        $chatCommandsMock = $this->getMockBuilder(ChatCommands::class)
+        $this->mockChatCommands = $this->getMockBuilder(ChatCommands::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->container->set(ChatCommands::class, $chatCommandsMock);
 
-        $notification = $this->getMockBuilder(ChatNotificationInterface::class)
+        $this->mockNotification = $this->getMockBuilder(ChatNotificationInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->container->set(ChatNotification::class, $notification);
+
+        $this->mockChatOutput = $this->getMockBuilder(ChatOutput::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->chatDataProvider = new ChatCommandDataProvider(
+            $this->mockChatCommands,
+            $this->mockNotification,
+            $this->mockChatOutput
+        );
     }
 
+    /**
+     * Test that a registered plugin will be sent properly to the chat commands main service.
+     */
     public function testRegister()
     {
         $commands = new TestChatCommand('test', [], true);
         /** @var ChatCommandPlugin|object $plugin */
         $plugin = new ChatCommandPlugin([$commands]);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $chatCommandsMock */
-        $chatCommandsMock = $this->container->get(ChatCommands::class);
-        $chatCommandsMock->expects($this->once())->method('registerPlugin')->with('test', $plugin);
+        $this->mockChatCommands->expects($this->once())->method('registerPlugin')->with('test', $plugin);
 
-        $this->getDataProvider()->registerPlugin('test', $plugin);
+        $this->chatDataProvider->registerPlugin('test', $plugin);
     }
 
-
+    /**
+     * Test that a deleted plugin will be sent propelry to the chat commands main service.
+     */
     public function testDelete()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject $chatCommandsMock */
-        $chatCommandsMock = $this->container->get(ChatCommands::class);
-        $chatCommandsMock->expects($this->once())->method('deletePlugin')->with('test');
-
-        $this->getDataProvider()->deletePlugin('test');
+        $this->mockChatCommands->expects($this->once())->method('deletePlugin')->with('test');
+        $this->chatDataProvider->deletePlugin('test');
     }
 
+    /**
+     * Test that a normal chat line doesen't execute a command and that simple commands work.
+     */
     public function testExecute()
     {
         $cmdText = 'value1 "value2 space"';
@@ -61,78 +87,113 @@ class ChatCommandProviderTest extends TestCore
             ->willReturn([]);
         $commands->expects($this->once())->method('run');
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $chatCommandsMock */
-        $chatCommandsMock = $this->container->get(ChatCommands::class);
-        $chatCommandsMock
+        $this->mockChatCommands
             ->expects($this->once())
             ->method('getChatCommand')
             ->willReturn([$commands, explode(' ', $cmdText)]);
 
-        $this->getDataProvider()->onPlayerChat(2, 'test2', "this is normal chat line", false);
-        $this->getDataProvider()->onPlayerChat(1, 'test', "/test $cmdText", true);
+        $this->chatDataProvider->onPlayerChat(2, 'test2', "this is normal chat line", false);
+        $this->chatDataProvider->onPlayerChat(1, 'test', "/test $cmdText", true);
     }
 
+    /**
+     * Test players just chatting around.
+     */
     public function testChat()
     {
         $cmdText = 'value1 value2';
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $chatCommandsMock */
-        $chatCommandsMock = $this->container->get(ChatCommands::class);
-        $chatCommandsMock
+        $this->mockChatCommands
             ->expects($this->never())
             ->method('getChatCommand');
 
-        $this->getDataProvider()->onPlayerChat(2, 'test2', "this is normal chat line", false);
-        $this->getDataProvider()->onPlayerChat(1, 'test', "test $cmdText", false);
+        $this->chatDataProvider->onPlayerChat(2, 'test2', "this is normal chat line", false);
+        $this->chatDataProvider->onPlayerChat(1, 'test', "test $cmdText", false);
     }
 
+    /**
+     * Test that an invalid command will show in player chat proper message.
+     */
     public function testInvalidCommand()
     {
         $cmdText = 'value1 value2';
 
-        $this->getChatNotificationMock()
+        $this->mockNotification
             ->expects($this->once())
             ->method('sendMessage')
             ->with('expansion_core.chat_commands.wrong_chat', 'test');
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $chatCommandsMock */
-        $chatCommandsMock = $this->container->get(ChatCommands::class);
-        $chatCommandsMock
+        $this->mockChatCommands
             ->expects($this->once())
             ->method('getChatCommand')
             ->willReturn(array(null, null));
 
-        $this->getDataProvider()->onPlayerChat(1, 'test', "/invalid $cmdText", true);
+        $this->chatDataProvider->onPlayerChat(1, 'test', "/invalid $cmdText", true);
     }
 
-
+    /**
+     * Test that the native dedicated version command doesen't trigger a chat command.
+     */
     public function testVersionCommand()
     {
         $cmdText = 'value1';
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $chatCommandsMock */
-        $chatCommandsMock = $this->container->get(ChatCommands::class);
-        $chatCommandsMock
+        $this->mockChatCommands
             ->expects($this->never())
             ->method('getChatCommand');
 
-        $this->getDataProvider()->onPlayerChat('test', 'test', "/version $cmdText", true);
+        $this->chatDataProvider->onPlayerChat('test', 'test', "/version $cmdText", true);
+    }
+
+    /**
+     * Test that an unexpected exception during chat execution should be thrown and not cached.
+     */
+    public function testUnExpectedException()
+    {
+        $cmdText = 'value1 "value2 space"';
+
+        $commands = $this->createMock(TestChatCommand::class);
+        $commands->expects($this->once())
+            ->method('validate')
+            ->with('test', $cmdText)
+            ->willReturn([]);
+        $commands->expects($this->once())->method('run')->willThrowException(new \Exception('Un expected'));
+
+        $this->mockChatCommands
+            ->expects($this->once())
+            ->method('getChatCommand')
+            ->willReturn([$commands, explode(' ', $cmdText)]);
+
+        $this->expectException(\Exception::class);
+        $this->chatDataProvider->onPlayerChat(1, 'test', "/test $cmdText", true);
     }
 
 
     /**
-     * @return  ChatCommandDataProvider|object
+     * Test that an a player exception is catched and that message is sent accordingly.
      */
-    protected function getDataProvider()
+    public function testPlayerException()
     {
-        return $this->container->get('expansion.framework.core.data_providers.chat_command_data_provider');
-    }
+        $cmdText = 'value1 "value2 space"';
 
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|object
-     */
-    protected function getChatNotificationMock()
-    {
-        return $this->container->get(ChatNotification::class);
+        $commands = $this->createMock(TestChatCommand::class);
+        $commands->expects($this->once())
+            ->method('validate')
+            ->with('test', $cmdText)
+            ->willReturn([]);
+        $commands
+            ->expects($this->once())
+            ->method('run')
+            ->willThrowException(new PlayerException('my message'));
+
+        $this->mockChatCommands
+            ->expects($this->once())
+            ->method('getChatCommand')
+            ->willReturn([$commands, explode(' ', $cmdText)]);
+
+        $this->mockNotification->expects($this->once())->method('sendMessage')->with('my message');
+
+        $this->chatDataProvider->onPlayerChat(1, 'test', "/test $cmdText", true);
     }
 }
