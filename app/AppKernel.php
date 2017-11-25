@@ -12,6 +12,7 @@ class AppKernel extends Kernel
 
         /* Register eXpansion Base Bundles */
         $bundles[] = new \eXpansion\Bundle\CustomChat\CustomChatBundle();
+        $bundles[] = new eXpansion\Bundle\ImmersiveWindows\ImmersiveWindowsBundle();
         $bundles[] = new \eXpansion\Bundle\CustomUi\CustomUiBundle();
         $bundles[] = new \eXpansion\Bundle\AdminChat\AdminChatBundle();
 
@@ -22,6 +23,7 @@ class AppKernel extends Kernel
         $bundles[] = new \eXpansion\Bundle\Emotes\EmotesBundle();
         $bundles[] = new \eXpansion\Bundle\Menu\MenuBundle();
         $bundles[] = new \eXpansion\Bundle\Admin\AdminBundle();
+
 
 //        $bundles[] = new \eXpansion\Bundle\MxKarma\MxKarmaBundle();
 

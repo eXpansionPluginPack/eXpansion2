@@ -3,6 +3,7 @@
 namespace eXpansion\Framework\Core\Plugins\Gui;
 
 use eXpansion\Framework\Core\Helpers\Translations;
+use eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactory;
 use eXpansion\Framework\Core\Model\Gui\Manialink;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
@@ -22,8 +23,8 @@ use FML\Controls\Control;
 class WindowFactory extends WidgetFactory
 {
 
-    /** @var ManiaScriptFactory */
-    protected $windowManiaScriptFactory;
+    /** @var WindowFrameFactory */
+    protected $windowFrameFactory;
 
     /**
      * WindowFactory constructor.
@@ -52,9 +53,8 @@ class WindowFactory extends WidgetFactory
             $context
         );
 
-        $this->windowManiaScriptFactory = $context->getWindowManiaScriptFactory();
+        $this->windowFrameFactory = $context->getWindowFrameFactory();
     }
-
 
     /**
      * @param Group $group
@@ -67,8 +67,8 @@ class WindowFactory extends WidgetFactory
 
         $manialink = new $className(
             $group,
-            $this->windowManiaScriptFactory,
             $this->translationsHelper,
+            $this->windowFrameFactory,
             $this->name,
             $this->sizeX,
             $this->sizeY,

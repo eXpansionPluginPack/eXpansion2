@@ -2,7 +2,7 @@
 
 namespace eXpansion\Bundle\LocalRecords\Plugins;
 
-use eXpansion\Framework\GameTrackmania\DataProviders\Listener\BaseDataListenerInterface as TmBaseDataListenerInterface;
+use eXpansion\Framework\GameTrackmania\DataProviders\Listener\RaceDataListenerInterface as TmRaceDataListenerInterface;
 
 /**
  * Class RaceRecords
@@ -10,7 +10,7 @@ use eXpansion\Framework\GameTrackmania\DataProviders\Listener\BaseDataListenerIn
  * @package eXpansion\Bundle\LocalRecords\Plugins;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-class LapsRecords extends BaseRecords implements TmBaseDataListenerInterface
+class LapsRecords extends BaseRecords implements TmRaceDataListenerInterface
 {
     /**
      * @param string $login       Login of the player that crossed the CP point

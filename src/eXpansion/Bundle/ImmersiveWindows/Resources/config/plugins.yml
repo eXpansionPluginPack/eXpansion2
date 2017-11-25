@@ -1,6 +1,24 @@
-sercices:
+services:
+    _defaults:
+        autowire: true
+        public: true
+
     eXpansion\Bundle\ImmersiveWindows\Plugins\WindowsGuiHandler:
         class: eXpansion\Bundle\ImmersiveWindows\Plugins\WindowsGuiHandler
-        autowire: true
         tags:
             - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
+
+    expansion.bundle.immersive_windows.maniascript.window:
+        class: eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory
+        arguments:
+            $relativePath: 'ImmersiveWindowsBundle/Resources/maniascript/window.txtm'
+            $className: eXpansion\Framework\Core\Model\Gui\ManiaScript
+
+    eXpansion\Bundle\ImmersiveWindows\Model\Gui\Factory\WindowFrameFactory:
+        class: eXpansion\Bundle\ImmersiveWindows\Model\Gui\Factory\WindowFrameFactory
+        arguments:
+            $maniaScriptFactory: '@expansion.bundle.immersive_windows.maniascript.window'
+
+    # Replace native one with ours.
+    eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactory: '@eXpansion\Bundle\ImmersiveWindows\Model\Gui\Factory\WindowFrameFactory'
+

@@ -68,9 +68,13 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
             ->addDataAttribute("action", $this->action)
             ->setScale($this->scale);
 
+        foreach ($this->_dataAttributes as $name => $value) {
+            $buttonFrame->addDataAttribute($name, $value);
+        }
+
         if ($this->type == self::TYPE_DECORATED) {
             $quad = new Quad();
-            $this->backColor = null;
+            $this->backColor = 0000;
             $quad->setStyles("Bgs1", "BgColorContour")
                 ->setColorize($this->borderColor)
                 ->setSize($this->width, $this->height)
@@ -88,9 +92,7 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
             ->addClass('uiButtonElement')
             ->setAlign("center", "center2");
 
-
         if ($this->translate) {
-            echo "traslate!";
             $this->buttonLabel->setTextId($this->getText());
         }
 

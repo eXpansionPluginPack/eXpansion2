@@ -60,9 +60,9 @@ class GridBuilderTest extends TestCore
     {
         $this->dataCollection->method('getLastPageNumber')->willReturn(10);
         $this->dataCollection
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(1))
             ->method('getData')
-            ->withConsecutive([1], [2])
+            ->with(2)
             ->willReturn(
                 [
                     ['id' => 'Toto'],
@@ -87,16 +87,16 @@ class GridBuilderTest extends TestCore
     {
         $this->dataCollection->method('getLastPageNumber')->willReturn(10);
         $this->dataCollection
-            ->expects($this->exactly(3))
+            ->expects($this->exactly(2))
             ->method('getData')
-            ->withConsecutive([1], [2], [1])
+            ->withConsecutive([2], [1])
             ->willReturn(
                 [
                     ['id' => 'Toto'],
                     ['id' => 'Toto2'],
                 ]
             );
-        $this->dataCollection->expects($this->exactly(2))->method('getLineData')->willReturn('Test');
+        $this->dataCollection->expects($this->exactly(4))->method('getLineData')->willReturn('Test');
 
         $builder = $this->createBuilder();
         $builder->setDataCollection($this->dataCollection);
@@ -107,6 +107,7 @@ class GridBuilderTest extends TestCore
         $builder->addActionColumn('id2', 'Test', 10, "test", Label::create());
 
         $builder->goToNextPage($this->manialink);
+        $builder->build(100, 100);
         $builder->goToPreviousPage($this->manialink);
         $builder->build(100, 100);
     }
@@ -115,16 +116,16 @@ class GridBuilderTest extends TestCore
     {
         $this->dataCollection->method('getLastPageNumber')->willReturn(10);
         $this->dataCollection
-            ->expects($this->exactly(3))
+            ->expects($this->exactly(2))
             ->method('getData')
-            ->withConsecutive([1], [2], [1])
+            ->withConsecutive([2], [1])
             ->willReturn(
                 [
                     ['id' => 'Toto'],
                     ['id' => 'Toto2'],
                 ]
             );
-        $this->dataCollection->expects($this->exactly(2))->method('getLineData')->willReturn('Test');
+        $this->dataCollection->expects($this->exactly(4))->method('getLineData')->willReturn('Test');
 
         $builder = $this->createBuilder();
         $builder->setDataCollection($this->dataCollection);
@@ -135,6 +136,7 @@ class GridBuilderTest extends TestCore
         $builder->addActionColumn('id2', 'Test', 10, "test", Label::create());
 
         $builder->goToNextPage($this->manialink);
+        $builder->build(100, 100);
         $builder->goToFirstPage($this->manialink);
         $builder->build(100, 100);
     }
@@ -144,9 +146,9 @@ class GridBuilderTest extends TestCore
     {
         $this->dataCollection->method('getLastPageNumber')->willReturn(10);
         $this->dataCollection
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(1))
             ->method('getData')
-            ->withConsecutive([1], [10])
+            ->withConsecutive([10])
             ->willReturn(
                 [
                     ['id' => 'Toto'],

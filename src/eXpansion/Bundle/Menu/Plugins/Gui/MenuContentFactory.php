@@ -3,6 +3,7 @@
 namespace eXpansion\Bundle\Menu\Plugins\Gui;
 
 use eXpansion\Bundle\Menu\DataProviders\MenuItemProvider;
+use eXpansion\Bundle\Menu\Gui\MenuTabsFactory;
 use eXpansion\Bundle\Menu\Model\Menu\ItemInterface;
 use eXpansion\Bundle\Menu\Model\Menu\ParentItem;
 use eXpansion\Framework\Core\Model\Gui\Manialink;
@@ -31,12 +32,26 @@ class MenuContentFactory extends WidgetFactory
     /** @var  ManiaScriptFactory */
     protected $menuScriptFactory;
 
+    /** @var  MenuTabsFactory */
+    protected $menuTabsFactory;
+
     /** @var string */
     protected $currentPath = 'admin';
 
     /**
      * MenuContentFactory constructor.
      *
+<<<<<<< HEAD
+     * @param $name
+     * @param $sizeX
+     * @param $sizeY
+     * @param null $posX
+     * @param null $posY
+     * @param WidgetFactoryContext $context
+     * @param ManiaScriptFactory $maniaScriptFactory
+     * @param MenuItemProvider $menuItemProvider
+     * @param MenuTabsFactory $menuTabsFactory
+=======
      * @param                      $name
      * @param                      $sizeX
      * @param                      $sizeY
@@ -44,6 +59,7 @@ class MenuContentFactory extends WidgetFactory
      * @param null $posY
      * @param WidgetFactoryContext $context
      * @param MenuItemProvider $menuItemProvider *
+>>>>>>> master
      */
     public function __construct(
         $name,
@@ -53,12 +69,14 @@ class MenuContentFactory extends WidgetFactory
         $posY,
         WidgetFactoryContext $context,
         ManiaScriptFactory $maniaScriptFactory,
-        MenuItemProvider $menuItemProvider
+        MenuItemProvider $menuItemProvider,
+        MenuTabsFactory $menuTabsFactory
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
 
         $this->menuItemProvider = $menuItemProvider;
         $this->menuScriptFactory = $maniaScriptFactory;
+        $this->menuTabsFactory = $menuTabsFactory;
     }
 
     /**
@@ -130,14 +148,28 @@ class MenuContentFactory extends WidgetFactory
         $contentFrame->removeAllChildren();
 
         $displayLevel = 0;
+        $breadcrumb = [];
         for ($i = count($pathParts) - 1; $i >= 0; $i--) {
             $path = implode('/', array_slice($pathParts, 0, $i + 1));
 
             /** @var ParentItem $parentItem */
             $parentItem = $rootItem->getChild($path);
 
+            $action = $this->actionFactory->createManialinkAction(
+                $manialink,
+                [$this, 'callbackItemClick'],
+                ['item' => $parentItem, 'ml' => $manialink]
+            );
+
+            $breadcrumb[] = [
+                "label" => $parentItem->getLabelId(),
+                "action" => $action,
+            ];
+
             $this->createSubMenu($manialink, $contentFrame, $parentItem, $displayLevel++);
         }
+
+        $contentFrame->addChild($this->createBreadcrumb($breadcrumb));
     }
 
     /**
@@ -153,45 +185,7 @@ class MenuContentFactory extends WidgetFactory
         $tabsFrame = $manialink->getData('tabs_frame');
         $tabsFrame->removeAllChildren();
 
-
-        $label = $this->uiFactory->createLabel("expansion_menu.menu");
-        $label->setPosition(0, 0);
-        $label->setSize(30, 5);
-        $label->setTextSize(4);
-        $label->setTextColor('FFFFFF');
-        $label->setHorizontalAlign(Label::CENTER);
-        $label->setTranslate(true);
-        $tabsFrame->addChild($label);
-
-        $posX = 28;
-        foreach ($rootItem->getChilds() as $item) {
-            if ($rootItem->isVisibleFor($manialink->getUserGroup())) {
-                $action = $this->actionFactory->createManialinkAction(
-                    $manialink,
-                    [$this, 'callbackItemClick'],
-                    ['item' => $item]
-                );
-                $label = $this->uiFactory->createLabel($item->getLabelId());
-
-                $label->setPosition($posX, 0);
-                $label->setSize(24, 5);
-                $label->setAction($action);
-                $label->setTextSize(3);
-                $label->setTextColor('FFFFFF');
-                $label->setHorizontalAlign(Label::CENTER);
-                $label->setTranslate(true);
-
-                if ($item->getId() == $openId) {
-                    $underline = $this->uiFactory->createLine($posX - 13, -5);
-                    $underline->to($posX + 13, -5);
-                    $underline->setColor('FFFFFF');
-                    $tabsFrame->addChild($underline);
-                }
-
-                $tabsFrame->addChild($label);
-                $posX += 26;
-            }
-        }
+        $this->menuTabsFactory->createTabsMenu($manialink, $tabsFrame, $rootItem, [$this, 'callbackItemClick'], $openId);
     }
 
     /**
@@ -204,6 +198,11 @@ class MenuContentFactory extends WidgetFactory
      */
     protected function createSubMenu(Manialink $manialink, Frame $frame, ParentItem $parentItem, $displayLevel)
     {
+
+        if ($displayLevel > 0) {
+            return;
+        }
+
         $posX = $displayLevel * (-160.0 / 3);
         $posY = ($displayLevel * (-100.0 / 3)) * 0.5;
         $scale = (0.5 / ($displayLevel + 1)) + 0.5;
@@ -232,23 +231,34 @@ class MenuContentFactory extends WidgetFactory
 
         /* TITLE */
         $titleLabel = $this->uiFactory->createLabel($parentItem->getLabelId(), uiLabel::TYPE_TITLE);
-        $titleLabel->setSize(60, 8);
-        $titleLabel->setPosition(-30, 0);
-        $titleLabel->setTranslate(true);
+        $titleLabel->setTextSize(9)
+            ->setSize(60, 12)
+            ->setPosition(0, 0)
+            ->setTranslate(true)
+            ->setTextColor('fff')
+            ->setHorizontalAlign("center");
+
         $contentFrame->addChild($titleLabel);
 
-        $titleLine = $this->uiFactory->createLine(-30, -8);
-        $titleLine->to(30, -8);
+        $titleLine = $this->uiFactory->createLine(-60 * $scale, -12);
+        $titleLine->setLength(120 * $scale);
+        $titleLine->setStroke(0.33)->setColor('fff');
+
         $contentFrame->addChild($titleLine);
 
-        $posY = -12;
+        $posY = -30;
         foreach ($parentItem->getChilds() as $item) {
             if ($item->isVisibleFor($manialink->getUserGroup())) {
-                $button = $this->uiFactory->createButton($item->getLabelId());
-                $button->setPosition(-25, $posY);
+                $button = $this->uiFactory->createLabel($item->getLabelId());
+                $button->setPosition(0, $posY);
                 $button->setSize(50, 8);
                 $button->setTranslate(true);
-
+                $button->setTextSize(4);
+                $button->setAlign("center", "center2");
+                $button->addClass('menuItem');
+                if ($item instanceof $parentItem) {
+                    $button->setTextPrefix("⏵ ");
+                }
                 if ($displayLevel == 0) {
                     $action = $this->actionFactory->createManialinkAction(
                         $manialink,
@@ -266,14 +276,50 @@ class MenuContentFactory extends WidgetFactory
         if ($displayLevel == 0) {
 
             $button = $this->uiFactory->createButton('expansion_menu.menu_close', uiButton::TYPE_DECORATED);
-            $button->setBackgroundColor(uiButton::COLOR_WARNING);
+            $button->setBorderColor(uiButton::COLOR_WARNING)->setFocusColor(uiButton::COLOR_WARNING);
             $button->setPosition(-25, $posY - 12);
             $button->setSize(50, 8);
             $button->setTranslate(true);
-            $action = $this->actionFactory->createManialinkAction($manialink, [$this, 'callbackClose'], []);
+
+            $action = $this->actionFactory->createManialinkAction($manialink, [$this, 'callbackClose'],
+                []);
             $button->setAction($action);
             $contentFrame->addChild($button);
         }
+    }
+
+    public function createBreadcrumb($items) {
+        $items = array_reverse($items);
+
+        $frame = $this->uiFactory->createLayoutLine(-60, -16, [], 2);
+        $frame->setId("breadcrumb");
+
+        foreach ($items as $i => $item) {
+            $element = $this->uiFactory->createLabel($item['label'], uiLabel::TYPE_HEADER);
+            $element->setTranslate(true);
+            $element->setAlign("left", "center2");
+            $element->setTextSize(4)
+                ->addClass("item")
+                ->setWidth(30);
+
+            if ($i < sizeof($items) - 1) {
+                $element->setAction($item['action'])
+                    ->addClass("menuItem");
+            } else {
+                $element->setTextColor("aaa");
+            }
+            $frame->addChild($element);
+
+            if ($i < sizeof($items) - 1) {
+                $element = $this->uiFactory->createLabel("", uiLabel::TYPE_HEADER);
+                $element->setAlign("left", "center2");
+                $element->setTextSize(4);
+                $element->setWidth(2)->addClass("item");
+                $frame->addChild($element);
+            }
+        }
+
+        return $frame;
     }
 
     /**
@@ -284,6 +330,7 @@ class MenuContentFactory extends WidgetFactory
      * @param $params
      * @param $args
      */
+
     public function callbackItemClick(ManialinkInterface $manialink, $login, $params, $args)
     {
         /** @var ItemInterface $item */
@@ -298,6 +345,7 @@ class MenuContentFactory extends WidgetFactory
      * @param $params
      * @param $args
      */
+
     public function callbackClose(ManialinkInterface $manialink, $login, $params, $args)
     {
         $this->destroy($manialink->getUserGroup());

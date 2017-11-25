@@ -13,6 +13,7 @@ expansion_menu:
 
 
   map:
+    label: Maps
     map: Map
     list: Server maps
     mx: Mania-exchange search

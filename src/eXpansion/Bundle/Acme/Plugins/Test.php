@@ -6,9 +6,10 @@ use eXpansion\Bundle\Acme\Plugins\Gui\MemoryWidgetFactory;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\Helpers\Time;
-use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Storage\Data\Player;
+use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
@@ -38,7 +39,7 @@ class Test implements ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, S
      */
     private $mlFactory;
     /**
-     * @var Group
+     * @var PlayerStorage
      */
     private $players;
 
@@ -48,10 +49,10 @@ class Test implements ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, S
      * @param Console $console
      * @param Time $time
      * @param MemoryWidgetFactory $mlFactory
-     * @param Group $players
+     * @param PlayerStorage $players
      */
     function __construct(
-        Group $players,
+        PlayerStorage $players,
         Connection $connection,
         Console $console,
         Time $time,
@@ -106,8 +107,10 @@ class Test implements ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, S
             }
 
             self::$memoryMsg = $msg;
-            $this->mlFactory->update($this->players);
-            // $this->console->writeln($msg);
+            foreach ($this->players->getOnline() as $player) {
+                $this->mlFactory->update($player->getLogin());
+            }
+            $this->console->writeln($msg);
         }
         $this->previousMemoryValue = $mem;
 
@@ -154,7 +157,10 @@ class Test implements ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, S
     {
         if ($status) {
             $this->startMemValue = memory_get_usage(true);
-            $this->mlFactory->create($this->players);
+            foreach ($this->players->getOnline() as $player) {
+                $this->mlFactory->create($player->getLogin());
+            }
+
         }
     }
 

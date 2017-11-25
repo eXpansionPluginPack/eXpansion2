@@ -8,76 +8,91 @@
 
 namespace Tests\eXpansion\Framework\Core\Model\Gui;
 
-use eXpansion\Framework\Core\Exceptions\Gui\MissingCloseActionException;
 use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Model\Gui\Action;
-use eXpansion\Framework\Core\Model\Gui\ManiaScript;
+use eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactory;
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
 use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
+use FML\Controls\Quad;
 use FML\Types\Renderable;
 use Tests\eXpansion\Framework\Core\TestCore;
 
 class WindowTest extends TestCore
 {
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockPlayerGroup;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockTranslationHelper;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockWindowsFrameFactory;
+
+    /** @var Window */
+    protected $window;
+
+    protected function setUp()
+    {
+        $this->mockPlayerGroup = $this->getMockBuilder(Group::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->mockTranslationHelper = $this->getMockBuilder(Translations::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->mockWindowsFrameFactory = $this->getMockBuilder(WindowFrameFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->mockWindowsFrameFactory->method('build')->willReturn(Quad::create());
+
+        $this->window = new Window(
+            $this->mockPlayerGroup,
+            $this->mockTranslationHelper,
+            $this->mockWindowsFrameFactory,
+            'test',
+            10,
+            20
+        );
+    }
+
+    /**
+     * Test that window is created properly with valid xml.
+     */
     public function testWindow()
     {
         /** @var ManiaScriptFactory $factory */
         $action = new Action([$this, 'totoCallback'], []);
 
-        $window = $this->getWindow();
-        $window->setCloseAction($action->getId());
+        $this->window->setCloseAction($action->getId());
 
-        $this->assertInstanceOf(\SimpleXMLElement::class, simplexml_load_string($window->getXml()));
-    }
-
-    public function testWindowWithoutAction()
-    {
-        $window = $this->getWindow();
-
-        $this->expectException(MissingCloseActionException::class);
-
-        $window->getXml();
-    }
-
-    public function testMethods()
-    {
-        $window = $this->getWindow();
-
-        $mockRenderable = $this->createMock(Renderable::class);
-
-        $window->addChild($mockRenderable);
-        $this->assertEquals([$mockRenderable], $window->getChildren());
-        $window->add($mockRenderable);
-        $this->assertEquals([$mockRenderable], $window->getChildren());
-
-        $window->removeAllChildren();
-        $this->assertEmpty($window->getChildren());
-
-        $window->addChildren([$mockRenderable]);
-        $this->assertEquals([$mockRenderable], $window->getChildren());
-
-        $window->removeChildren();
-        $this->assertEmpty($window->getChildren());
-
-        $format = $window->getFormat();
-        $window->setFormat($format);
+        $this->assertInstanceOf(\SimpleXMLElement::class, simplexml_load_string($this->window->getXml()));
     }
 
     /**
-     * @return Group
+     * Test different methods of the window.
      */
-    protected function getSpectatorsGroup()
+    public function testMethods()
     {
-        return $this->container->get('expansion.framework.core.user_groups.spectators');
-    }
+        $mockRenderable = $this->createMock(Renderable::class);
 
-    protected function getWindow()
-    {
-        $factory = $this->container->get('expansion.framework.core.mania_script.window_factory');
-        $translation = $this->container->get(Translations::class);
+        $this->window->addChild($mockRenderable);
+        $this->assertEquals([$mockRenderable], $this->window->getChildren());
+        $this->window->addChild($mockRenderable);
+        $this->assertEquals([$mockRenderable], $this->window->getChildren());
 
-        return new Window($this->getSpectatorsGroup(), $factory, $translation, 'test', 10, 20);
+        $this->window->removeAllChildren();
+        $this->assertEmpty($this->window->getChildren());
+
+        $this->window->addChildren([$mockRenderable]);
+        $this->assertEquals([$mockRenderable], $this->window->getChildren());
+
+        $this->window->removeChildren();
+        $this->assertEmpty($this->window->getChildren());
+
+        $format = $this->window->getFormat();
+        $this->window->setFormat($format);
     }
 }

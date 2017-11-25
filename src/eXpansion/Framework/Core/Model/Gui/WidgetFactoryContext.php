@@ -6,6 +6,7 @@ namespace eXpansion\Framework\Core\Model\Gui;
 use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Core\Plugins\GuiHandler;
+use eXpansion\Framework\Core\Plugins\GuiHandlerInterface;
 use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
 use \eXpansion\Framework\Gui\Ui\Factory as UiFactory;
 
@@ -27,15 +28,16 @@ class WidgetFactoryContext extends ManialinkFactoryContext
     /**
      * WidgetFactoryContext constructor.
      *
-     * @param               $className
-     * @param GuiHandler    $guiHandler
-     * @param Factory       $groupFactory
+     * @param $className
+     * @param GuiHandlerInterface $guiHandler
+     * @param Factory $groupFactory
      * @param ActionFactory $actionFactory
-     * @param Translations  $translations
+     * @param Translations $translations
+     * @param UiFactory $uiFactory
      */
     public function __construct(
         $className,
-        GuiHandler $guiHandler,
+        GuiHandlerInterface $guiHandler,
         Factory $groupFactory,
         ActionFactory $actionFactory,
         Translations $translations,

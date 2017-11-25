@@ -3,12 +3,12 @@
 namespace eXpansion\Framework\GameTrackmania\DataProviders\Listener;
 
 /**
- * Class BaseDataListenerInterface
+ * Class RaceDataListenerInterface
  *
  * @package eXpansion\Framework\GameTrackmania\DataProviders\Listener;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-interface BaseDataListenerInterface
+interface RaceDataListenerInterface
 {
     /**
      * @param string $login       Login of the player that crossed the CP point

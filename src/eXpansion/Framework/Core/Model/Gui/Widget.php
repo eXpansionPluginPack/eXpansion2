@@ -291,6 +291,4 @@ class Widget extends Manialink implements Container
     {
         return $this->contentFrame;
     }
-
-
 }

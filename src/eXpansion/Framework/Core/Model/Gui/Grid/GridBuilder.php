@@ -391,7 +391,7 @@ class GridBuilder
      */
     public function updateDataCollection($entries)
     {
-
+        $process = false;
         $data = [];
         $start = ($this->currentPage - 1) * $this->dataCollection->getPageSize();
         foreach ($entries as $key => $value) {
@@ -399,18 +399,22 @@ class GridBuilder
                 $array = explode("_", str_replace("entry_", "", $key));
                 setType($value, $array[1]);
                 $data[$array[0]] = $value;
+                $process = true;
             }
         }
-
-        $lines = $this->dataCollection->getData($this->currentPage);
-        foreach ($lines as $i => $lineData) {
-            $newData = $lineData;
-            foreach ($this->columns as $columnData) {
-                if ($columnData instanceof InputColumn) {
-                    $newData[$columnData->getKey()] = $data[$i];
+        if ($process) {
+            $lines = $this->dataCollection->getData($this->currentPage);
+            $counter = 0;
+            foreach ($lines as $i => $lineData) {
+                $newData = $lineData;
+                foreach ($this->columns as $columnData) {
+                    if ($columnData instanceof InputColumn) {
+                        $newData[$columnData->getKey()] = $data[$counter];
+                    }
                 }
+                $this->dataCollection->setDataByIndex($start + $counter, $newData);
+                $counter++;
             }
-            $this->dataCollection->setDataByIndex($start + $i, $newData);
         }
     }
 

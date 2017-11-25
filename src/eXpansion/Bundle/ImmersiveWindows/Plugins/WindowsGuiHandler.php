@@ -5,13 +5,18 @@ namespace eXpansion\Bundle\ImmersiveWindows\Plugins;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Window;
+use eXpansion\Framework\Core\Plugins\GuiHandler;
 use eXpansion\Framework\Core\Plugins\GuiHandlerInterface;
+use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
+use Maniaplanet\DedicatedServer\Connection;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class WindowsGuiHandler, replaces the native GuiHandler only for windows type manialinks in order to :
  *  - Prevent more then 1 window to open.
  *  - Change the display
+ *
  *
  * @author    de Cramer Oliver<oliverde8@gmail.com>
  * @copyright 2017 Smile
@@ -19,11 +24,19 @@ use eXpansion\Framework\Core\Storage\Data\Player;
  */
 class WindowsGuiHandler implements GuiHandlerInterface, ListenerInterfaceMpLegacyPlayer
 {
-    /** @var  GuiHandlerInterface */
-    protected $guiHandler;
 
     /** @var Window[] */
     protected $userWindows = [];
+
+    /**
+     * @var GuiHandler
+     */
+    protected $guiHandler;
+
+    public function __construct(GuiHandler $guiHandler)
+    {
+        $this->guiHandler = $guiHandler;
+    }
 
     /**
      * @inheritdoc
@@ -31,6 +44,7 @@ class WindowsGuiHandler implements GuiHandlerInterface, ListenerInterfaceMpLegac
     public function addToDisplay(ManialinkInterface $manialink)
     {
         $logins = $manialink->getUserGroup()->getLogins();
+
         if (count($logins) == 1 && !$manialink->getUserGroup()->isPersistent()) {
             $login = $logins[0];
 
@@ -42,7 +56,6 @@ class WindowsGuiHandler implements GuiHandlerInterface, ListenerInterfaceMpLegac
             $this->userWindows[$login] = $manialink;
         }
 
-        // TODO edit window content.
         $this->guiHandler->addToDisplay($manialink);
     }
 
