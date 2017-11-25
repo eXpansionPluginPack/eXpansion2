@@ -4,7 +4,6 @@ namespace eXpansion\Framework\Gui\Layouts;
 
 use FML\Controls\Control;
 use FML\Controls\Frame;
-use FML\Controls\Quad;
 use FML\Elements\Format;
 use FML\Script\Features\ScriptFeature;
 use FML\Types\Container;
@@ -80,6 +79,10 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
         $this->setSize($sizeX, $sizeY);
     }
 
+    /**
+     * @param double $x
+     * @param double $y
+     */
     public function setPosition($x, $y)
     {
         $this->startX = $x;
@@ -217,6 +220,9 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
     }
 
 
+    /**
+     * @param string $class
+     */
     public function addClass($class)
     {
         $this->frameClasses[] = $class;

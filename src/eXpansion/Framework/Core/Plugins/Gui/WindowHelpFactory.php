@@ -149,7 +149,7 @@ class WindowHelpFactory extends WindowFactory
             },
             array_filter(
                 $this->chatCommands->getChatCommands(),
-                function ($command) use ($login) {
+                function($command) use ($login) {
                     if ($command instanceof AbstractAdminChatCommand) {
                         return $command->hasPermission($login);
                     }

@@ -60,8 +60,8 @@ class WindowHelpDetailsFactory extends WindowFactory
         /** @var AbstractChatCommand $command */
         $command = $manialink->getData('command');
 
-        $column1Width = $manialink->getContentFrame()->getWidth() * (2/3);
-        $column2Width = $manialink->getContentFrame()->getWidth() * (1/3) - 1;
+        $column1Width = $manialink->getContentFrame()->getWidth() * (2 / 3);
+        $column2Width = $manialink->getContentFrame()->getWidth() * (1 / 3) - 1;
 
         /*
          * COLUMN 1 Description of the chat command
@@ -115,7 +115,7 @@ class WindowHelpDetailsFactory extends WindowFactory
             $column1Width - 21,
             [
                 [
-                    'text' => "Use '/" . $this->currentCommand->getCommand() . " -h' to get help on the usage of the command.",
+                    'text' => "Use '/".$this->currentCommand->getCommand()." -h' to get help on the usage of the command.",
                     'width' => 1,
                     'translatable' => false
 

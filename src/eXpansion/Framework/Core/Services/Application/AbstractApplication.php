@@ -84,7 +84,7 @@ abstract class AbstractApplication implements RunInterface
             $this->connection->triggerModeScriptEvent("XmlRpc.EnableCallbacks", ["True"]);
             $this->connection->triggerModeScriptEvent("XmlRpc.SetApiVersion", [self::SCRIPT_API_VERSION]);
         } catch (\Exception $exception) {
-            $this->connection->saveMatchSettings('MatchSettings/eXpansion-mode-fail-' . date(DATE_ISO8601) . '.txt');
+            $this->connection->saveMatchSettings('MatchSettings/eXpansion-mode-fail-'.date(DATE_ISO8601).'.txt');
             throw $exception;
         }
 
@@ -100,7 +100,7 @@ abstract class AbstractApplication implements RunInterface
                 $nextCycleStart += $cycleTime;
             } while ($nextCycleStart < $endCycleTime);
 
-           @time_sleep_until($nextCycleStart);
+            @time_sleep_until($nextCycleStart);
 
         } while ($this->isRunning);
     }
