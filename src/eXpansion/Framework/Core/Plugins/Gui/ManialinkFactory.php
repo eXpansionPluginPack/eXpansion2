@@ -34,9 +34,6 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
     /** @var  string */
     protected $className;
 
-    /** @var ManialinkInterface[] */
-    protected $manialinks = [];
-
     /** @var Group[] */
     protected $groups = [];
 
@@ -90,6 +87,14 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
     }
 
     /**
+     * @return string
+     */
+    public function getId()
+    {
+        return spl_object_hash($this);
+    }
+
+    /**
      * @inheritdoc
      * @param string|array|Group $group
      */
@@ -103,17 +108,17 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
             }
         }
 
-        if (isset($this->manialinks[$group->getName()])) {
+        if (!is_null($this->guiHandler->getManialink($group, $this))) {
             $this->update($group);
-
             return $group;
         }
 
-        $this->manialinks[$group->getName()] = $this->createManialink($group);
-        $this->guiHandler->addToDisplay($this->manialinks[$group->getName()]);
 
-        $this->createContent($this->manialinks[$group->getName()]);
-        $this->updateContent($this->manialinks[$group->getName()]);
+        $ml = $this->createManialink($group);
+        $this->guiHandler->addToDisplay($ml, $this);
+
+        $this->createContent($ml);
+        $this->updateContent($ml);
 
         return $group;
     }
@@ -132,9 +137,10 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
             }
         }
 
-        if (isset($this->manialinks[$group->getName()])) {
-            $this->updateContent($this->manialinks[$group->getName()]);
-            $this->guiHandler->addToDisplay($this->manialinks[$group->getName()]);
+        $ml = $this->guiHandler->getManialink($group, $this);
+        if ($ml) {
+            $this->updateContent($ml);
+            $this->guiHandler->addToDisplay($ml, $this);
         }
     }
 
@@ -165,10 +171,9 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
      */
     final public function destroy(Group $group)
     {
-        if (isset($this->manialinks[$group->getName()])) {
-            $this->guiHandler->addToHide($this->manialinks[$group->getName()]);
-            $this->actionFactory->destroyManialinkActions($this->manialinks[$group->getName()]);
-            unset($this->manialinks[$group->getName()]);
+        $ml = $this->guiHandler->getManialink($group, $this);
+        if ($ml) {
+            $this->guiHandler->addToHide($ml, $this);
         }
     }
 
@@ -186,21 +191,9 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
         return new $className($group, $this->name, $this->sizeX, $this->sizeY, $this->posX, $this->posY);
     }
 
-    /**
-     * When a gup is destroyed, destroy manialinks of the group.
-     *
-     * @param Group $group
-     * @param $lastLogin
-     *
-     * @return void
-     */
     public function onExpansionGroupDestroy(Group $group, $lastLogin)
     {
-        if (isset($this->manialinks[$group->getName()])) {
-            // Gui Handler will handle delete by it's own.
-            $this->actionFactory->destroyManialinkActions($this->manialinks[$group->getName()]);
-            unset($this->manialinks[$group->getName()]);
-        }
+        // nothing to do here.
     }
 
     public function onExpansionGroupAddUser(Group $group, $loginAdded)

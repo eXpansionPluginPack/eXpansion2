@@ -5,6 +5,8 @@ namespace eXpansion\Bundle\ImmersiveWindows\Plugins;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Window;
+use eXpansion\Framework\Core\Model\UserGroups\Group;
+use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
 use eXpansion\Framework\Core\Plugins\GuiHandler;
 use eXpansion\Framework\Core\Plugins\GuiHandlerInterface;
 use eXpansion\Framework\Core\Services\Console;
@@ -33,6 +35,11 @@ class WindowsGuiHandler implements GuiHandlerInterface, ListenerInterfaceMpLegac
      */
     protected $guiHandler;
 
+    /**
+     * WindowsGuiHandler constructor.
+     *
+     * @param GuiHandler $guiHandler
+     */
     public function __construct(GuiHandler $guiHandler)
     {
         $this->guiHandler = $guiHandler;
@@ -41,7 +48,7 @@ class WindowsGuiHandler implements GuiHandlerInterface, ListenerInterfaceMpLegac
     /**
      * @inheritdoc
      */
-    public function addToDisplay(ManialinkInterface $manialink)
+    public function addToDisplay(ManialinkInterface $manialink, ManialinkFactory $manialinkFactory)
     {
         $logins = $manialink->getUserGroup()->getLogins();
 
@@ -50,19 +57,19 @@ class WindowsGuiHandler implements GuiHandlerInterface, ListenerInterfaceMpLegac
 
             // If a window is already displayed hide it. We wish to have 1 window max.
             if (isset($this->userWindows[$login]) && $this->userWindows[$login]->getId() != $manialink->getId()) {
-                $this->guiHandler->addToHide($this->userWindows[$login]);
+                $this->guiHandler->addToHide($this->userWindows[$login], $manialinkFactory);
             }
 
             $this->userWindows[$login] = $manialink;
         }
 
-        $this->guiHandler->addToDisplay($manialink);
+        $this->guiHandler->addToDisplay($manialink, $manialinkFactory);
     }
 
     /**
      * @inheritdoc
      */
-    public function addToHide(ManialinkInterface $manialink)
+    public function addToHide(ManialinkInterface $manialink, ManialinkFactory $manialinkFactory)
     {
         $logins = $manialink->getUserGroup()->getLogins();
         if (count($logins) == 1 && !$manialink->getUserGroup()->isPersistent()) {
@@ -73,7 +80,16 @@ class WindowsGuiHandler implements GuiHandlerInterface, ListenerInterfaceMpLegac
             }
         }
 
-        $this->guiHandler->addToHide($manialink);
+        $this->guiHandler->addToHide($manialink, $manialinkFactory);
+    }
+
+
+    /**
+     * @inheritdoc
+     */
+    public function getManialink(Group $group, ManialinkFactory $manialinkFactory)
+    {
+        return $this->guiHandler->getManialink($group, $manialinkFactory);
     }
 
     /**
