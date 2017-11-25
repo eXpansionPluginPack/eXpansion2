@@ -98,7 +98,7 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
  		<go visible="true" />
  		
  		<!-- Current race chrono displayed at the bottom center of the screen -->
- 		<chrono visible="true" pos="0. 84. -5." />
+ 		<chrono visible="true" pos="0. -80. -5." />
  		
  		<!-- Speed and distance raced displayed in the bottom right of the screen -->
  		<speed_and_distance visible="true" pos="137. -69. 5." />
@@ -107,7 +107,7 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
  		<personal_best_and_rank visible="false" pos="157. -24. 5." />
  		
  		<!-- Current position in the map ranking displayed at the bottom right of the screen -->
- 		<position visible="true" pos="0 81. 5." />
+ 		<position visible="true" pos="150.5 -28. 5." />
  		
  		<!-- Checkpoint time information displayed in the middle of the screen when crossing a checkpoint -->
  		<checkpoint_time visible="true" pos="0. 3. -10." />
