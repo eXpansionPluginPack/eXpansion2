@@ -74,6 +74,7 @@ if (Event.ControlId == "WindowBg")  {
 
     if (Exp_CloseWindow && Exp_lastAction + 250 <= Now ) {
         TriggerPageAction(Exp_CloseButton.DataAttributeGet("action"));
+        Exp_CloseWindow = False;
         continue;
     }
 

@@ -5,8 +5,11 @@ namespace eXpansion\Framework\Core\Plugins;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpUserGroup;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
+use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryInterface;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
+use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
+use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use Maniaplanet\DedicatedServer\Connection;
@@ -34,6 +37,9 @@ class GuiHandler implements
     /** @var Console */
     protected $console;
 
+    /** @var ActionFactory */
+    protected $actionFactory;
+
     /** @var int */
     protected $charLimit;
 
@@ -60,14 +66,20 @@ class GuiHandler implements
      *
      * @param Connection $connection
      */
-    public function __construct(Connection $connection, LoggerInterface $logger, Console $console, $charLimit = 262144)
-    {
+    public function __construct(
+        Connection $connection,
+        LoggerInterface $logger,
+        Console $console,
+        ActionFactory $actionFactory,
+        $charLimit = 262144
+    ) {
         $this->connection = $connection;
 
         $this->connection->sendHideManialinkPage(null);
 
         $this->logger = $logger;
         $this->console = $console;
+        $this->actionFactory = $actionFactory;
         $this->charLimit = $charLimit;
     }
 
@@ -76,14 +88,15 @@ class GuiHandler implements
      * Add a manialink to the display queue.
      *
      * @param ManialinkInterface $manialink
+     * @param ManialinkFactory   $manialinkFactory
      *
      * @return void
      */
-    public function addToDisplay(ManialinkInterface $manialink)
+    public function addToDisplay(ManialinkInterface $manialink, ManialinkFactoryInterface $manialinkFactory)
     {
 
         $userGroup = $manialink->getUserGroup()->getName();
-        $id = $manialink->getId();
+        $id = $manialinkFactory->getId();
 
         if (AssociativeArray::getFromKey($this->hideQueu, [$userGroup, $id])) {
             unset($this->hideQueu[$userGroup][$id]);
@@ -96,11 +109,12 @@ class GuiHandler implements
      * Add a manialink to the destruction queue.
      *
      * @param ManialinkInterface $manialink
+     * @param ManialinkFactory   $manialinkFactory
      */
-    public function addToHide(ManialinkInterface $manialink)
+    public function addToHide(ManialinkInterface $manialink, ManialinkFactoryInterface $manialinkFactory)
     {
         $userGroup = $manialink->getUserGroup()->getName();
-        $id = $manialink->getId();
+        $id = $manialinkFactory->getId();
 
         if (AssociativeArray::getFromKey($this->displayQueu, [$userGroup, $id])) {
             unset($this->displayQueu[$userGroup][$id]);
@@ -110,7 +124,29 @@ class GuiHandler implements
             unset($this->displayeds[$userGroup][$id]);
         }
 
+        $this->actionFactory->destroyManialinkActions($manialink);
         $this->hideQueu[$userGroup][$id] = $manialink;
+    }
+
+    /**
+     * Get manialink for a group and manialink factory.
+     *
+     * @param Group            $group
+     * @param ManialinkFactory $manialinkFactory
+     *
+     * @return null
+     */
+    public function getManialink(Group $group, ManialinkFactoryInterface $manialinkFactory)
+    {
+        $varsToCheck = ['displayeds', 'hideQueu', 'displayQueu'];
+
+        foreach ($varsToCheck as $var) {
+            if (isset($this->$var[$group->getName()]) && isset($this->$var[$group->getName()][$manialinkFactory->getId()])) {
+                return $this->$var[$group->getName()][$manialinkFactory->getId()];
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -170,10 +206,10 @@ class GuiHandler implements
     protected function getManialinksToDisplay()
     {
         foreach ($this->displayQueu as $groupName => $manialinks) {
-            foreach ($manialinks as $id => $manialink) {
+            foreach ($manialinks as $factoryId => $manialink) {
                 $logins = $manialink->getUserGroup()->getLogins();
 
-                $this->displayeds[$groupName][$id] = $manialink;
+                $this->displayeds[$groupName][$factoryId] = $manialink;
                 if (!empty($logins)) {
                     yield ['logins' => $logins, 'ml' => $manialink->getXml()];
                 }
@@ -181,14 +217,16 @@ class GuiHandler implements
         }
 
         foreach ($this->individualQueu as $login => $manialinks) {
-            foreach ($manialinks as $id => $manialink) {
+            foreach ($manialinks as $manialink) {
                 $xml = $manialink->getXml();
                 yield ['logins' => $login, 'ml' => $xml];
             }
         }
 
         foreach ($this->hideQueu as $manialinks) {
-            foreach ($manialinks as $id => $manialink) {
+            foreach ($manialinks as $manialink) {
+                $id = $manialink->getId();
+
                 $logins = $manialink->getUserGroup()->getLogins();
                 $logins = array_diff($logins, $this->disconnectedLogins);
 
@@ -199,7 +237,9 @@ class GuiHandler implements
         }
 
         foreach ($this->hideIndividualQueu as $login => $manialinks) {
-            foreach ($manialinks as $id => $manialink) {
+            foreach ($manialinks as $manialink) {
+                $id = $manialink->getId();
+
                 if (!in_array($login, $this->disconnectedLogins)) {
                     yield ['logins' => $login, 'ml' => '<manialink id="'.$id.'" />'];
                 }

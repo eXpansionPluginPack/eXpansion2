@@ -24,7 +24,7 @@ class RecordQuery extends BaseRecordQuery
      */
     public function filterByPlayerLogins($logins)
     {
-        $query = $this->joinWithPlayer();
-        $query->filterBy('login', $logins, Criteria::IN);
+        $this->usePlayerQuery()
+            ->filterByLogin($logins, Criteria::IN);
     }
 }

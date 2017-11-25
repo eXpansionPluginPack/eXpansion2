@@ -5,6 +5,7 @@ namespace Tests\eXpansion\Framework\Core\Model\Gui\Grid;
 use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionInterface;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilder;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
+use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryInterface;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Plugins\Gui\WindowFactory;
 use FML\Controls\Label;
@@ -30,7 +31,7 @@ class GridBuilderTest extends TestCore
         $this->manialink->method('getUserGroup')->willReturn(
             $this->container->get('expansion.framework.core.user_groups.all_players')
         );
-        $this->mlFactory = $this->createMock(WindowFactory::class);
+        $this->mlFactory = $this->createMock(ManialinkFactoryInterface::class);
     }
 
 
