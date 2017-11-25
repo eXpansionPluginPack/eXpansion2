@@ -2,6 +2,7 @@
 
 namespace eXpansion\Bundle\Menu\Gui;
 
+use eXpansion\Bundle\Menu\Model\Menu\ItemInterface;
 use eXpansion\Bundle\Menu\Model\Menu\ParentItem;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
@@ -45,8 +46,13 @@ class MenuTabsFactory
      *
      * @return Renderable
      */
-    public function createTabsMenu(ManialinkInterface $manialink, Container $tabsFrame, ParentItem $rootItem, $openId)
-    {
+    public function createTabsMenu(
+        ManialinkInterface $manialink,
+        Container $tabsFrame,
+        ParentItem $rootItem,
+        $actionCallback,
+        $openId
+    ) {
 
         $label = $this->uiFactory->createLabel("expansion_menu.menu");
         $label->setPosition(0, 0);
@@ -62,7 +68,7 @@ class MenuTabsFactory
             if ($rootItem->isVisibleFor($manialink->getUserGroup())) {
                 $action = $this->actionFactory->createManialinkAction(
                     $manialink,
-                    [$this, 'callbackItemClick'],
+                    $actionCallback,
                     ['item' => $item, 'ml' => $manialink]
                 );
                 $label = $this->uiFactory->createLabel($item->getLabelId());

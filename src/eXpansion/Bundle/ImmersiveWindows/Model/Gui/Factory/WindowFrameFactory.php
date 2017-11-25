@@ -2,8 +2,11 @@
 
 namespace eXpansion\Bundle\ImmersiveWindows\Model\Gui\Factory;
 
+use eXpansion\Bundle\ImmersiveWindows\Plugins\WindowsGuiHandler;
 use eXpansion\Bundle\Menu\DataProviders\MenuItemProvider;
 use eXpansion\Bundle\Menu\Gui\MenuTabsFactory;
+use eXpansion\Bundle\Menu\Model\Menu\ItemInterface;
+use eXpansion\Bundle\Menu\Plugins\Gui\MenuContentFactory;
 use eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactory as OriginalWindowFrameFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
@@ -29,6 +32,13 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
 
     /** @var MenuItemProvider */
     protected $menuItemProvider;
+
+    /** @var MenuContentFactory */
+    protected $menuContentFactory;
+
+    /** @var WindowsGuiHandler */
+    protected $windowsGuiHandler;
+
     /**
      * @var ManiaScriptFactory
      */
@@ -42,9 +52,6 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
      */
     protected $uiFactory;
 
-    /** @var  uiButton */
-    private $closeButton;
-
     /**
      * WindowFrameFactory constructor.
      *
@@ -57,13 +64,17 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
         ManiaScriptFactory $maniaScriptFactory,
         MenuTabsFactory $menuTabsFactory,
         MenuItemProvider $menuItemProvider,
-        Factory $uiFactory
+        Factory $uiFactory,
+        MenuContentFactory $menuContentFactory,
+        WindowsGuiHandler $windowsGuiHandler
     ) {
         parent::__construct($maniaScriptFactory);
         $this->maniaScriptFactory = $maniaScriptFactory;
         $this->menuTabsFactory = $menuTabsFactory;
         $this->menuItemProvider = $menuItemProvider;
         $this->uiFactory = $uiFactory;
+        $this->menuContentFactory = $menuContentFactory;
+        $this->windowsGuiHandler = $windowsGuiHandler;
     }
 
     /**
@@ -80,22 +91,25 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
         $frame = new Frame();
         $frame->setPosition(-160 - $mainFrame->getX(), 90 - $mainFrame->getY());
 
+        $tabsFrame = new Frame();
+        $tabsFrame->setPosition(-144 - $mainFrame->getX(), 82- $mainFrame->getY());
 
         // Creating the tabs.
         $mainFrame->addChild(
             $this->menuTabsFactory->createTabsMenu(
                 $this->manialinkInterface,
-                $frame,
+                $tabsFrame,
                 $this->menuItemProvider->getRootItem(),
+                [$this, 'callbackItemClick'],
                 'admin/admin'
             )
         );
+        $mainFrame->addChild($tabsFrame);
         $mainFrame->addChild($frame);
 
         $closeButton = $this->uiFactory->createButton('Close', uiButton::TYPE_DECORATED);
         $closeButton->setBorderColor(uiButton::COLOR_WARNING)->setFocusColor(uiButton::COLOR_WARNING);
         $closeButton->setPosition(300, -20);
-        $this->closeButton = $closeButton;
         $frame->addChild($closeButton);
 
 
@@ -115,11 +129,9 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
         $frame->addChild($bgFrame);
 
 
-
-
-
         $manialink->addChild($this->maniaScriptFactory->createScript(['']));
 
+        return $closeButton;
     }
 
     /**
@@ -130,9 +142,21 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
         $this->manialinkInterface = $manialinkInterface;
     }
 
-    public function setCloseAction($action)
+    /**
+     * Callback when an item of the menu is clicked on.
+     *
+     * @param ManialinkInterface $manialink
+     * @param $login
+     * @param $params
+     * @param $args
+     */
+    public function callbackItemClick(ManialinkInterface $manialink, $login, $params, $args)
     {
-        $this->closeButton->setAction($action);
-    }
+        $this->windowsGuiHandler->addToHide($manialink);
+        $this->menuContentFactory->create($login);
 
+        /** @var ItemInterface $item */
+        $item = $args['item'];
+        $item->execute($this->menuContentFactory, $manialink, $login, $params, $args);
+    }
 }

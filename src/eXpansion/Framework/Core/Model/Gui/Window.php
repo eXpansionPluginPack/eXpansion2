@@ -39,15 +39,11 @@ class Window extends Widget implements Container
      */
     public function setCloseAction($actionId)
     {
-        $this->closeButton->setDataAttributes(['action' => $actionId]);
+        $this->closeButton->addDataAttribute('action', $actionId);
     }
 
     public function getXml()
     {
-        if (empty($this->closeButton->getDataAttribute('action'))) {
-            throw new MissingCloseActionException("Close action is missing for window. Check if you are using the proper factory.");
-        }
-
         return parent::getXml();
     }
 }

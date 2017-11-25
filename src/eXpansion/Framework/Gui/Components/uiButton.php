@@ -68,6 +68,10 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
             ->addDataAttribute("action", $this->action)
             ->setScale($this->scale);
 
+        foreach ($this->_dataAttributes as $name => $value) {
+            $buttonFrame->addDataAttribute($name, $value);
+        }
+
         if ($this->type == self::TYPE_DECORATED) {
             $quad = new Quad();
             $this->backColor = 0000;

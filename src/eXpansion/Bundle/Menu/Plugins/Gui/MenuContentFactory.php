@@ -185,7 +185,7 @@ class MenuContentFactory extends WidgetFactory
         $tabsFrame = $manialink->getData('tabs_frame');
         $tabsFrame->removeAllChildren();
 
-        $this->menuTabsFactory->createTabsMenu($manialink, $tabsFrame, $rootItem, $openId);
+        $this->menuTabsFactory->createTabsMenu($manialink, $tabsFrame, $rootItem, [$this, 'callbackItemClick'], $openId);
     }
 
     /**
@@ -321,7 +321,6 @@ class MenuContentFactory extends WidgetFactory
 
         return $frame;
     }
-
 
     /**
      * Callback when an item of the menu is clicked on.
