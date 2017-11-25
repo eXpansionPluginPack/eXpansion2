@@ -97,7 +97,7 @@ class uiLine extends abstractUiElement
 
     public function calcAngle()
     {
-        $angle = (float)(atan2($this->x - $this->tx, $this->y - $this->ty));
+        $angle = (float) (atan2($this->x - $this->tx, $this->y - $this->ty));
         $angle += pi() / 2.0;
 
         return rad2deg($angle);

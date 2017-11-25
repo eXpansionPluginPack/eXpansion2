@@ -333,7 +333,7 @@ class Connection
      */
     public function getObject($data)
     {
-        $obj = (object)json_decode($data);
+        $obj = (object) json_decode($data);
         if ($obj->success === false) {
             $this->handleErrors($obj);
 

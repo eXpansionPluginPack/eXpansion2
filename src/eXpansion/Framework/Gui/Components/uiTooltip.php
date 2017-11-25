@@ -8,7 +8,6 @@ use FML\Controls\Label;
 use FML\Controls\Quad;
 use FML\Script\Features\ScriptFeature;
 use FML\Script\Script;
-use FML\Types\Container;
 use FML\Types\ScriptFeatureable;
 
 class uiTooltip extends abstractUiElement implements ScriptFeatureable
@@ -25,8 +24,8 @@ class uiTooltip extends abstractUiElement implements ScriptFeatureable
     }
 
     /**
-     * @param $control
-     * @param $text
+     * @param uiButton $control
+     * @param string $text
      */
     public function addTooltip($control, $text)
     {
