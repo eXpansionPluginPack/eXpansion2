@@ -1,8 +1,8 @@
 <?php
 
 namespace eXpansion\Bundle\LocalRecords\DataProviders\Listener;
-use eXpansion\Bundle\LocalRecords\Entity\Record;
 
+use eXpansion\Bundle\LocalRecords\Model\Record;
 
 /**
  * Interface RecordsDataListener

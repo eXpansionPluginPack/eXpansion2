@@ -16,7 +16,7 @@ class AppKernel extends Kernel
         $bundles[] = new \eXpansion\Bundle\AdminChat\AdminChatBundle();
 
         /* Register eXpansion Plugins */
-//        $bundles[] = new \eXpansion\Bundle\LocalRecords\LocalRecordsBundle();
+        $bundles[] = new \eXpansion\Bundle\LocalRecords\LocalRecordsBundle();
         $bundles[] = new \eXpansion\Bundle\Maps\MapsBundle();
         $bundles[] = new \eXpansion\Bundle\JoinLeaveMessages\JoinLeaveMessagesBundle();
         $bundles[] = new \eXpansion\Bundle\Emotes\EmotesBundle();
@@ -40,7 +40,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
-            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            new Propel\Bundle\PropelBundle\PropelBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 
             // And add eXpansion core.

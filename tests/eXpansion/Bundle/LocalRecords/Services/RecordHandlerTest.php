@@ -2,16 +2,17 @@
 
 namespace Tests\eXpansion\Bundle\LocalRecords\Services;
 
-use eXpansion\Bundle\LocalRecords\Entity\Record;
-use eXpansion\Bundle\LocalRecords\Repository\RecordRepository;
+use eXpansion\Bundle\LocalRecords\Model\Record;
+use eXpansion\Bundle\LocalRecords\Model\RecordQuery;
+use eXpansion\Bundle\LocalRecords\Model\RecordQueryBuilder;
 use eXpansion\Bundle\LocalRecords\Services\RecordHandler;
-use eXpansion\Framework\PlayersBundle\Entity\Player;
+use eXpansion\Framework\PlayersBundle\Model\Player;
 use eXpansion\Framework\PlayersBundle\Storage\PlayerDb;
 
 class RecordHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $recordRepositoryMock;
+    protected $mockRecordQueryBuilder;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $playerDbMock;
@@ -20,7 +21,7 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->recordRepositoryMock = $this->getMockBuilder(RecordRepository::class)
+        $this->mockRecordQueryBuilder = $this->getMockBuilder(RecordQueryBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -51,8 +52,14 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
             $this->createRecord('toto5', 50),
         ];
 
-        $this->recordRepositoryMock->expects($this->at(0))->method('findBy')->willReturn($records);
-        $this->recordRepositoryMock->expects($this->at(1))->method('findBy')->willReturn($records2);
+        $this->mockRecordQueryBuilder
+            ->expects($this->at(0))
+            ->method('getMapRecords')
+            ->willReturn($records);
+        $this->mockRecordQueryBuilder
+            ->expects($this->at(1))
+            ->method('getPlayerMapRecords')
+            ->willReturn($records2);
 
         $recordHandler = $this->getRecordHandler(3);
         $recordHandler->loadForMap('', 1);
@@ -118,7 +125,10 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
             $this->createRecord('toto3', 30),
         ];
 
-        $this->recordRepositoryMock->expects($this->at(0))->method('findBy')->willReturn($records);
+        $this->mockRecordQueryBuilder
+            ->expects($this->at(0))
+            ->method('getMapRecords')
+            ->willReturn($records);
 
         $recordHandler = $this->getRecordHandler(3);
         $recordHandler->loadForMap('', 1);
@@ -157,7 +167,10 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
             $this->createRecord('toto3', 30),
         ];
 
-        $this->recordRepositoryMock->expects($this->at(0))->method('findBy')->willReturn($records);
+        $this->mockRecordQueryBuilder
+            ->expects($this->at(0))
+            ->method('getMapRecords')
+            ->willReturn($records);
 
         $recordHandler = $this->getRecordHandler(3);
         $recordHandler->loadForMap('', 1);
@@ -186,7 +199,10 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
             $this->createRecord('toto3', 30),
         ];
 
-        $this->recordRepositoryMock->expects($this->at(0))->method('findBy')->willReturn($records);
+        $this->mockRecordQueryBuilder
+            ->expects($this->at(0))
+            ->method('getMapRecords')
+            ->willReturn($records);
 
         $recordHandler = $this->getRecordHandler(3);
         $recordHandler->loadForMap('', 1);
@@ -207,7 +223,10 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $records = [ ];
 
-        $this->recordRepositoryMock->expects($this->at(0))->method('findBy')->willReturn($records);
+        $this->mockRecordQueryBuilder
+            ->expects($this->at(0))
+            ->method('getMapRecords')
+            ->willReturn($records);
 
         $recordHandler = $this->getRecordHandler(3);
         $recordHandler->loadForMap('', 1);
@@ -232,7 +251,10 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
             $this->createRecord('toto3', 30),
         ];
 
-        $this->recordRepositoryMock->expects($this->at(0))->method('findBy')->willReturn($records);
+        $this->mockRecordQueryBuilder
+            ->expects($this->at(0))
+            ->method('getMapRecords')
+            ->willReturn($records);
 
         $recordHandler = $this->getRecordHandler(3);
         $recordHandler->loadForMap('', 1);
@@ -261,7 +283,10 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
             $this->createRecord('toto3', 30),
         ];
 
-        $this->recordRepositoryMock->expects($this->at(0))->method('findBy')->willReturn($records);
+        $this->mockRecordQueryBuilder
+            ->expects($this->at(0))
+            ->method('getMapRecords')
+            ->willReturn($records);
 
         $recordHandler = $this->getRecordHandler(3);
         $recordHandler->loadForMap('', 1);
@@ -278,7 +303,10 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
             $this->createRecord('toto3', 30),
         ];
 
-        $this->recordRepositoryMock->expects($this->at(0))->method('findBy')->willReturn($records);
+        $this->mockRecordQueryBuilder
+            ->expects($this->at(0))
+            ->method('getMapRecords')
+            ->willReturn($records);
 
         $recordHandler = $this->getRecordHandler(3);
         $recordHandler->loadForMap('', 1);
@@ -295,7 +323,10 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
             $this->createRecord('toto3', 30),
         ];
 
-        $this->recordRepositoryMock->expects($this->at(0))->method('findBy')->willReturn($records);
+        $this->mockRecordQueryBuilder
+            ->expects($this->at(0))
+            ->method('getMapRecords')
+            ->willReturn($records);
 
         $recordHandler = $this->getRecordHandler(3);
         $recordHandler->loadForMap('', 1);
@@ -312,7 +343,10 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
             $this->createRecord('toto3', 30),
         ];
 
-        $this->recordRepositoryMock->expects($this->at(0))->method('findBy')->willReturn($records);
+        $this->mockRecordQueryBuilder
+            ->expects($this->at(0))
+            ->method('getMapRecords')
+            ->willReturn($records);
 
         $recordHandler = $this->getRecordHandler(5);
         $recordHandler->loadForMap('', 1);
@@ -329,7 +363,10 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
             $this->createRecord('toto3', 10),
         ];
 
-        $this->recordRepositoryMock->expects($this->at(0))->method('findBy')->willReturn($records);
+        $this->mockRecordQueryBuilder
+            ->expects($this->at(0))
+            ->method('getMapRecords')
+            ->willReturn($records);
 
         $recordHandler = $this->getRecordHandler(3, RecordHandler::ORDER_DESC);
         $recordHandler->loadForMap('', 1);
@@ -345,7 +382,10 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
         $records = [
             $this->createRecord('toto1', 10),
         ];
-        $this->recordRepositoryMock->expects($this->at(0))->method('findBy')->willReturn($records);
+        $this->mockRecordQueryBuilder
+            ->expects($this->at(0))
+            ->method('getMapRecords')
+            ->willReturn($records);
 
         $recordHandler = $this->getRecordHandler(10, RecordHandler::ORDER_ASC);
         $recordHandler->loadForMap('', 1);
@@ -354,21 +394,12 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($eventData = $recordHandler->addRecord('toto4', 12, [5,15]));
     }
 
-    public function testSave()
-    {
-        $this->recordRepositoryMock->expects($this->once())->method('massSave');
-        $recordHandler = $this->getRecordHandler(3, RecordHandler::ORDER_DESC);
-
-        $recordHandler->save();
-
-    }
-
     /**
      * @return RecordHandler
      */
     protected function getRecordHandler($limit = 10, $order = RecordHandler::ORDER_ASC)
     {
-        return new RecordHandler($this->recordRepositoryMock, $this->playerDbMock, $limit, $order);
+        return new RecordHandler($this->mockRecordQueryBuilder, $this->playerDbMock, $limit, $order);
     }
 
     /**

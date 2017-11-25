@@ -2,7 +2,7 @@
 
 namespace Tests\eXpansion\Bundle\LocalRecords\Services;
 
-use eXpansion\Bundle\LocalRecords\Repository\RecordRepository;
+use eXpansion\Bundle\LocalRecords\Model\RecordQueryBuilder;
 use eXpansion\Bundle\LocalRecords\Services\RecordHandler;
 use eXpansion\Bundle\LocalRecords\Services\RecordHandlerFactory;
 use eXpansion\Framework\PlayersBundle\Storage\PlayerDb;
@@ -10,7 +10,7 @@ use eXpansion\Framework\PlayersBundle\Storage\PlayerDb;
 class RecordHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $recordRepositoryMock;
+    protected $recordQueryBuilder;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $playerDbMock;
@@ -19,7 +19,7 @@ class RecordHandlerFactoryTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->recordRepositoryMock = $this->getMockBuilder(RecordRepository::class)
+        $this->recordQueryBuilder = $this->getMockBuilder(RecordQueryBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -30,7 +30,7 @@ class RecordHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $factory = new RecordHandlerFactory($this->recordRepositoryMock, $this->playerDbMock,RecordHandler::ORDER_ASC, 10);
+        $factory = new RecordHandlerFactory($this->recordQueryBuilder, $this->playerDbMock, RecordHandler::ORDER_ASC, 10);
 
         $this->assertInstanceOf(RecordHandler::class, $factory->create());
 
