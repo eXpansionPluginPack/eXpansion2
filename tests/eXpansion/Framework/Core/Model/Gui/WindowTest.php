@@ -8,11 +8,9 @@
 
 namespace Tests\eXpansion\Framework\Core\Model\Gui;
 
-use eXpansion\Framework\Core\Exceptions\Gui\MissingCloseActionException;
 use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Model\Gui\Action;
 use eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactory;
-use eXpansion\Framework\Core\Model\Gui\ManiaScript;
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
 use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
@@ -71,16 +69,6 @@ class WindowTest extends TestCore
         $this->window->setCloseAction($action->getId());
 
         $this->assertInstanceOf(\SimpleXMLElement::class, simplexml_load_string($this->window->getXml()));
-    }
-
-    /**
-     * Validated that window without action crashes.
-     */
-    public function testWindowWithoutAction()
-    {
-        $this->expectException(MissingCloseActionException::class);
-
-        $this->window->getXml();
     }
 
     /**
