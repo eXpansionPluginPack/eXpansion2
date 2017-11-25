@@ -206,10 +206,10 @@ class GuiHandler implements
     protected function getManialinksToDisplay()
     {
         foreach ($this->displayQueu as $groupName => $manialinks) {
-            foreach ($manialinks as $id => $manialink) {
+            foreach ($manialinks as $factoryId => $manialink) {
                 $logins = $manialink->getUserGroup()->getLogins();
 
-                $this->displayeds[$groupName][$id] = $manialink;
+                $this->displayeds[$groupName][$factoryId] = $manialink;
                 if (!empty($logins)) {
                     yield ['logins' => $logins, 'ml' => $manialink->getXml()];
                 }
@@ -217,14 +217,16 @@ class GuiHandler implements
         }
 
         foreach ($this->individualQueu as $login => $manialinks) {
-            foreach ($manialinks as $id => $manialink) {
+            foreach ($manialinks as $manialink) {
                 $xml = $manialink->getXml();
                 yield ['logins' => $login, 'ml' => $xml];
             }
         }
 
         foreach ($this->hideQueu as $manialinks) {
-            foreach ($manialinks as $id => $manialink) {
+            foreach ($manialinks as $manialink) {
+                $id = $manialink->getId();
+
                 $logins = $manialink->getUserGroup()->getLogins();
                 $logins = array_diff($logins, $this->disconnectedLogins);
 
@@ -235,7 +237,9 @@ class GuiHandler implements
         }
 
         foreach ($this->hideIndividualQueu as $login => $manialinks) {
-            foreach ($manialinks as $id => $manialink) {
+            foreach ($manialinks as $manialink) {
+                $id = $manialink->getId();
+
                 if (!in_array($login, $this->disconnectedLogins)) {
                     yield ['logins' => $login, 'ml' => '<manialink id="'.$id.'" />'];
                 }
