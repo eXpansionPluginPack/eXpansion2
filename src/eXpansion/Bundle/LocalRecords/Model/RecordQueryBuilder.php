@@ -29,7 +29,7 @@ class RecordQueryBuilder
         $query->orderByScore($sort);
         $query->limit($nbRecords);
 
-        return $query->find();
+        return $query->find()->getData();
     }
 
     /**
@@ -48,6 +48,6 @@ class RecordQueryBuilder
         $query->filterByNblaps($nbLaps);
         $query->filterByPlayerLogins($logins);
 
-        return $query->find();
+        return $query->find()->getData();
     }
 }
