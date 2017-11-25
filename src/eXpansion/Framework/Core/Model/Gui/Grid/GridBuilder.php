@@ -9,9 +9,9 @@ use eXpansion\Framework\Core\Model\Gui\Grid\Column\AbstractColumn;
 use eXpansion\Framework\Core\Model\Gui\Grid\Column\ActionColumn;
 use eXpansion\Framework\Core\Model\Gui\Grid\Column\InputColumn;
 use eXpansion\Framework\Core\Model\Gui\Grid\Column\TextColumn;
+use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryInterface;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
-use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
 use eXpansion\Framework\Gui\Ui\Factory;
 use FML\Controls\Frame;
 use FML\Types\Renderable;
@@ -47,7 +47,7 @@ class GridBuilder
     /** @var ManialinkInterface */
     protected $manialink;
 
-    /** @var ManialinkFactory */
+    /** @var ManialinkFactoryInterface */
     protected $manialinkFactory;
 
     /** @var AbstractColumn[] */
@@ -145,11 +145,11 @@ class GridBuilder
     /**
      * Set the manialink factory responsible with the manialink.
      *
-     * @param ManialinkFactory $manialinkFactory
+     * @param ManialinkFactoryInterface $manialinkFactory
      *
      * @return $this
      */
-    public function setManialinkFactory($manialinkFactory)
+    public function setManialinkFactory(ManialinkFactoryInterface $manialinkFactory)
     {
         $this->manialinkFactory = $manialinkFactory;
 

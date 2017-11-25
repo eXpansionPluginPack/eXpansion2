@@ -3,6 +3,7 @@
 namespace eXpansion\Bundle\ImmersiveWindows\Plugins;
 
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
+use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryInterface;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
@@ -48,7 +49,7 @@ class WindowsGuiHandler implements GuiHandlerInterface, ListenerInterfaceMpLegac
     /**
      * @inheritdoc
      */
-    public function addToDisplay(ManialinkInterface $manialink, ManialinkFactory $manialinkFactory)
+    public function addToDisplay(ManialinkInterface $manialink, ManialinkFactoryInterface $manialinkFactory)
     {
         $logins = $manialink->getUserGroup()->getLogins();
 
@@ -69,7 +70,7 @@ class WindowsGuiHandler implements GuiHandlerInterface, ListenerInterfaceMpLegac
     /**
      * @inheritdoc
      */
-    public function addToHide(ManialinkInterface $manialink, ManialinkFactory $manialinkFactory)
+    public function addToHide(ManialinkInterface $manialink, ManialinkFactoryInterface $manialinkFactory)
     {
         $logins = $manialink->getUserGroup()->getLogins();
         if (count($logins) == 1 && !$manialink->getUserGroup()->isPersistent()) {
@@ -87,7 +88,7 @@ class WindowsGuiHandler implements GuiHandlerInterface, ListenerInterfaceMpLegac
     /**
      * @inheritdoc
      */
-    public function getManialink(Group $group, ManialinkFactory $manialinkFactory)
+    public function getManialink(Group $group, ManialinkFactoryInterface $manialinkFactory)
     {
         return $this->guiHandler->getManialink($group, $manialinkFactory);
     }

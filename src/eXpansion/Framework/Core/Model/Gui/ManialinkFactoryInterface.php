@@ -10,6 +10,13 @@ interface ManialinkFactoryInterface
 {
 
     /**
+     * Get unique id for the factory.
+     *
+     * @return mixed
+     */
+    public function getId();
+
+    /**
      * Create & display manialink for user.
      *
      * @param Group|string|string[] $group

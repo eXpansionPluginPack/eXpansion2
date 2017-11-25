@@ -5,6 +5,7 @@ namespace eXpansion\Framework\Core\Plugins;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpUserGroup;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
+use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryInterface;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
@@ -91,11 +92,11 @@ class GuiHandler implements
      *
      * @return void
      */
-    public function addToDisplay(ManialinkInterface $manialink, ManialinkFactory $manialinkFactory)
+    public function addToDisplay(ManialinkInterface $manialink, ManialinkFactoryInterface $manialinkFactory)
     {
 
         $userGroup = $manialink->getUserGroup()->getName();
-        $id = $manialink->getId();
+        $id = $manialinkFactory->getId();
 
         if (AssociativeArray::getFromKey($this->hideQueu, [$userGroup, $id])) {
             unset($this->hideQueu[$userGroup][$id]);
@@ -110,7 +111,7 @@ class GuiHandler implements
      * @param ManialinkInterface $manialink
      * @param ManialinkFactory   $manialinkFactory
      */
-    public function addToHide(ManialinkInterface $manialink, ManialinkFactory $manialinkFactory)
+    public function addToHide(ManialinkInterface $manialink, ManialinkFactoryInterface $manialinkFactory)
     {
         $userGroup = $manialink->getUserGroup()->getName();
         $id = $manialinkFactory->getId();
@@ -135,7 +136,7 @@ class GuiHandler implements
      *
      * @return null
      */
-    public function getManialink(Group $group, ManialinkFactory $manialinkFactory)
+    public function getManialink(Group $group, ManialinkFactoryInterface $manialinkFactory)
     {
         $varsToCheck = ['displayeds', 'hideQueu', 'displayQueu'];
 

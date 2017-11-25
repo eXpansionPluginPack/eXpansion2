@@ -10,9 +10,12 @@ use eXpansion\Framework\Core\Plugins\GuiHandler;
 use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
 use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
 use Tests\eXpansion\Framework\Core\TestCore;
+use Tests\eXpansion\Framework\Core\TestHelpers\ManialinkDataTrait;
 
 class ManialinkFactoryTest extends TestCore
 {
+    use ManialinkDataTrait;
+
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $guiHandlerMock;
 
@@ -90,9 +93,9 @@ class ManialinkFactoryTest extends TestCore
 
         $mlFactory = $this->getManialinkFactory();
 
+        $this->guiHandlerMock->method('getManialink')->willReturn($this->getManialink([]));
         $this->guiHandlerMock->expects($this->exactly(1))->method('addToDisplay');
         $this->guiHandlerMock->expects($this->exactly(1))->method('addToHide');
-        $this->actionFactoryMock->expects($this->exactly(1))->method('destroyManialinkActions');
 
         $mlFactory->create(['test1', 'test2']);
         $mlFactory->destroy($group);
@@ -101,18 +104,7 @@ class ManialinkFactoryTest extends TestCore
     public function testGroupDestory()
     {
         $group = new Group('test1', $this->dispatcherMock);
-
-        $this->userGroupFactoryMock->method('createForPlayers')
-            ->with(['test1', 'test2'])
-            ->willReturn($group);
-
         $mlFactory = $this->getManialinkFactory();
-
-        $this->guiHandlerMock->expects($this->exactly(1))->method('addToDisplay');
-        $this->guiHandlerMock->expects($this->exactly(0))->method('addToHide');
-        $this->actionFactoryMock->expects($this->exactly(1))->method('destroyManialinkActions');
-
-        $mlFactory->create(['test1', 'test2']);
         $mlFactory->onExpansionGroupDestroy($group, 'test1');
     }
 
