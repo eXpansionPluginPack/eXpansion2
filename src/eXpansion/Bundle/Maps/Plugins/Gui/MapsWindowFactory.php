@@ -5,6 +5,8 @@ namespace eXpansion\Bundle\Maps\Plugins\Gui;
 
 
 use eXpansion\Bundle\Maps\Plugins\Jukebox;
+use eXpansion\Bundle\Maps\Plugins\Maps;
+use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Helpers\TMString;
 use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionFactory;
@@ -36,6 +38,14 @@ class MapsWindowFactory extends GridWindowFactory
      * @var Jukebox
      */
     private $jukeboxPlugin;
+    /**
+     * @var AdminGroups
+     */
+    private $adminGroups;
+    /**
+     * @var Maps
+     */
+    private $mapsPlugin;
 
     /**
      * MapsWindowFactory constructor.
@@ -49,6 +59,8 @@ class MapsWindowFactory extends GridWindowFactory
      * @param DataCollectionFactory $dataCollectionFactory
      * @param Time $time
      * @param Jukebox $jukeboxPlugin
+     * @param Maps $mapsPlugin
+     * @param AdminGroups $adminGroups
      */
     public function __construct(
         $name,
@@ -60,7 +72,9 @@ class MapsWindowFactory extends GridWindowFactory
         GridBuilderFactory $gridBuilderFactory,
         DataCollectionFactory $dataCollectionFactory,
         Time $time,
-        Jukebox $jukeboxPlugin
+        Jukebox $jukeboxPlugin,
+        Maps $mapsPlugin,
+        AdminGroups $adminGroups
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
 
@@ -68,8 +82,40 @@ class MapsWindowFactory extends GridWindowFactory
         $this->dataCollectionFactory = $dataCollectionFactory;
         $this->timeFormatter = $time;
         $this->jukeboxPlugin = $jukeboxPlugin;
+        $this->adminGroups = $adminGroups;
+        $this->mapsPlugin = $mapsPlugin;
     }
 
+    public function callbackRemove(ManialinkInterface $manialink, $login, $params, $args)
+    {
+        $this->mapsPlugin->removeMap($login, ($args['index'] - 1));
+    }
+
+    public function callbackWish(ManialinkInterface $manialink, $login, $params, $args)
+    {
+        $this->jukeboxPlugin->add($login, $args['index']);
+    }
+
+    public function setMaps($maps)
+    {
+        $this->genericData = [];
+
+        /**
+         * @var string $i
+         * @var Map $map
+         */
+        $i = 1;
+        foreach ($maps as $uid => $map) {
+            $this->genericData[] = [
+                'index' => $i++,
+                'name' => TMString::trimControls($map->name),
+                'author' => $map->author,
+                'time' => $this->timeFormatter->timeToText($map->goldTime, true),
+                'wish' => $map,
+            ];
+        }
+
+    }
 
     /**
      * @param ManialinkInterface $manialink
@@ -85,6 +131,10 @@ class MapsWindowFactory extends GridWindowFactory
         $queueButton = $this->uiFactory->createButton('+', uiButton::TYPE_DECORATED);
         $queueButton->setTextColor("fff")->setSize(5, 5);
         $tooltip->addTooltip($queueButton, 'Adds map to jukebox');
+
+        $removeButton = $this->uiFactory->createButton('x', uiButton::TYPE_DECORATED);
+        $removeButton->setBorderColor("f00")->setTextColor("fff")->setSize(5, 5);
+        $tooltip->addTooltip($removeButton, 'Removes map from playlist');
 
         $gridBuilder = $this->gridBuilderFactory->create();
         $gridBuilder->setManialink($manialink)
@@ -114,38 +164,15 @@ class MapsWindowFactory extends GridWindowFactory
                 true,
                 false
 
-            )->addActionColumn('wish', 'expansion_maps.gui.window.column.wish', 1, array($this, 'callbackWish'),
-                $queueButton);
+            )->addActionColumn('wish', 'expansion_maps.gui.window.column.wish', 1,
+                [$this, 'callbackWish'], $queueButton);
+
+        if ($this->adminGroups->hasPermission($manialink->getUserGroup()->getLogins()[0], "admin")) {
+            $gridBuilder->addActionColumn('index', 'expansion_maps.gui.window.column.remove',
+                1, [$this, 'callbackRemove'], $removeButton);
+        }
 
         $manialink->setData('grid', $gridBuilder);
-
-    }
-
-
-    public function callbackWish(ManialinkInterface $manialink, $login, $params, $args)
-    {
-        $this->jukeboxPlugin->add($login, $args['index']);
-    }
-
-
-    public function setMaps($maps)
-    {
-        $this->genericData = [];
-
-        /**
-         * @var string $i
-         * @var Map $map
-         */
-        $i = 1;
-        foreach ($maps as $uid => $map) {
-            $this->genericData[] = [
-                'index' => $i++,
-                'name' => TMString::trimControls($map->name),
-                'author' => $map->author,
-                'time' => $this->timeFormatter->timeToText($map->goldTime, true),
-                'wish' => $map,
-            ];
-        }
 
     }
 

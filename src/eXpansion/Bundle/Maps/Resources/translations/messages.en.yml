@@ -66,3 +66,4 @@ expansion_maps:
               nickname: 'Nickname'
               drop: 'Drop'
               wish: 'Add'
+              remove: "Remove"
