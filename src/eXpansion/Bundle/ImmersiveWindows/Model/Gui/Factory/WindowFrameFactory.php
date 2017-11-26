@@ -87,12 +87,13 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
         $sizeX,
         $sizeY
     ) {
+
         // Creating sub frame to keep all the pieces together. Position needs to be top left corner.
         $frame = new Frame();
         $frame->setPosition(-160 - $mainFrame->getX(), 90 - $mainFrame->getY());
 
         $tabsFrame = new Frame();
-        $tabsFrame->setPosition(-144 - $mainFrame->getX(), 82- $mainFrame->getY());
+        $tabsFrame->setPosition(-144 - $mainFrame->getX(), 82 - $mainFrame->getY());
 
         // Creating the tabs.
         $mainFrame->addChild(
@@ -109,7 +110,7 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
 
         $closeButton = $this->uiFactory->createButton('Close', uiButton::TYPE_DECORATED);
         $closeButton->setBorderColor(uiButton::COLOR_WARNING)->setFocusColor(uiButton::COLOR_WARNING);
-        $closeButton->setPosition(300, -20);
+        $closeButton->setPosition(160 - ($closeButton->getWidth()/2), -90 - $mainFrame->getY());
         $frame->addChild($closeButton);
 
 
@@ -127,7 +128,6 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
         $bgFrame->addChild($quad);
 
         $frame->addChild($bgFrame);
-
 
         $manialink->addChild($this->maniaScriptFactory->createScript(['']));
 
