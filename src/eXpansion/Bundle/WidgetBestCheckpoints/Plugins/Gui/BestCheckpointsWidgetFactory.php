@@ -131,8 +131,8 @@ EOL
      */
     private function createColumnBox($index)
     {
-        $width = 40;
-        $height = 5;
+        $width = 35;
+        $height = 4;
 
         $frame = Frame::create();
 
