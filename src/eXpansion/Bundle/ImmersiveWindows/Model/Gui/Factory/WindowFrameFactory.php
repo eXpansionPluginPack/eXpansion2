@@ -10,6 +10,7 @@ use eXpansion\Bundle\Menu\Plugins\Gui\MenuContentFactory;
 use eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactory as OriginalWindowFrameFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
+use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WindowFrameFactoryInterface;
 use eXpansion\Framework\Gui\Components\uiButton;
 use eXpansion\Framework\Gui\Ui\Factory;
@@ -17,6 +18,7 @@ use FML\Controls\Frame;
 use FML\Controls\Label;
 use FML\Controls\Quad;
 use FML\ManiaLink;
+use FML\Script\ScriptLabel;
 
 /**
  * Class WindowFrameFactory
@@ -78,7 +80,12 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
     }
 
     /**
-     * @inheritdoc
+     * @param ManiaLink|Widget $manialink
+     * @param Frame $mainFrame
+     * @param $name
+     * @param float $sizeX
+     * @param float $sizeY
+     * @return uiButton|\FML\Controls\Control
      */
     public function build(
         ManiaLink $manialink,
@@ -111,6 +118,7 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
         $closeButton = $this->uiFactory->createButton('Close', uiButton::TYPE_DECORATED);
         $closeButton->setBorderColor(uiButton::COLOR_WARNING)->setFocusColor(uiButton::COLOR_WARNING);
         $closeButton->setPosition(160 - ($closeButton->getWidth()/2), -90 - $mainFrame->getY());
+        $closeButton->setId("uiCloseButton");
         $frame->addChild($closeButton);
 
 
@@ -128,7 +136,6 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
         $bgFrame->addChild($quad);
 
         $frame->addChild($bgFrame);
-
         $manialink->addChild($this->maniaScriptFactory->createScript(['']));
 
         return $closeButton;
@@ -152,7 +159,6 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
      */
     public function callbackItemClick(ManialinkInterface $manialink, $login, $params, $args)
     {
-        $this->windowsGuiHandler->addToHide($manialink);
         $this->menuContentFactory->create($login);
 
         /** @var ItemInterface $item */

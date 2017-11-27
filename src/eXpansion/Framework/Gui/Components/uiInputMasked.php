@@ -33,7 +33,7 @@ class uiInputMasked extends abstractUiElement implements Renderable, ScriptFeatu
         $this->name = $name;
         $this->default = $default;
         $this->width = $width;
-        $this->setSize($width, 5);
+        $this->setSize($width, 4);
         $this->textFormat = $textFormat;
     }
 
@@ -62,7 +62,7 @@ class uiInputMasked extends abstractUiElement implements Renderable, ScriptFeatu
             ->setDataAttributes($this->_dataAttributes)->addClasses($this->_classes);
 
         $input = new Entry();
-        $input->setSize($this->width - 5, $this->height)
+        $input->setSize($this->width - 4, $this->height)
             ->setPosition(0, -$this->height / 2)
             ->setDefault($this->default)
             ->setSelectText(true)
@@ -75,7 +75,7 @@ class uiInputMasked extends abstractUiElement implements Renderable, ScriptFeatu
             ->setTextSize(2);
 
         $button = new uiButton("", uiButton::TYPE_DECORATED);
-        $button->setSize(5, 5)
+        $button->setSize(4, 4)
             ->addClass("uiMaskedToggle")
             ->setPosition($input->getWidth(), 0);
 

@@ -41,7 +41,7 @@ class uiDropdown extends abstractUiElement implements ScriptFeatureable
         $this->options = $options;
         $this->selectedIndex = $selectedIndex;
         $this->isOpened = $isOpened;
-        $this->setSize(30, 6);
+        $this->setSize(30, 4);
     }
 
     /**
@@ -165,13 +165,18 @@ EOD;
             ->addDataAttribute("open", $this->isOpened ? "1" : "0");
 
         $labelMark = new uiLabel("⏷");
+        $labelMark->setAlign("left", "center");
+        $labelMark->setPosition(0,-($this->height/2));
         $labelMark->setSize(5, 5)->setX($this->width - 5);
 
         $baseLabel = new Label();
         $baseLabel->setAreaColor("000")->setAreaFocusColor("333")
             ->setScriptEvents(true)->addClass("uiSelectElement")
             ->setSize($this->width, $this->height)
+            ->setPosition(0, -($this->height/2))
             ->setTextPrefix(" ")
+            ->setTextSize(1)
+            ->setAlign("left", "center")
             ->addClasses($this->_classes)
             ->setDataAttributes($this->_dataAttributes);
 
@@ -183,7 +188,7 @@ EOD;
         $entry->setPosition(900, 900)
             ->setName($this->name);
 
-        $frameOptions = new layoutRow(0, -$this->height);
+        $frameOptions = new layoutRow(0, -($this->height/2));
         $frameOptions->addClass('uiDropdownSelect');
 
         $idx = 0;

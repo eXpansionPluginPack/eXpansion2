@@ -16,6 +16,7 @@ use eXpansion\Framework\Gui\Components\uiLabel;
 use FML\Controls\Frame;
 use FML\Controls\Label;
 use FML\Controls\Quad;
+use FML\Script\ScriptLabel;
 
 
 /**
@@ -121,6 +122,7 @@ class MenuContentFactory extends WidgetFactory
          * Adding script
          */
         $manialink->getFmlManialink()->addChild($this->menuScriptFactory->createScript([]));
+
     }
 
     /**

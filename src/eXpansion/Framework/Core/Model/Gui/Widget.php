@@ -4,17 +4,13 @@ namespace eXpansion\Framework\Core\Model\Gui;
 
 use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
-use eXpansion\Framework\Gui\Components\uiButton;
-use eXpansion\Framework\Gui\Components\uiCheckbox;
 use eXpansion\Framework\Gui\Components\uiLabel;
 use FML\Controls\Frame;
 use FML\Controls\Label;
 use FML\Elements\Dico;
 use FML\Elements\Format;
-use FML\Elements\SimpleScript;
 use FML\Script\Features\ToggleInterface;
-use FML\Script\Script;
-use FML\Script\ScriptInclude;
+use FML\Script\ScriptLabel;
 use FML\Types\Container;
 use FML\Types\Renderable;
 
@@ -77,9 +73,33 @@ class Widget extends Manialink implements Container
         $this->contentFrame->setSize($sizeX, $sizeY);
         $windowFrame->addChild($this->contentFrame);
 
-        $toggleInterfaceF9 = new ToggleInterface("F9");
-        $this->manialink->getScript()
+        $toggleInterfaceF9 = new ToggleInterface($windowFrame, "F9");
+        $this->getFmlManialink()->getScript()
             ->addFeature($toggleInterfaceF9);
+
+        if (get_called_class() == 'eXpansion\\Framework\\Core\\Model\\Gui\\Widget') {
+            $this->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::OnInit,
+                <<<EOL
+            declare Boolean exp_hideWidgets for This = False;
+            declare Boolean exp_hideToggle = False;
+            declare CMlFrame exp_Widget <=> (Page.GetFirstChild("Window") as CMlFrame);
+EOL
+            );
+            $this->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::Loop,
+                <<<EOL
+            if (exp_hideWidgets) {
+                exp_hideToggle = True;                
+                exp_Widget.Hide();
+            } else {
+                if (exp_hideToggle) {
+                    exp_Widget.Show();
+                    exp_hideToggle = False;
+                }          
+            }
+EOL
+            );
+        }
+
 
         $this->windowFrame = $windowFrame;
     }

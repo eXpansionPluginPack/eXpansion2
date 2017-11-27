@@ -118,8 +118,8 @@ class uiTooltip extends abstractUiElement implements ScriptFeatureable
                 exp_tooltip_toggle = True;                         
                 //AnimMgr.Add(exp_tooltip.Controls[0], "<elem scale=\"0\" />",  30, CAnimManager::EAnimManagerEasing::Linear);
             	//AnimMgr.Add(exp_tooltip.Controls[1], "<elem scale=\"0\" />",  30, CAnimManager::EAnimManagerEasing::Linear);
-            	 (exp_tooltip.Controls[0] as CMlLabel).Scale = 0.;
-            	 (exp_tooltip.Controls[1] as CMlQuad).Scale = 0.;          	                                	
+            	 (exp_tooltip.Controls[0] as CMlLabel).RelativeScale = 0.;
+            	 (exp_tooltip.Controls[1] as CMlQuad).RelativeScale = 0.;          	                                	
             }    
        }
        ***

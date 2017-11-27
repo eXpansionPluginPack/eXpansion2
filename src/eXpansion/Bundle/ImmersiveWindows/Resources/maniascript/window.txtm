@@ -4,4 +4,15 @@
 ***FML_OnInit***
 ***
     declare CMlFrame Exp_Window <=> (Page.GetFirstChild("Window") as CMlFrame);
+    declare Boolean exp_hideWidgets for This = False;
+    exp_hideWidgets = True;
+***
+
+
+***FML_MouseClick2***
+***
+    if (Event.Control.ControlId == "uiCloseButton" ) {
+        exp_hideWidgets = False;
+        Exp_Window.Hide();
+    }
 ***

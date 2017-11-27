@@ -36,7 +36,7 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
         $this->name = $name;
         $this->default = $default;
         $this->width = $width;
-        $this->setSize($width, 5);
+        $this->setSize($width, 4);
         $this->textFormat = $textFormat;
     }
 
@@ -50,7 +50,7 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
     {
         $frame = new Frame();
         $frame->setPosition($this->posX, $this->posY)
-            ->setSize($this->width, $this->height)
+
             ->addClasses(["uiContainer", "uiInput"]);
 
         $quad = new Quad();
@@ -69,7 +69,7 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
             ->setPosition(0, -$this->height / 2)
             ->setDefault($this->default)
             ->setSelectText(true)
-            ->setAlign("left", "center2")
+            ->setAlign("left", "center")
             ->setAreaColor("0005")
             ->setAreaFocusColor('000a')
             ->setTextFormat($this->textFormat)
@@ -141,7 +141,7 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
 
     public function getHeight()
     {
-        return $this->height + 2;
+        return $this->height + 1;
     }
 
     /**

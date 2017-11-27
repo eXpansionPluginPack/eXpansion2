@@ -18,6 +18,7 @@ class LabelFactory
     public function create($text, $translate = false, $type = self::TYPE_NORMAL)
     {
         $label = new uiLabel($text, $type);
+        $label->setAlign("left", "center2");
 
         if ($translate) {
             $label->setTranslate(true);

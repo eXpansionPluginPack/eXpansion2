@@ -45,7 +45,7 @@ class uiCheckbox extends abstractUiElement implements ScriptFeatureable
         $this->checked = $checked;
         $this->disabled = $disabled;
         $this->setWidth(30);
-        $this->setHeight(6);
+        $this->setHeight(4);
     }
 
 
@@ -67,9 +67,8 @@ class uiCheckbox extends abstractUiElement implements ScriptFeatureable
     public function render(\DOMDocument $domDocument)
     {
         $containerFrame = new Frame();
-        $containerFrame->setPosition($this->posX-1, $this->posY+1)
+        $containerFrame->setPosition($this->posX-1, $this->posY)
             ->setZ($this->posZ)
-            ->setSize($this->getWidth(), $this->getHeight()+1)
             ->setScale($this->scale)
             ->addClasses(['uiContainer', 'uiCheckbox'])
             ->addDataAttribute('checked', $this->isChecked() ? "1" : "0")
@@ -81,22 +80,22 @@ class uiCheckbox extends abstractUiElement implements ScriptFeatureable
             ->setName($this->name);
 
         $checkedBackground = new uiLabel('⬜');
-        $checkedBackground->setTextSize(4)
+        $checkedBackground->setTextSize(3.5)
             ->setAlign('center', 'center2')
-            ->setSize(6, 6)
-            ->setPosition(3, -3);
+            ->setSize(4, 4)
+            ->setPosition(2, -2);
         $checkedBackground->setScriptEvents(true)
             ->addClass('uiCheckboxElement');
         $checkedBackground->setDataAttributes($this->_dataAttributes)->addClasses($this->_classes);
 
         $checkedLabel = clone $checkedBackground;
-        $checkedLabel->setText('✔')->setPosition(3.5, -2)->setScale(0);
+        $checkedLabel->setText('✔')->setPosition(2.5, -1.75)->setScale(0);
 
         $label = new uiLabel();
         $label->setTranslate(false)
             ->setAlign("left", "center2")
-            ->setPosition(6, -3)
-            ->setSize($this->width - 6, $this->height)
+            ->setPosition(5, -2.5)
+            ->setSize($this->width - 5, $this->height)
             ->setText($this->getText());
 
         $containerFrame->addChild($entry);
