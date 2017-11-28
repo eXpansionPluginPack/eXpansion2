@@ -1,0 +1,10 @@
+expansion_local_mapratings:
+  chat:
+    asd: ""
+
+  gui:
+    race:
+      window:
+        title: 'Map Ratings'
+        column:
+          position: '#'

@@ -2,6 +2,9 @@
 
 namespace eXpansion\Bundle\Maps\Plugins;
 
+use eXpansion\Bundle\Maps\Model\Map;
+use eXpansion\Bundle\Maps\Model\MapQuery;
+use eXpansion\Bundle\Maps\Model\Mxmap;
 use eXpansion\Bundle\Maps\Services\JukeboxService;
 use eXpansion\Bundle\Maps\Structure\MxInfo;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
@@ -174,11 +177,11 @@ class ManiaExchange implements ListenerInterfaceExpApplication
 
         /** @var MxInfo $info */
         $info = $data['mxInfo'];
-        $authorName = $this->cleanString($info->Username);
+        $authorName = $this->cleanString($info->username);
         $mapName = $this->cleanString(
             trim(
                 mb_convert_encoding(
-                    substr(TMString::trimStyles($info->GbxMapName), 0, 20),
+                    substr(TMString::trimStyles($info->gbxMapName), 0, 20),
                     "7bit",
                     "UTF-8"
                 )
@@ -187,12 +190,27 @@ class ManiaExchange implements ListenerInterfaceExpApplication
 
         $filename = $data['mxId']."-".$authorName."-".$mapName.".Map.Gbx";
         try {
-            // @todo write mx info from map to database!
-
             $this->connection->writeFile($filename, $result->getResponse());
             $this->connection->addMap($filename);
-
             $map = $this->connection->getMapInfo($filename);
+
+
+            $mapquery = new MapQuery();
+            $dbMap = $mapquery->findOneByMapuid($map->uId);
+
+            if ($dbMap) {
+                $dbMap->fromArray($map->toArray());
+            } else {
+                $dbmap = new Map();
+                $dbmap->fromArray($map->toArray());
+            }
+
+            $dbMap->save();
+
+            $db = new Mxmap();
+            $db->fromArray($info->toArray());
+            $db->save();
+
             $this->jukebox->addMap($map, $data['login']);
             $this->chatNotification->sendMessage(
                 'expansion_mx.chat.success',

@@ -5,97 +5,111 @@ namespace eXpansion\Bundle\Maps\Structure;
 class MxInfo
 {
     /** @var integer */
-    public $TrackID;
+    public $trackID;
     /** @var integer */
-    public $UserID;
+    public $userID;
     /** @var string */
-    public $Username;
+    public $username;
     /** @var string */
-    public $UploadedAt;
+    public $uploadedAt;
     /** @var string */
-    public $UpdatedAt;
+    public $updatedAt;
     /** @var string */
-    public $Name;
+    public $name;
     /** @var string */
-    public $TypeName;
+    public $typeName;
     /** @var string */
-    public $MapType;
+    public $mapType;
     /** @var  string */
-    public $TitlePack;
+    public $titlePack;
     /** @var string */
-    public $StyleName;
+    public $styleName;
     /** @var string */
-    public $Mood;
+    public $mood;
     /** @var integer */
-    public $DisplayCost;
+    public $displayCost;
     /** @var string */
-    public $ModName;
+    public $modName;
     /** @var integer */
-    public $Lightmap;
+    public $lightmap;
     /** @var string */
-    public $ExeVersion;
+    public $exeVersion;
     /** @var string */
-    public $ExeBuild;
+    public $exeBuild;
     /** @var string */
-    public $EnvironmentName;
+    public $environmentName;
     /** @var string */
-    public $VehicleName;
+    public $vehicleName;
     /** @var string */
-    public $RouteName;
+    public $routeName;
     /** @var string */
-    public $LengthName;
+    public $lengthName;
     /** @var integer */
-    public $Laps;
+    public $laps;
     /** @var string */
-    public $DifficultyName;
+    public $difficultyName;
     /** @var string */
-    public $ReplayTypeName;
+    public $replayTypeName;
     /** @var integer */
-    public $ReplayWRID;
+    public $replayWRID;
     /** @var integer */
-    public $ReplayCount;
+    public $replayCount;
     /** @var integer */
-    public $TrackValue;
+    public $trackValue;
     /** @var string */
-    public $Comments;
+    public $comments;
     /** @var integer */
-    public $AwardCount;
+    public $awardCount;
     /** @var integer */
-    public $CommentCount;
+    public $commentCount;
     /** @var integer */
-    public $ReplayWRTime;
+    public $replayWRTime;
     /** @var integer */
-    public $ReplayWRUserID;
+    public $replayWRUserID;
     /** @var string */
-    public $ReplayWRUsername;
+    public $replayWRUsername;
     /** @var boolean */
-    public $UnlimiterRequired;
+    public $unlimiterRequired;
     /** @var string */
-    public $TrackUID;
+    public $trackUID;
     /** @var boolean */
-    public $Unreleased;
+    public $unreleased;
     /** @var string */
-    public $GbxMapName;
+    public $gbxMapName;
     /** @var integer */
-    public $RatingVoteCount;
+    public $ratingVoteCount;
     /** @var integer */
-    public $RatingVoteAverage;
+    public $ratingVoteAverage;
     /** @var boolean */
-    public $HasScreenshot;
+    public $hasScreenshot;
     /** @var boolean */
-    public $HasThumbnail;
+    public $hasThumbnail;
     /** @var boolean */
-    public $HasGhostBlocks;
+    public $hasGhostBlocks;
     /** @var integer */
-    public $EmbeddedObjectsCount;
+    public $embeddedObjectsCount;
 
 
     public function __construct($mxinfo)
     {
         if ($mxinfo !== null) {
             foreach ($mxinfo as $key => $value) {
-                $this->{$key} = $value;
+                $this->{lcfirst($key)} = $value;
             }
         }
     }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $arr = [];
+        foreach ($this as $key => $value) {
+            $arr[$key] = $value;
+        }
+
+        return $arr;
+    }
+
 }
