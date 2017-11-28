@@ -18,6 +18,7 @@
 composer.phar
 /app/config/plugins/*.yml
 /tmp/
+/app/propel/*
 /docker/data/*
 !/docker/data/.gitkeep
 docker-compose.yml

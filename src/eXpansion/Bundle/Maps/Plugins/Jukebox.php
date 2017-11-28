@@ -3,10 +3,10 @@
 namespace eXpansion\Bundle\Maps\Plugins;
 
 use eXpansion\Bundle\Maps\Plugins\Gui\JukeboxWindowFactory;
-use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
-use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Bundle\Maps\Services\JukeboxService;
+use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
+use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Storage\MapStorage;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptPodium;
@@ -101,32 +101,6 @@ class Jukebox implements ListenerInterfaceMpScriptPodium, ListenerInterfaceMpLeg
 
     }
 
-    public function add($login, $index)
-    {
-        if (is_numeric($index)) {
-            $map = $this->mapStorage->getMapByIndex($index - 1);
-            if ($map) {
-                if ($this->jukeboxService->addMap($map, $login)) {
-                    $player = $this->playerStorage->getPlayerInfo($login);
-                    $length = count($this->jukeboxService->getMapQueue());
-                    $this->chatNotification->sendMessage('expansion_jukebox.chat.addmap', null, [
-                        "%mapname%" => $map->name,
-                        "%nickname%" => $player->getNickName(),
-                        "%length%" => $length,
-                    ]);
-
-                    return;
-                } else {
-                    $this->chatNotification->sendMessage('expansion_jukebox.chat.noadd', $login,
-                        ["%mapname%" => $map->name]);
-
-                    return;
-                }
-            }
-        }
-        $this->chatNotification->sendMessage('expansion_jukebox.chat.nomap', $login);
-    }
-
     public function drop($login, $map = null)
     {
         if ($map === null) {
@@ -164,6 +138,32 @@ class Jukebox implements ListenerInterfaceMpScriptPodium, ListenerInterfaceMpLeg
         } else {
             $this->chatNotification->sendMessage('expansion_jukebox.chat.nopermission', $login);
         }
+    }
+
+    public function add($login, $index)
+    {
+        if (is_numeric($index)) {
+            $map = $this->mapStorage->getMapByIndex($index - 1);
+            if ($map) {
+                if ($this->jukeboxService->addMap($map, $login)) {
+                    $player = $this->playerStorage->getPlayerInfo($login);
+                    $length = count($this->jukeboxService->getMapQueue());
+                    $this->chatNotification->sendMessage('expansion_jukebox.chat.addmap', null, [
+                        "%mapname%" => $map->name,
+                        "%nickname%" => $player->getNickName(),
+                        "%length%" => $length,
+                    ]);
+
+                    return;
+                } else {
+                    $this->chatNotification->sendMessage('expansion_jukebox.chat.noadd', $login,
+                        ["%mapname%" => $map->name]);
+
+                    return;
+                }
+            }
+        }
+        $this->chatNotification->sendMessage('expansion_jukebox.chat.nomap', $login);
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace eXpansion\Framework\Gui\Components;
 
-use eXpansion\Framework\Core\Helpers\ColorConversion;
 use FML\Controls\Frame;
 use FML\Controls\Quad;
 use FML\Elements\Format;
@@ -15,10 +14,16 @@ use FML\Types\ScriptFeatureable;
 
 class uiButton extends abstractUiElement implements ScriptFeatureable, Container
 {
+    const TYPE_DECORATED = "decorated";
+    const TYPE_DEFAULT = "default";
+    const COLOR_DEFAULT = "aaa";
+    const COLOR_SUCCESS = "0d0";
+    const COLOR_WARNING = "d00";
+    const COLOR_PRIMARY = "3af";
+    const COLOR_SECONDARY = "000";
     /** @var  uiLabel */
     protected $buttonLabel;
     protected $type;
-
     protected $textColor = "eee";
     protected $backColor = self::COLOR_DEFAULT;
     protected $focusColor = "bbb";
@@ -29,21 +34,11 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
     protected $text = "button";
     protected $scale = 1.;
 
-
-    const TYPE_DECORATED = "decorated";
-    const TYPE_DEFAULT = "default";
-
-    const COLOR_DEFAULT = "aaa";
-    const COLOR_SUCCESS = "0d0";
-    const COLOR_WARNING = "d00";
-    const COLOR_PRIMARY = "3af";
-    const COLOR_SECONDARY = "000";
-
     public function __construct($text = "button", $type = self::TYPE_DEFAULT)
     {
         $this->text = $text;
         $this->type = $type;
-        $this->setSize(26, 8);
+        $this->setSize(18, 5);
         $this->buttonLabel = new uiLabel("", uiLabel::TYPE_TITLE);
     }
 
@@ -85,6 +80,7 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
 
         $this->buttonLabel->setSize($this->width, $this->height)
             ->setText($this->getText())
+            ->setTextSize(1)
             ->setScriptEvents(true)
             ->setAreaColor($this->backColor)
             ->setAreaFocusColor($this->focusColor)
@@ -104,6 +100,24 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
 
         return $buttonFrame->render($domDocument);
 
+    }
+
+    /**
+     * @return string
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * @param string $text
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+
+        return $this;
     }
 
     /**
@@ -245,24 +259,6 @@ EOD;
     public function setFocusColor($focusColor)
     {
         $this->focusColor = $focusColor;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getText()
-    {
-        return $this->text;
-    }
-
-    /**
-     * @param string $text
-     */
-    public function setText($text)
-    {
-        $this->text = $text;
 
         return $this;
     }
@@ -410,5 +406,21 @@ EOD;
     public function setFormat(Format $format = null)
     {
         // TODO: Implement setFormat() method.
+    }
+
+    /**
+     * @return null
+     */
+    public function getId()
+    {
+        return $this->buttonLabel->getId();
+    }
+
+    /**
+     * @param null $id
+     */
+    public function setId($id)
+    {
+        $this->buttonLabel->setId($id);
     }
 }

@@ -10,26 +10,20 @@ class Manialink implements ManialinkInterface
 {
     use DataStorageTrait;
 
-    /** @var string */
-    private $id;
-
-    /** @var string */
-    private $name;
-
     /** @var  Group */
     protected $group;
-
     /** @var float */
     protected $sizeX;
-
     /** @var float */
     protected $sizeY;
-
     /** @var float */
     protected $posX;
-
     /** @var float */
     protected $posY;
+    /** @var string */
+    private $id;
+    /** @var string */
+    private $name;
 
     /**
      * Manialink constructor
@@ -73,20 +67,20 @@ class Manialink implements ManialinkInterface
 
     /**
      *
-     * @return Group
-     */
-    public function getUserGroup()
-    {
-        return $this->group;
-    }
-
-    /**
-     *
      * @return string
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     *
+     * @return Group
+     */
+    public function getUserGroup()
+    {
+        return $this->group;
     }
 
     /**
@@ -113,5 +107,15 @@ class Manialink implements ManialinkInterface
      */
     public function getContentFrame()
     {
+    }
+
+    /**
+     * getter for manialink name
+     *
+     * @return string
+     */
+    protected function getName(): string
+    {
+        return $this->name;
     }
 }

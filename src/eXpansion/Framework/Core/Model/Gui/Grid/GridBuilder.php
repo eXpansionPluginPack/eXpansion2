@@ -230,7 +230,7 @@ class GridBuilder
             $this->actionFactory->destroyAction($action);
         }
 
-        $lineHeight = 5 + 0.5;
+        $lineHeight = 4.5;
 
 
         $frame = new Frame();

@@ -71,13 +71,13 @@ class WindowHelpFactory extends WindowFactory
 
         $helpButton = new Label();
         $helpButton->setText('')
-            ->setSize(6, 6)
+            ->setSize(4, 4)
             ->setAreaColor("0000")
             ->setAreaFocusColor("0000");
 
         $desctiptionButton = new Label();
         $desctiptionButton->setText('')
-            ->setSize(6, 6)
+            ->setSize(4, 4)
             ->setAreaColor("0000")
             ->setAreaFocusColor("0000");
 

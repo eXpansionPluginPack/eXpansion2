@@ -53,7 +53,7 @@ class PagerFactory
         $frame->setSize($width, 16);
 
         $pagerLine = $this->uiFactory->createLayoutLine(0, -1);
-        $buttonSize = 7;
+        $buttonSize = 6;
 
         $empty = Quad::create();
         $empty->setOpacity(0)->setSize($buttonSize, $buttonSize);

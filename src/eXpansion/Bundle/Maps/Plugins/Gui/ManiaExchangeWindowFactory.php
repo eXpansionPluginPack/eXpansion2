@@ -227,20 +227,19 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $manialink->addChild($this->tpackBox);
 
         $mapname = $this->uiFactory->createInput("map");
-        $mapname->setHeight(6);
+
         $author = $this->uiFactory->createInput("author");
-        $author->setHeight(6);
+
 
         $search = $this->uiFactory->createButton('🔍 Search', uiButton::TYPE_DECORATED);
         $search->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackSearch'],
             ["ml" => $manialink]));
-        $search->setHeight(6);
 
         $line = $this->uiFactory->createLayoutLine(64, -14, [$mapname, $author, $search], 2);
         $manialink->addChild($line);
 
         $addButton = $this->uiFactory->createButton('Install', uiButton::TYPE_DEFAULT);
-        $addButton->setSize(20, 5);
+        $addButton->setSize(20, 4);
 
         $gridBuilder = $this->gridBuilderFactory->create();
         $gridBuilder->setManialink($manialink)
@@ -262,7 +261,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
                 'author',
                 'expansion_mx.gui.mxsearch.column.author',
                 3,
-                false
+                true
             )->addTextColumn(
                 'envir',
                 'expansion_mx.gui.mxsearch.column.envir',

@@ -58,7 +58,7 @@ class LineFactory
      *
      * @throws \Exception
      */
-    public function create($totalWidth, $columns, $index = 0, $height = 5.0, $autoNewLine = false, $maxLines = 1)
+    public function create($totalWidth, $columns, $index = 0, $height = 4.0, $autoNewLine = false, $maxLines = 1)
     {
         $totalCoef
             = ($totalWidth - 1) / array_reduce($columns, function ($carry, $item) {
@@ -115,7 +115,7 @@ class LineFactory
         );
         $label->setHeight($height - 1);
         $label->setWidth(($columnData["width"] * $totalCoef) - 0.5);
-        $label->setPosition($postX, -0.5);
+        $label->setPosition($postX, -($height/2));
         $label->setAutoNewLine($autoNewLine);
         $label->setMaxLines($maxLines);
 
@@ -136,12 +136,13 @@ class LineFactory
             if ($value === false) {
                 $element = new uiCheckbox("", "entry_".$i."_boolean", false);
             }
-            $element->setY(3);
+            $element->setPosition($postX+ 0.5,0);
         } else {
             $element = new uiInput("entry_".$i."_".$type);
             $element->setDefault($value);
+            $element->setPosition($postX, 0);
         }
-        $element->setPosition($postX, -0.5);
+
         $element->setWidth(($columnData["width"] * $totalCoef) - 0.5);
         $element->setHeight(4);
 
@@ -161,7 +162,7 @@ class LineFactory
     {
         /** @var Control $element */
         $element = $columnData['renderer'];
-        $element->setPosition($postX, -0.5);
+        $element->setPosition($postX, 0);
         $element->setHeight(4);
 
         return $element;
