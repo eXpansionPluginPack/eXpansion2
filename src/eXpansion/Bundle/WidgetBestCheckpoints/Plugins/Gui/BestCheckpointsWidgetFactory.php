@@ -98,7 +98,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                     if (BestCheckpoints.existskey(_Index) && BestCheckpoints[_Index] != 99999999 ) {
                         Label.Value = "\$fff\$o" ^ (_Index+1) ^ " \$o\$ff3" ^ TimeToText(BestCheckpoints[_Index]);                        
                     } else {
-                       Label.Value = "\$fff\$o" ^ (_Index+1);
+                       Label.Value = "\$fff\$o" ^ (_Index+1) ^ " \$o\$ff3 --:--.---";
                     }                    
                 } else {
                     if (_Score < BestCheckpoints[_Index]) {                    
@@ -194,7 +194,9 @@ EOL
                             BestTime = RaceEvent.LapTime; 
                             if (InputPlayer == RaceEvent.Player) {
                                 MyCheckpoints[RaceEvent.CheckpointInLap] = RaceEvent.LapTime;
-                                BestCheckpoints = MyCheckpoints;
+                                BestCheckpoints = MyCheckpoints;   
+                                MyCheckpoints = Integer[Integer];
+                                Refresh();                            
                             } else {                                                                                    
                                 foreach (k => i in RaceEvent.Player.Score.BestLap.Checkpoints) {
                                     BestCheckpoints[k] = i;
@@ -204,11 +206,13 @@ EOL
                             Label.Value = RaceEvent.Player.User.Name;
                             Refresh();                            
                         } else {                          
-                            if (InputPlayer == RaceEvent.Player) {  
-                                MyCheckpoints[RaceEvent.CheckpointInLap] = RaceEvent.LapTime;
-                                if (BestTime != 99999999) {                                                        
+                            if (InputPlayer == RaceEvent.Player && BestTime != 99999999) {                                  
+                                if (RaceEvent.IsEndLap && RaceEvent.IsEndRace == False ) {                                        
+                                    MyCheckpoints = Integer[Integer]; 
+                                    Refresh();
+                                } else {                                                                                                              
                                     UpdateCp(RaceEvent.CheckpointInLap, RaceEvent.LapTime, True);
-                                }
+                                }                                                                                                                                              
                             }
                         }                       
                     } else {                    
