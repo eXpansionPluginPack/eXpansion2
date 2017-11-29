@@ -15,6 +15,13 @@ interface ManialinkInterface
     public function getXml();
 
     /**
+     * Get the factory responsible of this manialink.
+     *
+     * @return ManialinkFactoryInterface
+     */
+    public function getManialinkFactory(): ManialinkFactoryInterface;
+
+    /**
      *
      * @return Group
      */
@@ -48,7 +55,13 @@ interface ManialinkInterface
      */
     public function getContentFrame();
 
-    /** removes child control */
+    /**
+     * Removes a child.
+     *
+     * @param Renderable $child
+     *
+     * @return mixed
+     */
     public function removeChild(Renderable $child);
 
     /**
@@ -67,4 +80,10 @@ interface ManialinkInterface
      */
     public function setData($name, $data);
 
+    /**
+     * Destroys a manialink.
+     *
+     * @return mixed
+     */
+    public function destroy();
 }

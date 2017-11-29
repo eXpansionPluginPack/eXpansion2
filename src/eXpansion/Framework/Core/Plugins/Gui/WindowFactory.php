@@ -66,6 +66,7 @@ class WindowFactory extends WidgetFactory
         $className = $this->className;
 
         $manialink = new $className(
+            $this,
             $group,
             $this->translationsHelper,
             $this->windowFrameFactory,

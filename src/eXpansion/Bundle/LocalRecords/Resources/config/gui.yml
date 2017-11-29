@@ -9,5 +9,3 @@ services:
             $posX:  null
             $posY:  null
             $dataCollectionFactory: '@expansion.gui.gridbuilder.datacollection.array'
-        tags:
-            - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}

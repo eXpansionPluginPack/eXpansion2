@@ -59,8 +59,6 @@ services:
             $posX:  null
             $posY:  null
             $dataCollectionFactory: "@expansion.gui.gridbuilder.datacollection.array"
-        tags:
-            - {name: expansion.plugin, data_provider: expansion.user_group}
 
     eXpansion\Framework\Core\Plugins\Gui\WindowHelpDetailsFactory:
         class: 'eXpansion\Framework\Core\Plugins\Gui\WindowHelpDetailsFactory'
@@ -70,5 +68,3 @@ services:
             $sizeY: 90
             $posX: null
             $posY: null
-        tags:
-            - {name: expansion.plugin, data_provider: expansion.user_group}

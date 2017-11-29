@@ -14,7 +14,21 @@ class Window extends Widget implements Container
     /** @var Control  */
     protected $closeButton;
 
+    /**
+     * Window constructor.
+     *
+     * @param ManialinkFactoryInterface $manialinkFactory
+     * @param Group $group
+     * @param Translations $translationHelper
+     * @param WindowFrameFactory $windowFrameFactory
+     * @param int $name
+     * @param float|null $sizeX
+     * @param null $sizeY
+     * @param null $posX
+     * @param null $posY
+     */
     public function __construct(
+        ManialinkFactoryInterface $manialinkFactory,
         Group $group,
         Translations $translationHelper,
         WindowFrameFactory $windowFrameFactory,
@@ -24,7 +38,7 @@ class Window extends Widget implements Container
         $posX = null,
         $posY = null
     ) {
-        parent::__construct($group, $translationHelper, $name, $sizeX, $sizeY, $posX, $posY);
+        parent::__construct($manialinkFactory, $group, $translationHelper, $name, $sizeX, $sizeY, $posX, $posY);
 
         $this->translationHelper = $translationHelper;
 
@@ -40,10 +54,5 @@ class Window extends Widget implements Container
     public function setCloseAction($actionId)
     {
         $this->closeButton->addDataAttribute('action', $actionId);
-    }
-
-    public function getXml()
-    {
-        return parent::getXml();
     }
 }

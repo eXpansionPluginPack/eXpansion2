@@ -11,6 +11,7 @@ namespace Tests\eXpansion\Framework\Core\Model\Gui;
 use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Model\Gui\Action;
 use eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactory;
+use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryInterface;
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
 use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
@@ -48,7 +49,10 @@ class WindowTest extends TestCore
 
         $this->mockWindowsFrameFactory->method('build')->willReturn(Quad::create());
 
+        $factoryMock = $this->getMockBuilder(ManialinkFactoryInterface::class)->getMock();
+
         $this->window = new Window(
+            $factoryMock,
             $this->mockPlayerGroup,
             $this->mockTranslationHelper,
             $this->mockWindowsFrameFactory,

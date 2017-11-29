@@ -101,21 +101,6 @@ class ManialinkFactoryTest extends TestCore
         $mlFactory->destroy($group);
     }
 
-    public function testGroupDestory()
-    {
-        $group = new Group('test1', $this->dispatcherMock);
-        $mlFactory = $this->getManialinkFactory();
-        $mlFactory->onExpansionGroupDestroy($group, 'test1');
-    }
-
-    public function testEmptyMethods()
-    {
-        $group = new Group('test1', $this->dispatcherMock);
-        $mlFactory = $this->getManialinkFactory();
-
-        $mlFactory->onExpansionGroupAddUser($group, 'test1');
-        $mlFactory->onExpansionGroupRemoveUser($group, 'test1');
-    }
 
     protected function getManialinkFactory()
     {

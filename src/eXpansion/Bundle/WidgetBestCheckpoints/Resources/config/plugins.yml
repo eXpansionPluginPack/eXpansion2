@@ -17,5 +17,3 @@ services:
                 $posY: 85
                 $sizeX: null
                 $sizeY: null
-            tags:
-                - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}

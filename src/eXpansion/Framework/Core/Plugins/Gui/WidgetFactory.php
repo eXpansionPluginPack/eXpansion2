@@ -70,6 +70,7 @@ class WidgetFactory extends ManialinkFactory
 
         $className = $this->className;
         $manialink = new $className(
+            $this,
             $group,
             $this->translationsHelper,
             $this->name,

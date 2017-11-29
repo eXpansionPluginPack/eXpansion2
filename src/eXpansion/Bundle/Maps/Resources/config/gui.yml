@@ -84,8 +84,6 @@ services:
             $posX:  null
             $posY:  null
             $dataCollectionFactory: '@expansion.gui.gridbuilder.datacollection.array'
-        tags:
-            - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}
 
     expansion.bundle.maps.gui.window.jukebox_factory:
         class: eXpansion\Bundle\Maps\Plugins\Gui\JukeboxWindowFactory
@@ -96,8 +94,6 @@ services:
             $posX:  null
             $posY:  null
             $dataCollectionFactory: '@expansion.gui.gridbuilder.datacollection.array'
-        tags:
-            - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}
 
     expansion.bundle.maps.gui.window.mania_exchange_window_factory:
         class: eXpansion\Bundle\Maps\Plugins\Gui\ManiaExchangeWindowFactory
@@ -115,6 +111,4 @@ services:
             $mapStylesSm: '%mania_exchange_enumeration.map_styles_sm%'
             $difficulties: '%mania_exchange_enumeration.difficulties%'
             $operator: '%mania_exchange_enumeration.operators%'
-        tags:
-            - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}
 

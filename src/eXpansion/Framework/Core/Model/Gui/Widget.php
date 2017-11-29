@@ -15,7 +15,6 @@ use FML\Types\Renderable;
 
 class Widget extends Manialink implements Container
 {
-
     /** @var  string */
     protected $scriptData;
 
@@ -40,7 +39,20 @@ class Widget extends Manialink implements Container
     /** @var array[] */
     protected $cachedMessages = [];
 
+    /**
+     * Widget constructor.
+     *
+     * @param ManialinkFactoryInterface $manialinkFactory
+     * @param Group $group
+     * @param Translations $translationHelper
+     * @param int $name
+     * @param int $sizeX
+     * @param float|null $sizeY
+     * @param null $posX
+     * @param null $posY
+     */
     public function __construct(
+        ManialinkFactoryInterface $manialinkFactory,
         Group $group,
         Translations $translationHelper,
         $name,
@@ -49,7 +61,7 @@ class Widget extends Manialink implements Container
         $posX = null,
         $posY = null
     ) {
-        parent::__construct($group, $name, $sizeX, $sizeY, $posX, $posY);
+        parent::__construct($manialinkFactory, $group, $name, $sizeX, $sizeY, $posX, $posY);
 
         $this->translationHelper = $translationHelper;
 

@@ -18,8 +18,6 @@ services:
             $sizeY: 0
             $posX:  -150
             $posY:  85
-        tags:
-            - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}
 
     eXpansion\Bundle\Menu\Plugins\Gui\MenuContentFactory:
         class: eXpansion\Bundle\Menu\Plugins\Gui\MenuContentFactory
@@ -30,5 +28,3 @@ services:
               $posX:  null
               $posY:  null
               $maniaScriptFactory: "@expansion.framework.core.gui.scripts.menu"
-        tags:
-            - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}

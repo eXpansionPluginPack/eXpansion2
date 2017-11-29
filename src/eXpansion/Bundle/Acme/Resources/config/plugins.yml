@@ -24,8 +24,6 @@ services:
                 $name:  "test window"
                 $sizeX:  180
                 $sizeY:  90
-            tags:
-                - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}
 
     eXpansion\Bundle\Acme\Plugins\Gui\MemoryWidgetFactory:
             class: 'eXpansion\Bundle\Acme\Plugins\Gui\MemoryWidgetFactory'
@@ -35,5 +33,3 @@ services:
                 $posY: -55
                 $sizeX: null
                 $sizeY: null
-            tags:
-                - {name: 'expansion.plugin', data_provider: 'expansion.user_group'}
