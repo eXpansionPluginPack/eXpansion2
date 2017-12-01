@@ -91,9 +91,9 @@ class AdminGroups
     }
 
     /**
-     * Checks if a login or player has a certain permission or not.
+     * Checks if group, a login or a player has a certain permission or not.
      *
-     * @param string|Group|Player $login Login of the player to check for permission.
+     * @param string|Group|Player $recipient
      * @param string $permission The permission to check for.
      *
      * @return bool
@@ -106,7 +106,6 @@ class AdminGroups
             foreach ($recipient->getLogins() as $login) {
                 if ($this->hasLoginPermission($login, $permission) === false) {
                     $check = false;
-                    echo "$login false";
                 }
             }
 

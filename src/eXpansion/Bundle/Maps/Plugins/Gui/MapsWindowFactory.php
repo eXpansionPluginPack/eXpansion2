@@ -167,7 +167,7 @@ class MapsWindowFactory extends GridWindowFactory
             )->addActionColumn('wish', 'expansion_maps.gui.window.column.wish', 1,
                 [$this, 'callbackWish'], $queueButton);
 
-        if ($this->adminGroups->hasPermission($manialink->getUserGroup()->getLogins()[0], "admin")) {
+        if ($this->adminGroups->hasPermission($manialink->getUserGroup(), "admin")) {
             $gridBuilder->addActionColumn('index', 'expansion_maps.gui.window.column.remove',
                 1, [$this, 'callbackRemove'], $removeButton);
         }
