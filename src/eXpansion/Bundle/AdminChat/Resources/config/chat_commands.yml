@@ -13,6 +13,14 @@ services:
             $aliases:     ['res', 'restartmap']
             $functionName: "restartMap"
 
+    expansion.admin_chat.chat_command.cancel:
+        class: 'eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand'
+        arguments:
+            $command:      "cancel"
+            $permission:   "votes"
+            $aliases:      ['cancel']
+            $functionName: "cancelVote"
+
     expansion.admin_chat.chat_command.next:
         class: 'eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand'
         arguments:
@@ -20,7 +28,6 @@ services:
             $permission:   "next"
             $aliases:      ['skip', 'nextmap']
             $functionName: "nextMap"
-
 
     expansion.admin_chat.chat_command.set_server_name:
         class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand

@@ -85,20 +85,19 @@ class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMap
     }
 
 
-    public function removeMap($login, $index)
+    public function removeMap($login, $uid)
     {
         if (!$this->adminGroups->hasPermission($login, 'maps')) {
             $this->chatNotification->sendMessage('expansion_maps.chat.nopermission', $login);
         }
-        if ($index == "this") {
+
+        if ($uid == "this") {
             $map = $this->mapStorage->getCurrentMap();
         } else {
-            if (is_numeric($index)) {
-                $map = $this->mapStorage->getMapByIndex($index);
+            if (is_numeric($uid)) {
+                $map = $this->mapStorage->getMapByIndex($uid);
             } else {
-                $this->chatNotification->sendMessage('expansion_maps.chat.nopermission', $login);
-
-                return;
+                $map = $this->mapStorage->getMap($uid);
             }
         }
 
