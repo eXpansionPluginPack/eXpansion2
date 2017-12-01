@@ -67,7 +67,7 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
             <<<EOL
     <ui_properties>
  		<!-- The map name and author displayed in the top right of the screen when viewing the scores table -->
- 		<map_info visible="false" pos="-160. 80. 150." />
+ 		<map_info visible="true" pos="-160. 80. 150." />
  
  		<!-- Information about live envent displayed in the top right of the screen -->
  		<live_info visible="false" pos="-159. 84. 5." />

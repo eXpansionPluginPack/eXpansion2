@@ -16,7 +16,7 @@ interface ListenerInterfaceMpScriptPodium
      * Callback sent when the "onPodiumStart" section start.
      *
      * @param int     $time      Server time when the callback was sent
-     * @return mixed
+     * @return void
      */
     public function onPodiumStart($time);
 
@@ -25,7 +25,7 @@ interface ListenerInterfaceMpScriptPodium
      *
      * @param int     $time      Server time when the callback was sent
      *
-     * @return mixed
+     * @return void
      */
     public function onPodiumEnd($time );
 

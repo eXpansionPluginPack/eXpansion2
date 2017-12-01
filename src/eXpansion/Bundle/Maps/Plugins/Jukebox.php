@@ -140,27 +140,38 @@ class Jukebox implements ListenerInterfaceMpScriptPodium, ListenerInterfaceMpLeg
         }
     }
 
-    public function add($login, $index)
+    /**
+     * @param $login
+     * @param $uid
+
+     */
+    public function add($login, $uid)
     {
-        if (is_numeric($index)) {
-            $map = $this->mapStorage->getMapByIndex($index - 1);
-            if ($map) {
-                if ($this->jukeboxService->addMap($map, $login)) {
-                    $player = $this->playerStorage->getPlayerInfo($login);
-                    $length = count($this->jukeboxService->getMapQueue());
-                    $this->chatNotification->sendMessage('expansion_jukebox.chat.addmap', null, [
-                        "%mapname%" => $map->name,
-                        "%nickname%" => $player->getNickName(),
-                        "%length%" => $length,
-                    ]);
+        if (is_numeric($uid)) {
+            $map = $this->mapStorage->getMapByIndex($uid - 1);
+        } else {
+            if ($uid == "this") {
+                $map = $this->mapStorage->getCurrentMap();
+            } else {
+                $map = $this->mapStorage->getMap($uid);
+            }
+        }
+        if ($map) {
+            if ($this->jukeboxService->addMap($map, $login)) {
+                $player = $this->playerStorage->getPlayerInfo($login);
+                $length = count($this->jukeboxService->getMapQueue());
+                $this->chatNotification->sendMessage('expansion_jukebox.chat.addmap', null, [
+                    "%mapname%" => $map->name,
+                    "%nickname%" => $player->getNickName(),
+                    "%length%" => $length,
+                ]);
 
-                    return;
-                } else {
-                    $this->chatNotification->sendMessage('expansion_jukebox.chat.noadd', $login,
-                        ["%mapname%" => $map->name]);
+                return;
+            } else {
+                $this->chatNotification->sendMessage('expansion_jukebox.chat.noadd', $login,
+                    ["%mapname%" => $map->name]);
 
-                    return;
-                }
+                return;
             }
         }
         $this->chatNotification->sendMessage('expansion_jukebox.chat.nomap', $login);
@@ -192,14 +203,18 @@ class Jukebox implements ListenerInterfaceMpScriptPodium, ListenerInterfaceMpLeg
     /**
      * @param Map $map
      *
-     * @return mixed
+     * @return void
      */
     public function onEndMap(Map $map)
     {
         $jbmap = $this->jukeboxService->getFirst();
         if ($jbmap) {
-            $this->connetion->setNextMapIdent($jbmap->getMap()->uId);
-            $this->jukeboxService->removeMap($jbmap->getMap(), null, true);
+            try {
+                $this->connetion->chooseNextMap($jbmap->getMap()->fileName);
+                $this->jukeboxService->removeMap($jbmap->getMap(), null, true);
+            } catch (\Exception $e) {
+                $this->jukeboxService->removeMap($jbmap->getMap(), null, true);
+            }
         }
     }
 
