@@ -102,7 +102,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                     }                    
                 } else {
                     if (_Score < BestCheckpoints[_Index]) {                    
-                       Bg.BgColor = TextLib::ToColor("3af");
+                       Bg.BgColor = TextLib::ToColor("00f");
                        Color = "\$fff";
                     } else {
                        Bg.BgColor = TextLib::ToColor("f00");
