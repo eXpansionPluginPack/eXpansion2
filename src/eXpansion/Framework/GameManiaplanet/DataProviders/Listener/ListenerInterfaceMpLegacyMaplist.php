@@ -1,8 +1,8 @@
 <?php
 
-namespace eXpansion\Framework\Core\DataProviders\Listener;
+namespace eXpansion\Framework\GameManiaplanet\DataProviders\Listener;
 
-use eXpansion\Framework\Core\DataProviders\PlayerDataProvider;
+use eXpansion\Framework\GameManiaplanet\DataProviders\PlayerDataProvider;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use Maniaplanet\DedicatedServer\Structures\Map;
 

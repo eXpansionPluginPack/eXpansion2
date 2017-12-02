@@ -18,7 +18,7 @@ interface ListenerInterfaceMpScriptMatch
      * @param int $count Each time this section is played, this number is incremented by one
      * @param int $time  Server time when the callback was sent
      *
-     * @return mixed
+     * @return void
      */
     public function onStartMatchStart($count, $time);
 
@@ -28,7 +28,7 @@ interface ListenerInterfaceMpScriptMatch
      * @param int $count Each time this section is played, this number is incremented by one
      * @param int $time  Server time when the callback was sent
      *
-     * @return mixed
+     * @return void
      */
     public function onStartMatchEnd($count, $time);
 
@@ -38,7 +38,7 @@ interface ListenerInterfaceMpScriptMatch
      * @param int $count Each time this section is played, this number is incremented by one
      * @param int $time  Server time when the callback was sent
      *
-     * @return mixed
+     * @return void
      */
     public function onEndMatchStart($count, $time);
 
@@ -48,7 +48,7 @@ interface ListenerInterfaceMpScriptMatch
      * @param int $count Each time this section is played, this number is incremented by one
      * @param int $time  Server time when the callback was sent
      *
-     * @return mixed
+     * @return void
      */
     public function onEndMatchEnd($count, $time);
 
@@ -58,7 +58,7 @@ interface ListenerInterfaceMpScriptMatch
      * @param int $count Each time this section is played, this number is incremented by one
      * @param int $time  Server time when the callback was sent
      *
-     * @return mixed
+     * @return void
      */
     public function onStartTurnStart($count, $time);
 
@@ -68,7 +68,7 @@ interface ListenerInterfaceMpScriptMatch
      * @param int $count Each time this section is played, this number is incremented by one
      * @param int $time  Server time when the callback was sent
      *
-     * @return mixed
+     * @return void
      */
     public function onStartTurnEnd($count, $time);
 
@@ -78,7 +78,7 @@ interface ListenerInterfaceMpScriptMatch
      * @param int $count Each time this section is played, this number is incremented by one
      * @param int $time  Server time when the callback was sent
      *
-     * @return mixed
+     * @return void
      */
     public function onEndTurnStart($count, $time);
 
@@ -88,7 +88,7 @@ interface ListenerInterfaceMpScriptMatch
      * @param int $count Each time this section is played, this number is incremented by one
      * @param int $time  Server time when the callback was sent
      *
-     * @return mixed
+     * @return void
      */
     public function onEndTurnEnd($count, $time);
 
@@ -98,7 +98,7 @@ interface ListenerInterfaceMpScriptMatch
      * @param int $count Each time this section is played, this number is incremented by one
      * @param int $time  Server time when the callback was sent
      *
-     * @return mixed
+     * @return void
      */
     public function onStartRoundStart($count, $time);
 
@@ -108,7 +108,7 @@ interface ListenerInterfaceMpScriptMatch
      * @param int $count Each time this section is played, this number is incremented by one
      * @param int $time  Server time when the callback was sent
      *
-     * @return mixed
+     * @return void
      */
     public function onStartRoundEnd($count, $time);
 
@@ -118,7 +118,7 @@ interface ListenerInterfaceMpScriptMatch
      * @param int $count Each time this section is played, this number is incremented by one
      * @param int $time  Server time when the callback was sent
      *
-     * @return mixed
+     * @return void
      */
     public function onEndRoundStart($count, $time);
 
@@ -128,7 +128,7 @@ interface ListenerInterfaceMpScriptMatch
      * @param int $count Each time this section is played, this number is incremented by one
      * @param int $time  Server time when the callback was sent
      *
-     * @return mixed
+     * @return void
      */
     public function onEndRoundEnd($count, $time);
 

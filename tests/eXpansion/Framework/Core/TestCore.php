@@ -2,8 +2,8 @@
 
 namespace Tests\eXpansion\Framework\Core;
 
-use eXpansion\Framework\Core\DataProviders\ChatDataProvider;
-use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
+use eXpansion\Framework\GameManiaplanet\DataProviders\ChatDataProvider;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
 use eXpansion\Framework\Core\Helpers\ChatOutput;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;

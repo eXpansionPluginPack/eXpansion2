@@ -12,7 +12,7 @@ class AppKernel extends Kernel
 
         /* Register eXpansion Base Bundles */
         $bundles[] = new \eXpansion\Bundle\CustomChat\CustomChatBundle();
-        $bundles[] = new eXpansion\Bundle\ImmersiveWindows\ImmersiveWindowsBundle();
+        $bundles[] = new \eXpansion\Bundle\ImmersiveWindows\ImmersiveWindowsBundle();
         $bundles[] = new \eXpansion\Bundle\CustomUi\CustomUiBundle();
         $bundles[] = new \eXpansion\Bundle\AdminChat\AdminChatBundle();
 
@@ -48,9 +48,9 @@ class AppKernel extends Kernel
 
             // And add eXpansion core.
             new \eXpansion\Framework\Core\eXpansionCore(),
-            new \eXpansion\Framework\AdminGroups\eXpansionAdminGroupsBundle(),
-            new \eXpansion\Framework\GameTrackmania\eXpansionGameTrackmaniaBundle(),
             new \eXpansion\Framework\GameManiaplanet\eXpansionGameManiaplanetBundle(),
+            new \eXpansion\Framework\GameTrackmania\eXpansionGameTrackmaniaBundle(),
+            new \eXpansion\Framework\AdminGroups\eXpansionAdminGroupsBundle(),
             new \eXpansion\Framework\Gui\eXpansionGuiBundle(),
             new \eXpansion\Framework\PlayersBundle\eXpansionFrameworkPlayersBundle(),
         ];

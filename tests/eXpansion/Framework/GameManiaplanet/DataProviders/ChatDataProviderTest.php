@@ -1,9 +1,10 @@
 <?php
 
 
-namespace Tests\eXpansion\Framework\Core\DataProviders;
+namespace Tests\eXpansion\Framework\GameManiaplanet\DataProviders;
 
-use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
+use eXpansion\Framework\GameManiaplanet\DataProviders\ChatDataProvider;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Tests\eXpansion\Framework\Core\TestCore;

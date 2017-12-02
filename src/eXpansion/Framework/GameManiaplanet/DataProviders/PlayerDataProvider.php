@@ -1,7 +1,8 @@
 <?php
 
-namespace eXpansion\Framework\Core\DataProviders;
+namespace eXpansion\Framework\GameManiaplanet\DataProviders;
 
+use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
 use eXpansion\Framework\Core\Services\Application;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;

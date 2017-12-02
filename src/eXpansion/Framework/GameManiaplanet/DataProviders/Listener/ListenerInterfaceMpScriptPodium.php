@@ -2,10 +2,8 @@
 
 namespace eXpansion\Framework\GameManiaplanet\DataProviders\Listener;
 
-use Maniaplanet\DedicatedServer\Structures\Map;
-
 /**
- * Class RaceDataListenerInterface
+ * Class PodiumDataListenerInterface
  *
  * @package eXpansion\Framework\GameManiaplanet\DataProviders\Listener;
  * @author  oliver de Cramer <oliverde8@gmail.com>
@@ -15,7 +13,7 @@ interface ListenerInterfaceMpScriptPodium
     /**
      * Callback sent when the "onPodiumStart" section start.
      *
-     * @param int     $time      Server time when the callback was sent
+     * @param int $time Server time when the callback was sent
      * @return void
      */
     public function onPodiumStart($time);
@@ -23,11 +21,11 @@ interface ListenerInterfaceMpScriptPodium
     /**
      * Callback sent when the "onPodiumEnd" section end.
      *
-     * @param int     $time      Server time when the callback was sent
+     * @param int $time Server time when the callback was sent
      *
      * @return void
      */
-    public function onPodiumEnd($time );
+    public function onPodiumEnd($time);
 
 
 }

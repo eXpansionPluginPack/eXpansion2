@@ -3,17 +3,15 @@
 
 namespace Tests\eXpansion\Framework\Core\Services;
 
-use eXpansion\Framework\Core\DataProviders\ChatDataProvider;
-use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
-use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
-use eXpansion\Framework\Core\DataProviders\MapDataProvider;
-use eXpansion\Framework\Core\DataProviders\PlayerDataProvider;
 use eXpansion\Framework\Core\Exceptions\DataProvider\UncompatibleException;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Services\DataProviderManager;
-
 use eXpansion\Framework\Core\Services\PluginManager;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
+use eXpansion\Framework\GameManiaplanet\DataProviders\ChatDataProvider;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
+use eXpansion\Framework\GameManiaplanet\DataProviders\MapDataProvider;
 use Maniaplanet\DedicatedServer\Structures\GameInfos;
 use Maniaplanet\DedicatedServer\Structures\PlayerDetailedInfo;
 use Maniaplanet\DedicatedServer\Structures\PlayerInfo;
@@ -183,11 +181,11 @@ class DataProviderManagerTest extends TestCore
         $title,
         $mode = DataProviderManager::COMPATIBLE_ALL,
         $script = DataProviderManager::COMPATIBLE_ALL
-    ){
+    ) {
         return [
             'title' => $title,
             'mode' => $mode,
-            'script' => $script
+            'script' => $script,
         ];
     }
 

@@ -2,7 +2,7 @@
 
 namespace eXpansion\Framework\Core\Plugins;
 
-use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyScript;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyScript;
 use eXpansion\Framework\Core\Services\Application\Dispatcher;
 
 /**

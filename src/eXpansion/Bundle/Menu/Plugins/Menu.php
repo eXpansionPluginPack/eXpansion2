@@ -6,7 +6,7 @@ namespace eXpansion\Bundle\Menu\Plugins;
 use eXpansion\Bundle\Menu\Plugins\Gui\MenuContentFactory;
 use eXpansion\Bundle\Menu\Plugins\Gui\MenuFactory;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
-use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use Maniaplanet\DedicatedServer\Structures\Map;
 

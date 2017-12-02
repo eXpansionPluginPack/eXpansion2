@@ -6,16 +6,16 @@
  * Time: 13:06
  */
 
-namespace eXpansion\Framework\Core\DataProviders\Listener;
+namespace eXpansion\Framework\GameManiaplanet\DataProviders\Listener;
 
-use eXpansion\Framework\Core\DataProviders\ChatDataProvider;
+use eXpansion\Framework\GameManiaplanet\DataProviders\ChatDataProvider;
 use eXpansion\Framework\Core\Storage\Data\Player;
 
 /**
  * Interface ChatDataListenerInterface for plugins using the ChatDataProvider data provider. *
  * @see ChatDataProvider
  *
- * @package eXpansion\Framework\Core\DataProviders\Listener
+ * @package eXpansion\Framework\GameManiaplanet\DataProviders\Listener
  */
 interface ListenerInterfaceMpLegacyChat
 {

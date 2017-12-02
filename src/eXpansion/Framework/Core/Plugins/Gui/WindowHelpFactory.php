@@ -3,7 +3,7 @@
 namespace eXpansion\Framework\Core\Plugins\Gui;
 
 use eXpansion\Framework\AdminGroups\Model\AbstractAdminChatCommand;
-use eXpansion\Framework\Core\DataProviders\ChatCommandDataProvider;
+use eXpansion\Framework\GameManiaplanet\DataProviders\ChatCommandDataProvider;
 use eXpansion\Framework\Core\Model\ChatCommand\AbstractChatCommand;
 use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionFactory;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilder;

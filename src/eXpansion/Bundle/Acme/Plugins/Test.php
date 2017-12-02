@@ -3,7 +3,7 @@
 namespace eXpansion\Bundle\Acme\Plugins;
 
 use eXpansion\Bundle\Acme\Plugins\Gui\MemoryWidgetFactory;
-use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;

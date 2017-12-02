@@ -3,7 +3,6 @@
 namespace eXpansion\Framework\GameManiaplanet\DataProviders;
 
 use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
-use eXpansion\Framework\Core\Storage\MapStorage;
 
 /**
  * Class MatchDataProvider
@@ -11,7 +10,7 @@ use eXpansion\Framework\Core\Storage\MapStorage;
  * @package eXpansion\Framework\GameManiaplanet\DataProviders;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-class MatchDataProvider extends AbstractDataProvider
+class ScriptMatchDataProvider extends AbstractDataProvider
 {
 
     /**
@@ -33,6 +32,7 @@ class MatchDataProvider extends AbstractDataProvider
     {
         $this->dispatch('onStartMatchEnd', [$params['count'], $params['time']]);
     }
+
     /**
      * Callback sent when the "StartMatch" section start.
      * XMLRPC Api Version >=2.0.0:
@@ -72,6 +72,7 @@ class MatchDataProvider extends AbstractDataProvider
     {
         $this->dispatch('onStartRoundEnd', [$params['count'], $params['time']]);
     }
+
     /**
      * Callback sent when the "StartRound" section start.
      * XMLRPC Api Version >=2.0.0:

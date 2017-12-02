@@ -7,7 +7,7 @@ use eXpansion\Bundle\MxKarma\DataProviders\Listeners\ListenerInterfaceMxKarma;
 use eXpansion\Bundle\MxKarma\Entity\MxRating;
 use eXpansion\Bundle\MxKarma\Entity\MxVote;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
-use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Application\Dispatcher;

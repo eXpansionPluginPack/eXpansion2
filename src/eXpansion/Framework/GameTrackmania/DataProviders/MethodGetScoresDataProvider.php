@@ -3,9 +3,10 @@
 namespace eXpansion\Framework\GameTrackmania\DataProviders;
 
 use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
-use eXpansion\Framework\Core\DataProviders\MethodScriptDataProviderInterface;
 use eXpansion\Framework\Core\ScriptMethods\AbstractScriptMethod;
+use eXpansion\Framework\Core\DataProviders\MethodScriptDataProviderInterface;
 use Maniaplanet\DedicatedServer\Connection;
+
 
 /**
  * Class MethodGetStoresDataProvider

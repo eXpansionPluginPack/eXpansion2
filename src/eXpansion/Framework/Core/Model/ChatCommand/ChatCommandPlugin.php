@@ -9,7 +9,7 @@ namespace eXpansion\Framework\Core\Model\ChatCommand;
  * @package eXpansion\Framework\Core\Model\ChatCommand;
  * @author oliver de Cramer <oliverde8@gmail.com>
  */
-class ChatCommandPlugin implements \eXpansion\Framework\Core\DataProviders\Listener\ChatCommandInterface
+class ChatCommandPlugin implements \eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ChatCommandInterface
 {
 
     protected $chatCommands;
