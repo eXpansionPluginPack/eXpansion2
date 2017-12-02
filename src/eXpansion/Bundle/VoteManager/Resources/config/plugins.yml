@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    eXpansion\Bundle\VoteManager\Plugins\VoteManager:
+        class: eXpansion\Bundle\VoteManager\Plugins\VoteManager
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'mp.legacy.vote'}
+            - {name: 'expansion.plugin', data_provider: 'exp.application'}
