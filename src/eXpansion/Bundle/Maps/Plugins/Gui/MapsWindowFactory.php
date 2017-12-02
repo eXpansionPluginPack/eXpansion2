@@ -88,12 +88,12 @@ class MapsWindowFactory extends GridWindowFactory
 
     public function callbackRemove(ManialinkInterface $manialink, $login, $params, $args)
     {
-        $this->mapsPlugin->removeMap($login, ($args['index'] - 1));
+        $this->mapsPlugin->removeMap($login, $args['wish']->uId);
     }
 
     public function callbackWish(ManialinkInterface $manialink, $login, $params, $args)
     {
-        $this->jukeboxPlugin->add($login, $args['index']);
+        $this->jukeboxPlugin->add($login, $args['wish']->uId);
     }
 
     public function setMaps($maps)
@@ -111,7 +111,7 @@ class MapsWindowFactory extends GridWindowFactory
                 'name' => TMString::trimControls($map->name),
                 'author' => $map->author,
                 'time' => $this->timeFormatter->timeToText($map->goldTime, true),
-                'wish' => $map,
+                'wish' => $map
             ];
         }
 
@@ -167,7 +167,7 @@ class MapsWindowFactory extends GridWindowFactory
             )->addActionColumn('wish', 'expansion_maps.gui.window.column.wish', 1,
                 [$this, 'callbackWish'], $queueButton);
 
-        if ($this->adminGroups->hasPermission($manialink->getUserGroup()->getLogins()[0], "admin")) {
+        if ($this->adminGroups->hasPermission($manialink->getUserGroup(), "admin")) {
             $gridBuilder->addActionColumn('index', 'expansion_maps.gui.window.column.remove',
                 1, [$this, 'callbackRemove'], $removeButton);
         }

@@ -3,6 +3,10 @@ expansion_admin_chat:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}restarts the map!'
     description: 'Replay current map.'
 
+  cancel:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}cancels the vote!'
+    description: '{info} cancels the current progressing vote.'
+
   nextmap:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}skips the map!'
     description: '{info} Skip current map & go to the next map.'

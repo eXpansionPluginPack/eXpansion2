@@ -55,13 +55,14 @@ class JukeboxService
      * @param null $login
      * @param bool $force
      * @return bool
-     * @throws \Exception
      */
+
     public function addMap(Map $map, $login = null, $force = false)
     {
         $player = null;
         if (!$login) {
-            throw new \Exception("login is mandatory");
+
+            return false;
         }
         $player = $this->playerStorage->getPlayerInfo($login);
         $jbMap = new JukeboxMap($map, $player);
@@ -95,8 +96,7 @@ class JukeboxService
      * @param Map $map
      * @param $login
      * @param bool $force
-     * @return bool
-     * @throws \Exception
+     * @return false;
      */
     public function removeMap(Map $map, $login = null, $force = false)
     {
@@ -105,7 +105,8 @@ class JukeboxService
         }
 
         if (!$login) {
-            throw new \Exception("login is mandatory, when not forced.");
+
+            return false;
         }
         // no some restrictions for admin
         if ($this->adminGroups->hasPermission($login, "jukebox")) {
