@@ -4,8 +4,7 @@ namespace eXpansion\Framework\Core\Model\Gui\Factory;
 
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
-use eXpansion\Framework\Core\Model\Gui\WindowFrameFactoryInterface;
-use eXpansion\Framework\Gui\Components\uiButton;
+use eXpansion\Framework\Core\Model\Gui\Window;
 use FML\Controls\Control;
 use FML\Controls\Frame;
 use FML\Controls\Label;
@@ -25,9 +24,6 @@ class WindowFrameFactory implements WindowFrameFactoryInterface
     /** @var ManiaScriptFactory */
     protected $windowManiaScriptFactory;
 
-    /** @var ManialinkInterface */
-    protected $manialinkInterface;
-
     /**
      * WindowFrameFactory constructor.
      *
@@ -41,7 +37,7 @@ class WindowFrameFactory implements WindowFrameFactoryInterface
     /**
      * Build the window frame content.
      *
-     * @param ManiaLink $manialink
+     * @param Window $manialink
      * @param Frame|Container $mainFrame to build into
      * @param $name
      * @param float $sizeX Size of the inner frame to build the window frame around
@@ -49,7 +45,7 @@ class WindowFrameFactory implements WindowFrameFactoryInterface
      *
      * @return Control
      */
-    public function build(ManiaLink $manialink, Frame $mainFrame, $name, $sizeX, $sizeY)
+    public function build(Window $manialink, Frame $mainFrame, $name, $sizeX, $sizeY)
     {
         $titleHeight = 5.5;
         $closeButtonWidth = 9.5;
@@ -132,16 +128,8 @@ class WindowFrameFactory implements WindowFrameFactoryInterface
         $frame->addChild($body);
 
         // Add maniascript for window handling.
-        $manialink->addChild($this->windowManiaScriptFactory->createScript(['']));
+        $manialink->getFmlManialink()->addChild($this->windowManiaScriptFactory->createScript(['']));
 
         return $closeButton;
-    }
-
-    /**
-     * @param ManialinkInterface $manialinkInterface
-     */
-    public function setManialinkInterface(ManialinkInterface $manialinkInterface)
-    {
-        $this->manialinkInterface = $manialinkInterface;
     }
 }

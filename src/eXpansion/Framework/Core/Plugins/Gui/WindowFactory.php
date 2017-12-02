@@ -20,7 +20,7 @@ use FML\Controls\Control;
  * @package eXpansion\Framework\Core\Plugins\Gui
  * @author Oliver de Cramer
  */
-class WindowFactory extends WidgetFactory
+class WindowFactory extends FmlManialinkFactory
 {
 
     /** @var WindowFrameFactory */
@@ -53,6 +53,8 @@ class WindowFactory extends WidgetFactory
             $context
         );
 
+        $this->translationsHelper = $context->getTranslationsHelper();
+        $this->uiFactory = $context->getUiFactory();
         $this->windowFrameFactory = $context->getWindowFrameFactory();
     }
 

@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Core\Plugins\Gui;
 use eXpansion\Framework\Core\Helpers\Translations;
+use eXpansion\Framework\Core\Model\Gui\Factory\WidgetFrameFactoryInterface;
 use eXpansion\Framework\Core\Model\Gui\Manialink;
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
 use eXpansion\Framework\Core\Model\Gui\Widget;
@@ -18,13 +19,10 @@ use FML\Controls\Control;
  * @package eXpansion\Framework\Core\Plugins\Gui
  * @author Oliver de Cramer
  */
-class WidgetFactory extends ManialinkFactory
+class WidgetFactory extends FmlManialinkFactory
 {
-    /** @var Translations */
-    protected $translationsHelper;
-
-    /** @var \eXpansion\Framework\Gui\Ui\Factory  */
-    protected $uiFactory;
+    /** @var WidgetFrameFactoryInterface */
+    protected $widgetFrameFactory;
 
     /**
      * WidgetFactory constructor.
@@ -44,9 +42,6 @@ class WidgetFactory extends ManialinkFactory
         $posY,
         WidgetFactoryContext $context
     ) {
-        // Hack for FML to use default MP alignements.
-        Control::clearDefaultAlign();
-
         parent::__construct(
             $name,
             $sizeX,
@@ -58,6 +53,7 @@ class WidgetFactory extends ManialinkFactory
 
         $this->translationsHelper = $context->getTranslationsHelper();
         $this->uiFactory = $context->getUiFactory();
+        $this->widgetFrameFactory = $context->getWidgetFrameFactory();
     }
 
     /**
@@ -73,6 +69,7 @@ class WidgetFactory extends ManialinkFactory
             $this,
             $group,
             $this->translationsHelper,
+            $this->widgetFrameFactory,
             $this->name,
             $this->sizeX,
             $this->sizeY,

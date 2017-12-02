@@ -4,12 +4,11 @@
 namespace eXpansion\Framework\Core\Model\Gui;
 
 use eXpansion\Framework\Core\Helpers\Translations;
+use eXpansion\Framework\Core\Model\Gui\Factory\WidgetFrameFactoryInterface;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
-use eXpansion\Framework\Core\Plugins\GuiHandler;
 use eXpansion\Framework\Core\Plugins\GuiHandlerInterface;
 use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
 use \eXpansion\Framework\Gui\Ui\Factory as UiFactory;
-
 
 /**
  * Class WidgetFactoryContext
@@ -17,13 +16,11 @@ use \eXpansion\Framework\Gui\Ui\Factory as UiFactory;
  * @package eXpansion\Framework\Core\Model\Gui;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-class WidgetFactoryContext extends ManialinkFactoryContext
+class WidgetFactoryContext extends FmlManialinkFactoryContext
 {
-    /** @var Translations */
-    protected $translationsHelper;
 
-    /** @var UiFactory  */
-    protected $uiFactory;
+    /** @var WidgetFrameFactoryInterface */
+    protected $widgetFrameFactory;
 
     /**
      * WidgetFactoryContext constructor.
@@ -41,27 +38,19 @@ class WidgetFactoryContext extends ManialinkFactoryContext
         Factory $groupFactory,
         ActionFactory $actionFactory,
         Translations $translations,
-        UiFactory $uiFactory
+        UiFactory $uiFactory,
+        WidgetFrameFactoryInterface $widgetFrameFactory
     ) {
-        parent::__construct($className, $guiHandler, $groupFactory, $actionFactory);
+        parent::__construct($className, $guiHandler, $groupFactory, $actionFactory, $translations, $uiFactory);
 
-        $this->translationsHelper = $translations;
-        $this->uiFactory = $uiFactory;
+        $this->widgetFrameFactory = $widgetFrameFactory;
     }
 
     /**
-     * @return Translations
+     * @return WidgetFrameFactoryInterface
      */
-    public function getTranslationsHelper()
+    public function getWidgetFrameFactory(): WidgetFrameFactoryInterface
     {
-        return $this->translationsHelper;
-    }
-
-    /**
-     * @return UiFactory
-     */
-    public function getUiFactory()
-    {
-        return $this->uiFactory;
+        return $this->widgetFrameFactory;
     }
 }

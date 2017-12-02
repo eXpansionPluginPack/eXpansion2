@@ -8,10 +8,11 @@ use eXpansion\Bundle\Menu\Gui\MenuTabsFactory;
 use eXpansion\Bundle\Menu\Model\Menu\ItemInterface;
 use eXpansion\Bundle\Menu\Plugins\Gui\MenuContentFactory;
 use eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactory as OriginalWindowFrameFactory;
+use eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactoryInterface;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
 use eXpansion\Framework\Core\Model\Gui\Widget;
-use eXpansion\Framework\Core\Model\Gui\WindowFrameFactoryInterface;
+use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Gui\Components\uiButton;
 use eXpansion\Framework\Gui\Ui\Factory;
 use FML\Controls\Frame;
@@ -80,7 +81,7 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
     }
 
     /**
-     * @param ManiaLink|Widget $manialink
+     * @param ManialinkInterface $manialink
      * @param Frame $mainFrame
      * @param $name
      * @param float $sizeX
@@ -88,7 +89,7 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
      * @return uiButton|\FML\Controls\Control
      */
     public function build(
-        ManiaLink $manialink,
+        Window $manialink,
         Frame $mainFrame,
         $name,
         $sizeX,
@@ -105,7 +106,7 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
         // Creating the tabs.
         $mainFrame->addChild(
             $this->menuTabsFactory->createTabsMenu(
-                $this->manialinkInterface,
+                $manialink,
                 $tabsFrame,
                 $this->menuItemProvider->getRootItem(),
                 [$this, 'callbackItemClick'],
@@ -121,7 +122,6 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
         $closeButton->setId("uiCloseButton");
         $frame->addChild($closeButton);
 
-
         /*
          * Adding background frame
          */
@@ -136,7 +136,7 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
         $bgFrame->addChild($quad);
 
         $frame->addChild($bgFrame);
-        $manialink->addChild($this->maniaScriptFactory->createScript(['']));
+        $manialink->getFmlManialink()->addChild($this->maniaScriptFactory->createScript(['']));
 
         return $closeButton;
     }

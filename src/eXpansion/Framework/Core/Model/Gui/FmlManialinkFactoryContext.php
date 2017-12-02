@@ -1,29 +1,31 @@
 <?php
 
+
 namespace eXpansion\Framework\Core\Model\Gui;
 
 use eXpansion\Framework\Core\Helpers\Translations;
-use eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactory;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
-use eXpansion\Framework\Core\Plugins\GuiHandler;
 use eXpansion\Framework\Core\Plugins\GuiHandlerInterface;
 use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
-use \eXpansion\Framework\Gui\Ui\Factory as UiFactory;
+use eXpansion\Framework\Gui\Ui\Factory as UiFactory;
+
 
 /**
- * Class WindowFactoryContext
+ * Class FmlManialinkFactoryContext
  *
  * @package eXpansion\Framework\Core\Model\Gui;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-class WindowFactoryContext extends FmlManialinkFactoryContext
+class FmlManialinkFactoryContext extends ManialinkFactoryContext
 {
+    /** @var Translations */
+    protected $translationsHelper;
 
-    /** @var  WindowFrameFactory */
-    protected $windowFrameFactory;
+    /** @var UiFactory  */
+    protected $uiFactory;
 
     /**
-     * WindowFactoryContext constructor.
+     * WidgetFactoryContext constructor.
      *
      * @param $className
      * @param GuiHandlerInterface $guiHandler
@@ -31,7 +33,6 @@ class WindowFactoryContext extends FmlManialinkFactoryContext
      * @param ActionFactory $actionFactory
      * @param Translations $translations
      * @param UiFactory $uiFactory
-     * @param WindowFrameFactory $windowFrameFactory
      */
     public function __construct(
         $className,
@@ -39,20 +40,28 @@ class WindowFactoryContext extends FmlManialinkFactoryContext
         Factory $groupFactory,
         ActionFactory $actionFactory,
         Translations $translations,
-        UiFactory $uiFactory,
-        WindowFrameFactory $windowFrameFactory
+        UiFactory $uiFactory
     ) {
+        parent::__construct($className, $guiHandler, $groupFactory, $actionFactory);
 
-        parent::__construct($className, $guiHandler, $groupFactory, $actionFactory, $translations, $uiFactory);
+        $this->translationsHelper = $translations;
+        $this->uiFactory = $uiFactory;
+    }
 
-        $this->windowFrameFactory = $windowFrameFactory;
+
+    /**
+     * @return Translations
+     */
+    public function getTranslationsHelper()
+    {
+        return $this->translationsHelper;
     }
 
     /**
-     * @return WindowFrameFactory
+     * @return UiFactory
      */
-    public function getWindowFrameFactory()
+    public function getUiFactory()
     {
-        return $this->windowFrameFactory;
+        return $this->uiFactory;
     }
 }
