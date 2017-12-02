@@ -132,9 +132,9 @@ class MapTableMap extends TableMap
     const COL_COPPERPRICE = 'map.copperPrice';
 
     /**
-     * the column name for the lapRave field
+     * the column name for the lapRace field
      */
-    const COL_LAPRAVE = 'map.lapRave';
+    const COL_LAPRACE = 'map.lapRace';
 
     /**
      * the column name for the nbLaps field
@@ -178,10 +178,10 @@ class MapTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Mapuid', 'Name', 'Filename', 'Author', 'Environment', 'Mood', 'Bronzetime', 'Silvertime', 'Goldtime', 'Authortime', 'Copperprice', 'Laprave', 'Nblaps', 'Npcheckpoints', 'Maptype', 'Mapstyle', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'mapuid', 'name', 'filename', 'author', 'environment', 'mood', 'bronzetime', 'silvertime', 'goldtime', 'authortime', 'copperprice', 'laprave', 'nblaps', 'npcheckpoints', 'maptype', 'mapstyle', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(MapTableMap::COL_ID, MapTableMap::COL_MAPUID, MapTableMap::COL_NAME, MapTableMap::COL_FILENAME, MapTableMap::COL_AUTHOR, MapTableMap::COL_ENVIRONMENT, MapTableMap::COL_MOOD, MapTableMap::COL_BRONZETIME, MapTableMap::COL_SILVERTIME, MapTableMap::COL_GOLDTIME, MapTableMap::COL_AUTHORTIME, MapTableMap::COL_COPPERPRICE, MapTableMap::COL_LAPRAVE, MapTableMap::COL_NBLAPS, MapTableMap::COL_NPCHECKPOINTS, MapTableMap::COL_MAPTYPE, MapTableMap::COL_MAPSTYLE, MapTableMap::COL_CREATED_AT, MapTableMap::COL_UPDATED_AT, ),
-        self::TYPE_FIELDNAME     => array('id', 'mapUid', 'name', 'fileName', 'author', 'environment', 'mood', 'bronzeTime', 'silverTime', 'goldTime', 'authorTime', 'copperPrice', 'lapRave', 'nbLaps', 'npCheckpoints', 'mapType', 'mapStyle', 'created_at', 'updated_at', ),
+        self::TYPE_PHPNAME       => array('Id', 'Mapuid', 'Name', 'Filename', 'Author', 'Environment', 'Mood', 'Bronzetime', 'Silvertime', 'Goldtime', 'Authortime', 'Copperprice', 'Laprace', 'Nblaps', 'Npcheckpoints', 'Maptype', 'Mapstyle', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'mapuid', 'name', 'filename', 'author', 'environment', 'mood', 'bronzetime', 'silvertime', 'goldtime', 'authortime', 'copperprice', 'laprace', 'nblaps', 'npcheckpoints', 'maptype', 'mapstyle', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(MapTableMap::COL_ID, MapTableMap::COL_MAPUID, MapTableMap::COL_NAME, MapTableMap::COL_FILENAME, MapTableMap::COL_AUTHOR, MapTableMap::COL_ENVIRONMENT, MapTableMap::COL_MOOD, MapTableMap::COL_BRONZETIME, MapTableMap::COL_SILVERTIME, MapTableMap::COL_GOLDTIME, MapTableMap::COL_AUTHORTIME, MapTableMap::COL_COPPERPRICE, MapTableMap::COL_LAPRACE, MapTableMap::COL_NBLAPS, MapTableMap::COL_NPCHECKPOINTS, MapTableMap::COL_MAPTYPE, MapTableMap::COL_MAPSTYLE, MapTableMap::COL_CREATED_AT, MapTableMap::COL_UPDATED_AT, ),
+        self::TYPE_FIELDNAME     => array('id', 'mapUid', 'name', 'fileName', 'author', 'environment', 'mood', 'bronzeTime', 'silverTime', 'goldTime', 'authorTime', 'copperPrice', 'lapRace', 'nbLaps', 'npCheckpoints', 'mapType', 'mapStyle', 'created_at', 'updated_at', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
     );
 
@@ -192,10 +192,10 @@ class MapTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Mapuid' => 1, 'Name' => 2, 'Filename' => 3, 'Author' => 4, 'Environment' => 5, 'Mood' => 6, 'Bronzetime' => 7, 'Silvertime' => 8, 'Goldtime' => 9, 'Authortime' => 10, 'Copperprice' => 11, 'Laprave' => 12, 'Nblaps' => 13, 'Npcheckpoints' => 14, 'Maptype' => 15, 'Mapstyle' => 16, 'CreatedAt' => 17, 'UpdatedAt' => 18, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'mapuid' => 1, 'name' => 2, 'filename' => 3, 'author' => 4, 'environment' => 5, 'mood' => 6, 'bronzetime' => 7, 'silvertime' => 8, 'goldtime' => 9, 'authortime' => 10, 'copperprice' => 11, 'laprave' => 12, 'nblaps' => 13, 'npcheckpoints' => 14, 'maptype' => 15, 'mapstyle' => 16, 'createdAt' => 17, 'updatedAt' => 18, ),
-        self::TYPE_COLNAME       => array(MapTableMap::COL_ID => 0, MapTableMap::COL_MAPUID => 1, MapTableMap::COL_NAME => 2, MapTableMap::COL_FILENAME => 3, MapTableMap::COL_AUTHOR => 4, MapTableMap::COL_ENVIRONMENT => 5, MapTableMap::COL_MOOD => 6, MapTableMap::COL_BRONZETIME => 7, MapTableMap::COL_SILVERTIME => 8, MapTableMap::COL_GOLDTIME => 9, MapTableMap::COL_AUTHORTIME => 10, MapTableMap::COL_COPPERPRICE => 11, MapTableMap::COL_LAPRAVE => 12, MapTableMap::COL_NBLAPS => 13, MapTableMap::COL_NPCHECKPOINTS => 14, MapTableMap::COL_MAPTYPE => 15, MapTableMap::COL_MAPSTYLE => 16, MapTableMap::COL_CREATED_AT => 17, MapTableMap::COL_UPDATED_AT => 18, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'mapUid' => 1, 'name' => 2, 'fileName' => 3, 'author' => 4, 'environment' => 5, 'mood' => 6, 'bronzeTime' => 7, 'silverTime' => 8, 'goldTime' => 9, 'authorTime' => 10, 'copperPrice' => 11, 'lapRave' => 12, 'nbLaps' => 13, 'npCheckpoints' => 14, 'mapType' => 15, 'mapStyle' => 16, 'created_at' => 17, 'updated_at' => 18, ),
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Mapuid' => 1, 'Name' => 2, 'Filename' => 3, 'Author' => 4, 'Environment' => 5, 'Mood' => 6, 'Bronzetime' => 7, 'Silvertime' => 8, 'Goldtime' => 9, 'Authortime' => 10, 'Copperprice' => 11, 'Laprace' => 12, 'Nblaps' => 13, 'Npcheckpoints' => 14, 'Maptype' => 15, 'Mapstyle' => 16, 'CreatedAt' => 17, 'UpdatedAt' => 18, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'mapuid' => 1, 'name' => 2, 'filename' => 3, 'author' => 4, 'environment' => 5, 'mood' => 6, 'bronzetime' => 7, 'silvertime' => 8, 'goldtime' => 9, 'authortime' => 10, 'copperprice' => 11, 'laprace' => 12, 'nblaps' => 13, 'npcheckpoints' => 14, 'maptype' => 15, 'mapstyle' => 16, 'createdAt' => 17, 'updatedAt' => 18, ),
+        self::TYPE_COLNAME       => array(MapTableMap::COL_ID => 0, MapTableMap::COL_MAPUID => 1, MapTableMap::COL_NAME => 2, MapTableMap::COL_FILENAME => 3, MapTableMap::COL_AUTHOR => 4, MapTableMap::COL_ENVIRONMENT => 5, MapTableMap::COL_MOOD => 6, MapTableMap::COL_BRONZETIME => 7, MapTableMap::COL_SILVERTIME => 8, MapTableMap::COL_GOLDTIME => 9, MapTableMap::COL_AUTHORTIME => 10, MapTableMap::COL_COPPERPRICE => 11, MapTableMap::COL_LAPRACE => 12, MapTableMap::COL_NBLAPS => 13, MapTableMap::COL_NPCHECKPOINTS => 14, MapTableMap::COL_MAPTYPE => 15, MapTableMap::COL_MAPSTYLE => 16, MapTableMap::COL_CREATED_AT => 17, MapTableMap::COL_UPDATED_AT => 18, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'mapUid' => 1, 'name' => 2, 'fileName' => 3, 'author' => 4, 'environment' => 5, 'mood' => 6, 'bronzeTime' => 7, 'silverTime' => 8, 'goldTime' => 9, 'authorTime' => 10, 'copperPrice' => 11, 'lapRace' => 12, 'nbLaps' => 13, 'npCheckpoints' => 14, 'mapType' => 15, 'mapStyle' => 16, 'created_at' => 17, 'updated_at' => 18, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
     );
 
@@ -217,22 +217,22 @@ class MapTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('mapUid', 'Mapuid', 'VARCHAR', false, 255, null);
-        $this->addColumn('name', 'Name', 'VARCHAR', false, 255, null);
-        $this->addColumn('fileName', 'Filename', 'VARCHAR', false, 255, null);
-        $this->addColumn('author', 'Author', 'VARCHAR', false, 100, null);
-        $this->addColumn('environment', 'Environment', 'VARCHAR', false, 100, null);
-        $this->addColumn('mood', 'Mood', 'VARCHAR', false, 100, null);
+        $this->addColumn('mapUid', 'Mapuid', 'VARCHAR', false, 32, null);
+        $this->addColumn('name', 'Name', 'VARCHAR', false, 150, null);
+        $this->addColumn('fileName', 'Filename', 'VARCHAR', false, 100, null);
+        $this->addColumn('author', 'Author', 'VARCHAR', false, 50, null);
+        $this->addColumn('environment', 'Environment', 'VARCHAR', false, 50, null);
+        $this->addColumn('mood', 'Mood', 'VARCHAR', false, 50, null);
         $this->addColumn('bronzeTime', 'Bronzetime', 'INTEGER', false, null, null);
         $this->addColumn('silverTime', 'Silvertime', 'INTEGER', false, null, null);
         $this->addColumn('goldTime', 'Goldtime', 'INTEGER', false, null, null);
         $this->addColumn('authorTime', 'Authortime', 'INTEGER', false, null, null);
         $this->addColumn('copperPrice', 'Copperprice', 'INTEGER', false, null, null);
-        $this->addColumn('lapRave', 'Laprave', 'BOOLEAN', false, 1, null);
+        $this->addColumn('lapRace', 'Laprace', 'BOOLEAN', false, 1, null);
         $this->addColumn('nbLaps', 'Nblaps', 'INTEGER', false, null, null);
         $this->addColumn('npCheckpoints', 'Npcheckpoints', 'INTEGER', false, null, null);
-        $this->addColumn('mapType', 'Maptype', 'VARCHAR', false, 255, null);
-        $this->addColumn('mapStyle', 'Mapstyle', 'VARCHAR', false, 255, null);
+        $this->addColumn('mapType', 'Maptype', 'VARCHAR', false, 50, null);
+        $this->addColumn('mapStyle', 'Mapstyle', 'VARCHAR', false, 50, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
@@ -417,7 +417,7 @@ class MapTableMap extends TableMap
             $criteria->addSelectColumn(MapTableMap::COL_GOLDTIME);
             $criteria->addSelectColumn(MapTableMap::COL_AUTHORTIME);
             $criteria->addSelectColumn(MapTableMap::COL_COPPERPRICE);
-            $criteria->addSelectColumn(MapTableMap::COL_LAPRAVE);
+            $criteria->addSelectColumn(MapTableMap::COL_LAPRACE);
             $criteria->addSelectColumn(MapTableMap::COL_NBLAPS);
             $criteria->addSelectColumn(MapTableMap::COL_NPCHECKPOINTS);
             $criteria->addSelectColumn(MapTableMap::COL_MAPTYPE);
@@ -437,7 +437,7 @@ class MapTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.goldTime');
             $criteria->addSelectColumn($alias . '.authorTime');
             $criteria->addSelectColumn($alias . '.copperPrice');
-            $criteria->addSelectColumn($alias . '.lapRave');
+            $criteria->addSelectColumn($alias . '.lapRace');
             $criteria->addSelectColumn($alias . '.nbLaps');
             $criteria->addSelectColumn($alias . '.npCheckpoints');
             $criteria->addSelectColumn($alias . '.mapType');

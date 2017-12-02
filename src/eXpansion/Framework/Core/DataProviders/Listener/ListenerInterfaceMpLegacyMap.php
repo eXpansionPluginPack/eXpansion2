@@ -16,14 +16,14 @@ interface ListenerInterfaceMpLegacyMap
     /**
      * @param Map $map
      *
-     * @return mixed
+     * @return void
      */
     public function onBeginMap(Map $map);
 
     /**
      * @param Map $map
      *
-     * @return mixed
+     * @return void
      */
     public function onEndMap(Map $map);
 

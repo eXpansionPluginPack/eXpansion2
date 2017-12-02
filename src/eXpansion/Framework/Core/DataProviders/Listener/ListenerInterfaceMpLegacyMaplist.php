@@ -18,7 +18,7 @@ interface ListenerInterfaceMpLegacyMaplist
      * @param string $currentMapUid
      * @param string $nextMapUid
      * @param bool $isListModified
-     * @return mixed
+     * @return void
      */
     public function onMapListModified($oldMaps, $currentMapUid, $nextMapUid, $isListModified);
 

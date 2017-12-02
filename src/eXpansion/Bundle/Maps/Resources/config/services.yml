@@ -3,3 +3,11 @@ services:
   eXpansion\Bundle\Maps\Services\JukeboxService:
       class: eXpansion\Bundle\Maps\Services\JukeboxService
       autowire: true
+
+  eXpansion\Bundle\Maps\Services\MapInfoService:
+      class: eXpansion\Bundle\Maps\Services\MapInfoService
+      autowire: true
+      tags:
+           - {name: 'expansion.plugin', data_provider: 'exp.application'}
+           - {name: 'expansion.plugin', data_provider: 'mp.legacy.map'}
+           - {name: 'expansion.plugin', data_provider: 'mp.legacy.maplist'}

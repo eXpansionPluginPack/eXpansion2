@@ -151,11 +151,11 @@ abstract class Map implements ActiveRecordInterface
     protected $copperprice;
 
     /**
-     * The value for the laprave field.
+     * The value for the laprace field.
      *
      * @var        boolean
      */
-    protected $laprave;
+    protected $laprace;
 
     /**
      * The value for the nblaps field.
@@ -565,23 +565,23 @@ abstract class Map implements ActiveRecordInterface
     }
 
     /**
-     * Get the [laprave] column value.
+     * Get the [laprace] column value.
      *
      * @return boolean
      */
-    public function getLaprave()
+    public function getLaprace()
     {
-        return $this->laprave;
+        return $this->laprace;
     }
 
     /**
-     * Get the [laprave] column value.
+     * Get the [laprace] column value.
      *
      * @return boolean
      */
-    public function isLaprave()
+    public function isLaprace()
     {
-        return $this->getLaprave();
+        return $this->getLaprace();
     }
 
     /**
@@ -905,7 +905,7 @@ abstract class Map implements ActiveRecordInterface
     } // setCopperprice()
 
     /**
-     * Sets the value of the [laprave] column.
+     * Sets the value of the [laprace] column.
      * Non-boolean arguments are converted using the following rules:
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
@@ -914,7 +914,7 @@ abstract class Map implements ActiveRecordInterface
      * @param  boolean|integer|string $v The new value
      * @return $this|\eXpansion\Bundle\Maps\Model\Map The current object (for fluent API support)
      */
-    public function setLaprave($v)
+    public function setLaprace($v)
     {
         if ($v !== null) {
             if (is_string($v)) {
@@ -924,13 +924,13 @@ abstract class Map implements ActiveRecordInterface
             }
         }
 
-        if ($this->laprave !== $v) {
-            $this->laprave = $v;
-            $this->modifiedColumns[MapTableMap::COL_LAPRAVE] = true;
+        if ($this->laprace !== $v) {
+            $this->laprace = $v;
+            $this->modifiedColumns[MapTableMap::COL_LAPRACE] = true;
         }
 
         return $this;
-    } // setLaprave()
+    } // setLaprace()
 
     /**
      * Set the value of [nblaps] column.
@@ -1124,8 +1124,8 @@ abstract class Map implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : MapTableMap::translateFieldName('Copperprice', TableMap::TYPE_PHPNAME, $indexType)];
             $this->copperprice = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : MapTableMap::translateFieldName('Laprave', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->laprave = (null !== $col) ? (boolean) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : MapTableMap::translateFieldName('Laprace', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->laprace = (null !== $col) ? (boolean) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : MapTableMap::translateFieldName('Nblaps', TableMap::TYPE_PHPNAME, $indexType)];
             $this->nblaps = (null !== $col) ? (int) $col : null;
@@ -1422,8 +1422,8 @@ abstract class Map implements ActiveRecordInterface
         if ($this->isColumnModified(MapTableMap::COL_COPPERPRICE)) {
             $modifiedColumns[':p' . $index++]  = 'copperPrice';
         }
-        if ($this->isColumnModified(MapTableMap::COL_LAPRAVE)) {
-            $modifiedColumns[':p' . $index++]  = 'lapRave';
+        if ($this->isColumnModified(MapTableMap::COL_LAPRACE)) {
+            $modifiedColumns[':p' . $index++]  = 'lapRace';
         }
         if ($this->isColumnModified(MapTableMap::COL_NBLAPS)) {
             $modifiedColumns[':p' . $index++]  = 'nbLaps';
@@ -1490,8 +1490,8 @@ abstract class Map implements ActiveRecordInterface
                     case 'copperPrice':
                         $stmt->bindValue($identifier, $this->copperprice, PDO::PARAM_INT);
                         break;
-                    case 'lapRave':
-                        $stmt->bindValue($identifier, (int) $this->laprave, PDO::PARAM_INT);
+                    case 'lapRace':
+                        $stmt->bindValue($identifier, (int) $this->laprace, PDO::PARAM_INT);
                         break;
                     case 'nbLaps':
                         $stmt->bindValue($identifier, $this->nblaps, PDO::PARAM_INT);
@@ -1610,7 +1610,7 @@ abstract class Map implements ActiveRecordInterface
                 return $this->getCopperprice();
                 break;
             case 12:
-                return $this->getLaprave();
+                return $this->getLaprace();
                 break;
             case 13:
                 return $this->getNblaps();
@@ -1672,7 +1672,7 @@ abstract class Map implements ActiveRecordInterface
             $keys[9] => $this->getGoldtime(),
             $keys[10] => $this->getAuthortime(),
             $keys[11] => $this->getCopperprice(),
-            $keys[12] => $this->getLaprave(),
+            $keys[12] => $this->getLaprace(),
             $keys[13] => $this->getNblaps(),
             $keys[14] => $this->getNpcheckpoints(),
             $keys[15] => $this->getMaptype(),
@@ -1780,7 +1780,7 @@ abstract class Map implements ActiveRecordInterface
                 $this->setCopperprice($value);
                 break;
             case 12:
-                $this->setLaprave($value);
+                $this->setLaprace($value);
                 break;
             case 13:
                 $this->setNblaps($value);
@@ -1863,7 +1863,7 @@ abstract class Map implements ActiveRecordInterface
             $this->setCopperprice($arr[$keys[11]]);
         }
         if (array_key_exists($keys[12], $arr)) {
-            $this->setLaprave($arr[$keys[12]]);
+            $this->setLaprace($arr[$keys[12]]);
         }
         if (array_key_exists($keys[13], $arr)) {
             $this->setNblaps($arr[$keys[13]]);
@@ -1960,8 +1960,8 @@ abstract class Map implements ActiveRecordInterface
         if ($this->isColumnModified(MapTableMap::COL_COPPERPRICE)) {
             $criteria->add(MapTableMap::COL_COPPERPRICE, $this->copperprice);
         }
-        if ($this->isColumnModified(MapTableMap::COL_LAPRAVE)) {
-            $criteria->add(MapTableMap::COL_LAPRAVE, $this->laprave);
+        if ($this->isColumnModified(MapTableMap::COL_LAPRACE)) {
+            $criteria->add(MapTableMap::COL_LAPRACE, $this->laprace);
         }
         if ($this->isColumnModified(MapTableMap::COL_NBLAPS)) {
             $criteria->add(MapTableMap::COL_NBLAPS, $this->nblaps);
@@ -2078,7 +2078,7 @@ abstract class Map implements ActiveRecordInterface
         $copyObj->setGoldtime($this->getGoldtime());
         $copyObj->setAuthortime($this->getAuthortime());
         $copyObj->setCopperprice($this->getCopperprice());
-        $copyObj->setLaprave($this->getLaprave());
+        $copyObj->setLaprace($this->getLaprace());
         $copyObj->setNblaps($this->getNblaps());
         $copyObj->setNpcheckpoints($this->getNpcheckpoints());
         $copyObj->setMaptype($this->getMaptype());
@@ -2387,7 +2387,7 @@ abstract class Map implements ActiveRecordInterface
         $this->goldtime = null;
         $this->authortime = null;
         $this->copperprice = null;
-        $this->laprave = null;
+        $this->laprace = null;
         $this->nblaps = null;
         $this->npcheckpoints = null;
         $this->maptype = null;

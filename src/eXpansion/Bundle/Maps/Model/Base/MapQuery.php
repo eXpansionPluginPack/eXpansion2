@@ -32,7 +32,7 @@ use eXpansion\Bundle\Maps\Model\Map\MapTableMap;
  * @method     ChildMapQuery orderByGoldtime($order = Criteria::ASC) Order by the goldTime column
  * @method     ChildMapQuery orderByAuthortime($order = Criteria::ASC) Order by the authorTime column
  * @method     ChildMapQuery orderByCopperprice($order = Criteria::ASC) Order by the copperPrice column
- * @method     ChildMapQuery orderByLaprave($order = Criteria::ASC) Order by the lapRave column
+ * @method     ChildMapQuery orderByLaprace($order = Criteria::ASC) Order by the lapRace column
  * @method     ChildMapQuery orderByNblaps($order = Criteria::ASC) Order by the nbLaps column
  * @method     ChildMapQuery orderByNpcheckpoints($order = Criteria::ASC) Order by the npCheckpoints column
  * @method     ChildMapQuery orderByMaptype($order = Criteria::ASC) Order by the mapType column
@@ -52,7 +52,7 @@ use eXpansion\Bundle\Maps\Model\Map\MapTableMap;
  * @method     ChildMapQuery groupByGoldtime() Group by the goldTime column
  * @method     ChildMapQuery groupByAuthortime() Group by the authorTime column
  * @method     ChildMapQuery groupByCopperprice() Group by the copperPrice column
- * @method     ChildMapQuery groupByLaprave() Group by the lapRave column
+ * @method     ChildMapQuery groupByLaprace() Group by the lapRace column
  * @method     ChildMapQuery groupByNblaps() Group by the nbLaps column
  * @method     ChildMapQuery groupByNpcheckpoints() Group by the npCheckpoints column
  * @method     ChildMapQuery groupByMaptype() Group by the mapType column
@@ -95,7 +95,7 @@ use eXpansion\Bundle\Maps\Model\Map\MapTableMap;
  * @method     ChildMap findOneByGoldtime(int $goldTime) Return the first ChildMap filtered by the goldTime column
  * @method     ChildMap findOneByAuthortime(int $authorTime) Return the first ChildMap filtered by the authorTime column
  * @method     ChildMap findOneByCopperprice(int $copperPrice) Return the first ChildMap filtered by the copperPrice column
- * @method     ChildMap findOneByLaprave(boolean $lapRave) Return the first ChildMap filtered by the lapRave column
+ * @method     ChildMap findOneByLaprace(boolean $lapRace) Return the first ChildMap filtered by the lapRace column
  * @method     ChildMap findOneByNblaps(int $nbLaps) Return the first ChildMap filtered by the nbLaps column
  * @method     ChildMap findOneByNpcheckpoints(int $npCheckpoints) Return the first ChildMap filtered by the npCheckpoints column
  * @method     ChildMap findOneByMaptype(string $mapType) Return the first ChildMap filtered by the mapType column
@@ -118,7 +118,7 @@ use eXpansion\Bundle\Maps\Model\Map\MapTableMap;
  * @method     ChildMap requireOneByGoldtime(int $goldTime) Return the first ChildMap filtered by the goldTime column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMap requireOneByAuthortime(int $authorTime) Return the first ChildMap filtered by the authorTime column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMap requireOneByCopperprice(int $copperPrice) Return the first ChildMap filtered by the copperPrice column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMap requireOneByLaprave(boolean $lapRave) Return the first ChildMap filtered by the lapRave column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMap requireOneByLaprace(boolean $lapRace) Return the first ChildMap filtered by the lapRace column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMap requireOneByNblaps(int $nbLaps) Return the first ChildMap filtered by the nbLaps column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMap requireOneByNpcheckpoints(int $npCheckpoints) Return the first ChildMap filtered by the npCheckpoints column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMap requireOneByMaptype(string $mapType) Return the first ChildMap filtered by the mapType column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -139,7 +139,7 @@ use eXpansion\Bundle\Maps\Model\Map\MapTableMap;
  * @method     ChildMap[]|ObjectCollection findByGoldtime(int $goldTime) Return ChildMap objects filtered by the goldTime column
  * @method     ChildMap[]|ObjectCollection findByAuthortime(int $authorTime) Return ChildMap objects filtered by the authorTime column
  * @method     ChildMap[]|ObjectCollection findByCopperprice(int $copperPrice) Return ChildMap objects filtered by the copperPrice column
- * @method     ChildMap[]|ObjectCollection findByLaprave(boolean $lapRave) Return ChildMap objects filtered by the lapRave column
+ * @method     ChildMap[]|ObjectCollection findByLaprace(boolean $lapRace) Return ChildMap objects filtered by the lapRace column
  * @method     ChildMap[]|ObjectCollection findByNblaps(int $nbLaps) Return ChildMap objects filtered by the nbLaps column
  * @method     ChildMap[]|ObjectCollection findByNpcheckpoints(int $npCheckpoints) Return ChildMap objects filtered by the npCheckpoints column
  * @method     ChildMap[]|ObjectCollection findByMaptype(string $mapType) Return ChildMap objects filtered by the mapType column
@@ -244,7 +244,7 @@ abstract class MapQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, mapUid, name, fileName, author, environment, mood, bronzeTime, silverTime, goldTime, authorTime, copperPrice, lapRave, nbLaps, npCheckpoints, mapType, mapStyle, created_at, updated_at FROM map WHERE id = :p0';
+        $sql = 'SELECT id, mapUid, name, fileName, author, environment, mood, bronzeTime, silverTime, goldTime, authorTime, copperPrice, lapRace, nbLaps, npCheckpoints, mapType, mapStyle, created_at, updated_at FROM map WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -731,15 +731,15 @@ abstract class MapQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the lapRave column
+     * Filter the query on the lapRace column
      *
      * Example usage:
      * <code>
-     * $query->filterByLaprave(true); // WHERE lapRave = true
-     * $query->filterByLaprave('yes'); // WHERE lapRave = true
+     * $query->filterByLaprace(true); // WHERE lapRace = true
+     * $query->filterByLaprace('yes'); // WHERE lapRace = true
      * </code>
      *
-     * @param     boolean|string $laprave The value to use as filter.
+     * @param     boolean|string $laprace The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
@@ -748,13 +748,13 @@ abstract class MapQuery extends ModelCriteria
      *
      * @return $this|ChildMapQuery The current query, for fluid interface
      */
-    public function filterByLaprave($laprave = null, $comparison = null)
+    public function filterByLaprace($laprace = null, $comparison = null)
     {
-        if (is_string($laprave)) {
-            $laprave = in_array(strtolower($laprave), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        if (is_string($laprace)) {
+            $laprace = in_array(strtolower($laprace), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(MapTableMap::COL_LAPRAVE, $laprave, $comparison);
+        return $this->addUsingAlias(MapTableMap::COL_LAPRACE, $laprace, $comparison);
     }
 
     /**

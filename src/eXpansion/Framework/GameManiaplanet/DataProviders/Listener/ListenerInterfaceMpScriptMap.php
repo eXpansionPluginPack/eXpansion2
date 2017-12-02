@@ -20,7 +20,7 @@ interface ListenerInterfaceMpScriptMap
      * @param boolean $restarted true if the map was restarted, false otherwise
      * @param Map     $map       Map started with.
      *
-     * @return mixed
+     * @return void
      */
     public function onStartMapStart($count, $time, $restarted, Map $map);
 
@@ -32,7 +32,7 @@ interface ListenerInterfaceMpScriptMap
      * @param boolean $restarted true if the map was restarted, false otherwise
      * @param Map     $map       Map started with.
      *
-     * @return mixed
+     * @return void
      */
     public function onStartMapEnd($count, $time, $restarted, Map $map);
 
@@ -44,7 +44,7 @@ interface ListenerInterfaceMpScriptMap
      * @param boolean $restarted true if the map was restarted, false otherwise
      * @param Map     $map       Map started with.
      *
-     * @return mixed
+     * @return void
      */
     public function onEndMapStart($count, $time, $restarted, Map $map);
 
@@ -56,7 +56,7 @@ interface ListenerInterfaceMpScriptMap
      * @param boolean $restarted true if the map was restarted, false otherwise
      * @param Map     $map       Map started with.
      *
-     * @return mixed
+     * @return void
      */
     public function onEndMapEnd($count, $time, $restarted, Map $map);
 }

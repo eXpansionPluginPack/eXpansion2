@@ -3,22 +3,22 @@
 
     <table name="map">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
-        <column name="mapUid" type="varchar" size="255"/>
-        <column name="name" type="varchar" size="255"/>
-        <column name="fileName" type="varchar" size="255"/>
-        <column name="author" type="varchar" size="100"/>
-        <column name="environment" type="varchar" size="100"/>
-        <column name="mood" type="varchar" size="100"/>
+        <column name="mapUid" type="varchar" size="32"/>
+        <column name="name" type="varchar" size="150"/>
+        <column name="fileName" type="varchar" size="100"/>
+        <column name="author" type="varchar" size="50"/>
+        <column name="environment" type="varchar" size="50"/>
+        <column name="mood" type="varchar" size="50"/>
         <column name="bronzeTime" type="integer"/>
         <column name="silverTime" type="integer"/>
         <column name="goldTime" type="integer"/>
         <column name="authorTime" type="integer"/>
         <column name="copperPrice" type="integer"/>
-        <column name="lapRave" type="boolean"/>
+        <column name="lapRace" type="boolean"/>
         <column name="nbLaps" type="integer"/>
         <column name="npCheckpoints" type="integer"/>
-        <column name="mapType" type="varchar" size="255"/>
-        <column name="mapStyle" type="varchar" size="255"/>
+        <column name="mapType" type="varchar" size="50"/>
+        <column name="mapStyle" type="varchar" size="50"/>
 
         <unique>
             <unique-column name="mapUid"/>
@@ -29,33 +29,33 @@
 
     <table name="mxmap">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
-        <column name="trackUID" type="varchar" size="255" required="true"/>
-        <column name="gbxMapName" type="varchar" size="255" required="false"/>
+        <column name="trackUID" type="varchar" size="32" required="true"/>
+        <column name="gbxMapName" type="varchar" size="150" required="false"/>
         <column name="trackID" type="integer" required="false"/>
         <column name="userID" type="integer" required="false"/>
         <column name="username" type="varchar" size="100"/>
         <column name="uploadedAt" type="timestamp" required="false"/>
         <column name="updatedAt" type="timestamp" required="false"/>
-        <column name="mapType" type="varchar" size="255" required="false"/>
-        <column name="titlePack" type="varchar" size="255" required="false"/>
-        <column name="styleName" type="varchar" size="255" required="false"/>
+        <column name="mapType" type="varchar" size="100" required="false"/>
+        <column name="titlePack" type="varchar" size="50" required="false"/>
+        <column name="styleName" type="varchar" size="50" required="false"/>
         <column name="displayCost" type="integer" required="false"/>
-        <column name="modName" type="varchar" size="255" required="false"/>
+        <column name="modName" type="varchar" size="60" required="false"/>
         <column name="lightMap" type="integer" required="false"/>
-        <column name="exeVersion" type="varchar" size="50" required="false"/>
-        <column name="exeBuild" type="varchar" size="50" required="false"/>
-        <column name="environmentName" type="varchar" size="255" required="false"/>
-        <column name="vehicleName" type="varchar" size="255" required="false"/>
+        <column name="exeVersion" type="varchar" size="25" required="false"/>
+        <column name="exeBuild" type="varchar" size="25" required="false"/>
+        <column name="environmentName" type="varchar" size="50" required="false"/>
+        <column name="vehicleName" type="varchar" size="50" required="false"/>
         <column name="unlimiterRequired" type="boolean" required="false"/>
-        <column name="routeName" type="varchar" size="255" required="false"/>
-        <column name="lengthName" type="varchar" size="100" required="false"/>
+        <column name="routeName" type="varchar" size="50" required="false"/>
+        <column name="lengthName" type="varchar" size="50" required="false"/>
         <column name="laps" type="integer" required="false"/>
-        <column name="difficultyName" type="varchar" size="255" required="false"/>
-        <column name="replayTypeName" type="varchar" size="255" required="false"/>
+        <column name="difficultyName" type="varchar" size="50" required="false"/>
+        <column name="replayTypeName" type="varchar" size="50" required="false"/>
         <column name="replayWRID" type="integer" required="false"/>
         <column name="replayWRTime" type="integer" required="false"/>
         <column name="replayWRUserID" type="integer" required="false"/>
-        <column name="replayWRUsername" type="varchar" size="255" required="false"/>
+        <column name="replayWRUsername" type="varchar" size="100" required="false"/>
         <column name="ratingVoteCount" type="integer" required="false"/>
         <column name="ratingVoteAverage" type="float" required="false"/>
         <column name="replayCount" type="integer" required="false"/>
