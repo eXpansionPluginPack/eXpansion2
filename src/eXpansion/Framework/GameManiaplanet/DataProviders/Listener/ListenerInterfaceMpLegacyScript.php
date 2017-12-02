@@ -1,11 +1,11 @@
 <?php
 
-namespace eXpansion\Framework\Core\DataProviders\Listener;
+namespace eXpansion\Framework\GameManiaplanet\DataProviders\Listener;
 
 /**
  * Interface ListenerInterfaceMpLegacyScript
  *
- * @package eXpansion\Framework\Core\DataProviders\Listener;
+ * @package eXpansion\Framework\GameManiaplanet\DataProviders\Listener;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
 interface ListenerInterfaceMpLegacyScript
@@ -14,7 +14,7 @@ interface ListenerInterfaceMpLegacyScript
      * @param string $eventName Name of the event.
      * @param mixed $parameters Parameters.
      *
-     * @return mixed
+     * @return void
      */
     public function onModeScriptCallbackArray($eventName, $parameters);
 }

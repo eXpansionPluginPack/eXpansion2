@@ -6,7 +6,7 @@ use eXpansion\Bundle\Menu\Model\Menu\ChatCommandItem;
 use eXpansion\Bundle\Menu\Model\Menu\ItemInterface;
 use eXpansion\Bundle\Menu\Services\ItemFactoryInterface;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
-use eXpansion\Framework\Core\DataProviders\ChatCommandDataProvider;
+use eXpansion\Framework\GameManiaplanet\DataProviders\ChatCommandDataProvider;
 use FML\Controls\Quad;
 
 /**

@@ -5,7 +5,7 @@ namespace eXpansion\Bundle\Maps\Plugins;
 use eXpansion\Bundle\Maps\Plugins\Gui\JukeboxWindowFactory;
 use eXpansion\Bundle\Maps\Services\JukeboxService;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
-use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Storage\MapStorage;
 use eXpansion\Framework\Core\Storage\PlayerStorage;

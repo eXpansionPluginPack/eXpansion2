@@ -1,8 +1,9 @@
 <?php
 
 
-namespace eXpansion\Framework\Core\DataProviders;
+namespace eXpansion\Framework\GameManiaplanet\DataProviders;
 
+use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
 
 class ManialinkPageAnswerDataProvider extends AbstractDataProvider
 {

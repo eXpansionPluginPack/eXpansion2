@@ -1,12 +1,33 @@
 parameters:
-    expansion.framework.game_maniaplanet.data_providers.map.class: eXpansion\Framework\GameManiaplanet\DataProviders\MapDataProvider
+    expansion.framework.game_maniaplanet.data_providers.map.class: eXpansion\Framework\GameManiaplanet\DataProviders\ScriptMapDataProvider
     expansion.framework.game_maniaplanet.data_providers.map.interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMap
 
-    expansion.framework.game_maniaplanet.data_providers.match.class: eXpansion\Framework\GameManiaplanet\DataProviders\MatchDataProvider
+    expansion.framework.game_maniaplanet.data_providers.match.class: eXpansion\Framework\GameManiaplanet\DataProviders\ScriptMatchDataProvider
     expansion.framework.game_maniaplanet.data_providers.match.interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMatch
 
     expansion.framework.game_maniaplanet.data_providers.podium.class: eXpansion\Framework\GameManiaplanet\DataProviders\PodiumDataProvider
     expansion.framework.game_maniaplanet.data_providers.podium.interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptPodium
+
+    expansion.framework.core.data_providers.chat_data_provider.class: eXpansion\Framework\GameManiaplanet\DataProviders\ChatDataProvider
+    expansion.framework.core.data_providers.chat_data_provider.interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyChat
+
+    expansion.framework.core.data_providers.chat_command_data_provider.class: eXpansion\Framework\GameManiaplanet\DataProviders\ChatCommandDataProvider
+    expansion.framework.core.data_providers.chat_command_data_provider.interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ChatCommandInterface
+
+    expansion.framework.core.data_providers.player_data_provider.class: eXpansion\Framework\GameManiaplanet\DataProviders\PlayerDataProvider
+    expansion.framework.core.data_providers.player_data_provider.interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer
+
+    expansion.framework.core.data_providers.map_data_provider.class: eXpansion\Framework\GameManiaplanet\DataProviders\MapListDataProvider
+    expansion.framework.core.data_providers.map_data_provider.interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMaplist
+
+    expansion.framework.core.data_providers.match_data_provider.class: eXpansion\Framework\GameManiaplanet\DataProviders\MapDataProvider
+    expansion.framework.core.data_providers.match_data_provider.interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap
+
+    expansion.framework.core.data_providers.manialink_page_answer_provider.class: eXpansion\Framework\GameManiaplanet\DataProviders\ManialinkPageAnswerDataProvider
+    expansion.framework.core.data_providers.manialink_page_answer_provider.interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyManialink
+
+    expansion.framework.core.data_providers.script_data_provider.class: eXpansion\Framework\GameManiaplanet\DataProviders\ScriptDataProvider
+    expansion.framework.core.data_providers.script_data_provider.interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyScript
 
 services:
     _defaults:
@@ -49,3 +70,57 @@ services:
             - {name: expansion.dataprovider.compatibility, title: ALL, gamemode: script}
             - {name: expansion.dataprovider.listener, event_name: Maniaplanet.Podium_Start, method: onPodiumStart}
             - {name: expansion.dataprovider.listener, event_name: Maniaplanet.Podium_End, method: onPodiumEnd}
+
+    expansion.framework.core.data_providers.chat_data_provider:
+        class: "%expansion.framework.core.data_providers.chat_data_provider.class%"
+        tags:
+            - {name: 'expansion.dataprovider', provider: "mp.legacy.chat", interface: "%expansion.framework.core.data_providers.chat_data_provider.interface%"}
+            - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
+            - {name: 'expansion.dataprovider.listener', event_name: 'PlayerChat', method: 'onPlayerChat'}
+
+    expansion.framework.core.data_providers.chat_command_data_provider:
+        class: "%expansion.framework.core.data_providers.chat_command_data_provider.class%"
+        tags:
+            - {name: 'expansion.dataprovider', provider: "expansion.chat_command_data", interface: "%expansion.framework.core.data_providers.chat_command_data_provider.interface%"}
+            - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
+            - {name: 'expansion.dataprovider.listener', event_name: PlayerChat, method: onPlayerChat}
+
+    expansion.framework.core.data_providers.player_data_provider:
+        class: "%expansion.framework.core.data_providers.player_data_provider.class%"
+        tags:
+            - {name: 'expansion.dataprovider', provider: "mp.legacy.player", interface: "%expansion.framework.core.data_providers.player_data_provider.interface%"}
+            - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
+            - {name: 'expansion.dataprovider.listener', event_name: PlayerConnect, method: onPlayerConnect}
+            - {name: 'expansion.dataprovider.listener', event_name: PlayerDisconnect, method: onPlayerDisconnect}
+            - {name: 'expansion.dataprovider.listener', event_name: PlayerInfoChanged, method: onPlayerInfoChanged}
+            - {name: 'expansion.dataprovider.listener', event_name: PlayerAlliesChanged, method: onPlayerAlliesChanged}
+
+    expansion.framework.core.data_providers.map_data_provider:
+        class: "%expansion.framework.core.data_providers.map_data_provider.class%"
+        tags:
+            - {name: 'expansion.dataprovider', provider: "mp.legacy.maplist", interface: "%expansion.framework.core.data_providers.map_data_provider.interface%"}
+            - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
+            - {name: 'expansion.dataprovider.listener', event_name: MapListModified, method: onMapListModified}
+
+    expansion.framework.core.data_providers.match_data_provider:
+        class: "%expansion.framework.core.data_providers.match_data_provider.class%"
+        tags:
+            - {name: 'expansion.dataprovider', provider: "mp.legacy.map", interface: "%expansion.framework.core.data_providers.match_data_provider.interface%"}
+            - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
+            - {name: 'expansion.dataprovider.listener', event_name: BeginMap, method: onBeginMap}
+            - {name: 'expansion.dataprovider.listener', event_name: EndMap, method: onEndMap}
+
+    expansion.framework.core.data_providers.manialink_page_answer_provider:
+        class: "%expansion.framework.core.data_providers.manialink_page_answer_provider.class%"
+        tags:
+            - {name: 'expansion.dataprovider', provider: "mp.legacy.manialink", interface: "%expansion.framework.core.data_providers.manialink_page_answer_provider.interface%"}
+            - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
+            - {name: 'expansion.dataprovider.listener', event_name: PlayerManialinkPageAnswer, method: onPlayerManialinkPageAnswer}
+
+
+    expansion.framework.core.data_providers.script_data_provider:
+        class: "%expansion.framework.core.data_providers.script_data_provider.class%"
+        tags:
+            - {name: 'expansion.dataprovider', provider: "mp.legacy.script", interface: "%expansion.framework.core.data_providers.script_data_provider.interface%"}
+            - {name: 'expansion.dataprovider.compatibility', title: ALL, gamemode: script}
+            - {name: 'expansion.dataprovider.listener', event_name: ModeScriptCallbackArray, method: onModeScriptCallbackArray}

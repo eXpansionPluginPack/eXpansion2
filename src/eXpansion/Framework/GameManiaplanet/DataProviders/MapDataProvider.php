@@ -3,88 +3,43 @@
 namespace eXpansion\Framework\GameManiaplanet\DataProviders;
 
 use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
-use eXpansion\Framework\Core\Storage\MapStorage;
+use eXpansion\Framework\Core\Storage\PlayerStorage;
+use Maniaplanet\DedicatedServer\Connection;
+use Maniaplanet\DedicatedServer\Structures\Map;
 
 /**
- * Class MapDataProvider
+ * ChatDataProvider provides chat information to plugins.
  *
- * @package eXpansion\Framework\GameManiaplanet\DataProviders;
- * @author  oliver de Cramer <oliverde8@gmail.com>
+ * @package eXpansion\Framework\Core\DataProviders
  */
 class MapDataProvider extends AbstractDataProvider
 {
-    /** @var  MapStorage */
-    protected $mapStorage;
+    /** @var  PlayerStorage */
+    protected $playerStorage;
+
+    /** @var  Connection */
+    protected $connection;
 
     /**
-     * RaceDataProvider constructor.
+     * MatchDataProvider constructor.
      *
-     * @param MapStorage $mapStorage
+     * @param PlayerStorage $playerStorage
+     * @param Connection $connection
      */
-    public function __construct(MapStorage $mapStorage)
+    public function __construct(PlayerStorage $playerStorage, Connection $connection)
     {
-        $this->mapStorage = $mapStorage;
+        $this->playerStorage = $playerStorage;
+        $this->connection = $connection;
     }
 
-    /**
-     * Callback sent when the "StartMap" section start.
-     *
-     * @param array $params
-     */
-    public function onStartMapStart($params)
+    public function onBeginMap($map)
     {
-        $this->dispatchMapEvent('onStartMapStart', $params);
+        $this->dispatch(__FUNCTION__, [Map::fromArray($map)]);
     }
 
-    /**
-     * Callback sent when the "StartMatch" section start.
-     *
-     * @param array $params
-     */
-    public function onStartMapEnd($params)
+    public function onEndMap($map)
     {
-        $this->dispatchMapEvent('onStartMapEnd', $params);
-    }
 
-
-    /**
-     * Callback sent when the "EndMap" section start.
-     *
-     * @param array $params
-     */
-    public function onEndMapStart($params)
-    {
-        $this->dispatchMapEvent('onEndMapStart', $params);
-    }
-
-    /**
-     * Callback sent when the "EndMap" section ends.
-     *
-     * @param array $params
-     */
-    public function onEndMapEnd($params)
-    {
-        $this->dispatchMapEvent('onEndMapEnd', $params);
-    }
-
-    /**
-     * Dispatch map event.
-     *
-     * @param $eventName
-     * @param $params
-     */
-    protected function dispatchMapEvent($eventName, $params)
-    {
-        $map = $this->mapStorage->getMap($params['map']['uid']);
-
-        $this->dispatch(
-            $eventName,
-            [
-                $params['count'],
-                isset($params['time']) ? $params['time'] : time(),
-                isset($params['restarted']) ? $params['restarted'] : false,
-                $map,
-            ]
-        );
+        $this->dispatch(__FUNCTION__, [Map::fromArray($map)]);
     }
 }

@@ -3,7 +3,7 @@
 namespace eXpansion\Framework\AdminGroups\Plugins;
 
 use eXpansion\Framework\AdminGroups\Services\AdminGroupConfiguration;
-use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
 use eXpansion\Framework\Core\Storage\Data\Player;

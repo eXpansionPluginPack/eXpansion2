@@ -1,8 +1,9 @@
 <?php
 
-namespace eXpansion\Framework\Core\DataProviders;
+namespace eXpansion\Framework\GameManiaplanet\DataProviders;
 
-use eXpansion\Framework\Core\DataProviders\Listener\ChatCommandInterface;
+use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ChatCommandInterface;
 use eXpansion\Framework\Core\Exceptions\PlayerException;
 use eXpansion\Framework\Core\Helpers\ChatOutput;
 use eXpansion\Framework\Core\Model\ChatCommand\AbstractChatCommand;

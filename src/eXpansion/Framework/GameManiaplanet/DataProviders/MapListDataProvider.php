@@ -1,7 +1,8 @@
 <?php
 
-namespace eXpansion\Framework\Core\DataProviders;
+namespace eXpansion\Framework\GameManiaplanet\DataProviders;
 
+use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
 use eXpansion\Framework\Core\Storage\MapStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Xmlrpc\IndexOutOfBoundException;
@@ -11,7 +12,7 @@ use Maniaplanet\DedicatedServer\Xmlrpc\IndexOutOfBoundException;
  *
  * @package eXpansion\Framework\Core\DataProviders
  */
-class MapDataProvider extends AbstractDataProvider
+class MapListDataProvider extends AbstractDataProvider
 {
     /** Size of batch to get maps from the storage. */
     const BATCH_SIZE = 500;

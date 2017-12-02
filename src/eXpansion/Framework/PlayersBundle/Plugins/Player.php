@@ -2,7 +2,7 @@
 
 namespace eXpansion\Framework\PlayersBundle\Plugins;
 
-use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Core\Helpers\TMString;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use \eXpansion\Framework\Core\Storage\Data\Player as PlayerData;

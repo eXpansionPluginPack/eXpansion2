@@ -1,33 +1,13 @@
 parameters:
-    expansion.framework.core.data_providers.chat_data_provider.class: eXpansion\Framework\Core\DataProviders\ChatDataProvider
-    expansion.framework.core.data_providers.chat_data_provider.interface: eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyChat
-
-    expansion.framework.core.data_providers.chat_command_data_provider.class: eXpansion\Framework\Core\DataProviders\ChatCommandDataProvider
-    expansion.framework.core.data_providers.chat_command_data_provider.interface: eXpansion\Framework\Core\DataProviders\Listener\ChatCommandInterface
-
-    expansion.framework.core.data_providers.player_data_provider.class: eXpansion\Framework\Core\DataProviders\PlayerDataProvider
-    expansion.framework.core.data_providers.player_data_provider.interface: eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer
-
-    expansion.framework.core.data_providers.map_data_provider.class: eXpansion\Framework\Core\DataProviders\MapDataProvider
-    expansion.framework.core.data_providers.map_data_provider.interface: eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyMaplist
-
-    expansion.framework.core.data_providers.match_data_provider.class: eXpansion\Framework\Core\DataProviders\MatchDataProvider
-    expansion.framework.core.data_providers.match_data_provider.interface: eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyMap
-
-    expansion.framework.core.data_providers.timer_data_provider.class: eXpansion\Framework\Core\DataProviders\TimerDataProvider
-    expansion.framework.core.data_providers.timer_data_provider.interface: eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer
 
     expansion.framework.core.data_providers.user_group_data_provider.class: eXpansion\Framework\Core\DataProviders\UserGroupDataProvider
     expansion.framework.core.data_providers.user_group_data_provider.interface: eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpUserGroup
 
-    expansion.framework.core.data_providers.manialink_page_answer_provider.class: eXpansion\Framework\Core\DataProviders\ManialinkPageAnswerDataProvider
-    expansion.framework.core.data_providers.manialink_page_answer_provider.interface: eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyManialink
-
-    expansion.framework.core.data_providers.script_data_provider.class: eXpansion\Framework\Core\DataProviders\ScriptDataProvider
-    expansion.framework.core.data_providers.script_data_provider.interface: eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyScript
-
     expansion.framework.core.data_providers.application_data_provider.class: eXpansion\Framework\Core\DataProviders\ApplicationDataProvider
     expansion.framework.core.data_providers.application_data_provider.interface: eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication
+
+    expansion.framework.core.data_providers.timer_data_provider.class: eXpansion\Framework\Core\DataProviders\TimerDataProvider
+    expansion.framework.core.data_providers.timer_data_provider.interface: eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer
 
 services:
     _defaults:
@@ -35,44 +15,6 @@ services:
         autoconfigure: true
         public: true
 
-    expansion.framework.core.data_providers.chat_data_provider:
-        class: "%expansion.framework.core.data_providers.chat_data_provider.class%"
-        tags:
-            - {name: 'expansion.dataprovider', provider: "mp.legacy.chat", interface: "%expansion.framework.core.data_providers.chat_data_provider.interface%"}
-            - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
-            - {name: 'expansion.dataprovider.listener', event_name: 'PlayerChat', method: 'onPlayerChat'}
-
-    expansion.framework.core.data_providers.chat_command_data_provider:
-        class: "%expansion.framework.core.data_providers.chat_command_data_provider.class%"
-        tags:
-            - {name: 'expansion.dataprovider', provider: "expansion.chat_command_data", interface: "%expansion.framework.core.data_providers.chat_command_data_provider.interface%"}
-            - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
-            - {name: 'expansion.dataprovider.listener', event_name: PlayerChat, method: onPlayerChat}
-
-    expansion.framework.core.data_providers.player_data_provider:
-        class: "%expansion.framework.core.data_providers.player_data_provider.class%"
-        tags:
-            - {name: 'expansion.dataprovider', provider: "mp.legacy.player", interface: "%expansion.framework.core.data_providers.player_data_provider.interface%"}
-            - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
-            - {name: 'expansion.dataprovider.listener', event_name: PlayerConnect, method: onPlayerConnect}
-            - {name: 'expansion.dataprovider.listener', event_name: PlayerDisconnect, method: onPlayerDisconnect}
-            - {name: 'expansion.dataprovider.listener', event_name: PlayerInfoChanged, method: onPlayerInfoChanged}
-            - {name: 'expansion.dataprovider.listener', event_name: PlayerAlliesChanged, method: onPlayerAlliesChanged}
-
-    expansion.framework.core.data_providers.map_data_provider:
-        class: "%expansion.framework.core.data_providers.map_data_provider.class%"
-        tags:
-            - {name: 'expansion.dataprovider', provider: "mp.legacy.maplist", interface: "%expansion.framework.core.data_providers.map_data_provider.interface%"}
-            - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
-            - {name: 'expansion.dataprovider.listener', event_name: MapListModified, method: onMapListModified}
-
-    expansion.framework.core.data_providers.match_data_provider:
-        class: "%expansion.framework.core.data_providers.match_data_provider.class%"
-        tags:
-            - {name: 'expansion.dataprovider', provider: "mp.legacy.map", interface: "%expansion.framework.core.data_providers.match_data_provider.interface%"}
-            - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
-            - {name: 'expansion.dataprovider.listener', event_name: BeginMap, method: onBeginMap}
-            - {name: 'expansion.dataprovider.listener', event_name: EndMap, method: onEndMap}
 
     expansion.framework.core.data_providers.timer_data_provider:
         class: "%expansion.framework.core.data_providers.timer_data_provider.class%"
@@ -90,21 +32,6 @@ services:
             - {name: 'expansion.dataprovider.listener', event_name: expansion.user_groups.user_add, method: onExpansionGroupAddUser}
             - {name: 'expansion.dataprovider.listener', event_name: expansion.user_groups.user_remove, method: onExpansionGroupRemoveUser}
             - {name: 'expansion.dataprovider.listener', event_name: expansion.user_groups.group_destroy, method: onExpansionGroupDestroy}
-
-    expansion.framework.core.data_providers.manialink_page_answer_provider:
-        class: "%expansion.framework.core.data_providers.manialink_page_answer_provider.class%"
-        tags:
-            - {name: 'expansion.dataprovider', provider: "mp.legacy.manialink", interface: "%expansion.framework.core.data_providers.manialink_page_answer_provider.interface%"}
-            - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
-            - {name: 'expansion.dataprovider.listener', event_name: PlayerManialinkPageAnswer, method: onPlayerManialinkPageAnswer}
-
-
-    expansion.framework.core.data_providers.script_data_provider:
-        class: "%expansion.framework.core.data_providers.script_data_provider.class%"
-        tags:
-            - {name: 'expansion.dataprovider', provider: "mp.legacy.script", interface: "%expansion.framework.core.data_providers.script_data_provider.interface%"}
-            - {name: 'expansion.dataprovider.compatibility', title: ALL, gamemode: script}
-            - {name: 'expansion.dataprovider.listener', event_name: ModeScriptCallbackArray, method: onModeScriptCallbackArray}
 
     expansion.framework.core.data_providers.application_data_provider:
         class: "%expansion.framework.core.data_providers.application_data_provider.class%"

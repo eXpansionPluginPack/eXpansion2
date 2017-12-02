@@ -2,7 +2,7 @@
 
 namespace eXpansion\Framework\Core\Services;
 
-use eXpansion\Framework\Core\DataProviders\Listener\ChatCommandInterface as ChatCommandPluginInterface;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ChatCommandInterface as ChatCommandPluginInterface;
 use eXpansion\Framework\Core\Exceptions\ChatCommand\CommandExistException;
 use eXpansion\Framework\Core\Model\ChatCommand\ChatCommandInterface;
 

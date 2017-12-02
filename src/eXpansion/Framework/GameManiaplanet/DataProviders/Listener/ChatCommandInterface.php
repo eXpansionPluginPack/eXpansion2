@@ -1,6 +1,6 @@
 <?php
 
-namespace eXpansion\Framework\Core\DataProviders\Listener;
+namespace eXpansion\Framework\GameManiaplanet\DataProviders\Listener;
 
 
 /**

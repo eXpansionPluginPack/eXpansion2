@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\eXpansion\Framework\Core\DataProviders;
+namespace Tests\eXpansion\Framework\GameManiaplanet\DataProviders;
 
-use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyManialink;
-use eXpansion\Framework\Core\DataProviders\ManialinkPageAnswerDataProvider;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyManialink;
+use eXpansion\Framework\GameManiaplanet\DataProviders\ManialinkPageAnswerDataProvider;
 use Tests\eXpansion\Framework\Core\TestCore;
 
 class ManialinkPageAnswerDataProviderTest extends TestCore

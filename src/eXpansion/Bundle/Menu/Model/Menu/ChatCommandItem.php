@@ -3,7 +3,7 @@
 namespace eXpansion\Bundle\Menu\Model\Menu;
 
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
-use eXpansion\Framework\Core\DataProviders\ChatCommandDataProvider;
+use eXpansion\Framework\GameManiaplanet\DataProviders\ChatCommandDataProvider;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
 

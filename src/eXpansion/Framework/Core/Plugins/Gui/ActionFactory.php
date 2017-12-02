@@ -3,7 +3,7 @@
 namespace eXpansion\Framework\Core\Plugins\Gui;
 
 use Doctrine\Bundle\DoctrineBundle\ManagerConfigurator;
-use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceMpLegacyManialink;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyManialink;
 use eXpansion\Framework\Core\Model\Gui\Action;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 
