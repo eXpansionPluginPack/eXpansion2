@@ -55,7 +55,7 @@ class GuiHandler implements
     /** @var ManialinkInterface[][] */
     protected $hideQueu = [];
 
-    /** @var String[][] */
+    /** @var ManialinkInterface[][] */
     protected $hideIndividualQueu = [];
 
     /** @var String[] */
@@ -85,18 +85,13 @@ class GuiHandler implements
 
 
     /**
-     * Add a manialink to the display queue.
-     *
-     * @param ManialinkInterface $manialink
-     * @param ManialinkFactory   $manialinkFactory
-     *
-     * @return void
-     */
-    public function addToDisplay(ManialinkInterface $manialink, ManialinkFactoryInterface $manialinkFactory)
+     * @inheritdoc
+     **/
+    public function addToDisplay(ManialinkInterface $manialink)
     {
 
         $userGroup = $manialink->getUserGroup()->getName();
-        $id = $manialinkFactory->getId();
+        $id = $manialink->getManialinkFactory()->getId();
 
         if (AssociativeArray::getFromKey($this->hideQueu, [$userGroup, $id])) {
             unset($this->hideQueu[$userGroup][$id]);
@@ -106,15 +101,12 @@ class GuiHandler implements
     }
 
     /**
-     * Add a manialink to the destruction queue.
-     *
-     * @param ManialinkInterface $manialink
-     * @param ManialinkFactory   $manialinkFactory
+     * @inheritdoc
      */
-    public function addToHide(ManialinkInterface $manialink, ManialinkFactoryInterface $manialinkFactory)
+    public function addToHide(ManialinkInterface $manialink)
     {
         $userGroup = $manialink->getUserGroup()->getName();
-        $id = $manialinkFactory->getId();
+        $id = $manialink->getManialinkFactory()->getId();
 
         if (AssociativeArray::getFromKey($this->displayQueu, [$userGroup, $id])) {
             unset($this->displayQueu[$userGroup][$id]);
@@ -129,12 +121,7 @@ class GuiHandler implements
     }
 
     /**
-     * Get manialink for a group and manialink factory.
-     *
-     * @param Group            $group
-     * @param ManialinkFactory $manialinkFactory
-     *
-     * @return null
+     * @inheritdoc
      */
     public function getManialink(Group $group, ManialinkFactoryInterface $manialinkFactory)
     {
@@ -226,6 +213,7 @@ class GuiHandler implements
         foreach ($this->hideQueu as $manialinks) {
             foreach ($manialinks as $manialink) {
                 $id = $manialink->getId();
+                $manialink->destroy();
 
                 $logins = $manialink->getUserGroup()->getLogins();
                 $logins = array_diff($logins, $this->disconnectedLogins);
@@ -239,6 +227,7 @@ class GuiHandler implements
         foreach ($this->hideIndividualQueu as $login => $manialinks) {
             foreach ($manialinks as $manialink) {
                 $id = $manialink->getId();
+                // Manialink is not destroyed just not shown at a particular user that left the group.
 
                 if (!in_array($login, $this->disconnectedLogins)) {
                     yield ['logins' => $login, 'ml' => '<manialink id="'.$id.'" />'];
@@ -327,19 +316,32 @@ class GuiHandler implements
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function onPlayerConnect(Player $player)
     {
     }
 
+    /**
+     * @inheritdoc
+     */
     public function onPlayerDisconnect(Player $player, $disconnectionReason)
     {
+        // To prevent sending manialinks to those players.
         $this->disconnectedLogins[] = $player->getLogin();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function onPlayerInfoChanged(Player $oldPlayer, Player $player)
     {
     }
 
+    /**
+     * @inheritdoc
+     */
     public function onPlayerAlliesChanged(Player $oldPlayer, Player $player)
     {
     }

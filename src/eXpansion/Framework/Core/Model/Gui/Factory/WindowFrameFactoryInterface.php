@@ -1,15 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Käyttäjä
- * Date: 14.11.2017
- * Time: 2:38
- */
 
-namespace eXpansion\Framework\Core\Model\Gui;
+namespace eXpansion\Framework\Core\Model\Gui\Factory;
 
+use eXpansion\Framework\Core\Model\Gui\Window;
 use FML\Controls\Control;
-use FML\ManiaLink;
 use FML\Controls\Frame;
 use FML\Types\Container;
 
@@ -18,7 +12,7 @@ interface WindowFrameFactoryInterface
     /**
      * Build the window frame content.
      *
-     * @param ManiaLink $manialink
+     * @param Window $manialink
      * @param Frame|Container $mainFrame to build into
      * @param $name
      * @param float $sizeX Size of the inner frame to build the window frame around
@@ -26,10 +20,5 @@ interface WindowFrameFactoryInterface
      *
      * @return Control
      */
-    public function build(Manialink $manialink, Frame $mainFrame, $name, $sizeX, $sizeY);
-
-    /**
-     * @param ManialinkInterface $manialinkInterface
-     */
-    public function setManialinkInterface(ManialinkInterface $manialinkInterface);
+    public function build(Window $manialink, Frame $mainFrame, $name, $sizeX, $sizeY);
 }

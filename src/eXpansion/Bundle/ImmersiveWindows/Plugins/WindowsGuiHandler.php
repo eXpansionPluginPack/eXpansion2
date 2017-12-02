@@ -49,7 +49,7 @@ class WindowsGuiHandler implements GuiHandlerInterface, ListenerInterfaceMpLegac
     /**
      * @inheritdoc
      */
-    public function addToDisplay(ManialinkInterface $manialink, ManialinkFactoryInterface $manialinkFactory)
+    public function addToDisplay(ManialinkInterface $manialink)
     {
         $logins = $manialink->getUserGroup()->getLogins();
 
@@ -58,19 +58,19 @@ class WindowsGuiHandler implements GuiHandlerInterface, ListenerInterfaceMpLegac
 
             // If a window is already displayed hide it. We wish to have 1 window max.
             if (isset($this->userWindows[$login]) && $this->userWindows[$login]->getId() != $manialink->getId()) {
-                $this->guiHandler->addToHide($this->userWindows[$login], $manialinkFactory);
+                $this->guiHandler->addToHide($this->userWindows[$login]);
             }
 
             $this->userWindows[$login] = $manialink;
         }
 
-        $this->guiHandler->addToDisplay($manialink, $manialinkFactory);
+        $this->guiHandler->addToDisplay($manialink);
     }
 
     /**
      * @inheritdoc
      */
-    public function addToHide(ManialinkInterface $manialink, ManialinkFactoryInterface $manialinkFactory)
+    public function addToHide(ManialinkInterface $manialink)
     {
         $logins = $manialink->getUserGroup()->getLogins();
         if (count($logins) == 1 && !$manialink->getUserGroup()->isPersistent()) {
@@ -81,7 +81,7 @@ class WindowsGuiHandler implements GuiHandlerInterface, ListenerInterfaceMpLegac
             }
         }
 
-        $this->guiHandler->addToHide($manialink, $manialinkFactory);
+        $this->guiHandler->addToHide($manialink);
     }
 
 

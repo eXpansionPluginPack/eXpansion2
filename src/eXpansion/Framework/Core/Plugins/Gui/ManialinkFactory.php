@@ -17,7 +17,7 @@ use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
  * @package eXpansion\Framework\Core\Plugins\Gui
  * @author Oliver de Cramer
  */
-class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceExpUserGroup
+class ManialinkFactory implements ManialinkFactoryInterface
 {
     /** @var  GuiHandler */
     protected $guiHandler;
@@ -188,22 +188,6 @@ class ManialinkFactory implements ManialinkFactoryInterface, ListenerInterfaceEx
     {
         $className = $this->className;
 
-        return new $className($group, $this->name, $this->sizeX, $this->sizeY, $this->posX, $this->posY);
+        return new $className($this, $group, $this->name, $this->sizeX, $this->sizeY, $this->posX, $this->posY);
     }
-
-    public function onExpansionGroupDestroy(Group $group, $lastLogin)
-    {
-        // nothing to do here.
-    }
-
-    public function onExpansionGroupAddUser(Group $group, $loginAdded)
-    {
-        // nothing to do here.
-    }
-
-    public function onExpansionGroupRemoveUser(Group $group, $loginRemoved)
-    {
-        // nothing to do here.
-    }
-
 }

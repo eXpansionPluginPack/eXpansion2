@@ -9,6 +9,7 @@
 namespace Tests\eXpansion\Framework\Core\Model\Gui;
 
 use eXpansion\Framework\Core\Model\Gui\Manialink;
+use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryInterface;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\UserGroups\AllPlayers;
 use Tests\eXpansion\Framework\Core\TestCore;
@@ -22,11 +23,12 @@ use Tests\eXpansion\Framework\Core\TestCore;
  */
 class ManialinkTest extends TestCore
 {
-    public function testManialinl()
+    public function testManialink()
     {
         $group = $this->getSpectatorsGroup();
+        $factoryMock = $this->getMockBuilder(ManialinkFactoryInterface::class)->getMock();
 
-        $manialink = new Manialink($group, 'test', 0,0,0,0);
+        $manialink = new Manialink($factoryMock, $group, 'test', 0,0,0,0);
 
         $this->assertEquals($group, $manialink->getUserGroup());
         $this->assertNotNull($manialink->getId());

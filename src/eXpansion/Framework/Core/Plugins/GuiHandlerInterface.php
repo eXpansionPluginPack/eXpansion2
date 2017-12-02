@@ -16,17 +16,31 @@ use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
  */
 interface GuiHandlerInterface
 {
-    public function addToDisplay(ManialinkInterface $manialink, ManialinkFactoryInterface $manialinkFactory);
+    /**
+     * Add a manialink to the display.
+     *
+     * @param ManialinkInterface $manialink
+     *
+     * @return void
+     */
+    public function addToDisplay(ManialinkInterface $manialink);
 
-    public function addToHide(ManialinkInterface $manialink, ManialinkFactoryInterface $manialinkFactory);
+    /**
+     * Hide a manialink.
+     *
+     * @param ManialinkInterface $manialink
+     *
+     * @return void
+     */
+    public function addToHide(ManialinkInterface $manialink);
 
     /**
      * Get manialink for a group and manialink factory.
      *
-     * @param Group            $group
-     * @param ManialinkFactory $manialinkFactory
+     * @param Group                     $group
+     * @param ManialinkFactoryInterface $manialinkFactory
      *
-     * @return null
+     * @return null|ManialinkInterface
      */
     public function getManialink(Group $group, ManialinkFactoryInterface $manialinkFactory);
 }

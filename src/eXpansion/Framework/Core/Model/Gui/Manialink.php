@@ -10,24 +10,35 @@ class Manialink implements ManialinkInterface
 {
     use DataStorageTrait;
 
-    /** @var  Group */
-    protected $group;
-    /** @var float */
-    protected $sizeX;
-    /** @var float */
-    protected $sizeY;
-    /** @var float */
-    protected $posX;
-    /** @var float */
-    protected $posY;
     /** @var string */
     private $id;
+
     /** @var string */
     private $name;
+
+    /** @var ManialinkFactoryInterface */
+    private $manialinkFactory;
+
+    /** @var  Group */
+    protected $group;
+
+    /** @var float */
+    protected $sizeX;
+
+    /** @var float */
+    protected $sizeY;
+
+    /** @var float */
+    protected $posX;
+
+    /** @var float */
+    protected $posY;
+
 
     /**
      * Manialink constructor
      *
+     * @param ManialinkFactoryInterface $manialinkFactory
      * @param Group $group
      * @param string $name
      * @param int $sizeX
@@ -36,6 +47,7 @@ class Manialink implements ManialinkInterface
      * @param float|null $posY
      */
     public function __construct(
+        ManialinkFactoryInterface $manialinkFactory,
         Group $group,
         $name,
         $sizeX,
@@ -43,13 +55,14 @@ class Manialink implements ManialinkInterface
         $posX = null,
         $posY = null
     ) {
+        $this->manialinkFactory = $manialinkFactory;
         $this->group = $group;
         $this->name = $name;
         $this->sizeX = $sizeX;
         $this->sizeY = $sizeY;
         $this->posX = $posX;
         $this->posY = $posY;
-        $this->id = uniqid("ml_", true); // originally: $this->id = spl_object_hash($this)... change back if needed
+        $this->id = uniqid("ml_", true);
     }
 
     /**
@@ -63,6 +76,14 @@ class Manialink implements ManialinkInterface
             .'<manialink version="3" id="'.$this->getId().'">'
             .'<label text="This is empty manialink!" />'
             .'</manialink>';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getManialinkFactory(): ManialinkFactoryInterface
+    {
+        return $this->manialinkFactory;
     }
 
     /**
@@ -117,5 +138,17 @@ class Manialink implements ManialinkInterface
     protected function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * Destroys a manialink.
+     *
+     * @return mixed
+     */
+    public function destroy()
+    {
+        // This is not mandatory as GC will free the memory eventually but allows memory to be freed faster.
+        $this->data = [];
+        $this->manialinkFactory = null;
     }
 }
