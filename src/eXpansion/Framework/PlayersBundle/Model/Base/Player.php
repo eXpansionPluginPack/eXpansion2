@@ -31,7 +31,7 @@ use eXpansion\Framework\PlayersBundle\Model\Map\PlayerTableMap;
  *
  *
  *
- * @package    propel.generator.src.eXpansion.Framework.PlayersBundle.Model.Base
+ * @package    propel.generator.src\eXpansion\Framework\PlayersBundle.Model.Base
  */
 abstract class Player implements ActiveRecordInterface
 {

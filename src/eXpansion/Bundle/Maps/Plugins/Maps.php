@@ -87,7 +87,7 @@ class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMap
 
     public function removeMap($login, $uid)
     {
-        if (!$this->adminGroups->hasPermission($login, 'maps')) {
+        if (!$this->adminGroups->hasPermission($login, 'maps.remove')) {
             $this->chatNotification->sendMessage('expansion_maps.chat.nopermission', $login);
         }
 

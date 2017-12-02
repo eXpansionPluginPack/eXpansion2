@@ -6,8 +6,6 @@ use eXpansion\Framework\Core\Helpers\JobRunner\Factory;
 use eXpansion\Framework\Core\Helpers\Structures\HttpRequest;
 use eXpansion\Framework\Core\Helpers\Structures\HttpResult;
 use eXpansion\Framework\Core\Services\Application\AbstractApplication;
-use oliverde8\AsynchronousJobs\Job\CallbackCurl;
-use oliverde8\AsynchronousJobs\JobRunner;
 
 /**
  * Class Http
@@ -60,9 +58,13 @@ class Http
      */
     public function get($url, callable $callback, $additionalData = null, $options = [])
     {
-        $options[CURLOPT_FOLLOWLOCATION] = true;
-        $options[CURLOPT_USERAGENT] = "eXpansionPluginPack v ".AbstractApplication::EXPANSION_VERSION;
 
+        $defaultOptions = [
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_USERAGENT => "eXpansionPluginPack v ".AbstractApplication::EXPANSION_VERSION,
+        ];
+
+        $options = $options + $defaultOptions;
         $additionalData['callback'] = $callback;
 
         $this->call($url, [$this, 'process'], $additionalData, $options);
@@ -80,9 +82,13 @@ class Http
      */
     public function post($url, $postFields, callable $callback, $additionalData = null, $options = [])
     {
-        $options[CURLOPT_POST] = true;
-        $options[CURLOPT_FOLLOWLOCATION] = true;
-        $options[CURLOPT_USERAGENT] = "eXpansionPluginPack v ".AbstractApplication::EXPANSION_VERSION;
+        $defaultOptions = [
+            CURLOPT_POST => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_USERAGENT => "eXpansionPluginPack v ".AbstractApplication::EXPANSION_VERSION,
+        ];
+
+        $options = $options + $defaultOptions;
 
         if (is_array($postFields)) {
             $query = http_build_query($postFields, '', '&');

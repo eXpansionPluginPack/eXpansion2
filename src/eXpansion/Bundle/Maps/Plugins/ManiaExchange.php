@@ -2,6 +2,10 @@
 
 namespace eXpansion\Bundle\Maps\Plugins;
 
+use eXpansion\Bundle\Maps\Model\Map;
+use eXpansion\Bundle\Maps\Model\MapQuery;
+use eXpansion\Bundle\Maps\Model\Mxmap;
+use eXpansion\Bundle\Maps\Model\MxmapQuery;
 use eXpansion\Bundle\Maps\Services\JukeboxService;
 use eXpansion\Bundle\Maps\Structure\MxInfo;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
@@ -13,6 +17,8 @@ use eXpansion\Framework\Core\Helpers\TMString;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use Maniaplanet\DedicatedServer\Connection;
+use Maniaplanet\DedicatedServer\Structures\Map as DedicatedMap;
+use Propel\Runtime\Map\TableMap;
 
 class ManiaExchange implements ListenerInterfaceExpApplication
 {
@@ -86,7 +92,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
     public function addMap($login, $id, $mxsite)
     {
 
-        if (!$this->adminGroups->hasPermission($login, "mania_exchange.add")) {
+        if (!$this->adminGroups->hasPermission($login, "maps.add")) {
             $this->chatNotification->sendMessage('expansion_mx.chat.nopermission', $login);
 
             return;
@@ -123,6 +129,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
         $group = $this->adminGroups->getLoginUserGroups($additionalData['login']);
 
         $json = json_decode($result->getResponse(), true);
+
         if (isset($json['StatusCode'])) {
             $this->chatNotification->sendMessage(
                 'expansion_mx.chat.apierror',
@@ -133,15 +140,16 @@ class ManiaExchange implements ListenerInterfaceExpApplication
             return;
         }
 
-        $mxInfo = new MxInfo($json);
+        $mxInfo = new MxInfo($json[0]);
         $additionalData['mxInfo'] = $mxInfo;
 
         if (!$result->hasError()) {
             $options = [
+                CURLOPT_FOLLOWLOCATION => false,
                 CURLOPT_HTTPHEADER => [
                     "Content-Type" => "application/json",
                     "X-ManiaPlanet-ServerLogin" => $this->gameDataStorage->getSystemInfo()->serverLogin,
-                ],
+                ]
             ];
 
             $this->http->get("https://".strtolower($additionalData['site']).
@@ -163,6 +171,16 @@ class ManiaExchange implements ListenerInterfaceExpApplication
         $group = $this->adminGroups->getLoginUserGroups($data['login']);
 
         if ($result->hasError()) {
+
+            if ($result->getHttpCode() == 302) {
+                $this->chatNotification->sendMessage(
+                    'expansion_mx.chat.decline',
+                    $group,
+                    []
+                );
+                return;
+            }
+
             $this->chatNotification->sendMessage(
                 'expansion_mx.chat.httperror',
                 $group,
@@ -174,11 +192,12 @@ class ManiaExchange implements ListenerInterfaceExpApplication
 
         /** @var MxInfo $info */
         $info = $data['mxInfo'];
-        $authorName = $this->cleanString($info->Username);
+
+        $authorName = $this->cleanString($info->username);
         $mapName = $this->cleanString(
             trim(
                 mb_convert_encoding(
-                    substr(TMString::trimStyles($info->GbxMapName), 0, 20),
+                    substr(TMString::trimStyles($info->gbxMapName), 0, 20),
                     "7bit",
                     "UTF-8"
                 )
@@ -186,13 +205,36 @@ class ManiaExchange implements ListenerInterfaceExpApplication
         );
 
         $filename = $data['mxId']."-".$authorName."-".$mapName.".Map.Gbx";
+
         try {
-            // @todo write mx info from map to database!
+            // @todo add file abstaction layer, when it gets finished
+            $folder = $this->gameDataStorage->getMapFolder();
 
-            $this->connection->writeFile($filename, $result->getResponse());
-            $this->connection->addMap($filename);
+            if (!is_dir($folder.DIRECTORY_SEPARATOR.$info->titlePack)) {
+                try {
+                    mkdir($folder.DIRECTORY_SEPARATOR.$info->titlePack);
+                } catch (\Exception $ex) {
+                    $this->chatNotification->sendMessage(
+                        'expansion_mx.chat.exception',
+                        $group, ["%message%" => $ex->getMessage()]
+                    );
+                    $this->console->writeln('$f00Error while adding map'.$ex->getMessage());
+                }
+            }
+            $file = ($folder.DIRECTORY_SEPARATOR.$info->titlePack.DIRECTORY_SEPARATOR.$filename);
+            file_put_contents($file, $result->getResponse());
 
-            $map = $this->connection->getMapInfo($filename);
+            //  $this->connection->writeFile($filename, $result->getResponse());
+
+            if (!$this->connection->checkMapForCurrentServerParams($info->titlePack.DIRECTORY_SEPARATOR.$filename)) {
+                $this->chatNotification->sendMessage("expansion_mx.chat.fail");
+
+                return;
+            }
+
+            $map = $this->connection->getMapInfo($info->titlePack.DIRECTORY_SEPARATOR.$filename);
+            $this->connection->addMap($map->fileName);
+
             $this->jukebox->addMap($map, $data['login']);
             $this->chatNotification->sendMessage(
                 'expansion_mx.chat.success',
@@ -203,15 +245,62 @@ class ManiaExchange implements ListenerInterfaceExpApplication
                     "%mapname%" => TMString::trimControls($map->name),
                 ]
             );
+
+            $this->persistMapData($map, $info);
+
         } catch (\Exception $e) {
             $this->chatNotification->sendMessage(
                 'expansion_mx.chat.dedicatedexception',
-                $group,
-                [
-                    "%message%" => $e->getMessage(),
-                ]
+                $group, ["%message%" => $e->getMessage()]
             );
         }
+    }
+
+    /**
+     * @param DedicatedMap $map
+     * @param MxInfo $mxInfo
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    protected function persistMapData($map, $mxInfo)
+    {
+
+        $mapquery = new MapQuery();
+        $dbMap = $mapquery->findOneByMapuid($map->uId);
+
+        if ($dbMap) {
+            $dbMap->fromArray($this->convertMap($map), TableMap::TYPE_FIELDNAME);
+        } else {
+            $dbMap = new Map();
+            $dbMap->fromArray($this->convertMap($map), TableMap::TYPE_FIELDNAME);
+        }
+
+        $mxquery = new MxmapQuery();
+        $mxMap = $mxquery->findOneByTrackuid($map->uId);
+
+        print_r($mxInfo->toArray());
+
+        if ($mxMap) {
+            $mxMap->fromArray($mxInfo->toArray(), TableMap::TYPE_FIELDNAME);
+        } else {
+            $mxMap = new Mxmap();
+            $mxMap->fromArray($mxInfo->toArray(), TableMap::TYPE_FIELDNAME);
+        }
+        $dbMap->addMxmap($mxMap);
+        $dbMap->save();
+        $mxMap->save();
+    }
+
+    /**
+     * @param DedicatedMap $map
+     * @return array
+     */
+    private function convertMap($map)
+    {
+        $outMap = (array)$map;
+        $outMap["mapUid"] = $map->uId;
+
+        return $outMap;
+
     }
 
     /**

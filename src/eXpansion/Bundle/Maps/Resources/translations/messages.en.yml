@@ -28,9 +28,12 @@ expansion_mx:
       nopermission: "|error| {error}You don't have enough permissions to add map from Mania-Exchange."
       apierror: "|error| {error}Mania-Exchange Api Error: \"{highlight}%message% {error}\" ({highlight}%status%{error})"
       httperror: "|error| {error}Mania-Exchange Http Error: \"{highlight}%message% {error}\" ({highlight}%status%{error})"
+      decline: "|admin| {error}Map author has declined downloading this map."
       success: "|admin| {info}Map {variable}%mapname% {info}by {variable}%mapauthor% {info}added successfully from Mania-Exchange."
       start: "|admin| {info}Download starting for {highlight}%id% {info}from {highlight}%site% {info}Mania-Exchange."
+      fail: "|error| {error}Map is not compatible with current server title pack or settings! Map is not added!"
       dedicatedexception: "|error| {error}Dedicated Server error: {highlight}%message%"
+      exception: "|error| {error}Error: {highlight}%message%"
   gui:
       mxsearch:
           title: "Mania-Exchange: Search"

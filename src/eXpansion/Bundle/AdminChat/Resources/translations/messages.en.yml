@@ -1,5 +1,5 @@
 expansion_admin_chat:
-  restart:
+  restartmap:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}restarts the map!'
     description: 'Replay current map.'
 

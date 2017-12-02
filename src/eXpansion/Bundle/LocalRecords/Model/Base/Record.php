@@ -28,7 +28,7 @@ use eXpansion\Framework\PlayersBundle\Model\PlayerQuery;
  *
  *
  *
- * @package    propel.generator.src.eXpansion.Bundle.LocalRecords.Model.Base
+ * @package    propel.generator.src\eXpansion\Bundle\LocalRecords.Model.Base
  */
 abstract class Record implements ActiveRecordInterface
 {

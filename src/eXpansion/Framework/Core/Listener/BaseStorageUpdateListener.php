@@ -41,13 +41,13 @@ class BaseStorageUpdateListener
         $this->dispatcher = $dispatcher;
 
         $gameInfos = $this->connection->getCurrentGameInfo();
-
         $serverOptions = $this->connection->getServerOptions();
-        $this->gameDataStorage->setServerOptions($serverOptions);
 
+        $this->gameDataStorage->setServerOptions($serverOptions);
         $this->gameDataStorage->setSystemInfo($this->connection->getSystemInfo());
         $this->gameDataStorage->setGameInfos(clone $gameInfos);
         $this->gameDataStorage->setVersion($this->connection->getVersion());
+        $this->gameDataStorage->setMapFolder($this->connection->getMapsDirectory());
     }
 
     /**

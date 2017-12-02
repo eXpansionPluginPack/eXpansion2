@@ -32,10 +32,11 @@ class RecordHandlerFactory
     /**
      * RecordHandlerFactory constructor.
      *
-     * @param PlayerDb         $playerDb
-     * @param string           $ordering
-     * @param int              $nbRecords
-     * @param string           $className
+     * @param RecordQueryBuilder $recordQueryBuilder
+     * @param PlayerDb $playerDb
+     * @param string $ordering
+     * @param int $nbRecords
+     * @param string $className
      */
     public function __construct(
         RecordQueryBuilder $recordQueryBuilder,

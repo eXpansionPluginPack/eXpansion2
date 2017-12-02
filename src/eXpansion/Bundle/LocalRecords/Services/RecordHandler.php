@@ -4,7 +4,6 @@ namespace eXpansion\Bundle\LocalRecords\Services;
 
 use eXpansion\Bundle\LocalRecords\Model\Map\RecordTableMap;
 use eXpansion\Bundle\LocalRecords\Model\Record;
-use eXpansion\Bundle\LocalRecords\Model\RecordQuery;
 use eXpansion\Bundle\LocalRecords\Model\RecordQueryBuilder;
 use eXpansion\Framework\PlayersBundle\Storage\PlayerDb;
 use Propel\Runtime\Propel;
@@ -138,8 +137,7 @@ class RecordHandler
             ->getMapRecords($mapUid, $nbLaps, $this->getScoreOrdering(), $this->nbRecords);
 
         $position = 1;
-        foreach ($this->records as $record)
-        {
+        foreach ($this->records as $record) {
             $this->recordsPerPlayer[$record->getPlayer()->getLogin()] = $record;
             $this->positionPerPlayer[$record->getPlayer()->getLogin()] = $position++;
         }
@@ -189,7 +187,8 @@ class RecordHandler
      *
      * @return array|null Data for the new records.
      */
-    public function addRecord($login, $score, $checkpoints) {
+    public function addRecord($login, $score, $checkpoints)
+    {
         $oldPosition = isset($this->positionPerPlayer[$login]) ? $this->positionPerPlayer[$login] : count($this->records) + 1;
         $record = isset($this->recordsPerPlayer[$login]) ? $this->recordsPerPlayer[$login] : $this->getNewRecord($login);
         $this->recordsPerPlayer[$login] = $record;
@@ -222,7 +221,7 @@ class RecordHandler
                 self::COL_EVENT => self::EVENT_TYPE_SAME_SCORE,
                 self::COL_RECORD => $record,
                 self::COL_OLD_RECORD => $oldRecord,
-                self::COL_RECORDS => $this->records
+                self::COL_RECORDS => $this->records,
             ];
         }
 

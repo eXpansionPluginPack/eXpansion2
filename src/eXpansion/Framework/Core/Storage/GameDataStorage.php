@@ -44,6 +44,9 @@ class GameDataStorage
      */
     protected $gameModeCodes;
 
+    /** @var string */
+    protected $mapFolder;
+
     /**
      * @var AssociativeArray
      */
@@ -144,5 +147,21 @@ class GameDataStorage
     public function getSystemInfo()
     {
         return $this->systemInfo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMapFolder(): string
+    {
+        return $this->mapFolder;
+    }
+
+    /**
+     * @param string $mapFolder
+     */
+    public function setMapFolder(string $mapFolder)
+    {
+        $this->mapFolder = $mapFolder;
     }
 }

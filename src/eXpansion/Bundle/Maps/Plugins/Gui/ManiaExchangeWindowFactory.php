@@ -367,13 +367,13 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
             $map = new MxInfo($mxInfo);
             $data[] = [
                 "index" => $idx + 1,
-                "name" => TMString::trimControls($map->GbxMapName),
-                "author" => $map->Username,
-                "envir" => $map->EnvironmentName,
-                "awards" => $map->AwardCount ? '$ff0🏆 $fff'.$map->AwardCount : "",
-                "length" => $map->LengthName,
-                "style" => $map->StyleName,
-                "mxid" => $map->TrackID,
+                "name" => TMString::trimControls($map->gbxMapName),
+                "author" => $map->username,
+                "envir" => $map->environmentName,
+                "awards" => $map->awardCount ? '$ff0🏆 $fff'.$map->awardCount : "",
+                "length" => $map->lengthName,
+                "style" => $map->styleName,
+                "mxid" => $map->trackID,
             ];
         }
 
