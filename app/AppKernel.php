@@ -47,6 +47,9 @@ class AppKernel extends Kernel
             new Propel\Bundle\PropelBundle\PropelBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 
+            // Add SF Community Bundles
+            new \Oneup\FlysystemBundle\OneupFlysystemBundle(),
+
             // And add eXpansion core.
             new \eXpansion\Framework\Core\eXpansionCore(),
             new \eXpansion\Framework\GameManiaplanet\eXpansionGameManiaplanetBundle(),

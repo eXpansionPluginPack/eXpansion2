@@ -3,6 +3,7 @@ php:
     build: docker/php
     volumes:
         - ./:/var/www/expansion
+        - ./docker/data/UserData/:/var/maniaplanet/UserData/
     links:
         - mysql
         - dedicated

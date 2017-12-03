@@ -15,6 +15,12 @@ services:
             $colorCodes: '%expansion.config.core_chat_color_codes%'
             $glyphIcons: '%expansion.config.core_chat_glyph_icons%'
 
+    eXpansion\Framework\Core\Helpers\FileSystem:
+        class: eXpansion\Framework\Core\Helpers\FileSystem
+        arguments:
+            $connectionType: "%dedicated_connection_type%"
+            $remoteAdapter: '@oneup_flysystem.dedicated_user_data_filesystem'
+
     expansion.helper.data.array_filter:
         class: 'eXpansion\Framework\Core\Helpers\Data\ArrayFilter'
 
@@ -25,3 +31,4 @@ services:
         class: eXpansion\Framework\Core\Helpers\JobRunner\Factory
         tags:
             - {name: expansion.plugin, data_provider: exp.timer}
+
