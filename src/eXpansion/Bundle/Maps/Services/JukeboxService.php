@@ -61,9 +61,9 @@ class JukeboxService
     {
         $player = null;
         if (!$login) {
-
             return false;
         }
+
         $player = $this->playerStorage->getPlayerInfo($login);
         $jbMap = new JukeboxMap($map, $player);
 

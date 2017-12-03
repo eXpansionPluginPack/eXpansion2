@@ -3,6 +3,7 @@
 namespace eXpansion\Bundle\VoteManager\Plugins\Gui\Widget;
 
 use eXpansion\Bundle\VoteManager\Plugins\VoteManager;
+use eXpansion\Bundle\VoteManager\Services\VoteService;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
@@ -18,6 +19,10 @@ class UpdateVoteWidgetFactory extends WidgetFactory
      * @var VoteManager
      */
     private $voteManager;
+    /**
+     * @var VoteService
+     */
+    private $voteService;
 
     /***
      * MenuFactory constructor.
@@ -28,6 +33,7 @@ class UpdateVoteWidgetFactory extends WidgetFactory
      * @param null $posX
      * @param null $posY
      * @param WidgetFactoryContext $context
+     * @param VoteService $voteService
      */
     public function __construct(
         $name,
@@ -35,9 +41,11 @@ class UpdateVoteWidgetFactory extends WidgetFactory
         $sizeY,
         $posX,
         $posY,
-        WidgetFactoryContext $context
+        WidgetFactoryContext $context,
+        VoteService $voteService
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
+        $this->voteService = $voteService;
     }
 
     /**
@@ -56,8 +64,7 @@ class UpdateVoteWidgetFactory extends WidgetFactory
      */
     protected function updateContent(ManialinkInterface $manialink)
     {
-
-        $vote = VoteManager::$currentVote;
+        $vote = $this->voteService->getCurrentVote();
 
         if ($vote) {
             $yes = number_format($vote->getYes(), 1, ".", "");

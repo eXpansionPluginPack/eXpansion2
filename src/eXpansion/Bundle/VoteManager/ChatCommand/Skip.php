@@ -1,16 +1,17 @@
 <?php
 
+
 namespace eXpansion\Bundle\VoteManager\ChatCommand;
 
-use eXpansion\Bundle\Maps\Plugins\Gui\MapsWindowFactory;
-use eXpansion\Bundle\Maps\Plugins\Maps;
 use eXpansion\Bundle\VoteManager\Plugins\VoteManager;
+use eXpansion\Bundle\VoteManager\Services\VoteService;
 use eXpansion\Framework\Core\Model\ChatCommand\AbstractChatCommand;
+use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Symfony\Component\Console\Input\InputInterface;
 
 
 /**
- * Class Records
+ * Class
  *
  * @package eXpansion\Bundle\LocalRecords\ChatCommand;
  * @author  reaby
@@ -20,7 +21,11 @@ class Skip extends AbstractChatCommand
     /**
      * @var VoteManager
      */
-    private $voteManager;
+    private $voteService;
+    /**
+     * @var PlayerStorage
+     */
+    private $playerStorage;
 
 
     /**
@@ -28,17 +33,18 @@ class Skip extends AbstractChatCommand
      *
      * @param                      $command
      * @param array $aliases
-     * @param VoteManager $voteManager
+     * @param VoteService $voteService
+     * @param PlayerStorage $playerStorage
      */
     public function __construct(
         $command,
         array $aliases = [],
-        VoteManager $voteManager
-    )
-    {
+        VoteService $voteService,
+        PlayerStorage $playerStorage
+    ) {
         parent::__construct($command, $aliases);
-
-        $this->voteManager = $voteManager;
+        $this->voteService = $voteService;
+        $this->playerStorage = $playerStorage;
     }
 
     /**
@@ -46,6 +52,7 @@ class Skip extends AbstractChatCommand
      */
     public function execute($login, InputInterface $input)
     {
-       $this->voteManager->startVote("NextMap");
+        $player = $this->playerStorage->getPlayerInfo($login);
+        $this->voteService->startVote($player, "Exp_NextMap");
     }
 }

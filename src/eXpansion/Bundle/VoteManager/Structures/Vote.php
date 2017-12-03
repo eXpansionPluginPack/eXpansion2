@@ -2,10 +2,19 @@
 
 namespace eXpansion\Bundle\VoteManager\Structures;
 
+use eXpansion\Framework\Core\Storage\Data\Player;
+
 class Vote
 {
-    const YES = "yes";
-    const NO = "no";
+    const VOTE_YES = "yes";
+    const VOTE_NO = "no";
+
+    const STATUS_FAILED = -1;
+    const STATUS_CANCEL = 0;
+    const STATUS_RUNNING = 1;
+    const STATUS_PASSED = 2;
+
+    protected $status = 1;
 
     protected $elapsedTime = 0;
     protected $totalTime = 30;
@@ -19,23 +28,28 @@ class Vote
     private $type;
 
     protected $ratio = 0.57;
+    /**
+     * @var Player
+     */
+    private $player;
 
-    public function __construct($type)
+    public function __construct(Player $player, $type)
     {
         $this->startTime = time();
         $this->type = $type;
         $this->totalTime = 30;
+        $this->player = $player;
     }
 
 
     public function castYes($login)
     {
-        $this->votes[$login] = self::YES;
+        $this->votes[$login] = self::VOTE_YES;
     }
 
     public function castNo($login)
     {
-        $this->votes[$login] = self::NO;
+        $this->votes[$login] = self::VOTE_NO;
     }
 
     /**
@@ -45,7 +59,7 @@ class Vote
     {
         $value = 0;
         foreach ($this->votes as $login => $vote) {
-            if ($vote === self::YES) {
+            if ($vote === self::VOTE_YES) {
                 $value++;
             }
         }
@@ -57,22 +71,20 @@ class Vote
     {
         $this->elapsedTime = $time - $this->startTime;
         if ($this->elapsedTime > $this->totalTime) {
-            return true;
+            $this->status = self::STATUS_FAILED;
         }
 
         $total = $this->getYes() + $this->getNo();
         if ($total > 0) {
             if (($this->getYes() / $total) > $this->ratio) {
-                return true;
+                $this->status = self::STATUS_PASSED;
             }
 
             if (1 - ($this->getYes() / $total) > 0.9) {
-                return true;
+                $this->status = self::STATUS_FAILED;
             }
 
         }
-
-        return false;
     }
 
 
@@ -83,7 +95,7 @@ class Vote
     {
         $value = 0;
         foreach ($this->votes as $login => $vote) {
-            if ($vote === self::NO) {
+            if ($vote === self::VOTE_NO) {
                 $value++;
             }
         }
@@ -138,6 +150,30 @@ class Vote
     public function getType(): string
     {
         return $this->type;
+    }
+
+    /**
+     * @return Player
+     */
+    public function getPlayer(): Player
+    {
+        return $this->player;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param int $status
+     */
+    public function setStatus(int $status)
+    {
+        $this->status = $status;
     }
 
 }
