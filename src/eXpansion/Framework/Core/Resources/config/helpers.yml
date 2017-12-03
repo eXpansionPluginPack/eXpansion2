@@ -19,7 +19,7 @@ services:
         class: eXpansion\Framework\Core\Helpers\FileSystem
         arguments:
             $connectionType: "%dedicated_connection_type%"
-            $remoteAdapter: 'oneup_flysystem.dedicated_user_data_filesystem'
+            $remoteAdapter: '@oneup_flysystem.dedicated_user_data_filesystem'
 
     expansion.helper.data.array_filter:
         class: 'eXpansion\Framework\Core\Helpers\Data\ArrayFilter'

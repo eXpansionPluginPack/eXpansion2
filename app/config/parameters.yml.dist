@@ -23,3 +23,7 @@ oneup_flysystem:
     adapters:
         dedicated_user_data:
             nulladapter: ~
+
+    filesystems:
+        dedicated_user_data:
+            adapter: dedicated_user_data

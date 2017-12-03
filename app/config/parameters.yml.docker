@@ -24,3 +24,6 @@ oneup_flysystem:
         dedicated_user_data:
             local:
                 directory: "/var/maniaplanet/UserData/"
+    filesystems:
+        dedicated_user_data:
+            adapter: dedicated_user_data
