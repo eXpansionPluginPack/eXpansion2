@@ -15,3 +15,7 @@ expansion_admin:
                   value: 'Setting Value'
               button:
                   apply: 'Apply'
+  menu:
+    server: "Server"
+    server_settings: "Server settings"
+    script_settings: "Script settings"
