@@ -9,6 +9,11 @@ services:
     eXpansion\Bundle\LocalRecords\Model\RecordQueryBuilder:
         class: eXpansion\Bundle\LocalRecords\Model\RecordQueryBuilder
 
+    eXpansion\Bundle\LocalRecords\Plugins\MenuItems:
+        class: eXpansion\Bundle\LocalRecords\Plugins\MenuItems
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'exp.menu.items'}
+
     #
     # Services used to handle Records in TA.
     #

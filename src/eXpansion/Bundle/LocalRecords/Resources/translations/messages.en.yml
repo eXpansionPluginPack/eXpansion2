@@ -45,3 +45,12 @@ expansion_local_records:
           score: 'Time'
           nickname: 'NickName'
           login: 'Login'
+
+  menu:
+    label: "Records"
+    race_recs: "Race Records"
+    laps_recs: "Lap Records"
+    prev:
+      race_recs: "Previous Race Records"
+      laps_recs: "Previous Lap Records"
+
