@@ -9,17 +9,18 @@ parameters:
     database_user: root
     database_password: ~
 
-    dedicated_host: localhost
+    dedicated_host: dedicated
     dedicated_port: 5000
     dedicated_timeout: 5
     dedicated_user: SuperAdmin
     dedicated_password: SuperAdmin
-    dedicated_connection_type: local
+    dedicated_connection_type: remote
 
     color_enabled: true
 
-# Need to create an adapter that will never be used to satify dependencies.
+# On docker even if the dedicated is remote the file are mounted locally.
 oneup_flysystem:
     adapters:
         dedicated_user_data:
-            nulladapter: ~
+            local:
+                directory: "/var/maniaplanet/UserData/"
