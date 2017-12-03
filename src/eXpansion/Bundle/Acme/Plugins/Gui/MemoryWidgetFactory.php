@@ -40,10 +40,11 @@ class MemoryWidgetFactory extends WidgetFactory
         $message = "Time now:".date("h:i:s");
 
 
-        $script = new Script();
+
 
         $hash = self::$exp_hash;
 
+        $script = new Script();
         $script->addCustomScriptLabel(ScriptLabel::OnInit,
             '
            declare Text '.$hash.' for LocalUser = Text;
