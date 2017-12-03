@@ -65,7 +65,7 @@ class MenuTabsFactory
 
         $posX = 28;
         foreach ($rootItem->getChilds() as $item) {
-            if ($rootItem->isVisibleFor($manialink->getUserGroup())) {
+            if ($item->isVisibleFor($manialink->getUserGroup())) {
                 $action = $this->actionFactory->createManialinkAction(
                     $manialink,
                     $actionCallback,

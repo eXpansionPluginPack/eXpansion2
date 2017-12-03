@@ -35,78 +35,9 @@ class MenuItems implements ListenerMenuItemProviderInterface
         $root->addChild(
             ChatCommandItem::class,
             'general/help',
-            'expansion_menu.admin.help',
+            'expansion_menu.general.help',
             null,
             ['cmd' => '/help']
-        );
-
-
-        $root->addChild(
-            ParentItem::class,
-            'admin',
-            'expansion_menu.admin.label',
-            null // Permission are handled by sub elements.
-        );
-        $root->addChild(
-            ChatCommandItem::class,
-            'admin/help',
-            'expansion_menu.admin.help',
-            'admin',
-            ['cmd' => '/help']
-        );
-        $root->addChild(
-            ChatCommandItem::class,
-            'admin/script_settings',
-            'expansion_menu.admin.script_settings',
-            'admin',
-            ['cmd' => '/admin script']
-        );
-        $root->addChild(
-            ChatCommandItem::class,
-            'admin/server_settings',
-            'expansion_menu.admin.server_settings',
-            'admin',
-            ['cmd' => '/admin server']
-        );
-
-        /**
-         * Test sub and subs.
-         *
-         */
-        $root->addChild(
-            ParentItem::class,
-            'admin/sub',
-            'expansion_menu.admin.sub1',
-            'admin',
-            []
-        );
-        $root->addChild(
-            ParentItem::class,
-            'admin/sub/sub',
-            'expansion_menu.admin.sub2',
-            'admin',
-            []
-        );
-        $root->addChild(
-            ChatCommandItem::class,
-            'admin/sub/sub_button',
-            'expansion_menu.map.recs',
-            '',
-            ['cmd' => '/recs']
-        );
-        $root->addChild(
-            ParentItem::class,
-            'admin/sub/sub/sub',
-            'expansion_menu.admin.sub3',
-            'admin',
-            []
-        );
-        $root->addChild(
-            ChatCommandItem::class,
-            'admin/sub/sub/sub_button',
-            'expansion_menu.map.recs',
-            '',
-            ['cmd' => '/recs']
         );
     }
 }

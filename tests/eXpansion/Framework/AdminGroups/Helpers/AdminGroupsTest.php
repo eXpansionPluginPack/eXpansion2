@@ -25,7 +25,7 @@ class AdminGroupsTest extends TestAdminGroups
     {
         $helper = $this->getAdminGroupHelper();
 
-        $this->assertCount(count($this->getAdminGroupConfiguration()), $helper->getUserGroups());
+        $this->assertCount(count($this->getAdminGroupConfiguration()) + 1, $helper->getUserGroups());
     }
 
     public function testGetLoginUserGroup()
