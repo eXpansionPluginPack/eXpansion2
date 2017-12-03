@@ -37,7 +37,7 @@ class MenuContentFactory extends WidgetFactory
     protected $menuTabsFactory;
 
     /** @var string */
-    protected $currentPath = 'admin';
+    protected $currentPath = 'general';
 
     /**
      * MenuContentFactory constructor.

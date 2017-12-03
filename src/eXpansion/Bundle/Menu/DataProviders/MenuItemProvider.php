@@ -53,7 +53,7 @@ class MenuItemProvider extends AbstractDataProvider
     {
         if (is_null($this->rootItem)) {
             $this->rootItem = $this->itemBuilder->create(
-                ParentItem::class, "root", "", "root", Quad::create(), null
+                ParentItem::class, "root", "", "root", null, null
             );
             foreach ($this->plugins as $plugin) {
                 $plugin->registerMenuItems($this->rootItem);
