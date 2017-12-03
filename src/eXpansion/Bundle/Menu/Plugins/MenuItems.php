@@ -28,6 +28,21 @@ class MenuItems implements ListenerMenuItemProviderInterface
     {
         $root->addChild(
             ParentItem::class,
+            'general',
+            'expansion_menu.general.label',
+            null
+        );
+        $root->addChild(
+            ChatCommandItem::class,
+            'general/help',
+            'expansion_menu.admin.help',
+            null,
+            ['cmd' => '/help']
+        );
+
+
+        $root->addChild(
+            ParentItem::class,
             'admin',
             'expansion_menu.admin.label',
             null // Permission are handled by sub elements.
@@ -52,37 +67,6 @@ class MenuItems implements ListenerMenuItemProviderInterface
             'expansion_menu.admin.server_settings',
             'admin',
             ['cmd' => '/admin server']
-        );
-
-        /*
-         * @TODO put these in plugins that actually defines the commands.
-         */
-        $root->addChild(
-            ParentItem::class,
-            'map',
-            'expansion_menu.map.label',
-            null // Permission are handled by sub elements.
-        );
-        $root->addChild(
-            ChatCommandItem::class,
-            'map/list',
-            'expansion_menu.map.list',
-            '',
-            ['cmd' => '/list']
-        );
-        $root->addChild(
-            ChatCommandItem::class,
-            'map/mx',
-            'expansion_menu.map.mx',
-            '',
-            ['cmd' => '/mx']
-        );
-        $root->addChild(
-            ChatCommandItem::class,
-            'map/recs',
-            'expansion_menu.map.recs',
-            '',
-            ['cmd' => '/recs']
         );
 
         /**

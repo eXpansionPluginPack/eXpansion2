@@ -77,6 +77,10 @@ class ParentItem extends AbstractItem
         }
 
         if (count($id) == 1) {
+            if (isset($this->childItems[$id[0]])) {
+                return $this->childItems[$id[0]];
+            }
+
             $item = $this->itemBuilder->create(
                 $class,
                 $id[0],
