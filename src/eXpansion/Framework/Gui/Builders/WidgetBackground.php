@@ -36,7 +36,8 @@ class WidgetBackground implements Renderable
     {
         $quad = Quad::create();
         $quad->setPosition($this->posX, $this->posY)->setZ($this->posZ)
-            ->setOpacity(0.4)->setBackgroundColor("000");
+            ->setOpacity(0.4)->setBackgroundColor("000")
+            ->setSize($this->width, $this->height);
         if ($this->id) {
             $quad->setId($this->id);
         }

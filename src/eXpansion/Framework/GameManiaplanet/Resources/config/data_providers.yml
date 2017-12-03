@@ -117,6 +117,27 @@ services:
             - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
             - {name: 'expansion.dataprovider.listener', event_name: PlayerManialinkPageAnswer, method: onPlayerManialinkPageAnswer}
 
+    expansion.framework.core.data_providers.vote_provider:
+        class: eXpansion\Framework\GameManiaplanet\DataProviders\VoteDataProvider
+        tags:
+            - {name: 'expansion.dataprovider', provider: "mp.legacy.vote", interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyVote}
+            - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
+            - {name: 'expansion.dataprovider.listener', event_name: VoteUpdated, method: VoteUpdated}
+
+    expansion.framework.core.data_providers.echo_provider:
+        class: eXpansion\Framework\GameManiaplanet\DataProviders\EchoDataProvider
+        tags:
+            - {name: 'expansion.dataprovider', provider: "mp.legacy.echo", interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyEcho}
+            - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
+            - {name: 'expansion.dataprovider.listener', event_name: Echo, method: onEcho}
+
+    expansion.framework.core.data_providers.bill_provider:
+        class: eXpansion\Framework\GameManiaplanet\DataProviders\BillDataProvider
+        tags:
+            - {name: 'expansion.dataprovider', provider: "mp.legacy.bill", interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyBill}
+            - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
+            - {name: 'expansion.dataprovider.listener', event_name: BillUpdated, method: BillUpdated}
+
 
     expansion.framework.core.data_providers.script_data_provider:
         class: "%expansion.framework.core.data_providers.script_data_provider.class%"

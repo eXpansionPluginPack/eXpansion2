@@ -7,6 +7,7 @@ use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\Data\PlayerFactory;
 use Maniaplanet\DedicatedServer\Connection;
+use Maniaplanet\DedicatedServer\InvalidArgumentException;
 use Maniaplanet\DedicatedServer\Xmlrpc\UnknownPlayerException;
 
 /**
@@ -62,7 +63,7 @@ class PlayerStorage implements ListenerInterfaceMpLegacyPlayer, ListenerInterfac
                 $playerDetails = $this->connection->getDetailedPlayerInfo($login);
 
                 return $this->playerFactory->createPlayer($playerInformation, $playerDetails);
-            } catch (UnknownPlayerException $e) {
+            } catch (InvalidArgumentException $e) {
                 // @todo log unknown player error
                 echo "unknown player $login\n";
 

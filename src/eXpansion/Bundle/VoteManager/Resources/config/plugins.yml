@@ -1,0 +1,53 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    eXpansion\Bundle\VoteManager\Plugins\VoteManager:
+        class: eXpansion\Bundle\VoteManager\Plugins\VoteManager
+        arguments:
+            $players: '@expansion.framework.core.user_groups.players'
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'mp.legacy.vote'}
+            - {name: 'expansion.plugin', data_provider: 'exp.plugin.votemanager'}
+            - {name: 'expansion.plugin', data_provider: 'exp.timer'}
+
+
+    eXpansion\Bundle\VoteManager\Services\VoteService:
+        class: eXpansion\Bundle\VoteManager\Services\VoteService
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'mp.legacy.vote'}
+            - {name: 'expansion.plugin', data_provider: 'exp.plugin.votemanager'}
+            - {name: 'expansion.plugin', data_provider: 'mp.script.map'}
+            - {name: 'expansion.plugin', data_provider: 'exp.timer'}
+
+    eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\VoteWidgetFactory:
+            class: eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\VoteWidgetFactory
+            autowire: true
+            arguments:
+                $name:  "Vote"
+                $posX: -120
+                $posY: 65
+                $sizeX: null
+                $sizeY: null
+
+    eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\UpdateVoteWidgetFactory:
+            class: eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\UpdateVoteWidgetFactory
+            autowire: true
+            arguments:
+                $name:  "UpdateVote"
+                $posX: 0
+                $posY: 0
+                $sizeX: null
+                $sizeY: null
+
+    expansion.bundle.votemanager.data_providers.votedataprovider:
+          class: eXpansion\Bundle\VoteManager\DataProviders\CustomVoteDataProvider
+          tags:
+            - {name: 'expansion.dataprovider', provider: "exp.plugin.votemanager", interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyVote}
+            - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
+            - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.votenew', method: onVoteNew}
+            - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.votecancelled', method: onVoteCancelled}
+            - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.votepassed', method: onVotePassed}
+            - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.votefailed', method: onVoteFailed}
