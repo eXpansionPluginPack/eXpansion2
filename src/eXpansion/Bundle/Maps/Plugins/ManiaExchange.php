@@ -11,6 +11,7 @@ use eXpansion\Bundle\Maps\Structure\MxInfo;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
+use eXpansion\Framework\Core\Helpers\FileSystem;
 use eXpansion\Framework\Core\Helpers\Http;
 use eXpansion\Framework\Core\Helpers\Structures\HttpResult;
 use eXpansion\Framework\Core\Helpers\TMString;
@@ -19,10 +20,10 @@ use eXpansion\Framework\Core\Storage\GameDataStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map as DedicatedMap;
 use Propel\Runtime\Map\TableMap;
+use Psr\Log\LoggerInterface;
 
 class ManiaExchange implements ListenerInterfaceExpApplication
 {
-
     const SITE_TM = "TM";
     const SITE_SM = "SM";
 
@@ -34,26 +35,41 @@ class ManiaExchange implements ListenerInterfaceExpApplication
      * @var ChatNotification
      */
     private $chatNotification;
+
     /**
      * @var Http
      */
     private $http;
+
     /**
      * @var AdminGroups
      */
     private $adminGroups;
+
     /**
      * @var GameDataStorage
      */
     private $gameDataStorage;
+
     /**
      * @var Console
      */
     private $console;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     /**
      * @var JukeboxService
      */
     private $jukebox;
+
+    /**
+     * @var FileSystem
+     */
+    protected $fileSystem;
 
 
     /**
@@ -73,7 +89,9 @@ class ManiaExchange implements ListenerInterfaceExpApplication
         AdminGroups $adminGroups,
         GameDataStorage $gameDataStorage,
         Console $console,
-        JukeboxService $jukebox
+        LoggerInterface $logger,
+        JukeboxService $jukebox,
+        FileSystem $fileSystem
     ) {
         $this->connection = $connection;
         $this->chatNotification = $chatNotification;
@@ -82,6 +100,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
         $this->gameDataStorage = $gameDataStorage;
         $this->console = $console;
         $this->jukebox = $jukebox;
+        $this->fileSystem = $fileSystem;
     }
 
     /**
@@ -207,32 +226,26 @@ class ManiaExchange implements ListenerInterfaceExpApplication
         $filename = $data['mxId']."-".$authorName."-".$mapName.".Map.Gbx";
 
         try {
-            // @todo add file abstaction layer, when it gets finished
-            $folder = $this->gameDataStorage->getMapFolder();
+            $fileSystem = $this->fileSystem->getUserData();
+            $dir = 'Maps' . DIRECTORY_SEPARATOR . $info->titlePack;
+            $file = $dir . DIRECTORY_SEPARATOR . $filename;
 
-            if (!is_dir($folder.DIRECTORY_SEPARATOR.$info->titlePack)) {
-                try {
-                    mkdir($folder.DIRECTORY_SEPARATOR.$info->titlePack);
-                } catch (\Exception $ex) {
-                    $this->chatNotification->sendMessage(
-                        'expansion_mx.chat.exception',
-                        $group, ["%message%" => $ex->getMessage()]
-                    );
-                    $this->console->writeln('$f00Error while adding map'.$ex->getMessage());
-                }
-            }
-            $file = ($folder.DIRECTORY_SEPARATOR.$info->titlePack.DIRECTORY_SEPARATOR.$filename);
-            file_put_contents($file, $result->getResponse());
-
-            //  $this->connection->writeFile($filename, $result->getResponse());
-
-            if (!$this->connection->checkMapForCurrentServerParams($info->titlePack.DIRECTORY_SEPARATOR.$filename)) {
-                $this->chatNotification->sendMessage("expansion_mx.chat.fail");
-
+            if (!$fileSystem->createDir($dir)) {
+                $this->console->writeln('<error>Error while adding map!</error>');
                 return;
             }
 
-            $map = $this->connection->getMapInfo($info->titlePack.DIRECTORY_SEPARATOR.$filename);
+            if (!$fileSystem->has($file)) {
+                $fileSystem->write($file, $result->getResponse());
+            }
+
+
+            if (!$this->connection->checkMapForCurrentServerParams($info->titlePack.DIRECTORY_SEPARATOR.$filename)) {
+                $this->chatNotification->sendMessage("expansion_mx.chat.fail");
+                return;
+            }
+
+            $map = $this->connection->getMapInfo($info->titlePack . DIRECTORY_SEPARATOR . $filename);
             $this->connection->addMap($map->fileName);
 
             $this->jukebox->addMap($map, $data['login']);
@@ -253,6 +266,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
                 'expansion_mx.chat.dedicatedexception',
                 $group, ["%message%" => $e->getMessage()]
             );
+            $this->logger->alert("Error while adding map : " . $e->getMessage(), ['exception' => $e]);
         }
     }
 
@@ -322,7 +336,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
      */
     public function onApplicationInit()
     {
-        // TODO: Implement onApplicationInit() method.
+        // Nothin here.
     }
 
     /**
@@ -332,7 +346,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
      */
     public function onApplicationReady()
     {
-
+        // Nothin here.
     }
 
     /**
@@ -342,6 +356,6 @@ class ManiaExchange implements ListenerInterfaceExpApplication
      */
     public function onApplicationStop()
     {
-        // TODO: Implement onApplicationStop() method.
+        // Nothin here.
     }
 }
