@@ -4,7 +4,7 @@ namespace eXpansion\Bundle\VoteManager\Structures;
 
 use eXpansion\Framework\Core\Storage\Data\Player;
 
-class Vote
+abstract class AbstractVote
 {
     const VOTE_YES = "yes";
     const VOTE_NO = "no";
@@ -14,52 +14,101 @@ class Vote
     const STATUS_RUNNING = 1;
     const STATUS_PASSED = 2;
 
-    protected $status = 1;
-
-    protected $elapsedTime = 0;
-    protected $totalTime = 30;
-
-    /** @var int */
-    protected $startTime = 0;
-
-    protected $votes = [];
+    /** @var Player Player that started the vote */
+    private $player;
 
     /** @var string */
     private $type;
 
-    protected $ratio = 0.57;
-    /**
-     * @var Player
-     */
-    private $player;
+    /** @var int Time the vote will take */
+    protected $totalTime = 30;
 
-    public function __construct(Player $player, $type)
+    /** @var float Ration for the vote to pass. */
+    protected $ratio = 0.57;
+
+    /** @var int Current status of the vote. */
+    protected $status = 1;
+
+    /** @var int Time elapsed since vote started */
+    protected $elapsedTime = 0;
+
+    /** @var int */
+    protected $startTime = 0;
+
+    /** @var array */
+    protected $votes = [];
+
+
+
+    /**
+     * Vote constructor.
+     *
+     * @param Player $player
+     * @param string $type
+     * @param int $duration
+     * @param float $ration
+     */
+    public function __construct(Player $player, $type, $duration = 30, $ration = 0.57)
     {
         $this->startTime = time();
+        $this->totalTime = $duration;
         $this->type = $type;
-        $this->totalTime = 30;
+        $this->ratio = $ration;
         $this->player = $player;
     }
 
-
+    /**
+     * User votes yes
+     *
+     * @param string $login
+     */
     public function castYes($login)
     {
         $this->votes[$login] = self::VOTE_YES;
     }
 
+    /**
+     * User votes no
+     *
+     * @param string $login
+     */
     public function castNo($login)
     {
         $this->votes[$login] = self::VOTE_NO;
     }
 
     /**
+     * Get number of yes votes.
      *
+     * @return int
      */
     public function getYes()
     {
+        return $this->countVote(self::VOTE_YES);
+    }
+
+    /**
+     * Get number of no votes.
+     *
+     * @return int
+     */
+    public function getNo()
+    {
+        return $this->countVote(self::VOTE_NO);
+    }
+
+    /**
+     * Count votes of a certain type.
+     *
+     * @param string $toCount
+     *
+     * @return int
+     */
+    protected function countVote($toCount)
+    {
         $value = 0;
         foreach ($this->votes as $login => $vote) {
-            if ($vote === self::VOTE_YES) {
+            if ($vote === $toCount) {
                 $value++;
             }
         }
@@ -67,6 +116,11 @@ class Vote
         return $value;
     }
 
+    /**
+     * Update status of the vite and change status if needed.
+     *
+     * @param $time
+     */
     function updateVote($time)
     {
         $this->elapsedTime = $time - $this->startTime;
@@ -89,22 +143,8 @@ class Vote
 
 
     /**
+     * Get timestamp at which votes started.
      *
-     */
-    public function getNo()
-    {
-        $value = 0;
-        foreach ($this->votes as $login => $vote) {
-            if ($vote === self::VOTE_NO) {
-                $value++;
-            }
-        }
-
-        return $value;
-    }
-
-
-    /**
      * @return int
      */
     public function getStartTime(): int
@@ -113,6 +153,8 @@ class Vote
     }
 
     /**
+     * Get duration of the votes.
+     *
      * @return float
      */
     public function getTotalTime(): int
@@ -121,6 +163,8 @@ class Vote
     }
 
     /**
+     * Get time elapsed since vote started.
+     *
      * @return int
      */
     public function getElapsedTime(): int
@@ -129,6 +173,8 @@ class Vote
     }
 
     /**
+     * Get ration to pass vote.
+     *
      * @return float
      */
     public function getRatio(): float
@@ -137,11 +183,33 @@ class Vote
     }
 
     /**
+     * Change ration to pass vote.
+     *
      * @param float $ratio
      */
     public function setRatio(float $ratio)
     {
         $this->ratio = $ratio;
+    }
+
+    /**
+     * Get player that started the vote.
+     *
+     * @return Player
+     */
+    public function getPlayer(): Player
+    {
+        return $this->player;
+    }
+
+    /**
+     * Get current status of the vote.
+     *
+     * @return int
+     */
+    public function getStatus(): int
+    {
+        return $this->status;
     }
 
     /**
@@ -152,28 +220,9 @@ class Vote
         return $this->type;
     }
 
-    /**
-     * @return Player
-     */
-    public function getPlayer(): Player
-    {
-        return $this->player;
-    }
+    public abstract function getQuestion() : string;
 
-    /**
-     * @return int
-     */
-    public function getStatus(): int
-    {
-        return $this->status;
-    }
+    public abstract function executeVotePassed();
 
-    /**
-     * @param int $status
-     */
-    public function setStatus(int $status)
-    {
-        $this->status = $status;
-    }
-
+    public abstract function executeVoteFailed();
 }

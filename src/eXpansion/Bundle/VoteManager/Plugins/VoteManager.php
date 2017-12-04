@@ -6,7 +6,7 @@ use eXpansion\Bundle\Maps\Services\JukeboxService;
 use eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\UpdateVoteWidgetFactory;
 use eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\VoteWidgetFactory;
 use eXpansion\Bundle\VoteManager\Services\VoteService;
-use eXpansion\Bundle\VoteManager\Structures\Vote;
+use eXpansion\Bundle\VoteManager\Structures\AbstractVote;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
@@ -18,49 +18,24 @@ use Maniaplanet\DedicatedServer\Connection;
 
 class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExpTimer
 {
-
     const YES = "yes";
     const NO = "no";
-
-    /**
-     * @var Console
-     */
-    private $console;
-    /**
-     * @var Connection
-     */
-    private $connection;
-    /**
-     * @var ChatNotification
-     */
-    private $chatNotification;
-
-    /** @var Vote|null */
-    public static $currentVote = null;
 
     /**
      * @var VoteWidgetFactory
      */
     private $voteWidgetFactory;
+
     /**
      * @var UpdateVoteWidgetFactory
      */
     private $updateVoteWidgetFactory;
+
     /**
      * @var Group
      */
     private $players;
-    /**
-     * @var JukeboxService
-     */
-    private $jukebox;
-    /**
-     * @var MapStorage
-     */
-    private $mapStorage;
 
-    /** @var array */
-    private $voteStarted = [];
     /**
      * @var VoteService
      */
@@ -68,35 +43,20 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
 
     /**
      * VoteManager constructor.
-     * @param Console $console
-     * @param Connection $connection
-     * @param ChatNotification $chatNotification
+     *
      * @param VoteWidgetFactory $voteWidgetFactory
      * @param UpdateVoteWidgetFactory $updateVoteWidgetFactory
      * @param Group $players
-     * @param JukeboxService $jukebox
-     * @param MapStorage $mapStorage
      * @param VoteService $voteService
      */
     public function __construct(
-        Console $console,
-        Connection $connection,
-        ChatNotification $chatNotification,
         VoteWidgetFactory $voteWidgetFactory,
         UpdateVoteWidgetFactory $updateVoteWidgetFactory,
         Group $players,
-        JukeboxService $jukebox,
-        MapStorage $mapStorage,
         VoteService $voteService
     ) {
-        $this->console = $console;
-        $this->connection = $connection;
-        $this->chatNotification = $chatNotification;
         $this->voteWidgetFactory = $voteWidgetFactory;
         $this->players = $players;
-        $this->jukebox = $jukebox;
-
-        $this->mapStorage = $mapStorage;
         $this->voteService = $voteService;
         $this->updateVoteWidgetFactory = $updateVoteWidgetFactory;
     }
@@ -112,20 +72,10 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
      */
     public function onVoteNew(Player $player, $cmdName, $cmdValue)
     {
-        if ($cmdValue instanceof Vote) {
-            $text = "Unknown Vote";
-            switch ($cmdValue->getType()) {
-                case "Exp_RestartMap":
-                    $text = "Restart Map ?";
-                    break;
-                case "Exp_NextMap":
-                    $text = "Skip Map ?";
-                    break;
-            }
-
+        if ($cmdValue instanceof AbstractVote) {
             $this->updateVoteWidgetFactory->create($this->players);
             $this->voteWidgetFactory->create($this->players);
-            $this->voteWidgetFactory->setMessage($text);
+            $this->voteWidgetFactory->setMessage($cmdValue->getQuestion());
         }
     }
 
@@ -140,7 +90,7 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
      */
     public function onVoteCancelled(Player $player, $cmdName, $cmdValue)
     {
-        if ($cmdValue instanceof Vote) {
+        if ($cmdValue instanceof AbstractVote) {
             $this->voteWidgetFactory->destroy($this->players);
             $this->updateVoteWidgetFactory->destroy($this->players);
         }
@@ -156,17 +106,8 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
      */
     public function onVotePassed(Player $player, $cmdName, $cmdValue)
     {
-        if ($cmdValue instanceof Vote) {
-            switch ($cmdName) {
-                case "Exp_RestartMap":
-                    $this->chatNotification->sendMessage("|info| Vote passed. Map will replay.");
-                    $this->jukebox->addMap($this->mapStorage->getCurrentMap(), $cmdValue->getPlayer()->getLogin(), true);
-                    break;
-                case "Exp_NextMap":
-                    $this->connection->nextMap(false);
-                    $this->chatNotification->sendMessage("|info| Vote passed. Skipping map!");
-                    break;
-            }
+        if ($cmdValue instanceof AbstractVote) {
+            $cmdValue->executeVotePassed();
             $this->voteWidgetFactory->destroy($this->players);
             $this->updateVoteWidgetFactory->destroy($this->players);
         }
@@ -182,27 +123,28 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
      */
     public function onVoteFailed(Player $player, $cmdName, $cmdValue)
     {
-        if ($cmdValue instanceof Vote) {
+        if ($cmdValue instanceof AbstractVote) {
+            $cmdValue->executeVoteFailed();
             $this->voteWidgetFactory->destroy($this->players);
             $this->updateVoteWidgetFactory->destroy($this->players);
         }
     }
 
+    public function onEverySecond()
+    {
+        if ($this->voteService->getCurrentVote() instanceof AbstractVote) {
+            $this->updateVoteWidgetFactory->update($this->players);
+        }
+    }
+
     public function onPreLoop()
     {
-        // TODO: Implement onPreLoop() method.
+        // Nothing
     }
 
     public function onPostLoop()
     {
-        // TODO: Implement onPostLoop() method.
-    }
-
-    public function onEverySecond()
-    {
-        if ($this->voteService->getCurrentVote() instanceof Vote) {
-            $this->updateVoteWidgetFactory->update($this->players);
-        }
+        // Nothing
     }
 }
 

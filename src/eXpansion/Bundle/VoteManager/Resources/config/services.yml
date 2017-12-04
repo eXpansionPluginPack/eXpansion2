@@ -1,0 +1,10 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    eXpansion\Bundle\VoteManager\Services\VoteFactories\:
+        resource: '../../Services/VoteFactories/*'
+        tags:
+          - {name: 'expansion.vote_manager.vote'}
