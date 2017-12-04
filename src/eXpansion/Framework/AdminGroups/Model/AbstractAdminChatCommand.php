@@ -38,6 +38,7 @@ abstract class AbstractAdminChatCommand extends AbstractChatCommand
     ) {
         $newAliases = [];
         $newAliases[] = "adm $command";
+        $newAliases[] = "/$command";
         foreach ($aliases as $alias) {
             $newAliases[] = "admin $alias";
             $newAliases[] = "adm $alias";
