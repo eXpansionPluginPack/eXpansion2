@@ -139,6 +139,7 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
     public function prepare(Script $script)
     {
         $script->addCustomScriptLabel(ScriptLabel::MouseClick, $this->getScriptMouseClick());
+        $script->addScriptFunction("", $this->getScriptFunction());
     }
 
     protected function getScriptMouseClick()
@@ -147,13 +148,41 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
             <<<'EOD'
             if (Event.Control.HasClass("uiButtonElement") ) {
                 if (Event.Control.Parent.HasClass("uiButton")) {
-                      Event.Control.Parent.RelativeScale = 0.75;
-                      AnimMgr.Add(Event.Control.Parent, "<elem scale=\"1.\" />", 200, CAnimManager::EAnimManagerEasing::QuadIn); 
-                      TriggerPageAction(Event.Control.Parent.DataAttributeGet("action"));
+                      TriggerButtonClick(Event.Control);
                 }                
             }
 EOD;
     }
+
+    protected function getScriptFunction()
+    {
+        return /** language=textmate  prefix=#RequireContext\n */
+            <<<'EOD'
+            Void TriggerButtonClick(Text ControlId) {
+              declare Control <=> Page.GetFirstChild(ControlId);
+                if (Control.Parent.HasClass("uiButton")) {
+                     if (Control.Parent.HasClass("uiButton")) {
+                        Control.Parent.RelativeScale = 0.75;
+                        AnimMgr.Add(Control.Parent, "<elem scale=\"1.\" />", 200, CAnimManager::EAnimManagerEasing::QuadIn); 
+                        TriggerPageAction(Control.Parent.DataAttributeGet("action"));
+                     }                
+                }
+            }
+
+            Void TriggerButtonClick(CMlControl Control) {         
+                if (Control.Parent.HasClass("uiButton")) {
+                     if (Control.Parent.HasClass("uiButton")) {
+                        Control.Parent.RelativeScale = 0.75;
+                        AnimMgr.Add(Control.Parent, "<elem scale=\"1.\" />", 200, CAnimManager::EAnimManagerEasing::QuadIn); 
+                        TriggerPageAction(Control.Parent.DataAttributeGet("action"));
+                     }                
+                }
+            }
+
+
+EOD;
+    }
+
 
     /**
      * @return string
@@ -422,5 +451,7 @@ EOD;
     public function setId($id)
     {
         $this->buttonLabel->setId($id);
+
+        return $this;
     }
 }

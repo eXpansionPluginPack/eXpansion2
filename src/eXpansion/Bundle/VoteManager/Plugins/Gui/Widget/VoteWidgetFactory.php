@@ -3,7 +3,7 @@
 namespace eXpansion\Bundle\VoteManager\Plugins\Gui\Widget;
 
 use eXpansion\Bundle\VoteManager\Services\VoteService;
-use eXpansion\Bundle\VoteManager\Structures\Vote;
+use eXpansion\Bundle\VoteManager\Structures\AbstractVote;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
@@ -61,17 +61,19 @@ class VoteWidgetFactory extends WidgetFactory
      */
     protected function createContent(ManialinkInterface $manialink)
     {
-        $label = $this->uiFactory->createLabel("Unknown Vote", UiLabel::TYPE_HEADER);
+        $label = $this->uiFactory->createLabel("", UiLabel::TYPE_HEADER);
         $label->setTextColor("fff")
             ->setPosition(self::x / 2, -1)
             ->setTextSize(4)
-            ->setAlign("center", "top");
+            ->setAlign("center", "top")
+            ->setTranslate(true);
         $this->label = $label;
         $manialink->addChild($this->label);
 
         $btnPosition = -9;
         $btn = $this->uiFactory->createButton(" F1", UiButton::TYPE_DEFAULT);
         $btn->setSize(18, 6)->setPosition(1, $btnPosition)
+            ->setId("ButtonYes")
             ->setBackgroundColor("0f09");
         $btn->setAction(
             $this->actionFactory->createManialinkAction($manialink, [$this, "callbackYes"], null)
@@ -80,7 +82,8 @@ class VoteWidgetFactory extends WidgetFactory
 
         $btn = $this->uiFactory->createButton(" F2", UiButton::TYPE_DEFAULT);
         $btn->setSize(18, 6)->setPosition(self::x - 19, $btnPosition)
-            ->setBackgroundColor("f009");
+            ->setBackgroundColor("f009")
+            ->setId("ButtonNo");
         $btn->setAction(
             $this->actionFactory->createManialinkAction($manialink, [$this, "callbackNo"], null)
         );
@@ -118,6 +121,18 @@ class VoteWidgetFactory extends WidgetFactory
         $manialink->addChild($bg);
 
         $x = self::x;
+        $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::KeyPress,
+            <<<EOL
+            
+            if (Event.KeyName == "F1") {
+                TriggerButtonClick("ButtonYes");                            
+            }
+            
+            if (Event.KeyName == "F2") {
+               TriggerButtonClick("ButtonNo");                                 
+            }
+EOL
+        );
 
         $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::OnInit,
             <<<EOL
@@ -156,7 +171,7 @@ EOL
 
     public function setMessage($message)
     {
-        $this->label->setText($message);
+        $this->label->setTextId($message);
     }
 
 
@@ -167,7 +182,7 @@ EOL
 
     public function callbackYes($manialink, $login, $entries, $args)
     {
-        if ($this->voteService->getCurrentVote() instanceof Vote) {
+        if ($this->voteService->getCurrentVote() instanceof AbstractVote) {
             $this->voteService->getCurrentVote()->castYes($login);
         }
 

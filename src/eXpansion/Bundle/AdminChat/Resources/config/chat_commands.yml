@@ -6,28 +6,31 @@ services:
         public: false
 
     expansion.admin_chat.chat_command.restart:
-        class: 'eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand'
+        class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
         arguments:
             $command:     "restart"
             $permission:  "restart"
             $aliases:     ['res', 'restartmap']
             $functionName: "restartMap"
 
+
     expansion.admin_chat.chat_command.cancel:
-        class: 'eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand'
+        class: eXpansion\Bundle\AdminChat\ChatCommand\AdminVoteCommand
         arguments:
             $command:      "cancel"
             $permission:   "votes"
-            $aliases:      ['cancel']
+            $aliases:      []
             $functionName: "cancelVote"
 
+
     expansion.admin_chat.chat_command.next:
-        class: 'eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand'
+        class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
         arguments:
             $command:      "next"
             $permission:   "next"
             $aliases:      ['skip', 'nextmap']
             $functionName: "nextMap"
+
 
     expansion.admin_chat.chat_command.set_server_name:
         class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand

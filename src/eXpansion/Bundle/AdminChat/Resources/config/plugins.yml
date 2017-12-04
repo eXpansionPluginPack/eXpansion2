@@ -8,7 +8,7 @@ services:
             -
               - '@expansion.admin_chat.chat_command.restart'
               - '@expansion.admin_chat.chat_command.next'
-
+              - '@expansion.admin_chat.chat_command.cancel'
               - '@expansion.admin_chat.chat_command.set_server_name'
               - '@expansion.admin_chat.chat_command.set_server_comment'
 

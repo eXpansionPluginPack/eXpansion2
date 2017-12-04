@@ -43,7 +43,7 @@ class MenuItems implements ListenerMenuItemProviderInterface
             'maps/jukebox',
             'expansion_maps.menu.jukebox',
             null,
-            ['cmd' => '/jukebox']
+            ['cmd' => '/jukebox list']
         );
         $root->addChild(
             ChatCommandItem::class,

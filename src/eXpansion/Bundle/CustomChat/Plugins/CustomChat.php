@@ -2,16 +2,17 @@
 
 namespace eXpansion\Bundle\CustomChat\Plugins;
 
+
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
-use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
+use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
 use Maniaplanet\DedicatedServer\Connection;
 
 
-class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacyChat, StatusAwarePluginInterface
+class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacyChat
 {
     /** @var Connection */
     protected $connection;
@@ -24,18 +25,28 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
 
     /** @var bool */
     protected $enabled = true;
+    /**
+     * @var ChatNotification
+     */
+    private $chatNotification;
 
     /**
      * CustomChat constructor.
      * @param Connection $connection
      * @param Console $console
      * @param AdminGroups $adminGroups
+     * @param ChatNotification $chatNotification
      */
-    function __construct(Connection $connection, Console $console, AdminGroups $adminGroups)
-    {
+    function __construct(
+        Connection $connection,
+        Console $console,
+        AdminGroups $adminGroups,
+        ChatNotification $chatNotification
+    ) {
         $this->connection = $connection;
         $this->console = $console;
         $this->adminGroups = $adminGroups;
+        $this->chatNotification = $chatNotification;
     }
 
     /**
@@ -55,35 +66,43 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
             return;
         }
 
-        if ($player->getPlayerId() != 0 && substr($text, 0, 1) != "/" && $this->enabled) {
-            $force = "";
+        if ($player->getPlayerId() != 0 && substr($text, 0, 1) != "/") {
             $nick = $player->getNickName();
 
             $nick = str_ireplace('$w', '', $nick);
             $nick = str_ireplace('$z', '$z$s', $nick);
+
             // fix for chat...
             $nick = str_replace('$<', '', $nick);
+            $nick = str_replace('$>', '', $nick);
+
             $text = str_replace('$<', '', $text);
 
+            $enabled = $this->enabled;
             try {
                 $color = '$ff0';
                 $separator = '';
                 if ($this->adminGroups->isAdmin($player->getLogin())) {
                     $color = '$ff0';
                     $separator = '';
+                    $enabled = true;
                 }
 
-                $this->connection->chatSendServerMessage(
-                    '$fff$<'.$nick.'$z$s$> '.$separator.' '.$color.$force.$text,
-                    null
-                );
-                $this->console->writeln('$ff0['.$from.'$ff0] '.$text);
+                if ($enabled) {
+                    $this->connection->chatSendServerMessage(
+                        '$fff$<'.$nick.'$>$z$s$fff '.$separator.' '.$color.$text,
+                        null
+                    );
+                    $this->console->writeln('$ff0['.$from.'$ff0] '.$text);
+                }
+                else {
+                    $this->console->writeln('$333['.$from.'$333] '.$text);
+                    $this->chatNotification->sendMessage('expansion_customchat.chat.disabledstate', $player->getLogin());
+                }
+
             } catch (\Exception $e) {
                 $this->console->writeln('$ff0 error while sending chat: $fff'.$e->getMessage());
             }
-        } else {
-            $this->connection->chatSendServerMessage('chat is disabled at the moment.', $player->getLogin());
-
         }
 
     }
@@ -93,17 +112,11 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      *
      * @param boolean $status
      *
-     * @return null
+     * @return void
      */
     public function setStatus($status)
     {
-        if (!$status) {
-            try {
-                $this->connection->chatEnableManualRouting(false);
-            } catch (\Exception $e) {
-                $this->console->writeln('Error while disabling custom chat: $f00'.$e->getMessage());
-            }
-        }
+        $this->enabled = $status;
     }
 
     /**

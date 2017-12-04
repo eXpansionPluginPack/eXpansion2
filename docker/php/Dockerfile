@@ -17,6 +17,9 @@ RUN "date"
 # Type docker-php-ext-install to see available extensions
 RUN docker-php-ext-install pdo pdo_mysql
 
+RUN pecl install -o -f xdebug
+RUN docker-php-ext-enable xdebug
+
 # Add a alias to lake it easier to use sf commands
 RUN echo 'alias sf="php bin/console"' >> ~/.bashrc
 WORKDIR /var/www/expansion

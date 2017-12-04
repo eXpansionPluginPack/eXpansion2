@@ -2,7 +2,8 @@
 
 namespace eXpansion\Bundle\VoteManager\Services;
 
-use eXpansion\Bundle\VoteManager\Structures\Vote;
+use eXpansion\Bundle\VoteManager\Services\VoteFactories\AbstractFactory;
+use eXpansion\Bundle\VoteManager\Structures\AbstractVote;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Services\Application\Dispatcher;
@@ -15,30 +16,31 @@ use Maniaplanet\DedicatedServer\Structures\Map;
 
 class VoteService implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExpTimer, ListenerInterfaceMpScriptMap
 {
-    /**
-     * @var Connection
-     */
-    public $connection;
-
     /** @var Console */
-    public $console;
+    protected $console;
 
-    public $removeVote = false;
+    /** @var Connection */
+    protected $connection;
 
-    /** @var null|Vote */
-    private $currentVote = null;
+    /** @var ChatNotification */
+    protected $chatNotification;
+
+    /** @var Dispatcher */
+    protected $dispatcher;
+
+    /** @var AbstractFactory[] */
+    protected $voteFactories = [];
+
+    /** @var array mapping between native MP votes and equivalent expansion votes. */
+    protected $voteMapping = [];
+
+    /** @var null|AbstractVote */
+    protected $currentVote = null;
 
     /** @var array */
-    private $votesStarted = [];
+    protected $votesStarted = [];
 
-    /**
-     * @var Dispatcher
-     */
-    private $dispatcher;
-    /**
-     * @var ChatNotification
-     */
-    private $chatNotification;
+
 
     /**
      * VoteManager constructor.
@@ -46,19 +48,29 @@ class VoteService implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
      * @param Connection $connection
      * @param ChatNotification $chatNotification
      * @param Dispatcher $dispatcher
+     * @param AbstractFactory[] $voteFactories
      */
     public function __construct(
         Console $console,
         Connection $connection,
         ChatNotification $chatNotification,
-        Dispatcher $dispatcher
-    ) {
+        Dispatcher $dispatcher,
+        $voteFactories
+    )
+    {
         $this->console = $console;
         $this->connection = $connection;
         $this->dispatcher = $dispatcher;
         $this->chatNotification = $chatNotification;
-    }
 
+        foreach ($voteFactories as $voteFactory) {
+            $this->voteFactories[$voteFactory->getVoteCode()] = $voteFactory;
+
+            foreach ($voteFactory->getReplacementTypes() as $replaces) {
+                $this->voteMapping[$replaces] = $voteFactory->getVoteCode();
+            }
+        }
+    }
 
     /**
      * When a new vote is addressed
@@ -71,17 +83,12 @@ class VoteService implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
      */
     public function onVoteNew(Player $player, $cmdName, $cmdValue)
     {
-        switch ($cmdName) {
-            case "NextMap":
+        if (!($cmdValue instanceof AbstractVote)) {
+            if (isset($this->voteMapping[$cmdName])) {
                 // disable default vote
                 $this->connection->cancelVote();
-                $this->startVote($player, "Exp_NextMap");
-                break;
-            case "RestartMap":
-                // disable default vote
-                $this->connection->cancelVote();
-                $this->startVote($player, "Exp_RestartMap");
-                break;
+                $this->startVote($player, $this->voteMapping[$cmdName]);
+            }
         }
     }
 
@@ -96,7 +103,11 @@ class VoteService implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
      */
     public function onVoteCancelled(Player $player, $cmdName, $cmdValue)
     {
-        if ($cmdValue instanceof Vote) {
+        if ($cmdName == null && $cmdValue == null && $this->currentVote instanceof AbstractVote) {
+            $this->currentVote->setStatus(Vote::STATUS_CANCEL);
+        }
+
+        if ($cmdValue instanceof AbstractVote) {
             $this->currentVote = null;
         }
     }
@@ -111,7 +122,7 @@ class VoteService implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
      */
     public function onVotePassed(Player $player, $cmdName, $cmdValue)
     {
-        if ($cmdValue instanceof Vote) {
+        if ($cmdValue instanceof AbstractVote) {
             $this->currentVote = null;
         }
     }
@@ -126,7 +137,7 @@ class VoteService implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
      */
     public function onVoteFailed(Player $player, $cmdName, $cmdValue)
     {
-        if ($cmdValue instanceof Vote) {
+        if ($cmdValue instanceof AbstractVote) {
             $this->currentVote = null;
         }
     }
@@ -143,12 +154,12 @@ class VoteService implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
 
     public function updateVote($login, $type)
     {
-        if ($this->currentVote instanceof Vote) {
+        if ($this->currentVote instanceof AbstractVote) {
             switch ($type) {
-                case Vote::VOTE_YES:
+                case AbstractVote::VOTE_YES:
                     $this->currentVote->castYes($login);
                     break;
-                case Vote::VOTE_NO:
+                case AbstractVote::VOTE_NO:
                     $this->currentVote->castNo($login);
                     break;
             }
@@ -163,15 +174,15 @@ class VoteService implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
             $vote->updateVote(time());
 
             switch ($vote->getStatus()) {
-                case Vote::STATUS_CANCEL:
+                case AbstractVote::STATUS_CANCEL:
                     $this->dispatcher->dispatch("votemanager.votecancelled",
                         [$vote->getPlayer(), $vote->getType(), $this->currentVote]);
                     break;
-                case Vote::STATUS_FAILED:
+                case AbstractVote::STATUS_FAILED:
                     $this->dispatcher->dispatch("votemanager.votefailed",
                         [$vote->getPlayer(), $vote->getType(), $this->currentVote]);
                     break;
-                case Vote::STATUS_PASSED:
+                case AbstractVote::STATUS_PASSED:
                     $this->dispatcher->dispatch("votemanager.votepassed",
                         [$vote->getPlayer(), $vote->getType(), $this->currentVote]);
                     break;
@@ -180,28 +191,31 @@ class VoteService implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
     }
 
     /**
-     * @return Vote
+     * @return AbstractVote
      */
     public function getCurrentVote()
     {
         return $this->currentVote;
     }
 
+
     public function startVote(Player $player, $type)
     {
         if ($this->getCurrentVote() !== null) {
-            $this->chatNotification->sendMessage("|error| Vote already progressing.");
-
+            $this->chatNotification->sendMessage("expansion_votemanager.error.in_progress");
             return;
+        }
+
+        if (!isset($this->voteFactories[$type])) {
+            $this->chatNotification->sendMessage("|error| Unknown vote type : $type");
         }
 
         if (array_key_exists($type, $this->votesStarted) == false) {
             $this->votesStarted[$type] = "yep";
-            $this->currentVote = new Vote($player, $type);
+            $this->currentVote = $this->voteFactories[$type]->create($player);
             $this->dispatcher->dispatch("votemanager.votenew", [$player, $type, $this->currentVote]);
         } else {
-            /** @todo change this to toast when the service is ready */
-            $this->chatNotification->sendMessage("|error| Vote of this type has already started.");
+            $this->chatNotification->sendMessage("expansion_votemanager.error.already_started");
         }
     }
 
@@ -233,7 +247,7 @@ class VoteService implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
      */
     public function onStartMapEnd($count, $time, $restarted, Map $map)
     {
-        // TODO: Implement onStartMapEnd() method.
+        // Nothing
     }
 
     /**
@@ -248,7 +262,9 @@ class VoteService implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
      */
     public function onEndMapStart($count, $time, $restarted, Map $map)
     {
-        // TODO: Implement onEndMapStart() method.
+        if ($this->currentVote instanceof Vote) {
+            $this->currentVote->setStatus(Vote::STATUS_CANCEL);
+        }
     }
 
     /**
@@ -263,6 +279,6 @@ class VoteService implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
      */
     public function onEndMapEnd($count, $time, $restarted, Map $map)
     {
-        // TODO: Implement onEndMapEnd() method.
+        // Nothing
     }
 }
