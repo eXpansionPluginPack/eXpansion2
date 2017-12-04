@@ -4,7 +4,7 @@ expansion_admin_chat:
     description: 'Replay current map.'
     label: "Restart Map"
 
-  cancel:
+  cancelvote:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}cancels the vote!'
     description: '{info} cancels the current progressing vote.'
     label: "Cancel current vote"

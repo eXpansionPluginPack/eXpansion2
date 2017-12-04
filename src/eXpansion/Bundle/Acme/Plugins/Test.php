@@ -3,17 +3,18 @@
 namespace eXpansion\Bundle\Acme\Plugins;
 
 use eXpansion\Bundle\Acme\Plugins\Gui\MemoryWidgetFactory;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\Helpers\Time;
+use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Console;
-use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
-class Test implements ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, StatusAwarePluginInterface
+class Test implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, StatusAwarePluginInterface
 {
 
     /** @var  string */
@@ -42,20 +43,26 @@ class Test implements ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, S
      * @var PlayerStorage
      */
     private $players;
+    /**
+     * @var Group
+     */
+    private $playergroup;
 
     /**
      * Test constructor.
+     * @param PlayerStorage $players
      * @param Connection $connection
      * @param Console $console
      * @param Time $time
+     * @param Group $playergroup
      * @param MemoryWidgetFactory $mlFactory
-     * @param PlayerStorage $players
      */
     function __construct(
         PlayerStorage $players,
         Connection $connection,
         Console $console,
         Time $time,
+        Group $playergroup,
         MemoryWidgetFactory $mlFactory
     ) {
         $this->connection = $connection;
@@ -63,6 +70,7 @@ class Test implements ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, S
         $this->time = $time;
         $this->mlFactory = $mlFactory;
         $this->players = $players;
+        $this->playergroup = $playergroup;
     }
 
     public function onBeginMap(Map $map)
@@ -100,18 +108,17 @@ class Test implements ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, S
             }
 
             $diff = ($mem - $this->startMemValue);
-            if ($this->startMemValue < $diff) {
-                $msg .= ' $f00('.round($diff / 1024)."kb)";
-            } else {
+            if ($this->startMemValue > $mem) {
                 $msg .= ' $0f0('.round($diff / 1024)."kb)";
+            } else {
+                $msg .= ' $f00('.round($diff / 1024)."kb)";
             }
 
             self::$memoryMsg = $msg;
-            foreach ($this->players->getOnline() as $player) {
-                $this->mlFactory->update($player->getLogin());
-            }
+            $this->mlFactory->update($this->playergroup);
             $this->console->writeln($msg);
         }
+
         $this->previousMemoryValue = $mem;
 
     }
@@ -155,13 +162,37 @@ class Test implements ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, S
      */
     public function setStatus($status)
     {
-        if ($status) {
-            $this->startMemValue = memory_get_usage(true);
-            foreach ($this->players->getOnline() as $player) {
-                $this->mlFactory->create($player->getLogin());
-            }
 
-        }
     }
 
+    /**
+     * called at eXpansion init
+     *
+     * @return void
+     */
+    public function onApplicationInit()
+    {
+        // TODO: Implement onApplicationInit() method.
+    }
+
+    /**
+     * called when init is done and callbacks are enabled
+     *
+     * @return void
+     */
+    public function onApplicationReady()
+    {
+        $this->startMemValue = memory_get_usage(false);
+        $this->mlFactory->create($this->playergroup);
+    }
+
+    /**
+     * called when requesting application stop
+     *
+     * @return void
+     */
+    public function onApplicationStop()
+    {
+        // TODO: Implement onApplicationStop() method.
+    }
 }

@@ -1,4 +1,13 @@
 expansion_votemanager:
+  menu:
+    restart: "Restart Map"
+    skip: "Skip Map"
+
+  gui:
+    vote_widget:
+        restart: "Restart Map ?"
+        skip: "Skip Map ?"
+
   nextmap:
     question: "Skip Map ?"
   restartmap:

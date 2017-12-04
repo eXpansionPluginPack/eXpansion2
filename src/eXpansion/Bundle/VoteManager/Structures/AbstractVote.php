@@ -124,20 +124,19 @@ abstract class AbstractVote
     function updateVote($time)
     {
         $this->elapsedTime = $time - $this->startTime;
-        if ($this->elapsedTime > $this->totalTime) {
-            $this->status = self::STATUS_FAILED;
-        }
-
         $total = $this->getYes() + $this->getNo();
-        if ($total > 0) {
-            if (($this->getYes() / $total) > $this->ratio) {
-                $this->status = self::STATUS_PASSED;
-            }
 
-            if (1 - ($this->getYes() / $total) > 0.9) {
-                $this->status = self::STATUS_FAILED;
-            }
+        if ($this->elapsedTime >= $this->totalTime) {
+            if ($total > 0) {
+                if (($this->getYes() / $total) > $this->ratio) {
+                    $this->status = self::STATUS_PASSED;
 
+                    return;
+                }
+            }
+            $this->status = self::STATUS_FAILED;
+
+            return;
         }
     }
 

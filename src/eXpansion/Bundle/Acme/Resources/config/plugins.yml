@@ -15,9 +15,12 @@ services:
             - {name: 'expansion.plugin', data_provider: 'exp.application'}
 
     eXpansion\Bundle\Acme\Plugins\Test:
+        arguments:
+             $playergroup: '@expansion.framework.core.user_groups.players'
         tags:
             - {name: 'expansion.plugin', data_provider: 'mp.legacy.map'}
             - {name: 'expansion.plugin', data_provider: 'exp.timer'}
+            - {name: 'expansion.plugin', data_provider: 'exp.application'}
 
     eXpansion\Bundle\Acme\Plugins\Gui\WindowFactory:
             arguments:
