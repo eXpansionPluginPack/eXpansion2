@@ -2,14 +2,17 @@ expansion_admin_chat:
   restartmap:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}restarts the map!'
     description: 'Replay current map.'
+    label: "Restart Map"
 
   cancel:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}cancels the vote!'
     description: '{info} cancels the current progressing vote.'
+    label: "Cancel current vote"
 
   nextmap:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}skips the map!'
     description: '{info} Skip current map & go to the next map.'
+    label: "Skip map"
 
   setservername:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}changes the server name. New server name is {highlight}%parameter%'

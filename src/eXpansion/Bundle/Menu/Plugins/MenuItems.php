@@ -28,101 +28,16 @@ class MenuItems implements ListenerMenuItemProviderInterface
     {
         $root->addChild(
             ParentItem::class,
-            'admin',
-            'expansion_menu.admin.label',
-            null // Permission are handled by sub elements.
+            'general',
+            'expansion_menu.general.label',
+            null
         );
         $root->addChild(
             ChatCommandItem::class,
-            'admin/help',
-            'expansion_menu.admin.help',
-            'admin',
+            'general/help',
+            'expansion_menu.general.help',
+            null,
             ['cmd' => '/help']
-        );
-        $root->addChild(
-            ChatCommandItem::class,
-            'admin/script_settings',
-            'expansion_menu.admin.script_settings',
-            'admin',
-            ['cmd' => '/admin script']
-        );
-        $root->addChild(
-            ChatCommandItem::class,
-            'admin/server_settings',
-            'expansion_menu.admin.server_settings',
-            'admin',
-            ['cmd' => '/admin server']
-        );
-
-        /*
-         * @TODO put these in plugins that actually defines the commands.
-         */
-        $root->addChild(
-            ParentItem::class,
-            'map',
-            'expansion_menu.map.label',
-            null // Permission are handled by sub elements.
-        );
-        $root->addChild(
-            ChatCommandItem::class,
-            'map/list',
-            'expansion_menu.map.list',
-            '',
-            ['cmd' => '/list']
-        );
-        $root->addChild(
-            ChatCommandItem::class,
-            'map/mx',
-            'expansion_menu.map.mx',
-            '',
-            ['cmd' => '/mx']
-        );
-        $root->addChild(
-            ChatCommandItem::class,
-            'map/recs',
-            'expansion_menu.map.recs',
-            '',
-            ['cmd' => '/recs']
-        );
-
-        /**
-         * Test sub and subs.
-         *
-         */
-        $root->addChild(
-            ParentItem::class,
-            'admin/sub',
-            'expansion_menu.admin.sub1',
-            'admin',
-            []
-        );
-        $root->addChild(
-            ParentItem::class,
-            'admin/sub/sub',
-            'expansion_menu.admin.sub2',
-            'admin',
-            []
-        );
-        $root->addChild(
-            ChatCommandItem::class,
-            'admin/sub/sub_button',
-            'expansion_menu.map.recs',
-            '',
-            ['cmd' => '/recs']
-        );
-        $root->addChild(
-            ParentItem::class,
-            'admin/sub/sub/sub',
-            'expansion_menu.admin.sub3',
-            'admin',
-            []
-        );
-        $root->addChild(
-            ChatCommandItem::class,
-            'admin/sub/sub/sub_button',
-            'expansion_menu.map.recs',
-            '',
-            ['cmd' => '/recs']
         );
     }
 }

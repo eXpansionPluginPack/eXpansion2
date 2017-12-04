@@ -70,3 +70,8 @@ expansion_maps:
               drop: 'Drop'
               wish: 'Add'
               remove: "Remove"
+  menu:
+    label: "Maps"
+    list: "List server maps"
+    jukebox: "Jukebox"
+    searchmx: "Search Mania Exchange"

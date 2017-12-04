@@ -10,3 +10,8 @@ services:
               - '@expansion.emotes.chat_command.thx'
         tags:
             - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}
+
+    eXpansion\Bundle\Emotes\Plugins\MenuItems:
+        class: eXpansion\Bundle\Emotes\Plugins\MenuItems
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'exp.menu.items'}

@@ -48,6 +48,7 @@ class AdminGroups
         foreach ($this->adminGroupConfiguration->getGroups() as $groupName) {
             $groups[] = $this->getUserGroup("$groupName");
         }
+        $groups[] = $this->getUserGroup('guest');
 
         return $groups;
     }

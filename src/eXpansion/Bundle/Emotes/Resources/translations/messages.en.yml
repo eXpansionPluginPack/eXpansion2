@@ -14,3 +14,9 @@ expansion_emotes:
   thx1: "%prefix%Thanks"
   thx2: "%prefix%Thank you"
   thx3: "%prefix%Many thanks"
+
+  menu:
+    label: "Emotes"
+    gg: "Good Game"
+    bb: "Bye"
+    thx: "Thanks"

@@ -2,19 +2,11 @@ expansion_menu:
   menu: "Menu :"
   menu_open: "Menu"
   menu_close: "Close menu"
+
   admin:
     label: Admin
+
+  general:
+    label: General
     help: Help
-    script_settings: "Script settings"
-    server_settings: "Server settings"
-    sub1: Test Sub
-    sub2: Test Sub2
-    sub3: Test Sub3
 
-
-  map:
-    label: Maps
-    map: Map
-    list: Server maps
-    mx: Mania-exchange search
-    recs: Map records

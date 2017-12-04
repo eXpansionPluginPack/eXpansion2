@@ -15,12 +15,12 @@ services:
         class: eXpansion\Bundle\Admin\ChatCommand\ScriptPanel
         arguments:
             $command: "script"
-            $permission: 'admin'
+            $permission: 'server'
             $aliases: []
 
     eXpansion\Bundle\Admin\ChatCommand\ServerPanel:
         class: eXpansion\Bundle\Admin\ChatCommand\ServerPanel
         arguments:
             $command: "server"
-            $permission: 'admin'
+            $permission: 'script'
             $aliases: []
