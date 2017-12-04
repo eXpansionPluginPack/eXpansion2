@@ -2,10 +2,10 @@
 
 namespace eXpansion\Bundle\VoteManager\Services\VoteFactories;
 
-use eXpansion\Bundle\LocalRecords\Plugins\ChatNotification;
 use eXpansion\Bundle\Maps\Services\JukeboxService;
 use eXpansion\Bundle\VoteManager\Structures\AbstractVote;
 use eXpansion\Bundle\VoteManager\Structures\RestartMapVote;
+use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\MapStorage;
 
@@ -30,12 +30,11 @@ class RestartMap extends AbstractFactory
     public function __construct(
         int $duration,
         float $ration,
-        string $class,
         JukeboxService $jukebox,
         MapStorage $mapStorage,
         ChatNotification $chatNotification
     ) {
-        parent::__construct($duration, $ration, $class);
+        parent::__construct($duration, $ration);
 
         $this->jukebox = $jukebox;
         $this->mapStorage = $mapStorage;

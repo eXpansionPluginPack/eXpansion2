@@ -19,21 +19,16 @@ abstract class AbstractFactory
     /** @var float */
     protected $ration;
 
-    /** @var string */
-    protected $class;
-
     /**
      * AbstractFactory constructor.
      *
      * @param int $duration
      * @param float $ration
-     * @param string $class
      */
-    public function __construct(int $duration, float $ration, string $class)
+    public function __construct(int $duration, float $ration)
     {
         $this->duration = $duration;
         $this->ration = $ration;
-        $this->class = $class;
     }
 
     /**
@@ -57,8 +52,5 @@ abstract class AbstractFactory
      *
      * @return array
      */
-    public function getReplacementTypes()
-    {
-        return [];
-    }
+    public abstract function getReplacementTypes();
 }

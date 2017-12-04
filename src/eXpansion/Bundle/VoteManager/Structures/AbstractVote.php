@@ -183,16 +183,6 @@ abstract class AbstractVote
     }
 
     /**
-     * Change ration to pass vote.
-     *
-     * @param float $ratio
-     */
-    public function setRatio(float $ratio)
-    {
-        $this->ratio = $ratio;
-    }
-
-    /**
      * Get player that started the vote.
      *
      * @return Player

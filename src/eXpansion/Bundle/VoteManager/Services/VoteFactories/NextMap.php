@@ -2,9 +2,9 @@
 
 namespace eXpansion\Bundle\VoteManager\Services\VoteFactories;
 
-use eXpansion\Bundle\LocalRecords\Plugins\ChatNotification;
 use eXpansion\Bundle\VoteManager\Structures\AbstractVote;
 use eXpansion\Bundle\VoteManager\Structures\NextMapVote;
+use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use Maniaplanet\DedicatedServer\Connection;
 
@@ -35,11 +35,10 @@ class NextMap extends AbstractFactory
     public function __construct(
         int $duration,
         float $ration,
-        string $class,
         Connection $connection,
         ChatNotification $chatNotification
     ) {
-        parent::__construct($duration, $ration, $class);
+        parent::__construct($duration, $ration);
 
         $this->connection = $connection;
         $this->chatNotification = $chatNotification;
