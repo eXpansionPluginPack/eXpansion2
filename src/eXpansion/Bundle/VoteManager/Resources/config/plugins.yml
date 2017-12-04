@@ -17,7 +17,7 @@ services:
     eXpansion\Bundle\VoteManager\Services\VoteService:
         class: eXpansion\Bundle\VoteManager\Services\VoteService
         arguments:
-            $voteFactories : !tagged expansion.vote_manager.vote
+            $voteFactories : []
         tags:
             - {name: 'expansion.plugin', data_provider: 'mp.legacy.vote'}
             - {name: 'expansion.plugin', data_provider: 'exp.plugin.votemanager'}

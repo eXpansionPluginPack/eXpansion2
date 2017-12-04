@@ -6,5 +6,8 @@ services:
 
     eXpansion\Bundle\VoteManager\Services\VoteFactories\:
         resource: '../../Services/VoteFactories/*'
+        arguments:
+          $duration: 30
+          $ration: 0.57
         tags:
           - {name: 'expansion.vote_manager.vote'}

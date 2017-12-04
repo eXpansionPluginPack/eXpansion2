@@ -54,7 +54,7 @@ class NextMapTest extends \PHPUnit_Framework_TestCase
         $this->vote->castYes('toto2');
         $this->vote->castNo('toto3');
         $this->assertEquals(NextMapVote::STATUS_RUNNING, $this->vote->getStatus());
-        $this->vote->updateVote(time());
+        $this->vote->updateVote(time() + 40);
 
         $this->assertEquals(2, $this->vote->getYes());
         $this->assertEquals(1, $this->vote->getNo());
@@ -67,7 +67,7 @@ class NextMapTest extends \PHPUnit_Framework_TestCase
         $this->vote->castNo('toto2');
         $this->vote->castNo('toto3');
         $this->assertEquals(NextMapVote::STATUS_RUNNING, $this->vote->getStatus());
-        $this->vote->updateVote(time());
+        $this->vote->updateVote(time() + 40);
 
         $this->assertEquals(0, $this->vote->getYes());
         $this->assertEquals(3, $this->vote->getNo());
