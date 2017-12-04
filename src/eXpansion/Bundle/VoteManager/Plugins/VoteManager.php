@@ -2,19 +2,15 @@
 
 namespace eXpansion\Bundle\VoteManager\Plugins;
 
-use eXpansion\Bundle\Maps\Services\JukeboxService;
-use eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\UpdateVoteWidgetFactory;
+
+use eXpansion\Bundle\Chat\Plugins\Gui\Widget\UpdateChatWidgetFactory;
 use eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\VoteWidgetFactory;
 use eXpansion\Bundle\VoteManager\Services\VoteService;
 use eXpansion\Bundle\VoteManager\Structures\AbstractVote;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
-use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
-use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
-use eXpansion\Framework\Core\Storage\MapStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyVote;
-use Maniaplanet\DedicatedServer\Connection;
 
 class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExpTimer
 {
@@ -27,7 +23,7 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
     private $voteWidgetFactory;
 
     /**
-     * @var UpdateVoteWidgetFactory
+     * @var UpdateChatWidgetFactory
      */
     private $updateVoteWidgetFactory;
 
@@ -45,14 +41,14 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
      * VoteManager constructor.
      *
      * @param VoteWidgetFactory $voteWidgetFactory
-     * @param UpdateVoteWidgetFactory $updateVoteWidgetFactory
+     * @param UpdateChatWidgetFactory $updateVoteWidgetFactory
      * @param Group $players
      * @param VoteService $voteService
      */
     public function __construct(
-        VoteWidgetFactory $voteWidgetFactory,
-        UpdateVoteWidgetFactory $updateVoteWidgetFactory,
         Group $players,
+        VoteWidgetFactory $voteWidgetFactory,
+        UpdateChatWidgetFactory $updateVoteWidgetFactory,
         VoteService $voteService
     ) {
         $this->voteWidgetFactory = $voteWidgetFactory;
@@ -90,6 +86,7 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
      */
     public function onVoteCancelled(Player $player, $cmdName, $cmdValue)
     {
+
         if ($cmdValue instanceof AbstractVote) {
             $this->voteWidgetFactory->destroy($this->players);
             $this->updateVoteWidgetFactory->destroy($this->players);

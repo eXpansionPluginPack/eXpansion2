@@ -47,12 +47,9 @@ class VoteWidgetFactory extends WidgetFactory
         $posX,
         $posY,
         WidgetFactoryContext $context,
-        Factory $uiFactory,
         VoteService $voteService
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
-
-        $this->uiFactory = $uiFactory;
         $this->voteService = $voteService;
     }
 

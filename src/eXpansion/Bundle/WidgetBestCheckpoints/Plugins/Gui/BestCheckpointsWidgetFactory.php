@@ -60,11 +60,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
 
             $rows->addChild($line);
         }
-
-        $manialink->getFmlManialink()->getScript()->setScriptInclude(ScriptInclude::TextLib, "TextLib");
-        $manialink->getFmlManialink()->getScript()->setScriptInclude(ScriptInclude::MathLib, "MathLib");
-
-
+        
         $manialink->getFmlManialink()->getScript()->addScriptFunction("",
             <<<EOL
             

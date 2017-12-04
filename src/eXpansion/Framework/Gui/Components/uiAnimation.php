@@ -97,7 +97,6 @@ class uiAnimation extends abstractUiElement implements ScriptFeatureable
      */
     public function prepare(Script $script)
     {
-        $script->setScriptInclude(ScriptInclude::TextLib);
         $script->addScriptFunction("exp_AnimationFunctions", $this->getFunctions());
 
         return $this;

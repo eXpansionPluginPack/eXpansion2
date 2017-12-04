@@ -24,7 +24,7 @@ class uiTooltip extends abstractUiElement implements ScriptFeatureable
     }
 
     /**
-     * @param uiButton $control
+     * @param abstractUiElement|Control $control
      * @param string $text
      */
     public function addTooltip($control, $text)

@@ -104,7 +104,8 @@ class VoteService implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
     public function onVoteCancelled(Player $player, $cmdName, $cmdValue)
     {
         if ($cmdName == null && $cmdValue == null && $this->currentVote instanceof AbstractVote) {
-            $this->currentVote->setStatus(Vote::STATUS_CANCEL);
+            $this->dispatcher->dispatch("votemanager.votecancelled",
+                [$this->currentVote->getPlayer(), $this->currentVote->getType(), $this->currentVote]);
         }
 
         if ($cmdValue instanceof AbstractVote) {
