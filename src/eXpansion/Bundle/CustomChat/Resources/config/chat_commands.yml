@@ -1,0 +1,18 @@
+services:
+    _defaults:
+        autowire: true
+
+    expansion.customchat.chat_command:
+        class: eXpansion\Bundle\CustomChat\ChatCommand\ControlCommand
+        arguments:
+            $command:     "chat"
+            $permission:  "chat"
+            $aliases:     []
+
+    expansion.custom_chat.plugins.chat_command_register:
+        class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
+        arguments:
+            -
+              - '@expansion.customchat.chat_command'
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}

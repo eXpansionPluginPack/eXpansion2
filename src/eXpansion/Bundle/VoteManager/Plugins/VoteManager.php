@@ -116,10 +116,10 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
             $text = "Unknown Vote";
             switch ($cmdValue->getType()) {
                 case "Exp_RestartMap":
-                    $text = "Restart Map ?";
+                    $text = "expansion_votemanager.gui.vote_widget.restart";
                     break;
                 case "Exp_NextMap":
-                    $text = "Skip Map ?";
+                    $text = "expansion_votemanager.gui.vote_widget.skip";
                     break;
             }
 
@@ -160,7 +160,8 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
             switch ($cmdName) {
                 case "Exp_RestartMap":
                     $this->chatNotification->sendMessage("|info| Vote passed. Map will replay.");
-                    $this->jukebox->addMap($this->mapStorage->getCurrentMap(), $cmdValue->getPlayer()->getLogin(), true);
+                    $this->jukebox->addMap($this->mapStorage->getCurrentMap(), $cmdValue->getPlayer()->getLogin(),
+                        true);
                     break;
                 case "Exp_NextMap":
                     $this->connection->nextMap(false);

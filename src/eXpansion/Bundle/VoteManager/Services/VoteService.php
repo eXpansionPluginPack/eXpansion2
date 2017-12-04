@@ -96,9 +96,14 @@ class VoteService implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
      */
     public function onVoteCancelled(Player $player, $cmdName, $cmdValue)
     {
+        if ($cmdName == null && $cmdValue == null && $this->currentVote instanceof Vote) {
+            $this->currentVote->setStatus(Vote::STATUS_CANCEL);
+        }
+
         if ($cmdValue instanceof Vote) {
             $this->currentVote = null;
         }
+
     }
 
     /**
@@ -248,7 +253,9 @@ class VoteService implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
      */
     public function onEndMapStart($count, $time, $restarted, Map $map)
     {
-        // TODO: Implement onEndMapStart() method.
+        if ($this->currentVote instanceof Vote) {
+            $this->currentVote->setStatus(Vote::STATUS_CANCEL);
+        }
     }
 
     /**

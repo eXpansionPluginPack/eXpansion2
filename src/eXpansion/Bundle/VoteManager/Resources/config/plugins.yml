@@ -7,7 +7,7 @@ services:
     eXpansion\Bundle\VoteManager\Plugins\VoteManager:
         class: eXpansion\Bundle\VoteManager\Plugins\VoteManager
         arguments:
-            $players: '@expansion.framework.core.user_groups.players'
+            $players: '@expansion.framework.core.user_groups.all_players'
         tags:
             - {name: 'expansion.plugin', data_provider: 'mp.legacy.vote'}
             - {name: 'expansion.plugin', data_provider: 'exp.plugin.votemanager'}
@@ -51,3 +51,8 @@ services:
             - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.votecancelled', method: onVoteCancelled}
             - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.votepassed', method: onVotePassed}
             - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.votefailed', method: onVoteFailed}
+
+    eXpansion\Bundle\VoteManager\Plugins\MenuItems:
+            class: eXpansion\Bundle\VoteManager\Plugins\MenuItems
+            tags:
+               - {name: 'expansion.plugin', data_provider: 'exp.menu.items'}
