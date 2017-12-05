@@ -23,7 +23,7 @@ use FML\Controls\Frame;
  * Class Factory
  *
  * @author    de Cramer Oliver<oliverde8@gmail.com>
- * @copyright 2017 Smile
+ * @copyright 2017 eXpansion
  * @package eXpansion\Framework\Gui\Ui
  *
  * @method uiButton createButton($text, $type = UiButton::TYPE_DEFAULT)

@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
  * Class ReasonUserCommand
  *
  * @author    de Cramer Oliver<oliverde8@gmail.com>
- * @copyright 2017 Smile
+ * @copyright 2017 eXpansion
  * @package eXpansion\Bundle\AdminChat\ChatCommand
  */
 class ReasonUserCommand extends AbstractConnectionCommand

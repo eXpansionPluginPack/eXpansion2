@@ -8,7 +8,7 @@ use eXpansion\Framework\Core\Model\UserGroups\Group;
  * Class UserGroupDataProvider
  *
  * @author    de Cramer Oliver<oliverde8@gmail.com>
- * @copyright 2017 Smile
+ * @copyright 2017 eXpansion
  * @package eXpansion\Framework\Core\DataProviders
  */
 class UserGroupDataProvider extends AbstractDataProvider

@@ -8,7 +8,7 @@ use eXpansion\Framework\Core\Model\UserGroups\Group;
  * Class ListenerInterfaceExpUserGroup
  *
  * @author    de Cramer Oliver<oliverde8@gmail.com>
- * @copyright 2017 Smile
+ * @copyright 2017 eXpansion
  * @package eXpansion\Framework\Core\DataProviders\Listener
  */
 interface ListenerInterfaceExpUserGroup

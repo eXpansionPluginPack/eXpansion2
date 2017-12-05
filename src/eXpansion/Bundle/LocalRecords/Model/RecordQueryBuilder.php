@@ -5,8 +5,8 @@ namespace eXpansion\Bundle\LocalRecords\Model;
 /**
  * Class RecordQueryBuilder
  *
- * @author    de Cramer Oliver<oldec@smile.fr>
- * @copyright 2017 Smile
+ * @author    de Cramer Oliver<oliverde8@gmail.com>
+ * @copyright 2017 eXpansion
  * @package eXpansion\Bundle\LocalRecords\Query
  */
 class RecordQueryBuilder

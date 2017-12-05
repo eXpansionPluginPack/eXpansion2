@@ -8,7 +8,7 @@ use Symfony\Component\EventDispatcher\Event as BaseEvent;
  * Class Event
  *
  * @author    de Cramer Oliver<oliverde8@gmail.com>
- * @copyright 2017 Smile
+ * @copyright 2017 eXpansion
  * @package eXpansion\Framework\Core\Model
  */
 class DedicatedEvent extends BaseEvent

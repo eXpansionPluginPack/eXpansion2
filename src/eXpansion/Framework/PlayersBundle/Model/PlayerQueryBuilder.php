@@ -8,8 +8,8 @@ use Propel\Runtime\Propel;
 /**
  * Class PlayerQueryBuilder
  *
- * @author    de Cramer Oliver<oldec@smile.fr>
- * @copyright 2017 Smile
+ * @author    de Cramer Oliver<oliverde8@gmail.com>
+ * @copyright 2017 eXpansion
  * @package eXpansion\Framework\PlayersBundle\Model
  */
 class PlayerQueryBuilder

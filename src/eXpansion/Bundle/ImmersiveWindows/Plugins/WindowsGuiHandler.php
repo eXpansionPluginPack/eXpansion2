@@ -22,7 +22,7 @@ use Psr\Log\LoggerInterface;
  *
  *
  * @author    de Cramer Oliver<oliverde8@gmail.com>
- * @copyright 2017 Smile
+ * @copyright 2017 eXpansion
  * @package eXpansion\Bundle\Menu\Plugins
  */
 class WindowsGuiHandler implements GuiHandlerInterface, ListenerInterfaceMpLegacyPlayer

@@ -11,7 +11,7 @@ use Maniaplanet\DedicatedServer\Connection;
  * Class BaseStorageUpdateListener
  *
  * @author    de Cramer Oliver<oliverde8@gmail.com>
- * @copyright 2017 Smile
+ * @copyright 2017 eXpansion
  * @package eXpansion\Framework\Core\Listner
  */
 class BaseStorageUpdateListener
