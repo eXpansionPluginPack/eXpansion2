@@ -8,6 +8,7 @@ services:
             - {name: 'expansion.plugin', data_provider: 'exp.application'}
             - {name: 'expansion.plugin', data_provider: 'exp.console'}
             - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
+            - {name: 'expansion.plugin', data_provider: 'exp.timer'}
 
     eXpansion\Bundle\Chat\Plugins\Gui\Widget\ChatWidgetFactory:
         class:    eXpansion\Bundle\Chat\Plugins\Gui\Widget\ChatWidgetFactory
