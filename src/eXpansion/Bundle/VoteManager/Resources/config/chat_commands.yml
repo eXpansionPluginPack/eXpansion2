@@ -13,17 +13,16 @@ services:
         tags:
             - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}
 
-    eXpansion\Bundle\VoteManager\ChatCommand\:
-        resource: '../../ChatCommand'
-
     eXpansion\Bundle\VoteManager\ChatCommand\Restart:
-        class: eXpansion\Bundle\VoteManager\ChatCommand\Restart
+        class: eXpansion\Bundle\VoteManager\ChatCommand\VoteStart
         arguments:
             $command: 'replay'
             $aliases: ['res', 'restart']
+            $voteTypeCode: 'Exp_RestartMap'
 
     eXpansion\Bundle\VoteManager\ChatCommand\Skip:
-        class: eXpansion\Bundle\VoteManager\ChatCommand\Skip
+        class: eXpansion\Bundle\VoteManager\ChatCommand\VoteStart
         arguments:
             $command: 'skip'
             $aliases: ['nextmap']
+            $voteTypeCode: 'Exp_NextMap'

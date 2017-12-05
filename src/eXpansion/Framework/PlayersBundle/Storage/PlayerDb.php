@@ -8,7 +8,7 @@ use \eXpansion\Framework\PlayersBundle\Plugins\Player as PlayerPlugin;
  * Class Player
  *
  * @author    de Cramer Oliver<oliverde8@gmail.com>
- * @copyright 2017 Smile
+ * @copyright 2017 eXpansion
  * @package eXpansion\Framework\PlayersBundle\Storage
  */
 class PlayerDb

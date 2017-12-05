@@ -8,7 +8,7 @@ use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
  * Class AbstractItem
  *
  * @author    de Cramer Oliver<oliverde8@gmail.com>
- * @copyright 2017 Smile
+ * @copyright 2017 eXpansion
  * @package eXpansion\Bundle\Menu\Model\Menu
  */
 abstract class AbstractItem implements ItemInterface

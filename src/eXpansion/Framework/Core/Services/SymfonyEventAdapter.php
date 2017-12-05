@@ -13,7 +13,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * Class StorageProvider
  *
  * @author    de Cramer Oliver<oliverde8@gmail.com>
- * @copyright 2017 Smile
+ * @copyright 2017 eXpansion
  * @package eXpansion\Framework\Core\Services
  */
 class SymfonyEventAdapter implements EventProcessorInterface

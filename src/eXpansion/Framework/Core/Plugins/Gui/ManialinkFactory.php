@@ -98,7 +98,7 @@ class ManialinkFactory implements ManialinkFactoryInterface
      * @inheritdoc
      * @param string|array|Group $group
      */
-    final public function create($group)
+    public function create($group)
     {
         if (is_string($group)) {
             $group = $this->groupFactory->createForPlayer($group);
@@ -127,7 +127,7 @@ class ManialinkFactory implements ManialinkFactoryInterface
      * @inheritdoc
      * @param string|array|Group $group
      */
-    final public function update($group)
+    public function update($group)
     {
         if (is_string($group)) {
             $group = $this->groupFactory->createForPlayer($group);
@@ -169,7 +169,7 @@ class ManialinkFactory implements ManialinkFactoryInterface
     /**
      * @inheritdoc
      */
-    final public function destroy(Group $group)
+    public function destroy(Group $group)
     {
         $ml = $this->guiHandler->getManialink($group, $this);
         if ($ml) {

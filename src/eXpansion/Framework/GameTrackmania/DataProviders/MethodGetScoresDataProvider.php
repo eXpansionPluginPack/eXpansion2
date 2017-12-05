@@ -12,7 +12,7 @@ use Maniaplanet\DedicatedServer\Connection;
  * Class MethodGetStoresDataProvider
  *
  * @author    de Cramer Oliver<oliverde8@gmail.com>
- * @copyright 2017 Smile
+ * @copyright 2017 eXpansion
  * @package eXpansion\Framework\GameManiaplanet\DataProviders
  */
 class MethodGetScoresDataProvider extends AbstractDataProvider implements MethodScriptDataProviderInterface

@@ -8,8 +8,8 @@ use Throwable;
  * Class PlayerException, is a special type of extension that needs to be used only to display an error message to a
  * player. These exceptions should not be logged but always catched.
  *
- * @author    de Cramer Oliver<oldec@smile.fr>
- * @copyright 2017 Smile
+ * @author    de Cramer Oliver<oliverde8@gmail.com>
+ * @copyright 2017 eXpansion
  * @package eXpansion\Framework\Core\Exceptions
  */
 class PlayerException extends ApplicationException

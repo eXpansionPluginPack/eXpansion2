@@ -24,8 +24,8 @@ use FML\Script\ScriptLabel;
 /**
  * Class WindowFrameFactory
  *
- * @author    de Cramer Oliver<oldec@smile.fr>
- * @copyright 2017 Smile
+ * @author    de Cramer Oliver<oliverde8@gmail.com>
+ * @copyright 2017 eXpansion
  * @package eXpansion\Bundle\ImmersiveWindows\Model\Gui\Factory
  */
 class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFrameFactoryInterface
