@@ -5,6 +5,7 @@ namespace eXpansion\Bundle\VoteManager\Plugins;
 use eXpansion\Bundle\Maps\Services\JukeboxService;
 use eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\UpdateVoteWidgetFactory;
 use eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\VoteWidgetFactory;
+use eXpansion\Bundle\VoteManager\Plugins\Votes\AbstractVotePlugin;
 use eXpansion\Bundle\VoteManager\Services\VoteService;
 use eXpansion\Bundle\VoteManager\Structures\Vote;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
@@ -132,7 +133,7 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
 
     public function onEverySecond()
     {
-        if ($this->voteService->getCurrentVote() instanceof Vote) {
+        if ($this->voteService->getCurrentVote() instanceof AbstractVotePlugin) {
             $this->voteService->update();
             $this->updateVoteWidgetFactory->update($this->players);
         }

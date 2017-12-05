@@ -33,11 +33,6 @@ class VoteService
     /** @var AbstractVotePlugin */
     protected $currentVote = null;
 
-    /** @var array */
-    protected $votesStarted = [];
-
-
-
     /**
      * VoteManager constructor.
      * @param Console $console
@@ -86,7 +81,7 @@ class VoteService
      */
     public function castVote($login, $type)
     {
-        if ($this->currentVote instanceof Vote) {
+        if ($this->currentVote instanceof AbstractVotePlugin) {
             switch ($type) {
                 case Vote::VOTE_YES:
                     $this->currentVote->castYes($login);
@@ -162,16 +157,22 @@ class VoteService
             return;
         }
 
+        if (isset($this->voteMapping[$typeCode])) {
+            $typeCode = $this->voteMapping[$typeCode];
+        }
+
         if (!isset($this->votePlugins[$typeCode])) {
             $this->chatNotification->sendMessage("|error| Unknown vote type : $typeCode");
             return;
         }
 
-        $this->votesStarted[$typeCode] = "yep";
         $this->currentVote = $this->votePlugins[$typeCode];
         $this->currentVote->start($player, $params);
         $this->connection->cancelVote();
 
-        $this->dispatcher->dispatch("votemanager.votenew", [$player, $type, $this->currentVote]);
+        $this->dispatcher->dispatch(
+            "votemanager.votenew",
+            [$player, $this->currentVote->getCode(), $this->currentVote->getCurrentVote()]
+        );
     }
 }
