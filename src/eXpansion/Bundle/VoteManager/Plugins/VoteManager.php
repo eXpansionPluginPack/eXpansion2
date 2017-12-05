@@ -93,9 +93,12 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
      */
     public function onVoteCancelled(Player $player, $cmdName, $cmdValue)
     {
+
         if ($cmdValue instanceof Vote) {
             $this->voteWidgetFactory->destroy($this->players);
             $this->updateVoteWidgetFactory->destroy($this->players);
+        } else {
+            $this->voteService->cancel();
         }
     }
 

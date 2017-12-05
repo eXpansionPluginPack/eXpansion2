@@ -99,24 +99,27 @@ class VoteService
     public function update()
     {
         if ($this->currentVote) {
-            $this->currentVote->update(time());
             $vote = $this->currentVote->getCurrentVote();
+            $this->currentVote->update(time());
 
             switch ($vote->getStatus()) {
                 case Vote::STATUS_CANCEL:
                     $this->dispatcher->dispatch("votemanager.votecancelled",
-                        [$vote->getPlayer(), $vote->getType(), $this->currentVote]);
+                        [$vote->getPlayer(), $vote->getType(), $vote]);
                     $this->currentVote = null;
+                    $this->reset();
                     break;
                 case Vote::STATUS_FAILED:
                     $this->dispatcher->dispatch("votemanager.votefailed",
-                        [$vote->getPlayer(), $vote->getType(), $this->currentVote]);
+                        [$vote->getPlayer(), $vote->getType(), $vote]);
                     $this->currentVote = null;
+                    $this->reset();
                     break;
                 case Vote::STATUS_PASSED:
                     $this->dispatcher->dispatch("votemanager.votepassed",
-                        [$vote->getPlayer(), $vote->getType(), $this->currentVote]);
+                        [$vote->getPlayer(), $vote->getType(), $vote]);
                     $this->currentVote = null;
+                    $this->reset();
                     break;
             }
         }

@@ -12,6 +12,7 @@ services:
             - {name: 'expansion.plugin', data_provider: 'mp.legacy.vote'}
             - {name: 'expansion.plugin', data_provider: 'exp.plugin.votemanager'}
             - {name: 'expansion.plugin', data_provider: 'exp.timer'}
+            - {name: 'expansion.plugin', data_provider: 'exp.plugin.votemanager'}
 
 
     eXpansion\Bundle\VoteManager\Plugins\Votes\:

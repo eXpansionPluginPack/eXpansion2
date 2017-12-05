@@ -122,10 +122,10 @@ abstract class AbstractVotePlugin
         }
 
         // If the vote is still not decided wait for the end to decide.
-        if ($time - $this->currentVote->getStartTime() > $this->duration) {
+        if (($time - $this->currentVote->getStartTime()) > $this->duration) {
             $totalVotes = $this->currentVote->getYes() + $this->currentVote->getNo() * 1.0;
 
-            if ($totalVotes > 1 && ($this->currentVote->getYes()/$totalVotes) > $this->ratio) {
+            if ($totalVotes >= 1 && ($this->currentVote->getYes()/$totalVotes) > $this->ratio) {
                 $this->votePassed();
             } else {
                 $this->voteFailed();
@@ -157,6 +157,30 @@ abstract class AbstractVotePlugin
     {
         $this->currentVote->setStatus(Vote::STATUS_FAILED);
         $this->executeVoteFailed();
+    }
+
+    /**
+     * @return int
+     */
+    public function getDuration(): int
+    {
+        return $this->duration;
+    }
+
+    /**
+     * @return float
+     */
+    public function getRatio(): float
+    {
+        return $this->ratio;
+    }
+
+    /**
+     * @return int
+     */
+    public function getElapsedTime() : int
+    {
+        return time() - $this->currentVote->getStartTime();
     }
 
     /**

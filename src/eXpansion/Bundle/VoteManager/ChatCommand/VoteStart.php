@@ -44,7 +44,7 @@ class VoteStart extends AbstractChatCommand
         parent::__construct($command, $aliases);
         $this->voteService = $voteService;
         $this->playerStorage = $playerStorage;
-        $this->voteService = $voteTypeCode;
+        $this->voteTypeCode = $voteTypeCode;
     }
 
     /**

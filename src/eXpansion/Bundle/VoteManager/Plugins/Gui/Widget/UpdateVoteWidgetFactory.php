@@ -64,13 +64,14 @@ class UpdateVoteWidgetFactory extends WidgetFactory
      */
     protected function updateContent(ManialinkInterface $manialink)
     {
-        $vote = $this->voteService->getCurrentVote();
+        $votePlugin = $this->voteService->getCurrentVote();
 
-        if ($vote) {
+        if ($votePlugin && $votePlugin->getCurrentVote()) {
+            $vote = $votePlugin->getCurrentVote();
             $yes = number_format($vote->getYes(), 1, ".", "");
             $no = number_format($vote->getNo(), 1, ".", "");
-            $elapsed = number_format($vote->getElapsedTime(), 1, ".", "");
-            $total = number_format($vote->getTotalTime(), 1, ".", "");
+            $elapsed = number_format($votePlugin->getElapsedTime(), 1, ".", "");
+            $total = number_format($votePlugin->getDuration(), 1, ".", "");
             $hash = uniqid("exp2_");
 
             $script = new Script();
