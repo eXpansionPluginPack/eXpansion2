@@ -3,7 +3,7 @@
 namespace eXpansion\Bundle\VoteManager\Plugins\Gui\Widget;
 
 use eXpansion\Bundle\VoteManager\Services\VoteService;
-use eXpansion\Bundle\VoteManager\Structures\AbstractVote;
+use eXpansion\Bundle\VoteManager\Structures\Vote;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
@@ -182,7 +182,7 @@ EOL
 
     public function callbackYes($manialink, $login, $entries, $args)
     {
-        if ($this->voteService->getCurrentVote() instanceof AbstractVote) {
+        if ($this->voteService->getCurrentVote() instanceof Vote) {
             $this->voteService->getCurrentVote()->castYes($login);
         }
 

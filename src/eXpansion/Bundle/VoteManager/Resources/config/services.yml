@@ -4,10 +4,18 @@ services:
         autoconfigure: true
         public: true
 
-    eXpansion\Bundle\VoteManager\Services\VoteFactories\:
-        resource: '../../Services/VoteFactories/*'
+    eXpansion\Bundle\VoteManager\Services\VoteService:
+        class: eXpansion\Bundle\VoteManager\Services\VoteService
         arguments:
-          $duration: 30
-          $ration: 0.57
-        tags:
-          - {name: 'expansion.vote_manager.vote'}
+            $voteFactories : []
+
+
+    expansion.bundle.votemanager.data_providers.votedataprovider:
+          class: eXpansion\Bundle\VoteManager\DataProviders\CustomVoteDataProvider
+          tags:
+            - {name: 'expansion.dataprovider', provider: "exp.plugin.votemanager", interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyVote}
+            - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
+            - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.votenew', method: onVoteNew}
+            - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.votecancelled', method: onVoteCancelled}
+            - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.votepassed', method: onVotePassed}
+            - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.votefailed', method: onVoteFailed}

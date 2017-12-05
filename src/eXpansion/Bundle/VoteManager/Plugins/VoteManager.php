@@ -6,7 +6,7 @@ use eXpansion\Bundle\Maps\Services\JukeboxService;
 use eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\UpdateVoteWidgetFactory;
 use eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\VoteWidgetFactory;
 use eXpansion\Bundle\VoteManager\Services\VoteService;
-use eXpansion\Bundle\VoteManager\Structures\AbstractVote;
+use eXpansion\Bundle\VoteManager\Structures\Vote;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
@@ -72,10 +72,12 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
      */
     public function onVoteNew(Player $player, $cmdName, $cmdValue)
     {
-        if ($cmdValue instanceof AbstractVote) {
+        if ($cmdValue instanceof Vote) {
             $this->updateVoteWidgetFactory->create($this->players);
             $this->voteWidgetFactory->create($this->players);
-            $this->voteWidgetFactory->setMessage($cmdValue->getQuestion());
+            $this->voteWidgetFactory->setMessage($this->voteService->getCurrentVote()->getQuestion());
+        } else {
+            $this->voteService->startVote($player, $cmdName, ['value' => $cmdValue]);
         }
     }
 
@@ -90,7 +92,7 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
      */
     public function onVoteCancelled(Player $player, $cmdName, $cmdValue)
     {
-        if ($cmdValue instanceof AbstractVote) {
+        if ($cmdValue instanceof Vote) {
             $this->voteWidgetFactory->destroy($this->players);
             $this->updateVoteWidgetFactory->destroy($this->players);
         }
@@ -106,8 +108,7 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
      */
     public function onVotePassed(Player $player, $cmdName, $cmdValue)
     {
-        if ($cmdValue instanceof AbstractVote) {
-            $cmdValue->executeVotePassed();
+        if ($cmdValue instanceof Vote) {
             $this->voteWidgetFactory->destroy($this->players);
             $this->updateVoteWidgetFactory->destroy($this->players);
         }
@@ -123,8 +124,7 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
      */
     public function onVoteFailed(Player $player, $cmdName, $cmdValue)
     {
-        if ($cmdValue instanceof AbstractVote) {
-            $cmdValue->executeVoteFailed();
+        if ($cmdValue instanceof Vote) {
             $this->voteWidgetFactory->destroy($this->players);
             $this->updateVoteWidgetFactory->destroy($this->players);
         }
@@ -132,7 +132,8 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
 
     public function onEverySecond()
     {
-        if ($this->voteService->getCurrentVote() instanceof AbstractVote) {
+        if ($this->voteService->getCurrentVote() instanceof Vote) {
+            $this->voteService->update();
             $this->updateVoteWidgetFactory->update($this->players);
         }
     }

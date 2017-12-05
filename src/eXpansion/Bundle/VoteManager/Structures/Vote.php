@@ -4,7 +4,7 @@ namespace eXpansion\Bundle\VoteManager\Structures;
 
 use eXpansion\Framework\Core\Storage\Data\Player;
 
-abstract class AbstractVote
+class Vote
 {
     const VOTE_YES = "yes";
     const VOTE_NO = "no";
@@ -20,25 +20,17 @@ abstract class AbstractVote
     /** @var string */
     private $type;
 
-    /** @var int Time the vote will take */
-    protected $totalTime = 30;
-
-    /** @var float Ration for the vote to pass. */
-    protected $ratio = 0.57;
-
-    /** @var int Current status of the vote. */
-    protected $status = 1;
-
-    /** @var int Time elapsed since vote started */
-    protected $elapsedTime = 0;
-
     /** @var int */
     protected $startTime = 0;
 
     /** @var array */
+    protected $params;
+
+    /** @var array */
     protected $votes = [];
 
-
+    /** @var int */
+    protected $status = self::STATUS_RUNNING;
 
     /**
      * Vote constructor.
@@ -48,13 +40,13 @@ abstract class AbstractVote
      * @param int $duration
      * @param float $ration
      */
-    public function __construct(Player $player, $type, $duration = 30, $ration = 0.57)
+    public function __construct(Player $player, $type, $duration = 30, $ration = 0.57, $params = [])
     {
         $this->startTime = time();
-        $this->totalTime = $duration;
         $this->type = $type;
-        $this->ratio = $ration;
         $this->player = $player;
+        $this->params = $params;
+        $this->votes = [];
     }
 
     /**
@@ -117,31 +109,6 @@ abstract class AbstractVote
     }
 
     /**
-     * Update status of the vite and change status if needed.
-     *
-     * @param $time
-     */
-    function updateVote($time)
-    {
-        $this->elapsedTime = $time - $this->startTime;
-        $total = $this->getYes() + $this->getNo();
-
-        if ($this->elapsedTime >= $this->totalTime) {
-            if ($total > 0) {
-                if (($this->getYes() / $total) > $this->ratio) {
-                    $this->status = self::STATUS_PASSED;
-
-                    return;
-                }
-            }
-            $this->status = self::STATUS_FAILED;
-
-            return;
-        }
-    }
-
-
-    /**
      * Get timestamp at which votes started.
      *
      * @return int
@@ -149,36 +116,6 @@ abstract class AbstractVote
     public function getStartTime(): int
     {
         return $this->startTime;
-    }
-
-    /**
-     * Get duration of the votes.
-     *
-     * @return float
-     */
-    public function getTotalTime(): int
-    {
-        return $this->totalTime;
-    }
-
-    /**
-     * Get time elapsed since vote started.
-     *
-     * @return int
-     */
-    public function getElapsedTime(): int
-    {
-        return $this->elapsedTime;
-    }
-
-    /**
-     * Get ration to pass vote.
-     *
-     * @return float
-     */
-    public function getRatio(): float
-    {
-        return $this->ratio;
     }
 
     /**
@@ -192,8 +129,14 @@ abstract class AbstractVote
     }
 
     /**
-     * Get current status of the vote.
-     *
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
      * @return int
      */
     public function getStatus(): int
@@ -202,16 +145,18 @@ abstract class AbstractVote
     }
 
     /**
-     * @return string
+     * @param int $status
      */
-    public function getType(): string
+    public function setStatus(int $status)
     {
-        return $this->type;
+        $this->status = $status;
     }
 
-    public abstract function getQuestion() : string;
-
-    public abstract function executeVotePassed();
-
-    public abstract function executeVoteFailed();
+    /**
+     * @return array
+     */
+    public function getParams(): array
+    {
+        return $this->params;
+    }
 }
