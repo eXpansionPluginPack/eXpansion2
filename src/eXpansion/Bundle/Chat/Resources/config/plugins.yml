@@ -6,6 +6,7 @@ services:
             $players: '@expansion.framework.core.user_groups.all_players'
         tags:
             - {name: 'expansion.plugin', data_provider: 'exp.application'}
+            - {name: 'expansion.plugin', data_provider: 'exp.console'}
             - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
 
     eXpansion\Bundle\Chat\Plugins\Gui\Widget\ChatWidgetFactory:

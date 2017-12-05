@@ -149,6 +149,7 @@ class AdminGroups
         }
 
         if (is_null($logins)) {
+            return false;
             throw new UnknownGroupException("'$groupName' admin group does not exist.");
         }
 

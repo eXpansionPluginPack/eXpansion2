@@ -4,7 +4,9 @@ namespace eXpansion\Bundle\Chat\Plugins;
 
 use eXpansion\Bundle\Chat\Plugins\Gui\Widget\ChatWidgetFactory;
 use eXpansion\Bundle\Chat\Plugins\Gui\Widget\UpdateChatWidgetFactory;
+use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpConsole;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
@@ -12,7 +14,7 @@ use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterface
 use Maniaplanet\DedicatedServer\Connection;
 
 
-class Chat implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacyPlayer
+class Chat implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacyPlayer, ListenerInterfaceExpConsole
 {
     /** @var Connection */
     protected $connection;
@@ -32,6 +34,10 @@ class Chat implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
      * @var UpdateChatWidgetFactory
      */
     private $updateChatWidget;
+    /**
+     * @var AdminGroups
+     */
+    private $adminGroups;
 
     /**
      * Chat constructor.
@@ -39,6 +45,7 @@ class Chat implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
      * @param Group $players
      * @param Connection $connection
      * @param PlayerStorage $playerStorage
+     * @param AdminGroups $adminGroups
      * @param ChatWidgetFactory $chatWidget
      * @param UpdateChatWidgetFactory $updateChatWidget
      */
@@ -46,6 +53,7 @@ class Chat implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
         Group $players,
         Connection $connection,
         PlayerStorage $playerStorage,
+        AdminGroups $adminGroups,
         ChatWidgetFactory $chatWidget,
         UpdateChatWidgetFactory $updateChatWidget
     ) {
@@ -54,6 +62,7 @@ class Chat implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
         $this->players = $players;
         $this->chatWidget = $chatWidget;
         $this->updateChatWidget = $updateChatWidget;
+        $this->adminGroups = $adminGroups;
     }
 
     /**
@@ -74,6 +83,11 @@ class Chat implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
     public function onApplicationReady()
     {
         $this->chatWidget->create($this->players);
+        foreach ($this->adminGroups->getUserGroups() as $group) {
+            if ($this->adminGroups->hasGroupPermission($group->getName(), "console")) {
+                $this->updateChatWidget->create($group);
+            }
+        }
     }
 
     /**
@@ -104,5 +118,15 @@ class Chat implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
     public function onPlayerAlliesChanged(Player $oldPlayer, Player $player)
     {
         // TODO: Implement onPlayerAlliesChanged() method.
+    }
+
+    public function onConsoleMessage($message)
+    {
+        foreach ($this->adminGroups->getUserGroups() as $group) {
+            if ($this->adminGroups->hasGroupPermission($group->getName(), "console")) {
+                $this->updateChatWidget->updateConsole($message);
+                $this->updateChatWidget->update($group);
+            }
+        }
     }
 }

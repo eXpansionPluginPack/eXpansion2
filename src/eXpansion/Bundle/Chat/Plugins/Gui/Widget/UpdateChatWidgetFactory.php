@@ -2,7 +2,6 @@
 
 namespace eXpansion\Bundle\Chat\Plugins\Gui\Widget;
 
-use eXpansion\Bundle\VoteManager\Plugins\VoteManager;
 use eXpansion\Bundle\VoteManager\Services\VoteService;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
@@ -15,10 +14,9 @@ use FML\Script\ScriptLabel;
 class UpdateChatWidgetFactory extends WidgetFactory
 {
 
-    /**
-     * @var VoteService
-     */
-    private $voteService;
+    public $login;
+    public $text;
+    public $console;
 
     /***
      * MenuFactory constructor.
@@ -37,11 +35,10 @@ class UpdateChatWidgetFactory extends WidgetFactory
         $sizeY,
         $posX,
         $posY,
-        WidgetFactoryContext $context,
-        VoteService $voteService
+        WidgetFactoryContext $context
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
-        $this->voteService = $voteService;
+
     }
 
     /**
@@ -60,34 +57,43 @@ class UpdateChatWidgetFactory extends WidgetFactory
      */
     protected function updateContent(ManialinkInterface $manialink)
     {
-        $vote = $this->voteService->getCurrentVote();
+        $login = $this->login;
+        $text = $this->text;
+        $console = $this->console;
 
-        if ($vote) {
-            $yes = number_format($vote->getYes(), 1, ".", "");
-            $no = number_format($vote->getNo(), 1, ".", "");
-            $elapsed = number_format($vote->getElapsedTime(), 1, ".", "");
-            $total = number_format($vote->getTotalTime(), 1, ".", "");
-            $hash = uniqid("exp2_");
+        $hash = uniqid("exp2_");
 
-            $script = new Script();
-            $script->addCustomScriptLabel(ScriptLabel::OnInit,
-                <<<EOL
-            declare Real Exp_Vote_Yes for This = 1.;
-            Exp_Vote_Yes = $yes;
-            declare Real Exp_Vote_No for This = 0.;
-            Exp_Vote_No = $no;            
-            declare Real Exp_Vote_TimeElapsed for This = 1.;
-            Exp_Vote_TimeElapsed = $elapsed;            
-            declare Real Exp_Vote_TimeTotal for This = 30.;
-            Exp_Vote_TimeTotal = $total;
-            declare Text Exp_Vote_check for This = "";  
-            Exp_Vote_check = "$hash";                                                                                       
+        $script = new Script();
+        $script->addCustomScriptLabel(ScriptLabel::OnInit,
+            <<<EOL
+            declare Text Exp_Chat_UpdateLogin for This = "";         
+            declare Text Exp_Chat_UpdateText for This = "";
+            declare Text Exp_Chat_UpdateConsole for This = "";
+            declare Text Exp_Chat_check for This = "";
+            declare Text Exp_Chat_oldCheck = "";   
+            
+            Exp_Chat_UpdateLogin = "$login";
+            Exp_Chat_UpdateText = "$text"; 
+            Exp_Chat_UpdateConsole = "$console";                                    
+            Exp_Chat_check = "$hash";                                                                                       
 EOL
-            );
+        );
 
-            $manialink->getFmlManialink()->setScript($script);
+        $manialink->getFmlManialink()->setScript($script);
+    }
 
-        }
+    public function updateConsole($message)
+    {
+        $this->login = "";
+        $this->text = "";
+        $this->console = $message;
+    }
+
+    public function updateMessage($login, $text)
+    {
+        $this->login = $login;
+        $this->text = $text;
+        $this->console = "";
     }
 
 }

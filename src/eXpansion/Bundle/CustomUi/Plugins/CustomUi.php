@@ -113,7 +113,7 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
  		<checkpoint_time visible="true" pos="0. 3. -10." />
  		
  		<!-- The avatar of the last player speaking in the chat displayed above the chat -->
- 		<chat_avatar visible="false" />
+ 		<chat_avatar visible="true" />
  		
  		<!-- Warm-up progression displayed on the right of the screen during warm-up -->
   		<warmup visible="true" pos="153. 13. 0." /> 		
