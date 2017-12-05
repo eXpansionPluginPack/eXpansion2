@@ -1,6 +1,5 @@
 <?php
 
-
 namespace eXpansion\Bundle\VoteManager\ChatCommand;
 
 use eXpansion\Bundle\VoteManager\Plugins\VoteManager;
@@ -9,42 +8,43 @@ use eXpansion\Framework\Core\Model\ChatCommand\AbstractChatCommand;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Symfony\Component\Console\Input\InputInterface;
 
-
 /**
  * Class Records
  *
  * @package eXpansion\Bundle\LocalRecords\ChatCommand;
  * @author  reaby
  */
-class Restart extends AbstractChatCommand
+class VoteStart extends AbstractChatCommand
 {
-    /**
-     * @var VoteManager
-     */
+    /** @var VoteService */
     private $voteService;
-    /**
-     * @var PlayerStorage
-     */
+
+    /** @var PlayerStorage */
     private $playerStorage;
 
+    /** @var string */
+    protected $voteTypeCode;
 
     /**
-     * MapsList constructor.
+     * VoteStart constructor.
      *
-     * @param                      $command
+     * @param $command
      * @param array $aliases
      * @param VoteService $voteService
      * @param PlayerStorage $playerStorage
+     * @param $voteTypeCode
      */
     public function __construct(
         $command,
         array $aliases = [],
         VoteService $voteService,
-        PlayerStorage $playerStorage
+        PlayerStorage $playerStorage,
+        $voteTypeCode
     ) {
         parent::__construct($command, $aliases);
         $this->voteService = $voteService;
         $this->playerStorage = $playerStorage;
+        $this->voteService = $voteTypeCode;
     }
 
     /**
@@ -53,6 +53,6 @@ class Restart extends AbstractChatCommand
     public function execute($login, InputInterface $input)
     {
         $player = $this->playerStorage->getPlayerInfo($login);
-        $this->voteService->startVote($player, "Exp_RestartMap");
+        $this->voteService->startVote($player, $this->voteTypeCode, []);
     }
 }
