@@ -50,7 +50,7 @@ abstract class AbstractVotePlugin
      */
     public function start(Player $player, $params)
     {
-        $this->currentVote = new Vote($player, $this->duration, $this->ratio, $params);
+        $this->currentVote = new Vote($player, $this->getCode(), $params);
         return $this->currentVote;
     }
 
@@ -82,7 +82,7 @@ abstract class AbstractVotePlugin
     public function castNo($login)
     {
         if ($this->currentVote) {
-            $this->currentVote->castYes($login);
+            $this->currentVote->castNo($login);
         }
     }
 
@@ -101,7 +101,7 @@ abstract class AbstractVotePlugin
     /**
      * Update the status of the vote, and execute actions if vote passed.
      *
-     * @param null $time
+     * @param int $time
      */
     public function update($time = null)
     {
@@ -113,17 +113,19 @@ abstract class AbstractVotePlugin
             $time = time();
         }
 
+        $playerCount = count($this->playerStorage->getOnline());
+
         // Check if vote passes when we suppose that all palyers that didn't vote would vote NO.
-        if (($this->currentVote->getYes() / count($this->playerStorage->getOnline())) > $this->ratio) {
+        if ($playerCount > 0 && ($this->currentVote->getYes() / $playerCount) > $this->ratio) {
             $this->votePassed();
             return;
         }
 
         // If the vote is still not decided wait for the end to decide.
         if ($time - $this->currentVote->getStartTime() > $this->duration) {
-            $totalVotes = $this->currentVote->getYes() + $this->currentVote->getNo();
+            $totalVotes = $this->currentVote->getYes() + $this->currentVote->getNo() * 1.0;
 
-            if ($totalVotes > 1 && $this->currentVote->getYes()/$totalVotes > $this->ratio) {
+            if ($totalVotes > 1 && ($this->currentVote->getYes()/$totalVotes) > $this->ratio) {
                 $this->votePassed();
             } else {
                 $this->voteFailed();
@@ -134,7 +136,7 @@ abstract class AbstractVotePlugin
     /**
      * @return Vote|null
      */
-    public function getCurrentVote(): Vote
+    public function getCurrentVote()
     {
         return $this->currentVote;
     }
@@ -146,7 +148,6 @@ abstract class AbstractVotePlugin
     {
         $this->currentVote->setStatus(Vote::STATUS_PASSED);
         $this->executeVotePassed();
-        $this->reset();
     }
 
     /**
@@ -156,7 +157,6 @@ abstract class AbstractVotePlugin
     {
         $this->currentVote->setStatus(Vote::STATUS_FAILED);
         $this->executeVoteFailed();
-        $this->reset();
     }
 
     /**

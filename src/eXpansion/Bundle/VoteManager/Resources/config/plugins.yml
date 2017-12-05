@@ -18,7 +18,7 @@ services:
         resource: '../../Plugins/Votes/*'
         arguments:
           $duration: 30
-          $ration: 0.57
+          $ratio: 0.57
         tags:
           - {name: 'expansion.vote_manager.vote'}
 

@@ -37,10 +37,9 @@ class Vote
      *
      * @param Player $player
      * @param string $type
-     * @param int $duration
-     * @param float $ration
+     * @param array $params
      */
-    public function __construct(Player $player, $type, $duration = 30, $ration = 0.57, $params = [])
+    public function __construct(Player $player, $type, $params = [])
     {
         $this->startTime = time();
         $this->type = $type;

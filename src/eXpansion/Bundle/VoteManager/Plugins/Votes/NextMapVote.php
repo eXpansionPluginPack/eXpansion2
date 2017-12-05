@@ -47,7 +47,7 @@ class NextMapVote extends AbstractVotePlugin
     /**
      * @inheritdoc
      */
-    protected function getQuestion(): string
+    public function getQuestion(): string
     {
         return 'expansion_votemanager.nextmap.question';
     }
