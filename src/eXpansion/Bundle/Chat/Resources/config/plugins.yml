@@ -23,7 +23,7 @@ services:
         class: eXpansion\Bundle\Chat\Plugins\Gui\Widget\UpdateChatWidgetFactory
         autowire: true
         arguments:
-            $name:  "UpdateChat"
+            $name:  "Update Chat"
             $posX: 0
             $posY: 0
             $sizeX: null

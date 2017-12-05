@@ -4,6 +4,7 @@ namespace eXpansion\Bundle\VoteManager\Plugins;
 
 
 use eXpansion\Bundle\Chat\Plugins\Gui\Widget\UpdateChatWidgetFactory;
+use eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\UpdateVoteWidgetFactory;
 use eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\VoteWidgetFactory;
 use eXpansion\Bundle\VoteManager\Services\VoteService;
 use eXpansion\Bundle\VoteManager\Structures\AbstractVote;
@@ -40,15 +41,15 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
     /**
      * VoteManager constructor.
      *
-     * @param VoteWidgetFactory $voteWidgetFactory
-     * @param UpdateChatWidgetFactory $updateVoteWidgetFactory
      * @param Group $players
+     * @param VoteWidgetFactory $voteWidgetFactory
+     * @param UpdateVoteWidgetFactory $updateVoteWidgetFactory
      * @param VoteService $voteService
      */
     public function __construct(
         Group $players,
         VoteWidgetFactory $voteWidgetFactory,
-        UpdateChatWidgetFactory $updateVoteWidgetFactory,
+        UpdateVoteWidgetFactory $updateVoteWidgetFactory,
         VoteService $voteService
     ) {
         $this->voteWidgetFactory = $voteWidgetFactory;
