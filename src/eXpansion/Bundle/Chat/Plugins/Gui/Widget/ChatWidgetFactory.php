@@ -121,8 +121,8 @@ class ChatWidgetFactory extends WidgetFactory
             $line = new Label();
             $line->setStyle("TextRaceMessage")
                 ->setId("line_$x")
-                ->setSize(90, 5)
-                ->setTextSize(2);
+                ->setSize(110, 4)
+                ->setTextSize(1);
             $linerow->addChild($line);
         }
 
@@ -141,12 +141,12 @@ class ChatWidgetFactory extends WidgetFactory
 
         $linerow = $this->uiFactory->createLayoutRow(2, -5, [], 1);
 
-        for ($x = 0; $x < 7; $x++) {
+        for ($x = 0; $x < 8; $x++) {
             $line = new Label();
             $line->setStyle("TextRaceMessage")
                 ->setId("serverline_$x")
-                ->setSize(90, 5)
-                ->setTextSize(2);
+                ->setSize(110, 4)
+                ->setTextSize(1);
             $linerow->addChild($line);
         }
 
@@ -162,11 +162,6 @@ class ChatWidgetFactory extends WidgetFactory
 
 
         $manialink->addChild($serverFrame);
-
-
-        $bg = new WidgetBackground(110, 50);
-        $bg->setPosition(6, -16);
-        $manialink->addChild($bg);
 
         $this->createManiascript($manialink);
 
@@ -227,12 +222,12 @@ class ChatWidgetFactory extends WidgetFactory
                      
                      if (Exp_Chat_UpdateConsole != "") {
                        
-                        if (ConsoleMessages.count >= 7) {
+                        if (ConsoleMessages.count >= 8) {
                             ConsoleMessages.removekey(0);
                         }
                         
                         ConsoleMessages.add(Exp_Chat_UpdateConsole);                                                                                                                                                                                
-                        for(x,0,6) {                        
+                        for(x,0,7) {                        
                             if (ConsoleMessages.existskey(x)) {                          
                                 (Page.GetFirstChild("serverline_"^x) as CMlLabel).Value = ConsoleMessages[x];
                             } else {
