@@ -135,11 +135,6 @@ class Chat implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
 
     public function onPostLoop()
     {
-        //
-    }
-
-    public function onEverySecond()
-    {
         if ($this->updateRequired) {
             $this->updateRequired = false;
             foreach ($this->adminGroups->getUserGroups() as $group) {
@@ -148,5 +143,10 @@ class Chat implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
                 }
             }
         }
+    }
+
+    public function onEverySecond()
+    {
+
     }
 }

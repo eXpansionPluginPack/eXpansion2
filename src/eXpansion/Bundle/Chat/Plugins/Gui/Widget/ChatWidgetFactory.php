@@ -207,7 +207,7 @@ class ChatWidgetFactory extends WidgetFactory
                       ButtonServer.BgColor = TextLib::ToColor("000");
                       ButtonPrivate.BgColor = TextLib::ToColor("000");
                       ButtonPublic.BgColor = TextLib::ToColor("000");
-                      Button.BgColor = TextLib::ToColor("960");                                              
+                      Button.BgColor = TextLib::ToColor("f90");                                              
                 }
               
                 Vec3 HsvToRgb(Vec3 _HSV) {

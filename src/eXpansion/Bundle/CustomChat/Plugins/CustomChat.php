@@ -8,6 +8,7 @@ use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplicat
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
+use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
 use Maniaplanet\DedicatedServer\Connection;
 
@@ -29,6 +30,10 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      * @var ChatNotification
      */
     private $chatNotification;
+    /**
+     * @var PlayerStorage
+     */
+    private $playerStorage;
 
     /**
      * CustomChat constructor.
@@ -36,17 +41,20 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      * @param Console $console
      * @param AdminGroups $adminGroups
      * @param ChatNotification $chatNotification
+     * @param PlayerStorage $playerStorage
      */
     function __construct(
         Connection $connection,
         Console $console,
         AdminGroups $adminGroups,
-        ChatNotification $chatNotification
+        ChatNotification $chatNotification,
+        PlayerStorage $playerStorage
     ) {
         $this->connection = $connection;
         $this->console = $console;
         $this->adminGroups = $adminGroups;
         $this->chatNotification = $chatNotification;
+        $this->playerStorage = $playerStorage;
     }
 
     /**
@@ -77,6 +85,7 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
             $nick = str_replace('$>', '', $nick);
 
             $text = str_replace('$<', '', $text);
+            $matches = [];
 
             $enabled = $this->enabled;
             try {
@@ -89,15 +98,59 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
                 }
 
                 if ($enabled) {
-                    $this->connection->chatSendServerMessage(
-                        '$fff$<'.$nick.'$>$z$s$fff '.$separator.' '.$color.$text,
-                        null
-                    );
-                    $this->console->writeln('$ff0['.$from.'$ff0] '.$text);
-                }
-                else {
+                    $matchFound = false;
+                    $matchLogin = [];
+
+                    if (preg_match_all("/(\@(?P<login>[\w-._]+)\s?)/", $text, $matches)) {
+                        $group = [];
+
+                        foreach ($this->playerStorage->getOnline() as $player) {
+                            foreach ($matches['login'] as $login) {
+                                if ($player->getLogin() == $login) {
+                                    $matchFound = true;
+                                    $matchLogin[$player->getLogin()] = $player->getLogin();
+                                }
+                            }
+                            $group[$player->getLogin()] = $player->getLogin();
+                        }
+
+                        $diff = array_diff($group, $matchLogin);
+
+                        if ($matchFound) {
+                            $this->connection->chatSendServerMessage(
+                                '$fff$<'.$nick.'$>$z$s$fff '.$separator.' $f9f'.$text,
+                                $matchLogin
+                            );
+
+                            if (count($diff) > 0) {
+                                $this->connection->chatSendServerMessage(
+                                    '$fff$<'.$nick.'$>$z$s$fff '.$separator.' '.$color.$text,
+                                    $diff
+                                );
+                            }
+                            $this->console->writeln('$ff0['.$from.'$ff0] '.$text);
+
+                            return;
+                        } else {
+                            $this->connection->chatSendServerMessage(
+                                '$fff$<'.$nick.'$>$z$s$fff '.$separator.' '.$color.$text,
+                                null
+                            );
+                            $this->console->writeln('$ff0['.$from.'$ff0] '.$text);
+
+                            return;
+                        }
+                    } else {
+                        $this->connection->chatSendServerMessage(
+                            '$fff$<'.$nick.'$>$z$s$fff '.$separator.' '.$color.$text,
+                            null
+                        );
+                        $this->console->writeln('$ff0['.$from.'$ff0] '.$text);
+                    }
+                } else {
                     $this->console->writeln('$333['.$from.'$333] '.$text);
-                    $this->chatNotification->sendMessage('expansion_customchat.chat.disabledstate', $player->getLogin());
+                    $this->chatNotification->sendMessage('expansion_customchat.chat.disabledstate',
+                        $player->getLogin());
                 }
 
             } catch (\Exception $e) {
