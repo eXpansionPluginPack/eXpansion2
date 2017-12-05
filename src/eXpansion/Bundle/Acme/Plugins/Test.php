@@ -115,7 +115,7 @@ class Test implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
             }
 
             self::$memoryMsg = $msg;
-            $this->mlFactory->update($this->playergroup);
+      //      $this->mlFactory->update($this->playergroup);
             $this->console->writeln($msg);
         }
 
@@ -183,7 +183,7 @@ class Test implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
     public function onApplicationReady()
     {
         $this->startMemValue = memory_get_usage(false);
-        $this->mlFactory->create($this->playergroup);
+     //   $this->mlFactory->create($this->playergroup);
     }
 
     /**
