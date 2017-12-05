@@ -130,14 +130,7 @@ class Chat implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
 
     public function onPreLoop()
     {
-        if ($this->updateRequired) {
-            $this->updateRequired = false;
-            foreach ($this->adminGroups->getUserGroups() as $group) {
-                if ($this->adminGroups->hasGroupPermission($group->getName(), "console")) {
-                    $this->updateChatWidget->update($group);
-                }
-            }
-        }
+
     }
 
     public function onPostLoop()
@@ -147,6 +140,13 @@ class Chat implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
 
     public function onEverySecond()
     {
-        //
+        if ($this->updateRequired) {
+            $this->updateRequired = false;
+            foreach ($this->adminGroups->getUserGroups() as $group) {
+                if ($this->adminGroups->hasGroupPermission($group->getName(), "console")) {
+                    $this->updateChatWidget->update($group);
+                }
+            }
+        }
     }
 }

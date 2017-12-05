@@ -243,6 +243,7 @@ class ChatWidgetFactory extends WidgetFactory
                 
                 ***FML_OnInit***
                 ***      
+                    Exp_Window.ZIndex = 50.;
                     declare Text[][Text] Exp_Chat_UpdateText for This = Text[][Text];
                     declare Text[] Exp_Chat_UpdateConsole for This = Text[];
                     declare Text Exp_Chat_check for This = "";
@@ -296,17 +297,17 @@ class ChatWidgetFactory extends WidgetFactory
                 ***
                                    
                     if (Exp_Chat_UpdateConsole.count > 0) {
-                        NewConsoleMessage = True;
+                        NewConsoleMessage = True;                   
                         foreach (Message in Exp_Chat_UpdateConsole) {
                            ConsoleMessages.add(Message);                          
                         }                        
                             
-                        if (ConsoleMessages.count >= 8) {
-                            for (x, 0, 8 - ConsoleMessages.count) { 
+                        if (ConsoleMessages.count >= 9) {                      
+                            for (x, 0, ConsoleMessages.count - 9) {                                
                                 ConsoleMessages.removekey(0);
                             }
                         }
-                                                                                                                                                                                                                           
+                                                                                                                                                                                                   
                         for(x,0,7) {                        
                             if (ConsoleMessages.existskey(x)) {                          
                                 (Page.GetFirstChild("serverline_"^x) as CMlLabel).Value = ConsoleMessages[x];
@@ -329,14 +330,13 @@ class ChatWidgetFactory extends WidgetFactory
                 	    FlashButton(ButtonServer);
                     }
                     
+                    if (NewPrivateMessage == True) {
+                	    FlashButton(ButtonPrivate);
+                    }
                     
                     
                      
                 ***
-
-
-
-
 
 EOL
         );
