@@ -327,7 +327,7 @@ class ChatWidgetFactory extends WidgetFactory
                     }
                     
                     if (NewConsoleMessage == True) {
-                	    FlashButton(ButtonServer);
+                	   // FlashButton(ButtonServer);
                     }
                     
                     if (NewPrivateMessage == True) {

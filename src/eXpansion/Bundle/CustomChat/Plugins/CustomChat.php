@@ -97,7 +97,7 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
                     $diff = array_diff($group, $matchLogin);
 
                     if ($matchFound) {
-                        $this->sendChat($player, $text, '$f90', $matchLogin);
+                        $this->sendChat($player, $text, '$ff0$o', $matchLogin);
 
                         if (count($diff) > 0) {
                             $this->sendChat($player, $text, '$ff0', $group);
