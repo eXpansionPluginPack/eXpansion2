@@ -81,17 +81,20 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
                 $matchFound = false;
                 $matchLogin = [];
 
-                if (preg_match_all("/(\@(?P<login>[\w-._]+)\s?)/", $text, $matches)) {
+                if (preg_match_all("/(\s|\G)(\@(?P<login>[\w-\._]+)[\s]{0,1})/", $text, $matches)) {
                     $group = [];
 
                     foreach ($matches['login'] as $login) {
-                        foreach ($this->playerStorage->getOnline() as $player) {
-                            if ($player->getLogin() == $login) {
+                        foreach ($this->playerStorage->getOnline() as $player2) {
+                            if ($player2->getLogin() == $login) {
                                 $matchFound = true;
-                                $matchLogin[$player->getLogin()] = $player->getLogin();
+                                $matchLogin[$player2->getLogin()] = $player2->getLogin();
+                            } else {
+                                if (!in_array($player->getLogin(), $matchLogin)) {
+                                    $group[$player2->getLogin()] = $player2->getLogin();
+                                }
                             }
                         }
-                        $group[$player->getLogin()] = $player->getLogin();
                     }
 
                     $diff = array_diff($group, $matchLogin);
