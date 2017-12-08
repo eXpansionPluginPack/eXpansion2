@@ -1,0 +1,51 @@
+expansion_local_records:
+  chat:
+    race:
+      new:
+        top1: '|record| {record_rank}first {record_top}Local Record! {variable}|time| %score% {record_top}driven by {variable}%nickname%'
+        top5: '|record| {record_rank}%position% {record_top}Local Record! {variable}|time| %score% {record_top}driven by {variable}%nickname%'
+        any: '|record| {record_rank}%position% {record}Local Record! {variable}|time| %score% {record}driven by {variable}%nickname%'
+      better:
+        top1: '|record| {record_rank}first {record_top}Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top}) {record_top}driven by {variable}%nickname%'
+        top5: '|record| {record_rank}%position% {record_top}Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top}) {record_top}driven by {variable}%nickname%'
+        any: '|record| {record_rank}%position% {record}Local Record! {variable}|time| %score%{record}({variable}%by%{record}) {record}driven by{variable}%nickname%'
+      secures:
+        top1: '|record| {record_rank}first {record_top}Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top}) {record_top}improved by {variable}%nickname% '
+        top5: '|record| {record_rank}%position% {record_top}Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top}) {record_top}improved by {variable}%nickname%'
+        any: '|record| {record_rank}%position% {record}Local Record! {variable}|time| %score%{record}({variable}%by%{record}) {record}improved by {variable}%nickname%'
+      loaded:
+        top1: '|record| {record_rank}first {record_top}Local Record with {variable}|time| %score% {record_top}Holder: {variable}%nickname% '
+        any: '|record| {record}You hold {record_rank}%position% {record}Local Record with {variable}|time| %score%'
+    lap:
+      new:
+        top1: '|record| {record_rank}first {record_top}LAP Local Record! {variable}|time| %score% {record_top}driven by {variable}%nickname%'
+        top5: '|record| {record_rank}%position% {record_top}LAP Local Record! {variable}|time| %score% {record_top}driven by {variable}%nickname%'
+        any: '|record| {record_rank}%position% {record}LAP Local Record! {variable}|time| %score% {record}driven by {variable}%nickname%'
+      better:
+        top1: '|record| {record_rank}first {record_top}LAP Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top}) {record_top}driven by {variable}%nickname%'
+        top5: '|record| {record_rank}%position% {record_top}LAP Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top}) {record_top}driven by {variable}%nickname%'
+        any: '|record| {record_rank}%position% {record}LAP Local Record! {variable}|time| %score%{record}({variable}%by%{record}) {record}driven by{variable}%nickname%'
+      secures:
+        top1: '|record| {record_rank}first {record_top}LAP Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top}) {record_top}improved by {variable}%nickname% '
+        top5: '|record| {record_rank}%position% {record_top}LAP Local Record! {variable}|time| %score%{record_top}({variable}%by%{record_top}) {record_top}improved by {variable}%nickname%'
+        any: '|record| {record_rank}%position% {record}LAP Local Record! {variable}|time| %score%{record}({variable}%by%{record}) {record}improved by {variable}%nickname%'
+      loaded:
+        top1: '|record| {variable}%nickname% {record_top}Holds {record_rank}first {record_top}LAP Local Record with {variable}|time| %score%'
+        any: '|record| {record}You hold {record_rank}%position% {record}LAP Local Record with {variable}|time| %score%'
+  gui:
+    race:
+      window:
+        title: 'Local Records'
+        column:
+          position: '#'
+          score: 'Time'
+          nickname: 'NickName'
+          login: 'Login'
+  menu:
+    label: "Records"
+    race_recs: "Race Records"
+    laps_recs: "Lap Records"
+    prev:
+      race_recs: "Previous Race Records"
+      laps_recs: "Previous Lap Records"
+

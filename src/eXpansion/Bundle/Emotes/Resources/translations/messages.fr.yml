@@ -1,3 +1,17 @@
 expansion_emotes:
-  gg1: '%nickname%{separator}|{default}Bon Jeu'
-  gg2: '%nickname%{separator}|{default}Excellent Jeu'
+  prefix: '%nickname%$z$z$fff $ff0$i'
+  gg1: '%prefix% Good Game'
+  gg2: '%prefix% Great Game'
+  bb1: "%prefix% Bye"
+  bb2: "%prefix% Laters!"
+  bb3: "%prefix% See you later!"
+  bb4: "%prefix% Ciao!"
+  bb5: "%prefix% Bye all!"
+  thx1: "%prefix% Thanks"
+  thx2: "%prefix% Thank you"
+  thx3: "%prefix% Many thanks"
+  menu:
+    label: "Emotes"
+    gg: "Good Game"
+    bb: "Bye"
+    thx: "Thanks"
