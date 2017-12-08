@@ -1,0 +1,15 @@
+expansion_votemanager:
+  menu:
+    restart: "Restart Map"
+    skip: "Skip Map"
+  gui:
+    vote_widget:
+      restart: "Restart Map ?"
+      skip: "Skip Map ?"
+  nextmap:
+    question: "Skip Map ?"
+  restartmap:
+    question: "Restart Map ?"
+  error:
+    already_started: "|error| Vote of this type has already started."
+    in_progress: "|error| There is already a vote in progress"
