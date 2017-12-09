@@ -27,6 +27,7 @@ use FML\Controls\Frame;
  * @package eXpansion\Framework\Gui\Ui
  *
  * @method uiButton createButton($text, $type = UiButton::TYPE_DEFAULT)
+ * @method uiConfirmButton createConfirmButton($text, $type = UiButton::TYPE_DEFAULT)
  * @method uiCheckbox createCheckbox($text, $name, $checked = false, $disabled = false)
  * @method uiDropdown createDropdown($name, $options, $selectedIndex = -1, $isOpened = false)
  * @method uiInput createInput($name, $default = "", $width = 30)

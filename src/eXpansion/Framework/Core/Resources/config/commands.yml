@@ -6,3 +6,7 @@ services:
 
     eXpansion\Framework\Core\Command\:
         resource: '../../Command/*'
+
+    eXpansion\Framework\Core\Command\GenRecordsCommand:
+        class: eXpansion\Framework\Core\Command\GenRecordsCommand
+

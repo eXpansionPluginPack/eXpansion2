@@ -3,10 +3,13 @@
 
 namespace eXpansion\Framework\Core\Model\Gui\Factory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
+use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
 use eXpansion\Framework\Core\Model\Gui\Widget;
 use FML\Controls\Frame;
 use FML\ManiaLink;
 use FML\Script\Features\ToggleInterface;
+use FML\Script\Script;
+use FML\Script\ScriptLabel;
 use FML\Types\Container;
 
 
@@ -18,6 +21,19 @@ use FML\Types\Container;
  */
 class WidgetFrameFactory implements WidgetFrameFactoryInterface
 {
+
+    /** @var ManiaScriptFactory */
+    protected $widgetManiaScriptFactory;
+
+    /**
+     * WindowFrameFactory constructor.
+     *
+     * @param ManiaScriptFactory $maniaScriptFactory
+     */
+    public function __construct(ManiaScriptFactory $maniaScriptFactory)
+    {
+        $this->widgetManiaScriptFactory = $maniaScriptFactory;
+    }
 
     /**
      * Build the window frame content.
@@ -33,9 +49,13 @@ class WidgetFrameFactory implements WidgetFrameFactoryInterface
     public function build(Widget $manialink, Frame $mainFrame, $name, $sizeX, $sizeY)
     {
         $toggleInterfaceF9 = new ToggleInterface($mainFrame, "F9");
+
         $manialink
             ->getFmlManialink()
             ->getScript()
             ->addFeature($toggleInterfaceF9);
+
+        $manialink->getFmlManialink()->addChild($this->widgetManiaScriptFactory->createScript(['']));
+
     }
 }

@@ -21,5 +21,6 @@ class eXpansionGuiExtension extends Extension
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('gui.yml');
+        $loader->load('ml_scripts.yml');
     }
 }

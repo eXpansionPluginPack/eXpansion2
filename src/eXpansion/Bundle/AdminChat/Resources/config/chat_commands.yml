@@ -41,6 +41,24 @@ services:
             $functionName:         "setServerName"
             $parameterDescription: 'sets new server name, uses "" if spaces used.'
 
+    expansion.admin_chat.chat_command.save_matchsettings:
+        class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
+        arguments:
+            $command:              "save"
+            $permission:           "matchsettings"
+            $aliases:              []
+            $functionName:         "saveMatchSettings"
+            $parameterDescription: 'matchsetting to save, ends with .txt'
+
+    expansion.admin_chat.chat_command.load_matchsettings:
+        class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
+        arguments:
+            $command:              "load"
+            $permission:           "matchsettings"
+            $aliases:              []
+            $functionName:         "loadMatchSettings"
+            $parameterDescription: 'matchsetting to load, ends with .txt'
+
     expansion.admin_chat.chat_command.set_server_comment:
         class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
         arguments:

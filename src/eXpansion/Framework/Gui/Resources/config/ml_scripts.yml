@@ -1,14 +1,14 @@
 services:
-  expansion.framework.core.maniascript.window:
+  maniascript.library.prgfx.text_ext:
     class: eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory
     autowire: true
     arguments:
-      $relativePath: 'eXpansionCore/Resources/maniascript/window.txtm'
+      $relativePath: 'eXpansionGuiBundle/Resources/maniascript/TextExt.Script.txt'
       $className: eXpansion\Framework\Core\Model\Gui\ManiaScript
 
-  expansion.framework.core.maniascript.widget:
+  maniascript.library.prgfx.time_ext:
       class: eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory
       autowire: true
       arguments:
-        $relativePath: 'eXpansionCore/Resources/maniascript/widget.txtm'
+        $relativePath: 'eXpansionGuiBundle/Resources/maniascript/Time.Script.txt'
         $className: eXpansion\Framework\Core\Model\Gui\ManiaScript

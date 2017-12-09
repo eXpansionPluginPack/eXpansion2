@@ -9,6 +9,7 @@
 namespace Tests\eXpansion\Framework\Core\Helpers;
 
 use eXpansion\Framework\Core\Helpers\ChatNotification;
+use eXpansion\Framework\Core\Services\Application\Dispatcher;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
@@ -21,7 +22,7 @@ class ChatNotificationTest extends TestCore
     {
         parent::setUp();
 
-        $this->container->get(Console::class)->init(new NullOutput());
+        $this->container->get(Console::class)->init(new NullOutput(), $this->container->get(Dispatcher::class));
     }
 
 

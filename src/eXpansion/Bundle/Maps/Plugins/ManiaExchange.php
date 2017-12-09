@@ -27,6 +27,9 @@ class ManiaExchange implements ListenerInterfaceExpApplication
     const SITE_TM = "TM";
     const SITE_SM = "SM";
 
+    /** @var bool */
+    private $downloadProgressing = false;
+
     /**
      * @var Connection
      */
@@ -72,6 +75,8 @@ class ManiaExchange implements ListenerInterfaceExpApplication
     protected $fileSystem;
 
 
+    protected $addQueue = [];
+
     /**
      * ManiaExchange constructor.
      * @param Connection $connection
@@ -80,7 +85,9 @@ class ManiaExchange implements ListenerInterfaceExpApplication
      * @param AdminGroups $adminGroups
      * @param GameDataStorage $gameDataStorage
      * @param Console $console
+     * @param LoggerInterface $logger
      * @param JukeboxService $jukebox
+     * @param FileSystem $fileSystem
      */
     public function __construct(
         Connection $connection,
@@ -103,12 +110,28 @@ class ManiaExchange implements ListenerInterfaceExpApplication
         $this->fileSystem = $fileSystem;
     }
 
+    /** @var Mxmap[] $maps */
+    public function addAllMaps($login, $maps)
+    {
+        if (!$this->adminGroups->hasPermission($login, "maps.add")) {
+            $this->chatNotification->sendMessage('expansion_mx.chat.nopermission', $login);
+
+            return;
+        }
+
+        $this->addQueue = $maps;
+        $this->connection->chatSendServerMessage("Starting download. Maps in queue: ".count($this->addQueue));
+        $map = array_shift($this->addQueue);
+        $this->addMap($login, $map['mxid'], $map['mxsite']);
+    }
+
     /**
+     * add map to queue
      * @param string $login
      * @param integer $id
      * @param string $mxsite "TM" or "SM"
      */
-    public function addMap($login, $id, $mxsite)
+    public function addMapToQueue($login, $id, $mxsite)
     {
 
         if (!$this->adminGroups->hasPermission($login, "maps.add")) {
@@ -116,6 +139,27 @@ class ManiaExchange implements ListenerInterfaceExpApplication
 
             return;
         }
+
+        if ($this->downloadProgressing || count($this->addQueue) > 1) {
+
+            $this->addQueue[] = ['mxid' => $id, 'mxsite' => $mxsite];
+            $this->chatNotification->sendMessage("|info| Adding map to download queue...", $login);
+
+            return;
+        } else {
+            $this->addMap($login, $id, $mxsite);
+        }
+
+    }
+
+    /**
+     * @param $login
+     * @param $id
+     * @param $mxsite
+     */
+    public function addMap($login, $id, $mxsite)
+    {
+
         $options = [
             CURLOPT_HTTPHEADER => [
                 "Content-Type" => "application/json",
@@ -134,7 +178,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
             $group,
             ["%id%" => $id, "%site%" => $mxsite]
         );
-
+        $this->downloadProgressing = true;
         $this->http->get("https://api.mania-exchange.com/".strtolower($mxsite)."/maps?ids=".$id,
             [$this, 'callbackAddMap1'],
             ['login' => $login, 'site' => $mxsite, 'mxId' => $id], $options);
@@ -155,7 +199,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
                 $group,
                 ["%status%" => $json['StatusCode'], "%message%" => $json['Message']]
             );
-
+            $this->downloadProgressing = false;
             return;
         }
 
@@ -197,6 +241,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
                     $group,
                     []
                 );
+                $this->downloadProgressing = false;
                 return;
             }
 
@@ -206,6 +251,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
                 ["%status%" => $result->getHttpCode(), "%message%" => $result->getError()]
             );
 
+            $this->downloadProgressing = false;
             return;
         }
 
@@ -227,11 +273,12 @@ class ManiaExchange implements ListenerInterfaceExpApplication
 
         try {
             $fileSystem = $this->fileSystem->getUserData();
-            $dir = 'Maps' . DIRECTORY_SEPARATOR . $info->titlePack;
-            $file = $dir . DIRECTORY_SEPARATOR . $filename;
+            $dir = 'Maps'.DIRECTORY_SEPARATOR.$info->titlePack;
+            $file = $dir.DIRECTORY_SEPARATOR.$filename;
 
             if (!$fileSystem->createDir($dir)) {
                 $this->console->writeln('<error>Error while adding map!</error>');
+
                 return;
             }
 
@@ -242,10 +289,11 @@ class ManiaExchange implements ListenerInterfaceExpApplication
 
             if (!$this->connection->checkMapForCurrentServerParams($info->titlePack.DIRECTORY_SEPARATOR.$filename)) {
                 $this->chatNotification->sendMessage("expansion_mx.chat.fail");
+
                 return;
             }
 
-            $map = $this->connection->getMapInfo($info->titlePack . DIRECTORY_SEPARATOR . $filename);
+            $map = $this->connection->getMapInfo($info->titlePack.DIRECTORY_SEPARATOR.$filename);
             $this->connection->addMap($map->fileName);
 
             $this->jukebox->addMap($map, $data['login']);
@@ -260,13 +308,20 @@ class ManiaExchange implements ListenerInterfaceExpApplication
             );
 
             $this->persistMapData($map, $info);
-
+            $this->downloadProgressing = false;
         } catch (\Exception $e) {
             $this->chatNotification->sendMessage(
                 'expansion_mx.chat.dedicatedexception',
                 $group, ["%message%" => $e->getMessage()]
             );
-            $this->logger->alert("Error while adding map : " . $e->getMessage(), ['exception' => $e]);
+            //  $this->logger->alert("Error while adding map : ".$e->getMessage(), ['exception' => $e]);
+            $this->downloadProgressing = false;
+        }
+
+        if (count($this->addQueue) > 0) {
+            $map = array_shift($this->addQueue);
+            $this->connection->chatSendServerMessage("Processing queue. Maps in queue: ".count($this->addQueue));
+            $this->addMap($data['login'], $map['mxid'], $map['mxsite']);
         }
     }
 

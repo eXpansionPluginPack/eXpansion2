@@ -56,8 +56,7 @@ abstract class AbstractApplication implements RunInterface
      */
     public function init(OutputInterface $console)
     {
-        $this->console->init($console);
-
+        $this->console->init($console, $this->dispatcher);
         $this->dispatcher->dispatch(self::EVENT_BEFORE_INIT, []);
         $this->dispatcher->init();
         $this->dispatcher->dispatch(self::EVENT_AFTER_INIT, []);

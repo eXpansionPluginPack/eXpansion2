@@ -41,3 +41,10 @@ services:
             - {name: 'expansion.dataprovider.listener', event_name: expansion.init, method: onApplicationInit}
             - {name: 'expansion.dataprovider.listener', event_name: expansion.ready, method: onApplicationReady}
             - {name: 'expansion.dataprovider.listener', event_name: expansion.stop, method: onApplicationStop}
+
+    expansion.framework.core.data_providers.console:
+        class:  eXpansion\Framework\Core\DataProviders\ConsoleDataProvider
+        tags:
+            - {name: 'expansion.dataprovider', provider: "exp.console", interface: eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpConsole}
+            - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
+            - {name: 'expansion.dataprovider.listener', event_name: expansion.console.message, method: onConsoleMessage}

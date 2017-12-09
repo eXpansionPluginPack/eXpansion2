@@ -1,0 +1,26 @@
+services:
+    _defaults:
+        autowire: true
+
+    expansion.bundle.acme.plugins.chat_commands:
+          class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
+          arguments:
+              -
+                - '@eXpansion\Bundle\Acme\ChatCommand\Connect'
+                - '@eXpansion\Bundle\Acme\ChatCommand\Disconnect'
+          tags:
+              - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}
+
+    eXpansion\Bundle\Acme\ChatCommand\Connect:
+        class:  eXpansion\Bundle\Acme\ChatCommand\Connect
+        arguments:
+            $command: "connect"
+            $permission: 'server'
+            $aliases: []
+
+    eXpansion\Bundle\Acme\ChatCommand\Disconnect:
+        class: eXpansion\Bundle\Acme\ChatCommand\Disconnect
+        arguments:
+            $command: "disconnect"
+            $permission: 'script'
+            $aliases: []
