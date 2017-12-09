@@ -20,7 +20,6 @@
 
 ***FML_OnInit***
 ***
-    declare CMlFrame Exp_Window <=> (Page.GetFirstChild("Window") as CMlFrame);
     Exp_Window.ZIndex = 1000.;
 
     Page.GetClassChildren("item", (Page.GetFirstChild("breadcrumb") as CMlFrame), True);
