@@ -18,6 +18,14 @@ expansion_admin_chat:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}changes the server name. New server name is {highlight}%parameter%'
     description: '{info}Change the name of the server.'
 
+  savematchsettings:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} saved match settings: {highlight}%parameter%'
+    description: '{info}Change the name of the server.'
+
+  loadmatchsettings:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} loaded match settings: {highlight}%parameter%'
+    description: '{info}Change the name of the server.'
+
   setservercomment:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}changes the server comment. New server comment is {highlight}%parameter%'
     description: '{info}Change the comment of the server.'

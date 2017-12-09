@@ -2,18 +2,22 @@
 
 namespace eXpansion\Bundle\Chat\Plugins\Gui\Widget;
 
-use eXpansion\Bundle\VoteManager\Services\VoteService;
+use eXpansion\Bundle\Chat\Plugins\Gui\Elements\Tab;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
+use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
 use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
+use FML\Controls\Entry;
 use FML\Controls\Frame;
 use FML\Controls\Label;
-use FML\Controls\Quad;
-use FML\Script\ScriptLabel;
 
 class ChatWidgetFactory extends WidgetFactory
 {
+    /**
+     * @var ManiaScriptFactory
+     */
+    private $maniaScriptFactory;
 
     /***
      * MenuFactory constructor.
@@ -24,7 +28,7 @@ class ChatWidgetFactory extends WidgetFactory
      * @param null $posX
      * @param null $posY
      * @param WidgetFactoryContext $context
-     * @param VoteService $voteService
+     * @param ManiaScriptFactory $maniaScriptFactory
      */
     public function __construct(
         $name,
@@ -32,9 +36,12 @@ class ChatWidgetFactory extends WidgetFactory
         $sizeY,
         $posX,
         $posY,
-        WidgetFactoryContext $context
+        WidgetFactoryContext $context,
+        ManiaScriptFactory $maniaScriptFactory
+
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
+        $this->maniaScriptFactory = $maniaScriptFactory;
     }
 
     /**
@@ -44,84 +51,56 @@ class ChatWidgetFactory extends WidgetFactory
     {
         parent::createContent($manialink);
 
+
         $tooltip = $this->uiFactory->createTooltip();
         $manialink->addChild($tooltip);
-        $posY = 0;
-        $frm = Frame::create();
-        $frm->setPosition(0, $posY);
-        $btn = $this->uiFactory->createLabel();
-        $btn->setSize(6, 6)
-            ->setAlign("center", "center2")
-            ->setTextSize(3)
-            ->setText("")
-            ->setScriptEvents(false);
 
-        $bg = Quad::create();
-        $bg->setOpacity(0.9)
-            ->setSize(6, 6)
-            ->setAlign("center", "center2")
-            ->setScriptEvents(true)
-            ->setId("ButtonPublic")
+
+        $tabline = $this->uiFactory->createLayoutLine(0, 0, [], 1);
+        $tabline->setId("Tabs");
+
+        $tabPrototype = new Tab();
+        $tabPrototype->setSize(20, 5)
             ->setBackgroundColor("000")
             ->setFocusBackgroundColor("f90");
-        $tooltip->addTooltip($bg, "Public Chat");
-        $frm->addChild($btn);
-        $frm->addChild($bg);
-        $manialink->addChild($frm);
-
-        $posY -= 7;
-        $frm = Frame::create();
-        $frm->setPosition(0, $posY);
-        $btn = $this->uiFactory->createLabel();
-        $btn->setSize(6, 6)
-            ->setAlign("center", "center2")
-            ->setTextSize(3)
-            ->setTextPrefix("")
-            ->setScriptEvents(false);
-
-        $bg = Quad::create();
-        $bg->setOpacity(0.9)
-            ->setSize(6, 6)
-            ->setAlign("center", "center2")
-            ->setScriptEvents(true)
-            ->setId("ButtonServer")
-            ->setBackgroundColor("000")
-            ->setFocusBackgroundColor("f90");
-        $tooltip->addTooltip($bg, "Console Messages");
-        $frm->addChild($btn);
-        $frm->addChild($bg);
-        $manialink->addChild($frm);
 
 
-        $privateFrame = Frame::create("PrivateMessages");
-        $privateFrame->setVisible(false);
-        $privateFrame->setPosition(6, -12);
+        $tab = clone $tabPrototype;
+        $tab->setText("Public chat")
+            ->setId("ButtonPublic");
+        $tabline->addChild($tab);
 
-        $nickline = $this->uiFactory->createLayoutLine(0, 0, [], 1);
-        $privateFrame->addChild($nickline);
+        $tab = clone $tabPrototype;
+        $tab->setText("Console")
+            ->setId("ButtonServer");
+        $tabline->addChild($tab);
 
-        for ($x = 1; $x <= 5; $x++) {
-            $nick = $this->uiFactory->createLabel("NickName $x");
-            $nick->setId("private_$x")
-                ->setSize(26, 5)
-                ->setScriptAction(true)
-                ->setTextPrefix("  ")
-                ->setAreaColor("000")
-                ->setAreaFocusColor("f90")
-                ->setOpacity(0.9)
-                ->setAlign("left", "center2");
-            $nickline->addChild($nick);
+        for ($x = 0; $x < 5; $x++) {
+            $tab = clone $tabPrototype;
+            $tab->setText("Nickname $x")
+                ->setId("tab_$x");
+            $tabline->addChild($tab);
         }
 
+        $tab = new Tab();
+        $tab->setSize(5, 5)
+            ->setText("+")
+            ->setId("ButtonAdd")
+            ->setBackgroundColor("0d0")
+            ->setFocusBackgroundColor("f90");
+        $tabline->addChild($tab);
 
-        $privateLines = Frame::create("PrivateLines");
-        $privateLines->setPosition(0, 0);
-        $privateFrame->addChild($privateLines);
+        $manialink->addChild($tabline);
 
-        $linerow = $this->uiFactory->createLayoutRow(2, -5, [], 1);
+        $messageFrame = Frame::create("MessageFrame");
+        $messageFrame->setVisible(false);
+        $messageFrame->setPosition(0, -10);
 
-        for ($x = 0; $x < 7; $x++) {
+        $linerow = $this->uiFactory->createLayoutRow(0, 0, [], 1);
+
+        for ($x = 0; $x < 8; $x++) {
             $line = new Label();
+            $line->setText("$x");
             $line->setStyle("TextRaceMessage")
                 ->setId("line_$x")
                 ->setSize(110, 4)
@@ -129,42 +108,24 @@ class ChatWidgetFactory extends WidgetFactory
             $linerow->addChild($line);
         }
 
-        $privateFrame->addChild($linerow);
+        $messageFrame->addChild($linerow);
 
-        $manialink->addChild($privateFrame);
+        $manialink->addChild($messageFrame);
 
+        $entry = Entry::create("TextEntry");
+        $entry->setSize(2200, 4);
 
-        $serverFrame = Frame::create("ServerMessages");
-        $serverFrame->setVisible(false);
-        $serverFrame->setPosition(6, -12);
+        $entry->setPosition(18, -4)
+            ->setVisible(false)
+            ->setAreaColor("0006")
+            ->setAreaFocusColor("000a")
+            ->setTextSize(2)
+            ->setScriptEvents(true);
 
-        $serverLines = Frame::create("serverLines");
-        $serverLines->setPosition(0, 0);
-        $serverFrame->addChild($serverLines);
-
-        $linerow = $this->uiFactory->createLayoutRow(2, -5, [], 1);
-
-        for ($x = 0; $x < 8; $x++) {
-            $line = new Label();
-            $line->setStyle("TextRaceMessage")
-                ->setId("serverline_$x")
-                ->setSize(110, 4)
-                ->setTextSize(1);
-            $linerow->addChild($line);
-        }
-
-        $serverFrame->addChild($linerow);
-
-        $manialink->addChild($serverFrame);
+        $manialink->addChild($entry);
 
 
-        $serverFrame = Frame::create("ServerMessages");
-        $serverFrame->setVisible(false);
-        $serverFrame->setPosition(6, -12);
-
-
-        $manialink->addChild($serverFrame);
-
+        $manialink->getFmlManialink()->addChild($this->maniaScriptFactory->createScript(['']));
         $this->createManiascript($manialink);
 
 
@@ -177,13 +138,12 @@ class ChatWidgetFactory extends WidgetFactory
               
                 Void Toggle(CMlQuad Button) {
                       declare CMlQuad ButtonServer <=> (Page.GetFirstChild("ButtonServer") as CMlQuad);
-                      declare CMlQuad ButtonPrivate <=> (Page.GetFirstChild("ButtonPrivate") as CMlQuad);  
                       declare CMlQuad ButtonPublic <=> (Page.GetFirstChild("ButtonPublic") as CMlQuad);
-                    
-                      ButtonServer.BgColor = TextLib::ToColor("000");
-                      ButtonPrivate.BgColor = TextLib::ToColor("000");
+                                          
+                      ButtonServer.BgColor = TextLib::ToColor("000");               
                       ButtonPublic.BgColor = TextLib::ToColor("000");
-                      Button.BgColor = TextLib::ToColor("f90");                                              
+                      Button.BgColor = TextLib::ToColor("f90"); 
+                                                                   
                 }
               
                 Vec3 HsvToRgb(Vec3 _HSV) {
@@ -219,6 +179,7 @@ class ChatWidgetFactory extends WidgetFactory
                 
                 ***FML_OnInit***
                 ***      
+                    ClientUI.StatusMessage = "";    
                     Exp_Window.ZIndex = 50.;
                     declare Text[][Text] Exp_Chat_UpdateText for This = Text[][Text];
                     declare Text[] Exp_Chat_UpdateConsole for This = Text[];
@@ -226,18 +187,16 @@ class ChatWidgetFactory extends WidgetFactory
                     declare Text Exp_Chat_oldcheck = "";
                     
                     declare Text[] ConsoleMessages = Text[];
-                    declare Text[][Text] PrivateMessages = Text[][Text];
                     declare Boolean NewConsoleMessage = False;
-                    declare Boolean NewPrivateMessage = False;
+                    declare Boolean NewPrivateMessage = False;                                     
                     
                     ClientUI.OverlayHideChat = False;
                     ClientUI.OverlayChatOffset = <-0.04 , 0.>;
                     
-                    declare CMlFrame PrivateMessagesFrame <=> (Page.GetFirstChild("PrivateMessages") as CMlFrame);
-                    declare CMlFrame ServerMessagesFrame <=> (Page.GetFirstChild("ServerMessages") as CMlFrame); 
+                    declare CMlFrame MessageFrame <=> (Page.GetFirstChild("MessageFrame") as CMlFrame);
+                    declare CMlEntry TextEntry <=> (Page.GetFirstChild("TextEntry") as CMlEntry); 
                     
                     declare CMlQuad ButtonServer <=> (Page.GetFirstChild("ButtonServer") as CMlQuad);
-                    declare CMlQuad ButtonPrivate <=> (Page.GetFirstChild("ButtonPrivate") as CMlQuad);  
                     declare CMlQuad ButtonPublic <=> (Page.GetFirstChild("ButtonPublic") as CMlQuad);
                                                      
                 ***
@@ -245,27 +204,15 @@ class ChatWidgetFactory extends WidgetFactory
                 ***Exp_ButtonPublic***
                 ***
                      ClientUI.OverlayHideChat = False;
-                     PrivateMessagesFrame.Hide();  
-                     ServerMessagesFrame.Hide();
+
+                     MessageFrame.Hide();
                      Toggle(ButtonPublic);                                      
                 ***    
-                
-                 
-                ***Exp_ButtonPrivate***
-                ***
-                     ClientUI.OverlayHideChat = True;
-                     PrivateMessagesFrame.Show();
-                     ServerMessagesFrame.Hide();
-                     Toggle(ButtonPrivate);                
-                ***
-                
-                
+
                 ***Exp_ButtonServer***
-                ***
+                ***         
                      ClientUI.OverlayHideChat = True;
-                     PrivateMessagesFrame.Hide(); 
-                     ServerMessagesFrame.Show(); 
-                     NewConsoleMessage = False;  
+                     MessageFrame.Show();                  
                      Toggle(ButtonServer);       
                 ***                                
                                  
@@ -286,9 +233,9 @@ class ChatWidgetFactory extends WidgetFactory
                                                                                                                                                                                                    
                         for(x,0,7) {                        
                             if (ConsoleMessages.existskey(x)) {                          
-                                (Page.GetFirstChild("serverline_"^x) as CMlLabel).Value = ConsoleMessages[x];
+                                (Page.GetFirstChild("line_"^x) as CMlLabel).Value = ConsoleMessages[x];
                             } else {
-                                (Page.GetFirstChild("serverline_"^x) as CMlLabel).Value = "";
+                                (Page.GetFirstChild("line_"^x) as CMlLabel).Value = "";
                             }                         	
                         }                        
                     } 
@@ -300,39 +247,42 @@ class ChatWidgetFactory extends WidgetFactory
                     if (Exp_Chat_check != Exp_Chat_oldcheck) {                      
                          Exp_Chat_oldcheck = Exp_Chat_check;                 
                         ---Exp_Chat_Update---                                                               
-                    }
-                    
-                    if (NewConsoleMessage == True) {
-                	   // FlashButton(ButtonServer);
-                    }
-                    
-                    if (NewPrivateMessage == True) {
-                	    FlashButton(ButtonPrivate);
-                    }
-                    
-                    
+                    }     
+                              
                      
                 ***
-
-EOL
-        );
-
-        $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::MouseClick, <<<EOL
+                
+                ***FML_KeyPress***
+                ***
+                if (ClientUI.OverlayHideChat == True && Event.KeyName == "Y" ) {
+                       if (TextEntry.Visible) {
+                            TextEntry.Hide();       
+                       } else {
+                            TextEntry.Show();
+                            TextEntry.StartEdition();                            
+                       }         
+                }          
+                ***
+                
+                ***FML_EntrySubmit***
+                ***     
+                        if (Event.ControlId == "TextEntry") {             
+                            log((Event.Control as CMlEntry).Value);   
+                        }
+                ***
+                
+                ***FML_MouseClick***
+                ***
                 if (Event.ControlId == "ButtonPublic") {                           
-                ---Exp_ButtonPublic---
+                    ---Exp_ButtonPublic---
                 }
- 
-                if (Event.ControlId == "ButtonPrivate") {
-                ---Exp_ButtonPrivate---
-                
-                }
+
                 if (Event.ControlId == "ButtonServer") {
-                ---Exp_ButtonServer---
-                }
-                
+                    ---Exp_ButtonServer---
+                }                
+                ***
 EOL
         );
-
 
     }
 

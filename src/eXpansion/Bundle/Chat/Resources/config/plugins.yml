@@ -15,10 +15,11 @@ services:
         autowire: true
         arguments:
             $name:  "Chat"
-            $posX: -156
-            $posY: -46
+            $posX: -150
+            $posY: -54
             $sizeX: null
             $sizeY: null
+            $maniaScriptFactory: '@maniascript.library.prgfx.text_ext'
 
     eXpansion\Bundle\Chat\Plugins\Gui\Widget\UpdateChatWidgetFactory:
         class: eXpansion\Bundle\Chat\Plugins\Gui\Widget\UpdateChatWidgetFactory

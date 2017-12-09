@@ -27,6 +27,12 @@ class PlayerQueryBuilder
         return $playerQuery->findOneByLogin($login);
     }
 
+    public function findAll()
+    {
+        $playerQuery = PlayerQuery::create();
+        return $playerQuery->find()->getData();
+    }
+
     /**
      * Save individual player.
      *

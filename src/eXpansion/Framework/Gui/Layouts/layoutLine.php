@@ -26,7 +26,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
     protected $elements = [];
 
     /** @var float */
-    protected $margin = 2.;
+    private $margin = 2.;
     /**
      * @var float
      */
@@ -83,11 +83,14 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
         $frame->setPosition($this->startX, $this->startY);
         $frame->addClasses($this->frameClasses);
 
-        $startX = 0;
+        $start = 0;
         $sizeY = 0;
+
         foreach ($this->elements as $idx => $element) {
-            $element->setX($startX);
-            $startX += $element->getWidth() + $this->margin;
+
+            $element->setX($start + $this->getRelativeStartPosition($element));
+            $start += $element->getWidth() + $this->margin;
+
             if ($element->getY() + $element->getHeight() > $sizeY) {
                 $this->setHeight($element->getHeight());
             }
@@ -95,6 +98,19 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
         }
 
         return $frame->render($domDocument);
+    }
+
+    /**
+     * @param Control $element
+     * @return float|int
+     */
+    private function getRelativeStartPosition($element)
+    {
+        if ($element->getHorizontalAlign() == "center") {
+            return ($element->getWidth() / 2);
+        }
+
+        return 0;
     }
 
     /**
@@ -293,6 +309,8 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
     {
         $this->halign = $hAling;
         $this->valign = $vAlign;
+
+        return $this;
     }
 
 
@@ -318,6 +336,26 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
     public function setId($frameId)
     {
         $this->frameId = $frameId;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHorizontalAlign(): string
+    {
+        return $this->hAlign;
+    }
+
+    /**
+     * @param string $hAlign
+     */
+    public function setHorizontalAlign(string $hAlign)
+    {
+        $this->hAlign = $hAlign;
+
+        return $this;
     }
 
 }

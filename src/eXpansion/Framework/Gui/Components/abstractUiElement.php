@@ -13,8 +13,10 @@ abstract class abstractUiElement extends ScriptFeature implements Renderable
     protected $posY = 0;
     protected $posZ = 0;
 
-    protected $width;
-    protected $height;
+    protected $width = 1;
+    protected $height = 1;
+    protected $horizontalAlign = "left";
+    protected $verticalAlign = "top";
 
     /**
      * @param int $posX
@@ -132,12 +134,50 @@ abstract class abstractUiElement extends ScriptFeature implements Renderable
     public function addDataAttribute($name, $value)
     {
         $this->_dataAttributes[$name] = $value;
+
         return $this;
     }
 
     public function addClass($name)
     {
         $this->_classes[] = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHorizontalAlign(): string
+    {
+        return $this->horizontalAlign;
+    }
+
+    /**
+     * @param string $horizontalAlign
+     */
+    public function setHorizontalAlign(string $horizontalAlign)
+    {
+        $this->horizontalAlign = $horizontalAlign;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVerticalAlign(): string
+    {
+        return $this->verticalAlign;
+    }
+
+    /**
+     * @param string $verticalAlign
+     */
+    public function setVerticalAlign(string $verticalAlign)
+    {
+        $this->verticalAlign = $verticalAlign;
+
         return $this;
     }
 

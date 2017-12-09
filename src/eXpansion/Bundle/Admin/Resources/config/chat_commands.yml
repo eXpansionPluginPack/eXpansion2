@@ -22,5 +22,5 @@ services:
         class: eXpansion\Bundle\Admin\ChatCommand\ServerPanel
         arguments:
             $command: "server"
-            $permission: 'script'
+            $permission: 'server'
             $aliases: []

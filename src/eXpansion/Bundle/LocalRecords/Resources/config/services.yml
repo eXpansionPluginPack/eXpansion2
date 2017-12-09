@@ -1,5 +1,5 @@
 parameters:
-    eXpansion.local_records.nb_records: 100
+    eXpansion.local_records.nb_records: 1000
 
 services:
     _defaults:

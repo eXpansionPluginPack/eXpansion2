@@ -36,6 +36,9 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
 
     public function __construct($text = "button", $type = self::TYPE_DEFAULT)
     {
+        $this->setHorizontalAlign("center");
+        $this->setVerticalAlign("center");
+
         $this->text = $text;
         $this->type = $type;
         $this->setSize(18, 5);
@@ -112,6 +115,7 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
 
     /**
      * @param string $text
+     * @return uiButton
      */
     public function setText($text)
     {
@@ -194,6 +198,7 @@ EOD;
 
     /**
      * @param string $type
+     * @return uiButton
      */
     public function setType($type)
     {
@@ -212,6 +217,7 @@ EOD;
 
     /**
      * @param string $textColor
+     * @return uiButton
      */
     public function setTextColor($textColor)
     {
@@ -230,6 +236,7 @@ EOD;
 
     /**
      * @param string $backColor
+     * @return uiButton
      */
     public function setBackgroundColor($backColor)
     {
@@ -248,6 +255,7 @@ EOD;
 
     /**
      * @param string $borderColor
+     * @return uiButton
      */
     public function setBorderColor($borderColor)
     {
@@ -266,6 +274,7 @@ EOD;
 
     /**
      * @param null $action
+     * @return uiButton
      */
     public function setAction($action)
     {
@@ -284,6 +293,7 @@ EOD;
 
     /**
      * @param string $focusColor
+     * @return uiButton
      */
     public function setFocusColor($focusColor)
     {
@@ -302,6 +312,7 @@ EOD;
 
     /**
      * @param float $scale
+     * @return uiButton
      */
     public function setScale($scale)
     {
@@ -321,6 +332,7 @@ EOD;
 
     /**
      * @param bool $translate
+     * @return uiButton
      */
     public function setTranslate($translate = true)
     {
@@ -352,11 +364,11 @@ EOD;
      * @api
      * @param Renderable $child Child Control to add
      * @deprecated
-     * @return static
+     * @return void
      */
     public function addChild(Renderable $child)
     {
-        // TODO: Implement addChild() method.
+
     }
 
     /**
@@ -364,13 +376,13 @@ EOD;
      *
      * @api
      * @param Renderable $child Child Control to add
-     * @return static
+     * @return void
      * @deprecated Use addChild()
      * @see        Container::addChild()
      */
     public function add(Renderable $child)
     {
-        // TODO: Implement add() method.
+
     }
 
     /**
@@ -378,35 +390,35 @@ EOD;
      *
      * @api
      * @param Renderable[] $children Child Controls to add
-     * @return static
+     * @return void
      */
     public function addChildren(array $children)
     {
-        // TODO: Implement addChildren() method.
+
     }
 
     /**
      * Remove all children
      *
      * @api
-     * @return static
+     * @return void
      */
     public function removeAllChildren()
     {
-        // TODO: Implement removeAllChildren() method.
+
     }
 
     /**
      * Remove all children
      *
      * @api
-     * @return static
+     * @return void
      * @deprecated Use removeAllChildren()
      * @see        Container::removeAllChildren()
      */
     public function removeChildren()
     {
-        // TODO: Implement removeChildren() method.
+
     }
 
     /**
@@ -414,13 +426,13 @@ EOD;
      *
      * @api
      * @param bool $createIfEmpty If the format should be created if it doesn't exist yet
-     * @return Format
+     * @return void
      * @deprecated Use Style
      * @see        Style
      */
     public function getFormat($createIfEmpty = true)
     {
-        // TODO: Implement getFormat() method.
+
     }
 
     /**
@@ -428,17 +440,17 @@ EOD;
      *
      * @api
      * @param Format $format New Format
-     * @return static
+     * @return void
      * @deprecated Use Style
      * @see        Style
      */
     public function setFormat(Format $format = null)
     {
-        // TODO: Implement setFormat() method.
+
     }
 
     /**
-     * @return null
+     * @return string|null
      */
     public function getId()
     {
@@ -447,6 +459,7 @@ EOD;
 
     /**
      * @param null $id
+     * @return uiButton
      */
     public function setId($id)
     {
