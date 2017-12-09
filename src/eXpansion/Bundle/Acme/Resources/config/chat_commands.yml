@@ -8,7 +8,6 @@ services:
               -
                 - '@eXpansion\Bundle\Acme\ChatCommand\Connect'
                 - '@eXpansion\Bundle\Acme\ChatCommand\Disconnect'
-                - '@eXpansion\Bundle\Acme\ChatCommand\GenRecords'
           tags:
               - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}
 
