@@ -5,14 +5,39 @@ namespace eXpansion\Framework\Gui\Builders;
 use FML\Controls\Quad;
 use FML\Types\Renderable;
 
+/**
+ * Class WidgetBackground
+ * @package eXpansion\Framework\Gui\Builders
+ */
 class WidgetBackground implements Renderable
 {
+    /**
+     * @var float
+     */
     protected $posX = 0;
+    /**
+     * @var float
+     */
     protected $posY = 0;
+    /**
+     * @var float
+     */
     protected $posZ = 0;
+    /**
+     * @var string
+     */
     protected $id;
+    /**
+     * @var float
+     */
     protected $width;
+    /**
+     * @var float
+     */
     protected $height;
+    /**
+     * @var string
+     */
     protected $action;
 
     /**
@@ -58,10 +83,26 @@ class WidgetBackground implements Renderable
 
     /**
      * @param int $posX
+     * @return WidgetBackground
      */
     public function setPosX(int $posX)
     {
         $this->posX = $posX;
+
+        return $this;
+    }
+
+    /**
+     * @param int $posX
+     * @param int $posY
+     * @return WidgetBackground
+     */
+    public function setPosition(int $posX, int $posY)
+    {
+        $this->posX = $posX;
+        $this->posY = $posY;
+
+        return $this;
     }
 
     /**
@@ -74,10 +115,13 @@ class WidgetBackground implements Renderable
 
     /**
      * @param int $posY
+     * @return WidgetBackground
      */
     public function setPosY(int $posY)
     {
         $this->posY = $posY;
+
+        return $this;
     }
 
     /**
@@ -90,10 +134,13 @@ class WidgetBackground implements Renderable
 
     /**
      * @param int $posZ
+     * @return WidgetBackground
      */
     public function setPosZ(int $posZ)
     {
         $this->posZ = $posZ;
+
+        return $this;
     }
 
     /**
@@ -106,10 +153,13 @@ class WidgetBackground implements Renderable
 
     /**
      * @param mixed $width
+     * @return WidgetBackground
      */
     public function setWidth($width)
     {
         $this->width = $width;
+
+        return $this;
     }
 
     /**
@@ -122,10 +172,13 @@ class WidgetBackground implements Renderable
 
     /**
      * @param mixed $height
+     * @return WidgetBackground
      */
     public function setHeight($height)
     {
         $this->height = $height;
+
+        return $this;
     }
 
     /**
@@ -138,10 +191,13 @@ class WidgetBackground implements Renderable
 
     /**
      * @param mixed $action
+     * @return WidgetBackground
      */
     public function setAction($action)
     {
         $this->action = $action;
+
+        return $this;
     }
 
     /**
@@ -154,10 +210,13 @@ class WidgetBackground implements Renderable
 
     /**
      * @param mixed $id
+     * @return WidgetBackground
      */
     public function setId($id)
     {
         $this->id = $id;
+
+        return $this;
     }
 
 
