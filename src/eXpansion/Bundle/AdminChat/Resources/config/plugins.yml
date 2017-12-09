@@ -36,6 +36,9 @@ services:
               - '@expansion.admin_chat.chat_command.password'
               - '@expansion.admin_chat.chat_command.specpass'
 
+              - '@expansion.admin_chat.chat_command.save_matchsettings'
+              - '@expansion.admin_chat.chat_command.load_matchsettings'
+
         tags:
             - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}
 
