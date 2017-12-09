@@ -6,3 +6,9 @@ services:
       $relativePath: 'eXpansionCore/Resources/maniascript/window.txtm'
       $className: eXpansion\Framework\Core\Model\Gui\ManiaScript
 
+  expansion.framework.core.maniascript.widget:
+      class: eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory
+      autowire: true
+      arguments:
+        $relativePath: 'eXpansionCore/Resources/maniascript/widget.txtm'
+        $className: eXpansion\Framework\Core\Model\Gui\ManiaScript

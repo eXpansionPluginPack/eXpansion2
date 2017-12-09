@@ -86,6 +86,7 @@ class GridBuilder
      * @param LineFactory $lineFactory
      * @param TitleLineFactory $titleLineFactory
      * @param PagerFactory $pagerFactory
+     * @param Factory $uiFactory
      */
     public function __construct(
         ActionFactory $actionFactory,
@@ -176,9 +177,6 @@ class GridBuilder
      * @param      string $key
      * @param      string $name
      * @param      integer $widthCoefficiency
-     * @param bool $sortable
-     * @param bool $translatable
-     *
      * @return $this
      */
     public function addInputColumn($key, $name, $widthCoefficiency)
@@ -223,6 +221,7 @@ class GridBuilder
      * @param double $height
      *
      * @return Frame
+     * @throws \Exception
      */
     public function build($width, $height)
     {
@@ -333,6 +332,9 @@ class GridBuilder
 
     /**
      * Action callback to go to the first page.
+     * @param ManialinkInterface $manialink
+     * @param null $login
+     * @param array $entries
      */
     public function goToFirstPage(ManialinkInterface $manialink, $login = null, $entries = [])
     {
@@ -342,6 +344,9 @@ class GridBuilder
 
     /**
      * Action callback to go to the previous page.
+     * @param ManialinkInterface $manialink
+     * @param null $login
+     * @param array $entries
      */
     public function goToPreviousPage(ManialinkInterface $manialink, $login = null, $entries = [])
     {
@@ -353,6 +358,9 @@ class GridBuilder
 
     /**
      * Action callback to go to the next page.
+     * @param ManialinkInterface $manialink
+     * @param null $login
+     * @param array $entries
      */
     public function goToNextPage(ManialinkInterface $manialink, $login = null, $entries = [])
     {
@@ -362,6 +370,11 @@ class GridBuilder
         }
     }
 
+    /**
+     * @param ManialinkInterface $manialink
+     * @param null $login
+     * @param array $entries
+     */
     public function goToPage(ManialinkInterface $manialink, $login = null, $entries = [])
     {
         if (array_key_exists("pager_gotopage", $entries)) {
@@ -379,6 +392,9 @@ class GridBuilder
 
     /**
      * Action callback to go to the last page.
+     * @param ManialinkInterface $manialink
+     * @param null $login
+     * @param array $entries
      */
     public function goToLastPage(ManialinkInterface $manialink, $login = null, $entries = [])
     {
@@ -388,6 +404,7 @@ class GridBuilder
 
     /**
      * Updates dataCollection from entries.
+     * @param $entries
      */
     public function updateDataCollection($entries)
     {
@@ -438,6 +455,12 @@ class GridBuilder
         $this->manialinkFactory->update($this->manialink->getUserGroup());
     }
 
+    /**
+     * @param ManialinkInterface $manialink
+     * @param $login
+     * @param $entries
+     * @param $args
+     */
     public function sortColumn(ManialinkInterface $manialink, $login, $entries, $args)
     {
         foreach ($this->columns as $columnData) {
@@ -454,5 +477,13 @@ class GridBuilder
         }
 
         $this->manialinkFactory->update($manialink->getUserGroup());
+    }
+
+    /**
+     * @return int
+     */
+    public function getCurrentPage(): int
+    {
+        return $this->currentPage;
     }
 }

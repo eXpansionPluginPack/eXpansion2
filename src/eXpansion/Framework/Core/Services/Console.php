@@ -3,6 +3,7 @@
 namespace eXpansion\Framework\Core\Services;
 
 use eXpansion\Framework\Core\Helpers\ColorConversion;
+use eXpansion\Framework\Core\Services\Application\Dispatcher;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -51,6 +52,10 @@ class Console
 
     /** @var boolean Color console enabled */
     protected $colorEnabled;
+    /**
+     * @var Dispatcher
+     */
+    private $dispatcher;
 
     /**
      * Console constructor.
@@ -68,9 +73,10 @@ class Console
      *
      * @param OutputInterface $consoleOutput
      */
-    public function init(OutputInterface $consoleOutput)
+    public function init(OutputInterface $consoleOutput, Dispatcher $dispatcher)
     {
         $this->consoleOutput = $consoleOutput;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -86,6 +92,8 @@ class Console
      */
     public function write($string, $newline = false)
     {
+        $this->dispatcher->dispatch("expansion.console.message", [$string]);
+
         if ($this->colorEnabled && $this->consoleOutput->isDecorated()) {
 
             $matches = array();

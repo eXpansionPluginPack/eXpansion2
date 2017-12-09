@@ -92,6 +92,7 @@ class PagerFactory
         $label->setSize(10, 7);
 
         $line = $this->uiFactory->createLayoutLine(0, -2);
+        $line->setHorizontalAlign("center");
         $line->addChildren([$input, $label]);
 
         if ($lastPageNumber > 1) {

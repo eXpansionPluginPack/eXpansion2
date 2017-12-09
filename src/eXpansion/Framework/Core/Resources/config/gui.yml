@@ -44,6 +44,12 @@ services:
         class: eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactory
         arguments:
           $maniaScriptFactory: '@expansion.framework.core.maniascript.window'
+
+    eXpansion\Framework\Core\Model\Gui\Factory\WidgetFrameFactory:
+        class: eXpansion\Framework\Core\Model\Gui\Factory\WidgetFrameFactory
+        arguments:
+          $maniaScriptFactory: '@expansion.framework.core.maniascript.widget'
+
     eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactoryInterface: '@eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactory'
 
 

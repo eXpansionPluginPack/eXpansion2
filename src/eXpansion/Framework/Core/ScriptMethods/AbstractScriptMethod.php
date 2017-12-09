@@ -51,7 +51,7 @@ class AbstractScriptMethod
      *
      * @param array $scores
      *
-     * @return mixed
+     * @return void
      */
     public function set($scores)
     {
@@ -64,7 +64,7 @@ class AbstractScriptMethod
      *
      * @param MethodScriptDataProviderInterface $dataProvider
      *
-     * @return mixed
+     * @return void
      */
     public function setCurrentDataProvider(MethodScriptDataProviderInterface $dataProvider)
     {

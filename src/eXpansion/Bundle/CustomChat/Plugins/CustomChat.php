@@ -8,6 +8,7 @@ use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplicat
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
+use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
 use Maniaplanet\DedicatedServer\Connection;
 
@@ -29,6 +30,10 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      * @var ChatNotification
      */
     private $chatNotification;
+    /**
+     * @var PlayerStorage
+     */
+    private $playerStorage;
 
     /**
      * CustomChat constructor.
@@ -36,17 +41,20 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      * @param Console $console
      * @param AdminGroups $adminGroups
      * @param ChatNotification $chatNotification
+     * @param PlayerStorage $playerStorage
      */
     function __construct(
         Connection $connection,
         Console $console,
         AdminGroups $adminGroups,
-        ChatNotification $chatNotification
+        ChatNotification $chatNotification,
+        PlayerStorage $playerStorage
     ) {
         $this->connection = $connection;
         $this->console = $console;
         $this->adminGroups = $adminGroups;
         $this->chatNotification = $chatNotification;
+        $this->playerStorage = $playerStorage;
     }
 
     /**
@@ -60,51 +68,93 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
     public function onPlayerChat(Player $player, $text)
     {
         $text = trim($text);
-        $from = trim($player->getNickName());
+        $nick = trim($player->getNickName());
 
         if ($player->getPlayerId() == 0) {
             return;
         }
 
         if ($player->getPlayerId() != 0 && substr($text, 0, 1) != "/") {
-            $nick = $player->getNickName();
+            $matches = [];
 
-            $nick = str_ireplace('$w', '', $nick);
-            $nick = str_ireplace('$z', '$z$s', $nick);
+            if ($this->enabled || $this->adminGroups->isAdmin($player->getLogin())) {
+                $matchFound = false;
+                $matchLogin = [];
 
-            // fix for chat...
-            $nick = str_replace('$<', '', $nick);
-            $nick = str_replace('$>', '', $nick);
+                if (preg_match_all("/(\s|\G)(\@(?P<login>[\w-\._]+)[\s]{0,1})/", $text, $matches)) {
+                    $group = [];
 
-            $text = str_replace('$<', '', $text);
+                    foreach ($matches['login'] as $login) {
+                        foreach ($this->playerStorage->getOnline() as $player2) {
+                            if ($player2->getLogin() == $login) {
+                                $matchFound = true;
+                                $matchLogin[$player2->getLogin()] = $player2->getLogin();
+                            } else {
+                                if (!in_array($player->getLogin(), $matchLogin)) {
+                                    $group[$player2->getLogin()] = $player2->getLogin();
+                                }
+                            }
+                        }
+                    }
 
-            $enabled = $this->enabled;
-            try {
-                $color = '$ff0';
-                $separator = '';
-                if ($this->adminGroups->isAdmin($player->getLogin())) {
-                    $color = '$ff0';
-                    $separator = '';
-                    $enabled = true;
+                    $diff = array_diff($group, $matchLogin);
+
+                    if ($matchFound) {
+                        $this->sendChat($player, $text, '$ff0$o', $matchLogin);
+
+                        if (count($diff) > 0) {
+                            $this->sendChat($player, $text, '$ff0', $group);
+                        }
+                        $this->console->writeln('$ff0['.$nick.'$ff0] '.$text);
+
+                        return;
+                    } else {
+                        $this->sendChat($player, $text, '$ff0', null);
+                        $this->console->writeln('$ff0['.$nick.'$ff0] '.$text);
+
+                        return;
+                    }
+                } else {
+                    $this->sendChat($player, $text, '$ff0', null);
+                    $this->console->writeln('$ff0['.$nick.'$ff0] '.$text);
                 }
-
-                if ($enabled) {
-                    $this->connection->chatSendServerMessage(
-                        '$fff$<'.$nick.'$>$z$s$fff '.$separator.' '.$color.$text,
-                        null
-                    );
-                    $this->console->writeln('$ff0['.$from.'$ff0] '.$text);
-                }
-                else {
-                    $this->console->writeln('$333['.$from.'$333] '.$text);
-                    $this->chatNotification->sendMessage('expansion_customchat.chat.disabledstate', $player->getLogin());
-                }
-
-            } catch (\Exception $e) {
-                $this->console->writeln('$ff0 error while sending chat: $fff'.$e->getMessage());
+            } else {
+                $this->console->writeln('$333['.$nick.'$333] '.$text);
+                $this->chatNotification->sendMessage('expansion_customchat.chat.disabledstate',
+                    $player->getLogin());
             }
         }
 
+    }
+
+    /**
+     * @param Player $player
+     * @param $text
+     * @param $color
+     * @param null $group
+     */
+    private function sendChat(Player $player, $text, $color, $group = null)
+    {
+        $nick = trim($player->getNickName());
+        $nick = str_ireplace('$w', '', $nick);
+        $nick = str_ireplace('$z', '$z$s', $nick);
+
+        // fix for chat...
+        $nick = str_replace(['$<', '$>'], '', $nick);
+        $text = str_replace(['$<', '$>'], '', $text);
+
+        $separator = '';
+        if ($this->adminGroups->isAdmin($player->getLogin())) {
+            $separator = '';
+        }
+
+        try {
+            $this->connection->chatSendServerMessage(
+                '$fff$<'.$nick.'$>$z$s$fff '.$separator.' '.$color.$text, $group
+            );
+        } catch (\Exception $e) {
+            $this->console->writeln('$ff0 error while sending chat: $fff'.$e->getMessage());
+        }
     }
 
     /**

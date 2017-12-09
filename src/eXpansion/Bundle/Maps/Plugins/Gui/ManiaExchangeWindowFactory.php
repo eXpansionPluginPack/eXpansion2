@@ -9,8 +9,9 @@ use eXpansion\Framework\Core\Helpers\Http;
 use eXpansion\Framework\Core\Helpers\Structures\HttpResult;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Helpers\TMString;
+use eXpansion\Framework\Core\Model\Gui\Grid\DataCollection;
 use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionFactory;
-use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionInterface;
+use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilder;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
@@ -235,7 +236,13 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $search->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackSearch'],
             ["ml" => $manialink]));
 
-        $line = $this->uiFactory->createLayoutLine(64, -14, [$mapname, $author, $search], 2);
+        $all = $this->uiFactory->createButton('Install view', uiButton::TYPE_DEFAULT);
+        $tooltip->addTooltip($all, "Install all maps from the view");
+        $all->setBackgroundColor("f00");
+        $all->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackInstallAll'],
+            ["ml" => $manialink]));
+
+        $line = $this->uiFactory->createLayoutLine(64, -14, [$mapname, $author, $search, $all], 2);
         $manialink->addChild($line);
 
         $addButton = $this->uiFactory->createButton('Install', uiButton::TYPE_DEFAULT);
@@ -305,7 +312,19 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
      */
     public function callbackAdd(ManialinkInterface $manialink, $login, $params, $args)
     {
-        $this->mxPlugin->addMap($login, $args['mxid'], $params['site']);
+        $this->mxPlugin->addMapToQueue($login, $args['mxid'], $params['site']);
+    }
+
+    public function callbackInstallAll(ManialinkInterface $manialink, $login, $params, $arguments)
+    {
+        /** @var DataCollection $collection */
+        $collection = $manialink->getData('dataCollection');
+
+        /** @var GridBuilder $grid */
+        $grid = $manialink->getData('grid');
+
+        $data = $collection->getData($grid->getCurrentPage());
+        $this->mxPlugin->addAllMaps($login, $data);
     }
 
     /**
@@ -341,7 +360,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
 
         $query = 'https://'.$params->site.'.mania-exchange.com/tracksearch2/search?api=on'.$args;
 
-        $this->http->get($query, [$this, 'setMaps'], ['login' => $login, 'ml' => $manialink]);
+        $this->http->get($query, [$this, 'setMaps'], ['login' => $login, 'params' => $params, 'ml' => $manialink]);
 
     }
 
@@ -352,6 +371,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
     public function setMaps(HttpResult $result)
     {
         $manialink = $result->getAdditionalData()['ml'];
+        $params = $result->getAdditionalData()['params'];
 
         $this->gridBuilder->goToFirstPage($manialink);
 
@@ -374,9 +394,9 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
                 "length" => $map->lengthName,
                 "style" => $map->styleName,
                 "mxid" => $map->trackID,
+                "mxsite" => $params->site,
             ];
         }
-
 
         $this->setData($manialink, $data);
         $group = $this->groupFactory->createForPlayer($result->getAdditionalData()['login']);
