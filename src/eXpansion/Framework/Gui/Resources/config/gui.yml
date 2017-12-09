@@ -1,5 +1,6 @@
 parameters:
   expansion.gui.components.button.class: 'eXpansion\Framework\Gui\Components\uiButton'
+  expansion.gui.components.confirmbutton.class: 'eXpansion\Framework\Gui\Components\uiConfirmButton'
   expansion.gui.components.checkbox.class: 'eXpansion\Framework\Gui\Components\uiCheckbox'
   expansion.gui.components.dropdown.class: 'eXpansion\Framework\Gui\Components\uiDropdown'
   expansion.gui.components.input.class: 'eXpansion\Framework\Gui\Components\uiInput'
@@ -14,6 +15,7 @@ parameters:
 
   expansion.gui.components.list:
     Button:   '%expansion.gui.components.button.class%'
+    ConfirmButton:   '%expansion.gui.components.confirmbutton.class%'
     Checkbox: '%expansion.gui.components.checkbox.class%'
     Dropdown: '%expansion.gui.components.dropdown.class%'
     Input:    '%expansion.gui.components.input.class%'

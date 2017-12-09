@@ -43,6 +43,7 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
         $this->type = $type;
         $this->setSize(18, 5);
         $this->buttonLabel = new uiLabel("", uiLabel::TYPE_TITLE);
+        $this->buttonLabel->addClass('uiButtonElement');
     }
 
 
@@ -88,7 +89,7 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
             ->setAreaColor($this->backColor)
             ->setAreaFocusColor($this->focusColor)
             ->setTextColor($this->textColor)
-            ->addClass('uiButtonElement')
+
             ->setAlign("center", "center2");
 
         if ($this->translate) {
@@ -150,10 +151,8 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
     {
         return /** language=textmate  prefix=#RequireContext\n */
             <<<'EOD'
-            if (Event.Control.HasClass("uiButtonElement") ) {
-                if (Event.Control.Parent.HasClass("uiButton")) {
-                      TriggerButtonClick(Event.Control);
-                }                
+            if (Event.Control.HasClass("uiButtonElement") ) {            
+                TriggerButtonClick(Event.Control);                             
             }
 EOD;
     }
@@ -162,25 +161,18 @@ EOD;
     {
         return /** language=textmate  prefix=#RequireContext\n */
             <<<'EOD'
-            Void TriggerButtonClick(Text ControlId) {
-              declare Control <=> Page.GetFirstChild(ControlId);
-                if (Control.Parent.HasClass("uiButton")) {
-                     if (Control.Parent.HasClass("uiButton")) {
-                        Control.Parent.RelativeScale = 0.75;
-                        AnimMgr.Add(Control.Parent, "<elem scale=\"1.\" />", 200, CAnimManager::EAnimManagerEasing::QuadIn); 
-                        TriggerPageAction(Control.Parent.DataAttributeGet("action"));
-                     }                
-                }
+       
+            Void TriggerButtonClick(CMlControl Control) {                
+                 if (Control.Parent.HasClass("uiButton")) {
+                    Control.Parent.RelativeScale = 0.75;
+                    AnimMgr.Add(Control.Parent, "<elem scale=\"1.\" />", 200, CAnimManager::EAnimManagerEasing::QuadIn); 
+                    TriggerPageAction(Control.Parent.DataAttributeGet("action"));
+                 }                                
             }
-
-            Void TriggerButtonClick(CMlControl Control) {         
-                if (Control.Parent.HasClass("uiButton")) {
-                     if (Control.Parent.HasClass("uiButton")) {
-                        Control.Parent.RelativeScale = 0.75;
-                        AnimMgr.Add(Control.Parent, "<elem scale=\"1.\" />", 200, CAnimManager::EAnimManagerEasing::QuadIn); 
-                        TriggerPageAction(Control.Parent.DataAttributeGet("action"));
-                     }                
-                }
+            
+            Void TriggerButtonClick(Text ControlId) {
+                declare Control <=> Page.GetFirstChild(ControlId);
+                TriggerButtonClick(Control);
             }
 
 

@@ -236,7 +236,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $search->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackSearch'],
             ["ml" => $manialink]));
 
-        $all = $this->uiFactory->createButton('Install view', uiButton::TYPE_DEFAULT);
+        $all = $this->uiFactory->createConfirmButton('Install view', uiButton::TYPE_DEFAULT);
         $tooltip->addTooltip($all, "Install all maps from the view");
         $all->setBackgroundColor("f00");
         $all->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackInstallAll'],
