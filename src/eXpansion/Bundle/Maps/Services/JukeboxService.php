@@ -51,6 +51,7 @@ class JukeboxService
     }
 
     /**
+     * Adds map as last item
      * @param Map $map
      * @param null $login
      * @param bool $force
@@ -69,6 +70,49 @@ class JukeboxService
 
         if ($force) {
             $this->add($jbMap);
+
+            return true;
+        }
+        // no some restrictions for admin
+        if ($this->adminGroups->hasPermission($login, "jukebox")) {
+            if ($this->checkMap($map) === false) {
+                $this->add($jbMap);
+
+                return true;
+            }
+
+        } else {
+            // restrict 1 map per 1 login
+            if ($this->checkLogin($login) === false && $this->checkMap($map) === false) {
+                $this->add($jbMap);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Adds Map as first item
+     * @param Map $map
+     * @param null $login
+     * @param bool $force
+     * @return bool
+     */
+
+    public function addMapFirst(Map $map, $login = null, $force = false)
+    {
+        $player = null;
+        if (!$login) {
+            return false;
+        }
+
+        $player = $this->playerStorage->getPlayerInfo($login);
+        $jbMap = new JukeboxMap($map, $player);
+
+        if ($force) {
+            $this->addFirst($jbMap);
 
             return true;
         }
@@ -130,6 +174,14 @@ class JukeboxService
     private function add(JukeboxMap $map)
     {
         array_push($this->mapQueue, $map);
+    }
+
+    /**
+     * @param JukeboxMap $map
+     */
+    private function addFirst(JukeboxMap $map)
+    {
+        array_unshift($this->mapQueue, $map);
     }
 
     /**
