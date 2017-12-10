@@ -22,6 +22,14 @@ expansion_admin_chat:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}changes the server comment. New server comment is {highlight}%parameter%'
     description: '{info}Change the comment of the server.'
 
+  savematchsettings:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} saved match settings: {highlight}%parameter%'
+    description: '{info}Change the name of the server.'
+
+  loadmatchsettings:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} loaded match settings: {highlight}%parameter%'
+    description: '{info}Change the name of the server.'
+
   kick:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}kicks {highlight}%player% {admin_info}. Reason: {highlight}%reason%'
     description: '{info}Kick a player from the server.'
