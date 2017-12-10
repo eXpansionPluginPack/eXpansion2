@@ -33,10 +33,7 @@ class MapRatingsWidget extends WidgetFactory
     {
         parent::createContent($manialink);
 
-
-
-
-
+        
 
         $bg = new WidgetBackground($this->sizeX, $this->sizeY);
         $manialink->addChild($bg);

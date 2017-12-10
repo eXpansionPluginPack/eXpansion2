@@ -228,7 +228,7 @@ class MapRatingsService implements ListenerInterfaceExpApplication, ListenerInte
      */
     public function onPodiumStart($time)
     {
-        $this->save();
+        $this->save($this->mapStorage->getCurrentMap());
     }
 
     /**
