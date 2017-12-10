@@ -1,6 +1,6 @@
 <?php
 
-namespace eXpansion\Bundle\LocalRecords\DependencyInjection;
+namespace eXpansion\Bundle\LocalMapRatings\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -21,7 +21,6 @@ class LocalMapRatingsExtension extends Extension
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
-        $loader->load('chat_commands.yml');
         $loader->load('gui.yml');
     }
 }

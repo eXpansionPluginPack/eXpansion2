@@ -1,6 +1,6 @@
 <?php
 
-namespace eXpansion\Bundle\Maps\Model\Map;
+namespace eXpansion\Bundle\LocalMapRatings\Model\Map;
 
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -11,12 +11,12 @@ use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
-use eXpansion\Bundle\Maps\Model\Map;
-use eXpansion\Bundle\Maps\Model\MapQuery;
+use eXpansion\Bundle\LocalMapRatings\Model\Maprating;
+use eXpansion\Bundle\LocalMapRatings\Model\MapratingQuery;
 
 
 /**
- * This class defines the structure of the 'map' table.
+ * This class defines the structure of the 'maprating' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use eXpansion\Bundle\Maps\Model\MapQuery;
  * (i.e. if it's a text column type).
  *
  */
-class MapTableMap extends TableMap
+class MapratingTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class MapTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'src\eXpansion\Bundle\Maps.Model.Map.MapTableMap';
+    const CLASS_NAME = 'src\eXpansion\Bundle\LocalMapRatings.Model.Map.MapratingTableMap';
 
     /**
      * The default database name for this class
@@ -44,22 +44,22 @@ class MapTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'map';
+    const TABLE_NAME = 'maprating';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\eXpansion\\Bundle\\Maps\\Model\\Map';
+    const OM_CLASS = '\\eXpansion\\Bundle\\LocalMapRatings\\Model\\Maprating';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'src\eXpansion\Bundle\Maps.Model.Map';
+    const CLASS_DEFAULT = 'src\eXpansion\Bundle\LocalMapRatings.Model.Maprating';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 19;
+    const NUM_COLUMNS = 6;
 
     /**
      * The number of lazy-loaded columns
@@ -69,102 +69,37 @@ class MapTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 19;
+    const NUM_HYDRATE_COLUMNS = 6;
 
     /**
      * the column name for the id field
      */
-    const COL_ID = 'map.id';
+    const COL_ID = 'maprating.id';
+
+    /**
+     * the column name for the player_id field
+     */
+    const COL_PLAYER_ID = 'maprating.player_id';
 
     /**
      * the column name for the mapUid field
      */
-    const COL_MAPUID = 'map.mapUid';
+    const COL_MAPUID = 'maprating.mapUid';
 
     /**
-     * the column name for the name field
+     * the column name for the score field
      */
-    const COL_NAME = 'map.name';
-
-    /**
-     * the column name for the fileName field
-     */
-    const COL_FILENAME = 'map.fileName';
-
-    /**
-     * the column name for the author field
-     */
-    const COL_AUTHOR = 'map.author';
-
-    /**
-     * the column name for the environment field
-     */
-    const COL_ENVIRONMENT = 'map.environment';
-
-    /**
-     * the column name for the mood field
-     */
-    const COL_MOOD = 'map.mood';
-
-    /**
-     * the column name for the bronzeTime field
-     */
-    const COL_BRONZETIME = 'map.bronzeTime';
-
-    /**
-     * the column name for the silverTime field
-     */
-    const COL_SILVERTIME = 'map.silverTime';
-
-    /**
-     * the column name for the goldTime field
-     */
-    const COL_GOLDTIME = 'map.goldTime';
-
-    /**
-     * the column name for the authorTime field
-     */
-    const COL_AUTHORTIME = 'map.authorTime';
-
-    /**
-     * the column name for the copperPrice field
-     */
-    const COL_COPPERPRICE = 'map.copperPrice';
-
-    /**
-     * the column name for the lapRace field
-     */
-    const COL_LAPRACE = 'map.lapRace';
-
-    /**
-     * the column name for the nbLaps field
-     */
-    const COL_NBLAPS = 'map.nbLaps';
-
-    /**
-     * the column name for the npCheckpoints field
-     */
-    const COL_NPCHECKPOINTS = 'map.npCheckpoints';
-
-    /**
-     * the column name for the mapType field
-     */
-    const COL_MAPTYPE = 'map.mapType';
-
-    /**
-     * the column name for the mapStyle field
-     */
-    const COL_MAPSTYLE = 'map.mapStyle';
+    const COL_SCORE = 'maprating.score';
 
     /**
      * the column name for the created_at field
      */
-    const COL_CREATED_AT = 'map.created_at';
+    const COL_CREATED_AT = 'maprating.created_at';
 
     /**
      * the column name for the updated_at field
      */
-    const COL_UPDATED_AT = 'map.updated_at';
+    const COL_UPDATED_AT = 'maprating.updated_at';
 
     /**
      * The default string format for model objects of the related table
@@ -178,11 +113,11 @@ class MapTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Mapuid', 'Name', 'Filename', 'Author', 'Environment', 'Mood', 'Bronzetime', 'Silvertime', 'Goldtime', 'Authortime', 'Copperprice', 'Laprace', 'Nblaps', 'Npcheckpoints', 'Maptype', 'Mapstyle', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'mapuid', 'name', 'filename', 'author', 'environment', 'mood', 'bronzetime', 'silvertime', 'goldtime', 'authortime', 'copperprice', 'laprace', 'nblaps', 'npcheckpoints', 'maptype', 'mapstyle', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(MapTableMap::COL_ID, MapTableMap::COL_MAPUID, MapTableMap::COL_NAME, MapTableMap::COL_FILENAME, MapTableMap::COL_AUTHOR, MapTableMap::COL_ENVIRONMENT, MapTableMap::COL_MOOD, MapTableMap::COL_BRONZETIME, MapTableMap::COL_SILVERTIME, MapTableMap::COL_GOLDTIME, MapTableMap::COL_AUTHORTIME, MapTableMap::COL_COPPERPRICE, MapTableMap::COL_LAPRACE, MapTableMap::COL_NBLAPS, MapTableMap::COL_NPCHECKPOINTS, MapTableMap::COL_MAPTYPE, MapTableMap::COL_MAPSTYLE, MapTableMap::COL_CREATED_AT, MapTableMap::COL_UPDATED_AT, ),
-        self::TYPE_FIELDNAME     => array('id', 'mapUid', 'name', 'fileName', 'author', 'environment', 'mood', 'bronzeTime', 'silverTime', 'goldTime', 'authorTime', 'copperPrice', 'lapRace', 'nbLaps', 'npCheckpoints', 'mapType', 'mapStyle', 'created_at', 'updated_at', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
+        self::TYPE_PHPNAME       => array('Id', 'PlayerId', 'Mapuid', 'Score', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'playerId', 'mapuid', 'score', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(MapratingTableMap::COL_ID, MapratingTableMap::COL_PLAYER_ID, MapratingTableMap::COL_MAPUID, MapratingTableMap::COL_SCORE, MapratingTableMap::COL_CREATED_AT, MapratingTableMap::COL_UPDATED_AT, ),
+        self::TYPE_FIELDNAME     => array('id', 'player_id', 'mapUid', 'score', 'created_at', 'updated_at', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -192,11 +127,11 @@ class MapTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Mapuid' => 1, 'Name' => 2, 'Filename' => 3, 'Author' => 4, 'Environment' => 5, 'Mood' => 6, 'Bronzetime' => 7, 'Silvertime' => 8, 'Goldtime' => 9, 'Authortime' => 10, 'Copperprice' => 11, 'Laprace' => 12, 'Nblaps' => 13, 'Npcheckpoints' => 14, 'Maptype' => 15, 'Mapstyle' => 16, 'CreatedAt' => 17, 'UpdatedAt' => 18, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'mapuid' => 1, 'name' => 2, 'filename' => 3, 'author' => 4, 'environment' => 5, 'mood' => 6, 'bronzetime' => 7, 'silvertime' => 8, 'goldtime' => 9, 'authortime' => 10, 'copperprice' => 11, 'laprace' => 12, 'nblaps' => 13, 'npcheckpoints' => 14, 'maptype' => 15, 'mapstyle' => 16, 'createdAt' => 17, 'updatedAt' => 18, ),
-        self::TYPE_COLNAME       => array(MapTableMap::COL_ID => 0, MapTableMap::COL_MAPUID => 1, MapTableMap::COL_NAME => 2, MapTableMap::COL_FILENAME => 3, MapTableMap::COL_AUTHOR => 4, MapTableMap::COL_ENVIRONMENT => 5, MapTableMap::COL_MOOD => 6, MapTableMap::COL_BRONZETIME => 7, MapTableMap::COL_SILVERTIME => 8, MapTableMap::COL_GOLDTIME => 9, MapTableMap::COL_AUTHORTIME => 10, MapTableMap::COL_COPPERPRICE => 11, MapTableMap::COL_LAPRACE => 12, MapTableMap::COL_NBLAPS => 13, MapTableMap::COL_NPCHECKPOINTS => 14, MapTableMap::COL_MAPTYPE => 15, MapTableMap::COL_MAPSTYLE => 16, MapTableMap::COL_CREATED_AT => 17, MapTableMap::COL_UPDATED_AT => 18, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'mapUid' => 1, 'name' => 2, 'fileName' => 3, 'author' => 4, 'environment' => 5, 'mood' => 6, 'bronzeTime' => 7, 'silverTime' => 8, 'goldTime' => 9, 'authorTime' => 10, 'copperPrice' => 11, 'lapRace' => 12, 'nbLaps' => 13, 'npCheckpoints' => 14, 'mapType' => 15, 'mapStyle' => 16, 'created_at' => 17, 'updated_at' => 18, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'PlayerId' => 1, 'Mapuid' => 2, 'Score' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'playerId' => 1, 'mapuid' => 2, 'score' => 3, 'createdAt' => 4, 'updatedAt' => 5, ),
+        self::TYPE_COLNAME       => array(MapratingTableMap::COL_ID => 0, MapratingTableMap::COL_PLAYER_ID => 1, MapratingTableMap::COL_MAPUID => 2, MapratingTableMap::COL_SCORE => 3, MapratingTableMap::COL_CREATED_AT => 4, MapratingTableMap::COL_UPDATED_AT => 5, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'player_id' => 1, 'mapUid' => 2, 'score' => 3, 'created_at' => 4, 'updated_at' => 5, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -209,30 +144,17 @@ class MapTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('map');
-        $this->setPhpName('Map');
+        $this->setName('maprating');
+        $this->setPhpName('Maprating');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\eXpansion\\Bundle\\Maps\\Model\\Map');
-        $this->setPackage('src\eXpansion\Bundle\Maps.Model');
+        $this->setClassName('\\eXpansion\\Bundle\\LocalMapRatings\\Model\\Maprating');
+        $this->setPackage('src\eXpansion\Bundle\LocalMapRatings.Model');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('mapUid', 'Mapuid', 'VARCHAR', false, 32, null);
-        $this->addColumn('name', 'Name', 'VARCHAR', false, 150, null);
-        $this->addColumn('fileName', 'Filename', 'VARCHAR', false, 100, null);
-        $this->addColumn('author', 'Author', 'VARCHAR', false, 50, null);
-        $this->addColumn('environment', 'Environment', 'VARCHAR', false, 50, null);
-        $this->addColumn('mood', 'Mood', 'VARCHAR', false, 50, null);
-        $this->addColumn('bronzeTime', 'Bronzetime', 'INTEGER', false, null, null);
-        $this->addColumn('silverTime', 'Silvertime', 'INTEGER', false, null, null);
-        $this->addColumn('goldTime', 'Goldtime', 'INTEGER', false, null, null);
-        $this->addColumn('authorTime', 'Authortime', 'INTEGER', false, null, null);
-        $this->addColumn('copperPrice', 'Copperprice', 'INTEGER', false, null, null);
-        $this->addColumn('lapRace', 'Laprace', 'BOOLEAN', false, 1, null);
-        $this->addColumn('nbLaps', 'Nblaps', 'INTEGER', false, null, null);
-        $this->addColumn('npCheckpoints', 'Npcheckpoints', 'INTEGER', false, null, null);
-        $this->addColumn('mapType', 'Maptype', 'VARCHAR', false, 50, null);
-        $this->addColumn('mapStyle', 'Mapstyle', 'VARCHAR', false, 50, null);
+        $this->addForeignKey('player_id', 'PlayerId', 'INTEGER', 'player', 'id', false, null, null);
+        $this->addForeignKey('mapUid', 'Mapuid', 'VARCHAR', 'map', 'mapUid', false, 32, null);
+        $this->addColumn('score', 'Score', 'INTEGER', false, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
@@ -242,20 +164,20 @@ class MapTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Maprating', '\\eXpansion\\Bundle\\LocalMapRatings\\Model\\Maprating', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('Player', '\\eXpansion\\Framework\\PlayersBundle\\Model\\Player', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':player_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('Map', '\\eXpansion\\Bundle\\Maps\\Model\\Map', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':mapUid',
     1 => ':mapUid',
   ),
-), null, null, 'Mapratings', false);
-        $this->addRelation('Mxmap', '\\eXpansion\\Bundle\\Maps\\Model\\Mxmap', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':trackUID',
-    1 => ':mapUid',
-  ),
-), null, null, 'Mxmaps', false);
+), null, null, null, false);
     } // buildRelations()
 
     /**
@@ -328,7 +250,7 @@ class MapTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? MapTableMap::CLASS_DEFAULT : MapTableMap::OM_CLASS;
+        return $withPrefix ? MapratingTableMap::CLASS_DEFAULT : MapratingTableMap::OM_CLASS;
     }
 
     /**
@@ -342,22 +264,22 @@ class MapTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Map object, last column rank)
+     * @return array           (Maprating object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = MapTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = MapTableMap::getInstanceFromPool($key))) {
+        $key = MapratingTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = MapratingTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + MapTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + MapratingTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = MapTableMap::OM_CLASS;
-            /** @var Map $obj */
+            $cls = MapratingTableMap::OM_CLASS;
+            /** @var Maprating $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            MapTableMap::addInstanceToPool($obj, $key);
+            MapratingTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -380,18 +302,18 @@ class MapTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = MapTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = MapTableMap::getInstanceFromPool($key))) {
+            $key = MapratingTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = MapratingTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Map $obj */
+                /** @var Maprating $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                MapTableMap::addInstanceToPool($obj, $key);
+                MapratingTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -412,43 +334,17 @@ class MapTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(MapTableMap::COL_ID);
-            $criteria->addSelectColumn(MapTableMap::COL_MAPUID);
-            $criteria->addSelectColumn(MapTableMap::COL_NAME);
-            $criteria->addSelectColumn(MapTableMap::COL_FILENAME);
-            $criteria->addSelectColumn(MapTableMap::COL_AUTHOR);
-            $criteria->addSelectColumn(MapTableMap::COL_ENVIRONMENT);
-            $criteria->addSelectColumn(MapTableMap::COL_MOOD);
-            $criteria->addSelectColumn(MapTableMap::COL_BRONZETIME);
-            $criteria->addSelectColumn(MapTableMap::COL_SILVERTIME);
-            $criteria->addSelectColumn(MapTableMap::COL_GOLDTIME);
-            $criteria->addSelectColumn(MapTableMap::COL_AUTHORTIME);
-            $criteria->addSelectColumn(MapTableMap::COL_COPPERPRICE);
-            $criteria->addSelectColumn(MapTableMap::COL_LAPRACE);
-            $criteria->addSelectColumn(MapTableMap::COL_NBLAPS);
-            $criteria->addSelectColumn(MapTableMap::COL_NPCHECKPOINTS);
-            $criteria->addSelectColumn(MapTableMap::COL_MAPTYPE);
-            $criteria->addSelectColumn(MapTableMap::COL_MAPSTYLE);
-            $criteria->addSelectColumn(MapTableMap::COL_CREATED_AT);
-            $criteria->addSelectColumn(MapTableMap::COL_UPDATED_AT);
+            $criteria->addSelectColumn(MapratingTableMap::COL_ID);
+            $criteria->addSelectColumn(MapratingTableMap::COL_PLAYER_ID);
+            $criteria->addSelectColumn(MapratingTableMap::COL_MAPUID);
+            $criteria->addSelectColumn(MapratingTableMap::COL_SCORE);
+            $criteria->addSelectColumn(MapratingTableMap::COL_CREATED_AT);
+            $criteria->addSelectColumn(MapratingTableMap::COL_UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.id');
+            $criteria->addSelectColumn($alias . '.player_id');
             $criteria->addSelectColumn($alias . '.mapUid');
-            $criteria->addSelectColumn($alias . '.name');
-            $criteria->addSelectColumn($alias . '.fileName');
-            $criteria->addSelectColumn($alias . '.author');
-            $criteria->addSelectColumn($alias . '.environment');
-            $criteria->addSelectColumn($alias . '.mood');
-            $criteria->addSelectColumn($alias . '.bronzeTime');
-            $criteria->addSelectColumn($alias . '.silverTime');
-            $criteria->addSelectColumn($alias . '.goldTime');
-            $criteria->addSelectColumn($alias . '.authorTime');
-            $criteria->addSelectColumn($alias . '.copperPrice');
-            $criteria->addSelectColumn($alias . '.lapRace');
-            $criteria->addSelectColumn($alias . '.nbLaps');
-            $criteria->addSelectColumn($alias . '.npCheckpoints');
-            $criteria->addSelectColumn($alias . '.mapType');
-            $criteria->addSelectColumn($alias . '.mapStyle');
+            $criteria->addSelectColumn($alias . '.score');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
         }
@@ -463,7 +359,7 @@ class MapTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(MapTableMap::DATABASE_NAME)->getTable(MapTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(MapratingTableMap::DATABASE_NAME)->getTable(MapratingTableMap::TABLE_NAME);
     }
 
     /**
@@ -471,16 +367,16 @@ class MapTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(MapTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(MapTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new MapTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(MapratingTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(MapratingTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new MapratingTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a Map or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a Maprating or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Map object or primary key or array of primary keys
+     * @param mixed               $values Criteria or Maprating object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -491,27 +387,27 @@ class MapTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(MapTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(MapratingTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \eXpansion\Bundle\Maps\Model\Map) { // it's a model object
+        } elseif ($values instanceof \eXpansion\Bundle\LocalMapRatings\Model\Maprating) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(MapTableMap::DATABASE_NAME);
-            $criteria->add(MapTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(MapratingTableMap::DATABASE_NAME);
+            $criteria->add(MapratingTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = MapQuery::create()->mergeWith($criteria);
+        $query = MapratingQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            MapTableMap::clearInstancePool();
+            MapratingTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                MapTableMap::removeInstanceFromPool($singleval);
+                MapratingTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -519,20 +415,20 @@ class MapTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the map table.
+     * Deletes all rows from the maprating table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return MapQuery::create()->doDeleteAll($con);
+        return MapratingQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a Map or Criteria object.
+     * Performs an INSERT on the database, given a Maprating or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Map object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or Maprating object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -541,22 +437,22 @@ class MapTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(MapTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(MapratingTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from Map object
+            $criteria = $criteria->buildCriteria(); // build Criteria from Maprating object
         }
 
-        if ($criteria->containsKey(MapTableMap::COL_ID) && $criteria->keyContainsValue(MapTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.MapTableMap::COL_ID.')');
+        if ($criteria->containsKey(MapratingTableMap::COL_ID) && $criteria->keyContainsValue(MapratingTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.MapratingTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = MapQuery::create()->mergeWith($criteria);
+        $query = MapratingQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -565,7 +461,7 @@ class MapTableMap extends TableMap
         });
     }
 
-} // MapTableMap
+} // MapratingTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-MapTableMap::buildTableMap();
+MapratingTableMap::buildTableMap();

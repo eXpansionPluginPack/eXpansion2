@@ -177,6 +177,13 @@ class PlayerTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Maprating', '\\eXpansion\\Bundle\\LocalMapRatings\\Model\\Maprating', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':player_id',
+    1 => ':id',
+  ),
+), null, null, 'Mapratings', false);
         $this->addRelation('Record', '\\eXpansion\\Bundle\\LocalRecords\\Model\\Record', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

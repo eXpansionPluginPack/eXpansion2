@@ -18,6 +18,10 @@ use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
 use Propel\Runtime\Util\PropelDateTime;
+use eXpansion\Bundle\LocalMapRatings\Model\Maprating;
+use eXpansion\Bundle\LocalMapRatings\Model\MapratingQuery;
+use eXpansion\Bundle\LocalMapRatings\Model\Base\Maprating as BaseMaprating;
+use eXpansion\Bundle\LocalMapRatings\Model\Map\MapratingTableMap;
 use eXpansion\Bundle\Maps\Model\Map as ChildMap;
 use eXpansion\Bundle\Maps\Model\MapQuery as ChildMapQuery;
 use eXpansion\Bundle\Maps\Model\Mxmap as ChildMxmap;
@@ -200,6 +204,12 @@ abstract class Map implements ActiveRecordInterface
     protected $updated_at;
 
     /**
+     * @var        ObjectCollection|Maprating[] Collection to store aggregation of Maprating objects.
+     */
+    protected $collMapratings;
+    protected $collMapratingsPartial;
+
+    /**
      * @var        ObjectCollection|ChildMxmap[] Collection to store aggregation of ChildMxmap objects.
      */
     protected $collMxmaps;
@@ -212,6 +222,12 @@ abstract class Map implements ActiveRecordInterface
      * @var boolean
      */
     protected $alreadyInSave = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|Maprating[]
+     */
+    protected $mapratingsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -1219,6 +1235,8 @@ abstract class Map implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->collMapratings = null;
+
             $this->collMxmaps = null;
 
         } // if (deep)
@@ -1341,6 +1359,24 @@ abstract class Map implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
+            }
+
+            if ($this->mapratingsScheduledForDeletion !== null) {
+                if (!$this->mapratingsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->mapratingsScheduledForDeletion as $maprating) {
+                        // need to save related object because we set the relation to null
+                        $maprating->save($con);
+                    }
+                    $this->mapratingsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collMapratings !== null) {
+                foreach ($this->collMapratings as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             if ($this->mxmapsScheduledForDeletion !== null) {
@@ -1694,6 +1730,21 @@ abstract class Map implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->collMapratings) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'mapratings';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'mapratings';
+                        break;
+                    default:
+                        $key = 'Mapratings';
+                }
+
+                $result[$key] = $this->collMapratings->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collMxmaps) {
 
                 switch ($keyType) {
@@ -2091,6 +2142,12 @@ abstract class Map implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
+            foreach ($this->getMapratings() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addMaprating($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getMxmaps() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addMxmap($relObj->copy($deepCopy));
@@ -2138,9 +2195,262 @@ abstract class Map implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
+        if ('Maprating' == $relationName) {
+            return $this->initMapratings();
+        }
         if ('Mxmap' == $relationName) {
             return $this->initMxmaps();
         }
+    }
+
+    /**
+     * Clears out the collMapratings collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addMapratings()
+     */
+    public function clearMapratings()
+    {
+        $this->collMapratings = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collMapratings collection loaded partially.
+     */
+    public function resetPartialMapratings($v = true)
+    {
+        $this->collMapratingsPartial = $v;
+    }
+
+    /**
+     * Initializes the collMapratings collection.
+     *
+     * By default this just sets the collMapratings collection to an empty array (like clearcollMapratings());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initMapratings($overrideExisting = true)
+    {
+        if (null !== $this->collMapratings && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = MapratingTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collMapratings = new $collectionClassName;
+        $this->collMapratings->setModel('\eXpansion\Bundle\LocalMapRatings\Model\Maprating');
+    }
+
+    /**
+     * Gets an array of Maprating objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildMap is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|Maprating[] List of Maprating objects
+     * @throws PropelException
+     */
+    public function getMapratings(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collMapratingsPartial && !$this->isNew();
+        if (null === $this->collMapratings || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collMapratings) {
+                // return empty collection
+                $this->initMapratings();
+            } else {
+                $collMapratings = MapratingQuery::create(null, $criteria)
+                    ->filterByMap($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collMapratingsPartial && count($collMapratings)) {
+                        $this->initMapratings(false);
+
+                        foreach ($collMapratings as $obj) {
+                            if (false == $this->collMapratings->contains($obj)) {
+                                $this->collMapratings->append($obj);
+                            }
+                        }
+
+                        $this->collMapratingsPartial = true;
+                    }
+
+                    return $collMapratings;
+                }
+
+                if ($partial && $this->collMapratings) {
+                    foreach ($this->collMapratings as $obj) {
+                        if ($obj->isNew()) {
+                            $collMapratings[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collMapratings = $collMapratings;
+                $this->collMapratingsPartial = false;
+            }
+        }
+
+        return $this->collMapratings;
+    }
+
+    /**
+     * Sets a collection of Maprating objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $mapratings A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildMap The current object (for fluent API support)
+     */
+    public function setMapratings(Collection $mapratings, ConnectionInterface $con = null)
+    {
+        /** @var Maprating[] $mapratingsToDelete */
+        $mapratingsToDelete = $this->getMapratings(new Criteria(), $con)->diff($mapratings);
+
+
+        $this->mapratingsScheduledForDeletion = $mapratingsToDelete;
+
+        foreach ($mapratingsToDelete as $mapratingRemoved) {
+            $mapratingRemoved->setMap(null);
+        }
+
+        $this->collMapratings = null;
+        foreach ($mapratings as $maprating) {
+            $this->addMaprating($maprating);
+        }
+
+        $this->collMapratings = $mapratings;
+        $this->collMapratingsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related BaseMaprating objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related BaseMaprating objects.
+     * @throws PropelException
+     */
+    public function countMapratings(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collMapratingsPartial && !$this->isNew();
+        if (null === $this->collMapratings || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collMapratings) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getMapratings());
+            }
+
+            $query = MapratingQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByMap($this)
+                ->count($con);
+        }
+
+        return count($this->collMapratings);
+    }
+
+    /**
+     * Method called to associate a Maprating object to this object
+     * through the Maprating foreign key attribute.
+     *
+     * @param  Maprating $l Maprating
+     * @return $this|\eXpansion\Bundle\Maps\Model\Map The current object (for fluent API support)
+     */
+    public function addMaprating(Maprating $l)
+    {
+        if ($this->collMapratings === null) {
+            $this->initMapratings();
+            $this->collMapratingsPartial = true;
+        }
+
+        if (!$this->collMapratings->contains($l)) {
+            $this->doAddMaprating($l);
+
+            if ($this->mapratingsScheduledForDeletion and $this->mapratingsScheduledForDeletion->contains($l)) {
+                $this->mapratingsScheduledForDeletion->remove($this->mapratingsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Maprating $maprating The Maprating object to add.
+     */
+    protected function doAddMaprating(Maprating $maprating)
+    {
+        $this->collMapratings[]= $maprating;
+        $maprating->setMap($this);
+    }
+
+    /**
+     * @param  Maprating $maprating The Maprating object to remove.
+     * @return $this|ChildMap The current object (for fluent API support)
+     */
+    public function removeMaprating(Maprating $maprating)
+    {
+        if ($this->getMapratings()->contains($maprating)) {
+            $pos = $this->collMapratings->search($maprating);
+            $this->collMapratings->remove($pos);
+            if (null === $this->mapratingsScheduledForDeletion) {
+                $this->mapratingsScheduledForDeletion = clone $this->collMapratings;
+                $this->mapratingsScheduledForDeletion->clear();
+            }
+            $this->mapratingsScheduledForDeletion[]= $maprating;
+            $maprating->setMap(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Map is new, it will return
+     * an empty collection; or if this Map has previously
+     * been saved, it will retrieve related Mapratings from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Map.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|Maprating[] List of Maprating objects
+     */
+    public function getMapratingsJoinPlayer(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = MapratingQuery::create(null, $criteria);
+        $query->joinWith('Player', $joinBehavior);
+
+        return $this->getMapratings($query, $con);
     }
 
     /**
@@ -2412,6 +2722,11 @@ abstract class Map implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
+            if ($this->collMapratings) {
+                foreach ($this->collMapratings as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collMxmaps) {
                 foreach ($this->collMxmaps as $o) {
                     $o->clearAllReferences($deep);
@@ -2419,6 +2734,7 @@ abstract class Map implements ActiveRecordInterface
             }
         } // if ($deep)
 
+        $this->collMapratings = null;
         $this->collMxmaps = null;
     }
 
