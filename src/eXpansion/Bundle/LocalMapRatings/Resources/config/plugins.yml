@@ -3,10 +3,11 @@ services:
         autowire: true
         public: true
 
-    eXpansion\Bundle\LocalMapRatings\Services\MapRatingsService:
-        class: eXpansion\Bundle\LocalMapRatings\Services\MapRatingsService
+    eXpansion\Bundle\LocalMapRatings\Plugin\MapRatings:
+        class: eXpansion\Bundle\LocalMapRatings\Plugin\MapRatings
+        arguments:
+            $players: "@expansion.framework.core.user_groups.all_players"
         tags:
             - {name: 'expansion.plugin', data_provider: 'exp.application'}
-            - {name: 'expansion.plugin', data_provider: 'mp.script.podium'}
             - {name: 'expansion.plugin', data_provider: 'mp.script.map'}
 

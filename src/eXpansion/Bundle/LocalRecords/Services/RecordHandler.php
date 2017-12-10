@@ -178,6 +178,9 @@ class RecordHandler
         }
 
         $con->commit();
+
+        RecordTableMap::clearRelatedInstancePool();
+        RecordTableMap::clearInstancePool();
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace eXpansion\Bundle\LocalMapRatings\Services;
 
+use eXpansion\Bundle\LocalMapRatings\Model\Map\MapratingTableMap;
 use eXpansion\Bundle\LocalMapRatings\Model\Maprating;
 use eXpansion\Bundle\LocalMapRatings\Model\MapratingQueryBuilder;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
@@ -9,9 +10,12 @@ use eXpansion\Framework\Core\Storage\MapStorage;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMap;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptPodium;
+use eXpansion\Framework\PlayersBundle\Model\PlayerQueryBuilder;
 use Maniaplanet\DedicatedServer\Structures\Map;
+use Propel\Runtime\Propel;
 
-class MapRatingService implements ListenerInterfaceExpApplication, ListenerInterfaceMpScriptMap,
+
+class MapRatingsService implements ListenerInterfaceExpApplication, ListenerInterfaceMpScriptMap,
     ListenerInterfaceMpScriptPodium
 {
 
@@ -30,29 +34,32 @@ class MapRatingService implements ListenerInterfaceExpApplication, ListenerInter
     private $playerStorage;
 
     /**
-     * @var Maprating[]
-     */
-    protected $ratings = [];
-    /**
      * @var MapratingQueryBuilder
      */
     private $mapratingQueryBuilder;
+    /**
+     * @var PlayerQueryBuilder
+     */
+    private $playerQueryBuilder;
 
     /**
      * MapRatingService constructor.
      * @param MapStorage            $mapStorage
      * @param PlayerStorage         $playerStorage
      * @param MapratingQueryBuilder $mapratingQueryBuilder
+     * @param PlayerQueryBuilder    $playerQueryBuilder
      */
     public function __construct(
         MapStorage $mapStorage,
         PlayerStorage $playerStorage,
-        MapratingQueryBuilder $mapratingQueryBuilder
+        MapratingQueryBuilder $mapratingQueryBuilder,
+        PlayerQueryBuilder $playerQueryBuilder
 
     ) {
         $this->mapStorage = $mapStorage;
         $this->playerStorage = $playerStorage;
         $this->mapratingQueryBuilder = $mapratingQueryBuilder;
+        $this->playerQueryBuilder = $playerQueryBuilder;
     }
 
     /**
@@ -63,6 +70,8 @@ class MapRatingService implements ListenerInterfaceExpApplication, ListenerInter
      */
     public function load(Map $map)
     {
+        $this->changedRatings = [];
+
         /** @var Maprating[] $ratings */
         $ratings = $this->mapratingQueryBuilder->getRatingsForMap($map);
 
@@ -75,17 +84,49 @@ class MapRatingService implements ListenerInterfaceExpApplication, ListenerInter
 
     public function save(Map $map)
     {
-        /** @var Maprating[] $ratings */
-        $ratings = $this->mapratingQueryBuilder->getRatingsForMap($map);
 
-        foreach ($ratings as $rating) {
-            $this->ratingsPerPlayer[$rating->getPlayer()->getLogin()] = $rating;
+        $con = Propel::getWriteConnection(MapratingTableMap::DATABASE_NAME);
+        $con->beginTransaction();
+        foreach ($this->changedRatings as $rating) {
+            $rating->save();
         }
+        $con->commit();
 
+        MapratingTableMap::clearInstancePool();
+        MapratingTableMap::clearRelatedInstancePool();
+    }
+
+    /**
+     * @param string $login
+     * @param int    $score
+     */
+    public function changeRating($login, $score)
+    {
+        $rating = $this->getRating($login);
+        $rating->setScore($score);
+        $this->changedRatings[$login] = $rating;
+        $this->ratingsPerPlayer[$login] = $rating;
     }
 
 
+    private function getRating($login)
+    {
+        if (array_key_exists($login, $this->changedRatings)) {
+            $rating = $this->changedRatings[$login];
+        } else {
+            if (array_key_exists($login, $this->ratingsPerPlayer)) {
+                $rating = $this->ratingsPerPlayer[$login];
+            } else {
+                $rating = new Maprating();
+                $player = $this->playerQueryBuilder->findByLogin($login);
+                $rating->setPlayerId($player->getId());
+                $rating->setPlayer($player);
+                $rating->setMapuid($this->mapStorage->getCurrentMap()->uId);
+            }
+        }
 
+        return $rating;
+    }
 
     /**
      * called at eXpansion init
@@ -94,7 +135,7 @@ class MapRatingService implements ListenerInterfaceExpApplication, ListenerInter
      */
     public function onApplicationInit()
     {
-        // TODO: Implement onApplicationInit() method.
+
     }
 
     /**
@@ -115,7 +156,7 @@ class MapRatingService implements ListenerInterfaceExpApplication, ListenerInter
      */
     public function onApplicationStop()
     {
-        // TODO: Implement onApplicationStop() method.
+
     }
 
     /**
@@ -146,7 +187,7 @@ class MapRatingService implements ListenerInterfaceExpApplication, ListenerInter
      */
     public function onStartMapEnd($count, $time, $restarted, Map $map)
     {
-        // TODO: Implement onStartMapEnd() method.
+
     }
 
     /**
@@ -161,7 +202,7 @@ class MapRatingService implements ListenerInterfaceExpApplication, ListenerInter
      */
     public function onEndMapStart($count, $time, $restarted, Map $map)
     {
-        // TODO: Implement onEndMapStart() method.
+
     }
 
     /**
@@ -176,7 +217,7 @@ class MapRatingService implements ListenerInterfaceExpApplication, ListenerInter
      */
     public function onEndMapEnd($count, $time, $restarted, Map $map)
     {
-        // TODO: Implement onEndMapEnd() method.
+
     }
 
     /**
@@ -199,6 +240,22 @@ class MapRatingService implements ListenerInterfaceExpApplication, ListenerInter
      */
     public function onPodiumEnd($time)
     {
-        // TODO: Implement onPodiumEnd() method.
+
+    }
+
+    /**
+     * @return Maprating[]
+     */
+    public function getRatingsPerPlayer(): array
+    {
+        return $this->ratingsPerPlayer;
+    }
+
+    /**
+     * @param Maprating[] $ratingsPerPlayer
+     */
+    public function setRatingsPerPlayer(array $ratingsPerPlayer)
+    {
+        $this->ratingsPerPlayer = $ratingsPerPlayer;
     }
 }

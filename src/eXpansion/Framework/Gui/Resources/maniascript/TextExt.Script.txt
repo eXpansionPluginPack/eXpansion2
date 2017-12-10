@@ -1,3 +1,9 @@
+/**
+ * TextExt.Script.txt
+ * @author zocka
+ * @link https://github.com/PRGfx/mQscripts/blob/master/lib/TextExt.Script.txt
+ * @link https://github.com/PRGfx/mQscripts/wiki/TextExt
+ */
 
 declare Text _TextExt_lowercase;
 declare Text _TextExt_uppercase;
