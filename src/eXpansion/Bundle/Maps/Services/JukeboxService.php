@@ -25,7 +25,7 @@ class JukeboxService
      * JukeboxService constructor.
      *
      * @param PlayerStorage $playerStorage
-     * @param AdminGroups $adminGroups
+     * @param AdminGroups   $adminGroups
      */
     public function __construct(PlayerStorage $playerStorage, AdminGroups $adminGroups)
     {
@@ -54,7 +54,7 @@ class JukeboxService
     /**
      * Adds map as first item
      *
-     * @param Map $map
+     * @param Map  $map
      * @param null $login
      * @param bool $force
      *
@@ -68,7 +68,7 @@ class JukeboxService
     /**
      * Adds map as last item
      *
-     * @param Map $map
+     * @param Map  $map
      * @param null $login
      * @param bool $force
      *
@@ -82,7 +82,7 @@ class JukeboxService
     /**
      * Adds map as last or first item
      *
-     * @param Map $map
+     * @param Map  $map
      * @param null $login
      * @param bool $force
      * @param bool $addFirst
@@ -125,8 +125,8 @@ class JukeboxService
     }
 
     /**
-     * @param Map $map
-     * @param $login
+     * @param Map  $map
+     * @param      $login
      * @param bool $force
      *
      * @return false;
@@ -159,7 +159,7 @@ class JukeboxService
 
     /**
      * @param JukeboxMap $map
-     * @param bool $addFirst
+     * @param bool       $addFirst
      *
      * @return void
      */
@@ -227,6 +227,7 @@ class JukeboxService
     /**
      * checks if map exists on queue
      * @param Map $map
+     *
      * @return bool
      */
     private function checkMap(Map $map)
