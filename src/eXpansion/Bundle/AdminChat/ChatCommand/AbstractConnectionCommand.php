@@ -8,6 +8,7 @@ use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
+use Maniaplanet\DedicatedServer\Xmlrpc\Exception as DedicatedException;
 use Psr\Log\LoggerInterface;
 
 /**

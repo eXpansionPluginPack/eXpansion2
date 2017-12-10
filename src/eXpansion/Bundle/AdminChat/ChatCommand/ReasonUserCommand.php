@@ -7,8 +7,8 @@ use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
-use Monolog\Logger;
 use Psr\Log\LoggerInterface;
+use Maniaplanet\DedicatedServer\Xmlrpc\Exception as DedicatedException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 
@@ -17,7 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
  *
  * @author    de Cramer Oliver<oliverde8@gmail.com>
  * @copyright 2017 eXpansion
- * @package eXpansion\Bundle\AdminChat\ChatCommand
+ * @package   eXpansion\Bundle\AdminChat\ChatCommand
  */
 class ReasonUserCommand extends AbstractConnectionCommand
 {
@@ -59,20 +59,20 @@ class ReasonUserCommand extends AbstractConnectionCommand
     /**
      * ReasonUserCommand constructor.
      *
-     * @param $command
-     * @param string $permission
-     * @param array $aliases
-     * @param AdminGroups $description
-     * @param Connection $chatMessage
+     * @param                  $command
+     * @param string           $permission
+     * @param array            $aliases
+     * @param AdminGroups      $description
+     * @param Connection       $chatMessage
      * @param ChatNotification $functionName
-     * @param PlayerStorage $parameterLoginDescription
-     * @param LoggerInterface $parameterReasonDescription
-     * @param AdminGroups $adminGroupsHelper
-     * @param Connection $connection
+     * @param PlayerStorage    $parameterLoginDescription
+     * @param LoggerInterface  $parameterReasonDescription
+     * @param AdminGroups      $adminGroupsHelper
+     * @param Connection       $connection
      * @param ChatNotification $chatNotification
-     * @param PlayerStorage $playerStorage
-     * @param LoggerInterface $logger
-     * @param Time $timeHelper
+     * @param PlayerStorage    $playerStorage
+     * @param LoggerInterface  $logger
+     * @param Time             $timeHelper
      */
     public function __construct(
         $command,
@@ -100,8 +100,8 @@ class ReasonUserCommand extends AbstractConnectionCommand
             $timeHelper
         );
 
-        $this->description = 'expansion_admin_chat.' . strtolower($functionName) . '.description';
-        $this->chatMessage = 'expansion_admin_chat.' . strtolower($functionName) . '.msg';
+        $this->description = 'expansion_admin_chat.'.strtolower($functionName).'.description';
+        $this->chatMessage = 'expansion_admin_chat.'.strtolower($functionName).'.msg';
         $this->functionName = $functionName;
         $this->parameterLoginDescription = $parameterLoginDescription;
         $this->parameterReasonDescription = $parameterReasonDescription;
@@ -135,13 +135,18 @@ class ReasonUserCommand extends AbstractConnectionCommand
         $group = $this->getGroupLabel($login);
 
         $playerNickName = $this->playerStorage->getPlayerInfo($playerLogin)->getNickName();
+        try {
+            $this->connection->{$this->functionName}($playerLogin, $reason);
+            $this->chatNotification->sendMessage(
+                $this->chatMessage,
+                $this->isPublic ? null : $login,
+                ['%adminLevel%' => $group, '%admin%' => $nickName, '%player%' => $playerNickName, "%reason%" => $reason]
+            );
+        }  catch (DedicatedException $e) {
+            $this->logger->error("Error on admin command", ["exception" => $e]);
+            $this->chatNotification->sendMessage("expansion_admin_chat.dedicatedexception", $login,
+                ["%message%" => $e->getMessage()]);
+        }
 
-        $this->chatNotification->sendMessage(
-            $this->chatMessage,
-            $this->isPublic ? null : $login,
-            ['%adminLevel%' => $group, '%admin%' => $nickName, '%player%' => $playerNickName, "%reason%" => $reason]
-        );
-
-        $this->connection->{$this->functionName}($playerLogin, $reason);
     }
 }

@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class Console to print in the console.
  *
  * @package eXpansion\Framework\Core\Services
- * @author Reaby
+ * @author  Reaby
  */
 class Console
 {
@@ -72,8 +72,9 @@ class Console
      * Initialize service with the console output.
      *
      * @param OutputInterface $consoleOutput
+     * @param                 $dispatcher
      */
-    public function init(OutputInterface $consoleOutput, Dispatcher $dispatcher)
+    public function init(OutputInterface $consoleOutput, $dispatcher)
     {
         $this->consoleOutput = $consoleOutput;
         $this->dispatcher = $dispatcher;
@@ -92,7 +93,9 @@ class Console
      */
     public function write($string, $newline = false)
     {
-        $this->dispatcher->dispatch("expansion.console.message", [$string]);
+        if ($this->dispatcher instanceof Dispatcher) {
+            $this->dispatcher->dispatch("expansion.console.message", [$string]);
+        }
 
         if ($this->colorEnabled && $this->consoleOutput->isDecorated()) {
 
@@ -127,7 +130,7 @@ class Console
     /**
      * Outoyt brute text.
      *
-     * @param string $msg
+     * @param string  $msg
      * @param boolean $newline
      *
      */

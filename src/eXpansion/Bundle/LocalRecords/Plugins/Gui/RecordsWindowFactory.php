@@ -2,6 +2,7 @@
 
 
 namespace eXpansion\Bundle\LocalRecords\Plugins\Gui;
+
 use eXpansion\Bundle\Acme\Plugins\Gui\WindowFactory;
 use eXpansion\Bundle\LocalRecords\Model\Record;
 use eXpansion\Framework\Core\Helpers\Time;
@@ -36,15 +37,15 @@ class RecordsWindowFactory extends WindowFactory
     /**
      * RecordsWindowFactory constructor.
      *
-     * @param $name
-     * @param $sizeX
-     * @param $sizeY
-     * @param null $posX
-     * @param null $posY
+     * @param                       $name
+     * @param                       $sizeX
+     * @param                       $sizeY
+     * @param null                  $posX
+     * @param null                  $posY
      * @param DataCollectionFactory $dataCollectionFactory
-     * @param WindowFactoryContext $context
-     * @param GridBuilderFactory $gridBuilderFactory
-     * @param Time $time
+     * @param WindowFactoryContext  $context
+     * @param GridBuilderFactory    $gridBuilderFactory
+     * @param Time                  $time
      */
     public function __construct(
         $name,
@@ -126,13 +127,17 @@ class RecordsWindowFactory extends WindowFactory
      */
     protected function getRecordsData()
     {
+        /** @var Record[] $recordsData */
         $recordsData = [];
-
+        /**
+         * @var  $i
+         * @var Record $record
+         */
         foreach ($this->recordsData as $i => $record) {
             $recordsData[] = [
                 'position' => $i + 1,
                 'nickname' => $record->getPlayer()->getNickname(),
-                'login' => $record->getPlayer()->getNickname(),
+                'login' => $record->getPlayer()->getLogin(),
                 'score' => $this->timeFormatter->timeToText($record->getScore(), true),
             ];
         }

@@ -2,14 +2,8 @@
 
 namespace eXpansion\Bundle\AdminChat\ChatCommand;
 
-use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
-use eXpansion\Framework\Core\Helpers\ChatNotification;
-use eXpansion\Framework\Core\Storage\PlayerStorage;
-use Maniaplanet\DedicatedServer\Connection;
-use Monolog\Logger;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Maniaplanet\DedicatedServer\Xmlrpc\Exception as DedicatedException;
 
 /**
  * Class ReasonUserCommand
@@ -27,14 +21,18 @@ class AdminReturnCommand extends AdminCommand
     {
         $nickName = $this->playerStorage->getPlayerInfo($login)->getNickName();
         $group = $this->getGroupLabel($login);
+        try {
+            $return = $this->connection->{$this->functionName}();
 
-        $return = $this->connection->{$this->functionName}();
-
-        $this->chatNotification->sendMessage(
-            $this->chatMessage,
-            $this->isPublic ? null : $login,
-            ['%adminLevel%' => $group, '%admin%' => $nickName, '%return%' => $return]
-        );
-
+            $this->chatNotification->sendMessage(
+                $this->chatMessage,
+                $this->isPublic ? null : $login,
+                ['%adminLevel%' => $group, '%admin%' => $nickName, '%return%' => $return]
+            );
+        }  catch (DedicatedException $e) {
+            $this->logger->error("Error on admin command", ["exception" => $e]);
+            $this->chatNotification->sendMessage("expansion_admin_chat.dedicatedexception", $login,
+                ["%message%" => $e->getMessage()]);
+        }
     }
 }

@@ -9,6 +9,7 @@ use eXpansion\Framework\Core\Services\Application\Dispatcher;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Psr\Log\LoggerInterface;
+use Maniaplanet\DedicatedServer\Xmlrpc\Exception as DedicatedException;
 use Symfony\Component\Console\Input\InputInterface;
 
 /**

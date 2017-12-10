@@ -10,7 +10,7 @@ use Propel\Runtime\Propel;
  *
  * @author    de Cramer Oliver<oliverde8@gmail.com>
  * @copyright 2017 eXpansion
- * @package eXpansion\Framework\PlayersBundle\Model
+ * @package   eXpansion\Framework\PlayersBundle\Model
  */
 class PlayerQueryBuilder
 {
@@ -24,14 +24,27 @@ class PlayerQueryBuilder
     public function findByLogin($login)
     {
         $playerQuery = PlayerQuery::create();
+
         return $playerQuery->findOneByLogin($login);
     }
 
     public function findAll()
     {
         $playerQuery = PlayerQuery::create();
+
         return $playerQuery->find()->getData();
     }
+
+    /**
+     * @return Player[]
+     */
+    public function findDummy()
+    {
+        $playerQuery = PlayerQuery::create();
+
+        return $playerQuery->filterByLogin("dummylogin", PlayerQuery::LIKE)->find()->getData();
+    }
+
 
     /**
      * Save individual player.
@@ -53,7 +66,7 @@ class PlayerQueryBuilder
         $connection = Propel::getWriteConnection(PlayerTableMap::DATABASE_NAME);
         $connection->beginTransaction();
 
-        foreach ($players as $record){
+        foreach ($players as $record) {
             $this->save($record);
         }
 

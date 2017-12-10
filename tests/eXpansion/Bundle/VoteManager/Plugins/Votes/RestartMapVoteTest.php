@@ -13,6 +13,7 @@ use eXpansion\Bundle\VoteManager\Plugins\Votes\RestartMapVote;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Storage\MapStorage;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
+use Maniaplanet\DedicatedServer\Structures\Map;
 use Tests\eXpansion\Framework\Core\TestHelpers\MapDataTrait;
 use Tests\eXpansion\Framework\Core\TestHelpers\PlayerDataTrait;
 
@@ -36,6 +37,9 @@ class RestartMapVoteTest extends \PHPUnit_Framework_TestCase
     /** @var RestartMapVote */
     protected $restartMapVote;
 
+    /** @var Map */
+    private $tempMap;
+
     protected function setUp()
     {
         parent::setUp();
@@ -50,6 +54,7 @@ class RestartMapVoteTest extends \PHPUnit_Framework_TestCase
         $this->mockMapStorage = $this->getMockBuilder(MapStorage::class)
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->mockChatNotification = $this->getMockBuilder(ChatNotification::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -66,17 +71,20 @@ class RestartMapVoteTest extends \PHPUnit_Framework_TestCase
 
     public function testPassed()
     {
-        $map = $this->getAMap('test');
+        $this->map = $this->getAMap('test');
 
-        $this->mockMapStorage
-            ->expects($this->once())
-            ->method('getCurrentMap')
-            ->willReturn($map);
-        $this->mockJukebox->expects($this->once())->method('addMap')->with($map);
+        $this->mockJukebox->expects($this->once())->method('addMap')->with($this->map);
 
         $this->mockPlayerStorage->method('getOnline')->willReturn(['test1', 'test2', 'test3', 'test4']);
 
         $player = $this->getPlayer('test', false);
+
+
+        $this->mockMapStorage
+            ->expects($this->once())
+            ->method('getCurrentMap')
+            ->willReturn($this->map);
+
         $this->restartMapVote->start($player, []);
 
         // 3 person out of 4 votes yes pass vote before timeout.

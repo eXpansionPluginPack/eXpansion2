@@ -245,7 +245,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $line = $this->uiFactory->createLayoutLine(64, -14, [$mapname, $author, $search, $all], 2);
         $manialink->addChild($line);
 
-        $addButton = $this->uiFactory->createButton('Install', uiButton::TYPE_DEFAULT);
+        $addButton = $this->uiFactory->createConfirmButton('Install', uiButton::TYPE_DEFAULT);
         $addButton->setSize(20, 4);
 
         $gridBuilder = $this->gridBuilderFactory->create();

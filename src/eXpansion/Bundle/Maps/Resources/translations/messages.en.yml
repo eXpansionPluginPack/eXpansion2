@@ -1,13 +1,13 @@
 expansion_jukebox:
   chat:
       addmap: '|info| {variable}%nickname% {info}added map {variable}%mapname%{info} to Jukebox. Queue length: {variable}%length%'
-      removemap: '|info| {info}Map dropped from jukebox {variable}%mapname%{info} wished by {variable}%nickname%{info}. Queue lenght: {variable}%length%'
+      removemap: '|info| {info}Map dropped from jukebox {variable}%mapname%{info} wished by {variable}%nickname%{info}. Queue length: {variable}%length%'
       noremove: "|warning| {warning}You can't remove map %mapname% {warning}from queue."
       noadd: "|warning| {warning}You can't add map %mapname% {warning}to queue, since you already have map at queue."
       nomap: '|error| {error}No map was not found.'
       nopermission: "|error| {error}You don't have enough permissions to clear jukebox."
       clear: "|info| {admin_info}%adminlevel% %admin% {admin_info}clears the Jukebox queue!"
-      nextjbmap: '|info| {info}Next map {variable}%mapname%{info} by {variable}%mapauthor% {info} wished by {variable}%nickname%{info}. Queue lenght: {variable}%length%'
+      nextjbmap: '|info| {info}Next map {variable}%mapname%{info} by {variable}%mapauthor% {info} wished by {variable}%nickname%{info}. Queue length: {variable}%length%'
       nextmap: '|info| {info}Next map {variable}%name%{info} by {variable}%author%'
       beginmap: '|info| {info}Now playing {variable}%name%{info} by {variable}%author%'
   command:

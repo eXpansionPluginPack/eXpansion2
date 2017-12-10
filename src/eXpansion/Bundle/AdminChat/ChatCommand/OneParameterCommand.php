@@ -7,8 +7,8 @@ use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
-use Monolog\Logger;
 use Psr\Log\LoggerInterface;
+use Maniaplanet\DedicatedServer\Xmlrpc\Exception as DedicatedException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 
@@ -51,19 +51,19 @@ class OneParameterCommand extends AbstractConnectionCommand
     /**
      * OneParameterCommand constructor.
      *
-     * @param $command
-     * @param string $permission
-     * @param array $aliases
-     * @param AdminGroups $description
-     * @param Connection $chatMessage
+     * @param                  $command
+     * @param string           $permission
+     * @param array            $aliases
+     * @param AdminGroups      $description
+     * @param Connection       $chatMessage
      * @param ChatNotification $functionName
-     * @param PlayerStorage $parameterDescription
-     * @param AdminGroups $adminGroupsHelper
-     * @param Connection $connection
+     * @param PlayerStorage    $parameterDescription
+     * @param AdminGroups      $adminGroupsHelper
+     * @param Connection       $connection
      * @param ChatNotification $chatNotification
-     * @param PlayerStorage $playerStorage
-     * @param LoggerInterface $logger
-     * @param Time $timeHelper
+     * @param PlayerStorage    $playerStorage
+     * @param LoggerInterface  $logger
+     * @param Time             $timeHelper
      */
     public function __construct(
         $command,
@@ -90,8 +90,8 @@ class OneParameterCommand extends AbstractConnectionCommand
             $timeHelper
         );
 
-        $this->description = 'expansion_admin_chat.' . strtolower($functionName) . '.description';
-        $this->chatMessage = 'expansion_admin_chat.' . strtolower($functionName) . '.msg';
+        $this->description = 'expansion_admin_chat.'.strtolower($functionName).'.description';
+        $this->chatMessage = 'expansion_admin_chat.'.strtolower($functionName).'.msg';
         $this->functionName = $functionName;
         $this->parameterDescription = $parameterDescription;
     }
@@ -117,13 +117,18 @@ class OneParameterCommand extends AbstractConnectionCommand
         $nickName = $this->playerStorage->getPlayerInfo($login)->getNickName();
         $parameter = $input->getArgument('parameter');
         $group = $this->getGroupLabel($login);
+        try {
+            $this->connection->{$this->functionName}($parameter);
+            $this->chatNotification->sendMessage(
+                $this->chatMessage,
+                $this->isPublic ? null : $login,
+                ['%adminLevel%' => $group, '%admin%' => $nickName, "%parameter%" => $parameter]
+            );
+        }  catch (DedicatedException $e) {
+            $this->logger->error("Error on admin command", ["exception" => $e]);
+            $this->chatNotification->sendMessage("expansion_admin_chat.dedicatedexception", $login,
+                ["%message%" => $e->getMessage()]);
+        }
 
-        $this->chatNotification->sendMessage(
-            $this->chatMessage,
-            $this->isPublic ? null : $login,
-            ['%adminLevel%' => $group, '%admin%' => $nickName, "%parameter%" => $parameter]
-        );
-
-        $this->connection->{$this->functionName}($parameter);
     }
 }
