@@ -6,16 +6,20 @@ use eXpansion\Bundle\Maps\Services\JukeboxService;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Storage\MapStorage;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
+use Maniaplanet\DedicatedServer\Structures\Map;
 
 /**
  * Class NextMapVote
  *
  * @author    de Cramer Oliver<oliverde8@gmail.com>
  * @copyright 2017 eXpansion
- * @package eXpansion\Bundle\VoteManager\Plugins\Votes
+ * @package   eXpansion\Bundle\VoteManager\Plugins\Votes
  */
 class RestartMapVote extends AbstractVotePlugin
 {
+    /** @var Map */
+    private $map;
+
     /** @var JukeboxService */
     protected $jukebox;
 
@@ -28,12 +32,12 @@ class RestartMapVote extends AbstractVotePlugin
     /**
      * RestartMapVote constructor.
      *
-     * @param PlayerStorage $playerStorage
-     * @param JukeboxService $jukebox
-     * @param MapStorage $mapStorage
+     * @param PlayerStorage    $playerStorage
+     * @param JukeboxService   $jukebox
+     * @param MapStorage       $mapStorage
      * @param ChatNotification $chatNotification
-     * @param int $duration
-     * @param float $ratio
+     * @param int              $duration
+     * @param float            $ratio
      */
     public function __construct(
         PlayerStorage $playerStorage,
@@ -47,6 +51,7 @@ class RestartMapVote extends AbstractVotePlugin
 
         $this->jukebox = $jukebox;
         $this->mapStorage = $mapStorage;
+        $this->map = $mapStorage->getCurrentMap();
         $this->chatNotification = $chatNotification;
     }
 
@@ -63,7 +68,7 @@ class RestartMapVote extends AbstractVotePlugin
      */
     public function executeVotePassed()
     {
-        $this->jukebox->addMap($this->mapStorage->getCurrentMap(), $this->getCurrentVote()->getPlayer()->getLogin(),
+        $this->jukebox->addMap($this->map, $this->getCurrentVote()->getPlayer()->getLogin(),
             true, true);
         $this->chatNotification->sendMessage("|info| Vote passed. Will replay map!");
     }
