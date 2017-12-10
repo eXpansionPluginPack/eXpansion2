@@ -8,6 +8,7 @@ use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Psr\Log\LoggerInterface;
+use Maniaplanet\DedicatedServer\Xmlrpc\Exception as DedicatedException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 
@@ -123,12 +124,10 @@ class OneParameterCommand extends AbstractConnectionCommand
                 $this->isPublic ? null : $login,
                 ['%adminLevel%' => $group, '%admin%' => $nickName, "%parameter%" => $parameter]
             );
-        } catch (\Exception $e) {
-            $this->chatNotification->sendMessage(
-                'expansion_admin_chat.dedicatedexception',
-                $login,
-                ['%message%' => $e->getMessage()]
-            );
+        }  catch (DedicatedException $e) {
+            $this->logger->error("Error on admin command", ["exception" => $e]);
+            $this->chatNotification->sendMessage("expansion_admin_chat.dedicatedexception", $login,
+                ["%message%" => $e->getMessage()]);
         }
 
     }

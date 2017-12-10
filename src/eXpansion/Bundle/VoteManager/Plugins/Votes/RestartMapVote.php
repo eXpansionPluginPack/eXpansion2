@@ -4,6 +4,7 @@ namespace eXpansion\Bundle\VoteManager\Plugins\Votes;
 
 use eXpansion\Bundle\Maps\Services\JukeboxService;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
+use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\MapStorage;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Structures\Map;
@@ -51,8 +52,15 @@ class RestartMapVote extends AbstractVotePlugin
 
         $this->jukebox = $jukebox;
         $this->mapStorage = $mapStorage;
-        $this->map = $mapStorage->getCurrentMap();
+
         $this->chatNotification = $chatNotification;
+    }
+
+    public function start(Player $player, $params)
+    {
+        $this->map = $this->mapStorage->getCurrentMap();
+
+        return parent::start($player, $params);
     }
 
     /**
@@ -61,6 +69,14 @@ class RestartMapVote extends AbstractVotePlugin
     public function getQuestion(): string
     {
         return 'expansion_votemanager.restartmap.question';
+    }
+
+    /**
+     * @param Map $map
+     */
+    public function setMap(Map $map)
+    {
+        $this->map = $map;
     }
 
     /**

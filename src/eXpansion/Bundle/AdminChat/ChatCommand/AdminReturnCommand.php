@@ -3,6 +3,7 @@
 namespace eXpansion\Bundle\AdminChat\ChatCommand;
 
 use Symfony\Component\Console\Input\InputInterface;
+use Maniaplanet\DedicatedServer\Xmlrpc\Exception as DedicatedException;
 
 /**
  * Class ReasonUserCommand
@@ -28,12 +29,10 @@ class AdminReturnCommand extends AdminCommand
                 $this->isPublic ? null : $login,
                 ['%adminLevel%' => $group, '%admin%' => $nickName, '%return%' => $return]
             );
-        } catch (\Exception $e) {
-            $this->chatNotification->sendMessage(
-                'expansion_admin_chat.dedicatedexception',
-                 $login,
-                ['%message%' => $e->getMessage()]
-            );
+        }  catch (DedicatedException $e) {
+            $this->logger->error("Error on admin command", ["exception" => $e]);
+            $this->chatNotification->sendMessage("expansion_admin_chat.dedicatedexception", $login,
+                ["%message%" => $e->getMessage()]);
         }
     }
 }

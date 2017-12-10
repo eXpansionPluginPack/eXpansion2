@@ -145,8 +145,7 @@ class DelDummyRecordsCommand extends ContainerAwareCommand
             } else {
                 $this->console->writeln("skipping map ".$i."/".count($maps)." -> ".$map->getName());
             }
-            RecordTableMap::clearInstancePool();
-            RecordTableMap::clearRelatedInstancePool();
+
             PlayerTableMap::clearInstancePool();
             PlayerTableMap::clearRelatedInstancePool();
             RecordTableMap::clearInstancePool();

@@ -59,13 +59,6 @@ class RestartMapVoteTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->map = $this->getAMap('test');
-
-        $this->mockMapStorage
-            ->expects($this->once())
-            ->method('getCurrentMap')
-            ->willReturn($this->map);
-
         $this->restartMapVote = new RestartMapVote(
             $this->mockPlayerStorage,
             $this->mockJukebox,
@@ -78,12 +71,20 @@ class RestartMapVoteTest extends \PHPUnit_Framework_TestCase
 
     public function testPassed()
     {
+        $this->map = $this->getAMap('test');
 
         $this->mockJukebox->expects($this->once())->method('addMap')->with($this->map);
 
         $this->mockPlayerStorage->method('getOnline')->willReturn(['test1', 'test2', 'test3', 'test4']);
 
         $player = $this->getPlayer('test', false);
+
+
+        $this->mockMapStorage
+            ->expects($this->once())
+            ->method('getCurrentMap')
+            ->willReturn($this->map);
+
         $this->restartMapVote->start($player, []);
 
         // 3 person out of 4 votes yes pass vote before timeout.
