@@ -20,6 +20,8 @@ class Test implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
     /** @var  string */
     static public $memoryMsg;
 
+    public $connectQueue = 0;
+
     /** @var Connection */
     protected $connection;
 
@@ -50,11 +52,11 @@ class Test implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
 
     /**
      * Test constructor.
-     * @param PlayerStorage $players
-     * @param Connection $connection
-     * @param Console $console
-     * @param Time $time
-     * @param Group $playergroup
+     * @param PlayerStorage       $players
+     * @param Connection          $connection
+     * @param Console             $console
+     * @param Time                $time
+     * @param Group               $playergroup
      * @param MemoryWidgetFactory $mlFactory
      */
     function __construct(
@@ -85,12 +87,15 @@ class Test implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
 
     public function onPreLoop()
     {
-        // do nothing
+        if ($this->connectQueue > 0) {
+            $this->connection->connectFakePlayer();
+            $this->connectQueue--;
+        }
     }
 
     public function onPostLoop()
     {
-        // do nothing
+
     }
 
     public function onEverySecond()
@@ -124,10 +129,10 @@ class Test implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
     }
 
     /**
-     * @param Map[] $oldMaps
+     * @param Map[]  $oldMaps
      * @param string $currentMapUid
      * @param string $nextMapUid
-     * @param bool $isListModified
+     * @param bool   $isListModified
      * @return mixed
      */
     public function onMapListModified($oldMaps, $currentMapUid, $nextMapUid, $isListModified)
