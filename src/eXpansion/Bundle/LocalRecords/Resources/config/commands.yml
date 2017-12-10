@@ -4,5 +4,5 @@ services:
         autoconfigure: true
         public: false
 
-    eXpansion\Framework\Core\Command\:
+    eXpansion\Bundle\LocalRecords\Command\:
         resource: '../../Command/*'
