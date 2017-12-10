@@ -1,14 +1,19 @@
 expansion_core:
-  test: "Ceci est une trad de test : %test%"
-  test_color: "{test}Ceci est une trad de test : %test%"
-  test_glyph: "|test|Ceci est une trad de test : %test%"
-  test_color_glyph: "|test|{test}Ceci est une trad de test : %test%"
-
+  test: 'Ceci est une trad de test : %test%'
+  test_color: '{test}Ceci est une trad de test : %test%'
+  test_glyph: '|test|Ceci est une trad de test : %test%'
+  test_color_glyph: '|test|{test} Ceci est une trad de test : %test%'
   chat_commands:
-    wrong_chat: "{error}This chat command does not exists. {info}Please use {highlight}/help {info}to see all available chat commands."
-
+    wrong_chat: "{error}This chat command does not exists. {info}Please use /help to see all available chat commands."
+    no_description: "{info}Sorry, this command has no description."
+    no_help: "{info}Sorry, this command has no help message."
   windows:
     chat_commands:
-      title: Liste des commandes
+      title: Chat Commands
       column_command: Commande
       column_description: Description
+    chat_commands_description:
+      title: Chat Command Description
+      aliases: Aliases
+      description: Description
+      help: Help

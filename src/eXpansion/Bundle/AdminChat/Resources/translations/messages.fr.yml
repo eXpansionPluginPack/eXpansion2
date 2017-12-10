@@ -1,0 +1,79 @@
+expansion_admin_chat:
+  restartmap:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}restarts the map!'
+    description: 'Replay current map.'
+    label: "Restart Map"
+  cancelvote:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}cancels the vote!'
+    description: '{info} cancels the current progressing vote.'
+    label: "Cancel current vote"
+  nextmap:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}skips the map!'
+    description: '{info} Skip current map & go to the next map.'
+    label: "Skip map"
+  setservername:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}changes the server name. New server name is {highlight}%parameter%'
+    description: '{info}Change the name of the server.'
+  setservercomment:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}changes the server comment. New server comment is {highlight}%parameter%'
+    description: '{info}Change the comment of the server.'
+  kick:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}kicks {highlight}%player% {admin_info}. Reason: {highlight}%reason%'
+    description: '{info}Kick a player from the server.'
+  ban:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}bans {highlight}%player% {admin_info}. Reason: {highlight}%reason%'
+    description: '{info}Ban a player from the server.'
+  unban:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}unbans player with login: {highlight}%parameter%'
+    description: '{info}Unban a player from the server.'
+  cleanbanlist:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} cleans the ban list.'
+    description: '{info}Cleans the ban list.'
+  black:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}blacklists {highlight}%player% {admin_info}. Reason: {highlight}%reason%'
+    description: '{info}Blacklist a player for the server.'
+  unblack:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}unblacklists player with login: {highlight}%parameter%'
+    description: '{info}Unblacklist a player for the server.'
+  cleanblacklist:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} cleans the black list.'
+    description: '{info}Cleans the black list.'
+  saveblacklist:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}saved black list. File name: {highlight}%parameter%'
+    description: '{info}Saves black list to server. File is relative to server config directory.'
+  loadblacklist:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}loads black list. File name: {highlight}%parameter%'
+    description: '{info}Loads black list. File is relative to server config directory.'
+  getserverplanets:
+    msg: '|info| {admin_info}Server has {highlight}%return% {admin_info}planets.'
+    description: '{info}Show server planets.'
+  ignore:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}ignores player with login: {highlight}%parameter%'
+    description: '{info}Ignore (mute) players public chat messages.'
+  unignore:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}unignores {highlight}%parameter%'
+    description: '{info}Unignore (allow) players public chat messages.'
+  addguest:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}adds {highlight}%parameter% to guest list.'
+    description: '{info}Add player to guest list. Guests can enter server without typing password.'
+  removequest:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}removes {highlight}%parameter% from guest list.'
+    description: '{info}Remove player from quest list.'
+  cleanguestlist:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} cleans the quest list.'
+    description: '{info}Cleans the quest list.'
+  saveguestlist:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}saved guest list. File name: {highlight}%parameter%'
+    description: '{info}Saves guest list to server. File is relative to server config directory.'
+  loadguestlist:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}loads guest list. File name: {highlight}%parameter%'
+    description: '{info}Loads guest list. File is relative to server config directory.'
+  setserverpasswordforplayer:
+    msg: '|admin| {admin_info}New join password for server is: "{highlight}%parameter%{admin_info}"'
+    description: '{info}Sets new server password'
+  ssetserverpasswordforspectator:
+    msg: '|admin| {admin_info}New spectators join password for server is: "{highlight}%parameter%{admin_info}"'
+    description: '{info}Sets new specator password'
+
+
+
