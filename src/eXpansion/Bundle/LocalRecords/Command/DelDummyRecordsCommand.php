@@ -99,29 +99,8 @@ class DelDummyRecordsCommand extends ContainerAwareCommand
     {
         $this->console->init($output, null);
 
-
-        $i = 1;
-
-        $con = Propel::getWriteConnection(PlayerTableMap::DATABASE_NAME);
-        $con->beginTransaction();
-
-        $players = $this->playerQueryBuilder->findDummy();
-
-        $progress = new ProgressBar($output, count($players));
-        $progress->start();
-        /** @var Player $player */
-        foreach ($players as $player) {
-            $player->delete();
-            $progress->advance();
-        }
-        $con->commit();
-        $progress->finish();
-
-
-        $this->console->writeln("");
         $this->console->writeln("Removing dummy records... please wait...");
         $maps = $this->mapQuery->getAllMaps();
-        $count = count($maps);
 
         $i = 1;
         foreach ($maps as $m => $map) {
@@ -152,6 +131,28 @@ class DelDummyRecordsCommand extends ContainerAwareCommand
             RecordTableMap::clearRelatedInstancePool();
             $i++;
         }
+
+        $this->console->writeln("");
+        $this->console->writeln("Removing dummy players... please wait...");
+        $con = Propel::getWriteConnection(PlayerTableMap::DATABASE_NAME);
+        $con->beginTransaction();
+
+        $players = $this->playerQueryBuilder->findDummy();
+
+        $progress = new ProgressBar($output, count($players));
+        $progress->start();
+        /** @var Player $player */
+        foreach ($players as $player) {
+            $player->delete();
+            $progress->advance();
+        }
+        $con->commit();
+        $progress->finish();
+
+        PlayerTableMap::clearInstancePool();
+        PlayerTableMap::clearRelatedInstancePool();
+        $this->console->writeln("");
+        $this->console->writeln("all Done.");
     }
 
 }
