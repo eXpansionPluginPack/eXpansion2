@@ -152,7 +152,9 @@ class RecordHandler
      */
     public function loadForPlayers($mapUid, $nbLaps, $logins)
     {
-        $logins = array_diff(array_keys($this->recordsPerPlayer), $logins);
+        $logins = array_diff($logins, array_keys($this->recordsPerPlayer));
+
+        print_r($logins);
 
         if (!empty($logins)) {
             $records = $this->recordQueryBuilder->getPlayerMapRecords($mapUid, $nbLaps, $logins);
