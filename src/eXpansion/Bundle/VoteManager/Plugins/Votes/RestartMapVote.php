@@ -70,15 +70,7 @@ class RestartMapVote extends AbstractVotePlugin
     {
         return 'expansion_votemanager.restartmap.question';
     }
-
-    /**
-     * @param Map $map
-     */
-    public function setMap(Map $map)
-    {
-        $this->map = $map;
-    }
-
+    
     /**
      * @inheritdoc
      */
