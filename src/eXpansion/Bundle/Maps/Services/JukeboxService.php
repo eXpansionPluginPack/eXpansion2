@@ -23,8 +23,9 @@ class JukeboxService
 
     /**
      * JukeboxService constructor.
+     *
      * @param PlayerStorage $playerStorage
-     * @param AdminGroups $adminGroups
+     * @param AdminGroups   $adminGroups
      */
     public function __construct(PlayerStorage $playerStorage, AdminGroups $adminGroups)
     {
@@ -51,13 +52,44 @@ class JukeboxService
     }
 
     /**
-     * @param Map $map
+     * Adds map as first item
+     *
+     * @param Map  $map
      * @param null $login
      * @param bool $force
+     *
      * @return bool
      */
+    public function addMapFirst(Map $map, $login = null, $force = false)
+    {
+        return $this->addMap($map, $login, $force, true);
+    }
 
-    public function addMap(Map $map, $login = null, $force = false)
+    /**
+     * Adds map as last item
+     *
+     * @param Map  $map
+     * @param null $login
+     * @param bool $force
+     *
+     * @return bool
+     */
+    public function addMapLast(Map $map, $login = null, $force = false)
+    {
+        return $this->addMap($map, $login, $force, false);
+    }
+
+    /**
+     * Adds map as last or first item
+     *
+     * @param Map  $map
+     * @param null $login
+     * @param bool $force
+     * @param bool $addFirst
+     *
+     * @return bool
+     */
+    public function addMap(Map $map, $login = null, $force = false, $addFirst = false)
     {
         $player = null;
         if (!$login) {
@@ -68,14 +100,14 @@ class JukeboxService
         $jbMap = new JukeboxMap($map, $player);
 
         if ($force) {
-            $this->add($jbMap);
+            $this->add($jbMap, $addFirst);
 
             return true;
         }
         // no some restrictions for admin
         if ($this->adminGroups->hasPermission($login, "jukebox")) {
             if ($this->checkMap($map) === false) {
-                $this->add($jbMap);
+                $this->add($jbMap, $addFirst);
 
                 return true;
             }
@@ -83,7 +115,7 @@ class JukeboxService
         } else {
             // restrict 1 map per 1 login
             if ($this->checkLogin($login) === false && $this->checkMap($map) === false) {
-                $this->add($jbMap);
+                $this->add($jbMap, $addFirst);
 
                 return true;
             }
@@ -93,9 +125,10 @@ class JukeboxService
     }
 
     /**
-     * @param Map $map
-     * @param $login
+     * @param Map  $map
+     * @param      $login
      * @param bool $force
+     *
      * @return false;
      */
     public function removeMap(Map $map, $login = null, $force = false)
@@ -126,14 +159,23 @@ class JukeboxService
 
     /**
      * @param JukeboxMap $map
+     * @param bool       $addFirst
+     *
+     * @return void
      */
-    private function add(JukeboxMap $map)
+    private function add(JukeboxMap $map, $addFirst = false)
     {
-        array_push($this->mapQueue, $map);
+        if ($addFirst) {
+            array_unshift($this->mapQueue, $map);
+        } else {
+            array_push($this->mapQueue, $map);
+        }
+
     }
 
     /**
      * @param $login
+     *
      * @return bool|JukeboxMap
      */
     public function getMap($login)
@@ -185,6 +227,7 @@ class JukeboxService
     /**
      * checks if map exists on queue
      * @param Map $map
+     *
      * @return bool
      */
     private function checkMap(Map $map)

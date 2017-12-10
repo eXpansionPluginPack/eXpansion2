@@ -63,7 +63,8 @@ class RestartMapVote extends AbstractVotePlugin
      */
     public function executeVotePassed()
     {
-        $this->jukebox->addMap($this->mapStorage->getCurrentMap(), $this->getCurrentVote()->getPlayer()->getLogin(), true);
+        $this->jukebox->addMap($this->mapStorage->getCurrentMap(), $this->getCurrentVote()->getPlayer()->getLogin(),
+            true, true);
         $this->chatNotification->sendMessage("|info| Vote passed. Will replay map!");
     }
 
