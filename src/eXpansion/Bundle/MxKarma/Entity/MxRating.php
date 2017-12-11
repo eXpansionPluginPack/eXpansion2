@@ -24,7 +24,7 @@ class MxRating
     public function append($object)
     {
         if (!is_object($object)) {
-            throw new \Exception("MXVote constructor got non object", 1, null);
+            throw new \Exception("MXVote constructor got non object");
         }
         $this->voteCount = $object->votecount;
         $this->voteAverage = $object->voteaverage;

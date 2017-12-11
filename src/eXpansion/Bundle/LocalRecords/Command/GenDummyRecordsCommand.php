@@ -110,7 +110,8 @@ class GenDummyRecordsCommand extends ContainerAwareCommand
         $this->console->writeln('Checking if there\'s enough players');
 
         $preAdd = $this->playerQueryBuilder->findDummy();
-        if (count($preAdd) <= $count) {
+
+        if (count($preAdd) < $count) {
 
             $this->console->writeln("Generating missing players up to $count");
             $progress = new ProgressBar($output, $count);
@@ -132,42 +133,43 @@ class GenDummyRecordsCommand extends ContainerAwareCommand
             }
             $con->commit();
             $progress->finish();
-
         }
+
         unset($preAdd);
 
-        $players = $this->playerQueryBuilder->findAll();
+        /** @var Player[] $players */
+        $players = $this->playerQueryBuilder->findDummy();
 
         $this->console->writeln("Generating maximum of $count records for all maps on server");
-        $maps = $this->mapStorage->getMaps();
-        $count = count($maps);
-
+        $maps = $this->mapQuery->getAllMaps();
 
         $con = Propel::getWriteConnection(RecordTableMap::DATABASE_NAME);
         $i = 1;
         foreach ($maps as $m => $map) {
-            $records = $this->recordQueryBuilder->getMapRecords($map->uId, $map->nbLaps, "asc", 1000);
+            $records = $this->recordQueryBuilder->getMapRecords($map->getMapuid(), 1, "asc", 1000);
+
+
             $idsUsed = [];
-            if (count($records) <= $count - 1) {
+            if (count($records) < $count) {
                 foreach ($records as $record) {
                     $idsUsed[] = $record->getPlayerId();
                 }
-                $this->console->writeln("Generating records for map ".$i."/".count($maps)." -> ".$map->name);
+                $this->console->writeln("Generating records for map ".$i."/".count($maps)." -> ".$map->getName());
                 $con->beginTransaction();
 
                 $record = new Record();
                 $record->setNblaps(1);
                 $record->setNbFinish(1);
-                $record->setMapuid($map->uId);
+                $record->setMapuid($map->getMapuid());
                 $record->setCreatedAt(new \DateTime());
                 $record->setCheckpoints([]);
-                $progress = new ProgressBar($output, $count);
+                $progress = new ProgressBar($output, $count - count($records));
                 $progress->start();
                 for ($x = (count($records) + 1); $x < $count; $x++) {
                     if (!in_array($x, $idsUsed)) {
                         $rec = clone $record;
-                        $rec->setScore(mt_rand($map->goldTime, $map->goldTime * 5));
-                        $rec->setPlayerId($x);
+                        $rec->setScore(mt_rand($map->getGoldtime(), $map->getGoldtime() * 5));
+                        $rec->setPlayerId($players[$x-1]->getId());
                         $rec->save();
                         $progress->advance();
                     }
@@ -175,8 +177,6 @@ class GenDummyRecordsCommand extends ContainerAwareCommand
                 $con->commit();
                 $progress->finish();
                 $i++;
-                PlayerTableMap::clearInstancePool();
-                PlayerTableMap::clearRelatedInstancePool();
                 RecordTableMap::clearInstancePool();
                 RecordTableMap::clearRelatedInstancePool();
 
@@ -184,6 +184,7 @@ class GenDummyRecordsCommand extends ContainerAwareCommand
                 $this->console->writeln("skipping map, records alreaady set!");
             }
         }
-
+        PlayerTableMap::clearInstancePool();
+        PlayerTableMap::clearRelatedInstancePool();
     }
 }

@@ -1,3 +1,9 @@
+/**
+ * Time.Script.txt
+ * @author zocka
+ * @link https://github.com/PRGfx/mQscripts/blob/master/lib/Time.Script.txt
+ * @link https://github.com/PRGfx/mQscripts/wiki/Time
+ */
 
 #Const TIME_DATE_ATOM "Y-d-m\\TH:i:sP"
 #Const TIME_DATE_COOKIE "l, d-M-Y H:i:s T"

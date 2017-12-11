@@ -127,8 +127,17 @@ class WindowFrameFactory implements WindowFrameFactoryInterface
             ->setStyles('Bgs1InRace', 'BgButtonShadow');
         $frame->addChild($body);
 
+
+
         // Add maniascript for window handling.
         $manialink->getFmlManialink()->addChild($this->windowManiaScriptFactory->createScript(['']));
+        $manialink->getFmlManialink()->getScript(true)->addCustomScriptLabel("exp_dummy", <<<EOL
+        // this dummy is here to force FML script generation on all windowFactory classes.
+        if (False) { 
+            return; 
+        }
+EOL
+        );
 
         return $closeButton;
     }

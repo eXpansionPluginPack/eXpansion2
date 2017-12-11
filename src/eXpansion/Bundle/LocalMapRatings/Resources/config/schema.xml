@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <database name="expansion" namespace="eXpansion\Bundle\LocalMapRatings\Model" defaultIdMethod="native">
 
-    <table name="mapRatings">
+    <table name="maprating">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
-        <column name="player_id" type="integer" />
-        <column name="mapUid" type="varchar" size="255" />
+        <column name="login" type="varchar" size="255"  />
+        <column name="mapUid" type="varchar" size="32" />
         <column name="score" type="integer" />
-
-        <foreign-key foreignTable="player">
-            <reference local="player_id" foreign="id"/>
-        </foreign-key>
-
-        <foreign-key foreignTable="maps">
-            <reference local="mapUid" foreign="mapUid"/>
-        </foreign-key>
 
         <behavior name="timestampable" />
     </table>

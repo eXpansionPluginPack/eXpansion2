@@ -1,6 +1,6 @@
 <?php
 
-namespace eXpansion\Bundle\LocalRecords;
+namespace eXpansion\Bundle\LocalMapRatings;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

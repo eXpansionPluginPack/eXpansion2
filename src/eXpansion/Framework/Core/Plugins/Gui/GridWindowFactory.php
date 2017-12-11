@@ -13,7 +13,6 @@ use FML\Controls\Frame;
 /**
  * Class RecordsWindowFactory
  *
- * @package eXpansion\Bundle\LocalRecords\Plugins\Gui;
  * @author  reaby
  */
 abstract class GridWindowFactory extends WindowFactory

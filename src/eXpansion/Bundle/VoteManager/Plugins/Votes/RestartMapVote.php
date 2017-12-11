@@ -70,7 +70,7 @@ class RestartMapVote extends AbstractVotePlugin
     {
         return 'expansion_votemanager.restartmap.question';
     }
-    
+
     /**
      * @inheritdoc
      */

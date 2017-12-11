@@ -42,7 +42,7 @@ class PlayerQueryBuilder
     {
         $playerQuery = PlayerQuery::create();
 
-        return $playerQuery->filterByLogin("dummylogin", PlayerQuery::LIKE)->find()->getData();
+        return $playerQuery->filterByLogin("%dummyplayer_%", PlayerQuery::LIKE)->find()->getData();
     }
 
 
