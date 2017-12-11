@@ -1,0 +1,10 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    eXpansion\Framework\GameTrackmania\ScriptMethods\GetNumberOfLaps:
+        class: eXpansion\Framework\GameTrackmania\ScriptMethods\GetNumberOfLaps
+        tags:
+            - {name: expansion.plugin, data_provider: mp.method.get_number_laps}

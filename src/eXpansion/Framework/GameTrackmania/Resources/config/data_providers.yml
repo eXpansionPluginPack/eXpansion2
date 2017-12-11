@@ -26,3 +26,19 @@ services:
             - {name: expansion.dataprovider, provider: 'mp.method.get_scores', interface: eXpansion\Framework\Core\ScriptMethods\AbstractScriptMethod}
             - {name: expansion.dataprovider.compatibility, title: TM}
             - {name: expansion.dataprovider.listener, event_name: Trackmania.Scores, method: setScores}
+
+    expansion.framework.game_trackmania.data_providers.script_base_rounds.method_get_number_laps:
+        class: eXpansion\Framework\GameTrackmania\DataProviders\ScriptBaseRounds\MethodGetNumberLapsDataProvider
+        tags:
+          - {name: expansion.dataprovider, provider: 'mp.method.get_number_laps', interface: eXpansion\Framework\Core\ScriptMethods\AbstractScriptMethod}
+          - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'Rounds.Script.txt'}
+          - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'Cup.Script.txt'}
+          - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'Team.Script.txt'}
+          - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'Chase.Script.txt'}
+
+    expansion.framework.game_trackmania.data_providers.script_time_attack.method_get_number_laps:
+        class: eXpansion\Framework\GameTrackmania\DataProviders\ScriptBaseRounds\MethodGetNumberLapsDataProvider
+        tags:
+          - {name: expansion.dataprovider, provider: 'mp.method.get_number_laps', interface: eXpansion\Framework\Core\ScriptMethods\AbstractScriptMethod}
+          - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'TeamAttack.Script.txt'}
+          - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'TimeAttack.Script.txt'}
