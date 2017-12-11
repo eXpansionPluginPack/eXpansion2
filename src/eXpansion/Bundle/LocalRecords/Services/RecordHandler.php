@@ -154,8 +154,6 @@ class RecordHandler
     {
         $logins = array_diff($logins, array_keys($this->recordsPerPlayer));
 
-        print_r($logins);
-
         if (!empty($logins)) {
             $records = $this->recordQueryBuilder->getPlayerMapRecords($mapUid, $nbLaps, $logins);
 
