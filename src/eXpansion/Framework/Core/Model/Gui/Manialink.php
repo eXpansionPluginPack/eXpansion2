@@ -3,6 +3,7 @@
 namespace eXpansion\Framework\Core\Model\Gui;
 
 use eXpansion\Framework\Core\Model\Data\DataStorageTrait;
+use eXpansion\Framework\Core\Model\DestroyableObject;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use FML\Types\Renderable;
 
@@ -147,7 +148,15 @@ class Manialink implements ManialinkInterface
      */
     public function destroy()
     {
-        // This is not mandatory as GC will free the memory eventually but allows memory to be freed faster.
+        // This is not mandatory as GC will free the memory eventually but allows memory to be freed faster
+        // by removing circular dependencies.
+        if (!empty($this->data)) {
+            foreach ($this->data as $data) {
+                if ($data instanceof DestroyableObject) {
+                    $data->destroy();
+                }
+            }
+        }
         $this->data = [];
         $this->manialinkFactory = null;
     }

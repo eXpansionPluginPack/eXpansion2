@@ -123,22 +123,6 @@ abstract class GridWindowFactory extends WindowFactory
     }
 
     /**
-     * @param GridBuilderFactory $gridBuilderFactory
-     */
-    public function setGridBuilderFactory($gridBuilderFactory)
-    {
-        $this->gridBuilderFactory = $gridBuilderFactory;
-    }
-
-    /**
-     * @param DataCollectionFactory $dataCollectionFactory
-     */
-    public function setDataCollectionFactory($dataCollectionFactory)
-    {
-        $this->dataCollectionFactory = $dataCollectionFactory;
-    }
-
-    /**
      * @param Time $time
      */
     public function setTimerFormatter(Time $time)
