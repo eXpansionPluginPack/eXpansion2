@@ -9,6 +9,7 @@ use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Services\Application\Dispatcher;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\MapStorage;
+use eXpansion\Framework\GameTrackmania\ScriptMethods\GetNumberOfLaps;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
 class RaceRecordsTest extends \PHPUnit_Framework_TestCase
@@ -28,6 +29,9 @@ class RaceRecordsTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $dispatcher;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockGetNbLaps;
+
     protected function setUp()
     {
         parent::setUp();
@@ -44,6 +48,10 @@ class RaceRecordsTest extends \PHPUnit_Framework_TestCase
 
         $this->dispatcher = $this->getMockBuilder(Dispatcher::class)->disableOriginalConstructor()->getMock();
 
+        $this->mockGetNbLaps = $this->getMockBuilder(GetNumberOfLaps::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->playersGroup = new Group(null, $this->dispatcher);
     }
 
@@ -52,6 +60,12 @@ class RaceRecordsTest extends \PHPUnit_Framework_TestCase
         $this->mapStorageMock->expects($this->once())->method('getCurrentMap')->willReturn(new Map());
         $this->recordHanlderMock->expects($this->once())->method('loadForMap');
         $this->recordHanlderMock->expects($this->once())->method('loadForPlayers');
+        $this->mockGetNbLaps
+            ->expects($this->once())
+            ->method('get')
+            ->willReturnCallback(function ($call) {
+                $call(1);
+            });
 
         $this->getRaceRecords()->setStatus(true);
     }
@@ -60,6 +74,12 @@ class RaceRecordsTest extends \PHPUnit_Framework_TestCase
     {
         $this->recordHanlderMock->expects($this->once())->method('loadForMap');
         $this->recordHanlderMock->expects($this->once())->method('loadForPlayers');
+        $this->mockGetNbLaps
+            ->expects($this->once())
+            ->method('get')
+            ->willReturnCallback(function ($call) {
+                $call(1);
+            });
 
         $this->getRaceRecords()->onStartMapStart(0,0,false, new Map());
     }
@@ -149,6 +169,7 @@ class RaceRecordsTest extends \PHPUnit_Framework_TestCase
             $this->playersGroup,
             $this->mapStorageMock,
             $this->dispatcher,
+            $this->mockGetNbLaps,
             'prefix'
         );
     }
