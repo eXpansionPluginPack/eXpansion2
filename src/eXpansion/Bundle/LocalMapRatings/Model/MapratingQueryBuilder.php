@@ -16,8 +16,6 @@ class MapratingQueryBuilder
         $query = new MapratingQuery();
         $result = $query->filterByMapuid($map->uId)->find();
 
-        $result->populateRelation('Player');
-
         return $result->getData();
     }
 }

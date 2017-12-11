@@ -242,13 +242,6 @@ class MapTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Maprating', '\\eXpansion\\Bundle\\LocalMapRatings\\Model\\Maprating', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':mapUid',
-    1 => ':mapUid',
-  ),
-), null, null, 'Mapratings', false);
         $this->addRelation('Mxmap', '\\eXpansion\\Bundle\\Maps\\Model\\Mxmap', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

@@ -11,7 +11,6 @@ use Propel\Runtime\ActiveQuery\ModelJoin;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
-use eXpansion\Bundle\LocalMapRatings\Model\Maprating;
 use eXpansion\Bundle\LocalRecords\Model\Record;
 use eXpansion\Framework\PlayersBundle\Model\Player as ChildPlayer;
 use eXpansion\Framework\PlayersBundle\Model\PlayerQuery as ChildPlayerQuery;
@@ -48,16 +47,6 @@ use eXpansion\Framework\PlayersBundle\Model\Map\PlayerTableMap;
  * @method     ChildPlayerQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildPlayerQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildPlayerQuery leftJoinMaprating($relationAlias = null) Adds a LEFT JOIN clause to the query using the Maprating relation
- * @method     ChildPlayerQuery rightJoinMaprating($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Maprating relation
- * @method     ChildPlayerQuery innerJoinMaprating($relationAlias = null) Adds a INNER JOIN clause to the query using the Maprating relation
- *
- * @method     ChildPlayerQuery joinWithMaprating($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Maprating relation
- *
- * @method     ChildPlayerQuery leftJoinWithMaprating() Adds a LEFT JOIN clause and with to the query using the Maprating relation
- * @method     ChildPlayerQuery rightJoinWithMaprating() Adds a RIGHT JOIN clause and with to the query using the Maprating relation
- * @method     ChildPlayerQuery innerJoinWithMaprating() Adds a INNER JOIN clause and with to the query using the Maprating relation
- *
  * @method     ChildPlayerQuery leftJoinRecord($relationAlias = null) Adds a LEFT JOIN clause to the query using the Record relation
  * @method     ChildPlayerQuery rightJoinRecord($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Record relation
  * @method     ChildPlayerQuery innerJoinRecord($relationAlias = null) Adds a INNER JOIN clause to the query using the Record relation
@@ -68,7 +57,7 @@ use eXpansion\Framework\PlayersBundle\Model\Map\PlayerTableMap;
  * @method     ChildPlayerQuery rightJoinWithRecord() Adds a RIGHT JOIN clause and with to the query using the Record relation
  * @method     ChildPlayerQuery innerJoinWithRecord() Adds a INNER JOIN clause and with to the query using the Record relation
  *
- * @method     \eXpansion\Bundle\LocalMapRatings\Model\MapratingQuery|\eXpansion\Bundle\LocalRecords\Model\RecordQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \eXpansion\Bundle\LocalRecords\Model\RecordQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildPlayer findOne(ConnectionInterface $con = null) Return the first ChildPlayer matching the query
  * @method     ChildPlayer findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPlayer matching the query, or a new ChildPlayer object populated from the query conditions when no match is found
@@ -555,79 +544,6 @@ abstract class PlayerQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(PlayerTableMap::COL_LAST_ONLINE, $lastOnline, $comparison);
-    }
-
-    /**
-     * Filter the query by a related \eXpansion\Bundle\LocalMapRatings\Model\Maprating object
-     *
-     * @param \eXpansion\Bundle\LocalMapRatings\Model\Maprating|ObjectCollection $maprating the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildPlayerQuery The current query, for fluid interface
-     */
-    public function filterByMaprating($maprating, $comparison = null)
-    {
-        if ($maprating instanceof \eXpansion\Bundle\LocalMapRatings\Model\Maprating) {
-            return $this
-                ->addUsingAlias(PlayerTableMap::COL_ID, $maprating->getPlayerId(), $comparison);
-        } elseif ($maprating instanceof ObjectCollection) {
-            return $this
-                ->useMapratingQuery()
-                ->filterByPrimaryKeys($maprating->getPrimaryKeys())
-                ->endUse();
-        } else {
-            throw new PropelException('filterByMaprating() only accepts arguments of type \eXpansion\Bundle\LocalMapRatings\Model\Maprating or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Maprating relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildPlayerQuery The current query, for fluid interface
-     */
-    public function joinMaprating($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Maprating');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Maprating');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Maprating relation Maprating object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \eXpansion\Bundle\LocalMapRatings\Model\MapratingQuery A secondary query class using the current class as primary query
-     */
-    public function useMapratingQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        return $this
-            ->joinMaprating($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Maprating', '\eXpansion\Bundle\LocalMapRatings\Model\MapratingQuery');
     }
 
     /**

@@ -77,9 +77,9 @@ class MapratingTableMap extends TableMap
     const COL_ID = 'maprating.id';
 
     /**
-     * the column name for the player_id field
+     * the column name for the login field
      */
-    const COL_PLAYER_ID = 'maprating.player_id';
+    const COL_LOGIN = 'maprating.login';
 
     /**
      * the column name for the mapUid field
@@ -113,10 +113,10 @@ class MapratingTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'PlayerId', 'Mapuid', 'Score', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'playerId', 'mapuid', 'score', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(MapratingTableMap::COL_ID, MapratingTableMap::COL_PLAYER_ID, MapratingTableMap::COL_MAPUID, MapratingTableMap::COL_SCORE, MapratingTableMap::COL_CREATED_AT, MapratingTableMap::COL_UPDATED_AT, ),
-        self::TYPE_FIELDNAME     => array('id', 'player_id', 'mapUid', 'score', 'created_at', 'updated_at', ),
+        self::TYPE_PHPNAME       => array('Id', 'Login', 'Mapuid', 'Score', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'login', 'mapuid', 'score', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(MapratingTableMap::COL_ID, MapratingTableMap::COL_LOGIN, MapratingTableMap::COL_MAPUID, MapratingTableMap::COL_SCORE, MapratingTableMap::COL_CREATED_AT, MapratingTableMap::COL_UPDATED_AT, ),
+        self::TYPE_FIELDNAME     => array('id', 'login', 'mapUid', 'score', 'created_at', 'updated_at', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
@@ -127,10 +127,10 @@ class MapratingTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'PlayerId' => 1, 'Mapuid' => 2, 'Score' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'playerId' => 1, 'mapuid' => 2, 'score' => 3, 'createdAt' => 4, 'updatedAt' => 5, ),
-        self::TYPE_COLNAME       => array(MapratingTableMap::COL_ID => 0, MapratingTableMap::COL_PLAYER_ID => 1, MapratingTableMap::COL_MAPUID => 2, MapratingTableMap::COL_SCORE => 3, MapratingTableMap::COL_CREATED_AT => 4, MapratingTableMap::COL_UPDATED_AT => 5, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'player_id' => 1, 'mapUid' => 2, 'score' => 3, 'created_at' => 4, 'updated_at' => 5, ),
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Login' => 1, 'Mapuid' => 2, 'Score' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'login' => 1, 'mapuid' => 2, 'score' => 3, 'createdAt' => 4, 'updatedAt' => 5, ),
+        self::TYPE_COLNAME       => array(MapratingTableMap::COL_ID => 0, MapratingTableMap::COL_LOGIN => 1, MapratingTableMap::COL_MAPUID => 2, MapratingTableMap::COL_SCORE => 3, MapratingTableMap::COL_CREATED_AT => 4, MapratingTableMap::COL_UPDATED_AT => 5, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'login' => 1, 'mapUid' => 2, 'score' => 3, 'created_at' => 4, 'updated_at' => 5, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
@@ -152,8 +152,8 @@ class MapratingTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addForeignKey('player_id', 'PlayerId', 'INTEGER', 'player', 'id', false, null, null);
-        $this->addForeignKey('mapUid', 'Mapuid', 'VARCHAR', 'map', 'mapUid', false, 32, null);
+        $this->addColumn('login', 'Login', 'VARCHAR', false, 255, null);
+        $this->addColumn('mapUid', 'Mapuid', 'VARCHAR', false, 32, null);
         $this->addColumn('score', 'Score', 'INTEGER', false, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
@@ -164,20 +164,6 @@ class MapratingTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Player', '\\eXpansion\\Framework\\PlayersBundle\\Model\\Player', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':player_id',
-    1 => ':id',
-  ),
-), null, null, null, false);
-        $this->addRelation('Map', '\\eXpansion\\Bundle\\Maps\\Model\\Map', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':mapUid',
-    1 => ':mapUid',
-  ),
-), null, null, null, false);
     } // buildRelations()
 
     /**
@@ -335,14 +321,14 @@ class MapratingTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->addSelectColumn(MapratingTableMap::COL_ID);
-            $criteria->addSelectColumn(MapratingTableMap::COL_PLAYER_ID);
+            $criteria->addSelectColumn(MapratingTableMap::COL_LOGIN);
             $criteria->addSelectColumn(MapratingTableMap::COL_MAPUID);
             $criteria->addSelectColumn(MapratingTableMap::COL_SCORE);
             $criteria->addSelectColumn(MapratingTableMap::COL_CREATED_AT);
             $criteria->addSelectColumn(MapratingTableMap::COL_UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.player_id');
+            $criteria->addSelectColumn($alias . '.login');
             $criteria->addSelectColumn($alias . '.mapUid');
             $criteria->addSelectColumn($alias . '.score');
             $criteria->addSelectColumn($alias . '.created_at');

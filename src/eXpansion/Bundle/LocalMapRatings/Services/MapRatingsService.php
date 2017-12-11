@@ -5,25 +5,29 @@ namespace eXpansion\Bundle\LocalMapRatings\Services;
 use eXpansion\Bundle\LocalMapRatings\Model\Map\MapratingTableMap;
 use eXpansion\Bundle\LocalMapRatings\Model\Maprating;
 use eXpansion\Bundle\LocalMapRatings\Model\MapratingQueryBuilder;
+use eXpansion\Bundle\LocalRecords\Plugins\ChatNotification;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
+use eXpansion\Framework\Core\Services\Application\Dispatcher;
+use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\MapStorage;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMap;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptPodium;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMatch;
 use eXpansion\Framework\PlayersBundle\Model\PlayerQueryBuilder;
 use Maniaplanet\DedicatedServer\Structures\Map;
 use Propel\Runtime\Propel;
 
 
-class MapRatingsService implements ListenerInterfaceExpApplication, ListenerInterfaceMpScriptMap,
-    ListenerInterfaceMpScriptPodium
+class MapRatingsService implements ListenerInterfaceExpApplication, ListenerInterfaceMpScriptMatch,
+    ListenerInterfaceMpScriptMap, ListenerInterfaceMpLegacyChat
 {
 
     /** @var Maprating[] */
     protected $changedRatings;
 
     /** @var Maprating[] */
-    protected $ratingsPerPlayer;
+    protected $ratingsPerPlayer = [];
     /**
      * @var MapStorage
      */
@@ -41,6 +45,14 @@ class MapRatingsService implements ListenerInterfaceExpApplication, ListenerInte
      * @var PlayerQueryBuilder
      */
     private $playerQueryBuilder;
+    /**
+     * @var ChatNotification
+     */
+    private $chatNotification;
+    /**
+     * @var Dispatcher
+     */
+    private $dispatcher;
 
     /**
      * MapRatingService constructor.
@@ -48,18 +60,24 @@ class MapRatingsService implements ListenerInterfaceExpApplication, ListenerInte
      * @param PlayerStorage         $playerStorage
      * @param MapratingQueryBuilder $mapratingQueryBuilder
      * @param PlayerQueryBuilder    $playerQueryBuilder
+     * @param ChatNotification      $chatNotification
+     * @param Dispatcher            $dispatcher
      */
     public function __construct(
         MapStorage $mapStorage,
         PlayerStorage $playerStorage,
         MapratingQueryBuilder $mapratingQueryBuilder,
-        PlayerQueryBuilder $playerQueryBuilder
+        PlayerQueryBuilder $playerQueryBuilder,
+        ChatNotification $chatNotification,
+        Dispatcher $dispatcher
 
     ) {
         $this->mapStorage = $mapStorage;
         $this->playerStorage = $playerStorage;
         $this->mapratingQueryBuilder = $mapratingQueryBuilder;
         $this->playerQueryBuilder = $playerQueryBuilder;
+        $this->chatNotification = $chatNotification;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -71,29 +89,33 @@ class MapRatingsService implements ListenerInterfaceExpApplication, ListenerInte
     public function load(Map $map)
     {
         $this->changedRatings = [];
+        $this->ratingsPerPlayer = [];
+        MapratingTableMap::clearInstancePool();
 
         /** @var Maprating[] $ratings */
         $ratings = $this->mapratingQueryBuilder->getRatingsForMap($map);
 
         foreach ($ratings as $rating) {
-            $this->ratingsPerPlayer[$rating->getPlayer()->getLogin()] = $rating;
+            $this->ratingsPerPlayer[$rating->getLogin()] = $rating;
         }
 
+        $this->dispatcher->dispatch("expansion.mapratings.loaded", [$this->ratingsPerPlayer]);
     }
 
 
-    public function save(Map $map)
+    public function save()
     {
 
         $con = Propel::getWriteConnection(MapratingTableMap::DATABASE_NAME);
         $con->beginTransaction();
+
         foreach ($this->changedRatings as $rating) {
             $rating->save();
         }
         $con->commit();
+        $this->changedRatings = [];
 
         MapratingTableMap::clearInstancePool();
-        MapratingTableMap::clearRelatedInstancePool();
     }
 
     /**
@@ -104,8 +126,11 @@ class MapRatingsService implements ListenerInterfaceExpApplication, ListenerInte
     {
         $rating = $this->getRating($login);
         $rating->setScore($score);
+
         $this->changedRatings[$login] = $rating;
         $this->ratingsPerPlayer[$login] = $rating;
+
+        $this->dispatcher->dispatch("expansion.mapratings.changed", [$this->ratingsPerPlayer]);
     }
 
 
@@ -118,14 +143,41 @@ class MapRatingsService implements ListenerInterfaceExpApplication, ListenerInte
                 $rating = $this->ratingsPerPlayer[$login];
             } else {
                 $rating = new Maprating();
-                $player = $this->playerQueryBuilder->findByLogin($login);
-                $rating->setPlayerId($player->getId());
-                $rating->setPlayer($player);
+                $rating->setLogin($login);
                 $rating->setMapuid($this->mapStorage->getCurrentMap()->uId);
             }
         }
 
         return $rating;
+    }
+
+    /**
+     * Called when a player chats.
+     *
+     * @param Player $player
+     * @param        $text
+     *
+     * @return void
+     */
+    public function onPlayerChat(Player $player, $text)
+    {
+        if ($player->getPlayerId() == 0) {
+            return;
+        }
+
+        if ($player->getPlayerId() != 0 && substr($text, 0, 1) != "/") {
+            if ($text === "++") {
+                $this->changeRating($player->getLogin(), 1);
+
+                return;
+            }
+
+            if ($text === "--") {
+                $this->changeRating($player->getLogin(), -1);
+
+                return;
+            }
+        }
     }
 
     /**
@@ -145,7 +197,6 @@ class MapRatingsService implements ListenerInterfaceExpApplication, ListenerInte
      */
     public function onApplicationReady()
     {
-        $this->changedRatings = [];
         $this->load($this->mapStorage->getCurrentMap());
     }
 
@@ -160,6 +211,171 @@ class MapRatingsService implements ListenerInterfaceExpApplication, ListenerInte
     }
 
     /**
+     * @return Maprating[]
+     */
+    public function getRatingsPerPlayer(): array
+    {
+        return $this->ratingsPerPlayer;
+    }
+
+    /**
+     * Callback sent when the "StartMatch" section start.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time  Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onStartMatchStart($count, $time)
+    {
+
+    }
+
+    /**
+     * Callback sent when the "StartMatch" section end.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time  Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onStartMatchEnd($count, $time)
+    {
+        $this->load($this->mapStorage->getCurrentMap());
+    }
+
+    /**
+     * Callback sent when the "EndMatch" section start.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time  Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onEndMatchStart($count, $time)
+    {
+
+    }
+
+    /**
+     * Callback sent when the "EndMatch" section end.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time  Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onEndMatchEnd($count, $time)
+    {
+        $this->save();
+    }
+
+    /**
+     * Callback sent when the "StartTurn" section start.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time  Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onStartTurnStart($count, $time)
+    {
+        // TODO: Implement onStartTurnStart() method.
+    }
+
+    /**
+     * Callback sent when the "StartTurn" section end.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time  Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onStartTurnEnd($count, $time)
+    {
+        // TODO: Implement onStartTurnEnd() method.
+    }
+
+    /**
+     * Callback sent when the "EndMatch" section start.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time  Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onEndTurnStart($count, $time)
+    {
+        // TODO: Implement onEndTurnStart() method.
+    }
+
+    /**
+     * Callback sent when the "EndMatch" section end.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time  Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onEndTurnEnd($count, $time)
+    {
+        // TODO: Implement onEndTurnEnd() method.
+    }
+
+    /**
+     * Callback sent when the "StartRound" section start.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time  Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onStartRoundStart($count, $time)
+    {
+        // TODO: Implement onStartRoundStart() method.
+    }
+
+    /**
+     * Callback sent when the "StartRound" section end.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time  Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onStartRoundEnd($count, $time)
+    {
+        // TODO: Implement onStartRoundEnd() method.
+    }
+
+    /**
+     * Callback sent when the "EndMatch" section start.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time  Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onEndRoundStart($count, $time)
+    {
+        // TODO: Implement onEndRoundStart() method.
+    }
+
+    /**
+     * Callback sent when the "EndMatch" section end.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time  Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onEndRoundEnd($count, $time)
+    {
+        // TODO: Implement onEndRoundEnd() method.
+    }
+
+
+    /**
      * Callback sent when the "StartMap" section start.
      *
      * @param int     $count     Each time this section is played, this number is incremented by one
@@ -171,8 +387,9 @@ class MapRatingsService implements ListenerInterfaceExpApplication, ListenerInte
      */
     public function onStartMapStart($count, $time, $restarted, Map $map)
     {
-        $this->changedRatings = [];
-        $this->load($map);
+        if ($restarted) {
+            $this->save();
+        }
     }
 
     /**
@@ -187,7 +404,7 @@ class MapRatingsService implements ListenerInterfaceExpApplication, ListenerInte
      */
     public function onStartMapEnd($count, $time, $restarted, Map $map)
     {
-
+        // TODO: Implement onStartMapEnd() method.
     }
 
     /**
@@ -202,7 +419,7 @@ class MapRatingsService implements ListenerInterfaceExpApplication, ListenerInte
      */
     public function onEndMapStart($count, $time, $restarted, Map $map)
     {
-
+        $this->save();
     }
 
     /**
@@ -217,45 +434,6 @@ class MapRatingsService implements ListenerInterfaceExpApplication, ListenerInte
      */
     public function onEndMapEnd($count, $time, $restarted, Map $map)
     {
-
-    }
-
-    /**
-     * Callback sent when the "onPodiumStart" section start.
-     *
-     * @param int $time Server time when the callback was sent
-     * @return void
-     */
-    public function onPodiumStart($time)
-    {
-        $this->save($this->mapStorage->getCurrentMap());
-    }
-
-    /**
-     * Callback sent when the "onPodiumEnd" section end.
-     *
-     * @param int $time Server time when the callback was sent
-     *
-     * @return void
-     */
-    public function onPodiumEnd($time)
-    {
-
-    }
-
-    /**
-     * @return Maprating[]
-     */
-    public function getRatingsPerPlayer(): array
-    {
-        return $this->ratingsPerPlayer;
-    }
-
-    /**
-     * @param Maprating[] $ratingsPerPlayer
-     */
-    public function setRatingsPerPlayer(array $ratingsPerPlayer)
-    {
-        $this->ratingsPerPlayer = $ratingsPerPlayer;
+        // TODO: Implement onEndMapEnd() method.
     }
 }

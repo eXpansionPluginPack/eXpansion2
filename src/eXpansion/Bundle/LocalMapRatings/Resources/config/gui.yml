@@ -3,4 +3,11 @@ services:
         autowire: true
         public: true
 
-
+    eXpansion\Bundle\LocalMapRatings\Plugin\Gui\MapRatingsWidget:
+            class: eXpansion\Bundle\LocalMapRatings\Plugin\Gui\MapRatingsWidget
+            arguments:
+                $name:  "Map Ratings"
+                $posX: 158
+                $posY: 70
+                $sizeX: null
+                $sizeY: null

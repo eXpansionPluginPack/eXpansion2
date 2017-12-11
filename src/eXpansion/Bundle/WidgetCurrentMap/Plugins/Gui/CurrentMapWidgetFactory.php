@@ -108,8 +108,6 @@ EOL
     protected function updateContent(ManialinkInterface $manialink)
     {
         parent::updateContent($manialink);
-        echo "update\n";
-
     }
 
 

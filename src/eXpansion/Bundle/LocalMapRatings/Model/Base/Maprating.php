@@ -20,10 +20,6 @@ use Propel\Runtime\Util\PropelDateTime;
 use eXpansion\Bundle\LocalMapRatings\Model\Maprating as ChildMaprating;
 use eXpansion\Bundle\LocalMapRatings\Model\MapratingQuery as ChildMapratingQuery;
 use eXpansion\Bundle\LocalMapRatings\Model\Map\MapratingTableMap;
-use eXpansion\Bundle\Maps\Model\Map;
-use eXpansion\Bundle\Maps\Model\MapQuery;
-use eXpansion\Framework\PlayersBundle\Model\Player;
-use eXpansion\Framework\PlayersBundle\Model\PlayerQuery;
 
 /**
  * Base class that represents a row from the 'maprating' table.
@@ -74,11 +70,11 @@ abstract class Maprating implements ActiveRecordInterface
     protected $id;
 
     /**
-     * The value for the player_id field.
+     * The value for the login field.
      *
-     * @var        int
+     * @var        string
      */
-    protected $player_id;
+    protected $login;
 
     /**
      * The value for the mapuid field.
@@ -107,16 +103,6 @@ abstract class Maprating implements ActiveRecordInterface
      * @var        DateTime
      */
     protected $updated_at;
-
-    /**
-     * @var        Player
-     */
-    protected $aPlayer;
-
-    /**
-     * @var        Map
-     */
-    protected $aMap;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -362,13 +348,13 @@ abstract class Maprating implements ActiveRecordInterface
     }
 
     /**
-     * Get the [player_id] column value.
+     * Get the [login] column value.
      *
-     * @return int
+     * @return string
      */
-    public function getPlayerId()
+    public function getLogin()
     {
-        return $this->player_id;
+        return $this->login;
     }
 
     /**
@@ -452,28 +438,24 @@ abstract class Maprating implements ActiveRecordInterface
     } // setId()
 
     /**
-     * Set the value of [player_id] column.
+     * Set the value of [login] column.
      *
-     * @param int $v new value
+     * @param string $v new value
      * @return $this|\eXpansion\Bundle\LocalMapRatings\Model\Maprating The current object (for fluent API support)
      */
-    public function setPlayerId($v)
+    public function setLogin($v)
     {
         if ($v !== null) {
-            $v = (int) $v;
+            $v = (string) $v;
         }
 
-        if ($this->player_id !== $v) {
-            $this->player_id = $v;
-            $this->modifiedColumns[MapratingTableMap::COL_PLAYER_ID] = true;
-        }
-
-        if ($this->aPlayer !== null && $this->aPlayer->getId() !== $v) {
-            $this->aPlayer = null;
+        if ($this->login !== $v) {
+            $this->login = $v;
+            $this->modifiedColumns[MapratingTableMap::COL_LOGIN] = true;
         }
 
         return $this;
-    } // setPlayerId()
+    } // setLogin()
 
     /**
      * Set the value of [mapuid] column.
@@ -490,10 +472,6 @@ abstract class Maprating implements ActiveRecordInterface
         if ($this->mapuid !== $v) {
             $this->mapuid = $v;
             $this->modifiedColumns[MapratingTableMap::COL_MAPUID] = true;
-        }
-
-        if ($this->aMap !== null && $this->aMap->getMapuid() !== $v) {
-            $this->aMap = null;
         }
 
         return $this;
@@ -598,8 +576,8 @@ abstract class Maprating implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : MapratingTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : MapratingTableMap::translateFieldName('PlayerId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->player_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : MapratingTableMap::translateFieldName('Login', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->login = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : MapratingTableMap::translateFieldName('Mapuid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->mapuid = (null !== $col) ? (string) $col : null;
@@ -648,12 +626,6 @@ abstract class Maprating implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
-        if ($this->aPlayer !== null && $this->player_id !== $this->aPlayer->getId()) {
-            $this->aPlayer = null;
-        }
-        if ($this->aMap !== null && $this->mapuid !== $this->aMap->getMapuid()) {
-            $this->aMap = null;
-        }
     } // ensureConsistency
 
     /**
@@ -693,8 +665,6 @@ abstract class Maprating implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aPlayer = null;
-            $this->aMap = null;
         } // if (deep)
     }
 
@@ -806,25 +776,6 @@ abstract class Maprating implements ActiveRecordInterface
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
-            // We call the save method on the following object(s) if they
-            // were passed to this object by their corresponding set
-            // method.  This object relates to these object(s) by a
-            // foreign key reference.
-
-            if ($this->aPlayer !== null) {
-                if ($this->aPlayer->isModified() || $this->aPlayer->isNew()) {
-                    $affectedRows += $this->aPlayer->save($con);
-                }
-                $this->setPlayer($this->aPlayer);
-            }
-
-            if ($this->aMap !== null) {
-                if ($this->aMap->isModified() || $this->aMap->isNew()) {
-                    $affectedRows += $this->aMap->save($con);
-                }
-                $this->setMap($this->aMap);
-            }
-
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -865,8 +816,8 @@ abstract class Maprating implements ActiveRecordInterface
         if ($this->isColumnModified(MapratingTableMap::COL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'id';
         }
-        if ($this->isColumnModified(MapratingTableMap::COL_PLAYER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'player_id';
+        if ($this->isColumnModified(MapratingTableMap::COL_LOGIN)) {
+            $modifiedColumns[':p' . $index++]  = 'login';
         }
         if ($this->isColumnModified(MapratingTableMap::COL_MAPUID)) {
             $modifiedColumns[':p' . $index++]  = 'mapUid';
@@ -894,8 +845,8 @@ abstract class Maprating implements ActiveRecordInterface
                     case 'id':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'player_id':
-                        $stmt->bindValue($identifier, $this->player_id, PDO::PARAM_INT);
+                    case 'login':
+                        $stmt->bindValue($identifier, $this->login, PDO::PARAM_STR);
                         break;
                     case 'mapUid':
                         $stmt->bindValue($identifier, $this->mapuid, PDO::PARAM_STR);
@@ -975,7 +926,7 @@ abstract class Maprating implements ActiveRecordInterface
                 return $this->getId();
                 break;
             case 1:
-                return $this->getPlayerId();
+                return $this->getLogin();
                 break;
             case 2:
                 return $this->getMapuid();
@@ -1006,11 +957,10 @@ abstract class Maprating implements ActiveRecordInterface
      *                    Defaults to TableMap::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
-     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
+    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
     {
 
         if (isset($alreadyDumpedObjects['Maprating'][$this->hashCode()])) {
@@ -1020,7 +970,7 @@ abstract class Maprating implements ActiveRecordInterface
         $keys = MapratingTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getPlayerId(),
+            $keys[1] => $this->getLogin(),
             $keys[2] => $this->getMapuid(),
             $keys[3] => $this->getScore(),
             $keys[4] => $this->getCreatedAt(),
@@ -1039,38 +989,6 @@ abstract class Maprating implements ActiveRecordInterface
             $result[$key] = $virtualColumn;
         }
 
-        if ($includeForeignObjects) {
-            if (null !== $this->aPlayer) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'player';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'player';
-                        break;
-                    default:
-                        $key = 'Player';
-                }
-
-                $result[$key] = $this->aPlayer->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-            if (null !== $this->aMap) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'map';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'map';
-                        break;
-                    default:
-                        $key = 'Map';
-                }
-
-                $result[$key] = $this->aMap->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-        }
 
         return $result;
     }
@@ -1108,7 +1026,7 @@ abstract class Maprating implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setPlayerId($value);
+                $this->setLogin($value);
                 break;
             case 2:
                 $this->setMapuid($value);
@@ -1152,7 +1070,7 @@ abstract class Maprating implements ActiveRecordInterface
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setPlayerId($arr[$keys[1]]);
+            $this->setLogin($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
             $this->setMapuid($arr[$keys[2]]);
@@ -1210,8 +1128,8 @@ abstract class Maprating implements ActiveRecordInterface
         if ($this->isColumnModified(MapratingTableMap::COL_ID)) {
             $criteria->add(MapratingTableMap::COL_ID, $this->id);
         }
-        if ($this->isColumnModified(MapratingTableMap::COL_PLAYER_ID)) {
-            $criteria->add(MapratingTableMap::COL_PLAYER_ID, $this->player_id);
+        if ($this->isColumnModified(MapratingTableMap::COL_LOGIN)) {
+            $criteria->add(MapratingTableMap::COL_LOGIN, $this->login);
         }
         if ($this->isColumnModified(MapratingTableMap::COL_MAPUID)) {
             $criteria->add(MapratingTableMap::COL_MAPUID, $this->mapuid);
@@ -1311,7 +1229,7 @@ abstract class Maprating implements ActiveRecordInterface
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setPlayerId($this->getPlayerId());
+        $copyObj->setLogin($this->getLogin());
         $copyObj->setMapuid($this->getMapuid());
         $copyObj->setScore($this->getScore());
         $copyObj->setCreatedAt($this->getCreatedAt());
@@ -1345,124 +1263,14 @@ abstract class Maprating implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a Player object.
-     *
-     * @param  Player $v
-     * @return $this|\eXpansion\Bundle\LocalMapRatings\Model\Maprating The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setPlayer(Player $v = null)
-    {
-        if ($v === null) {
-            $this->setPlayerId(NULL);
-        } else {
-            $this->setPlayerId($v->getId());
-        }
-
-        $this->aPlayer = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Player object, it will not be re-added.
-        if ($v !== null) {
-            $v->addMaprating($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated Player object
-     *
-     * @param  ConnectionInterface $con Optional Connection object.
-     * @return Player The associated Player object.
-     * @throws PropelException
-     */
-    public function getPlayer(ConnectionInterface $con = null)
-    {
-        if ($this->aPlayer === null && ($this->player_id !== null)) {
-            $this->aPlayer = PlayerQuery::create()->findPk($this->player_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aPlayer->addMapratings($this);
-             */
-        }
-
-        return $this->aPlayer;
-    }
-
-    /**
-     * Declares an association between this object and a Map object.
-     *
-     * @param  Map $v
-     * @return $this|\eXpansion\Bundle\LocalMapRatings\Model\Maprating The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setMap(Map $v = null)
-    {
-        if ($v === null) {
-            $this->setMapuid(NULL);
-        } else {
-            $this->setMapuid($v->getMapuid());
-        }
-
-        $this->aMap = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Map object, it will not be re-added.
-        if ($v !== null) {
-            $v->addMaprating($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated Map object
-     *
-     * @param  ConnectionInterface $con Optional Connection object.
-     * @return Map The associated Map object.
-     * @throws PropelException
-     */
-    public function getMap(ConnectionInterface $con = null)
-    {
-        if ($this->aMap === null && (($this->mapuid !== "" && $this->mapuid !== null))) {
-            $this->aMap = MapQuery::create()
-                ->filterByMaprating($this) // here
-                ->findOne($con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aMap->addMapratings($this);
-             */
-        }
-
-        return $this->aMap;
-    }
-
-    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
      */
     public function clear()
     {
-        if (null !== $this->aPlayer) {
-            $this->aPlayer->removeMaprating($this);
-        }
-        if (null !== $this->aMap) {
-            $this->aMap->removeMaprating($this);
-        }
         $this->id = null;
-        $this->player_id = null;
+        $this->login = null;
         $this->mapuid = null;
         $this->score = null;
         $this->created_at = null;
@@ -1487,8 +1295,6 @@ abstract class Maprating implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
-        $this->aPlayer = null;
-        $this->aMap = null;
     }
 
     /**

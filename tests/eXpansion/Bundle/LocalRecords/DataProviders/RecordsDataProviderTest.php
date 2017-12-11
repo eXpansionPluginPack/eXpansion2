@@ -2,19 +2,19 @@
 
 namespace Tests\eXpansion\Bundle\LocalRecords\DataProviders;
 
-use eXpansion\Bundle\LocalRecords\DataProviders\RecordsDataProvider;
+use eXpansion\Bundle\LocalRecords\DataProviders\MapRatingsDataProvider;
 use eXpansion\Bundle\LocalRecords\Services\RecordHandler;
 
 class RecordsDataProviderTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var  RecordsDataProvider */
+    /** @var  MapRatingsDataProvider */
     protected $provider;
 
     protected function setUp()
     {
         parent::setUp();
 
-        $this->provider =  new RecordsDataProvider();
+        $this->provider =  new MapRatingsDataProvider();
     }
 
     public function testFirstRecord()

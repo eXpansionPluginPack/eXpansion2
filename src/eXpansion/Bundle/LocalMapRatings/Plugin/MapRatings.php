@@ -2,13 +2,35 @@
 
 namespace eXpansion\Bundle\LocalMapRatings\Plugin;
 
-use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMap;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptPodium;
-use Maniaplanet\DedicatedServer\Structures\Map;
 
-class MapRatings implements ListenerInterfaceExpApplication, ListenerInterfaceMpScriptMap, ListenerInterfaceMpScriptPodium
+use eXpansion\Bundle\LocalMapRatings\DataProviders\Listener\MapRatingsDataListener;
+use eXpansion\Bundle\LocalMapRatings\Model\Maprating;
+use eXpansion\Bundle\LocalMapRatings\Plugin\Gui\MapRatingsWidget;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
+use eXpansion\Framework\Core\Model\UserGroups\Group;
+
+class MapRatings implements ListenerInterfaceExpApplication, MapRatingsDataListener
 {
+
+    /**
+     * @var MapRatingsWidget
+     */
+    private $mapRatingsWidget;
+    /**
+     * @var Group
+     */
+    private $players;
+
+    /**
+     * MapRatings constructor.
+     * @param MapRatingsWidget $mapRatingsWidget
+     * @param Group            $players
+     */
+    public function __construct(MapRatingsWidget $mapRatingsWidget, Group $players)
+    {
+        $this->mapRatingsWidget = $mapRatingsWidget;
+        $this->players = $players;
+    }
 
     /**
      * called at eXpansion init
@@ -17,7 +39,7 @@ class MapRatings implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      */
     public function onApplicationInit()
     {
-        // TODO: Implement onApplicationInit() method.
+
     }
 
     /**
@@ -27,7 +49,7 @@ class MapRatings implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      */
     public function onApplicationReady()
     {
-
+        $this->mapRatingsWidget->create($this->players);
     }
 
     /**
@@ -37,89 +59,26 @@ class MapRatings implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      */
     public function onApplicationStop()
     {
-        // TODO: Implement onApplicationStop() method.
+
     }
 
     /**
-     * Callback sent when the "StartMap" section start.
+     * Called when map ratings are loaded.
      *
-     * @param int     $count     Each time this section is played, this number is incremented by one
-     * @param int     $time      Server time when the callback was sent
-     * @param boolean $restarted true if the map was restarted, false otherwise
-     * @param Map     $map       Map started with.
-     *
-     * @return void
+     * @param Maprating[] $ratings
      */
-    public function onStartMapStart($count, $time, $restarted, Map $map)
+    public function onMapRatingsLoaded($ratings)
     {
-        // TODO: Implement onStartMapStart() method.
+        $this->mapRatingsWidget->update($this->players);
     }
 
     /**
-     * Callback sent when the "StartMap" section end.
+     * Called when map ratings are changed.
      *
-     * @param int     $count     Each time this section is played, this number is incremented by one
-     * @param int     $time      Server time when the callback was sent
-     * @param boolean $restarted true if the map was restarted, false otherwise
-     * @param Map     $map       Map started with.
-     *
-     * @return void
+     * @param Maprating[] $ratings
      */
-    public function onStartMapEnd($count, $time, $restarted, Map $map)
+    public function onMapRatingsChanged($ratings)
     {
-        // TODO: Implement onStartMapEnd() method.
-    }
-
-    /**
-     * Callback sent when the "EndMap" section start.
-     *
-     * @param int     $count     Each time this section is played, this number is incremented by one
-     * @param int     $time      Server time when the callback was sent
-     * @param boolean $restarted true if the map was restarted, false otherwise
-     * @param Map     $map       Map started with.
-     *
-     * @return void
-     */
-    public function onEndMapStart($count, $time, $restarted, Map $map)
-    {
-        // TODO: Implement onEndMapStart() method.
-    }
-
-    /**
-     * Callback sent when the "EndMap" section end.
-     *
-     * @param int     $count     Each time this section is played, this number is incremented by one
-     * @param int     $time      Server time when the callback was sent
-     * @param boolean $restarted true if the map was restarted, false otherwise
-     * @param Map     $map       Map started with.
-     *
-     * @return void
-     */
-    public function onEndMapEnd($count, $time, $restarted, Map $map)
-    {
-        // TODO: Implement onEndMapEnd() method.
-    }
-
-    /**
-     * Callback sent when the "onPodiumStart" section start.
-     *
-     * @param int $time Server time when the callback was sent
-     * @return void
-     */
-    public function onPodiumStart($time)
-    {
-        // TODO: Implement onPodiumStart() method.
-    }
-
-    /**
-     * Callback sent when the "onPodiumEnd" section end.
-     *
-     * @param int $time Server time when the callback was sent
-     *
-     * @return void
-     */
-    public function onPodiumEnd($time)
-    {
-        // TODO: Implement onPodiumEnd() method.
+        $this->mapRatingsWidget->update($this->players);
     }
 }

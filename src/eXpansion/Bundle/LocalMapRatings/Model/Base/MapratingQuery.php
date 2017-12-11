@@ -7,15 +7,12 @@ use \PDO;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\ActiveQuery\ModelJoin;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 use eXpansion\Bundle\LocalMapRatings\Model\Maprating as ChildMaprating;
 use eXpansion\Bundle\LocalMapRatings\Model\MapratingQuery as ChildMapratingQuery;
 use eXpansion\Bundle\LocalMapRatings\Model\Map\MapratingTableMap;
-use eXpansion\Bundle\Maps\Model\Map;
-use eXpansion\Framework\PlayersBundle\Model\Player;
 
 /**
  * Base class that represents a query for the 'maprating' table.
@@ -23,14 +20,14 @@ use eXpansion\Framework\PlayersBundle\Model\Player;
  *
  *
  * @method     ChildMapratingQuery orderById($order = Criteria::ASC) Order by the id column
- * @method     ChildMapratingQuery orderByPlayerId($order = Criteria::ASC) Order by the player_id column
+ * @method     ChildMapratingQuery orderByLogin($order = Criteria::ASC) Order by the login column
  * @method     ChildMapratingQuery orderByMapuid($order = Criteria::ASC) Order by the mapUid column
  * @method     ChildMapratingQuery orderByScore($order = Criteria::ASC) Order by the score column
  * @method     ChildMapratingQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     ChildMapratingQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
  * @method     ChildMapratingQuery groupById() Group by the id column
- * @method     ChildMapratingQuery groupByPlayerId() Group by the player_id column
+ * @method     ChildMapratingQuery groupByLogin() Group by the login column
  * @method     ChildMapratingQuery groupByMapuid() Group by the mapUid column
  * @method     ChildMapratingQuery groupByScore() Group by the score column
  * @method     ChildMapratingQuery groupByCreatedAt() Group by the created_at column
@@ -44,33 +41,11 @@ use eXpansion\Framework\PlayersBundle\Model\Player;
  * @method     ChildMapratingQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildMapratingQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildMapratingQuery leftJoinPlayer($relationAlias = null) Adds a LEFT JOIN clause to the query using the Player relation
- * @method     ChildMapratingQuery rightJoinPlayer($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Player relation
- * @method     ChildMapratingQuery innerJoinPlayer($relationAlias = null) Adds a INNER JOIN clause to the query using the Player relation
- *
- * @method     ChildMapratingQuery joinWithPlayer($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Player relation
- *
- * @method     ChildMapratingQuery leftJoinWithPlayer() Adds a LEFT JOIN clause and with to the query using the Player relation
- * @method     ChildMapratingQuery rightJoinWithPlayer() Adds a RIGHT JOIN clause and with to the query using the Player relation
- * @method     ChildMapratingQuery innerJoinWithPlayer() Adds a INNER JOIN clause and with to the query using the Player relation
- *
- * @method     ChildMapratingQuery leftJoinMap($relationAlias = null) Adds a LEFT JOIN clause to the query using the Map relation
- * @method     ChildMapratingQuery rightJoinMap($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Map relation
- * @method     ChildMapratingQuery innerJoinMap($relationAlias = null) Adds a INNER JOIN clause to the query using the Map relation
- *
- * @method     ChildMapratingQuery joinWithMap($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Map relation
- *
- * @method     ChildMapratingQuery leftJoinWithMap() Adds a LEFT JOIN clause and with to the query using the Map relation
- * @method     ChildMapratingQuery rightJoinWithMap() Adds a RIGHT JOIN clause and with to the query using the Map relation
- * @method     ChildMapratingQuery innerJoinWithMap() Adds a INNER JOIN clause and with to the query using the Map relation
- *
- * @method     \eXpansion\Framework\PlayersBundle\Model\PlayerQuery|\eXpansion\Bundle\Maps\Model\MapQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
- *
  * @method     ChildMaprating findOne(ConnectionInterface $con = null) Return the first ChildMaprating matching the query
  * @method     ChildMaprating findOneOrCreate(ConnectionInterface $con = null) Return the first ChildMaprating matching the query, or a new ChildMaprating object populated from the query conditions when no match is found
  *
  * @method     ChildMaprating findOneById(int $id) Return the first ChildMaprating filtered by the id column
- * @method     ChildMaprating findOneByPlayerId(int $player_id) Return the first ChildMaprating filtered by the player_id column
+ * @method     ChildMaprating findOneByLogin(string $login) Return the first ChildMaprating filtered by the login column
  * @method     ChildMaprating findOneByMapuid(string $mapUid) Return the first ChildMaprating filtered by the mapUid column
  * @method     ChildMaprating findOneByScore(int $score) Return the first ChildMaprating filtered by the score column
  * @method     ChildMaprating findOneByCreatedAt(string $created_at) Return the first ChildMaprating filtered by the created_at column
@@ -80,7 +55,7 @@ use eXpansion\Framework\PlayersBundle\Model\Player;
  * @method     ChildMaprating requireOne(ConnectionInterface $con = null) Return the first ChildMaprating matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildMaprating requireOneById(int $id) Return the first ChildMaprating filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMaprating requireOneByPlayerId(int $player_id) Return the first ChildMaprating filtered by the player_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMaprating requireOneByLogin(string $login) Return the first ChildMaprating filtered by the login column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMaprating requireOneByMapuid(string $mapUid) Return the first ChildMaprating filtered by the mapUid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMaprating requireOneByScore(int $score) Return the first ChildMaprating filtered by the score column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMaprating requireOneByCreatedAt(string $created_at) Return the first ChildMaprating filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -88,7 +63,7 @@ use eXpansion\Framework\PlayersBundle\Model\Player;
  *
  * @method     ChildMaprating[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildMaprating objects based on current ModelCriteria
  * @method     ChildMaprating[]|ObjectCollection findById(int $id) Return ChildMaprating objects filtered by the id column
- * @method     ChildMaprating[]|ObjectCollection findByPlayerId(int $player_id) Return ChildMaprating objects filtered by the player_id column
+ * @method     ChildMaprating[]|ObjectCollection findByLogin(string $login) Return ChildMaprating objects filtered by the login column
  * @method     ChildMaprating[]|ObjectCollection findByMapuid(string $mapUid) Return ChildMaprating objects filtered by the mapUid column
  * @method     ChildMaprating[]|ObjectCollection findByScore(int $score) Return ChildMaprating objects filtered by the score column
  * @method     ChildMaprating[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildMaprating objects filtered by the created_at column
@@ -191,7 +166,7 @@ abstract class MapratingQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, player_id, mapUid, score, created_at, updated_at FROM maprating WHERE id = :p0';
+        $sql = 'SELECT id, login, mapUid, score, created_at, updated_at FROM maprating WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -323,46 +298,28 @@ abstract class MapratingQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the player_id column
+     * Filter the query on the login column
      *
      * Example usage:
      * <code>
-     * $query->filterByPlayerId(1234); // WHERE player_id = 1234
-     * $query->filterByPlayerId(array(12, 34)); // WHERE player_id IN (12, 34)
-     * $query->filterByPlayerId(array('min' => 12)); // WHERE player_id > 12
+     * $query->filterByLogin('fooValue');   // WHERE login = 'fooValue'
+     * $query->filterByLogin('%fooValue%', Criteria::LIKE); // WHERE login LIKE '%fooValue%'
      * </code>
      *
-     * @see       filterByPlayer()
-     *
-     * @param     mixed $playerId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $login The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildMapratingQuery The current query, for fluid interface
      */
-    public function filterByPlayerId($playerId = null, $comparison = null)
+    public function filterByLogin($login = null, $comparison = null)
     {
-        if (is_array($playerId)) {
-            $useMinMax = false;
-            if (isset($playerId['min'])) {
-                $this->addUsingAlias(MapratingTableMap::COL_PLAYER_ID, $playerId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($playerId['max'])) {
-                $this->addUsingAlias(MapratingTableMap::COL_PLAYER_ID, $playerId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
+        if (null === $comparison) {
+            if (is_array($login)) {
                 $comparison = Criteria::IN;
             }
         }
 
-        return $this->addUsingAlias(MapratingTableMap::COL_PLAYER_ID, $playerId, $comparison);
+        return $this->addUsingAlias(MapratingTableMap::COL_LOGIN, $login, $comparison);
     }
 
     /**
@@ -515,160 +472,6 @@ abstract class MapratingQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(MapratingTableMap::COL_UPDATED_AT, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query by a related \eXpansion\Framework\PlayersBundle\Model\Player object
-     *
-     * @param \eXpansion\Framework\PlayersBundle\Model\Player|ObjectCollection $player The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @throws \Propel\Runtime\Exception\PropelException
-     *
-     * @return ChildMapratingQuery The current query, for fluid interface
-     */
-    public function filterByPlayer($player, $comparison = null)
-    {
-        if ($player instanceof \eXpansion\Framework\PlayersBundle\Model\Player) {
-            return $this
-                ->addUsingAlias(MapratingTableMap::COL_PLAYER_ID, $player->getId(), $comparison);
-        } elseif ($player instanceof ObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            return $this
-                ->addUsingAlias(MapratingTableMap::COL_PLAYER_ID, $player->toKeyValue('PrimaryKey', 'Id'), $comparison);
-        } else {
-            throw new PropelException('filterByPlayer() only accepts arguments of type \eXpansion\Framework\PlayersBundle\Model\Player or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Player relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildMapratingQuery The current query, for fluid interface
-     */
-    public function joinPlayer($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Player');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Player');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Player relation Player object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \eXpansion\Framework\PlayersBundle\Model\PlayerQuery A secondary query class using the current class as primary query
-     */
-    public function usePlayerQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        return $this
-            ->joinPlayer($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Player', '\eXpansion\Framework\PlayersBundle\Model\PlayerQuery');
-    }
-
-    /**
-     * Filter the query by a related \eXpansion\Bundle\Maps\Model\Map object
-     *
-     * @param \eXpansion\Bundle\Maps\Model\Map|ObjectCollection $map The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @throws \Propel\Runtime\Exception\PropelException
-     *
-     * @return ChildMapratingQuery The current query, for fluid interface
-     */
-    public function filterByMap($map, $comparison = null)
-    {
-        if ($map instanceof \eXpansion\Bundle\Maps\Model\Map) {
-            return $this
-                ->addUsingAlias(MapratingTableMap::COL_MAPUID, $map->getMapuid(), $comparison);
-        } elseif ($map instanceof ObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            return $this
-                ->addUsingAlias(MapratingTableMap::COL_MAPUID, $map->toKeyValue('PrimaryKey', 'Mapuid'), $comparison);
-        } else {
-            throw new PropelException('filterByMap() only accepts arguments of type \eXpansion\Bundle\Maps\Model\Map or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Map relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildMapratingQuery The current query, for fluid interface
-     */
-    public function joinMap($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Map');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Map');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Map relation Map object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \eXpansion\Bundle\Maps\Model\MapQuery A secondary query class using the current class as primary query
-     */
-    public function useMapQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        return $this
-            ->joinMap($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Map', '\eXpansion\Bundle\Maps\Model\MapQuery');
     }
 
     /**
