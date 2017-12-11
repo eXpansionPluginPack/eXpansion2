@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Core\Model\Gui\Grid;
 
+use eXpansion\Framework\Core\Model\DestroyableObject;
 use eXpansion\Framework\Core\Model\Gui\Factory\LineFactory;
 use eXpansion\Framework\Core\Model\Gui\Factory\PagerFactory;
 use eXpansion\Framework\Core\Model\Gui\Factory\TitleLineFactory;
@@ -23,9 +24,8 @@ use FML\Types\Renderable;
  * @package eXpansion\Framework\Core\Model\Gui\Grid;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-class GridBuilder
+class GridBuilder implements DestroyableObject
 {
-
     /** @var  ActionFactory */
     protected $actionFactory;
 
@@ -64,14 +64,19 @@ class GridBuilder
 
     /** @var string */
     protected $actionPreviousPage;
+
     /** @var string */
     protected $actionNextPage;
+
     /** @var string */
     protected $actionLastPage;
+
     /** @var string */
     protected $actionFirstPage;
+
     /** @var  string */
     protected $actionGotoPage;
+
     /** @var string[] */
     protected $temporaryActions = [];
 
@@ -485,5 +490,27 @@ class GridBuilder
     public function getCurrentPage(): int
     {
         return $this->currentPage;
+    }
+
+    /**
+     * Prepare object so that it's destroyed easier.
+     *
+     * Generally GC will do this automatically, we are trying to help it so that it happens faster.
+     *
+     * @return mixed
+     */
+    public function destroy()
+    {
+        $this->manialink = null;
+        $this->manialinkFactory = null;
+        $this->dataCollection = null;
+
+        // There is cyclic dependency between actions and model, remove it so that memory can be freed immediately.
+        $this->actionFirstPage = null;
+        $this->actionGotoPage = null;
+        $this->actionLastPage = null;
+        $this->actionNextPage = null;
+        $this->temporaryActions = [];
+        $this->temporaryEntries = [];
     }
 }
