@@ -3,18 +3,10 @@ services:
         autowire: true
         public: true
 
-    eXpansion\Bundle\LocalMapRatings\Services\MapRatingsService:
-        class: eXpansion\Bundle\LocalMapRatings\Services\MapRatingsService
-        tags:
-            - {name: 'expansion.plugin', data_provider: 'exp.application'}
-            - {name: 'expansion.plugin', data_provider: 'mp.script.map'}
-            - {name: 'expansion.plugin', data_provider: 'mp.script.match'}
-            - {name: 'expansion.plugin', data_provider: 'mp.legacy.chat'}
-
     eXpansion\Bundle\LocalMapRatings\DataProviders\MapRatingsDataProvider:
         class: eXpansion\Bundle\LocalMapRatings\DataProviders\MapRatingsDataProvider
         tags:
-          - {name: 'expansion.dataprovider', provider: "exp.mapratings", interface: eXpansion\Bundle\LocalMapRatings\DataProviders\Listener\MapRatingsDataListener}
+          - {name: 'expansion.dataprovider', provider: "exp.mapratings", interface: eXpansion\Bundle\LocalMapRatings\DataProviders\Listener\ListenerInterfaceExpMapRatings}
           - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
           - {name: 'expansion.dataprovider.listener', event_name: 'expansion.mapratings.loaded', method: 'onMapRatingsLoaded'}
           - {name: 'expansion.dataprovider.listener', event_name: 'expansion.mapratings.changed', method: 'onMapRatingsChanged'}

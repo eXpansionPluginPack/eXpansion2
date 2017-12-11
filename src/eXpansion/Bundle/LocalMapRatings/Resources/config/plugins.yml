@@ -10,4 +10,7 @@ services:
         tags:
             - {name: 'expansion.plugin', data_provider: 'exp.application'}
             - {name: 'expansion.plugin', data_provider: 'exp.mapratings'}
+            - {name: 'expansion.plugin', data_provider: 'mp.script.map'}
+            - {name: 'expansion.plugin', data_provider: 'mp.script.match'}
+            - {name: 'expansion.plugin', data_provider: 'mp.legacy.chat'}
 

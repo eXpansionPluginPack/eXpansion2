@@ -12,9 +12,9 @@ use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
  */
 class MapRatingsDataProvider extends AbstractDataProvider
 {
-    public function onMapRatingsChanged($params)
+    public function onMapRatingsChanged($login, $score, $ratings)
     {
-        $this->dispatch('onMapRatingsChanged', [$params]);
+        $this->dispatch('onMapRatingsChanged', [$login, $score, $ratings]);
     }
 
     public function onMapRatingsLoaded($params)

@@ -2,6 +2,7 @@
 
 namespace eXpansion\Bundle\LocalMapRatings\Plugin\Gui;
 
+use eXpansion\Bundle\LocalMapRatings\Model\Maprating;
 use eXpansion\Bundle\LocalMapRatings\Services\MapRatingsService;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
@@ -18,6 +19,9 @@ class MapRatingsWidget extends WidgetFactory
      * @var MapRatingsService
      */
     private $mapRatingsService;
+
+    /** @var Maprating[] */
+    private $ratings = [];
 
     public function __construct(
         $name,
@@ -47,7 +51,7 @@ class MapRatingsWidget extends WidgetFactory
 
     protected function updateContent(ManialinkInterface $manialink)
     {
-        $ratings = $this->mapRatingsService->getRatingsPerPlayer();
+        $ratings = $this->ratings;
         $total = count($ratings);
         $yes = 0;
         $no = 0;
@@ -87,6 +91,14 @@ class MapRatingsWidget extends WidgetFactory
     {
         $this->mapRatingsService->changeRating($login, -1);
         $this->update($manialink->getUserGroup());
+    }
+
+    /**
+     * @param Maprating[] $ratings
+     */
+    public function setRatings($ratings)
+    {
+        $this->ratings = $ratings;
     }
 
 }
