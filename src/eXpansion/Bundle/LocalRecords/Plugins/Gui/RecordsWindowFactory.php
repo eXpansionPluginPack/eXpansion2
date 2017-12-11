@@ -70,6 +70,8 @@ class RecordsWindowFactory extends WindowFactory
      */
     protected function createContent(ManialinkInterface $manialink)
     {
+        parent::createContent($manialink);
+
         $collection = $this->dataCollectionFactory->create($this->getRecordsData());
         $collection->setPageSize(20);
 
