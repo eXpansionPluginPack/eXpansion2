@@ -1,0 +1,17 @@
+expansion_emotes:
+  prefix: '%nickname%$z$z$fff $ff0$i'
+  gg1: '%prefix% Hyvä Peli'
+  gg2: '%prefix% Mainio Peli'
+  bb1: "%prefix% Moikka"
+  bb2: "%prefix% Näkemiin!"
+  bb3: "%prefix% Nähdään myöhemmin!"
+  bb4: "%prefix% Tsau!"
+  bb5: "%prefix% Moikka kaikille!"
+  thx1: "%prefix% Kiitti"
+  thx2: "%prefix% Kiitos"
+  thx3: "%prefix% Paljon kiitoksia"
+  menu:
+    label: "Viestit"
+    gg: "Hyvä Peli"
+    bb: "Näkemiin"
+    thx: "Kiitos"

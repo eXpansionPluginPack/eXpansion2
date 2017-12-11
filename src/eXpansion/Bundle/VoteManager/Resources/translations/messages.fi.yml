@@ -1,0 +1,15 @@
+expansion_votemanager:
+  menu:
+    restart: "Käynnistä uudelleen"
+    skip: "Ohita kartta"
+  gui:
+    vote_widget:
+      restart: "Käynnistä uudelleen ?"
+      skip: "Ohita kartta ?"
+  nextmap:
+    question: "Ohita kartta ?"
+  restartmap:
+    question: "Käynnistä uudelleen kartta ?"
+  error:
+    already_started: "|error| Tämän tyyppinen äänestys on jo käynnissä."
+    in_progress: "|error| Äänestys on jo käynnissä"

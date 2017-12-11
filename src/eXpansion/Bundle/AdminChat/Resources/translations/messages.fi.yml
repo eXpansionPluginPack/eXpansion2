@@ -1,0 +1,79 @@
+expansion_admin_chat:
+  restartmap:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}käynnistää uudelleen kartan!'
+    description: 'Pelaa uudelleen nykyinen kartta.'
+    label: "Käynnistä uudelleen kartta"
+  cancelvote:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}peruutaa äänestyksen!'
+    description: '{info} peruutaa nykyisen äänestyksen.'
+    label: "Peruuta nykyinen äänestys"
+  nextmap:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}ohittaa kartan!'
+    description: '{info} Ohita nykyinen kartta ja siirry seuraavaan karttaan.'
+    label: "Ohita kartta"
+  setservername:
+    msg: '| admin | {admin_info}%adminLevel% %admin% {admin_info}muuttaa palvelimen nimeä. Uusi palvelimen nimi on {highlight}%parameter%'
+    description: '{info}Muuta palvelimen nimi.'
+  setservercomment:
+    msg: '| admin | {admin_info}%adminLevel% %admin% {admin_info}muuttaa palvelimen kommentin. Uusi palvelinkommentti on {highlight}%parameter%'
+    description: '{info}Muuta palvelimen kommentti.'
+  kick:
+    msg: '| admin | {admin_info}%adminLevel% %admin% {admin_info}poistaa pelaajan {highlight}%player% {admin_info}palvelimelta. Syy: {highlight}%reason%'
+    description: '{info}Poista pelaaja palvelimelta.'
+  ban:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}bannaa pelaajan {highlight}%player% {admin_info}palvelimelta. Syy: {highlight}%reason%'
+    description: '{info}Bannaa pelaaja palvelimelta.'
+  unban:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}sallii pelaajan {highlight}%parameter%'
+    description: '{info}Salli pelaajan liittyä palvelimelle.'
+  cleanbanlist:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} tyhjentää bannauslistan.'
+    description: '{info} Tyhjennä ban-lista.'
+  black:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}lisää pelaajan {highlight}%player% {admin_info}mustalle listalle. Syy: {highlight}%reason%'
+    description: '{info}Lisää pelaajan mustalle listalle.'
+  unblack:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}poistaa pelaajan {highlight}%parameter% {admin_info}mustalta listalta.'
+    description: '{info}Poista pelaja palvelimen mustalta listalta.'
+  cleanblacklist:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} tyhjentää mustan listan.'
+    description: '{info}Tyhjentää mustan listan.'
+  saveblacklist:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}tallentaa mustan listan. Tiedoston nimi: {highlight}%parameter%'
+    description: '{info}tallentaa mustan listan palvelimelle. Tiedoston hakemisto on suhteellinen config-hakemistoon.'
+  loadblacklist:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}lataa mustan listan. Tiedoston nimi: {highlight}%parameter%'
+    description: '{info}lataa mustan listan palvelimelta. Tiedoston hakemisto on suhteellinen config-hakemistoon.'
+  getserverplanets:
+    msg: '|info| {admin_info}Palvelimella on {highlight}%return% {admin_info}planet:aa.'
+    description: '{info}Näytä palvelimen planet:sit.'
+  ignore:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}Mykistää pelaajan: {highlight}%parameter%'
+    description: '{info}Mykistä pelaajan julkinen chat-viestintä.'
+  unignore:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}sallii viestinnän: {highlight}%parameter%'
+    description: '{info}Salli pelaajan julkinen chat-viestintä.'
+  addguest:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}lisää pelaajan {highlight}%parameter% vierailija luetteloon.'
+    description: '{info}Lisää pelaaja vierailija luetteloon. Vierailijat voivat tulla palvelimelle ilman salasanaa.'
+  removequest:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}poistaa pelaajan {highlight}%parameter% vierailija luettelosta.'
+    description: '{info}Poista pelaaja vierailija-luettelosta.'
+  cleanguestlist:
+    msg: '| admin | {admin_info}%adminLevel% %admin% {admin_info} tyhjentää vierailija-luettelon.'
+    description: '{info}Tyhjentää vierailija-luettelon.'
+  saveguestlist:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}tallentaa vierailija-luettelon. Tiedoston nimi: {highlight}%parameter%'
+    description: '{info}Tallentaa vierailija-luettelon. Tiedoston sijainti on suhteellinen config-hakemistoon.'
+  loadguestlist:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}lataa vierailija-luettelon. Tiedoston nimi: {highlight}%parameter%'
+    description: '{info}lataa vierailija-luettelon palvelimelta. Tiedoston sijainti on suhteellinen config-hakemistoon.'
+  setserverpasswordforplayer:
+    msg: '| admin | {admin_info}Uusi palvelimen salasana pelaajille on: ”{highlight}%parameter%{admin_info}”'
+    description: '{info}Asettaa uuden palvelimen salasanan'
+  ssetserverpasswordforspectator:
+    msg: '| admin | {admin_info}Uusi palvelimen salasana katsojille on: ”{highlight}%parameter%{admin_info}”'
+    description: '{info}Asettaa uuden salasanan katsojille'
+
+
+

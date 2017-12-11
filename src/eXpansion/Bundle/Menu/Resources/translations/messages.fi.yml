@@ -1,0 +1,10 @@
+expansion_menu:
+  menu: "Valikko:"
+  menu_open: "Valikko"
+  menu_close: "Sulje"
+  admin:
+    label: Ylläpito
+  general:
+    label: Yleinen
+    help: Ohje
+

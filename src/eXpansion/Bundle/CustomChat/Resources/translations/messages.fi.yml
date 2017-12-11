@@ -1,0 +1,6 @@
+expansion_customchat:
+  chat:
+    enabled: "|admin| {admin_info}%admin% %nickname% {variable}sallii {admin_info}julkisen chat-viestinnän."
+    disabled: "|admin| {admin_info}%admin% %nickname% {variable}kieltää {admin_info}julkisen chat-viestinnän."
+    invalid: '| info | {info} argumentti ei kelpaa. Kelvollisia arvoja ovat: %variable%enable, disable, on, off'
+    disabledstate: "| info | {info} julkinen chat-viestintä on poistettu käytöstä tällä hetkellä. Sinulla on kuitenkin oikeus lähettää henkilökohtaisia viestejä."

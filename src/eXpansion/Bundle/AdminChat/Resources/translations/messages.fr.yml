@@ -1,34 +1,34 @@
 expansion_admin_chat:
   restartmap:
-    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}restarts the map!'
-    description: 'Replay current map.'
-    label: "Restart Map"
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}redémarré la carte !'
+    description: 'Rejoue la carte courante.'
+    label: "Redémarrer la carte"
   cancelvote:
-    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}cancels the vote!'
-    description: '{info} cancels the current progressing vote.'
-    label: "Cancel current vote"
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}annule le vote!'
+    description: '{info} annule le vote courant.'
+    label: "Annuler le vote courant"
   nextmap:
-    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}skips the map!'
-    description: '{info} Skip current map & go to the next map.'
-    label: "Skip map"
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}passe la carte!'
+    description: '{info} passer la carte actuelle & aller à la prochaine carte.'
+    label: "Passer la carte"
   setservername:
-    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}changes the server name. New server name is {highlight}%parameter%'
-    description: '{info}Change the name of the server.'
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}changé le nom du serveur. Nouveau nom du serveur est {highlight}%parameter%'
+    description: '{info}Change le nom du serveur.'
   setservercomment:
-    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}changes the server comment. New server comment is {highlight}%parameter%'
-    description: '{info}Change the comment of the server.'
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}changé le commentaire du serveur. Nouveau commentaire du serveur est {highlight}%parameter%'
+    description: '{info}Change le commentaire du serveur.'
   kick:
-    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}kicks {highlight}%player% {admin_info}. Reason: {highlight}%reason%'
-    description: '{info}Kick a player from the server.'
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}exclut {highlight}%player% {admin_info}. Raison : {highlight}%reason%'
+    description: '{info}Exclut un joueur du serveur.'
   ban:
-    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}bans {highlight}%player% {admin_info}. Reason: {highlight}%reason%'
-    description: '{info}Ban a player from the server.'
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}bannis {highlight}%player% {admin_info}. Raison : {highlight}%reason%'
+    description: '{info}Bannir un joueur du serveur.'
   unban:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}unbans player with login: {highlight}%parameter%'
     description: '{info}Unban a player from the server.'
   cleanbanlist:
-    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} cleans the ban list.'
-    description: '{info}Cleans the ban list.'
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} vide la liste des bannis.'
+    description: '{info}Vide la liste des bannis.'
   black:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}blacklists {highlight}%player% {admin_info}. Reason: {highlight}%reason%'
     description: '{info}Blacklist a player for the server.'
@@ -45,35 +45,35 @@ expansion_admin_chat:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}loads black list. File name: {highlight}%parameter%'
     description: '{info}Loads black list. File is relative to server config directory.'
   getserverplanets:
-    msg: '|info| {admin_info}Server has {highlight}%return% {admin_info}planets.'
-    description: '{info}Show server planets.'
+    msg: '| info | {admin_info}Le serveur a {highlight}%return% {admin_info}planètes.'
+    description: '{info}Afficher le nombre de Planètes de serveur.'
   ignore:
-    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}ignores player with login: {highlight}%parameter%'
-    description: '{info}Ignore (mute) players public chat messages.'
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}ignoré le joueur : {highlight}%parameter%'
+    description: '{info}Ignore(mute) message public des joueurs.'
   unignore:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}unignores {highlight}%parameter%'
     description: '{info}Unignore (allow) players public chat messages.'
   addguest:
-    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}adds {highlight}%parameter% to guest list.'
-    description: '{info}Add player to guest list. Guests can enter server without typing password.'
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}ajoute {highlight}%parameter% à la liste des invités.'
+    description: '{info}Ajoute un joueur à la liste des invités. Invités peuvent entrer le serveur sans avoir à taper de mot de passe.'
   removequest:
-    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}removes {highlight}%parameter% from guest list.'
-    description: '{info}Remove player from quest list.'
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}enlevé {highlight}%parameter% de la liste des invités.'
+    description: '{info}Enlevé le joueur de liste des invités.'
   cleanguestlist:
-    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} cleans the quest list.'
-    description: '{info}Cleans the quest list.'
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} vide la liste des invités.'
+    description: '{info}Vide la liste des invités.'
   saveguestlist:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}saved guest list. File name: {highlight}%parameter%'
-    description: '{info}Saves guest list to server. File is relative to server config directory.'
+    description: '{info}Sauvegarde liste des invités au serveur. Fichier est relatif au répertoire de configuration de serveur.'
   loadguestlist:
-    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}loads guest list. File name: {highlight}%parameter%'
-    description: '{info}Loads guest list. File is relative to server config directory.'
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}chargé la liste des invités. Nom du fichier : {highlight}%parameter%'
+    description: '{info}Chargé liste des invités. Fichier est relatif au répertoire de configuration de serveur.'
   setserverpasswordforplayer:
-    msg: '|admin| {admin_info}New join password for server is: "{highlight}%parameter%{admin_info}"'
-    description: '{info}Sets new server password'
+    msg: '|admin| {admin_info}Nouveau mot de passe pour joindre le serveur est : « {highlight}%parameter%{admin_info} »'
+    description: '{info}Configure un nouveau mot de passe serveur'
   ssetserverpasswordforspectator:
-    msg: '|admin| {admin_info}New spectators join password for server is: "{highlight}%parameter%{admin_info}"'
-    description: '{info}Sets new specator password'
+    msg: '|admin| {admin_info}Nouveau mot de passe pour les spectateur du serveur est : « {highlight}%parameter%{admin_info} »'
+    description: '{info}Nouveau mot de passe spectateurs'
 
 
 

@@ -1,0 +1,3 @@
+expansion_join_leave_messages:
+  connect: '|server| Uusi yhteys |success| {default}%group% %nickname% {default}({muted}%login%{default}) {variable}%path%{default}.'
+  disconnect: '|server| Yhteys katkaistu |success| {default}%group% %nickname% {default}({muted}%login%{default}) {variable}%path%{default}.'

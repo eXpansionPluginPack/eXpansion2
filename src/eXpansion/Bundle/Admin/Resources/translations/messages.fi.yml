@@ -1,0 +1,21 @@
+expansion_admin:
+  chat:
+    nopermission: "|error| {error}Sinulla ei ole riittävästi oikeuksia tämän suorittamiseen."
+    dedicatedexception: '|error| {error}Pelipalvelimen virhe:{highlight}%message%'
+    removemap: "|admin| {admin_info}%level% %admin% {admin_info}poistaa kartan %map% {admin_info}nykyisestä karttalistasta."
+  gui:
+    button:
+      drop: "poista"
+      clear: "tyhjennä"
+    window:
+      scriptsettings:
+        title: 'Script-asetukset'
+        column:
+          name: 'Asetuksen nimi'
+          value: 'Asetusarvo'
+        button:
+          apply: 'Käytä'
+  menu:
+    server: "Palvelin"
+    server_settings: "Palvelinasetukset"
+    script_settings: "Script-asetukset"
