@@ -35,7 +35,7 @@ class RecordQueryBuilder
         $result->populateRelation('Player');
         RecordTableMap::clearInstancePool();
 
-        return $result;
+        return $result->getData();
     }
 
     /**
@@ -58,6 +58,6 @@ class RecordQueryBuilder
         $result->populateRelation('Player');
         RecordTableMap::clearInstancePool();
 
-        return $result;
+        return $result->getData();
     }
 }
