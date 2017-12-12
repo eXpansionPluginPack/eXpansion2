@@ -5,6 +5,21 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 
 class AppKernel extends Kernel
 {
+    /**
+     * @inheritdoc
+     */
+    public function __construct(string $environment, bool $debug)
+    {
+        parent::__construct($environment, $debug);
+
+        // Force enabling GC.
+        gc_enable();
+        if (!gc_enabled()) {
+            die('Garbage collector couldn\'t be enabled');
+        }
+    }
+
+
     public function registerBundles()
     {
         /* Register symfony bundles & eXpansion core bundles */

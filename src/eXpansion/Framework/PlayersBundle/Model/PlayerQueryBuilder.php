@@ -3,6 +3,7 @@
 namespace eXpansion\Framework\PlayersBundle\Model;
 
 use eXpansion\Framework\PlayersBundle\Model\Map\PlayerTableMap;
+use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Propel;
 
 /**
@@ -24,15 +25,19 @@ class PlayerQueryBuilder
     public function findByLogin($login)
     {
         $playerQuery = PlayerQuery::create();
+        $player = $playerQuery->findOneByLogin($login);
 
-        return $playerQuery->findOneByLogin($login);
+        PlayerTableMap::clearInstancePool();
+        return $player;
     }
 
     public function findAll()
     {
         $playerQuery = PlayerQuery::create();
+        $result = $playerQuery->find()->getData();
 
-        return $playerQuery->find()->getData();
+        PlayerTableMap::clearInstancePool();
+        return $result;
     }
 
     /**
@@ -50,16 +55,21 @@ class PlayerQueryBuilder
      * Save individual player.
      *
      * @param Player $player
+     *
+     * @throws PropelException
      */
     public function save(Player $player)
     {
         $player->save();
+        PlayerTableMap::clearInstancePool();
     }
 
     /**
      * Save multiple player models at the tume
      *
      * @param Player[] $players
+     *
+     * @throws PropelException
      */
     public function saveAll($players)
     {
@@ -71,5 +81,6 @@ class PlayerQueryBuilder
         }
 
         $connection->commit();
+        PlayerTableMap::clearInstancePool();
     }
 }
