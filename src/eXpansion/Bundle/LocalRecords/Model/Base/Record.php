@@ -2,25 +2,26 @@
 
 namespace eXpansion\Bundle\LocalRecords\Model\Base;
 
-use DateTime;
-use Exception;
-use eXpansion\Bundle\LocalRecords\Model\Map\RecordTableMap;
-use eXpansion\Bundle\LocalRecords\Model\Record as ChildRecord;
-use eXpansion\Bundle\LocalRecords\Model\RecordQuery as ChildRecordQuery;
-use eXpansion\Framework\PlayersBundle\Model\Player;
-use eXpansion\Framework\PlayersBundle\Model\PlayerQuery;
-use PDO;
+use \DateTime;
+use \Exception;
+use \PDO;
+use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\BadMethodCallException;
 use Propel\Runtime\Exception\LogicException;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
-use Propel\Runtime\Propel;
 use Propel\Runtime\Util\PropelDateTime;
+use eXpansion\Bundle\LocalRecords\Model\Record as ChildRecord;
+use eXpansion\Bundle\LocalRecords\Model\RecordQuery as ChildRecordQuery;
+use eXpansion\Bundle\LocalRecords\Model\Map\RecordTableMap;
+use eXpansion\Framework\PlayersBundle\Model\Player;
+use eXpansion\Framework\PlayersBundle\Model\PlayerQuery;
 
 /**
  * Base class that represents a row from the 'record' table.
@@ -166,7 +167,7 @@ abstract class Record implements ActiveRecordInterface
     /**
      * Has specified column been modified?
      *
-     * @param  string $col column fully qualified name (TableMap::TYPE_COLNAME), e.g. Book::AUTHOR_ID
+     * @param  string  $col column fully qualified name (TableMap::TYPE_COLNAME), e.g. Book::AUTHOR_ID
      * @return boolean True if $col has been modified.
      */
     public function isColumnModified($col)
@@ -203,7 +204,7 @@ abstract class Record implements ActiveRecordInterface
      */
     public function setNew($b)
     {
-        $this->new = (boolean)$b;
+        $this->new = (boolean) $b;
     }
 
     /**
@@ -222,7 +223,7 @@ abstract class Record implements ActiveRecordInterface
      */
     public function setDeleted($b)
     {
-        $this->deleted = (boolean)$b;
+        $this->deleted = (boolean) $b;
     }
 
     /**
@@ -246,7 +247,7 @@ abstract class Record implements ActiveRecordInterface
      * <code>obj</code> is an instance of <code>Record</code>, delegates to
      * <code>equals(Record)</code>.  Otherwise, returns <code>false</code>.
      *
-     * @param  mixed $obj The object to compare to.
+     * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
      */
     public function equals($obj)
@@ -279,7 +280,7 @@ abstract class Record implements ActiveRecordInterface
     /**
      * Checks the existence of a virtual column in this object
      *
-     * @param  string $name The virtual column name
+     * @param  string  $name The virtual column name
      * @return boolean
      */
     public function hasVirtualColumn($name)
@@ -322,13 +323,13 @@ abstract class Record implements ActiveRecordInterface
     /**
      * Logs a message using Propel::log().
      *
-     * @param  string $msg
-     * @param  int    $priority One of the Propel::LOG_* logging levels
+     * @param  string  $msg
+     * @param  int     $priority One of the Propel::LOG_* logging levels
      * @return boolean
      */
     protected function log($msg, $priority = Propel::LOG_INFO)
     {
-        return Propel::log(get_class($this).': '.$msg, $priority);
+        return Propel::log(get_class($this) . ': ' . $msg, $priority);
     }
 
     /**
@@ -362,10 +363,9 @@ abstract class Record implements ActiveRecordInterface
 
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
-        $serializableProperties = array_diff($cls->getProperties(),
-            $cls->getProperties(\ReflectionProperty::IS_STATIC));
+        $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
 
-        foreach ($serializableProperties as $property) {
+        foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
 
@@ -463,7 +463,7 @@ abstract class Record implements ActiveRecordInterface
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getCreatedAt($format = null)
+    public function getCreatedAt($format = NULL)
     {
         if ($format === null) {
             return $this->created_at;
@@ -483,7 +483,7 @@ abstract class Record implements ActiveRecordInterface
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getUpdatedAt($format = null)
+    public function getUpdatedAt($format = NULL)
     {
         if ($format === null) {
             return $this->updated_at;
@@ -501,7 +501,7 @@ abstract class Record implements ActiveRecordInterface
     public function setId($v)
     {
         if ($v !== null) {
-            $v = (int)$v;
+            $v = (int) $v;
         }
 
         if ($this->id !== $v) {
@@ -521,7 +521,7 @@ abstract class Record implements ActiveRecordInterface
     public function setMapuid($v)
     {
         if ($v !== null) {
-            $v = (string)$v;
+            $v = (string) $v;
         }
 
         if ($this->mapuid !== $v) {
@@ -541,7 +541,7 @@ abstract class Record implements ActiveRecordInterface
     public function setNblaps($v)
     {
         if ($v !== null) {
-            $v = (int)$v;
+            $v = (int) $v;
         }
 
         if ($this->nblaps !== $v) {
@@ -561,7 +561,7 @@ abstract class Record implements ActiveRecordInterface
     public function setScore($v)
     {
         if ($v !== null) {
-            $v = (int)$v;
+            $v = (int) $v;
         }
 
         if ($this->score !== $v) {
@@ -581,7 +581,7 @@ abstract class Record implements ActiveRecordInterface
     public function setNbfinish($v)
     {
         if ($v !== null) {
-            $v = (int)$v;
+            $v = (int) $v;
         }
 
         if ($this->nbfinish !== $v) {
@@ -601,7 +601,7 @@ abstract class Record implements ActiveRecordInterface
     public function setAvgscore($v)
     {
         if ($v !== null) {
-            $v = (int)$v;
+            $v = (int) $v;
         }
 
         if ($this->avgscore !== $v) {
@@ -621,7 +621,7 @@ abstract class Record implements ActiveRecordInterface
     public function setCheckpoints($v)
     {
         if ($v !== null) {
-            $v = (string)$v;
+            $v = (string) $v;
         }
 
         if ($this->checkpoints !== $v) {
@@ -641,7 +641,7 @@ abstract class Record implements ActiveRecordInterface
     public function setPlayerId($v)
     {
         if ($v !== null) {
-            $v = (int)$v;
+            $v = (int) $v;
         }
 
         if ($this->player_id !== $v) {
@@ -660,7 +660,7 @@ abstract class Record implements ActiveRecordInterface
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
-     *                  Empty strings are treated as NULL.
+     *               Empty strings are treated as NULL.
      * @return $this|\eXpansion\Bundle\LocalRecords\Model\Record The current object (for fluent API support)
      */
     public function setCreatedAt($v)
@@ -680,7 +680,7 @@ abstract class Record implements ActiveRecordInterface
      * Sets the value of [updated_at] column to a normalized version of the date/time value specified.
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
-     *                  Empty strings are treated as NULL.
+     *               Empty strings are treated as NULL.
      * @return $this|\eXpansion\Bundle\LocalRecords\Model\Record The current object (for fluent API support)
      */
     public function setUpdatedAt($v)
@@ -718,11 +718,11 @@ abstract class Record implements ActiveRecordInterface
      * for results of JOIN queries where the resultset row includes columns from two or
      * more tables.
      *
-     * @param array   $row        The row returned by DataFetcher->fetch().
-     * @param int     $startcol   0-based offset column which indicates which restultset column to start with.
-     * @param boolean $rehydrate  Whether this object is being re-hydrated from the database.
-     * @param string  $indexType  The index type of $row. Mostly DataFetcher->getIndexType().
-     *                            One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
+     * @param array   $row       The row returned by DataFetcher->fetch().
+     * @param int     $startcol  0-based offset column which indicates which restultset column to start with.
+     * @param boolean $rehydrate Whether this object is being re-hydrated from the database.
+     * @param string  $indexType The index type of $row. Mostly DataFetcher->getIndexType().
+                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                            TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
      * @return int             next starting column
@@ -732,47 +732,37 @@ abstract class Record implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : RecordTableMap::translateFieldName('Id',
-                TableMap::TYPE_PHPNAME, $indexType)];
-            $this->id = (null !== $col) ? (int)$col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : RecordTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : RecordTableMap::translateFieldName('Mapuid',
-                TableMap::TYPE_PHPNAME, $indexType)];
-            $this->mapuid = (null !== $col) ? (string)$col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : RecordTableMap::translateFieldName('Mapuid', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->mapuid = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : RecordTableMap::translateFieldName('Nblaps',
-                TableMap::TYPE_PHPNAME, $indexType)];
-            $this->nblaps = (null !== $col) ? (int)$col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : RecordTableMap::translateFieldName('Nblaps', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->nblaps = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : RecordTableMap::translateFieldName('Score',
-                TableMap::TYPE_PHPNAME, $indexType)];
-            $this->score = (null !== $col) ? (int)$col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : RecordTableMap::translateFieldName('Score', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->score = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : RecordTableMap::translateFieldName('Nbfinish',
-                TableMap::TYPE_PHPNAME, $indexType)];
-            $this->nbfinish = (null !== $col) ? (int)$col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : RecordTableMap::translateFieldName('Nbfinish', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->nbfinish = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : RecordTableMap::translateFieldName('Avgscore',
-                TableMap::TYPE_PHPNAME, $indexType)];
-            $this->avgscore = (null !== $col) ? (int)$col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : RecordTableMap::translateFieldName('Avgscore', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->avgscore = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : RecordTableMap::translateFieldName('Checkpoints',
-                TableMap::TYPE_PHPNAME, $indexType)];
-            $this->checkpoints = (null !== $col) ? (string)$col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : RecordTableMap::translateFieldName('Checkpoints', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->checkpoints = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : RecordTableMap::translateFieldName('PlayerId',
-                TableMap::TYPE_PHPNAME, $indexType)];
-            $this->player_id = (null !== $col) ? (int)$col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : RecordTableMap::translateFieldName('PlayerId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->player_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : RecordTableMap::translateFieldName('CreatedAt',
-                TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : RecordTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : RecordTableMap::translateFieldName('UpdatedAt',
-                TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : RecordTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -788,8 +778,7 @@ abstract class Record implements ActiveRecordInterface
             return $startcol + 10; // 10 = RecordTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object',
-                '\\eXpansion\\Bundle\\LocalRecords\\Model\\Record'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\eXpansion\\Bundle\\LocalRecords\\Model\\Record'), 0, $e);
         }
     }
 
@@ -818,8 +807,8 @@ abstract class Record implements ActiveRecordInterface
      *
      * This will only work if the object has been saved and has a valid primary key set.
      *
-     * @param      boolean             $deep (optional) Whether to also de-associated any related objects.
-     * @param      ConnectionInterface $con  (optional) The ConnectionInterface connection to use.
+     * @param      boolean $deep (optional) Whether to also de-associated any related objects.
+     * @param      ConnectionInterface $con (optional) The ConnectionInterface connection to use.
      * @return void
      * @throws PropelException - if this object is deleted, unsaved or doesn't have pk match in db
      */
@@ -840,8 +829,7 @@ abstract class Record implements ActiveRecordInterface
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildRecordQuery::create(null,
-            $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildRecordQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -1008,39 +996,39 @@ abstract class Record implements ActiveRecordInterface
 
         $this->modifiedColumns[RecordTableMap::COL_ID] = true;
         if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.RecordTableMap::COL_ID.')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . RecordTableMap::COL_ID . ')');
         }
 
-        // check the columns in natural order for more readable SQL queries
+         // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(RecordTableMap::COL_ID)) {
-            $modifiedColumns[':p'.$index++] = 'id';
+            $modifiedColumns[':p' . $index++]  = 'id';
         }
         if ($this->isColumnModified(RecordTableMap::COL_MAPUID)) {
-            $modifiedColumns[':p'.$index++] = 'mapUid';
+            $modifiedColumns[':p' . $index++]  = 'mapUid';
         }
         if ($this->isColumnModified(RecordTableMap::COL_NBLAPS)) {
-            $modifiedColumns[':p'.$index++] = 'nbLaps';
+            $modifiedColumns[':p' . $index++]  = 'nbLaps';
         }
         if ($this->isColumnModified(RecordTableMap::COL_SCORE)) {
-            $modifiedColumns[':p'.$index++] = 'score';
+            $modifiedColumns[':p' . $index++]  = 'score';
         }
         if ($this->isColumnModified(RecordTableMap::COL_NBFINISH)) {
-            $modifiedColumns[':p'.$index++] = 'nbFinish';
+            $modifiedColumns[':p' . $index++]  = 'nbFinish';
         }
         if ($this->isColumnModified(RecordTableMap::COL_AVGSCORE)) {
-            $modifiedColumns[':p'.$index++] = 'avgScore';
+            $modifiedColumns[':p' . $index++]  = 'avgScore';
         }
         if ($this->isColumnModified(RecordTableMap::COL_CHECKPOINTS)) {
-            $modifiedColumns[':p'.$index++] = 'checkpoints';
+            $modifiedColumns[':p' . $index++]  = 'checkpoints';
         }
         if ($this->isColumnModified(RecordTableMap::COL_PLAYER_ID)) {
-            $modifiedColumns[':p'.$index++] = 'player_id';
+            $modifiedColumns[':p' . $index++]  = 'player_id';
         }
         if ($this->isColumnModified(RecordTableMap::COL_CREATED_AT)) {
-            $modifiedColumns[':p'.$index++] = 'created_at';
+            $modifiedColumns[':p' . $index++]  = 'created_at';
         }
         if ($this->isColumnModified(RecordTableMap::COL_UPDATED_AT)) {
-            $modifiedColumns[':p'.$index++] = 'updated_at';
+            $modifiedColumns[':p' . $index++]  = 'updated_at';
         }
 
         $sql = sprintf(
@@ -1078,12 +1066,10 @@ abstract class Record implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->player_id, PDO::PARAM_INT);
                         break;
                     case 'created_at':
-                        $stmt->bindValue($identifier,
-                            $this->created_at ? $this->created_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                        $stmt->bindValue($identifier, $this->created_at ? $this->created_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                     case 'updated_at':
-                        $stmt->bindValue($identifier,
-                            $this->updated_at ? $this->updated_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                        $stmt->bindValue($identifier, $this->updated_at ? $this->updated_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1124,9 +1110,9 @@ abstract class Record implements ActiveRecordInterface
      *
      * @param      string $name name
      * @param      string $type The type of fieldname the $name is of:
-     *                          one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
-     *                          TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
-     *                          Defaults to TableMap::TYPE_PHPNAME.
+     *                     one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
+     *                     TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
+     *                     Defaults to TableMap::TYPE_PHPNAME.
      * @return mixed Value of field.
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
@@ -1189,21 +1175,17 @@ abstract class Record implements ActiveRecordInterface
      * You can specify the key type of the array by passing one of the class
      * type constants.
      *
-     * @param     string  $keyType                (optional) One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME,
-     *                                            TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
-     *                                            Defaults to TableMap::TYPE_PHPNAME.
+     * @param     string  $keyType (optional) One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME,
+     *                    TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
+     *                    Defaults to TableMap::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
-     * @param     array   $alreadyDumpedObjects   List of objects to skip to avoid recursion
-     * @param     boolean $includeForeignObjects  (optional) Whether to include hydrated related objects. Default to FALSE.
+     * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray(
-        $keyType = TableMap::TYPE_PHPNAME,
-        $includeLazyLoadColumns = true,
-        $alreadyDumpedObjects = array(),
-        $includeForeignObjects = false
-    ) {
+    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
+    {
 
         if (isset($alreadyDumpedObjects['Record'][$this->hashCode()])) {
             return '*RECURSION*';
@@ -1249,7 +1231,7 @@ abstract class Record implements ActiveRecordInterface
                         $key = 'Player';
                 }
 
-                $result[$key] = $this->aPlayer->toArray($keyType, $includeLazyLoadColumns, $alreadyDumpedObjects, true);
+                $result[$key] = $this->aPlayer->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -1261,10 +1243,10 @@ abstract class Record implements ActiveRecordInterface
      *
      * @param  string $name
      * @param  mixed  $value field value
-     * @param  string $type  The type of fieldname the $name is of:
-     *                       one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
-     *                       TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
-     *                       Defaults to TableMap::TYPE_PHPNAME.
+     * @param  string $type The type of fieldname the $name is of:
+     *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
+     *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
+     *                Defaults to TableMap::TYPE_PHPNAME.
      * @return $this|\eXpansion\Bundle\LocalRecords\Model\Record
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
@@ -1278,7 +1260,7 @@ abstract class Record implements ActiveRecordInterface
      * Sets a field from the object by Position as specified in the xml schema.
      * Zero-based.
      *
-     * @param  int   $pos   position in xml schema
+     * @param  int $pos position in xml schema
      * @param  mixed $value field value
      * @return $this|\eXpansion\Bundle\LocalRecords\Model\Record
      */
@@ -1373,7 +1355,7 @@ abstract class Record implements ActiveRecordInterface
         }
     }
 
-    /**
+     /**
      * Populate the current object from a string, using a given parser format
      * <code>
      * $book = new Book();
@@ -1385,9 +1367,9 @@ abstract class Record implements ActiveRecordInterface
      * TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      * The default key type is the column's TableMap::TYPE_PHPNAME.
      *
-     * @param mixed  $parser  A AbstractParser instance,
-     *                        or a format name ('XML', 'YAML', 'JSON', 'CSV')
-     * @param string $data    The source data to import from
+     * @param mixed $parser A AbstractParser instance,
+     *                       or a format name ('XML', 'YAML', 'JSON', 'CSV')
+     * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
      * @return $this|\eXpansion\Bundle\LocalRecords\Model\Record The current object, for fluid interface
@@ -1521,9 +1503,9 @@ abstract class Record implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object  $copyObj  An object of \eXpansion\Bundle\LocalRecords\Model\Record (or compatible) type.
+     * @param      object $copyObj An object of \eXpansion\Bundle\LocalRecords\Model\Record (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @param      boolean $makeNew  Whether to reset autoincrement PKs and make the object new.
+     * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
@@ -1539,7 +1521,7 @@ abstract class Record implements ActiveRecordInterface
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setId(null); // this is a auto-increment column, so set to default value
+            $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1575,7 +1557,7 @@ abstract class Record implements ActiveRecordInterface
     public function setPlayer(Player $v = null)
     {
         if ($v === null) {
-            $this->setPlayerId(null);
+            $this->setPlayerId(NULL);
         } else {
             $this->setPlayerId($v->getId());
         }
@@ -1666,7 +1648,7 @@ abstract class Record implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string)$this->exportTo(RecordTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(RecordTableMap::DEFAULT_STRING_FORMAT);
     }
 
     // timestampable behavior
@@ -1693,7 +1675,6 @@ abstract class Record implements ActiveRecordInterface
         if (is_callable('parent::preSave')) {
             return parent::preSave($con);
         }
-
         return true;
     }
 
@@ -1718,7 +1699,6 @@ abstract class Record implements ActiveRecordInterface
         if (is_callable('parent::preInsert')) {
             return parent::preInsert($con);
         }
-
         return true;
     }
 
@@ -1743,7 +1723,6 @@ abstract class Record implements ActiveRecordInterface
         if (is_callable('parent::preUpdate')) {
             return parent::preUpdate($con);
         }
-
         return true;
     }
 
@@ -1768,7 +1747,6 @@ abstract class Record implements ActiveRecordInterface
         if (is_callable('parent::preDelete')) {
             return parent::preDelete($con);
         }
-
         return true;
     }
 

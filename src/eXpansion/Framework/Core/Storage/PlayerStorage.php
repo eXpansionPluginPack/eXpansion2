@@ -2,14 +2,15 @@
 
 namespace eXpansion\Framework\Core\Storage;
 
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
+use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\Data\PlayerFactory;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\InvalidArgumentException;
 use Maniaplanet\DedicatedServer\Xmlrpc\FaultException;
-use Maniaplanet\DedicatedServer\Xmlrpc\UnknownPlayerException;
+use Psr\Log\LoggerInterface;
 
 /**
  * PlayerStorage keeps in storage player data in order to minimize amounts of calls done to the dedicated server.
@@ -35,24 +36,40 @@ class PlayerStorage implements ListenerInterfaceMpLegacyPlayer, ListenerInterfac
 
     /** @var array */
     protected $playersToRemove = [];
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+    /**
+     * @var Console
+     */
+    private $console;
 
     /**
      * PlayerDataProvider constructor.
      *
-     * @param Connection $connection
-     * @param PlayerFactory $playerFactory
+     * @param Connection      $connection
+     * @param PlayerFactory   $playerFactory
+     * @param LoggerInterface $logger
+     * @param Console         $console
      */
-    public function __construct(Connection $connection, PlayerFactory $playerFactory)
-    {
+    public function __construct(
+        Connection $connection,
+        PlayerFactory $playerFactory,
+        LoggerInterface $logger,
+        Console $console
+    ) {
         $this->connection = $connection;
         $this->playerFactory = $playerFactory;
+        $this->logger = $logger;
+        $this->console = $console;
     }
 
     /**
      * Get information about a player.
      *
      * @param string $login
-     * @param bool $forceNew
+     * @param bool   $forceNew
      *
      * @return Player
      */
@@ -65,13 +82,13 @@ class PlayerStorage implements ListenerInterfaceMpLegacyPlayer, ListenerInterfac
 
                 return $this->playerFactory->createPlayer($playerInformation, $playerDetails);
             } catch (InvalidArgumentException $e) {
-                // @todo log unknown player error
-                echo "unknown player $login\n";
+                $this->logger->error("Login unknown: $login", ["exception" => $e]);
+                $this->console->writeln('$f00Login Unknown: '.$login.' dedicated server said: $fff'.$e->getMessage());
 
                 return new Player();
             } catch (FaultException $ex) {
-                // @todo log unknown player error
-                echo "unknown player $login\n";
+                $this->logger->error("Login unknown: $login", ["exception" => $ex]);
+                $this->console->writeln('$f00Login Unknown: '.$login.' dedicated server said: $fff'.$ex->getMessage());
 
                 return new Player();
             }
