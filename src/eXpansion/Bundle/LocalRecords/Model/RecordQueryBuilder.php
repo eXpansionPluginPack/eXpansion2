@@ -2,12 +2,14 @@
 
 namespace eXpansion\Bundle\LocalRecords\Model;
 
+use eXpansion\Bundle\LocalRecords\Model\Map\RecordTableMap;
+
 /**
  * Class RecordQueryBuilder
  *
  * @author    de Cramer Oliver<oliverde8@gmail.com>
  * @copyright 2017 eXpansion
- * @package eXpansion\Bundle\LocalRecords\Query
+ * @package   eXpansion\Bundle\LocalRecords\Query
  */
 class RecordQueryBuilder
 {
@@ -31,6 +33,7 @@ class RecordQueryBuilder
 
         $result = $query->find();
         $result->populateRelation('Player');
+        RecordTableMap::clearInstancePool();
 
         return $result->getData();
     }
@@ -53,6 +56,7 @@ class RecordQueryBuilder
 
         $result = $query->find();
         $result->populateRelation('Player');
+        RecordTableMap::clearInstancePool();
 
         return $result->getData();
     }

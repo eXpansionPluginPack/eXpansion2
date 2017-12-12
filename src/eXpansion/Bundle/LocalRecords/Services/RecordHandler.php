@@ -5,6 +5,7 @@ namespace eXpansion\Bundle\LocalRecords\Services;
 use eXpansion\Bundle\LocalRecords\Model\Map\RecordTableMap;
 use eXpansion\Bundle\LocalRecords\Model\Record;
 use eXpansion\Bundle\LocalRecords\Model\RecordQueryBuilder;
+use eXpansion\Framework\PlayersBundle\Model\Map\PlayerTableMap;
 use eXpansion\Framework\PlayersBundle\Storage\PlayerDb;
 use Propel\Runtime\Propel;
 
@@ -53,13 +54,13 @@ class RecordHandler
     protected $playerDb;
 
     /** @var Record[] */
-    protected $records;
+    protected $records = [];
 
     /** @var Record[] */
-    protected $recordsPerPlayer;
+    protected $recordsPerPlayer = [];
 
     /** @var int[] */
-    protected $positionPerPlayer;
+    protected $positionPerPlayer = [];
 
     /** @var int */
     protected $currentNbLaps;
@@ -71,9 +72,9 @@ class RecordHandler
      * RecordHandler constructor.
      *
      * @param RecordQueryBuilder $recordQueryBuilder
-     * @param PlayerDb $playerDb
-     * @param int $nbRecords
-     * @param string $ordering
+     * @param PlayerDb           $playerDb
+     * @param int                $nbRecords
+     * @param string             $ordering
      */
     public function __construct(
         RecordQueryBuilder $recordQueryBuilder,
@@ -122,11 +123,22 @@ class RecordHandler
     /**
      * Load records for a certain map.
      *
-     * @param $mapUid
+     * @param string  $mapUid
      * @param integer $nbLaps
+     * @throws \Propel\Runtime\Exception\PropelException
      */
     public function loadForMap($mapUid, $nbLaps)
     {
+        foreach ($this->records as $record) {
+            unset($record);
+        }
+
+        foreach ($this->recordsPerPlayer as $record) {
+            unset($record);
+        }
+
+        RecordTableMap::clearInstancePool();
+
         $this->recordsPerPlayer = [];
         $this->positionPerPlayer = [];
 
@@ -149,6 +161,7 @@ class RecordHandler
      * @param $mapUid
      * @param $nbLaps
      * @param $logins
+     * @throws \Propel\Runtime\Exception\PropelException
      */
     public function loadForPlayers($mapUid, $nbLaps, $logins)
     {
@@ -165,30 +178,48 @@ class RecordHandler
 
     /**
      * Save all new records.
+     * @param bool $releaseRecords
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function save()
+    public function save($releaseRecords = true)
     {
+        PlayerTableMap::clearInstancePool();
+        RecordTableMap::clearInstancePool();
+
         $con = Propel::getWriteConnection(RecordTableMap::DATABASE_NAME);
         $con->beginTransaction();
 
         foreach ($this->recordsPerPlayer as $record) {
             $record->save();
+            if ($releaseRecords) {
+                $record->setPlayer(null);
+                unset($record);
+            }
+
+        }
+
+        foreach ($this->records as $record) {
+            if ($releaseRecords) {
+                $record->setPlayer(null);
+                unset($record);
+            }
         }
 
         $con->commit();
 
-        RecordTableMap::clearRelatedInstancePool();
         RecordTableMap::clearInstancePool();
+
     }
 
     /**
      * Add a new record
      *
      * @param string $login
-     * @param int $score
-     * @param int[] $checkpoints
+     * @param int    $score
+     * @param int[]  $checkpoints
      *
      * @return array|null Data for the new records.
+     * @throws \Propel\Runtime\Exception\PropelException
      */
     public function addRecord($login, $score, $checkpoints)
     {
@@ -301,7 +332,7 @@ class RecordHandler
     /**
      * Update Records statistics.
      *
-     * @param Record $record
+     * @param Record         $record
      * @param        integer $score
      */
     protected function updateRecordStats(Record $record, $score)
@@ -324,7 +355,7 @@ class RecordHandler
     }
 
     /**
-     * @param int $newScore
+     * @param int    $newScore
      * @param Record $record
      *
      * @return bool
