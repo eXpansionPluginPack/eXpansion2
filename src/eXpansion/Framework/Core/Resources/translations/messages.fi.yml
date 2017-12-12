@@ -1,21 +1,19 @@
 expansion_core:
-  test: "Tämä on testikäännös : %test%"
-  test_color: "{test}Tämä on testikäännös : %test%"
-  test_glyph: "|test|Tämä on testikäännös : %test%"
-  test_color_glyph: "|test|{test}Tämä on testikäännös : %test%"
-
+  test: 'Tämä on testikäännös : %test%'
+  test_color: '{test}tämä on testikäännös : %test%'
+  test_glyph: '|test|Tämä on testikäännös : %test%'
+  test_color_glyph: '{test}|test|Tämä on testikäännös : %test%'
   chat_commands:
-    wrong_chat: "{error}Komentoa ei löydy. {info}Kirjoita /help nähdäksesi kaikki komennot."
-    no_description: "{info} Selitteen teksti puuttuu."
-    no_help: "{info}Ohjeen teksti puuttuu."
-
+    wrong_chat: "{error}Chat-komentoa ei löydy. {info}Kirjoita /help nähdäksesi kaikki komennot."
+    no_description: "{info}Komennolla ei ole kuvausta."
+    no_help: "{info}Komennolla ei ole ohjetta."
   windows:
-      chat_commands:
-        title: Chat komennot
-        column_command: komento
-        column_description: selite
-      chat_commands_description:
-        title: Chat komentojen selite
-        aliases: Aliakset
-        description: Selite
-        help: Ohje
+    chat_commands:
+      title: Chatin komennot
+      column_command: Komento
+      column_description: Kuvaus
+    chat_commands_description:
+      title: Komennon kuvaus
+      aliases: Aliakset
+      description: Kuvaus
+      help: Ohje

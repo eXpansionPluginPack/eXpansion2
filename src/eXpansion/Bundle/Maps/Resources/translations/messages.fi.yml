@@ -1,0 +1,75 @@
+expansion_jukebox:
+  chat:
+    addmap: '|info| {variable}%nickname% {info}lisäsi kartan {variable}%mapname%{info} jukeboksiin. Jonon pituus: {variable}%length%'
+    removemap: '|info| {info}kartta poistettu jukeboksista {variable}%mapname%{info} toiveen esitti {variable}%nickname%{info}. Jonon pituus: {variable}%length%'
+    noremove: "|warning| {warning}Et voi poistaa karttaa %mapname% {warning}jonosta."
+    noadd: "|warning| {warning}Et voi lisätä karttaa %mapname% {warning}jonoon, sillä sinulla on jo kartta jonossa."
+    nomap: '|error| {error}Yhtään karttaa ei löytynyt.'
+    nopermission: "|error| {error}Sinulla ei ole riittävästi oikeuksia jukeboksin tyhjäämiseen."
+    clear: "|admin| {admin_info}%adminlevel% %admin% {admin_info} tyhjentää jukebox jonon!"
+    nextjbmap: '|info| {info}Seuraava kartta: {variable}%mapname%{info} tekijä {variable}%mapauthor% {info} toivonut {variable}%nickname%{info}. Jonon pituus: {variable}%length%'
+    nextmap: '|info| {info}Seuraava kartta {variable}%name%{info} tekijä {variable}%author%'
+    beginmap: '|info| {info}Pelissä nyt {variable}%name%{info} tekijä {variable}%author%'
+  command:
+    jukebox:
+      help: 'käyttö /jukebox :number: tai /jukebox drop, ylläpitäjillle myös /jukebox clear'
+      description: "numeroarvo lisää karttan indeksillä jukeboksiin. sanalla ”drop” voit poistaa toiveesi ja ylläpitäjät: 'clear' tyhjentää kaikki kartat jonosta"
+expansion_mx:
+  command:
+    add:
+      description: "Lisää kartta Mania-Exchangesta. käyttö //add 3 tm tai //add 3 sm"
+      mxid: "numerollinen arvo Mania-Exchange kartan id"
+      site: "hyväksyy \"tm\" tai \"sm\""
+    remove:
+      description: "poistaa nykyisen kartan tai kartan indeksin numerolla"
+      index: "numerollinen arvo /maps-komennosta tai \"this\""
+  chat:
+    nopermission: "|error| {error}Oikeutesi eivät riitä lisätä karttaa Mania-Exchangesta."
+    apierror: '|error| {error}Mania-Exchange Api-virhe: "{highlight}%message% {error}" ({highlight}%status%{error})'
+    httperror: '|error| {error}Mania-Exchange Http-virhe: "{highlight}%message% {error}" ({highlight}%status%{error})'
+    decline: "|admin| {error}Kartan tekijä on kieltänyt tämän kartan lataamisen."
+    success: "|admin| {info}Kartta {variable}%mapname% {info}tekijä {variable}%mapauthor% {info}lisätty onnistuneesti Mania-Exchangesta."
+    start: "|admin| {info}Lataus alkaa kartalle {highlight}%id% {info}peli: {highlight}%site% {info}Mania-Exchange."
+    fail: "|error| {error}Kartta ei ole yhteensopiva palvelimen nykyiseen titlepackkiin tai asetuksiin! Karttaa ei ole lisätty!"
+    dedicatedexception: '|error| {error}Pelipalvelimen virhe:{highlight}%message%'
+    exception: '|error| {error}Virhe: {highlight}%message%'
+  gui:
+    mxsearch:
+      title: 'Mania-Exchange: Haku'
+      button:
+        install: "asenna"
+      column:
+        index: "#"
+        name: "Nimi"
+        author: "Tekijä"
+        envir: "Ymp."
+        awards: '$ff0🏆'
+        length: "Pituus"
+        style: "Tyyli"
+        add: "Asennus"
+expansion_maps:
+  chat:
+    nopermission: "|error| {error}Sinulla ei ole riittävästi oikeuksia tämän suorittamiseen."
+    dedicatedexception: '|error| {error}Pelipalvelimen virhe:{highlight}%message%'
+    removemap: "|admin| {admin_info}%level% %admin% {admin_info}poistaa kartan %map% {admin_info}nykyisestä karttalistasta."
+  gui:
+    button:
+      drop: "poista"
+      clear: "tyhjennä"
+    window:
+      title: 'Palvelimen kartat'
+      jbtitle: 'Jukeboksi'
+      column:
+        index: '#'
+        name: 'Nimi'
+        author: 'Tekijä'
+        goldtime: 'Aika'
+        nickname: 'Käyttäjänimi'
+        drop: 'Poista'
+        wish: 'Lisää'
+        remove: "Poista"
+  menu:
+    label: "Kartat"
+    list: "Karttaluettelo"
+    jukebox: "Jukeboksi"
+    searchmx: "Hae Mania-Exchangesta"

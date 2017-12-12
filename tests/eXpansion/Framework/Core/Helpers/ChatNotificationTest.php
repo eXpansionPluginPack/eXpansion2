@@ -52,15 +52,12 @@ class ChatNotificationTest extends TestCore
         $translate = [
             0 => ['Lang' => 'fr', 'Text' => '$z' . $colorCode . 'Ceci est une trad de test : Toto'],
             1 => ['Lang' => 'de', 'Text' => '$z' . $colorCode . 'This is a test translation : Toto'],
-            2 => ['Lang' => 'fi', 'Text' => '$z' . $colorCode . 'Tämä on testikäännös : Toto'],
-            3 => ['Lang' => 'nl', 'Text' => '$z' . $colorCode . 'This is a test translation : Toto'],
-            4 => ['Lang' => 'en', 'Text' => '$z' . $colorCode . 'This is a test translation : Toto'],
         ];
 
         $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
         $dedicatedConnection->expects($this->once())
             ->method('chatSendServerMessage')
-            ->with($translate, null);
+            ->with(new \PHPUnit_Framework_Constraint_ArraySubset($translate), null);
 
         $player = new Player();
         $player->merge(['language' => 'en']);
@@ -78,16 +75,13 @@ class ChatNotificationTest extends TestCore
         $translate = [
             0 => ['Lang' => 'fr', 'Text' => '$z' . $colorCode . 'Ceci est une trad de test : Toto'],
             1 => ['Lang' => 'de', 'Text' => '$z' . $colorCode . 'This is a test translation : Toto'],
-            2 => ['Lang' => 'fi', 'Text' => '$z' . $colorCode . 'Tämä on testikäännös : Toto'],
-            3 => ['Lang' => 'nl', 'Text' => '$z' . $colorCode . 'This is a test translation : Toto'],
-            4 => ['Lang' => 'en', 'Text' => '$z' . $colorCode . 'This is a test translation : Toto'],
         ];
 
 
         $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
         $dedicatedConnection->expects($this->once())
             ->method('chatSendServerMessage')
-            ->with($translate, 'toto1,toto2');
+            ->with(new \PHPUnit_Framework_Constraint_ArraySubset($translate), 'toto1,toto2');
 
         $chatNotification = $this->getChatNotificationHelper();
         $chatNotification->sendMessage('expansion_core.test_color', ['toto1', 'toto2'], ['%test%' => 'Toto']);

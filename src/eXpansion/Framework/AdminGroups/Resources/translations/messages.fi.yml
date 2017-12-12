@@ -1,0 +1,3 @@
+expansion_admingroups:
+  chat_commands:
+    no_permission: "{error}Ei tarpeeksi oikeuksia käyttää tätä chat-komentoa."
