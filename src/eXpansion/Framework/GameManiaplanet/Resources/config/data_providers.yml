@@ -136,7 +136,7 @@ services:
         tags:
             - {name: 'expansion.dataprovider', provider: "mp.legacy.bill", interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyBill}
             - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
-            - {name: 'expansion.dataprovider.listener', event_name: BillUpdated, method: BillUpdated}
+            - {name: 'expansion.dataprovider.listener', event_name: BillUpdated, method: onBillUpdated}
 
 
     expansion.framework.core.data_providers.script_data_provider:

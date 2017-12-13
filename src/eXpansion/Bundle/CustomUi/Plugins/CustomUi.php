@@ -2,14 +2,13 @@
 
 namespace eXpansion\Bundle\CustomUi\Plugins;
 
-use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
+use eXpansion\Bundle\CustomUi\Plugins\Gui\ChatHelperWidget;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
+use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
-use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use Maniaplanet\DedicatedServer\Connection;
 
 
@@ -21,17 +20,33 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
      * @var PlayerStorage
      */
     private $playerStorage;
+    /**
+     * @var Group
+     */
+    private $players;
+    /**
+     * @var ChatHelperWidget
+     */
+    private $chatHelperWidget;
 
     /**
      * CustomUi constructor.
      *
-     * @param Connection $connection
-     * @param PlayerStorage $playerStorage
+     * @param Connection       $connection
+     * @param PlayerStorage    $playerStorage
+     * @param Group            $players
+     * @param ChatHelperWidget $chatHelperWidget
      */
-    public function __construct(Connection $connection, PlayerStorage $playerStorage)
-    {
+    public function __construct(
+        Connection $connection,
+        PlayerStorage $playerStorage,
+        Group $players,
+        ChatHelperWidget $chatHelperWidget
+    ) {
         $this->connection = $connection;
         $this->playerStorage = $playerStorage;
+        $this->players = $players;
+        $this->chatHelperWidget = $chatHelperWidget;
     }
 
     /**
@@ -136,6 +151,8 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
 EOL;
 
         $this->connection->triggerModeScriptEvent('Trackmania.UI.SetProperties', [$properties]);
+        $this->chatHelperWidget->create($this->players);
+
     }
 
     /**

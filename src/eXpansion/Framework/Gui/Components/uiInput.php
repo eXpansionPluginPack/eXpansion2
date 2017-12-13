@@ -31,6 +31,9 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
 
     protected $textFormat = "Basic";
 
+    /** @var null|string  */
+    protected $id = null;
+
     public function __construct($name, $default = "", $width = 30, $textFormat = "Basic")
     {
         $this->name = $name;
@@ -66,15 +69,17 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
 
         $input = new Entry();
         $input->setSize($this->width, $this->height)
-            ->setPosition(0, -$this->height / 2)
+            ->setPosition(0, 0)
             ->setDefault($this->default)
             ->setSelectText(true)
-            ->setAlign("left", "center")
+            ->setAlign("left", "top")
             ->setAreaColor("0005")
             ->setAreaFocusColor('000a')
             ->setTextFormat($this->textFormat)
             ->setName($this->name)
-            ->setTextSize(2);
+            ->setTextSize(2)
+            ->setScriptEvents(true)
+            ->setId($this->id);
         if ($this->action) {
             $input->addDataAttribute("action", $this->action);
         }
@@ -225,5 +230,21 @@ EOL;
         $this->action = $action;
 
         return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param null|string $id
+     */
+    public function setId(string $id)
+    {
+        $this->id = $id;
     }
 }

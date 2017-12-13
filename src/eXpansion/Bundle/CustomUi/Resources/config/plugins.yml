@@ -2,6 +2,28 @@ services:
     eXpansion\Bundle\CustomUi\Plugins\CustomUi:
         class: eXpansion\Bundle\CustomUi\Plugins\CustomUi
         autowire: true
+        arguments:
+          $players: "@expansion.framework.core.user_groups.all_players"
         tags:
           - {name: 'expansion.plugin', data_provider: 'exp.application'}
           - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
+
+    eXpansion\Bundle\CustomUi\Plugins\Gui\ChatHelperWidget:
+        class: eXpansion\Bundle\CustomUi\Plugins\Gui\ChatHelperWidget
+        autowire: true
+        arguments:
+          $name:  "Chat"
+          $posX: -120
+          $posY: -50
+          $sizeX: null
+          $sizeY: null
+
+    eXpansion\Bundle\CustomUi\Plugins\Gui\CustomCheckpointWidget:
+        class: eXpansion\Bundle\CustomUi\Plugins\Gui\CustomCheckpointWidget
+        autowire: true
+        arguments:
+          $name:  "Chat"
+          $posX: -120
+          $posY: -65
+          $sizeX: null
+          $sizeY: null
