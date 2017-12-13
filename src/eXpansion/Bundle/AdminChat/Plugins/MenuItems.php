@@ -50,7 +50,7 @@ class MenuItems implements ListenerMenuItemProviderInterface
         $root->addChild(
             ChatCommandItem::class,
             'admin/cancel',
-            'expansion_admin_chat.cancel.label',
+            'expansion_admin_chat.cancelvote.label',
             'votes',
             ['cmd' => '/admin cancel']
         );
