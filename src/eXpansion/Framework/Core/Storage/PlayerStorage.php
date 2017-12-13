@@ -78,17 +78,16 @@ class PlayerStorage implements ListenerInterfaceMpLegacyPlayer, ListenerInterfac
     public function getPlayerInfo($login, $forceNew = false)
     {
         if (!isset($this->online[$login]) || $forceNew) {
+            // to make sure even if an exception happens, player has login and basic nickname
+            $playerInformation = new PlayerInfo();
+            $playerInformation->login = $login;
+            $playerDetails = new PlayerDetailedInfo();
+            $playerDetails->nickName = $login;
+
             try {
-                // to make sure even if an exception happens, player has login and basic nickname
-                $playerInformation = new PlayerInfo();
-                $playerInformation->login = $login;
-                $playerDetails = new PlayerDetailedInfo();
-                $playerDetails->nickName = $login;
-                
                 //fetch additional informations
                 $playerInformation = $this->connection->getPlayerInfo($login);
                 $playerDetails = $this->connection->getDetailedPlayerInfo($login);
-
             } catch (InvalidArgumentException $e) {
                 $this->logger->error("Login unknown: $login", ["exception" => $e]);
                 $this->console->writeln('$f00Login Unknown: '.$login.' dedicated server said: $fff'.$e->getMessage());
