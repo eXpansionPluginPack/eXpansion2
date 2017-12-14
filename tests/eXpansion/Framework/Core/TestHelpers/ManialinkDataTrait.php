@@ -8,6 +8,7 @@ use eXpansion\Framework\Core\Model\Gui\Manialink;
 use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryInterface;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Services\Application\Dispatcher;
+use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
 
 trait ManialinkDataTrait
 {
@@ -18,7 +19,9 @@ trait ManialinkDataTrait
      */
     protected function getManialink($logins, $factory = null)
     {
-        $group = new Group("test", $this->container->get(Dispatcher::class));
+        $dispatcher = $this->getMockBuilder(DispatcherInterface::class)->getMock();
+
+        $group = new Group("test", $dispatcher);
         foreach ($logins as $login) {
             $group->addLogin($login);
         }

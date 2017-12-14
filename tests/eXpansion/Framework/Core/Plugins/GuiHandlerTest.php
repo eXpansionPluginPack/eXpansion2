@@ -16,12 +16,13 @@ use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Core\Plugins\GuiHandler;
 use eXpansion\Framework\Core\Services\Console;
 use Maniaplanet\DedicatedServer\Connection;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Tests\eXpansion\Framework\Core\TestCore;
 use Tests\eXpansion\Framework\Core\TestHelpers\ManialinkDataTrait;
 use Tests\eXpansion\Framework\Core\TestHelpers\PlayerDataTrait;
 
-class GuiHandlerTest extends TestCore
+class GuiHandlerTest extends TestCase
 {
     use ManialinkDataTrait;
     use PlayerDataTrait;
