@@ -7,11 +7,12 @@ use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilder;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryInterface;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
-use eXpansion\Framework\Core\Plugins\Gui\WindowFactory;
+use eXpansion\Framework\Core\Model\UserGroups\Group;
+use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
 use FML\Controls\Label;
-use Tests\eXpansion\Framework\Core\TestCore;
+use Tests\eXpansion\Framework\Core\SimpleTestCore;
 
-class GridBuilderTest extends TestCore
+class GridBuilderTest extends SimpleTestCore
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $dataCollection;
@@ -26,10 +27,13 @@ class GridBuilderTest extends TestCore
     {
         parent::setUp();
 
+        $dispatcher = $this->getMockBuilder(DispatcherInterface::class)
+            ->getMock();
+
         $this->dataCollection = $this->createMock(DataCollectionInterface::class);
         $this->manialink = $this->createMock(ManialinkInterface::class);
         $this->manialink->method('getUserGroup')->willReturn(
-            $this->container->get('expansion.framework.core.user_groups.all_players')
+            new Group(null, $dispatcher)
         );
         $this->mlFactory = $this->createMock(ManialinkFactoryInterface::class);
     }
