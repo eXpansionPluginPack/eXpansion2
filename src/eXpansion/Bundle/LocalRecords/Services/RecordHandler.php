@@ -190,7 +190,6 @@ class RecordHandler
         foreach ($this->recordsPerPlayer as $record) {
             $record->save();
             if ($releaseRecords) {
-                $record->setPlayer(null);
                 unset($record);
             }
 
@@ -198,7 +197,6 @@ class RecordHandler
 
         foreach ($this->records as $record) {
             if ($releaseRecords) {
-                $record->setPlayer(null);
                 unset($record);
             }
         }
