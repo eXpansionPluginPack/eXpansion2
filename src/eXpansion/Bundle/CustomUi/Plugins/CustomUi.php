@@ -151,7 +151,6 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
 EOL;
 
         $this->connection->triggerModeScriptEvent('Trackmania.UI.SetProperties', [$properties]);
-        $this->chatHelperWidget->create($this->players);
 
     }
 

@@ -183,8 +183,6 @@ class RecordHandler
      */
     public function save($releaseRecords = true)
     {
-        PlayerTableMap::clearInstancePool();
-        RecordTableMap::clearInstancePool();
 
         $con = Propel::getWriteConnection(RecordTableMap::DATABASE_NAME);
         $con->beginTransaction();
@@ -208,7 +206,7 @@ class RecordHandler
         $con->commit();
 
         RecordTableMap::clearInstancePool();
-
+        PlayerTableMap::clearInstancePool();
     }
 
     /**

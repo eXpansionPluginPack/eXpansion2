@@ -58,13 +58,13 @@ class ChatHelperWidget extends WidgetFactory
         $entry = $this->uiFactory->createInput("publicChat", "", 90);
         $action = $this->actionFactory->createManialinkAction($manialink, [$this, "onChat"], []);
 
-    $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::EntrySubmit, <<<eol
+        $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::EntrySubmit, <<<eol
             if (Event.ControlId == "publicChat" ) {              
                 declare CMlEntry Entry <=> (Page.GetFirstChild("publicChat") as CMlEntry);
                 Entry.SetText(" ", False);  
             }
 eol
-);
+        );
 
 
         $entry->setAction($action);
@@ -75,12 +75,13 @@ eol
     public function onChat($manialink, $login, $entries, $args)
     {
         $player = $this->playerStorage->getPlayerInfo($login);
-
-        $this->dispatcher->dispatch("PlayerChat", [
-            $player->getPlayerId(),
-            $login,
-            $entries['publicChat'],
-        ]);
+        if (!empty($entries['publicChat'])) {
+            $this->dispatcher->dispatch("PlayerChat", [
+                $player->getPlayerId(),
+                $login,
+                $entries['publicChat'],
+            ]);
+        }
     }
 
 }

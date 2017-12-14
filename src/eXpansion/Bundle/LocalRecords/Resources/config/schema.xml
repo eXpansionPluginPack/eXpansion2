@@ -11,7 +11,7 @@
         <column name="avgScore" type="integer" />
         <column name="checkpoints" type="longvarchar" />
 
-        <column name="player_id" type="integer" />
+        <column name="player_id" type="integer" required="true" />
         <foreign-key foreignTable="player">
             <reference local="player_id" foreign="id"/>
         </foreign-key>
