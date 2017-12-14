@@ -22,8 +22,18 @@ services:
         class: eXpansion\Bundle\CustomUi\Plugins\Gui\CustomCheckpointWidget
         autowire: true
         arguments:
-          $name:  "Chat"
-          $posX: -120
-          $posY: -65
+          $name:  "Checkpoints"
+          $posX: -130
+          $posY: 65
+          $sizeX: null
+          $sizeY: null
+
+    eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSpeedWidget:
+        class: eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSpeedWidget
+        autowire: true
+        arguments:
+          $name:  "Speed"
+          $posX: 130
+          $posY: -70
           $sizeX: null
           $sizeY: null

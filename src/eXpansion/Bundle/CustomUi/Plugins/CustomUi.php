@@ -3,6 +3,7 @@
 namespace eXpansion\Bundle\CustomUi\Plugins;
 
 use eXpansion\Bundle\CustomUi\Plugins\Gui\ChatHelperWidget;
+use eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSpeedWidget;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
@@ -27,26 +28,26 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
     /**
      * @var ChatHelperWidget
      */
-    private $chatHelperWidget;
+    private $customSpeedWidget;
 
     /**
      * CustomUi constructor.
      *
-     * @param Connection       $connection
-     * @param PlayerStorage    $playerStorage
-     * @param Group            $players
-     * @param ChatHelperWidget $chatHelperWidget
+     * @param Connection        $connection
+     * @param PlayerStorage     $playerStorage
+     * @param Group             $players
+     * @param CustomSpeedWidget $customSpeedWidget
      */
     public function __construct(
         Connection $connection,
         PlayerStorage $playerStorage,
         Group $players,
-        ChatHelperWidget $chatHelperWidget
+        CustomSpeedWidget $customSpeedWidget
     ) {
         $this->connection = $connection;
         $this->playerStorage = $playerStorage;
         $this->players = $players;
-        $this->chatHelperWidget = $chatHelperWidget;
+        $this->customSpeedWidget = $customSpeedWidget;
     }
 
     /**
@@ -116,7 +117,7 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
  		<chrono visible="true" pos="0. -80. -5." />
  		
  		<!-- Speed and distance raced displayed in the bottom right of the screen -->
- 		<speed_and_distance visible="true" pos="137. -69. 5." />
+ 		<speed_and_distance visible="false" pos="137. -69. 5." />
  		
  		<!-- Previous and best times displayed at the bottom right of the screen -->
  		<personal_best_and_rank visible="false" pos="157. -24. 5." />
@@ -151,6 +152,59 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
 EOL;
 
         $this->connection->triggerModeScriptEvent('Trackmania.UI.SetProperties', [$properties]);
+
+        $scoretable = /** @lang XML */
+            <<<EOL
+<?xml version="1.0" encoding="utf-8"?>
+<scorestable version="1">
+    <styles>
+        <style id="LibST_Reset" />
+		<style id="LibST_TMWithLegends" />				
+    </styles>
+    <properties>
+        
+    </properties>
+     <columns>
+        <column id="EXP_finishes" action="create">
+			<width>3.</width>
+			<textalign>left</textalign>
+		</column>
+		<column id="LibST_TMBestTime" action="create">
+			<width>12.</width>
+			<defaultvalue>--:--.---</defaultvalue>
+			<textalign>right</textalign>
+		</column>
+		<column id="LibST_Avatar" action="create">
+			<width>6.</width>
+			<textalign>center</textalign>
+		</column>
+		<column id="LibST_Name" action="create">
+			<width>32.</width>
+			<textalign>left</textalign>
+		</column>
+		<column id="LibST_ManiaStars" action="create">
+			<width>3.</width>
+			<textalign>center</textalign>
+		</column>
+		<column id="LibST_Tools" action="create">
+			<width>3.</width>
+			<textalign>right</textalign>
+		</column>
+	 </columns>
+
+    <images>
+        <playercard>
+            <quad path="file://Media/Manialinks/Trackmania/ScoresTable/playerline-square.dds" />
+            <left path="file://Media/Manialinks/Trackmania/ScoresTable/playerline-left.dds" />
+            <right path="file://Media/Manialinks/Trackmania/ScoresTable/playerline-right.dds" />
+        </playercard>
+    </images>
+  
+</scorestable>
+EOL;
+
+        $this->connection->triggerModeScriptEvent('LibScoresTable2_SetStyleFromXml', ["TM", $scoretable]);
+        $this->customSpeedWidget->create($this->players);
 
     }
 
