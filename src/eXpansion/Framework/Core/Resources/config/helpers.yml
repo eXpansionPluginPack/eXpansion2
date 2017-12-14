@@ -14,6 +14,7 @@ services:
             $supportedLocales: ['fr', 'de', 'fi', 'nl', 'en']
             $colorCodes: '%expansion.config.core_chat_color_codes%'
             $glyphIcons: '%expansion.config.core_chat_glyph_icons%'
+            $translator: '@translator'
 
     eXpansion\Framework\Core\Helpers\FileSystem:
         class: eXpansion\Framework\Core\Helpers\FileSystem
