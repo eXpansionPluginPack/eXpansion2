@@ -9,23 +9,31 @@
 namespace Tests\eXpansion\Framework\Core\Model\ChatCommand;
 
 use eXpansion\Framework\Core\Exceptions\PlayerException;
-use eXpansion\Framework\Core\Helpers\ChatNotification;
-use eXpansion\Framework\Core\Model\ChatCommand\AbstractChatCommand;
+use eXpansion\Framework\Core\Helpers\ChatOutput;
 use eXpansion\Framework\Core\Model\Helpers\ChatNotificationInterface;
-use Symfony\Component\Console\Exception\RuntimeException;
-use Tests\eXpansion\Framework\Core\TestCore;
+use PHPUnit\Framework\TestCase;
 use Tests\eXpansion\Framework\Core\TestHelpers\Model\TestChatCommand;
 
-class AbstractChatCommandTest extends TestCore
+class AbstractChatCommandTest extends TestCase
 {
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockChatNotification;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockChatOutputHelper;
+
     protected function setUp()
     {
         parent::setUp();
 
-        $notification = $this->getMockBuilder(ChatNotificationInterface::class)
+        $this->mockChatNotification = $this->getMockBuilder(ChatNotificationInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->container->set(ChatNotification::class, $notification);
+
+        $this->mockChatOutputHelper = $this->getMockBuilder(ChatOutput::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->mockChatOutputHelper->method('getChatNotification')->willReturn($this->mockChatNotification);
     }
 
     public function testModel()
@@ -37,7 +45,7 @@ class AbstractChatCommandTest extends TestCore
         $this->assertEquals('expansion_core.chat_commands.no_description', $cmd2->getDescription());
         $this->assertEquals('expansion_core.chat_commands.no_help', $cmd2->getHelp());
 
-        $cmd2->run('toto', $this->getChatOutputHelper(), '--help');
+        $cmd2->run('toto', $this->mockChatOutputHelper, '--help');
     }
 
     public function testHelp()
@@ -48,7 +56,7 @@ class AbstractChatCommandTest extends TestCore
             ->expects($this->at(0))
             ->method('sendMessage')->with($cmd2->getDescription(), 'toto');
 
-        $cmd2->run('toto', $this->getChatOutputHelper(), '--help');
+        $cmd2->run('toto', $this->mockChatOutputHelper, '--help');
         $this->assertFalse($cmd2->executed);
     }
 
@@ -56,7 +64,7 @@ class AbstractChatCommandTest extends TestCore
     {
         $cmd2 = new TestChatCommand('test', ['t']);
 
-        $cmd2->run('toto', $this->getChatOutputHelper(), '');
+        $cmd2->run('toto', $this->mockChatOutputHelper, '');
         $this->assertTrue($cmd2->executed);
     }
 
@@ -65,7 +73,7 @@ class AbstractChatCommandTest extends TestCore
         $cmd2 = new TestChatCommand('test', ['t']);
 
         $this->expectException(PlayerException::class);
-        $cmd2->run('toto', $this->getChatOutputHelper(), 'test');
+        $cmd2->run('toto', $this->mockChatOutputHelper, 'test');
     }
 
     /**
@@ -73,6 +81,6 @@ class AbstractChatCommandTest extends TestCore
      */
     protected function getChatNotificationMock()
     {
-        return $this->container->get(ChatNotification::class);
+        return $this->mockChatNotification;
     }
 }
