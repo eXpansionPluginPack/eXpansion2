@@ -4,7 +4,7 @@
     <table name="record">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
 
-        <column name="mapUid" type="varchar" size="255" />
+        <column name="mapUid" type="varchar" size="50" />
         <column name="nbLaps" type="integer" />
         <column name="score" type="integer" />
         <column name="nbFinish" type="integer" />

@@ -3,13 +3,9 @@
 
     <table name="maprating">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
-        <column name="login" type="varchar" size="255" required="true"/>
-        <column name="mapUid" type="varchar" size="255" required="true"/>
+        <column name="login" type="varchar" primaryString="1" size="255" required="true"/>
+        <column name="mapUid" type="varchar" size="50" required="true"/>
         <column name="score" type="integer" required="true"/>
-
-        <foreign-key foreignTable="player">
-            <reference local="login" foreign="login"/>
-        </foreign-key>
 
         <behavior name="timestampable" />
     </table>
