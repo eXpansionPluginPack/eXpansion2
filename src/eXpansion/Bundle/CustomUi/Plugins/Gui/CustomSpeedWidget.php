@@ -31,9 +31,14 @@ class CustomSpeedWidget extends WidgetFactory
     {
         parent::createContent($manialink);
 
-        $frame = Frame::create();
+        $frame = Frame::create("Frame_Main");
         $frame->setScale(1);
         $manialink->addChild($frame);
+
+        $lbl = $this->uiFactory->createLabel("0:00");
+        $lbl->setPosition(0, 6)->setAlign("center", "center")
+            ->setSize(20, 4)->setTextSize(2)->setTextFont("RajdhaniMono")->setId("Label_Countdown");
+        $frame->addChild($lbl);
 
         $lbl = $this->uiFactory->createLabel("100");
         $lbl->setPosition(2, 0)->setAlign("right", "center")
@@ -83,17 +88,66 @@ class CustomSpeedWidget extends WidgetFactory
         $rpm2->addChild($quad);
         $frame->addChild($rpm2);
 
+
         $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::OnInit, <<<EOL
+            declare CMlFrame Frame = (Page.GetFirstChild("Frame_Main") as CMlFrame);
             declare CMlQuad RPM1 = (Page.GetFirstChild("Quad_RPM1") as CMlQuad);
             declare CMlQuad RPM2 = (Page.GetFirstChild("Quad_RPM2") as CMlQuad);
             declare CMlLabel Speed = (Page.GetFirstChild("Label_Speed") as CMlLabel);
             declare CMlLabel Distance = (Page.GetFirstChild("Label_Distance") as CMlLabel);
-            declare CMlLabel Gear = (Page.GetFirstChild("Label_Gear") as CMlLabel);                                    
+            declare CMlLabel Gear = (Page.GetFirstChild("Label_Gear") as CMlLabel);
+            declare CMlLabel Countdown = (Page.GetFirstChild("Label_Countdown") as CMlLabel);
+            
+            declare netread Integer Net_LibUI_SettingsUpdate for Teams[0];
+            declare netread Text[Text] Net_LibUI_Settings for Teams[0];
+  
+            declare PrevSettingsUpdate = -1;
+            declare CutOffTimeLimit = -1;
+              
+            declare IsIntro = (
+                UI.UISequence == CUIConfig::EUISequence::Intro ||
+                UI.UISequence == CUIConfig::EUISequence::RollingBackgroundIntro ||
+                UI.UISequence == CUIConfig::EUISequence::Outro
+            );        
+                                           
 EOL
         );
 
         $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::Loop,
             <<<EOL
+    
+            if (Frame.Visible && IsIntro) {
+                Frame.Visible = False;
+            } else if (!Frame.Visible && !IsIntro) {            
+                Frame.Visible = True;                        
+            }
+            if (PrevSettingsUpdate != Net_LibUI_SettingsUpdate) {
+                  PrevSettingsUpdate = Net_LibUI_SettingsUpdate;
+                  foreach (SettingName => SettingValue in Net_LibUI_Settings) {
+                        switch (SettingName) {                  
+                              case "TMUIModule_Countdown_CutOffTimeLimit": {
+                                  CutOffTimeLimit = TextLib::ToInteger(SettingValue);
+                              }
+                        }
+                  }              
+            }
+           
+            if (CutOffTimeLimit > 0) {
+                if (!Frame.Visible) Frame.Visible = True;
+            } else if (Frame.Visible) {
+                Frame.Visible = False;
+            }
+           
+           if (CutOffTimeLimit >= GameTime) Countdown.Value = TextLib::TimeToText(CutOffTimeLimit - GameTime + 1, False);
+           else Countdown.Value = TextLib::TimeToText(0);
+
+           if (CutOffTimeLimit - GameTime > 30000) { 
+                Countdown.TextColor = <1., 1., 1.>;
+           } else {
+                Countdown.TextColor = <1., 0.12, 0.12>;
+           }
+           
+     
             if (GUIPlayer != Null && GUIPlayer.IsSpawned) {
                 declare Real speed = GUIPlayer.DisplaySpeed / 1000.;		                
                 Gear.Value= "" ^ GUIPlayer.EngineCurGear;
