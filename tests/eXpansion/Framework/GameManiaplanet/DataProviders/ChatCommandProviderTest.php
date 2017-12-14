@@ -4,16 +4,14 @@ namespace Tests\eXpansion\Framework\GameManiaplanet\DataProviders;
 
 use eXpansion\Framework\GameManiaplanet\DataProviders\ChatCommandDataProvider;
 use eXpansion\Framework\Core\Exceptions\PlayerException;
-use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\ChatOutput;
 use eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin;
 use eXpansion\Framework\Core\Model\Helpers\ChatNotificationInterface;
 use eXpansion\Framework\Core\Services\ChatCommands;
-use Symfony\Component\Console\Output\NullOutput;
-use Tests\eXpansion\Framework\Core\TestCore;
+use PHPUnit\Framework\TestCase;
 use Tests\eXpansion\Framework\Core\TestHelpers\Model\TestChatCommand;
 
-class ChatCommandProviderTest extends TestCore
+class ChatCommandProviderTest extends TestCase
 {
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
     protected $mockChatCommands;
