@@ -17,6 +17,12 @@ expansion_admin_chat:
   setservercomment:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}changé le commentaire du serveur. Nouveau commentaire du serveur est {highlight}%parameter%'
     description: '{info}Change le commentaire du serveur.'
+  savematchsettings:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} saved match settings: {highlight}%parameter%'
+    description: '{info}Change the name of the server.'
+  loadmatchsettings:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} loaded match settings: {highlight}%parameter%'
+    description: '{info}Change the name of the server.'
   kick:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}exclut {highlight}%player% {admin_info}. Raison : {highlight}%reason%'
     description: '{info}Exclut un joueur du serveur.'
@@ -71,9 +77,7 @@ expansion_admin_chat:
   setserverpasswordforplayer:
     msg: '|admin| {admin_info}Nouveau mot de passe pour joindre le serveur est : « {highlight}%parameter%{admin_info} »'
     description: '{info}Configure un nouveau mot de passe serveur'
-  ssetserverpasswordforspectator:
-    msg: '|admin| {admin_info}Nouveau mot de passe pour les spectateur du serveur est : « {highlight}%parameter%{admin_info} »'
-    description: '{info}Nouveau mot de passe spectateurs'
-
-
-
+  setserverpasswordforspectator:
+    msg: '|admin| {admin_info}New spectators join password for server is: "{highlight}%parameter%{admin_info}"'
+    description: '{info}Sets new specator password'
+  dedicatedexception: '|error| {error}Dedicated Server error: {highlight}%message%'
