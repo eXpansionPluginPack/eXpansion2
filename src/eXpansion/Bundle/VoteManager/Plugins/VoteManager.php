@@ -15,9 +15,10 @@ use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\MapStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyVote;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptPodium;
 use Maniaplanet\DedicatedServer\Connection;
 
-class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExpTimer
+class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExpTimer, ListenerInterfaceMpScriptPodium
 {
     const YES = "yes";
     const NO = "no";
@@ -150,6 +151,31 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
     public function onPostLoop()
     {
         // Nothing
+    }
+
+    /**
+     * Callback sent when the "onPodiumStart" section start.
+     *
+     * @param int $time Server time when the callback was sent
+     * @return void
+     */
+    public function onPodiumStart($time)
+    {
+        //nothing
+    }
+
+    /**
+     * Callback sent when the "onPodiumEnd" section end.
+     *
+     * @param int $time Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onPodiumEnd($time)
+    {
+        if ($this->voteService->getCurrentVote()) {
+            $this->voteService->cancel();
+        }
     }
 }
 
