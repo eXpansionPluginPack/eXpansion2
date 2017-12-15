@@ -14,6 +14,6 @@ services:
             arguments:
                 $name:  "BestCheckpoints"
                 $posX: -120
-                $posY: 85
+                $posY: 88
                 $sizeX: null
                 $sizeY: null

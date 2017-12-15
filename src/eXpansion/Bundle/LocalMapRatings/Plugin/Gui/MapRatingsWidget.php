@@ -14,7 +14,11 @@ class MapRatingsWidget extends WidgetFactory
 {
 
     /** @var uiLabel */
-    private $lblRatings;
+    private $lblRatingsYes;
+
+    /** @var uiLabel */
+    private $lblRatingsNo;
+
     /**
      * @var MapRatingsService
      */
@@ -41,10 +45,23 @@ class MapRatingsWidget extends WidgetFactory
     {
         parent::createContent($manialink);
 
-        $this->lblRatings = $this->uiFactory->createLabel("", uiLabel::TYPE_NORMAL);
-        $this->lblRatings->setPosition(0, 0)->setSize(40, 6)
-            ->setTextSize(2)->setAlign("right", "top");
-        $manialink->addChild($this->lblRatings);
+        $line = $this->uiFactory->createLayoutLine(0, 0, [], 2);
+        $manialink->addChild($line);
+
+        $this->lblRatingsYes = $this->uiFactory->createLabel("", uiLabel::TYPE_TITLE);
+        $this->lblRatingsYes->setTextSize(2)
+            ->setSize(7, 4)
+            ->setAction($this->actionFactory->createManialinkAction($manialink,
+                [$this, "callbackVoteYes"], []));
+        $line->addChild($this->lblRatingsYes);
+
+        $this->lblRatingsNo = $this->uiFactory->createLabel("", uiLabel::TYPE_TITLE);
+        $this->lblRatingsNo->setTextSize(2)
+            ->setSize(7, 4)
+            ->setAction($this->actionFactory->createManialinkAction($manialink,
+                [$this, "callbackVoteNo"], []));
+        $line->addChild($this->lblRatingsNo);
+
 
     }
 
@@ -52,7 +69,6 @@ class MapRatingsWidget extends WidgetFactory
     protected function updateContent(ManialinkInterface $manialink)
     {
         $ratings = $this->ratings;
-        $total = count($ratings);
         $yes = 0;
         $no = 0;
         foreach ($ratings as $login => $rating) {
@@ -66,7 +82,8 @@ class MapRatingsWidget extends WidgetFactory
             }
         }
 
-        $this->lblRatings->setText('$0d0 $fff'.$yes.'   $d00 $fff'.$no); // for total add ."   👥 ".$total
+        $this->lblRatingsYes->setText('$0d0 $fff'.$yes);
+        $this->lblRatingsNo->setText('$d00 $fff'.$no);
     }
 
     /**

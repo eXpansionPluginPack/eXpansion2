@@ -16,7 +16,7 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
 {
     const TYPE_DECORATED = "decorated";
     const TYPE_DEFAULT = "default";
-    const COLOR_DEFAULT = "aaa";
+    const COLOR_DEFAULT = "777";
     const COLOR_SUCCESS = "0d0";
     const COLOR_WARNING = "d00";
     const COLOR_PRIMARY = "3af";
@@ -24,9 +24,9 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
     /** @var  uiLabel */
     protected $buttonLabel;
     protected $type;
-    protected $textColor = "eee";
+    protected $textColor = "fff";
     protected $backColor = self::COLOR_DEFAULT;
-    protected $focusColor = "bbb";
+    protected $focusColor = "aaa";
     protected $borderColor = "fff";
     protected $translate = false;
 

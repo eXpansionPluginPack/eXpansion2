@@ -6,6 +6,7 @@ use eXpansion\Bundle\LocalRecords\DataProviders\Listener\RecordsDataListener;
 use eXpansion\Bundle\LocalRecords\Model\Record;
 use eXpansion\Framework\Core\Helpers\ChatNotification as ChatNotificationHelper;
 use eXpansion\Framework\Core\Helpers\Time;
+use eXpansion\Framework\Core\Helpers\TMString;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 
 
@@ -36,9 +37,10 @@ class ChatNotification implements RecordsDataListener
      * ChatNotification constructor.
      *
      * @param ChatNotificationHelper $chatNotification
-     * @param Time $timeFormater
-     * @param string $translationPrefix
-     * @param int $positionForPublicMessage
+     * @param Time                   $timeFormater
+     * @param PlayerStorage          $playerStorage
+     * @param string                 $translationPrefix
+     * @param int                    $positionForPublicMessage
      */
     public function __construct(
         ChatNotificationHelper $chatNotification,
@@ -58,6 +60,7 @@ class ChatNotification implements RecordsDataListener
      * Called when local records are loaded.
      *
      * @param Record[] $records
+     * @throws \Propel\Runtime\Exception\PropelException
      */
     public function onLocalRecordsLoaded($records)
     {
@@ -65,7 +68,7 @@ class ChatNotification implements RecordsDataListener
             $firstRecord = $records[0];
 
             $this->sendMessage('loaded.top1', null, [
-                '%nickname%' => $firstRecord->getPlayer()->getNickname(),
+                '%nickname%' => TMString::trimStyles($firstRecord->getPlayer()->getNickname()),
                 '%score%' => $this->timeFormater->timeToText($firstRecord->getScore(), true),
             ]);
 
@@ -74,7 +77,7 @@ class ChatNotification implements RecordsDataListener
             for ($i = 1; $i < $count; $i++) {
                 if (isset($online[$records[$i]->getPlayer()->getLogin()])) {
                     $this->sendMessage('loaded.any', $records[$i]->getPlayer()->getLogin(), [
-                        '%nickname%' => $records[$i]->getPlayer()->getNickname(),
+                        '%nickname%' => TMString::trimStyles($records[$i]->getPlayer()->getNickname()),
                         '%score%' => $this->timeFormater->timeToText($records[$i]->getScore(), true),
                         '%position%' => $i + 1,
                     ]);
@@ -86,9 +89,9 @@ class ChatNotification implements RecordsDataListener
     /**
      * Called when a player finishes map for the very first time (basically first record).
      *
-     * @param Record     $record
-     * @param Record[]   $records
-     * @param int        $position
+     * @param Record   $record
+     * @param Record[] $records
+     * @param int      $position
      */
     public function onLocalRecordsFirstRecord(Record $record, $records, $position)
     {
@@ -98,9 +101,9 @@ class ChatNotification implements RecordsDataListener
     /**
      * Called when a player finishes map and does same time as before.
      *
-     * @param Record    $record
-     * @param Record    $oldRecord
-     * @param Record[]  $records
+     * @param Record   $record
+     * @param Record   $oldRecord
+     * @param Record[] $records
      *
      * @return void
      */
@@ -112,11 +115,11 @@ class ChatNotification implements RecordsDataListener
     /**
      * Called when a player finishes map with better time and has better position.
      *
-     * @param Record    $record
-     * @param Record    $oldRecord
-     * @param Record[]  $records
-     * @param int       $position
-     * @param int       $oldPosition
+     * @param Record   $record
+     * @param Record   $oldRecord
+     * @param Record[] $records
+     * @param int      $position
+     * @param int      $oldPosition
      *
      * @return void
      */
@@ -124,6 +127,7 @@ class ChatNotification implements RecordsDataListener
     {
         if ($position == 1 && $oldPosition == null) {
             $this->messageFirstPlaceNew($record);
+
             return;
         }
 
@@ -155,7 +159,7 @@ class ChatNotification implements RecordsDataListener
             $msg,
             $to,
             [
-                '%nickname%' => $record->getPlayer()->getNickName(),
+                '%nickname%' => TMString::trimStyles($record->getPlayer()->getNickName()),
                 '%score%' => $this->timeFormater->timeToText($record->getScore(), true),
                 '%position%' => $position,
                 '%old_position%' => $oldPosition,
@@ -167,8 +171,8 @@ class ChatNotification implements RecordsDataListener
     /**
      * Called when a player finishes map with better time but keeps same position.
      *
-     * @param Record $record
-     * @param Record $oldRecord
+     * @param Record   $record
+     * @param Record   $oldRecord
      * @param Record[] $records
      * @param          $position
      *
@@ -199,7 +203,7 @@ class ChatNotification implements RecordsDataListener
             $msg,
             $to,
             [
-                '%nickname%' => $record->getPlayer()->getNickName(),
+                '%nickname%' => TMString::trimStyles($record->getPlayer()->getNickName()),
                 '%score%' => $this->timeFormater->timeToText($record->getScore(), true),
                 '%position%' => $position,
                 '%by%' => $securedBy,
@@ -232,7 +236,7 @@ class ChatNotification implements RecordsDataListener
             'new.top1',
             null,
             [
-                '%nickname%' => $record->getPlayer()->getNickname(),
+                '%nickname%' => TMString::trimStyles($record->getPlayer()->getNickname()),
                 '%score%' => $this->timeFormater->timeToText($record->getScore(), true),
                 '%position%' => 1,
             ]
@@ -240,7 +244,7 @@ class ChatNotification implements RecordsDataListener
     }
 
     /**
-     * @param string $message
+     * @param string      $message
      * @param null|string $recipe
      */
     protected function sendMessage($message, $recipe, $params)
