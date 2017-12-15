@@ -37,3 +37,13 @@ services:
           $posY: -70
           $sizeX: null
           $sizeY: null
+
+    eXpansion\Bundle\CustomUi\Plugins\Gui\FinishRecapWidget:
+        class: eXpansion\Bundle\CustomUi\Plugins\Gui\FinishRecapWidget
+        autowire: true
+        arguments:
+          $name:  "Finish Recap"
+          $posX: 0
+          $posY: 0
+          $sizeX: null
+          $sizeY: null

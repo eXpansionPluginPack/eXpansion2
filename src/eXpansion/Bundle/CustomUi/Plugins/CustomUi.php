@@ -99,7 +99,7 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
  		<live_info visible="false" pos="-159. 84. 5." />
  
  		<!-- Information about the spectated player displayed in the bottom of the screen -->
- 		<spectator_info visible="true" pos="0. -68. 5." />
+ 		<spectator_info visible="true" pos="-135. 80. 5." />
  
  		<!-- Only visible in solo modes, it hides the medal/ghost selection UI -->
  		<opponents_info visible="true" />
