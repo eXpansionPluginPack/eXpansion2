@@ -1,13 +1,13 @@
 expansion_jukebox:
   chat:
     addmap: '|info| {variable}%nickname% {info}lisäsi kartan {variable}%mapname%{info} jukeboksiin. Jonon pituus: {variable}%length%'
-    removemap: '|info| {info}kartta poistettu jukeboksista {variable}%mapname%{info} toiveen esitti {variable}%nickname%{info}. Jonon pituus: {variable}%length%'
+    removemap: '|info| {info}Map dropped from jukebox {variable}%mapname%{info} wished by {variable}%nickname%{info}. Queue length: {variable}%length%'
     noremove: "|warning| {warning}Et voi poistaa karttaa %mapname% {warning}jonosta."
     noadd: "|warning| {warning}Et voi lisätä karttaa %mapname% {warning}jonoon, sillä sinulla on jo kartta jonossa."
     nomap: '|error| {error}Yhtään karttaa ei löytynyt.'
     nopermission: "|error| {error}Sinulla ei ole riittävästi oikeuksia jukeboksin tyhjäämiseen."
     clear: "|admin| {admin_info}%adminlevel% %admin% {admin_info} tyhjentää jukebox jonon!"
-    nextjbmap: '|info| {info}Seuraava kartta: {variable}%mapname%{info} tekijä {variable}%mapauthor% {info} toivonut {variable}%nickname%{info}. Jonon pituus: {variable}%length%'
+    nextjbmap: '|info| {info}Next map {variable}%mapname%{info} by {variable}%mapauthor% {info} wished by {variable}%nickname%{info}. Queue length: {variable}%length%'
     nextmap: '|info| {info}Seuraava kartta {variable}%name%{info} tekijä {variable}%author%'
     beginmap: '|info| {info}Pelissä nyt {variable}%name%{info} tekijä {variable}%author%'
   command:
