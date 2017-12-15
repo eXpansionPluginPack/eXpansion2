@@ -37,12 +37,12 @@ class CustomSpeedWidget extends WidgetFactory
 
         $lbl = $this->uiFactory->createLabel("0:00");
         $lbl->setPosition(0, 6)->setAlign("center", "center")
-            ->setSize(20, 4)->setTextSize(2)->setTextFont("RajdhaniMono")->setId("Label_Countdown");
+            ->setSize(20, 4)->setTextSize(5)->setTextFont("RajdhaniMono")->setId("Label_Countdown");
         $frame->addChild($lbl);
 
         $lbl = $this->uiFactory->createLabel("100");
         $lbl->setPosition(2, 0)->setAlign("right", "center")
-            ->setSize(20, 4)->setTextSize(2)->setTextFont("RajdhaniMono")->setId("Label_Speed");
+            ->setSize(20, 4)->setTextSize(3)->setTextFont("RajdhaniMono")->setId("Label_Speed");
         $frame->addChild($lbl);
 
         $lbl = $this->uiFactory->createLabel("km/h");
@@ -144,7 +144,7 @@ EOL
            if (CutOffTimeLimit - GameTime > 30000) { 
                 Countdown.TextColor = <1., 1., 1.>;
            } else {
-                Countdown.TextColor = <1., 0.12, 0.12>;
+                Countdown.TextColor = <.9, 0.0, 0.0>;
            }
            
      
