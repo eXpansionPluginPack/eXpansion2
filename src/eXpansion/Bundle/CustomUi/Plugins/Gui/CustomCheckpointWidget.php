@@ -89,6 +89,7 @@ EOL
         $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::Loop, <<<EOL
             if (Frame.Visible && IsIntro) {
                 Frame.Visible = False;
+              
             } else if (!Frame.Visible && !IsIntro) {            
                 Frame.Visible = True;                        
             }                      
@@ -104,7 +105,7 @@ EOL
                 if (GUIPlayer == RaceEvent.Player && RaceEvent.Type == CTmRaceClientEvent::EType::WayPoint) {
                   
                     declare CTmResult Score <=> RaceEvent.Player.Score.BestLap;
-                    TopBg.Show(); 
+                   // TopBg.Show();                    
                     if (Score.Checkpoints.existskey(RaceEvent.CheckpointInLap) ) {
                         CheckPointLabel.Value = "Cp: " ^(RaceEvent.CheckpointInLap+1) ^ "  " ^ TimeToText(RaceEvent
                         .LapTime - Score.Checkpoints[RaceEvent.CheckpointInLap]);
@@ -118,6 +119,7 @@ EOL
                     } else {
                        CheckPointLabel.Value = "Cp: " ^(RaceEvent.CheckpointInLap+1) ^ "  " ^ TimeToText(RaceEvent
                         .LapTime);
+                       TopBg.Colorize = <0.7, 0.7, 0.7>;
                     }
                                                                                                
                 }
