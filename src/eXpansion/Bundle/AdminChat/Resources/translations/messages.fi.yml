@@ -17,6 +17,12 @@ expansion_admin_chat:
   setservercomment:
     msg: '| admin | {admin_info}%adminLevel% %admin% {admin_info}muuttaa palvelimen kommentin. Uusi palvelinkommentti on {highlight}%parameter%'
     description: '{info}Muuta palvelimen kommentti.'
+  savematchsettings:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} saved match settings: {highlight}%parameter%'
+    description: '{info}Change the name of the server.'
+  loadmatchsettings:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} loaded match settings: {highlight}%parameter%'
+    description: '{info}Change the name of the server.'
   kick:
     msg: '| admin | {admin_info}%adminLevel% %admin% {admin_info}poistaa pelaajan {highlight}%player% {admin_info}palvelimelta. Syy: {highlight}%reason%'
     description: '{info}Poista pelaaja palvelimelta.'
@@ -71,9 +77,7 @@ expansion_admin_chat:
   setserverpasswordforplayer:
     msg: '| admin | {admin_info}Uusi palvelimen salasana pelaajille on: ”{highlight}%parameter%{admin_info}”'
     description: '{info}Asettaa uuden palvelimen salasanan'
-  ssetserverpasswordforspectator:
-    msg: '| admin | {admin_info}Uusi palvelimen salasana katsojille on: ”{highlight}%parameter%{admin_info}”'
-    description: '{info}Asettaa uuden salasanan katsojille'
-
-
-
+  setserverpasswordforspectator:
+    msg: '|admin| {admin_info}New spectators join password for server is: "{highlight}%parameter%{admin_info}"'
+    description: '{info}Sets new specator password'
+  dedicatedexception: '|error| {error}Dedicated Server error: {highlight}%message%'
