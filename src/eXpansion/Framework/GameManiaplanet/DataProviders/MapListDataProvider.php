@@ -4,8 +4,10 @@ namespace eXpansion\Framework\GameManiaplanet\DataProviders;
 
 use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
 use eXpansion\Framework\Core\Storage\MapStorage;
+use League\Flysystem\Exception;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Xmlrpc\IndexOutOfBoundException;
+use Maniaplanet\DedicatedServer\Xmlrpc\NextMapException;
 
 /**
  * Class MapDataProvider provides information to plugins about what is going on with the maps on the server.
@@ -43,7 +45,11 @@ class MapListDataProvider extends AbstractDataProvider
         $currentMap = $this->connection->getCurrentMapInfo();
         if ($currentMap) {
             $this->mapStorage->setCurrentMap($currentMap);
-            $this->mapStorage->setNextMap($this->connection->getNextMapInfo());
+            try {
+                $this->mapStorage->setNextMap($this->connection->getNextMapInfo());
+            } catch (NextMapException $ex) {
+                $this->mapStorage->setNextMap($currentMap);
+            }
         }
     }
 
@@ -59,6 +65,9 @@ class MapListDataProvider extends AbstractDataProvider
                 $maps = $this->connection->getMapList(self::BATCH_SIZE, $start);
             } catch (IndexOutOfBoundException $e) {
                 // This is normal error when we we are trying to find all maps and we are out of bounds.
+                return;
+            } catch (NextMapException $ex) {
+                // this is if no maps defined
                 return;
             }
 

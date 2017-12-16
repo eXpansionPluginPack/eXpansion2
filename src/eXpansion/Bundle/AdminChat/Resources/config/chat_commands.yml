@@ -13,6 +13,12 @@ services:
             $aliases:     ['res', 'restartmap']
             $functionName: "restartMap"
 
+    expansion.admin_chat.chat_command.shuffle_maplist:
+        class: eXpansion\Bundle\AdminChat\ChatCommand\AdminShuffleCommand
+        arguments:
+            $command:      "shuffle"
+            $permission:   "maps"
+            $aliases:      []
 
     expansion.admin_chat.chat_command.cancel:
         class: eXpansion\Bundle\AdminChat\ChatCommand\AdminVoteCommand
