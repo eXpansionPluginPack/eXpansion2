@@ -184,7 +184,7 @@ class DataProviderManagerTest extends TestCore
     ) {
         return [
             'title' => $title,
-            'mode' => $mode,
+            'gamemode' => $mode,
             'script' => $script,
         ];
     }
