@@ -42,7 +42,8 @@ class MemoryWidgetFactory extends WidgetFactory
     {
 
         $this->memoryMessage = $this->uiFactory->createLabel("awaiting data...");
-        $this->memoryMessage->setTextPrefix('$s')->setTextSize(3)->setSize(60, 5);
+        $this->memoryMessage->setTextPrefix('$s')->setTextSize(3)->setSize(60, 5)
+            ->setScale(0.7);
         $manialink->addChild($this->memoryMessage);
 
         self::$exp_hash = uniqid("exp");

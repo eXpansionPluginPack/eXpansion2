@@ -33,6 +33,6 @@ services:
             arguments:
                 $name:  "memory"
                 $posX: 80
-                $posY: -55
+                $posY: -85
                 $sizeX: null
                 $sizeY: null

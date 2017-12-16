@@ -4,6 +4,7 @@ namespace eXpansion\Bundle\VoteManager\Plugins\Votes;
 
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptPodium;
 use Maniaplanet\DedicatedServer\Connection;
 
 /**
@@ -13,7 +14,7 @@ use Maniaplanet\DedicatedServer\Connection;
  * @copyright 2017 eXpansion
  * @package eXpansion\Bundle\VoteManager\Plugins\Votes
  */
-class NextMapVote extends AbstractVotePlugin
+class NextMapVote extends AbstractVotePlugin implements ListenerInterfaceMpScriptPodium
 {
     /** @var Connection */
     protected $connection;
@@ -87,5 +88,28 @@ class NextMapVote extends AbstractVotePlugin
     public function getReplacementTypes(): array
     {
         return ['NextMap'];
+    }
+
+    /**
+     * Callback sent when the "onPodiumStart" section start.
+     *
+     * @param int $time Server time when the callback was sent
+     * @return void
+     */
+    public function onPodiumStart($time)
+    {
+        //nothing
+    }
+
+    /**
+     * Callback sent when the "onPodiumEnd" section end.
+     *
+     * @param int $time Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onPodiumEnd($time)
+    {
+        $this->cancel();
     }
 }

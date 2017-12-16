@@ -7,7 +7,7 @@ services:
             class: eXpansion\Bundle\LocalMapRatings\Plugin\Gui\MapRatingsWidget
             arguments:
                 $name:  "Map Ratings"
-                $posX: 158
+                $posX: 142
                 $posY: 70
                 $sizeX: null
                 $sizeY: null

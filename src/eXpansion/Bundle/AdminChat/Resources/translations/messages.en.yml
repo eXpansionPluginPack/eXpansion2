@@ -4,6 +4,10 @@ expansion_admin_chat:
     description: 'Replay current map.'
     label: "Restart Map"
 
+  shuffle:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}shuffles the maps list!'
+    description: 'Performs shuffle for current map list.'
+
   cancelvote:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}cancels the vote!'
     description: '{info} cancels the current progressing vote.'

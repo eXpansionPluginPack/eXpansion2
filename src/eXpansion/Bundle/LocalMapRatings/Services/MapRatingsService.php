@@ -62,6 +62,7 @@ class MapRatingsService
      */
     public function load(Map $map)
     {
+
         $this->changedRatings = [];
         $this->ratingsPerPlayer = [];
         MapratingTableMap::clearInstancePool();

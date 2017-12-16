@@ -40,7 +40,7 @@ class Translations
         $this->supportedLocales = $supportedLocales;
 
         foreach ($colorCodes as $code => $colorCode) {
-            $this->replacementPatterns["{".$code."}"] = '$z'.$colorCode;
+            $this->replacementPatterns["{".$code."}"] = '$z$s'.$colorCode;
         }
 
         foreach ($glyphIcons as $name => $icon) {

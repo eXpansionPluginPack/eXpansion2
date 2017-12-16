@@ -2,12 +2,12 @@
 
 namespace eXpansion\Bundle\JoinLeaveMessages\Plugins;
 
-use eXpansion\Bundle\AdminChat\AdminChatBundle;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
+use eXpansion\Framework\Core\Services\Application\AbstractApplication;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use Maniaplanet\DedicatedServer\Connection;
 
 class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
@@ -19,7 +19,7 @@ class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
     protected $console;
 
     /** @var ChatNotification $chat */
-    protected $chat;
+    protected $chatNotification;
 
     /** @var AdminGroups */
     protected $adminGroups;
@@ -27,8 +27,10 @@ class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
     /**
      * JoinLeaveMessages constructor.
      *
-     * @param Connection $connection
-     * @param Console $console
+     * @param Connection       $connection
+     * @param Console          $console
+     * @param ChatNotification $chatNotification
+     * @param AdminGroups      $adminGroups
      */
     public function __construct(
         Connection $connection,
@@ -38,7 +40,7 @@ class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
     ) {
         $this->connection = $connection;
         $this->console = $console;
-        $this->chat = $chatNotification;
+        $this->chatNotification = $chatNotification;
         $this->adminGroups = $adminGroups;
     }
 
@@ -48,8 +50,7 @@ class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
     public function onPlayerConnect(Player $player)
     {
         $groupName = $this->adminGroups->getLoginUserGroups($player->getLogin())->getName();
-
-        $this->chat->sendMessage(
+        $this->chatNotification->sendMessage(
             "expansion_join_leave_messages.connect",
             null,
             [
@@ -59,6 +60,12 @@ class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
                 "%path%" => $player->getPath(),
                 "%ladder%" => $player->getLadderScore(),
             ]);
+
+        $this->chatNotification->sendMessage(
+            'expansion_join_leave_messages.applicationGreeter',
+            $player->getLogin(),
+            ["%version%" => AbstractApplication::EXPANSION_VERSION]);
+
     }
 
     /**
@@ -68,7 +75,7 @@ class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
     {
         $groupName = $this->adminGroups->getLoginUserGroups($player->getLogin())->getName();
 
-        $this->chat->sendMessage(
+        $this->chatNotification->sendMessage(
             "expansion_join_leave_messages.disconnect",
             null,
             [

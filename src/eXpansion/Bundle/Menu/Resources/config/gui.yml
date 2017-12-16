@@ -16,8 +16,8 @@ services:
             $name:  'Menu Factory'
             $sizeX: 0
             $sizeY: 0
-            $posX:  -150
-            $posY:  85
+            $posX:  130
+            $posY:  -45
 
     eXpansion\Bundle\Menu\Plugins\Gui\MenuContentFactory:
         class: eXpansion\Bundle\Menu\Plugins\Gui\MenuContentFactory

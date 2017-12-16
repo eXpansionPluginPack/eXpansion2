@@ -3,7 +3,7 @@
 
     <table name="map">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
-        <column name="mapUid" type="varchar" size="32"/>
+        <column name="mapUid" type="varchar" size="50"/>
         <column name="name" type="varchar" size="150"/>
         <column name="fileName" type="varchar" size="100"/>
         <column name="author" type="varchar" size="50"/>
@@ -29,7 +29,7 @@
 
     <table name="mxmap">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
-        <column name="trackUID" type="varchar" size="32" required="true"/>
+        <column name="trackUID" type="varchar" size="50" required="true"/>
         <column name="gbxMapName" type="varchar" size="150" required="false"/>
         <column name="trackID" type="integer" required="false"/>
         <column name="userID" type="integer" required="false"/>

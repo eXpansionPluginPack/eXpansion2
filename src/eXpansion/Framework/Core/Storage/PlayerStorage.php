@@ -9,6 +9,8 @@ use eXpansion\Framework\Core\Storage\Data\PlayerFactory;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\InvalidArgumentException;
+use Maniaplanet\DedicatedServer\Structures\PlayerDetailedInfo;
+use Maniaplanet\DedicatedServer\Structures\PlayerInfo;
 use Maniaplanet\DedicatedServer\Xmlrpc\FaultException;
 use Psr\Log\LoggerInterface;
 
@@ -76,22 +78,24 @@ class PlayerStorage implements ListenerInterfaceMpLegacyPlayer, ListenerInterfac
     public function getPlayerInfo($login, $forceNew = false)
     {
         if (!isset($this->online[$login]) || $forceNew) {
+            // to make sure even if an exception happens, player has login and basic nickname
+            $playerInformation = new PlayerInfo();
+            $playerInformation->login = $login;
+            $playerDetails = new PlayerDetailedInfo();
+            $playerDetails->nickName = $login;
+
             try {
+                //fetch additional informations
                 $playerInformation = $this->connection->getPlayerInfo($login);
                 $playerDetails = $this->connection->getDetailedPlayerInfo($login);
-
-                return $this->playerFactory->createPlayer($playerInformation, $playerDetails);
             } catch (InvalidArgumentException $e) {
                 $this->logger->error("Login unknown: $login", ["exception" => $e]);
                 $this->console->writeln('$f00Login Unknown: '.$login.' dedicated server said: $fff'.$e->getMessage());
-
-                return new Player();
             } catch (FaultException $ex) {
                 $this->logger->error("Login unknown: $login", ["exception" => $ex]);
                 $this->console->writeln('$f00Login Unknown: '.$login.' dedicated server said: $fff'.$ex->getMessage());
-
-                return new Player();
             }
+            return $this->playerFactory->createPlayer($playerInformation, $playerDetails);
         }
 
         return $this->online[$login];

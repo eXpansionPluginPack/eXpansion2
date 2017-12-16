@@ -2,14 +2,11 @@
 
 
 namespace eXpansion\Framework\Core\Model\Gui\Factory;
-use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
+
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
 use eXpansion\Framework\Core\Model\Gui\Widget;
 use FML\Controls\Frame;
-use FML\ManiaLink;
 use FML\Script\Features\ToggleInterface;
-use FML\Script\Script;
-use FML\Script\ScriptLabel;
 use FML\Types\Container;
 
 
@@ -40,21 +37,23 @@ class WidgetFrameFactory implements WidgetFrameFactoryInterface
      *
      * @param Widget          $manialink
      * @param Frame|Container $mainFrame to build into
-     * @param                 $name
+     * @param string          $name
      * @param float           $sizeX     Size of the inner frame to build the window frame around
      * @param float           $sizeY     Size of the inner frame to build the window frame around
+     * @param boolean         $hideable
      *
      * @return void
      */
-    public function build(Widget $manialink, Frame $mainFrame, $name, $sizeX, $sizeY)
+    public function build(Widget $manialink, Frame $mainFrame, $name, $sizeX, $sizeY, $hideable)
     {
-        $toggleInterfaceF9 = new ToggleInterface($mainFrame, "F9");
+        if ($hideable) {
+            $toggleInterfaceF9 = new ToggleInterface($mainFrame, "F9");
 
-        $manialink
-            ->getFmlManialink()
-            ->getScript()
-            ->addFeature($toggleInterfaceF9);
-
+            $manialink
+                ->getFmlManialink()
+                ->getScript()
+                ->addFeature($toggleInterfaceF9);
+        }
         $manialink->getFmlManialink()->addChild($this->widgetManiaScriptFactory->createScript(['']));
 
     }

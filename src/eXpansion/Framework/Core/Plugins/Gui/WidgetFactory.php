@@ -61,7 +61,7 @@ class WidgetFactory extends FmlManialinkFactory
      *
      * @return Window
      */
-    protected function createManialink(Group $group)
+    protected function createManialink(Group $group, $hideable = true)
     {
 
         $className = $this->className;
@@ -74,7 +74,8 @@ class WidgetFactory extends FmlManialinkFactory
             $this->sizeX,
             $this->sizeY,
             $this->posX,
-            $this->posY
+            $this->posY,
+            $hideable
         );
 
         return $manialink;

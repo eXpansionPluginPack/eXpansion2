@@ -197,8 +197,7 @@ class Jukebox implements ListenerInterfaceMpScriptPodium, ListenerInterfaceMpLeg
      */
     public function onBeginMap(Map $map)
     {
-        $this->chatNotification->sendMessage('expansion_jukebox.chat.beginmap', null,
-            ['%name%' => $map->name, '%author%' => $map->author]);
+
     }
 
     /**

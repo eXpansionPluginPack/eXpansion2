@@ -14,7 +14,6 @@ services:
             - {name: 'expansion.plugin', data_provider: 'exp.timer'}
             - {name: 'expansion.plugin', data_provider: 'exp.plugin.votemanager'}
 
-
     eXpansion\Bundle\VoteManager\Plugins\Votes\:
         resource: '../../Plugins/Votes/*'
         arguments:
@@ -23,6 +22,23 @@ services:
         tags:
           - {name: 'expansion.vote_manager.vote'}
 
+    eXpansion\Bundle\VoteManager\Plugins\Votes\NextMapVote:
+          class:  eXpansion\Bundle\VoteManager\Plugins\Votes\NextMapVote
+          arguments:
+            $duration: 30
+            $ratio: 0.57
+          tags:
+            - {name: 'expansion.plugin', data_provider: 'mp.script.podium'}
+            - {name: 'expansion.vote_manager.vote'}
+
+    eXpansion\Bundle\VoteManager\Plugins\Votes\RestartMapVote:
+          class:  eXpansion\Bundle\VoteManager\Plugins\Votes\RestartMapVote
+          arguments:
+            $duration: 30
+            $ratio: 0.57
+          tags:
+            - {name: 'expansion.plugin', data_provider: 'mp.script.podium'}
+            - {name: 'expansion.vote_manager.vote'}
 
     eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\VoteWidgetFactory:
             class: eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\VoteWidgetFactory

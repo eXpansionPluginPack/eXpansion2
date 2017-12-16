@@ -34,14 +34,14 @@ class TranslationsTest extends TestCore
         $testGlyph = $glyphCodes['test'];
 
         $colorEn = $translationHelper->getTranslation('expansion_core.test_color', ['%test%' => 'TOTO'], 'en');
-        $this->assertEquals('$z'.$testColor.'This is a test translation : TOTO', $colorEn);
+        $this->assertEquals('$z$s'.$testColor.'This is a test translation : TOTO', $colorEn);
 
         $glyphEn = $translationHelper->getTranslation('expansion_core.test_glyph', ['%test%' => 'TOTO'], 'en');
         $this->assertEquals($testGlyph.'This is a test translation : TOTO', $glyphEn);
 
         $colorglyphEn = $translationHelper->getTranslation('expansion_core.test_color_glyph', ['%test%' => 'TOTO'],
             'en');
-        $this->assertEquals('$z'.$testColor.$testGlyph.'This is a test translation : TOTO', $colorglyphEn);
+        $this->assertEquals('$z$s'.$testColor.$testGlyph.'This is a test translation : TOTO', $colorglyphEn);
 
     }
 

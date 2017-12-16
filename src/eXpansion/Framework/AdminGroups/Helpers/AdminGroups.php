@@ -12,7 +12,7 @@ use eXpansion\Framework\Core\Storage\Data\Player;
  * Class AdminGroupConfiguration
  *
  * @package eXpansion\Bundle\AdminGroupConfiguration\Helpers;
- * @author oliver de Cramer <oliverde8@gmail.com>
+ * @author  oliver de Cramer <oliverde8@gmail.com>
  */
 class AdminGroups
 {
@@ -26,7 +26,7 @@ class AdminGroups
      * GroupsPlugin constructor.
      *
      * @param AdminGroupConfiguration $adminGroupConfiguration
-     * @param Factory $userGroupFactory
+     * @param Factory                 $userGroupFactory
      */
     public function __construct(
         AdminGroupConfiguration $adminGroupConfiguration,
@@ -72,6 +72,27 @@ class AdminGroups
     }
 
     /**
+     * Get admin group Label
+     *
+     * @param string $login
+     * @return string
+     */
+    public function getLoginGroupLabel($login)
+    {
+        $group = $this->getLoginUserGroups($login);
+
+        $groupName = "Admin";
+        if ($group) {
+            if ($groupName) {
+                $groupName = $this->getGroupLabel($group->getName());
+            }
+        }
+
+        return $groupName;
+    }
+
+
+    /**
      * Get (or create a new) admin user group
      *
      * @param string $groupName
@@ -95,7 +116,7 @@ class AdminGroups
      * Checks if group, a login or a player has a certain permission or not.
      *
      * @param string|Group|Player $recipient
-     * @param string $permission The permission to check for.
+     * @param string              $permission The permission to check for.
      *
      * @return bool
      */
@@ -129,7 +150,7 @@ class AdminGroups
     /**
      * Check if a group has a certain permission or not.
      *
-     * @param string $groupName The name of the group to check permissions for.
+     * @param string $groupName  The name of the group to check permissions for.
      * @param string $permission The permission to check for.
      *
      * @return bool
