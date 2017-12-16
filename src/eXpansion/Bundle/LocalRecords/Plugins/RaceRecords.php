@@ -13,15 +13,21 @@ use eXpansion\Framework\GameTrackmania\DataProviders\Listener\RaceDataListenerIn
 class RaceRecords extends BaseRecords implements TmRaceDataListenerInterface
 {
     /**
-     * @param string $login       Login of the player that crossed the CP point
-     * @param int    $time        Server time when the event occured,
-     * @param int    $raceTime    Total race time in milliseconds
-     * @param int    $stuntsScore Stunts score
-     * @param int    $cpInRace    Number of checkpoints crossed since the beginning of the race
-     * @param int[]  $curCps      Checkpoints times since the beginning of the race
-     * @param string $blockId     Id of the checkpoint block
-     * @param string $speed       Speed of the player in km/h
-     * @param string $distance    Distance traveled by the player
+     * @inheritdoc
+     */
+    public function startMap($map, $nbLaps)
+    {
+        if ($nbLaps == 1 && $map->lapRace) {
+            $this->status = false;
+            return;
+        }
+
+        parent::startMap($map, $nbLaps);
+    }
+
+
+    /**
+     * @inheritdoc
      */
     public function onPlayerEndRace(
         $login,
@@ -35,23 +41,18 @@ class RaceRecords extends BaseRecords implements TmRaceDataListenerInterface
         $distance
     )
     {
-        $eventData = $this->recordsHandler->addRecord($login, $raceTime, $curCps);
+        if (!$this->status) {
+            return;
+        }
 
+        $eventData = $this->recordsHandler->addRecord($login, $raceTime, $curCps);
         if ($eventData) {
             $this->dispatchEvent($eventData);
         }
     }
 
-    /**
-     * @param string $login       Login of the player that crossed the CP point
-     * @param int    $time        Server time when the event occured,
-     * @param int    $lapTime     Lap time in milliseconds
-     * @param int    $stuntsScore Stunts score
-     * @param int    $cpInLap     Number of checkpoints crossed since the beginning of the lap
-     * @param int[]  $curLapCps   Checkpoints time since the beginning of the lap
-     * @param string $blockId     Id of the checkpoint block
-     * @param string $speed       Speed of the player in km/h
-     * @param string $distance    Distance traveled by the player
+    /*
+     * @inheritdoc
      */
     public function onPlayerEndLap(
         $login,
@@ -68,19 +69,8 @@ class RaceRecords extends BaseRecords implements TmRaceDataListenerInterface
         // Nothing to do.
     }
 
-    /**
-     * @param string $login       Login of the player that crossed the CP point
-     * @param int    $time        Server time when the event occured,
-     * @param int    $raceTime    Total race time in milliseconds
-     * @param int    $lapTime     Lap time in milliseconds
-     * @param int    $stuntsScore Stunts score
-     * @param int    $cpInRace    Number of checkpoints crossed since the beginning of the race
-     * @param int    $cpInLap     Number of checkpoints crossed since the beginning of the lap
-     * @param int[]  $curCps      Checkpoints times since the beginning of the race
-     * @param int[]  $curLapCps   Checkpoints time since the beginning of the lap
-     * @param string $blockId     Id of the checkpoint block
-     * @param string $speed       Speed of the player in km/h
-     * @param string $distance    Distance traveled by the player
+    /*
+     * @inheritdoc
      */
     public function onPlayerWayPoint(
         $login,

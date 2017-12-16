@@ -43,6 +43,9 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
     /** @var DispatcherInterface */
     protected $dispatcher;
 
+    /** @var bool Is the plugin running forc current map */
+    protected $status = true;
+
     /**
      * BaseRecords constructor.
      *
@@ -106,26 +109,44 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
      */
     public function onStartMapStart($count, $time, $restarted, Map $map)
     {
-        $playerGroup = $this->allPlayersGroup;
-        $recordsHandler = $this->recordsHandler;
+        $plugin = $this;
 
-        $this->getNumberOfLaps->get(function ($laps) use ($map, $playerGroup, $recordsHandler) {
-            // Load firs X records for this map.
-            $recordsHandler->loadForMap($map->uId, $laps);
-
-            // Load time information for remaining players.
-            $recordsHandler->loadForPlayers($map->uId, $laps, $playerGroup->getLogins());
-
-            // Let others know that records information is now available.
-            $this->dispatchEvent(['event' => 'loaded', 'records' => $recordsHandler->getRecords()]);
+        $this->getNumberOfLaps->get(function ($laps) use ($map, $plugin) {
+            $plugin->startMap($map, $laps);
         });
     }
 
     /**
-     * @param Player $player
+     * Start plugin for a certain map.
+     *
+     * @param Map $map
+     * @param int $nbLaps
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function startMap($map, $nbLaps)
+    {
+        $this->status = true;
+
+        // Load firs X records for this map.
+        $this->recordsHandler->loadForMap($map->uId, $nbLaps);
+
+        // Load time information for remaining players.
+        $this->recordsHandler->loadForPlayers($map->uId, $nbLaps, $this->allPlayersGroup->getLogins());
+
+        // Let others know that records information is now available.
+        $this->dispatchEvent(['event' => 'loaded', 'records' => $this->recordsHandler->getRecords()]);
+    }
+
+    /**
+     * @inheritdoc
      */
     public function onPlayerConnect(Player $player)
     {
+        if (!$this->status) {
+            return;
+        }
+
         $this->recordsHandler->loadForPlayers($this->mapStorage->getCurrentMap()->uId, [1], [$player->getLogin()]);
     }
 
@@ -167,6 +188,10 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
      */
     public function onStartMatchEnd($count, $time)
     {
+        if (!$this->status) {
+            return;
+        }
+
         $this->recordsHandler->save();
     }
 

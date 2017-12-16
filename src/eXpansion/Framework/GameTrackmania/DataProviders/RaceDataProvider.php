@@ -3,6 +3,7 @@
 namespace eXpansion\Framework\GameTrackmania\DataProviders;
 
 use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
+use eXpansion\Framework\Core\Storage\MapStorage;
 
 
 /**
@@ -13,6 +14,20 @@ use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
  */
 class RaceDataProvider extends AbstractDataProvider
 {
+    /** @var MapStorage */
+    protected $mapStorage;
+
+    /**
+     * RaceDataProvider constructor.
+     *
+     * @param MapStorage $mapStorage
+     */
+    public function __construct(MapStorage $mapStorage)
+    {
+        $this->mapStorage = $mapStorage;
+    }
+
+
     public function onWayPoint($params)
     {
         if ($params['isendrace']) {
@@ -32,7 +47,7 @@ class RaceDataProvider extends AbstractDataProvider
             );
         }
 
-        if ($params['isendlap']) {
+        if ($params['isendlap'] && $this->mapStorage->getCurrentMap()->lapRace) {
             $this->dispatch(
                 'onPlayerEndLap',
                 [
