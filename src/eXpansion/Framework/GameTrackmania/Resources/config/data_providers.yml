@@ -38,7 +38,7 @@ services:
           - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'Laps.Script.txt'}
 
     expansion.framework.game_trackmania.data_providers.script_time_attack.method_get_number_laps:
-        class: eXpansion\Framework\GameTrackmania\DataProviders\ScriptBaseRounds\MethodGetNumberLapsDataProvider
+        class: eXpansion\Framework\GameTrackmania\DataProviders\ScriptTimeAttack\MethodGetNumberLapsDataProvider
         tags:
           - {name: expansion.dataprovider, provider: 'mp.method.get_number_laps', interface: eXpansion\Framework\Core\ScriptMethods\AbstractScriptMethod}
           - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'TeamAttack.Script.txt'}

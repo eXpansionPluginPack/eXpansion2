@@ -14,6 +14,18 @@ use eXpansion\Framework\Core\DataProviders\MethodScriptDataProviderInterface;
  */
 class MethodGetNumberLapsDataProvider extends AbstractDataProvider implements MethodScriptDataProviderInterface
 {
+    /**
+     * @inheritdoc
+     *
+     * @param string $pluginId
+     * @param mixed $pluginService
+     */
+    public function registerPlugin($pluginId, $pluginService)
+    {
+        parent::registerPlugin($pluginId, $pluginService);
+
+        $pluginService->setCurrentDataProvider($this);
+    }
 
     /**
      * Request call to fetch something..
