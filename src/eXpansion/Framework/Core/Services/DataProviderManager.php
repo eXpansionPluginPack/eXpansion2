@@ -153,6 +153,9 @@ class DataProviderManager
             [$provider, $title, $mode, self::COMPATIBLE_ALL],
             [$provider, $title, self::COMPATIBLE_ALL, self::COMPATIBLE_ALL],
             [$provider, self::COMPATIBLE_ALL, self::COMPATIBLE_ALL, self::COMPATIBLE_ALL],
+            // For modes that are common to all titles.
+            [$provider, self::COMPATIBLE_ALL, $mode, self::COMPATIBLE_ALL],
+            [$provider, self::COMPATIBLE_ALL, $mode, $script],
         ];
 
         foreach ($parameters as $parameter) {
