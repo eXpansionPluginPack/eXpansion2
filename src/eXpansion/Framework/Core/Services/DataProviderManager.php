@@ -112,7 +112,7 @@ class DataProviderManager
     public function registerDataProvider($id, $provider, $interface, $compatibilities, $listeners)
     {
         foreach ($compatibilities as $compatibility) {
-            $this->providersByCompatibility[$provider][$compatibility['title']][$compatibility['mode']][$compatibility['script']] = $id;
+            $this->providersByCompatibility[$provider][$compatibility['title']][$compatibility['gamemode']][$compatibility['script']] = $id;
         }
 
         $this->providerListeners[$id] = [];
