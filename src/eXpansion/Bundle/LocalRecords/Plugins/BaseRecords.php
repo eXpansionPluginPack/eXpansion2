@@ -12,6 +12,7 @@ use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\MapStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMap;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMatch;
+use eXpansion\Framework\GameTrackmania\ScriptMethods\GetNumberOfLaps;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
 /**
@@ -36,6 +37,9 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
     /** @var string */
     protected $eventPrefix;
 
+    /** @var GetNumberOfLaps */
+    protected $getNumberOfLaps;
+
     /** @var DispatcherInterface */
     protected $dispatcher;
 
@@ -46,6 +50,7 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
      * @param Group                $allPlayersGroup
      * @param MapStorage           $mapStorage
      * @param DispatcherInterface  $dispatcher
+     * @param GetNumberOfLaps      $getNumberOfLaps
      * @param                      $eventPrefix
      */
     public function __construct(
@@ -53,6 +58,7 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
         Group $allPlayersGroup,
         MapStorage $mapStorage,
         DispatcherInterface $dispatcher,
+        GetNumberOfLaps $getNumberOfLaps,
         $eventPrefix
     ) {
         $this->recordsHandler = $recordsHandlerFactory->create();
@@ -60,6 +66,7 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
         $this->mapStorage = $mapStorage;
         $this->eventPrefix = $eventPrefix;
         $this->dispatcher = $dispatcher;
+        $this->getNumberOfLaps = $getNumberOfLaps;
     }
 
     /**
@@ -83,14 +90,7 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
     {
         if ($status) {
             $map = $this->mapStorage->getCurrentMap();
-
-            // Load firs X records for this map.
-            $this->recordsHandler->loadForMap($map->uId, $this->getNbLaps());
-
-            // Load time information for remaining players.
-            $this->recordsHandler->loadForPlayers($map->uId, $this->getNbLaps(), $this->allPlayersGroup->getLogins());
-
-            $this->dispatchEvent(['event' => 'loaded', 'records' => $this->recordsHandler->getRecords()]);
+            $this->onStartMapStart(0, 0, 0, $map);
         }
     }
 
@@ -106,14 +106,19 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
      */
     public function onStartMapStart($count, $time, $restarted, Map $map)
     {
-        // Load firs X records for this map.
-        $this->recordsHandler->loadForMap($map->uId, $this->getNbLaps());
+        $playerGroup = $this->allPlayersGroup;
+        $recordsHandler = $this->recordsHandler;
 
-        // Load time information for remaining players.
-        $this->recordsHandler->loadForPlayers($map->uId, $this->getNbLaps(), $this->allPlayersGroup->getLogins());
+        $this->getNumberOfLaps->get(function ($laps) use ($map, $playerGroup, $recordsHandler) {
+            // Load firs X records for this map.
+            $recordsHandler->loadForMap($map->uId, $laps);
 
-        // Let others know that records information is now available.
-        $this->dispatchEvent(['event' => 'loaded', 'records' => $this->recordsHandler->getRecords()]);
+            // Load time information for remaining players.
+            $recordsHandler->loadForPlayers($map->uId, $laps, $playerGroup->getLogins());
+
+            // Let others know that records information is now available.
+            $this->dispatchEvent(['event' => 'loaded', 'records' => $recordsHandler->getRecords()]);
+        });
     }
 
     /**
@@ -215,22 +220,12 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
      *
      * @param $eventData
      */
-    protected function dispatchEvent($eventData)
+    public function dispatchEvent($eventData)
     {
         $event = $this->eventPrefix.'.'.$eventData['event'];
         unset($eventData['event']);
 
         $this->dispatcher->dispatch($event, [$eventData]);
-    }
-
-    /**
-     * Get number of laps
-     *
-     * @return int
-     */
-    protected function getNbLaps()
-    {
-        return 1;
     }
 
     /**

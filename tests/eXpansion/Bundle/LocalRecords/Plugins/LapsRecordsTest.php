@@ -8,6 +8,7 @@ use eXpansion\Bundle\LocalRecords\Services\RecordHandlerFactory;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Services\Application\Dispatcher;
 use eXpansion\Framework\Core\Storage\MapStorage;
+use eXpansion\Framework\GameTrackmania\ScriptMethods\GetNumberOfLaps;
 
 class LapsRecordsTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,6 +23,9 @@ class LapsRecordsTest extends \PHPUnit_Framework_TestCase
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $playersGroup;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockGetNbLaps;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $dispatcher;
@@ -41,6 +45,10 @@ class LapsRecordsTest extends \PHPUnit_Framework_TestCase
         $this->mapStorageMock = $this->getMockBuilder(MapStorage::class)->getMock();
 
         $this->dispatcher = $this->getMockBuilder(Dispatcher::class)->disableOriginalConstructor()->getMock();
+
+        $this->mockGetNbLaps = $this->getMockBuilder(GetNumberOfLaps::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->playersGroup = new Group(null, $this->dispatcher);
     }
@@ -82,6 +90,7 @@ class LapsRecordsTest extends \PHPUnit_Framework_TestCase
             $this->playersGroup,
             $this->mapStorageMock,
             $this->dispatcher,
+            $this->mockGetNbLaps,
             'prefix'
         );
     }

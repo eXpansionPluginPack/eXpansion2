@@ -15,7 +15,7 @@ services:
             - {name: 'expansion.plugin', data_provider: 'exp.menu.items'}
 
     #
-    # Services used to handle Records in TA.
+    # Services used to handle Records for Race results.
     #
     eXpansion.local_records.services.race_record_handler_factory:
         class: eXpansion\Bundle\LocalRecords\Services\RecordHandlerFactory
@@ -27,11 +27,9 @@ services:
     expansion.local_records.plugins.race_records:
         class: eXpansion\Bundle\LocalRecords\Plugins\RaceRecords
         arguments:
-            - '@eXpansion.local_records.services.race_record_handler_factory'
-            - '@expansion.framework.core.user_groups.all_players'
-            - '@eXpansion\Framework\Core\Storage\MapStorage'
-            - '@eXpansion\Framework\Core\Services\Application\Dispatcher'
-            - 'expansion.local_records.race'
+            $recordsHandlerFactory: '@eXpansion.local_records.services.race_record_handler_factory'
+            $allPlayersGroup: '@expansion.framework.core.user_groups.all_players'
+            $eventPrefix: 'expansion.local_records.race'
         tags:
             - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
             - {name: 'expansion.plugin', data_provider: 'mp.script.map'}
@@ -60,8 +58,46 @@ services:
         tags:
             - {name: 'expansion.plugin', data_provider: 'expansion.local_records.race'}
 
+    #
+    # Services used to handle records for individual laps.
+    #
+    eXpansion.local_records.services.lap_record_handler_factory:
+        class: eXpansion\Bundle\LocalRecords\Services\RecordHandlerFactory
+        arguments:
+            $ordering: ASC
+            $nbRecords: '%eXpansion.local_records.nb_records%'
 
-    #
-    # In Laps mode we will also need a service to save individual lap records and not just race records.
-    #
-    # TODO Complete
+    # Plugins to save lap records in all TM gamemodes.
+    expansion.local_records.plugins.lap_records:
+        class: eXpansion\Bundle\LocalRecords\Plugins\LapsRecords
+        arguments:
+            $recordsHandlerFactory: '@eXpansion.local_records.services.lap_record_handler_factory'
+            $allPlayersGroup: '@expansion.framework.core.user_groups.all_players'
+            $eventPrefix: 'expansion.local_records.lap'
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
+            - {name: 'expansion.plugin', data_provider: 'mp.script.map'}
+            - {name: 'expansion.plugin', data_provider: 'mp.script.match'}
+            - {name: 'expansion.plugin', data_provider: 'tm.script.race'}
+
+    # Data provider to lap records data to other plugins.
+    eXpansion.local_records.data_providers.lap_records:
+        class: eXpansion\Bundle\LocalRecords\DataProviders\RecordsDataProvider
+        tags:
+          - {name: 'expansion.dataprovider', provider: "expansion.local_records.lap", interface: 'eXpansion\Bundle\LocalRecords\DataProviders\Listener\RecordsDataListener'}
+          - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
+          - {name: 'expansion.dataprovider.parent', parent: 'expansion.local_records.plugins.lap_records'}
+          - {name: 'expansion.dataprovider.listener', event_name: 'expansion.local_records.lap.loaded', method: 'onRecordsLoaded'}
+          - {name: 'expansion.dataprovider.listener', event_name: 'expansion.local_records.lap.first_time', method: 'onFirstRecord'}
+          - {name: 'expansion.dataprovider.listener', event_name: 'expansion.local_records.lap.same_score', method: 'onSameScore'}
+          - {name: 'expansion.dataprovider.listener', event_name: 'expansion.local_records.lap.same_position', method: 'onSamePosition'}
+          - {name: 'expansion.dataprovider.listener', event_name: 'expansion.local_records.lap.better_position', method: 'onBetterPosition'}
+
+    # Plugin to have chat notificaiton for lap records.
+    eXpansion.local_records.plugins.lap_records_notifications:
+        class: eXpansion\Bundle\LocalRecords\Plugins\ChatNotification
+        arguments:
+            $translationPrefix: 'expansion_local_records.chat.lap'
+            $positionForPublicMessage: 20
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'expansion.local_records.lap'}

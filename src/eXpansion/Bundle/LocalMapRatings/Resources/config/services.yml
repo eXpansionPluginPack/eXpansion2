@@ -3,6 +3,9 @@ services:
         autowire: true
         public: true
 
+    eXpansion\Bundle\LocalMapRatings\Services\:
+        resource: '../../Services/*'
+
     eXpansion\Bundle\LocalMapRatings\DataProviders\MapRatingsDataProvider:
         class: eXpansion\Bundle\LocalMapRatings\DataProviders\MapRatingsDataProvider
         tags:

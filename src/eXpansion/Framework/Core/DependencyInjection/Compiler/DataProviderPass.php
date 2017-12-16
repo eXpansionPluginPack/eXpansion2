@@ -46,7 +46,7 @@ class DataProviderPass implements CompilerPassInterface
             foreach ($tags as $attributes) {
                 $providerData[$id]['compatibility'][] = [
                     'title' => isset($attributes['title']) ? $attributes['title'] : DataProviderManager::COMPATIBLE_ALL,
-                    'mode' => isset($attributes['mode']) ? $attributes['mode'] : DataProviderManager::COMPATIBLE_ALL,
+                    'gamemode' => isset($attributes['gamemode']) ? $attributes['gamemode'] : DataProviderManager::COMPATIBLE_ALL,
                     'script' => isset($attributes['script']) ? $attributes['script'] : DataProviderManager::COMPATIBLE_ALL,
                 ];
             }

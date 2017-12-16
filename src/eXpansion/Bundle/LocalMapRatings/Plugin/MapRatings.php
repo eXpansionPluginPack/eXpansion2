@@ -6,7 +6,6 @@ use eXpansion\Bundle\LocalMapRatings\DataProviders\Listener\ListenerInterfaceExp
 use eXpansion\Bundle\LocalMapRatings\Model\Maprating;
 use eXpansion\Bundle\LocalMapRatings\Plugin\Gui\MapRatingsWidget;
 use eXpansion\Bundle\LocalMapRatings\Services\MapRatingsService;
-use eXpansion\Bundle\LocalRecords\Plugins\ChatNotification;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Services\Application\Dispatcher;
@@ -22,7 +21,6 @@ use Maniaplanet\DedicatedServer\Structures\Map;
 class MapRatings implements ListenerInterfaceExpApplication, ListenerInterfaceMpScriptMatch,
     ListenerInterfaceMpScriptMap, ListenerInterfaceMpLegacyChat, ListenerInterfaceExpMapRatings
 {
-
     /**
      * @var MapStorage
      */
@@ -32,10 +30,6 @@ class MapRatings implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      */
     private $playerStorage;
 
-    /**
-     * @var ChatNotification
-     */
-    private $chatNotification;
     /**
      * @var Dispatcher
      */
@@ -57,7 +51,6 @@ class MapRatings implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      * MapRatingService constructor.
      * @param MapStorage        $mapStorage
      * @param PlayerStorage     $playerStorage
-     * @param ChatNotification  $chatNotification
      * @param MapRatingsWidget  $mapRatingsWidget
      * @param MapRatingsService $mapRatingsService
      * @param Group             $players
@@ -65,14 +58,12 @@ class MapRatings implements ListenerInterfaceExpApplication, ListenerInterfaceMp
     public function __construct(
         MapStorage $mapStorage,
         PlayerStorage $playerStorage,
-        ChatNotification $chatNotification,
         MapRatingsWidget $mapRatingsWidget,
         MapRatingsService $mapRatingsService,
         Group $players
     ) {
         $this->mapStorage = $mapStorage;
         $this->playerStorage = $playerStorage;
-        $this->chatNotification = $chatNotification;
         $this->mapRatingsWidget = $mapRatingsWidget;
         $this->players = $players;
         $this->mapRatingsService = $mapRatingsService;
