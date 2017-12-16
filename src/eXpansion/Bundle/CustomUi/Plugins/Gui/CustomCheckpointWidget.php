@@ -5,6 +5,7 @@ namespace eXpansion\Bundle\CustomUi\Plugins\Gui;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
+use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
 use eXpansion\Framework\Gui\Components\uiLabel;
 use FML\Controls\Frame;
@@ -26,13 +27,19 @@ class CustomCheckpointWidget extends WidgetFactory
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function createManialink(Group $group, $hideable = true)
+    {
+        return parent::createManialink($group, false);
+    }
+
+    /**
      * @param ManialinkInterface|Widget $manialink
      */
     protected function createContent(ManialinkInterface $manialink)
     {
         parent::createContent($manialink);
-
-        $manialink->setWidgetHide(false);
 
         $frame = Frame::create("Frame_Main");
         $manialink->addChild($frame);

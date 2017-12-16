@@ -14,19 +14,18 @@ use FML\Types\Container;
  */
 class Widget extends FmlManialink implements Container
 {
-    private $_hideable = true;
-
     /**
      * Widget constructor.
      *
      * @param ManialinkFactoryInterface $manialinkFactory
      * @param Group                     $group
      * @param Translations              $translationHelper
-     * @param int                       $name
-     * @param int                       $sizeX
+     * @param string                    $name
+     * @param float|null                $sizeX
      * @param float|null                $sizeY
-     * @param null                      $posX
-     * @param null                      $posY
+     * @param float|null                $posX
+     * @param float|null                $posY
+     * @param bool                      $hideable
      */
     public function __construct(
         ManialinkFactoryInterface $manialinkFactory,
@@ -37,21 +36,10 @@ class Widget extends FmlManialink implements Container
         $sizeX,
         $sizeY,
         $posX = null,
-        $posY = null
+        $posY = null,
+        $hideable = true
     ) {
         parent::__construct($manialinkFactory, $group, $translationHelper, $name, $sizeX, $sizeY, $posX, $posY);
-
-        $widgetFrameFactory->build($this, $this->windowFrame, $name, $sizeX, $sizeY, $this->_hideable);
+        $widgetFrameFactory->build($this, $this->windowFrame, $name, $sizeX, $sizeY, $hideable);
     }
-
-
-    /**
-     * set if widget can be hided with f9
-     * @param $status
-     */
-    public function setWidgetHide($status)
-    {
-        $this->_hideable = $status;
-    }
-
 }
