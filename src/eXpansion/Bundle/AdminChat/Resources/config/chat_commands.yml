@@ -239,7 +239,7 @@ services:
           arguments:
               $command:              "password"
               $permission:           "password"
-              $aliases:              ['pass']
+              $aliases:              []
               $functionName:         "setServerPasswordForPlayer"
               $parameterDescription: "New server join password"
 
@@ -248,6 +248,6 @@ services:
           arguments:
               $command:              "specpassword"
               $permission:           "specpassword"
-              $aliases:              ['specpass']
+              $aliases:              []
               $functionName:         "setServerPasswordForSpectator"
               $parameterDescription: "New server spectator join password"

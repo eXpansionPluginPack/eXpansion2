@@ -10,6 +10,7 @@ services:
             -
               - '@eXpansion\Bundle\VoteManager\ChatCommand\Skip'
               - '@eXpansion\Bundle\VoteManager\ChatCommand\Restart'
+              - '@eXpansion\Bundle\VoteManager\ChatCommand\Pass'
         tags:
             - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}
 
@@ -26,3 +27,10 @@ services:
             $command: 'skip'
             $aliases: ['nextmap']
             $voteTypeCode: 'Exp_NextMap'
+
+    eXpansion\Bundle\VoteManager\ChatCommand\Pass:
+        class: eXpansion\Bundle\VoteManager\ChatCommand\VotePass
+        arguments:
+            $command: 'pass'
+            $permission: "votes"
+            $aliases: []

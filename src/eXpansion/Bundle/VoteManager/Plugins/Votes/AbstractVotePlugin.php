@@ -142,6 +142,15 @@ abstract class AbstractVotePlugin
     }
 
     /**
+     *  Pass a vote
+     */
+    public function pass()
+    {
+        $this->currentVote->setStatus(Vote::STATUS_PASSED);
+        $this->executeVotePassed();
+    }
+
+    /**
      * Called when a vote passed.
      */
     protected function votePassed()

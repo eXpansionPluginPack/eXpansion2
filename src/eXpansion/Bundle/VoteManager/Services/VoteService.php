@@ -139,6 +139,20 @@ class VoteService
     }
 
     /**
+     * Pass ongoing vote.
+     */
+    public function pass()
+    {
+        if (!$this->currentVote) {
+            return;
+        }
+
+        $this->currentVote->pass();
+        $this->update();
+    }
+
+
+    /**
      * @return AbstractVotePlugin
      */
     public function getCurrentVote()

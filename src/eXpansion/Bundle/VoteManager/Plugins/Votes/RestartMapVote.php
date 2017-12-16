@@ -7,6 +7,7 @@ use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\MapStorage;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptPodium;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
 /**
@@ -16,7 +17,7 @@ use Maniaplanet\DedicatedServer\Structures\Map;
  * @copyright 2017 eXpansion
  * @package   eXpansion\Bundle\VoteManager\Plugins\Votes
  */
-class RestartMapVote extends AbstractVotePlugin
+class RestartMapVote extends AbstractVotePlugin implements ListenerInterfaceMpScriptPodium
 {
     /** @var Map */
     private $map;
@@ -107,5 +108,28 @@ class RestartMapVote extends AbstractVotePlugin
     public function getReplacementTypes(): array
     {
         return ['RestartMap'];
+    }
+
+    /**
+     * Callback sent when the "onPodiumStart" section start.
+     *
+     * @param int $time Server time when the callback was sent
+     * @return void
+     */
+    public function onPodiumStart($time)
+    {
+        //nothing
+    }
+
+    /**
+     * Callback sent when the "onPodiumEnd" section end.
+     *
+     * @param int $time Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onPodiumEnd($time)
+    {
+        $this->cancel();
     }
 }
