@@ -34,7 +34,7 @@ class ChatNotificationTest extends TestCore
         $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
         $dedicatedConnection->expects($this->once())
             ->method('chatSendServerMessage')
-            ->with('$z' . $colorCode . 'This is a test translation : Toto', 'toto');
+            ->with('$z$s' . $colorCode . 'This is a test translation : Toto', 'toto');
 
         $player = new Player();
         $player->merge(['language' => 'en']);
@@ -50,8 +50,8 @@ class ChatNotificationTest extends TestCore
         $colorCode = $colorCodes['test'];
 
         $translate = [
-            0 => ['Lang' => 'fr', 'Text' => '$z' . $colorCode . 'Ceci est une trad de test : Toto'],
-            1 => ['Lang' => 'de', 'Text' => '$z' . $colorCode . 'This is a test translation : Toto'],
+            0 => ['Lang' => 'fr', 'Text' => '$z$s' . $colorCode . 'Ceci est une trad de test : Toto'],
+            1 => ['Lang' => 'de', 'Text' => '$z$s' . $colorCode . 'This is a test translation : Toto'],
         ];
 
         $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
@@ -73,8 +73,8 @@ class ChatNotificationTest extends TestCore
         $colorCode = $colorCodes['test'];
 
         $translate = [
-            0 => ['Lang' => 'fr', 'Text' => '$z' . $colorCode . 'Ceci est une trad de test : Toto'],
-            1 => ['Lang' => 'de', 'Text' => '$z' . $colorCode . 'This is a test translation : Toto'],
+            0 => ['Lang' => 'fr', 'Text' => '$z$s' . $colorCode . 'Ceci est une trad de test : Toto'],
+            1 => ['Lang' => 'de', 'Text' => '$z$s' . $colorCode . 'This is a test translation : Toto'],
         ];
 
 
@@ -95,7 +95,7 @@ class ChatNotificationTest extends TestCore
         $chatNotification = $this->getChatNotificationHelper();
         $translation = $chatNotification->getMessage('expansion_core.test_color', ['%test%' => 'Toto'], 'en');
 
-        $this->assertEquals('$z' . $colorCode . 'This is a test translation : Toto', $translation);
+        $this->assertEquals('$z$s' . $colorCode . 'This is a test translation : Toto', $translation);
 
     }
 
