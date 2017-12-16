@@ -138,11 +138,11 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
         $nick = trim($player->getNickName());
         $nick = str_ireplace('$w', '', $nick);
         $nick = str_ireplace('$z', '$z$s', $nick);
-
+        $replacements = [":yes:" => "",":no:" => "", ":happy:" => "", ":sad:" => "", ":heart:" => ""];
         // fix for chat...
         $nick = str_replace(['$<', '$>'], '', $nick);
         $text = str_replace(['$<', '$>'], '', $text);
-
+        $text = str_replace(array_keys($replacements), array_values($replacements), $text);
         $separator = '';
         if ($this->adminGroups->isAdmin($player->getLogin())) {
             $separator = '';

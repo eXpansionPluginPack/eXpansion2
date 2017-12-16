@@ -32,6 +32,8 @@ class CustomCheckpointWidget extends WidgetFactory
     {
         parent::createContent($manialink);
 
+        $manialink->setWidgetHide(false);
+
         $frame = Frame::create("Frame_Main");
         $manialink->addChild($frame);
 

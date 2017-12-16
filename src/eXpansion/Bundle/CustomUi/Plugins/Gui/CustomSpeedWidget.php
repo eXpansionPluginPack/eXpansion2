@@ -30,6 +30,7 @@ class CustomSpeedWidget extends WidgetFactory
     protected function createContent(ManialinkInterface $manialink)
     {
         parent::createContent($manialink);
+        $manialink->setWidgetHide(false);
 
         $frame = Frame::create("Frame_Main");
         $frame->setScale(1);
