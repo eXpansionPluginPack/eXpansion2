@@ -287,6 +287,10 @@ class GuiHandler implements
         if (isset($this->displayeds[$group])) {
             foreach ($this->displayeds[$group] as $mlId => $manialink) {
                 $this->individualQueu[$loginAdded][$mlId] = $manialink;
+
+                if (isset($this->hideIndividualQueu[$loginAdded]) && isset($this->hideIndividualQueu[$loginAdded][$mlId])) {
+                    unset ($this->hideIndividualQueu[$loginAdded][$mlId]);
+                }
             }
         }
     }
@@ -302,6 +306,10 @@ class GuiHandler implements
         if (isset($this->displayeds[$group])) {
             foreach ($this->displayeds[$group] as $mlId => $manialink) {
                 $this->hideIndividualQueu[$loginRemoved][$mlId] = $manialink;
+
+                if (isset($this->individualQueu[$loginRemoved]) && isset($this->individualQueu[$loginRemoved][$mlId])) {
+                    unset ($this->hideIndividualQueu[$loginRemoved][$mlId]);
+                }
             }
         }
     }
