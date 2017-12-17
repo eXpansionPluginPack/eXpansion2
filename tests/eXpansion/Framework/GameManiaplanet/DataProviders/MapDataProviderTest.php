@@ -46,6 +46,10 @@ class MapDataProviderTest extends TestCore
             ->method('getMapList')
             ->willThrowException(new IndexOutOfBoundException('test'));
         $connectionMock
+            ->expects($this->exactly(1000))
+            ->method('getMapInfo')
+            ->willReturn(reset($mapPack1));
+        $connectionMock
             ->method('getCurrentMapInfo')
             ->willReturn($maps[0]);
         $connectionMock
@@ -79,6 +83,10 @@ class MapDataProviderTest extends TestCore
         $connectionMock
             ->method('getNextMapInfo')
             ->willReturn($mapPack1[$uids1[1]]);
+        $connectionMock
+            ->expects($this->exactly(20))
+            ->method('getMapInfo')
+            ->willReturn(reset($mapPack1));
 
         $mapStorageMock = $this->createMock(MapStorage::class);
         $mapStorageMock->method('getMaps')->willReturn($mapPack1);

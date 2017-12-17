@@ -11,6 +11,7 @@ use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\MapStorage;
 use eXpansion\Framework\GameTrackmania\ScriptMethods\GetNumberOfLaps;
 use Maniaplanet\DedicatedServer\Structures\Map;
+use Psr\Log\LoggerInterface;
 
 class RaceRecordsTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,6 +29,9 @@ class RaceRecordsTest extends \PHPUnit_Framework_TestCase
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $dispatcher;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockLogger;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $mockGetNbLaps;
@@ -52,6 +56,8 @@ class RaceRecordsTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->mockLogger = $this->getMockBuilder(LoggerInterface::class)->disableOriginalConstructor()->getMock();
+
         $this->playersGroup = new Group(null, $this->dispatcher);
     }
 
@@ -67,7 +73,7 @@ class RaceRecordsTest extends \PHPUnit_Framework_TestCase
                 $call(1);
             });
 
-        $this->getRaceRecords()->setStatus(true);
+        $this->getRaceRecords()->onApplicationReady();
     }
 
     public function testMapChange()
@@ -132,7 +138,6 @@ class RaceRecordsTest extends \PHPUnit_Framework_TestCase
     {
         $raceRecords = $this->getRaceRecords();
 
-        $raceRecords->setStatus(false);
         $raceRecords->onPlayerInfoChanged(new Player(), new Player());
         $raceRecords->onPlayerAlliesChanged(new Player(), new Player());
         $raceRecords-> onPlayerDisconnect(new Player(), '');
@@ -152,7 +157,9 @@ class RaceRecordsTest extends \PHPUnit_Framework_TestCase
         $raceRecords->onStartRoundStart(0, 0);
         $raceRecords->onStartRoundEnd(0, 0);
         $raceRecords->onEndRoundStart(0, 0);
-        $raceRecords->onEndRoundEnd(0, 0);
+        $raceRecords->onEndRoundStart(0, 0);
+        $raceRecords->onApplicationInit();
+        $raceRecords->onApplicationStop();
         $raceRecords->getRecordsHandler();
 
 
@@ -170,6 +177,7 @@ class RaceRecordsTest extends \PHPUnit_Framework_TestCase
             $this->mapStorageMock,
             $this->dispatcher,
             $this->mockGetNbLaps,
+            $this->mockLogger,
             'prefix'
         );
     }
