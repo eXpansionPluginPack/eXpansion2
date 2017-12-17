@@ -48,7 +48,7 @@ class RaceRecordsTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->recordHanlderFactoryMock->method('create')->willReturn($this->recordHanlderMock);
 
-        $this->mapStorageMock = $this->getMockBuilder(MapStorage::class)->getMock();
+        $this->mapStorageMock = $this->getMockBuilder(MapStorage::class)->disableOriginalConstructor()->getMock();
 
         $this->dispatcher = $this->getMockBuilder(Dispatcher::class)->disableOriginalConstructor()->getMock();
 
