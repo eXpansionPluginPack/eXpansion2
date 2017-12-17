@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Core\Storage;
 
+use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
 
@@ -13,6 +14,9 @@ use oliverde8\AssociativeArraySimplified\AssociativeArray;
  */
 class MapStorage
 {
+    /** @var Connection */
+    protected $connection;
+
     /** @var Map[] List of all current maps on the server. */
     protected $maps = [];
 
@@ -21,6 +25,17 @@ class MapStorage
 
     /** @var Map Next map to be played. */
     protected $nextMap;
+
+    /**
+     * MapStorage constructor.
+     *
+     * @param Connection $connection
+     */
+    public function __construct(Connection $connection)
+    {
+        $this->connection = $connection;
+    }
+
 
     /**
      * Add a map to the current map list.
@@ -52,7 +67,15 @@ class MapStorage
      */
     public function getMap($uid)
     {
-        return AssociativeArray::getFromKey($this->maps, $uid,  new Map());
+        /** @var Map $map */
+        $map = AssociativeArray::getFromKey($this->maps, $uid,  new Map());
+
+        if ($map->fileName && $map->lapRace === null) {
+            $map = $this->connection->getMapInfo($map->fileName);
+            $this->maps[$map->uId] = $map;
+        }
+
+        return $map;
     }
 
     /**
