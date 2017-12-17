@@ -4,6 +4,7 @@ namespace eXpansion\Bundle\LocalRecords\Plugins;
 
 use eXpansion\Bundle\LocalRecords\Services\RecordHandler;
 use eXpansion\Bundle\LocalRecords\Services\RecordHandlerFactory;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
@@ -14,6 +15,7 @@ use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterface
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMatch;
 use eXpansion\Framework\GameTrackmania\ScriptMethods\GetNumberOfLaps;
 use Maniaplanet\DedicatedServer\Structures\Map;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class RaceRecords
@@ -23,7 +25,7 @@ use Maniaplanet\DedicatedServer\Structures\Map;
  * @package eXpansion\Bundle\LocalRecords\Plugins;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpScriptMatch, ListenerInterfaceMpLegacyPlayer, StatusAwarePluginInterface
+class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpScriptMatch, ListenerInterfaceMpLegacyPlayer, ListenerInterfaceExpApplication
 {
     /** @var  RecordHandler */
     protected $recordsHandler;
@@ -43,6 +45,9 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
     /** @var DispatcherInterface */
     protected $dispatcher;
 
+    /** @var LoggerInterface */
+    protected $logger;
+
     /** @var bool Is the plugin running forc current map */
     protected $status = true;
 
@@ -54,6 +59,7 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
      * @param MapStorage           $mapStorage
      * @param DispatcherInterface  $dispatcher
      * @param GetNumberOfLaps      $getNumberOfLaps
+     * @param LoggerInterface      $logger
      * @param                      $eventPrefix
      */
     public function __construct(
@@ -62,6 +68,7 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
         MapStorage $mapStorage,
         DispatcherInterface $dispatcher,
         GetNumberOfLaps $getNumberOfLaps,
+        LoggerInterface $logger,
         $eventPrefix
     ) {
         $this->recordsHandler = $recordsHandlerFactory->create();
@@ -69,6 +76,7 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
         $this->mapStorage = $mapStorage;
         $this->eventPrefix = $eventPrefix;
         $this->dispatcher = $dispatcher;
+        $this->logger = $logger;
         $this->getNumberOfLaps = $getNumberOfLaps;
     }
 
@@ -83,18 +91,14 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
     }
 
     /**
-     * Set the status of the plugin
-     *
-     * @param boolean $status
+     * called when init is done and callbacks are enabled
      *
      * @return void
      */
-    public function setStatus($status)
+    public function onApplicationReady()
     {
-        if ($status) {
-            $map = $this->mapStorage->getCurrentMap();
-            $this->onStartMapStart(0, 0, 0, $map);
-        }
+        $map = $this->mapStorage->getCurrentMap();
+        $this->onStartMapStart(0, 0, 0, $map);
     }
 
     /**
@@ -379,6 +383,26 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
      * @return mixed
      */
     public function onEndRoundEnd($count, $time)
+    {
+        // Nothing
+    }
+
+    /**
+     * called at eXpansion init
+     *
+     * @return void
+     */
+    public function onApplicationInit()
+    {
+        // Nothing
+    }
+
+    /**
+     * called when requesting application stop
+     *
+     * @return void
+     */
+    public function onApplicationStop()
     {
         // Nothing
     }
