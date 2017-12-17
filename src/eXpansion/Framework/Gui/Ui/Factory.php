@@ -6,6 +6,7 @@ use eXpansion\Framework\Core\Model\Gui\Factory\BackGroundFactory;
 use eXpansion\Framework\Gui\Components\uiAnimation;
 use eXpansion\Framework\Gui\Components\uiButton;
 use eXpansion\Framework\Gui\Components\uiCheckbox;
+use eXpansion\Framework\Gui\Components\uiConfirmButton;
 use eXpansion\Framework\Gui\Components\uiDropdown;
 use eXpansion\Framework\Gui\Components\uiInput;
 use eXpansion\Framework\Gui\Components\uiInputMasked;

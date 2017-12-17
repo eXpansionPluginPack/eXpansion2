@@ -120,7 +120,7 @@ class Test implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
             }
 
             self::$memoryMsg = $msg;
-            $this->mlFactory->update($this->playergroup);
+        //    $this->mlFactory->update($this->playergroup);
             $this->console->writeln($msg);
         }
 

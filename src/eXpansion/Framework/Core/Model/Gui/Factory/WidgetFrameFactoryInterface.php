@@ -27,5 +27,5 @@ interface WidgetFrameFactoryInterface
      *
      * @return void
      */
-    public function build(Widget $manialink, Frame $mainFrame, $name, $sizeX, $sizeY, $hideable);
+    public function build(Widget $manialink, Frame $mainFrame, $name, $sizeX, $sizeY);
 }

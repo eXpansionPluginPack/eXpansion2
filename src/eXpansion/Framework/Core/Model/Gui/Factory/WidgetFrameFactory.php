@@ -40,21 +40,21 @@ class WidgetFrameFactory implements WidgetFrameFactoryInterface
      * @param string          $name
      * @param float           $sizeX     Size of the inner frame to build the window frame around
      * @param float           $sizeY     Size of the inner frame to build the window frame around
-     * @param boolean         $hideable
      *
      * @return void
      */
-    public function build(Widget $manialink, Frame $mainFrame, $name, $sizeX, $sizeY, $hideable)
+    public function build(Widget $manialink, Frame $mainFrame, $name, $sizeX, $sizeY)
     {
-        if ($hideable) {
-            $toggleInterfaceF9 = new ToggleInterface($mainFrame, "F9");
 
-            $manialink
-                ->getFmlManialink()
-                ->getScript()
-                ->addFeature($toggleInterfaceF9);
-        }
+        $toggleInterfaceF9 = new ToggleInterface($mainFrame, "F9");
+
+        $manialink
+            ->getFmlManialink()
+            ->getScript()
+            ->addFeature($toggleInterfaceF9);
+
         $manialink->getFmlManialink()->addChild($this->widgetManiaScriptFactory->createScript(['']));
-
     }
+
+
 }
