@@ -117,8 +117,6 @@ class BestCheckpoints implements ListenerInterfaceExpApplication, RecordsDataLis
      */
     public function onLocalRecordsLoaded($records)
     {
-
-
         if (count($records) > 0) {
             $this->updater->setLocalRecord($records[0]->getCheckpoints());
         } else {
@@ -164,7 +162,10 @@ class BestCheckpoints implements ListenerInterfaceExpApplication, RecordsDataLis
      */
     public function onLocalRecordsBetterPosition(Record $record, Record $oldRecord, $records, $position, $oldPosition)
     {
-
+        if ($position == 1) {
+            $this->updater->setLocalRecord($record->getCheckpoints());
+            $this->updater->update($this->allPlayers);
+        }
     }
 
     /**
@@ -177,7 +178,10 @@ class BestCheckpoints implements ListenerInterfaceExpApplication, RecordsDataLis
      */
     public function onLocalRecordsSamePosition(Record $record, Record $oldRecord, $records, $position)
     {
-
+        if ($position == 1) {
+            $this->updater->setLocalRecord($record->getCheckpoints());
+            $this->updater->update($this->allPlayers);
+        }
     }
 
     /**
