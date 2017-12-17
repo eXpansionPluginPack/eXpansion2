@@ -64,6 +64,7 @@ class MapListDataProvider extends AbstractDataProvider
 
             if (!empty($maps)) {
                 foreach ($maps as $map) {
+                    $map = $this->connection->getMapInfo($map->fileName);
                     $this->mapStorage->addMap($map);
                 }
             }
