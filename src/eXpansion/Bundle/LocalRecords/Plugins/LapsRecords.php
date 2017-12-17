@@ -19,6 +19,7 @@ class LapsRecords extends BaseRecords implements TmRaceDataListenerInterface
     public function onStartMapStart($count, $time, $restarted, Map $map)
     {
         if (!$map->lapRace) {
+            $this->logger->info("Disabling lap records.", ['map' => $map->lapRace]);
             $this->status = false;
             return;
         }
