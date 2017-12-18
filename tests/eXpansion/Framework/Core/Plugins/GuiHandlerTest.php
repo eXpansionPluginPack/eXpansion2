@@ -269,6 +269,62 @@ class GuiHandlerTest extends TestCore
         $guiHanlder->onPostLoop();
     }
 
+    /**
+     * When Gui handler received show then hide order it needs to hide the ml.
+     */
+    public function testShowHide()
+    {
+        $logins = ['test1', 'test2'];
+        $manialink = $this->getManialink($logins, $this->mockMlFactory);
+
+        $this->mockDedicatedConnection->expects($this->exactly(3))
+            ->method('sendDisplayManialinkPage')
+            ->withConsecutive(
+                [$logins, $manialink->getXml()],
+                ['test1', '<manialink id="' . $manialink->getId() . '" />'],
+                ['test1', '<manialink id="' . $manialink->getId() . '" />']
+            );
+
+        /** @var GuiHandler $guiHanlder */
+        $guiHanlder = $this->guiHandler;
+        $guiHanlder->addToDisplay($manialink);
+        $guiHanlder->onPostLoop();
+
+        $guiHanlder->onExpansionGroupRemoveUser($manialink->getUserGroup(), 'test1');
+        $guiHanlder->onPostLoop();
+
+        // Execute test scenario
+        $guiHanlder->onExpansionGroupAddUser($manialink->getUserGroup(), 'test1');
+        $guiHanlder->onExpansionGroupRemoveUser($manialink->getUserGroup(), 'test1');
+        $guiHanlder->onPostLoop();
+    }
+
+    /**
+     * When Gui handler received hide then show order it needs to show the ml.
+     */
+    public function testHideShow()
+    {
+        $logins = ['test1', 'test2'];
+        $manialink = $this->getManialink($logins, $this->mockMlFactory);
+
+        $this->mockDedicatedConnection->expects($this->exactly(2))
+            ->method('sendDisplayManialinkPage')
+            ->withConsecutive(
+                [$logins, $manialink->getXml()],
+                ['test1', $manialink->getXml()]
+            );
+
+        /** @var GuiHandler $guiHanlder */
+        $guiHanlder = $this->guiHandler;
+        $guiHanlder->addToDisplay($manialink);
+        $guiHanlder->onPostLoop();
+
+        // Execute test scenario
+        $guiHanlder->onExpansionGroupRemoveUser($manialink->getUserGroup(), 'test1');
+        $guiHanlder->onExpansionGroupAddUser($manialink->getUserGroup(), 'test1');
+        $guiHanlder->onPostLoop();
+    }
+
     public function testEmptyMethods()
     {
         /** @var GuiHandler $guiHanlder */

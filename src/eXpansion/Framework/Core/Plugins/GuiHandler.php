@@ -308,7 +308,7 @@ class GuiHandler implements
                 $this->hideIndividualQueu[$loginRemoved][$mlId] = $manialink;
 
                 if (isset($this->individualQueu[$loginRemoved]) && isset($this->individualQueu[$loginRemoved][$mlId])) {
-                    unset ($this->hideIndividualQueu[$loginRemoved][$mlId]);
+                    unset ($this->individualQueu[$loginRemoved][$mlId]);
                 }
             }
         }
