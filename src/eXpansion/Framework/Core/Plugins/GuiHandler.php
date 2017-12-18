@@ -203,10 +203,18 @@ class GuiHandler implements
             }
         }
 
-        foreach ($this->individualQueu as $login => $manialinks) {
-            foreach ($manialinks as $manialink) {
+        foreach ($this->individualQueu as $manialinks) {
+            // Fetch all logins
+            $logins = [];
+            $lastManialink = null;
+            foreach ($manialinks as $login => $manialink) {
+                $logins[] = $login;
+                $lastManialink = $manialink;
+            }
+
+            if ($lastManialink) {
                 $xml = $manialink->getXml();
-                yield ['logins' => $login, 'ml' => $xml];
+                yield ['logins' => $logins, 'ml' => $xml];
             }
         }
 
@@ -224,14 +232,20 @@ class GuiHandler implements
             }
         }
 
-        foreach ($this->hideIndividualQueu as $login => $manialinks) {
-            foreach ($manialinks as $manialink) {
-                $id = $manialink->getId();
-                // Manialink is not destroyed just not shown at a particular user that left the group.
-
+        foreach ($this->hideIndividualQueu as $id => $manialinks) {
+            // Fetch all logins.
+            $logins = [];
+            $lastManialink = null;
+            foreach ($manialinks as $login => $manialink) {
                 if (!in_array($login, $this->disconnectedLogins)) {
-                    yield ['logins' => $login, 'ml' => '<manialink id="'.$id.'" />'];
+                    $logins[] = $login;
+                    $lastManialink = $manialink;
                 }
+            }
+
+            if ($lastManialink) {
+                // Manialink is not destroyed just not shown at a particular user that left the group.
+                yield ['logins' => $logins, 'ml' => '<manialink id="'.$lastManialink->getId().'" />'];
             }
         }
     }
@@ -286,10 +300,10 @@ class GuiHandler implements
         // User was added to group, need to display all manialinks of the group to this user
         if (isset($this->displayeds[$group])) {
             foreach ($this->displayeds[$group] as $mlId => $manialink) {
-                $this->individualQueu[$loginAdded][$mlId] = $manialink;
+                $this->individualQueu[$mlId][$loginAdded] = $manialink;
 
-                if (isset($this->hideIndividualQueu[$loginAdded]) && isset($this->hideIndividualQueu[$loginAdded][$mlId])) {
-                    unset ($this->hideIndividualQueu[$loginAdded][$mlId]);
+                if (isset($this->hideIndividualQueu[$mlId]) && isset($this->hideIndividualQueu[$mlId][$loginAdded])) {
+                    unset ($this->hideIndividualQueu[$mlId][$loginAdded]);
                 }
             }
         }
@@ -305,10 +319,10 @@ class GuiHandler implements
         // User was removed from group, need to hide all manialinks of the group to this user
         if (isset($this->displayeds[$group])) {
             foreach ($this->displayeds[$group] as $mlId => $manialink) {
-                $this->hideIndividualQueu[$loginRemoved][$mlId] = $manialink;
+                $this->hideIndividualQueu[$mlId][$loginRemoved] = $manialink;
 
-                if (isset($this->individualQueu[$loginRemoved]) && isset($this->individualQueu[$loginRemoved][$mlId])) {
-                    unset ($this->individualQueu[$loginRemoved][$mlId]);
+                if (isset($this->individualQueu[$mlId]) && isset($this->individualQueu[$mlId][$loginRemoved])) {
+                    unset ($this->individualQueu[$mlId][$loginRemoved]);
                 }
             }
         }

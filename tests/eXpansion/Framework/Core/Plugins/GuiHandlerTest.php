@@ -151,7 +151,7 @@ class GuiHandlerTest extends TestCore
         
         $this->mockDedicatedConnection->expects($this->exactly(2))
             ->method('sendDisplayManialinkPage')
-            ->withConsecutive([$logins, $manialink->getXml()], ['test3', $manialink->getXml()]);
+            ->withConsecutive([$logins, $manialink->getXml()], [['test3'], $manialink->getXml()]);
 
         /** @var GuiHandler $guiHanlder */
         $guiHanlder = $this->guiHandler;
@@ -162,6 +162,26 @@ class GuiHandlerTest extends TestCore
         $guiHanlder->onPostLoop();
     }
 
+    public function testMultipleConnect()
+    {
+        $logins = ['test1', 'test2'];
+        $manialink = $this->getManialink($logins, $this->mockMlFactory);
+
+        $this->mockDedicatedConnection->expects($this->exactly(2))
+            ->method('sendDisplayManialinkPage')
+            ->withConsecutive([$logins, $manialink->getXml()], [['test3', 'test4', 'test5'], $manialink->getXml()]);
+
+        /** @var GuiHandler $guiHanlder */
+        $guiHanlder = $this->guiHandler;
+        $guiHanlder->addToDisplay($manialink);
+
+        $guiHanlder->onPostLoop();
+        $guiHanlder->onExpansionGroupAddUser($manialink->getUserGroup(), 'test3');
+        $guiHanlder->onExpansionGroupAddUser($manialink->getUserGroup(), 'test4');
+        $guiHanlder->onExpansionGroupAddUser($manialink->getUserGroup(), 'test5');
+        $guiHanlder->onPostLoop();
+    }
+
     public function testGroupRemoveUser()
     {
         $logins = ['test1', 'test2'];
@@ -169,7 +189,7 @@ class GuiHandlerTest extends TestCore
 
         $this->mockDedicatedConnection->expects($this->exactly(2))
             ->method('sendDisplayManialinkPage')
-            ->withConsecutive([$logins, $manialink->getXml()], ['test1', '<manialink id="' . $manialink->getId() . '" />']);
+            ->withConsecutive([$logins, $manialink->getXml()], [['test1'], '<manialink id="' . $manialink->getId() . '" />']);
 
         /** @var GuiHandler $guiHanlder */
         $guiHanlder = $this->guiHandler;
@@ -177,6 +197,28 @@ class GuiHandlerTest extends TestCore
 
         $guiHanlder->onPostLoop();
         $guiHanlder->onExpansionGroupRemoveUser($manialink->getUserGroup(), 'test1');
+        $guiHanlder->onPostLoop();
+    }
+
+    public function testMultipleGroupRemoveUser()
+    {
+        $logins = ['test1', 'test2', 'test3', 'test4'];
+        $manialink = $this->getManialink($logins, $this->mockMlFactory);
+
+        $this->mockDedicatedConnection->expects($this->exactly(2))
+            ->method('sendDisplayManialinkPage')
+            ->withConsecutive(
+                [$logins, $manialink->getXml()],
+                [['test1', 'test2'], '<manialink id="' . $manialink->getId() . '" />']
+            );
+
+        /** @var GuiHandler $guiHanlder */
+        $guiHanlder = $this->guiHandler;
+        $guiHanlder->addToDisplay($manialink);
+
+        $guiHanlder->onPostLoop();
+        $guiHanlder->onExpansionGroupRemoveUser($manialink->getUserGroup(), 'test1');
+        $guiHanlder->onExpansionGroupRemoveUser($manialink->getUserGroup(), 'test2');
         $guiHanlder->onPostLoop();
     }
 
@@ -281,8 +323,8 @@ class GuiHandlerTest extends TestCore
             ->method('sendDisplayManialinkPage')
             ->withConsecutive(
                 [$logins, $manialink->getXml()],
-                ['test1', '<manialink id="' . $manialink->getId() . '" />'],
-                ['test1', '<manialink id="' . $manialink->getId() . '" />']
+                [['test1'], '<manialink id="' . $manialink->getId() . '" />'],
+                [['test1'], '<manialink id="' . $manialink->getId() . '" />']
             );
 
         /** @var GuiHandler $guiHanlder */
@@ -311,7 +353,7 @@ class GuiHandlerTest extends TestCore
             ->method('sendDisplayManialinkPage')
             ->withConsecutive(
                 [$logins, $manialink->getXml()],
-                ['test1', $manialink->getXml()]
+                [['test1'], $manialink->getXml()]
             );
 
         /** @var GuiHandler $guiHanlder */
