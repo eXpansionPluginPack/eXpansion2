@@ -86,13 +86,14 @@ class PagerFactory
         // Show current page.
 
         $input = $this->uiFactory->createInput('pager_gotopage', $currentPageNumber, 7);
-        $input->setAction($actionGotoPage)->setPosition(0, 1);
+        $input->setAction($actionGotoPage)->setPosition(0, 1)->setHorizontalAlign("left");
+
 
         $label = $this->uiFactory->createLabel(" / $lastPageNumber");
-        $label->setSize(10, 7);
+        $label->setSize(10, 7)->setHorizontalAlign("left");
 
         $line = $this->uiFactory->createLayoutLine(0, -2);
-        $line->setHorizontalAlign("center");
+        $line->setHorizontalAlign("left");
         $line->addChildren([$input, $label]);
 
         if ($lastPageNumber > 1) {

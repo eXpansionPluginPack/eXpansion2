@@ -44,10 +44,10 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
 
     /**
      * layoutLine constructor.
-     * @param float $startX
-     * @param float $startY
+     * @param float    $startX
+     * @param float    $startY
      * @param object[] $elements
-     * @param float $margin
+     * @param float    $margin
      * @throws \Exception
      */
     public function __construct($startX, $startY, $elements = [], $margin = 0.)
@@ -89,7 +89,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
         foreach ($this->elements as $idx => $element) {
 
             $element->setX($start + $this->getRelativeStartPosition($element));
-            $start += $element->getWidth() + $this->margin;
+            $start += $this->getRelativeWidth($element) + $this->margin;
 
             if ($element->getY() + $element->getHeight() > $sizeY) {
                 $this->setHeight($element->getHeight());
@@ -106,11 +106,42 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
      */
     private function getRelativeStartPosition($element)
     {
-        if ($element->getHorizontalAlign() == "center") {
-            return ($element->getWidth() / 2);
+        switch ($element->getHorizontalAlign()) {
+            case "left":
+                return 0;
+                break;
+            case "center":
+                return -($element->getWidth() / 2);
+                break;
+            case "right":
+                return -($element->getWidth() * 2);
+                break;
+            default:
+                return ($element->getWidth() / 2);
+                break;
         }
+    }
 
-        return 0;
+    /**
+     * @param Control $element
+     * @return float|int
+     */
+    private function getRelativeWidth($element)
+    {
+        switch ($element->getHorizontalAlign()) {
+            case "left":
+                return $element->getWidth();
+                break;
+            case "center":
+                return $element->getWidth();
+                break;
+            case "right":
+                return -$element->getWidth();
+                break;
+            default:
+                return $element->getWidth();
+                break;
+        }
     }
 
     /**
