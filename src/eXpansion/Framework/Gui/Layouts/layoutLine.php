@@ -307,8 +307,8 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
 
     public function setAlign($hAling = "left", $vAlign = "top")
     {
-        $this->halign = $hAling;
-        $this->valign = $vAlign;
+        $this->hAlign = $hAling;
+        $this->vAlign = $vAlign;
 
         return $this;
     }

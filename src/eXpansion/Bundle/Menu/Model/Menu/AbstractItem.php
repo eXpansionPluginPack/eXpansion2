@@ -84,6 +84,11 @@ abstract class AbstractItem implements ItemInterface
         return $this->permission;
     }
 
+    public function addChild($class, $id, $label, $permission, $options)
+    {
+      // do nothing
+    }
+
     /**
      * @inheritdoc
      */

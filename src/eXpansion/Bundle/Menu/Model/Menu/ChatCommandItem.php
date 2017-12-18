@@ -14,7 +14,7 @@ use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
  * @copyright 2017 eXpansion
  * @package eXpansion\Bundle\Menu\Model\Menu
  */
-class ChatCommandItem extends AbstractItem
+class ChatCommandItem extends AbstractItem implements ItemInterface
 {
     /** @var string */
     protected $chatCommand;

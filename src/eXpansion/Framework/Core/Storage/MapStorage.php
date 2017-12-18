@@ -83,7 +83,7 @@ class MapStorage
      *
      * @param integer $index the index number of the map to fetch
      *
-     * @return Map|false
+     * @return Map|null
      */
     public function getMapByIndex($index)
     {

@@ -26,7 +26,7 @@ class FileSystem
     /** @var array */
     protected $adapterParams;
 
-    /** @var Local */
+    /** @var FilesystemInterface */
     protected $localAdapter;
 
     /** @var FilesystemInterface  */

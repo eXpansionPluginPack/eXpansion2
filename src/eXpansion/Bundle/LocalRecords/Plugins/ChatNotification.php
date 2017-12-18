@@ -227,7 +227,7 @@ class ChatNotification implements RecordsDataListener
             return '-'.$securedBy;
         }
 
-        return $securedBy = $this->timeFormater->timeToText(0);
+        return $this->timeFormater->timeToText(0);
     }
 
     protected function messageFirstPlaceNew(Record $record)

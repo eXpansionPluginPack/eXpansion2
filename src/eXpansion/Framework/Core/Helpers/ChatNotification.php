@@ -7,13 +7,15 @@ use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
+use Maniaplanet\DedicatedServer\InvalidArgumentException;
 use Maniaplanet\DedicatedServer\Xmlrpc\UnknownPlayerException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class ChatNotification
  *
  * @package eXpansion\Framework\Core\Helpers;
- * @author oliver de Cramer <oliverde8@gmail.com>
+ * @author  oliver de Cramer <oliverde8@gmail.com>
  */
 class ChatNotification implements ChatNotificationInterface
 {
@@ -28,32 +30,40 @@ class ChatNotification implements ChatNotificationInterface
 
     /** @var Console */
     protected $console;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * ChatNotification constructor.
      *
-     * @param Connection $connection
-     * @param Translations $translations
-     * @param PlayerStorage $playerStorage
+     * @param Connection      $connection
+     * @param Translations    $translations
+     * @param PlayerStorage   $playerStorage
+     * @param Console         $console
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Connection $connection,
         Translations $translations,
         PlayerStorage $playerStorage,
-        Console $console
+        Console $console,
+        LoggerInterface $logger
     ) {
         $this->connection = $connection;
         $this->translations = $translations;
         $this->playerStorage = $playerStorage;
         $this->console = $console;
+        $this->logger = $logger;
     }
 
     /**
      * Send message.
      *
-     * @param string $messageId
+     * @param string                     $messageId
      * @param string|string[]|Group|null $to
-     * @param string[] $parameters
+     * @param string[]                   $parameters
      */
     public function sendMessage($messageId, $to = null, $parameters = [])
     {
@@ -82,7 +92,10 @@ class ChatNotification implements ChatNotificationInterface
         try {
             $this->connection->chatSendServerMessage($message, $to);
         } catch (UnknownPlayerException $e) {
+            $this->logger->info("can't send chat message: $message", ["to" => $to, "exception" => $e]);
             // Nothing to do, it happens.
+        } catch (InvalidArgumentException $ex) {
+            // Nothing to do
         }
     }
 
@@ -92,7 +105,7 @@ class ChatNotification implements ChatNotificationInterface
      *  * defaults to English locale, without parameters
      *
      * @param string $messageId
-     * @param array $parameters
+     * @param array  $parameters
      * @param string $locale
      * @return string
      */

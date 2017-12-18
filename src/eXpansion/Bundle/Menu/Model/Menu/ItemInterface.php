@@ -30,6 +30,11 @@ interface ItemInterface
     public function getPath();
 
     /**
+     *
+     */
+    public function addChild($class, $id, $label, $permission, $options);
+
+    /**
      * Label to be translated to be displayed on the menu.
      *
      * @return string

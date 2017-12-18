@@ -157,7 +157,7 @@ class Jukebox implements ListenerInterfaceMpScriptPodium, ListenerInterfaceMpLeg
             }
         }
 
-        if ($map->uId) {
+        if ($map instanceof Map && $map->uId) {
             if ($this->jukeboxService->addMap($map, $login)) {
                 $player = $this->playerStorage->getPlayerInfo($login);
                 $length = count($this->jukeboxService->getMapQueue());

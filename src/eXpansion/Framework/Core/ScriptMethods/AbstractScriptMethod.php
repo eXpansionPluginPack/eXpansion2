@@ -13,7 +13,7 @@ use eXpansion\Framework\Core\DataProviders\MethodScriptDataProviderInterface;
  */
 class AbstractScriptMethod
 {
-    /** @var array | null */
+    /** @var array|null */
     protected $currentData = null;
 
     /** @var bool  */
