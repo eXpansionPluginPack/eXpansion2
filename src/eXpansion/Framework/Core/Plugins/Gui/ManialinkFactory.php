@@ -145,6 +145,13 @@ class ManialinkFactory implements ManialinkFactoryInterface
     }
 
     /**
+     * @param array $checkpoints
+     */
+    public function setLocalRecord($checkpoints) {
+
+    }
+
+    /**
      * Create content in the manialink.
      *
      * @param ManialinkInterface $manialink

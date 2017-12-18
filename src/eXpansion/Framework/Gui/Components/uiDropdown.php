@@ -25,15 +25,18 @@ class uiDropdown extends abstractUiElement implements ScriptFeatureable
     /** @var string[] */
     protected $options;
 
+    /** @var string */
+    protected $id = "";
+
     /**
      * uiDropdown constructor \n
      *
      * Options ["display name" => "value"], both needs to be string
      *
      * @param string $name
-     * @param array $options
-     * @param int $selectedIndex
-     * @param bool $isOpened
+     * @param array  $options
+     * @param int    $selectedIndex
+     * @param bool   $isOpened
      */
     public function __construct($name, $options, $selectedIndex = -1, $isOpened = false)
     {
@@ -131,9 +134,12 @@ Void uiToggleDropdown (CMlFrame frame) {
 }
 
 Void uiSelectDropdown (CMlLabel label) {
-	label.Parent.Parent.DataAttributeSet("selected", label.DataAttributeGet("index"));
-	uiRenderDropdown(label.Parent.Parent);
-	uiToggleDropdown(label.Parent.Parent);
+    declare uiDropdown = label.Parent.Parent;
+	uiDropdown.DataAttributeSet("selected", label.DataAttributeGet("index"));
+	uiDropdown.DataAttributeSet("value", label.DataAttributeGet("value"));
+	uiRenderDropdown(uiDropdown);
+	uiToggleDropdown(uiDropdown);
+	+++onSelectDropdown+++
 }
 
 EOD;
@@ -164,16 +170,20 @@ EOD;
             ->addDataAttribute("selected", $this->selectedIndex)
             ->addDataAttribute("open", $this->isOpened ? "1" : "0");
 
+        if ($this->id) {
+            $frame->setId($this->id);
+        }
+
         $labelMark = new uiLabel("⏷");
         $labelMark->setAlign("left", "center");
-        $labelMark->setPosition(0,-($this->height/2));
+        $labelMark->setPosition(0, -($this->height / 2));
         $labelMark->setSize(5, 5)->setX($this->width - 5);
 
         $baseLabel = new Label();
         $baseLabel->setAreaColor("000")->setAreaFocusColor("333")
             ->setScriptEvents(true)->addClass("uiSelectElement")
             ->setSize($this->width, $this->height)
-            ->setPosition(0, -($this->height/2))
+            ->setPosition(0, -($this->height / 2))
             ->setTextPrefix(" ")
             ->setTextSize(1)
             ->setAlign("left", "center")
@@ -188,7 +198,7 @@ EOD;
         $entry->setPosition(900, 900)
             ->setName($this->name);
 
-        $frameOptions = new layoutRow(0, -($this->height/2));
+        $frameOptions = new layoutRow(0, -($this->height + ($this->height / 2)));
         $frameOptions->addClass('uiDropdownSelect');
 
         $idx = 0;
@@ -266,5 +276,21 @@ EOD;
     public function getScriptFeatures()
     {
         return ScriptFeature::collect($this);
+    }
+
+    /**
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param string $id
+     */
+    public function setId(string $id)
+    {
+        $this->id = $id;
     }
 }

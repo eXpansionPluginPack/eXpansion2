@@ -4,9 +4,11 @@ services:
         autowire: true
         arguments:
                 $players: '@expansion.framework.core.user_groups.players'
+                $allPlayers: '@expansion.framework.core.user_groups.all_players'
         tags:
           - {name: 'expansion.plugin', data_provider: 'exp.application'}
-          - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
+          - {name: 'expansion.plugin', data_provider: 'expansion.local_records.race'}
+          - {name: 'expansion.plugin.parent', parent: 'expansion.local_records.plugins.race_records'}
 
     eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\BestCheckpointsWidgetFactory:
             class: eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\BestCheckpointsWidgetFactory
@@ -15,5 +17,15 @@ services:
                 $name:  "BestCheckpoints"
                 $posX: -120
                 $posY: 88
+                $sizeX: null
+                $sizeY: null
+
+    eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\UpdaterWidgetFactory:
+            class: eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\UpdaterWidgetFactory
+            autowire: true
+            arguments:
+                $name:  "BestCheckpoints Updater"
+                $posX: 0
+                $posY: 0
                 $sizeX: null
                 $sizeY: null

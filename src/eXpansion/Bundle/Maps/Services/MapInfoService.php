@@ -7,10 +7,10 @@ use eXpansion\Bundle\Maps\Model\Map\MapTableMap;
 use eXpansion\Bundle\Maps\Model\MapQuery;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMaplist;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\MapStorage;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMaplist;
 use Maniaplanet\DedicatedServer\Structures\Map as DedicatedMap;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Map\TableMap;
@@ -34,8 +34,8 @@ class MapInfoService implements ListenerInterfaceExpApplication, ListenerInterfa
 
     /**
      * JukeboxService constructor.
-     * @param Console $console
-     * @param MapStorage $mapStorage
+     * @param Console     $console
+     * @param MapStorage  $mapStorage
      * @param AdminGroups $adminGroups
      */
     public function __construct(Console $console, MapStorage $mapStorage, AdminGroups $adminGroups)
@@ -98,9 +98,9 @@ class MapInfoService implements ListenerInterfaceExpApplication, ListenerInterfa
 
     /**
      * @param DedicatedMap[] $oldMaps
-     * @param string $currentMapUid
-     * @param string $nextMapUid
-     * @param bool $isListModified
+     * @param string         $currentMapUid
+     * @param string         $nextMapUid
+     * @param bool           $isListModified
      * @return void
      */
     public function onMapListModified($oldMaps, $currentMapUid, $nextMapUid, $isListModified)
@@ -122,7 +122,7 @@ class MapInfoService implements ListenerInterfaceExpApplication, ListenerInterfa
 
     protected function syncMaps()
     {
-        $this->console->writeln("Starting Database DedicatedMap Sync...");
+        $this->console->writeln("Starting Database Map Sync...");
 
         $mapuids = [];
         $allMaps = [];
@@ -136,7 +136,7 @@ class MapInfoService implements ListenerInterfaceExpApplication, ListenerInterfa
         $mapsInDb = [];
 
         foreach ($maps as $uids) {
-            $this->console->writeln("Processing chunk 1 of ".count($maps)."...");
+            $this->console->writeln("Processing chunk ".($x + 1)." of ".count($maps)."...");
             $mapQuery = new MapQuery();
             $mapQuery->filterByMapuid($uids, Criteria::IN);
             /** @var \eXpansion\Bundle\Maps\Model\Map[] $data */

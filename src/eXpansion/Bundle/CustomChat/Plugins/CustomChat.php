@@ -37,11 +37,11 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
 
     /**
      * CustomChat constructor.
-     * @param Connection $connection
-     * @param Console $console
-     * @param AdminGroups $adminGroups
+     * @param Connection       $connection
+     * @param Console          $console
+     * @param AdminGroups      $adminGroups
      * @param ChatNotification $chatNotification
-     * @param PlayerStorage $playerStorage
+     * @param PlayerStorage    $playerStorage
      */
     function __construct(
         Connection $connection,
@@ -61,7 +61,7 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      * Called when a player chats.
      *
      * @param Player $player
-     * @param $text
+     * @param        $text
      *
      * @return void
      */
@@ -129,16 +129,27 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
 
     /**
      * @param Player $player
-     * @param $text
-     * @param $color
-     * @param null $group
+     * @param        $text
+     * @param        $color
+     * @param null   $group
      */
     private function sendChat(Player $player, $text, $color, $group = null)
     {
         $nick = trim($player->getNickName());
         $nick = str_ireplace('$w', '', $nick);
         $nick = str_ireplace('$z', '$z$s', $nick);
-        $replacements = [":yes:" => "",":no:" => "", ":happy:" => "", ":sad:" => "", ":heart:" => ""];
+        $replacements = [
+            "(y)" => "",
+            ":yes:" => "",
+            ":no:" => "",
+            "(n)" => "",
+            ":happy:" => "",
+            ":smile:" => "",
+            ":sad:" => "",
+            ":heart:" => '$d00$z$s',
+            "<3" => '$d00$z$s',
+
+        ];
         // fix for chat...
         $nick = str_replace(['$<', '$>'], '', $nick);
         $text = str_replace(['$<', '$>'], '', $text);

@@ -9,7 +9,6 @@ use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
 use eXpansion\Framework\Gui\Builders\WidgetBackground;
 use eXpansion\Framework\Gui\Ui\Factory;
 use FML\Controls\Frame;
-use FML\Script\ScriptInclude;
 use FML\Script\ScriptLabel;
 
 class BestCheckpointsWidgetFactory extends WidgetFactory
@@ -20,13 +19,13 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
     /***
      * MenuFactory constructor.
      *
-     * @param $name
-     * @param $sizeX
-     * @param $sizeY
-     * @param null $posX
-     * @param null $posY
+     * @param                      $name
+     * @param                      $sizeX
+     * @param                      $sizeY
+     * @param null                 $posX
+     * @param null                 $posY
      * @param WidgetFactoryContext $context
-     * @param Factory $uiFactory
+     * @param Factory              $uiFactory
      */
     public function __construct(
         $name,
@@ -53,17 +52,37 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
         for ($i = 0; $i < self::rowCount; $i++) {
             $elements = [];
             for ($c = 0; $c < self::columnCount; $c++) {
-                $elements[] = $this->createColumnBox($elementCount);
+                if ($elementCount == 0) {
+                    $dropdown = $this->uiFactory->createDropdown("select", ["Live 1" => "1", "Local 1" =>
+                        "2"],
+                        0,
+                        false);
+                    $dropdown->setWidth(35)->setId("Dropdown");
+                    $elements[] = $dropdown;
+                } else {
+                    $elements[] = $this->createColumnBox($elementCount);
+                }
                 $elementCount++;
             }
             $line = $this->uiFactory->createLayoutLine(0, 0, $elements, 1);
 
             $rows->addChild($line);
         }
+        $manialink->addChild($rows);
 
-
+        $elementCount -= 1;
+        /**
+         * Functions
+         */
         $manialink->getFmlManialink()->getScript()->addScriptFunction("",
             <<<EOL
+            
+            ***onSelectDropdown***
+            ***
+               declare Integer BestCp_Mode for LocalUser = 1;   
+               BestCp_Mode = TextLib::ToInteger(uiDropdown.DataAttributeGet("selected"));
+               Refresh();        
+            ***
             
             Text TimeToText(Integer intime) {
                 declare time = MathLib::Abs(intime);
@@ -84,49 +103,73 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
 
 
             Void UpdateCp(Integer _Index, Integer _Score, Boolean _Animate) {
-                declare Integer[Integer] BestCheckpoints for Page = Integer[Integer];                
+                 declare Integer ElementCount for Page = $elementCount;
+                if (_Index > ElementCount) {
+                    return;
+                }
+                declare Integer[Integer] BestCp_LocalRecordCheckpoints for LocalUser = Integer[Integer];
+                declare Integer[Integer] MapBestCheckpoints for Page = Integer[Integer];                                
                 declare CMlLabel Label <=> (Page.GetFirstChild("Cp_"^ (_Index+1)) as CMlLabel);
-                declare CMlQuad Bg <=> (Page.GetFirstChild("Bg_"^ (_Index+1)) as CMlQuad);
-                
+                declare CMlQuad Bg <=> (Page.GetFirstChild("Bg_"^ (_Index+1)) as CMlQuad);          
+                                                                              
+                declare Integer BestCp_Mode for LocalUser = 1;                  
                 declare Text Color = "\$fff";
-                Bg.BgColor = TextLib::ToColor("000");
-                                              
+                Bg.BgColor = TextLib::ToColor("000");                           
+                
+                declare Integer Compare = 99999999;            
+                
+                switch (BestCp_Mode) {
+                    case 0: {
+                        if (MapBestCheckpoints.existskey(_Index)) {
+                            Compare = MapBestCheckpoints[_Index];                            
+                        } else {
+                            Compare = 99999999;
+                        }                 
+                    }
+                    case 1: {
+                        if (BestCp_LocalRecordCheckpoints.existskey(_Index)) {
+                            Compare = BestCp_LocalRecordCheckpoints[_Index];                            
+                        } else {
+                            Compare = 99999999;
+                        }                       
+                    }                                   
+                }
+                                 
                 if (_Score == 99999999) {                                             
-                    if (BestCheckpoints.existskey(_Index) && BestCheckpoints[_Index] != 99999999 ) {
-                        Label.Value = "\$fff\$o" ^ (_Index+1) ^ " \$o\$ff3" ^ TimeToText(BestCheckpoints[_Index]);                        
+                    if ( Compare > 0 && Compare != 99999999  ) {
+                        Label.Value = "\$fff\$o" ^ (_Index+1) ^ " \$o\$ff3" ^ TimeToText(Compare);                    
+                                
                     } else {
                        Label.Value = "\$fff\$o" ^ (_Index+1) ^ " \$o\$ff3 --:--.---";
                     }                    
                 } else {
-                    if (_Score < BestCheckpoints[_Index]) {                    
+                    if (_Score < Compare) {                    
                        Bg.BgColor = TextLib::ToColor("00f");
                        Color = "\$fff";
                     } else {
                        Bg.BgColor = TextLib::ToColor("f00");
-                        Color = "\$fff";                                                                                                 
+                       Color = "\$fff";                                                                                                 
                     }
-                    Label.Value = "\$fff\$o" ^ (_Index+1) ^ " \$o\$ff3" ^ TimeToText(BestCheckpoints[_Index]) ^ "\$fff diff: " ^ Color ^ TimeToText(_Score - BestCheckpoints[_Index]); 
-                }
-                
-                
-                if (_Animate) {                                
-                  //  AnimMgr.Add (Label, "<elem scale=\"1.5\" />", 350, CAnimManager::EAnimManagerEasing::ElasticOut);
-                  //  AnimMgr.AddChain (Label, "<elem scale=\"1.0\" />", 350, CAnimManager::EAnimManagerEasing::ElasticIn);
-                }          
+                    Label.Value = "\$fff\$o" ^ (_Index+1) ^ " \$o\$ff3" ^ TimeToText(Compare) ^ "\$fff" ^
+                     "diff: " ^ Color ^ TimeToText(_Score - Compare); 
+                }                                                
             }
             
             Void Refresh() {
                 declare Integer ElementCount for Page = $elementCount;  
                 declare Integer[Integer] MyCheckpoints for Page = Integer[Integer];       
-                declare Integer[Integer] BestCheckpoints for Page = Integer[Integer];
-                            
-                foreach (k => i in BestCheckpoints) {
-                    if (MyCheckpoints.existskey(k) && i != 99999999) {
+                declare Integer[Integer] MapBestCheckpoints for Page = Integer[Integer];                                                
+                declare Integer BestCp_Mode for LocalUser = 1;   
+                                                                                      
+                
+                for (k, 0, (ElementCount-1)) {                                                       
+                    if (MyCheckpoints.existskey(k)) {
                         UpdateCp(k, MyCheckpoints[k], False);
                     } else {
                         UpdateCp(k, 99999999, False);          
-                    }                 
-                }                     
+                    }                                 
+                }
+                                                
             }
                         
              Void HideCp(Integer _Index) {
@@ -137,48 +180,70 @@ EOL
 
         );
 
+        /**
+         * ON INIT
+         */
         $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::OnInit,
             <<<EOL
-            declare Integer ElementCount for Page = $elementCount;            
+            declare Integer ElementCount for Page = $elementCount;
+            declare Integer BestCp_Mode for LocalUser = 1;   
+            declare CMlFrame Dropdown = (Page.GetFirstChild("Dropdown") as CMlFrame);    
             declare Integer[Integer] MyCheckpoints for Page = Integer[Integer];           
-            declare Integer[Integer] BestCheckpoints for Page = Integer[Integer];                        
-            declare Integer BestTime = 99999999;
+            declare Integer[Integer] MapBestCheckpoints for Page = Integer[Integer];              
+            declare Integer[Integer] BestCp_LocalRecordCheckpoints for LocalUser = Integer[Integer];
+            declare Text BestCp_LocalRecord_Check for LocalUser = "";
+            declare Text BestCp_LocalRecord_OldCheck = "";            
+            declare Integer[Integer] CompareCheckpoints for Page = Integer[Integer];            
+            declare Integer MapBestTime = 99999999;
                                                         
             // clear
-            for (i, 0, (ElementCount-2)) {
-                BestCheckpoints[i] = 99999999;                                
+            for (i, 0, (ElementCount-1)) {
+                MapBestCheckpoints[i] = 99999999;                                
             }
                                                              
             // hide checkpoints not needed            
-            for (i, (MapCheckpointPos.count+2), (ElementCount-1)) {
+            for (i, (MapCheckpointPos.count+2), (ElementCount)) {
                 HideCp(i);
-            }  
+            }
             
-            foreach (k => i in InputPlayer.CurLap.Checkpoints) {
-                    MyCheckpoints[k] = i;
-            }
-                                    
-            if (Scores[0].BestLap.Time != -1) {
-                BestTime = Scores[0].BestLap.Time;
-                declare CMlLabel Label <=> (Page.GetFirstChild("Cp_0") as CMlLabel);
-                Label.Value = Scores[0].User.Name;
-                foreach (k => i in Scores[0].BestLap.Checkpoints) {
-                    BestCheckpoints[k] = i;
+            if (InputPlayer != Null) {
+                foreach (k => i in InputPlayer.CurLap.Checkpoints) {
+                            MyCheckpoints[k] = i;
                 }
-                           
             }
-                       
+            
+            if (Scores.count > 0) {                                           
+                if (Scores[0].BestLap.Time != -1) {
+                    MapBestTime = Scores[0].BestLap.Time;             
+                    foreach (k => i in Scores[0].BestLap.Checkpoints) {
+                        MapBestCheckpoints[k] = i;
+                    }                           
+                }
+            }
+                 
             Refresh();
-                                                                                      
+            
+            Dropdown.DataAttributeSet("selected", ""^BestCp_Mode);
+            uiRenderDropdown(Dropdown);
+                                     
 EOL
         );
 
-
+        /**
+         * Loop
+         */
         $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::Loop,
             <<<EOL
+            
+            // handle new record
+            if (BestCp_LocalRecord_Check != BestCp_LocalRecord_OldCheck) {
+                BestCp_LocalRecord_Check = BestCp_LocalRecord_OldCheck;                          
+                Refresh();
+            }
+                                    
             foreach (RaceEvent in RaceEvents) {
-                if (InputPlayer == RaceEvent.Player && RaceEvent.Type == CTmRaceClientEvent::EType::Respawn) {
-                     if (InputPlayer.RaceState == CTmMlPlayer::ERaceState::BeforeStart) {                     
+                if (GUIPlayer == RaceEvent.Player && RaceEvent.Type == CTmRaceClientEvent::EType::Respawn) {
+                     if (GUIPlayer.RaceState == CTmMlPlayer::ERaceState::BeforeStart) {                     
                         MyCheckpoints = Integer[Integer];               
                         Refresh();
                      }
@@ -187,24 +252,26 @@ EOL
                 if (RaceEvent.Type == CTmRaceClientEvent::EType::WayPoint) {                               
                     
                     if (RaceEvent.IsEndRace || RaceEvent.IsEndLap) {
-                        if (RaceEvent.LapTime < BestTime) {
-                            BestTime = RaceEvent.LapTime; 
-                            if (InputPlayer == RaceEvent.Player) {
+                    
+                        if (RaceEvent.LapTime < MapBestTime) {
+                            MapBestTime = RaceEvent.LapTime; 
+                            if (GUIPlayer == RaceEvent.Player) {
                                 MyCheckpoints[RaceEvent.CheckpointInLap] = RaceEvent.LapTime;
-                                BestCheckpoints = MyCheckpoints;   
+                                MapBestCheckpoints = MyCheckpoints;   
                                 MyCheckpoints = Integer[Integer];
                                 Refresh();                            
                             } else {                                                                                    
                                 foreach (k => i in RaceEvent.Player.Score.BestLap.Checkpoints) {
-                                    BestCheckpoints[k] = i;
-                                }       
-                            }                                                                                                                                                                                                                                                                                                           
-                            declare CMlLabel Label <=> (Page.GetFirstChild("Cp_0") as CMlLabel);
-                            Label.Value = RaceEvent.Player.User.Name;
-                            Refresh();                            
+                                    MapBestCheckpoints[k] = i;
+                                }
+                                Refresh();                                    
+                            } 
+                                                                                                                                                                                                                                                                                                                                                               
+                                                    
                         } else {                          
-                            if (InputPlayer == RaceEvent.Player && BestTime != 99999999) {                                  
-                                if (RaceEvent.IsEndLap && RaceEvent.IsEndRace == False ) {                                        
+                            if (GUIPlayer == RaceEvent.Player && BestCp_LocalRecordCheckpoints.count > 0 && 
+                            MapBestTime != 99999999) {                                                                                          
+                                if (RaceEvent.IsEndLap && RaceEvent.IsEndRace == False) {                                        
                                     MyCheckpoints = Integer[Integer]; 
                                     Refresh();
                                 } else {                                                                                                              
@@ -212,19 +279,28 @@ EOL
                                 }                                                                                                                                              
                             }
                         }                       
-                    } else {                    
-                        if (InputPlayer == RaceEvent.Player && RaceEvent.CheckpointInLap < ElementCount) {            
+                    } else {                                            
+                        if (GUIPlayer == RaceEvent.Player && RaceEvent.CheckpointInLap < ElementCount) {            
                             MyCheckpoints[RaceEvent.CheckpointInLap] = RaceEvent.LapTime;
-                            if (BestTime != 99999999) {                                                        
-                                UpdateCp(RaceEvent.CheckpointInLap, RaceEvent.LapTime, True);
-                            }
-                        }                        
+                            
+                            switch (BestCp_Mode) {
+                                case 0:  {
+                                    if (MapBestTime != 99999999) {                                         
+                                        UpdateCp(RaceEvent.CheckpointInLap, RaceEvent.LapTime, True);
+                                    }
+                                }
+                                case 1: {
+                                   if (BestCp_LocalRecordCheckpoints.count > 0) {
+                                        UpdateCp(RaceEvent.CheckpointInLap, RaceEvent.LapTime, True);
+                                   }                                
+                                }                            
+                            }                             
+                        }
                     }
                 }
             }
 EOL
         );
-        $manialink->addChild($rows);
 
 
     }
@@ -258,7 +334,7 @@ EOL
 
     protected function updateContent(ManialinkInterface $manialink)
     {
-        parent::updateContent($manialink); // TODO: Change the autogenerated stub
+        parent::updateContent($manialink);
     }
 
 
