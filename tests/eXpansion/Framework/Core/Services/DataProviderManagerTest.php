@@ -13,6 +13,7 @@ use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterface
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\GameManiaplanet\DataProviders\MapDataProvider;
 use Maniaplanet\DedicatedServer\Structures\GameInfos;
+use Maniaplanet\DedicatedServer\Structures\Map;
 use Maniaplanet\DedicatedServer\Structures\PlayerDetailedInfo;
 use Maniaplanet\DedicatedServer\Structures\PlayerInfo;
 use Maniaplanet\DedicatedServer\Structures\Version;
@@ -85,28 +86,29 @@ class DataProviderManagerTest extends TestCore
     {
         $dataProviderManager = $this->getDataProviderManager();
         $this->prepareProviders();
+        $map = new Map();
 
         $this->assertEquals(
             'dp1-1',
-            $dataProviderManager->getCompatibleProviderId('dp1', 'TM', 'script', 'TimeAttack.script.txt')
+            $dataProviderManager->getCompatibleProviderId('dp1', 'TM', 'script', 'TimeAttack.script.txt', $map)
         );
 
         $this->assertEquals(
             'dp1-2',
-            $dataProviderManager->getCompatibleProviderId('dp1', 'TM', 'script2', 'TimeAttack.script.txt')
+            $dataProviderManager->getCompatibleProviderId('dp1', 'TM', 'script2', 'TimeAttack.script.txt', $map)
         );
 
         $this->assertEquals(
             'dp2-2',
-            $dataProviderManager->getCompatibleProviderId('dp2', 'TM2', 'script2', 'TimeAttack.script.txt')
+            $dataProviderManager->getCompatibleProviderId('dp2', 'TM2', 'script2', 'TimeAttack.script.txt', $map)
         );
 
         $this->assertNull(
-            $dataProviderManager->getCompatibleProviderId('dp1', 'TM3', 'script2', 'TimeAttack.script.txt')
+            $dataProviderManager->getCompatibleProviderId('dp1', 'TM3', 'script2', 'TimeAttack.script.txt', $map)
         );
 
         $this->assertTrue(
-            $dataProviderManager->isProviderCompatible('dp1', 'TM', 'script2', 'TimeAttack.script.txt')
+            $dataProviderManager->isProviderCompatible('dp1', 'TM', 'script2', 'TimeAttack.script.txt', $map)
         );
     }
 
@@ -115,6 +117,7 @@ class DataProviderManagerTest extends TestCore
         $this->prepareProviders();
         $dataProviderManager = $this->getDataProviderManager();
         $player = $this->getPlayer('test1', false);
+        $map = new Map();
 
         $pluginMock = $this->createMock(ListenerInterfaceMpLegacyChat::class);
         $this->container->set('p1', $pluginMock);
@@ -126,7 +129,7 @@ class DataProviderManagerTest extends TestCore
 
         $dataProviderMock->expects($this->once())->method('registerPlugin')->withConsecutive(['p1', $pluginMock]);
 
-        $dataProviderManager->registerPlugin('dp1', 'p1', 'TM', 'script', 'TimeAttack.script.txt');
+        $dataProviderManager->registerPlugin('dp1', 'p1', 'TM', 'script', 'TimeAttack.script.txt', $map);
     }
 
     public function testRegisterWrongPlugin()
@@ -139,7 +142,7 @@ class DataProviderManagerTest extends TestCore
 
         $this->expectException(UncompatibleException::class);
 
-        $dataProviderManager->registerPlugin('dp1', 'p1', 'TM', 'script', 'TimeAttack.script.txt');
+        $dataProviderManager->registerPlugin('dp1', 'p1', 'TM', 'script', 'TimeAttack.script.txt', new Map());
     }
 
     public function testDispatch()
@@ -172,7 +175,7 @@ class DataProviderManagerTest extends TestCore
         $dataProviderMock2 = $this->container->get('dp1-2');
         $dataProviderMock2->expects($this->never())->method('onPlayerChat');
 
-        $dataProviderManager->init($pManagerMock);
+        $dataProviderManager->init($pManagerMock, new Map());
         $dataProviderManager->dispatch('onPlayerChat', ['test', 'test2', false]);
     }
 

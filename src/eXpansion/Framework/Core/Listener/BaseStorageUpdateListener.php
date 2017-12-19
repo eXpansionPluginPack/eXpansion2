@@ -72,12 +72,12 @@ class BaseStorageUpdateListener
         $newGameInfos = $this->connection->getCurrentGameInfo();
         $prevousGameInfos = $this->gameDataStorage->getGameInfos();
 
-        if ($prevousGameInfos->gameMode != $newGameInfos->gameMode || $prevousGameInfos->scriptName != $newGameInfos->scriptName) {
-            // TODO move this logic somewhere else.
-            $this->dispatcher->reset();
+        // TODO move this logic somewhere else.
+        $this->dispatcher->reset($event->getParameters()[0]);
 
+        if ($prevousGameInfos->gameMode != $newGameInfos->gameMode || $prevousGameInfos->scriptName != $newGameInfos->scriptName) {
             $this->gameDataStorage->setGameInfos(clone $newGameInfos);
-            // TODO dispatch custom event to let it know.
+            // TODO dispatch custom event to let it know?
         }
     }
 }

@@ -4,6 +4,8 @@ namespace eXpansion\Framework\Core\Services\Application;
 
 use eXpansion\Framework\Core\Services\DataProviderManager;
 use eXpansion\Framework\Core\Services\PluginManager;
+use Maniaplanet\DedicatedServer\Connection;
+use Maniaplanet\DedicatedServer\Structures\Map;
 
 /**
  * Class Dispatcher, dispatches events to the Data Providers.
@@ -38,12 +40,14 @@ class Dispatcher implements DispatcherInterface
     }
 
     /**
-     * Init.
+     * @inheritdoc
      */
-    public function init()
+    public function init(Connection $connection)
     {
-        $this->pluginManager->init();
-        $this->dataProviderManager->init($this->pluginManager);
+        $map = $connection->getCurrentMapInfo();
+
+        $this->pluginManager->init($map);
+        $this->dataProviderManager->init($this->pluginManager, $map);
 
         $this->isInitialized = true;
     }
@@ -51,9 +55,19 @@ class Dispatcher implements DispatcherInterface
     /**
      * Reset when game mode changes.
      */
-    public function reset()
+    /**
+     * Reset the dispatcher elements when game mode changes.
+     *
+     * @param Map $map Current map.
+     *
+     * @return void
+     *
+     * @throws
+     */
+    public function reset(Map $map)
     {
-
+        $this->pluginManager->reset($map);
+        $this->dataProviderManager->reset($this->pluginManager, $map);
     }
 
     /**

@@ -58,7 +58,7 @@ abstract class AbstractApplication implements RunInterface
     {
         $this->console->init($console, $this->dispatcher);
         $this->dispatcher->dispatch(self::EVENT_BEFORE_INIT, []);
-        $this->dispatcher->init();
+        $this->dispatcher->init($this->connection);
         $this->dispatcher->dispatch(self::EVENT_AFTER_INIT, []);
 
         return $this;
