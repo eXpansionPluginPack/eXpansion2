@@ -35,7 +35,6 @@ services:
             - {name: 'expansion.plugin', data_provider: 'mp.script.map'}
             - {name: 'expansion.plugin', data_provider: 'mp.script.match'}
             - {name: 'expansion.plugin', data_provider: 'tm.script.race'}
-            - {name: 'expansion.plugin', data_provider: 'exp.application'}
 
     # Data provider to race records data to other plugins.
     eXpansion.local_records.data_providers.race_records:
@@ -79,8 +78,7 @@ services:
             - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
             - {name: 'expansion.plugin', data_provider: 'mp.script.map'}
             - {name: 'expansion.plugin', data_provider: 'mp.script.match'}
-            - {name: 'expansion.plugin', data_provider: 'tm.script.race'}
-            - {name: 'expansion.plugin', data_provider: 'exp.application'}
+            - {name: 'expansion.plugin', data_provider: 'tm.script.lap'}
 
     # Data provider to lap records data to other plugins.
     eXpansion.local_records.data_providers.lap_records:
