@@ -4,6 +4,7 @@ namespace eXpansion\Framework\GameTrackmania\DataProviders\ScriptBaseRounds;
 
 use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
 use eXpansion\Framework\Core\DataProviders\MethodScriptDataProviderInterface;
+use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\Core\Storage\MapStorage;
 use Maniaplanet\DedicatedServer\Connection;
 
@@ -16,8 +17,8 @@ use Maniaplanet\DedicatedServer\Connection;
  */
 class MethodGetNumberLapsDataProvider extends AbstractDataProvider implements MethodScriptDataProviderInterface
 {
-    /** @var Connection */
-    protected $connection;
+    /** @var GameDataStorage */
+    protected $gameDataStorage;
 
     /** @var MapStorage */
     protected $mapStorage;
@@ -25,12 +26,12 @@ class MethodGetNumberLapsDataProvider extends AbstractDataProvider implements Me
     /**
      * MethodGetNumberLapsDataProvider constructor.
      *
-     * @param Connection $connection
+     * @param GameDataStorage $gameDataStorage
      * @param MapStorage $mapStorage
      */
-    public function __construct(Connection $connection, MapStorage $mapStorage)
+    public function __construct(GameDataStorage $gameDataStorage, MapStorage $mapStorage)
     {
-        $this->connection = $connection;
+        $this->gameDataStorage = $gameDataStorage;
         $this->mapStorage = $mapStorage;
     }
 
@@ -54,7 +55,7 @@ class MethodGetNumberLapsDataProvider extends AbstractDataProvider implements Me
      */
     public function request()
     {
-        $scriptSettings = $this->connection->getModeScriptSettings();
+        $scriptSettings = $this->gameDataStorage->getScriptOptions();
         $currentMap = $this->mapStorage->getCurrentMap();
 
         $nbLaps = 1;

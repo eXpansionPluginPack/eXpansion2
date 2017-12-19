@@ -4,13 +4,40 @@ services:
         autoconfigure: true
         public: true
 
-    expansion.framework.game_trackmania.data_providers.race:
-        class: eXpansion\Framework\GameTrackmania\DataProviders\RaceDataProvider
+    #
+    # Data providers to handle the script waypoint callback and dispatch it in 3 distinctive events.
+    #
+    expansion.framework.game_trackmania.data_providers.waypoint:
+        class: eXpansion\Framework\GameTrackmania\DataProviders\WayPointDataProvider
+        tags:
+            - {name: expansion.dataprovider, provider: "tm.script.waypoint", interface: eXpansion\Framework\GameTrackmania\DataProviders\Listener\WaypointDataListenerInterface}
+            - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script}
+            - {name: expansion.dataprovider.listener, event_name: Trackmania.Event.WayPoint, method: onWayPoint }
+
+    expansion.framework.game_trackmania.data_providers.script_base_rounds.race:
+        class: eXpansion\Framework\GameTrackmania\DataProviders\ScriptBaseRounds\RaceDataProvider
         tags:
             - {name: expansion.dataprovider, provider: "tm.script.race", interface: eXpansion\Framework\GameTrackmania\DataProviders\Listener\RaceDataListenerInterface}
             - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script}
             - {name: expansion.dataprovider.listener, event_name: Trackmania.Event.WayPoint, method: onWayPoint }
 
+    expansion.framework.game_trackmania.data_providers.script_time_attack.race:
+        class: eXpansion\Framework\GameTrackmania\DataProviders\ScriptTimeAttack\RaceDataProvider
+        tags:
+            - {name: expansion.dataprovider, provider: "tm.script.race", interface: eXpansion\Framework\GameTrackmania\DataProviders\Listener\RaceDataListenerInterface}
+            - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script}
+            - {name: expansion.dataprovider.listener, event_name: Trackmania.Event.WayPoint, method: onWayPoint }
+
+    expansion.framework.game_trackmania.data_providers.lap:
+        class: eXpansion\Framework\GameTrackmania\DataProviders\LapDataProvider
+        tags:
+            - {name: expansion.dataprovider, provider: "tm.script.race", interface: eXpansion\Framework\GameTrackmania\DataProviders\Listener\LapDataListenerInterface}
+            - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script}
+            - {name: expansion.dataprovider.listener, event_name: Trackmania.Event.WayPoint, method: onWayPoint }
+
+    #
+    # Generic Data providers.
+    #
     expansion.framework.game_trackmania.data_providers.player:
         class: eXpansion\Framework\GameTrackmania\DataProviders\PlayerEventsDataProvider
         tags:

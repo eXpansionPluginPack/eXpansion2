@@ -33,6 +33,9 @@ class GameDataStorage
     /** @var  ServerOptions */
     protected $serverOptions;
 
+    /** @var array */
+    protected $scriptOptions;
+
     /** @var  GameInfos */
     protected $gameInfos;
 
@@ -130,6 +133,22 @@ class GameDataStorage
     public function setServerOptions($serverOptions)
     {
         $this->serverOptions = $serverOptions;
+    }
+
+    /**
+     * @return array
+     */
+    public function getScriptOptions(): array
+    {
+        return $this->scriptOptions;
+    }
+
+    /**
+     * @param array $scriptOptions
+     */
+    public function setScriptOptions(array $scriptOptions)
+    {
+        $this->scriptOptions = $scriptOptions;
     }
 
     /**

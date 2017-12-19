@@ -44,6 +44,7 @@ class BaseStorageUpdateListener
         $serverOptions = $this->connection->getServerOptions();
 
         $this->gameDataStorage->setServerOptions($serverOptions);
+        $this->gameDataStorage->setScriptOptions($this->connection->getModeScriptSettings());
         $this->gameDataStorage->setSystemInfo($this->connection->getSystemInfo());
         $this->gameDataStorage->setGameInfos(clone $gameInfos);
         $this->gameDataStorage->setVersion($this->connection->getVersion());
@@ -66,6 +67,7 @@ class BaseStorageUpdateListener
     public function onManiaplanetGameBeginMap(DedicatedEvent $event)
     {
         $serverOptions = $this->connection->getServerOptions();
+        $this->gameDataStorage->setScriptOptions($this->connection->getModeScriptSettings());
         $this->gameDataStorage->setServerOptions($serverOptions);
         $this->gameDataStorage->setSystemInfo($this->connection->getSystemInfo());
 
