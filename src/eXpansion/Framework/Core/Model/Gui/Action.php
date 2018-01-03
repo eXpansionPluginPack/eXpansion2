@@ -17,9 +17,9 @@ class Action
      */
     public function __construct($callable, $args)
     {
-        $this->id = spl_object_hash($this);
         $this->callable = $callable;
         $this->args = $args;
+        $this->id = spl_object_hash($this);
     }
 
     public function getId()

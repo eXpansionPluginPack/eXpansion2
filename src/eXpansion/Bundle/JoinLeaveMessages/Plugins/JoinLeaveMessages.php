@@ -4,6 +4,7 @@ namespace eXpansion\Bundle\JoinLeaveMessages\Plugins;
 
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
+use eXpansion\Framework\Core\Helpers\Countries;
 use eXpansion\Framework\Core\Services\Application\AbstractApplication;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
@@ -57,7 +58,7 @@ class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
                 "%group%" => $this->adminGroups->getGroupLabel($groupName),
                 "%nickname%" => $player->getNickName(),
                 "%login%" => $player->getLogin(),
-                "%path%" => $player->getPath(),
+                "%path%" => Countries::parseCountryFromPath($player->getPath()),
                 "%ladder%" => $player->getLadderScore(),
             ]);
 
@@ -82,7 +83,7 @@ class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
                 "%group%" => $this->adminGroups->getGroupLabel($groupName),
                 "%nickname%" => $player->getNickName(),
                 "%login%" => $player->getLogin(),
-                "%path%" => $player->getPath(),
+                "%path%" => Countries::parseCountryFromPath($player->getPath()),
                 "%ladder%" => $player->getLadderScore(),
             ]);
     }

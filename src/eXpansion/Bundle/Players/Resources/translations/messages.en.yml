@@ -1,0 +1,19 @@
+expansion_players:
+  gui:
+    players:
+      window:
+        title: 'Players'
+        reason: 'Reason'
+        language: 'Client Language'
+        gameversion: 'Game Version'
+        ladder: 'Ladder points'
+        column:
+          flag: '#'
+          from: 'From'
+          nickname: 'NickName'
+          login: 'Login'
+          select: 'Select'
+
+  menu:
+    label: "Players"
+    list: "Player List"

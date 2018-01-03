@@ -8,6 +8,8 @@ use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Xmlrpc\Exception as DedicatedException;
+use Maniaplanet\DedicatedServer\Xmlrpc\FaultException;
+use Maniaplanet\DedicatedServer\Xmlrpc\UnknownPlayerException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 

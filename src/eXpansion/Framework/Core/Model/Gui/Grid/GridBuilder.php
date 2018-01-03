@@ -8,6 +8,7 @@ use eXpansion\Framework\Core\Model\Gui\Factory\PagerFactory;
 use eXpansion\Framework\Core\Model\Gui\Factory\TitleLineFactory;
 use eXpansion\Framework\Core\Model\Gui\Grid\Column\AbstractColumn;
 use eXpansion\Framework\Core\Model\Gui\Grid\Column\ActionColumn;
+use eXpansion\Framework\Core\Model\Gui\Grid\Column\IconColumn;
 use eXpansion\Framework\Core\Model\Gui\Grid\Column\InputColumn;
 use eXpansion\Framework\Core\Model\Gui\Grid\Column\TextColumn;
 use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryInterface;
@@ -87,11 +88,11 @@ class GridBuilder implements DestroyableObject
     /**
      * GridBuilder constructor.
      *
-     * @param ActionFactory $actionFactory
-     * @param LineFactory $lineFactory
+     * @param ActionFactory    $actionFactory
+     * @param LineFactory      $lineFactory
      * @param TitleLineFactory $titleLineFactory
-     * @param PagerFactory $pagerFactory
-     * @param Factory $uiFactory
+     * @param PagerFactory     $pagerFactory
+     * @param Factory          $uiFactory
      */
     public function __construct(
         ActionFactory $actionFactory,
@@ -163,30 +164,43 @@ class GridBuilder implements DestroyableObject
     }
 
     /**
-     * @param      string $key
-     * @param      string $name
-     * @param      integer $widthCoefficiency
-     * @param bool $sortable
-     * @param bool $translatable
+     * @param string  $key
+     * @param string  $name
+     * @param integer $widthCoefficient
+     * @param bool    $sortable
+     * @param bool    $translatable
      *
      * @return $this
      */
-    public function addTextColumn($key, $name, $widthCoefficiency, $sortable = false, $translatable = false)
+    public function addTextColumn($key, $name, $widthCoefficient, $sortable = false, $translatable = false)
     {
-        $this->columns[] = new TextColumn($key, $name, $widthCoefficiency, $sortable, $translatable);
+        $this->columns[] = new TextColumn($key, $name, $widthCoefficient, $sortable, $translatable);
 
         return $this;
     }
 
     /**
-     * @param      string $key
-     * @param      string $name
-     * @param      integer $widthCoefficiency
+     * @param string  $key
+     * @param string  $name
+     * @param integer $width
      * @return $this
      */
-    public function addInputColumn($key, $name, $widthCoefficiency)
+    public function addIconColumn($key, $name, $width)
     {
-        $this->columns[] = new InputColumn($key, $name, $widthCoefficiency);
+        $this->columns[] = new IconColumn($key, $name, $width);
+
+        return $this;
+    }
+
+    /**
+     * @param  string  $key
+     * @param  string  $name
+     * @param  integer $widthCoefficient
+     * @return $this
+     */
+    public function addInputColumn($key, $name, $widthCoefficient)
+    {
+        $this->columns[] = new InputColumn($key, $name, $widthCoefficient);
 
         return $this;
     }
@@ -195,17 +209,17 @@ class GridBuilder implements DestroyableObject
     /**
      * Add an action into a column.
      *
-     * @param string $key
-     * @param string $name
-     * @param integer $widthCoefficiency
-     * @param $action
+     * @param string     $key
+     * @param string     $name
+     * @param integer    $widthCoefficient
+     * @param callable   $callback
      * @param Renderable $renderer
      *
      * @return $this
      */
-    public function addActionColumn($key, $name, $widthCoefficiency, $action, $renderer)
+    public function addActionColumn($key, $name, $widthCoefficient, $callback, $renderer)
     {
-        $this->columns[] = new ActionColumn($key, $name, $widthCoefficiency, $action, $renderer);
+        $this->columns[] = new ActionColumn($key, $name, $widthCoefficient, $callback, $renderer);
 
         return $this;
     }
@@ -289,24 +303,32 @@ class GridBuilder implements DestroyableObject
                         'width' => $columnData->getWidthCoeficiency(),
                         'translatable' => $columnData->getTranslatable(),
                     ];
-                } elseif ($columnData instanceof ActionColumn) {
-                    $action = $this->actionFactory
-                        ->createManialinkAction($this->manialink, $columnData->getCallable(), $lineData);
-                    $this->temporaryActions[] = $action;
-                    $data[] = [
-                        'renderer' => clone $columnData->getRenderer(),
-                        'width' => $columnData->getWidthCoeficiency(),
-                        'action' => $action,
-                    ];
-                } elseif ($columnData instanceof InputColumn) {
-                    $value = $this->dataCollection->getLineData($lineData, $columnData->getKey());
+                } else {
+                    if ($columnData instanceof IconColumn) {
+                        $data[] = [
+                            'iconUrl' => $this->dataCollection->getLineData($lineData, $columnData->getKey()),
+                            'width' => $columnData->getWidthCoeficiency(),
+                            'iconWidth' => 4,
+                        ];
+                    } elseif ($columnData instanceof ActionColumn) {
+                        $action = $this->actionFactory
+                            ->createManialinkAction($this->manialink, $columnData->getCallable(), $lineData);
+                        $this->temporaryActions[] = $action;
+                        $data[] = [
+                            'renderer' => clone $columnData->getRenderer(),
+                            'width' => $columnData->getWidthCoeficiency(),
+                            'action' => $action,
+                        ];
+                    } elseif ($columnData instanceof InputColumn) {
+                        $value = $this->dataCollection->getLineData($lineData, $columnData->getKey());
 
-                    $data[] = [
-                        'input' => $value,
-                        'index' => $i,
-                        'tooltip' => $tooltip,
-                        'width' => $columnData->getWidthCoeficiency(),
-                    ];
+                        $data[] = [
+                            'input' => $value,
+                            'index' => $i,
+                            'tooltip' => $tooltip,
+                            'width' => $columnData->getWidthCoeficiency(),
+                        ];
+                    }
                 }
             }
             $line = $this->lineFactory->create($frame->getWidth(), $data, $idx++);
@@ -338,8 +360,8 @@ class GridBuilder implements DestroyableObject
     /**
      * Action callback to go to the first page.
      * @param ManialinkInterface $manialink
-     * @param null $login
-     * @param array $entries
+     * @param null               $login
+     * @param array              $entries
      */
     public function goToFirstPage(ManialinkInterface $manialink, $login = null, $entries = [])
     {
@@ -350,8 +372,8 @@ class GridBuilder implements DestroyableObject
     /**
      * Action callback to go to the previous page.
      * @param ManialinkInterface $manialink
-     * @param null $login
-     * @param array $entries
+     * @param null               $login
+     * @param array              $entries
      */
     public function goToPreviousPage(ManialinkInterface $manialink, $login = null, $entries = [])
     {
@@ -364,8 +386,8 @@ class GridBuilder implements DestroyableObject
     /**
      * Action callback to go to the next page.
      * @param ManialinkInterface $manialink
-     * @param null $login
-     * @param array $entries
+     * @param null               $login
+     * @param array              $entries
      */
     public function goToNextPage(ManialinkInterface $manialink, $login = null, $entries = [])
     {
@@ -377,8 +399,8 @@ class GridBuilder implements DestroyableObject
 
     /**
      * @param ManialinkInterface $manialink
-     * @param null $login
-     * @param array $entries
+     * @param null               $login
+     * @param array              $entries
      */
     public function goToPage(ManialinkInterface $manialink, $login = null, $entries = [])
     {
@@ -398,8 +420,8 @@ class GridBuilder implements DestroyableObject
     /**
      * Action callback to go to the last page.
      * @param ManialinkInterface $manialink
-     * @param null $login
-     * @param array $entries
+     * @param null               $login
+     * @param array              $entries
      */
     public function goToLastPage(ManialinkInterface $manialink, $login = null, $entries = [])
     {
@@ -462,9 +484,9 @@ class GridBuilder implements DestroyableObject
 
     /**
      * @param ManialinkInterface $manialink
-     * @param $login
-     * @param $entries
-     * @param $args
+     * @param                    $login
+     * @param                    $entries
+     * @param                    $args
      */
     public function sortColumn(ManialinkInterface $manialink, $login, $entries, $args)
     {

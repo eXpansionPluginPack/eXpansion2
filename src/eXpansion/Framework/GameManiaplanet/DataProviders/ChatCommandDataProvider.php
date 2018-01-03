@@ -3,16 +3,14 @@
 namespace eXpansion\Framework\GameManiaplanet\DataProviders;
 
 use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ChatCommandInterface;
 use eXpansion\Framework\Core\Exceptions\PlayerException;
 use eXpansion\Framework\Core\Helpers\ChatOutput;
 use eXpansion\Framework\Core\Model\ChatCommand\AbstractChatCommand;
 use eXpansion\Framework\Core\Model\Helpers\ChatNotificationInterface;
 use eXpansion\Framework\Core\Services\ChatCommands;
-
-use /** @noinspection PhpUndefinedClassInspection */
-    Symfony\Component\Console\Exception\RuntimeException;
-
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ChatCommandInterface;
+use Psr\Log\LoggerInterface;
+use Maniaplanet\DedicatedServer\Xmlrpc\UnknownPlayerException;
 /**
  * Class ChatCommandDataProvider, provides execution instructions for chat commands.
  *
@@ -28,21 +26,29 @@ class ChatCommandDataProvider extends AbstractDataProvider
 
     /** @var ChatOutput */
     protected $chatOutput;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * ChatCommandDataProvider constructor.
-     * @param ChatCommands $chatCommands
+     * @param ChatCommands              $chatCommands
      * @param ChatNotificationInterface $chatNotification
-     * @param ChatOutput $chatOutput
+     * @param ChatOutput                $chatOutput
+     * @param LoggerInterface           $logger
      */
     public function __construct(
         ChatCommands $chatCommands,
         ChatNotificationInterface $chatNotification,
-        ChatOutput $chatOutput
+        ChatOutput $chatOutput,
+        LoggerInterface $logger
+
     ) {
         $this->chatCommands = $chatCommands;
         $this->chatNotification = $chatNotification;
         $this->chatOutput = $chatOutput;
+        $this->logger = $logger;
     }
 
     /**
@@ -69,10 +75,10 @@ class ChatCommandDataProvider extends AbstractDataProvider
     /**
      * Called when a player chats on the server.
      *
-     * @param int $playerUid
+     * @param int    $playerUid
      * @param string $login
      * @param string $text
-     * @param bool $isRegisteredCmd
+     * @param bool   $isRegisteredCmd
      */
     public function onPlayerChat($playerUid, $login, $text, $isRegisteredCmd = false)
     {
@@ -96,6 +102,7 @@ class ChatCommandDataProvider extends AbstractDataProvider
         $message = 'expansion_core.chat_commands.wrong_chat';
 
         list($command, $parameter) = $this->chatCommands->getChatCommand($cmdAndArgs);
+
         /** @var AbstractChatCommand $command */
         if ($command) {
             $parameter = implode(" ", $parameter);
@@ -107,6 +114,9 @@ class ChatCommandDataProvider extends AbstractDataProvider
                 } catch (PlayerException $e) {
                     // Player exceptions are meant to be sent to players, and not crash or even be logged.
                     $this->chatNotification->sendMessage($e->getTranslatableMessage(), $login);
+                } catch( UnknownPlayerException $e) {
+                    // Player exceptions are meant to be sent to players, and not crash or even be logged.
+                    $this->chatNotification->sendMessage($e->getMessage(), $login);
                 }
             }
         }

@@ -8,13 +8,13 @@ services:
           - {name: 'expansion.plugin', data_provider: 'exp.application'}
           - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
 
-    eXpansion\Bundle\CustomUi\Plugins\Gui\ChatHelperWidget:
-        class: eXpansion\Bundle\CustomUi\Plugins\Gui\ChatHelperWidget
+    eXpansion\Bundle\CustomUi\Plugins\Gui\CustomScoreboardWidget:
+        class: eXpansion\Bundle\CustomUi\Plugins\Gui\CustomScoreboardWidget
         autowire: true
         arguments:
-          $name:  "Chat"
-          $posX: -120
-          $posY: -50
+          $name:  "Scoreboard"
+          $posX: 0
+          $posY: 0
           $sizeX: null
           $sizeY: null
 

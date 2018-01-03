@@ -25,12 +25,13 @@ class WidgetFactoryContext extends FmlManialinkFactoryContext
     /**
      * WidgetFactoryContext constructor.
      *
-     * @param $className
-     * @param GuiHandlerInterface $guiHandler
-     * @param Factory $groupFactory
-     * @param ActionFactory $actionFactory
-     * @param Translations $translations
-     * @param UiFactory $uiFactory
+     * @param                             $className
+     * @param GuiHandlerInterface         $guiHandler
+     * @param Factory                     $groupFactory
+     * @param ActionFactory               $actionFactory
+     * @param Translations                $translations
+     * @param UiFactory                   $uiFactory
+     * @param WidgetFrameFactoryInterface $widgetFrameFactory
      */
     public function __construct(
         $className,

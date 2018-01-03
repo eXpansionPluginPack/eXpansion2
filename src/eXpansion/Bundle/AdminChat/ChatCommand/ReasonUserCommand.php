@@ -111,8 +111,6 @@ class ReasonUserCommand extends AbstractConnectionCommand
      */
     protected function configure()
     {
-        parent::configure();
-
         $this->inputDefinition->addArgument(
             new InputArgument('login', InputArgument::REQUIRED, $this->parameterLoginDescription)
         );

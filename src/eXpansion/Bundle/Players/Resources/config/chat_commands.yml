@@ -1,0 +1,16 @@
+services:
+    eXpansion\Bundle\Players\ChatCommand\Players:
+        class: eXpansion\Bundle\Players\ChatCommand\Players
+        autowire: true
+        arguments:
+          $command: players
+          $aliases: []
+
+
+    expansion.players.plugins.chat_commands.players:
+        class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
+        arguments:
+            -
+                - '@eXpansion\Bundle\Players\ChatCommand\Players'
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}

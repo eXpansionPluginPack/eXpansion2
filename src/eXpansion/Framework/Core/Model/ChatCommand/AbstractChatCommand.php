@@ -96,7 +96,7 @@ abstract class AbstractChatCommand implements ChatCommandInterface
             $parameter = str_getcsv($parameter, " ", '"');
             $parameter = array_merge([0 => 1], $parameter);
 
-            $input = new ArgvInput($parameter);
+            $input = new ArgvInput($parameter, $this->inputDefinition);
 
             if (true === $input->hasParameterOption(array('--help', '-h'), true)) {
                 $helper = new DescriptorHelper();
@@ -105,7 +105,6 @@ abstract class AbstractChatCommand implements ChatCommandInterface
                 return '';
             }
 
-            $input->bind($this->inputDefinition);
             $input->validate();
         } catch (RuntimeException $runtimeException) {
             // These exceptions are thrown by symfony when arguments passed are not correct.

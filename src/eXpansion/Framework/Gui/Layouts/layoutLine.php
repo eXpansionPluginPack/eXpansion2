@@ -117,7 +117,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
                 return -($element->getWidth() * 2);
                 break;
             default:
-                return ($element->getWidth() / 2);
+                return 0;
                 break;
         }
     }

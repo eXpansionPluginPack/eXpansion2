@@ -8,6 +8,7 @@ use eXpansion\Framework\Gui\Components\uiTooltip;
 use FML\Controls\Control;
 use FML\Controls\Frame;
 use FML\Controls\Label;
+use FML\Controls\Quad;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
 
 /**
@@ -31,8 +32,8 @@ class LineFactory
      * TitleLineFactory constructor.
      *
      * @param BackGroundFactory $backGroundFactory
-     * @param LabelFactory $labelFactory
-     * @param string $type
+     * @param LabelFactory      $labelFactory
+     * @param string            $type
      */
     public function __construct(
         BackGroundFactory $backGroundFactory,
@@ -49,10 +50,10 @@ class LineFactory
      *
      * @param float $totalWidth
      * @param array $columns
-     * @param int $index
+     * @param int   $index
      * @param float $height
-     * @param bool $autoNewLine
-     * @param int $maxLines
+     * @param bool  $autoNewLine
+     * @param int   $maxLines
      *
      * @return Frame
      *
@@ -71,8 +72,11 @@ class LineFactory
 
         $postX = 1;
         foreach ($columns as $columnData) {
+            $coeff = $totalCoef;
             if (isset($columnData['text'])) {
                 $element = $this->createTextColumn($totalCoef, $columnData, $postX, $height, $autoNewLine, $maxLines);
+            } elseif (isset($columnData['iconUrl'])) {
+                $element = $this->createIconColumn($columnData, $postX, $height);
             } elseif (isset($columnData['input'])) {
                 $element = $this->createInputColumn($totalCoef, $columnData, $postX);
             } elseif (isset($columnData['renderer'])) {
@@ -88,7 +92,7 @@ class LineFactory
             }
 
             $frame->addChild($element);
-            $postX += $columnData["width"] * $totalCoef;
+            $postX += $columnData["width"] * $coeff;
         }
 
         $frame->addChild($this->backGroundFactory->create($totalWidth, $height, $index));
@@ -101,8 +105,8 @@ class LineFactory
      * @param array $columnData
      * @param float $postX
      * @param float $height
-     * @param bool $autoNewLine
-     * @param int $maxLines
+     * @param bool  $autoNewLine
+     * @param int   $maxLines
      *
      * @return Label
      */
@@ -115,13 +119,30 @@ class LineFactory
         );
         $label->setHeight($height - 1);
         $label->setWidth(($columnData["width"] * $totalCoef) - 0.5);
-        $label->setPosition($postX, -($height/2));
+        $label->setPosition($postX, -($height / 2));
         $label->setAutoNewLine($autoNewLine);
         $label->setMaxLines($maxLines);
 
         return $label;
     }
 
+
+    protected function createIconColumn($columnData, $postX, $height)
+    {
+        $frame = Frame::create();
+
+        $icon = Quad::create();
+        $icon->setImageUrl($columnData['iconUrl']);
+        $icon->setHeight($height - 1);
+        $icon->setWidth($columnData["iconWidth"]);
+        $icon->setAlign("left", "center");
+        $icon->setPosition($postX, -($height / 2));
+
+        $frame->addChild($icon);
+
+
+        return $frame;
+    }
 
     protected function createInputColumn($totalCoef, $columnData, $postX)
     {
@@ -136,7 +157,7 @@ class LineFactory
             if ($value === false) {
                 $element = new uiCheckbox("", "entry_".$i."_boolean", false);
             }
-            $element->setPosition($postX+ 0.5,0);
+            $element->setPosition($postX + 0.5, 0);
         } else {
             $element = new uiInput("entry_".$i."_".$type);
             $element->setDefault($value);

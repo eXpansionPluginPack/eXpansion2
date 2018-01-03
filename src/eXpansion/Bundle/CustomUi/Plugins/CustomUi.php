@@ -2,8 +2,8 @@
 
 namespace eXpansion\Bundle\CustomUi\Plugins;
 
-use eXpansion\Bundle\CustomUi\Plugins\Gui\ChatHelperWidget;
 use eXpansion\Bundle\CustomUi\Plugins\Gui\CustomCheckpointWidget;
+use eXpansion\Bundle\CustomUi\Plugins\Gui\CustomScoreboardWidget;
 use eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSpeedWidget;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
@@ -27,13 +27,17 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
      */
     private $players;
     /**
-     * @var ChatHelperWidget
+     * @var CustomScoreboardWidget
      */
     private $customSpeedWidget;
     /**
      * @var CustomCheckpointWidget
      */
     private $customCheckpointWidget;
+    /**
+     * @var CustomScoreboardWidget
+     */
+    private $customScoreboardWidget;
 
     /**
      * CustomUi constructor.
@@ -43,19 +47,22 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
      * @param Group                  $players
      * @param CustomSpeedWidget      $customSpeedWidget
      * @param CustomCheckpointWidget $customCheckpointWidget
+     * @param CustomScoreboardWidget $customScoreboardWidget
      */
     public function __construct(
         Connection $connection,
         PlayerStorage $playerStorage,
         Group $players,
         CustomSpeedWidget $customSpeedWidget,
-        CustomCheckpointWidget $customCheckpointWidget
+        CustomCheckpointWidget $customCheckpointWidget,
+        CustomScoreboardWidget $customScoreboardWidget
     ) {
         $this->connection = $connection;
         $this->playerStorage = $playerStorage;
         $this->players = $players;
         $this->customSpeedWidget = $customSpeedWidget;
         $this->customCheckpointWidget = $customCheckpointWidget;
+        $this->customScoreboardWidget = $customScoreboardWidget;
     }
 
     /**
@@ -163,57 +170,7 @@ EOL;
 
         $this->connection->triggerModeScriptEvent('Trackmania.UI.SetProperties', [$properties]);
 
-        $scoretable = /** @lang XML */
-            <<<EOL
-<?xml version="1.0" encoding="utf-8"?>
-<scorestable version="1">
-    <styles>
-        <style id="LibST_Reset" />
-		<style id="LibST_TMWithLegends" />				
-    </styles>
-    <properties>
-        
-    </properties>
-     <columns>
-        <column id="EXP_finishes" action="create">
-			<width>3.</width>
-			<textalign>left</textalign>
-		</column>
-		<column id="LibST_TMBestTime" action="create">
-			<width>12.</width>
-			<defaultvalue>--:--.---</defaultvalue>
-			<textalign>right</textalign>
-		</column>
-		<column id="LibST_Avatar" action="create">
-			<width>6.</width>
-			<textalign>center</textalign>
-		</column>
-		<column id="LibST_Name" action="create">
-			<width>32.</width>
-			<textalign>left</textalign>
-		</column>
-		<column id="LibST_ManiaStars" action="create">
-			<width>3.</width>
-			<textalign>center</textalign>
-		</column>
-		<column id="LibST_Tools" action="create">
-			<width>3.</width>
-			<textalign>right</textalign>
-		</column>
-	 </columns>
-
-    <images>
-        <playercard>
-            <quad path="file://Media/Manialinks/Trackmania/ScoresTable/playerline-square.dds" />
-            <left path="file://Media/Manialinks/Trackmania/ScoresTable/playerline-left.dds" />
-            <right path="file://Media/Manialinks/Trackmania/ScoresTable/playerline-right.dds" />
-        </playercard>
-    </images>
-  
-</scorestable>
-EOL;
-
-        $this->connection->triggerModeScriptEvent('LibScoresTable2_SetStyleFromXml', ["TM", $scoretable]);
+        $this->customScoreboardWidget->create($this->players);
         $this->customSpeedWidget->create($this->players);
         $this->customCheckpointWidget->create($this->players);
     }
