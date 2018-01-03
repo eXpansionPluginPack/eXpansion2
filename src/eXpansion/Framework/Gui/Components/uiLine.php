@@ -26,7 +26,7 @@ class uiLine extends abstractUiElement
      */
     protected $ty;
 
-    protected $color = "f00";
+    protected $color = "fffa";
 
     protected $stoke = 0.25;
 
@@ -73,7 +73,7 @@ class uiLine extends abstractUiElement
     public function render(\DOMDocument $domDocument)
     {
         $quad = new Quad();
-        $quad->setPosition($this->x - 180, $this->y - 90);
+        $quad->setPosition($this->posX + $this->x - 180, $this->posY + $this->y - 90);
         $quad->setBackgroundColor($this->color);
         if ($this->to) {
             $quad->setWidth($this->calcLength())->setHeight($this->stoke);
@@ -97,7 +97,7 @@ class uiLine extends abstractUiElement
 
     public function calcAngle()
     {
-        $angle = (float) (atan2($this->x - $this->tx, $this->y - $this->ty));
+        $angle = (float)(atan2($this->x - $this->tx, $this->y - $this->ty));
         $angle += pi() / 2.0;
 
         return rad2deg($angle);

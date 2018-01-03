@@ -1,10 +1,47 @@
 services:
+    _defaults:
+        autowire: true
+        public: true
+
     eXpansion\Bundle\Players\ChatCommand\Players:
         class: eXpansion\Bundle\Players\ChatCommand\Players
-        autowire: true
         arguments:
           $command: players
           $aliases: []
+
+    eXpansion\Bundle\Players\ChatCommand\Blacklist:
+        class: eXpansion\Bundle\Players\ChatCommand\OpenListWindow
+        arguments:
+          $command:              "blacklist"
+          $permission:           "blacklist.show"
+          $aliases:              []
+          $listMode:             "blacklist"
+
+    eXpansion\Bundle\Players\ChatCommand\Banlist:
+        class: eXpansion\Bundle\Players\ChatCommand\OpenListWindow
+        arguments:
+          $command:              "banlist"
+          $permission:           "banlist.show"
+          $aliases:              []
+          $listMode:             "banlist"
+
+
+    eXpansion\Bundle\Players\ChatCommand\Ignorelist:
+        class: eXpansion\Bundle\Players\ChatCommand\OpenListWindow
+        arguments:
+          $command:              "ignorelist"
+          $permission:           "ignorelist.show"
+          $aliases:              []
+          $listMode:             "ignorelist"
+
+
+    eXpansion\Bundle\Players\ChatCommand\Guestlist:
+        class: eXpansion\Bundle\Players\ChatCommand\OpenListWindow
+        arguments:
+          $command:              "guestlist"
+          $permission:           "guestlist.show"
+          $aliases:              []
+          $listMode:             "guestlist"
 
 
     expansion.players.plugins.chat_commands.players:
@@ -12,5 +49,9 @@ services:
         arguments:
             -
                 - '@eXpansion\Bundle\Players\ChatCommand\Players'
+                - '@eXpansion\Bundle\Players\ChatCommand\Blacklist'
+                - '@eXpansion\Bundle\Players\ChatCommand\Banlist'
+                - '@eXpansion\Bundle\Players\ChatCommand\Ignorelist'
+                - '@eXpansion\Bundle\Players\ChatCommand\Guestlist'
         tags:
             - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}

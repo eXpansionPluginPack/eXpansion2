@@ -1,5 +1,10 @@
 expansion_players:
   gui:
+    list:
+      window:
+        title: "Manage player lists"
+        column:
+          remove: "Remove"
     players:
       window:
         title: 'Players'
@@ -7,12 +12,19 @@ expansion_players:
         language: 'Client Language'
         gameversion: 'Game Version'
         ladder: 'Ladder points'
+        blacklist: "Black list"
+        guestlist: "Guest list"
+        ignorelist: "Ignore list"
+        banlist: "Ban list"
         column:
           flag: '#'
           from: 'From'
           nickname: 'NickName'
           login: 'Login'
           select: 'Select'
+
+  chat:
+    exception: "|error| {error}Dedicated Server error: {highlight}%message%"
 
   menu:
     label: "Players"

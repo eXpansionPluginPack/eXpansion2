@@ -2,6 +2,7 @@
 
 namespace eXpansion\Bundle\Players\Plugins\Gui;
 
+use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\Helpers\Countries;
 use eXpansion\Framework\Core\Helpers\TMString;
 use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionFactory;
@@ -14,6 +15,7 @@ use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\ChatCommandDataProvider;
 use eXpansion\Framework\Gui\Components\uiButton;
 use eXpansion\Framework\Gui\Components\uiLabel;
+use eXpansion\Framework\Gui\Layouts\layoutRow;
 use FML\Controls\Frame;
 use Maniaplanet\DedicatedServer\Connection;
 
@@ -31,6 +33,10 @@ class PlayersWindow extends GridWindowFactory
      * @var Connection
      */
     private $connection;
+    /**
+     * @var AdminGroups
+     */
+    private $adminGroups;
 
     /**
      * PlayersWindow constructor.
@@ -45,6 +51,7 @@ class PlayersWindow extends GridWindowFactory
      * @param GridBuilderFactory      $gridBuilderFactory
      * @param ChatCommandDataProvider $chatCommandDataProvider
      * @param Connection              $connection
+     * @param AdminGroups             $adminGroups
      */
     public function __construct(
         $name,
@@ -57,7 +64,8 @@ class PlayersWindow extends GridWindowFactory
         DataCollectionFactory $dataCollectionFactory,
         GridBuilderFactory $gridBuilderFactory,
         ChatCommandDataProvider $chatCommandDataProvider,
-        Connection $connection
+        Connection $connection,
+        AdminGroups $adminGroups
 
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
@@ -67,6 +75,7 @@ class PlayersWindow extends GridWindowFactory
         $this->gridBuilderFactory = $gridBuilderFactory;
         $this->chatCommandDataProvider = $chatCommandDataProvider;
         $this->connection = $connection;
+        $this->adminGroups = $adminGroups;
     }
 
     protected function createContent(ManialinkInterface $manialink)
@@ -75,8 +84,40 @@ class PlayersWindow extends GridWindowFactory
         $manialink->setData('playerActions', []);
         $this->setPlayer($manialink, $manialink->getUserGroup()->getLogins()[0]);
 
+        $recipient = $manialink->getUserGroup()->getLogins()[0];
+
+        if ($this->adminGroups->isAdmin($recipient)) {
+
+            $ignoreList = $this->uiFactory->createButton("expansion_players.gui.players.window.ignorelist")
+                ->setTranslate(true)
+                ->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackChatCommand"],
+                    ["action" => "//ignorelist"]));
+
+            $guestList = $this->uiFactory->createButton("expansion_players.gui.players.window.guestlist")
+                ->setTranslate(true)
+                ->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackChatCommand"],
+                    ["action" => "//guestlist"]));
+
+            $banList = $this->uiFactory->createButton("expansion_players.gui.players.window.banlist")
+                ->setTranslate(true)
+                ->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackChatCommand"],
+                    ["action" => "//banlist"]));
+
+            $blackList = $this->uiFactory->createButton("expansion_players.gui.players.window.blacklist")
+                ->setTranslate(true)
+                ->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackChatCommand"],
+                    ["action" => "//blacklist"]));
+
+            $row = $this->uiFactory->createLayoutLine(120, 0,
+                [$guestList, $ignoreList, $banList, $blackList], 2);
+            $manialink->addChild($row);
+
+
+        }
+
+
         $frame = Frame::create();;
-        $frame->setPosition(120, 0);
+        $frame->setPosition(120, -16);
 
         $manialink->setData("playerFrame", $frame);
         $manialink->addChild($frame);
@@ -87,17 +128,18 @@ class PlayersWindow extends GridWindowFactory
     {
 
         parent::updateContent($manialink);
-        $width = 100;
+        $width = 60;
+        $recipient = $manialink->getUserGroup()->getLogins()[0];
 
         /** @var Frame $frame */
         $login = $manialink->getData('playerLogin');
         $player = $this->playerStorage->getPlayerInfo($login);
-        $actions = $manialink->getData('playerActions');
 
         $frame = $manialink->getData('playerFrame');
         $frame->removeAllChildren();
 
-        $row = $this->uiFactory->createLayoutRow(0, 0);
+        $row = $this->uiFactory->createLayoutRow(0, 0, [], -2);
+
 
         $element = $this->uiFactory->createLabel($player->getNickName(), uiLabel::TYPE_HEADER);
         $element->setTextSize(5)->setSize($width, 10)->setAlign("center", "top")
@@ -138,14 +180,23 @@ class PlayersWindow extends GridWindowFactory
         $line = $this->uiFactory->createLayoutLine(0, 0, $elem, 2);
         $row->addChild($line);
 
-        $elem = [
-            $this->uiFactory->createLabel("expansion_players.gui.players.window.reason")
-                ->setSize(20, 5)
-                ->setTranslate(true),
-            $this->uiFactory->createInput('reason', "", 40)->setHeight(5),
-        ];
-        $line = $this->uiFactory->createLayoutLine(0, 0, $elem, 2);
-        $row->addChild($line);
+
+        if ($this->adminGroups->isAdmin($recipient)) {
+            $this->createAdminControls($manialink, $row);
+        }
+
+        $frame->addChild($row);
+    }
+
+
+    /**
+     * @param ManialinkInterface $manialink
+     * @param layoutRow          $row
+     */
+    private function createAdminControls($manialink, $row)
+    {
+        $actions = $manialink->getData('playerActions');
+        $login = $manialink->getData('playerLogin');
 
         if ($this->getIgnoredStatus($login)) {
             $muteText = "Allow";
@@ -159,6 +210,26 @@ class PlayersWindow extends GridWindowFactory
             $this->uiFactory->createConfirmButton($muteText, uiButton::TYPE_DEFAULT)
                 ->setAction($actions['mute'])
                 ->setBackgroundColor($color),
+            $this->uiFactory->createConfirmButton("Guest", uiButton::TYPE_DEFAULT)
+                ->setAction($actions['guest'])
+                ->setBackgroundColor(UiButton::COLOR_DEFAULT),
+        ];
+        $line = $this->uiFactory->createLayoutLine(0, 0, $elem, 2);
+        $row->addChild($line);
+
+        $separator = $this->uiFactory->createLine(0, 0)->setLength(40)->setStroke(0.5);
+        $row->addChild($separator);
+
+        $elem = [
+            $this->uiFactory->createLabel("expansion_players.gui.players.window.reason")
+                ->setSize(20, 5)
+                ->setTranslate(true),
+            $this->uiFactory->createInput('reason', "", 40)->setHeight(5),
+        ];
+        $line = $this->uiFactory->createLayoutLine(0, 0, $elem, 2);
+        $row->addChild($line);
+
+        $elem = [
             $this->uiFactory->createConfirmButton("Kick", uiButton::TYPE_DEFAULT)
                 ->setAction($actions['kick'])
                 ->setBackgroundColor(UiButton::COLOR_DEFAULT),
@@ -173,10 +244,8 @@ class PlayersWindow extends GridWindowFactory
         ];
         $line = $this->uiFactory->createLayoutLine(0, 0, $elem, 2);
         $row->addChild($line);
-
-
-        $frame->addChild($row);
     }
+
 
     /**
      * @param ManialinkInterface $manialink
@@ -219,7 +288,7 @@ class PlayersWindow extends GridWindowFactory
 
             )
             ->addActionColumn('login', "expansion_players.gui.players.window.column.select",
-                3, [$this, "setPlayer"], $selectButton);
+                3, [$this, "callbackSetPlayer"], $selectButton);
 
 
         $manialink->setData('grid', $gridBuilder);
@@ -272,6 +341,10 @@ class PlayersWindow extends GridWindowFactory
                 [
                     "login" => $login,
                 ]),
+            "guest" => (string)$this->actionFactory->createManialinkAction($manialink, [$this, 'callbackGuest'],
+                [
+                    "login" => $login,
+                ]),
         ];
 
         $manialink->setData('playerActions', $actions);
@@ -298,21 +371,32 @@ class PlayersWindow extends GridWindowFactory
         $this->update($manialink->getUserGroup());
     }
 
+    public function callbackGuest($manialink, $login, $entries, $args)
+    {
+        $this->callChatCommand($login, "//addguest ".$args['login']);
+        $this->updateData($manialink);
+        $this->update($manialink->getUserGroup());
+    }
+
     public function callbackBan($manialink, $login, $entries, $args)
     {
-//        $this->callChatCommand($login, "//ban ".$args['login'].' "'.$entries['reason'].'"');
-        echo "ban ".$args['login']."\n";
+        $this->callChatCommand($login, "//ban ".$args['login'].' "'.$entries['reason'].'"');
         $this->updateData($manialink);
         $this->update($manialink->getUserGroup());
     }
 
     public function callbackBlack($manialink, $login, $entries, $args)
     {
-        //   $this->callChatCommand($login, "//black ".$args['login'].' "'.$entries['reason'].'"');
-        echo "black ".$args['login']."\n";
+        $this->callChatCommand($login, "//black ".$args['login'].' "'.$entries['reason'].'"');
         $this->updateData($manialink);
         $this->update($manialink->getUserGroup());
     }
+
+    public function callbackChatCommand($manialink, $login, $entries, $args)
+    {
+        $this->callChatCommand($login, $args['action']);
+    }
+
 
     public function updateData($manialink)
     {
@@ -337,7 +421,6 @@ class PlayersWindow extends GridWindowFactory
      */
     public function callChatCommand($login, $command)
     {
-        echo $command."\n";
         $this->chatCommandDataProvider->onPlayerChat($login, $login, $command, true);
     }
 
