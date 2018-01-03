@@ -5,6 +5,7 @@ namespace eXpansion\Bundle\CustomUi\Plugins;
 use eXpansion\Bundle\CustomUi\Plugins\Gui\CustomCheckpointWidget;
 use eXpansion\Bundle\CustomUi\Plugins\Gui\CustomScoreboardWidget;
 use eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSpeedWidget;
+use eXpansion\Bundle\CustomUi\Plugins\Gui\MarkersWidget;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
@@ -25,7 +26,7 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
     /**
      * @var Group
      */
-    private $players;
+    private $allPlayers;
     /**
      * @var CustomScoreboardWidget
      */
@@ -38,31 +39,45 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
      * @var CustomScoreboardWidget
      */
     private $customScoreboardWidget;
+    /**
+     * @var MarkersWidget
+     */
+    private $markersWidget;
+    /**
+     * @var Group
+     */
+    private $players;
 
     /**
      * CustomUi constructor.
      *
      * @param Connection             $connection
      * @param PlayerStorage          $playerStorage
+     * @param Group                  $allPlayers
      * @param Group                  $players
      * @param CustomSpeedWidget      $customSpeedWidget
      * @param CustomCheckpointWidget $customCheckpointWidget
      * @param CustomScoreboardWidget $customScoreboardWidget
+     * @param MarkersWidget          $markersWidget
      */
     public function __construct(
         Connection $connection,
         PlayerStorage $playerStorage,
+        Group $allPlayers,
         Group $players,
         CustomSpeedWidget $customSpeedWidget,
         CustomCheckpointWidget $customCheckpointWidget,
-        CustomScoreboardWidget $customScoreboardWidget
+        CustomScoreboardWidget $customScoreboardWidget,
+        MarkersWidget $markersWidget
     ) {
         $this->connection = $connection;
         $this->playerStorage = $playerStorage;
-        $this->players = $players;
+        $this->allPlayers = $allPlayers;
         $this->customSpeedWidget = $customSpeedWidget;
         $this->customCheckpointWidget = $customCheckpointWidget;
         $this->customScoreboardWidget = $customScoreboardWidget;
+        $this->markersWidget = $markersWidget;
+        $this->players = $players;
     }
 
     /**
@@ -170,9 +185,10 @@ EOL;
 
         $this->connection->triggerModeScriptEvent('Trackmania.UI.SetProperties', [$properties]);
 
-        $this->customScoreboardWidget->create($this->players);
-        $this->customSpeedWidget->create($this->players);
-        $this->customCheckpointWidget->create($this->players);
+        $this->markersWidget->create($this->players);
+        $this->customScoreboardWidget->create($this->allPlayers);
+        $this->customSpeedWidget->create($this->allPlayers);
+        $this->customCheckpointWidget->create($this->allPlayers);
     }
 
     /**
