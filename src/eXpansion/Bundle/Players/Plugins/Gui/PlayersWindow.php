@@ -108,7 +108,7 @@ class PlayersWindow extends GridWindowFactory
                 ->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackChatCommand"],
                     ["action" => "//blacklist"]));
 
-            $row = $this->uiFactory->createLayoutLine(120, 0,
+            $row = $this->uiFactory->createLayoutLine(125, 0,
                 [$guestList, $ignoreList, $banList, $blackList], 2);
             $manialink->addChild($row);
 
@@ -177,7 +177,7 @@ class PlayersWindow extends GridWindowFactory
             $this->uiFactory->createLabel(floor($player->getLadderScore())),
         ];
 
-        $line = $this->uiFactory->createLayoutLine(0, 0, $elem, 2);
+        $line = $this->uiFactory->createLayoutLine(0, 0, $elem, 1);
         $row->addChild($line);
 
 
@@ -214,20 +214,20 @@ class PlayersWindow extends GridWindowFactory
                 ->setAction($actions['guest'])
                 ->setBackgroundColor(UiButton::COLOR_DEFAULT),
         ];
-        $line = $this->uiFactory->createLayoutLine(0, 0, $elem, 2);
+        $line = $this->uiFactory->createLayoutLine(10, 0, $elem, 2);
         $row->addChild($line);
 
-        $separator = $this->uiFactory->createLine(0, 0)->setLength(40)->setStroke(0.5);
+        $separator = $this->uiFactory->createLine(0, 0)->setLength(60)->setStroke(0.5);
         $row->addChild($separator);
 
-        $elem = [
-            $this->uiFactory->createLabel("expansion_players.gui.players.window.reason")
-                ->setSize(20, 5)
-                ->setTranslate(true),
-            $this->uiFactory->createInput('reason', "", 40)->setHeight(5),
-        ];
-        $line = $this->uiFactory->createLayoutLine(0, 0, $elem, 2);
-        $row->addChild($line);
+
+        $elem = $this->uiFactory->createLabel("expansion_players.gui.players.window.reason")
+            ->setSize(20, 5)
+            ->setTranslate(true);
+        $row->addChild($elem);
+        $elem = $this->uiFactory->createInput('reason', "", 60);
+        $row->addChild($elem);
+
 
         $elem = [
             $this->uiFactory->createConfirmButton("Kick", uiButton::TYPE_DEFAULT)
@@ -242,7 +242,7 @@ class PlayersWindow extends GridWindowFactory
 
 
         ];
-        $line = $this->uiFactory->createLayoutLine(0, 0, $elem, 2);
+        $line = $this->uiFactory->createLayoutLine(10, 0, $elem, 2);
         $row->addChild($line);
     }
 
