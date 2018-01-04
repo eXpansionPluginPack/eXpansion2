@@ -83,7 +83,7 @@ class AdminCommand extends AbstractConnectionCommand
 
         $this->description = 'expansion_admin_chat.'.strtolower($functionName).'.description';
         $this->chatMessage = 'expansion_admin_chat.'.strtolower($functionName).'.msg';
-        $this->functionName = (string)$functionName;
+        $this->functionName = $functionName;
     }
 
     /**

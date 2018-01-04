@@ -99,7 +99,7 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
      */
     public function onApplicationInit()
     {
-        // TODO: Implement onApplicationInit() method.
+        // do nothing
     }
 
     /**
@@ -198,7 +198,7 @@ EOL;
      */
     public function onApplicationStop()
     {
-        // TODO: Implement onApplicationStop() method.
+        // do nothing
     }
 
     public function onPlayerConnect(Player $player)
@@ -208,16 +208,16 @@ EOL;
 
     public function onPlayerDisconnect(Player $player, $disconnectionReason)
     {
-        // TODO: Implement onPlayerDisconnect() method.
+        // do nothing
     }
 
     public function onPlayerInfoChanged(Player $oldPlayer, Player $player)
     {
-        // TODO: Implement onPlayerInfoChanged() method.
+      // do nothing
     }
 
     public function onPlayerAlliesChanged(Player $oldPlayer, Player $player)
     {
-        // TODO: Implement onPlayerAlliesChanged() method.
+       // do nothing
     }
 }

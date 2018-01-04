@@ -73,7 +73,7 @@ class MapInfoService implements ListenerInterfaceExpApplication, ListenerInterfa
      */
     public function onApplicationStop()
     {
-        // TODO: Implement onApplicationStop() method.
+        // do nothing
     }
 
     /**
@@ -83,7 +83,7 @@ class MapInfoService implements ListenerInterfaceExpApplication, ListenerInterfa
      */
     public function onBeginMap(DedicatedMap $map)
     {
-        // TODO: Implement onBeginMap() method.
+        // do nothing
     }
 
     /**
@@ -93,7 +93,7 @@ class MapInfoService implements ListenerInterfaceExpApplication, ListenerInterfa
      */
     public function onEndMap(DedicatedMap $map)
     {
-        // TODO: Implement onEndMap() method.
+      // do nothing
     }
 
     /**
@@ -112,12 +112,12 @@ class MapInfoService implements ListenerInterfaceExpApplication, ListenerInterfa
 
     public function onExpansionMapChange($currentMap, $previousMap)
     {
-        // TODO: Implement onExpansionMapChange() method.
+        // do nothing
     }
 
     public function onExpansionNextMapChange($nextMap, $previousNextMap)
     {
-        // TODO: Implement onExpansionNextMapChange() method.
+       // do nothing
     }
 
     protected function syncMaps()

@@ -118,7 +118,7 @@ class MxKarma implements StatusAwarePluginInterface,
      */
     public function setStatus($status)
     {
-        // TODO: Implement setStatus() method.
+       // do nothing
     }
 
     /**
@@ -156,7 +156,7 @@ class MxKarma implements StatusAwarePluginInterface,
      */
     public function onApplicationInit()
     {
-        // TODO: Implement onApplicationInit() method.
+        // do nothing
     }
 
     /**
@@ -178,7 +178,7 @@ class MxKarma implements StatusAwarePluginInterface,
      */
     public function onApplicationStop()
     {
-        // TODO: Implement onApplicationStop() method.
+        // do nothing
     }
 
     /**
@@ -191,7 +191,7 @@ class MxKarma implements StatusAwarePluginInterface,
 
     /**
      * @param MxRating $mxRating
-     * @return mixed
+     * @return void
      */
     public function onMxKarmaVoteLoad(MxRating $mxRating)
     {
@@ -204,16 +204,16 @@ class MxKarma implements StatusAwarePluginInterface,
 
     /**
      * @param MxVote[] $updatedVotes
-     * @return mixed
+     * @return void
      */
     public function onMxKarmaVoteSave($updatedVotes)
     {
-        // TODO: Implement onMxKarmaVoteSave() method.
+       // do nothing
     }
 
     public function onMxKarmaDisconnect()
     {
-        // TODO: Implement onMxKarmaDisconnect() method.
+        // do nothing
     }
 
     /**
@@ -224,11 +224,11 @@ class MxKarma implements StatusAwarePluginInterface,
      * @param boolean $restarted true if the map was restarted, false otherwise
      * @param Map $map Map started with.
      *
-     * @return mixed
+     * @return void
      */
     public function onStartMapStart($count, $time, $restarted, Map $map)
     {
-        // TODO: Implement onStartMapStart() method.
+       // do nothing
     }
 
     /**
@@ -239,7 +239,7 @@ class MxKarma implements StatusAwarePluginInterface,
      * @param boolean $restarted true if the map was restarted, false otherwise
      * @param Map $map Map started with.
      *
-     * @return mixed
+     * @return void
      */
     public function onStartMapEnd($count, $time, $restarted, Map $map)
     {
@@ -255,11 +255,11 @@ class MxKarma implements StatusAwarePluginInterface,
      * @param boolean $restarted true if the map was restarted, false otherwise
      * @param Map $map Map started with.
      *
-     * @return mixed
+     * @return void
      */
     public function onEndMapStart($count, $time, $restarted, Map $map)
     {
-
+    // do nothing
     }
 
     /**
@@ -270,7 +270,7 @@ class MxKarma implements StatusAwarePluginInterface,
      * @param boolean $restarted true if the map was restarted, false otherwise
      * @param Map $map Map started with.
      *
-     * @return mixed
+     * @return void
      */
     public function onEndMapEnd($count, $time, $restarted, Map $map)
     {

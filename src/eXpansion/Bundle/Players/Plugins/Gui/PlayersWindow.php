@@ -81,6 +81,7 @@ class PlayersWindow extends GridWindowFactory
     protected function createContent(ManialinkInterface $manialink)
     {
         parent::createContent($manialink);
+
         $manialink->setData('playerActions', []);
         $this->setPlayer($manialink, $manialink->getUserGroup()->getLogins()[0]);
 

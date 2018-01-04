@@ -59,7 +59,7 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
      */
     public function onApplicationInit()
     {
-        // TODO: Implement onApplicationInit() method.
+        // do nothing
     }
 
     /**
@@ -79,6 +79,6 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
      */
     public function onApplicationStop()
     {
-        // TODO: Implement onApplicationStop() method.
+        // do nothing
     }
 }

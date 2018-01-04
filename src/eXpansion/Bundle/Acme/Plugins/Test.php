@@ -177,7 +177,7 @@ class Test implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
      */
     public function onApplicationInit()
     {
-        // TODO: Implement onApplicationInit() method.
+
     }
 
     /**
@@ -199,6 +199,6 @@ class Test implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
      */
     public function onApplicationStop()
     {
-        // TODO: Implement onApplicationStop() method.
+
     }
 }

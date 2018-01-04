@@ -129,18 +129,12 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
     private function getRelativeWidth($element)
     {
         switch ($element->getHorizontalAlign()) {
-            case "left":
-                return $element->getWidth();
-                break;
-            case "center":
-                return $element->getWidth();
-                break;
             case "right":
                 return -$element->getWidth();
-                break;
-            default:
+            case "left":
+            case "center":
+            default :
                 return $element->getWidth();
-                break;
         }
     }
 
@@ -232,7 +226,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
     }
 
     /**
-     * @param object $element
+     * @param Renderable $element
      */
     public function addChild(Renderable $element)
     {
@@ -257,13 +251,13 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
      *
      * @api
      * @param Renderable $child Child Control to add
-     * @return static
+     * @return void
      * @deprecated Use addChild()
      * @see        Container::addChild()
      */
     public function add(Renderable $child)
     {
-        // TODO: Implement add() method.
+        // do nothing
     }
 
     /**
@@ -271,7 +265,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
      *
      * @api
      * @param Renderable[] $children Child Controls to add
-     * @return static
+     * @return void
      */
     public function addChildren(array $children)
     {
@@ -299,13 +293,13 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
      * Remove all children
      *
      * @api
-     * @return static
+     * @return void
      * @deprecated Use removeAllChildren()
      * @see        Container::removeAllChildren()
      */
     public function removeChildren()
     {
-        // TODO: Implement removeChildren() method.
+        // do nothing
     }
 
     /**
@@ -313,7 +307,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
      *
      * @api
      * @param bool $createIfEmpty If the format should be created if it doesn't exist yet
-     * @return Format
+     * @return void
      * @deprecated Use Style
      * @see        Style
      */
@@ -363,6 +357,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
 
     /**
      * @param null|string $frameId
+     * @return layoutLine
      */
     public function setId($frameId)
     {
@@ -381,6 +376,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
 
     /**
      * @param string $hAlign
+     * @return layoutLine
      */
     public function setHorizontalAlign(string $hAlign)
     {

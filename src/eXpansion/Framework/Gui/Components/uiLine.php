@@ -57,11 +57,11 @@ class uiLine extends abstractUiElement
      * Prepare the given Script for rendering by adding the needed Labels, etc.
      *
      * @param Script $script Script to prepare
-     * @return static
+     * @return void
      */
     public function prepare(Script $script)
     {
-        // TODO: Implement prepare() method.
+        // do nothing
     }
 
     /**
@@ -113,6 +113,7 @@ class uiLine extends abstractUiElement
 
     /**
      * @param float $stoke
+     * @return uiLine
      */
     public function setStroke($stoke)
     {
@@ -131,6 +132,7 @@ class uiLine extends abstractUiElement
 
     /**
      * @param string $color
+     * @return uiLine
      */
     public function setColor($color)
     {
@@ -149,6 +151,7 @@ class uiLine extends abstractUiElement
 
     /**
      * @param int $rotate
+     * @return uiLine
      */
     public function setRotate($rotate)
     {
@@ -167,6 +170,7 @@ class uiLine extends abstractUiElement
 
     /**
      * @param int $length
+     * @return uiLine
      */
     public function setLength($length)
     {

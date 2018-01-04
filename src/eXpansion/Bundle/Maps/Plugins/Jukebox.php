@@ -187,7 +187,7 @@ class Jukebox implements ListenerInterfaceMpScriptPodium, ListenerInterfaceMpLeg
      */
     public function setStatus($status)
     {
-        // TODO: Implement setStatus() method.
+       // do nothing
     }
 
     /**

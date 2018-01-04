@@ -107,7 +107,7 @@ class layoutScrollable extends abstractUiElement implements Renderable, ScriptFe
 
     /**
      * Get the Script Features
-     * @todo write recursion for frames...
+     *
      * @return ScriptFeature[]
      */
     public function getScriptFeatures()

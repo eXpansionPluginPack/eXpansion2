@@ -68,7 +68,7 @@ class MarkersWidget extends WidgetFactory
                 foreach(pos in Positions) {          
                 if (MapBestCheckpoints[pos] != 99999999) {                                                                                                           
                     xml ^= "<marker label='"^MapBestNicknames[pos] ^ " " ^ TimeToText(MapBestCheckpoints[pos]) ^ 
-                    "' pos='"^pos.X^" "^(pos.Y + 3.)^" "^pos.Z^"' distmax='300' />";
+                    "' pos='"^pos.X^" "^(pos.Y + 3.)^" "^pos.Z^"' distmax='150' />";
                     }                                                                               
                 }
                 ClientUI.MarkersXML = xml;                    
@@ -83,9 +83,7 @@ EOL
             declare Integer[Vec3] MapBestCheckpoints for Page = Integer[Vec3];                                    
             declare Text[Vec3] MapBestNicknames for Page = Text[Vec3];
             declare Vec3[] Positions for Page = Vec3[];                                                                 
-                
-                    
-                                                                       
+                                                                                                           
             // clear
             foreach (position in MapCheckpointPos) {
                 MapBestCheckpoints[position] = 99999999;
@@ -102,7 +100,7 @@ EOL
          */
         $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::Loop,
 
-            /** @lang text */
+            /** @lang textmate */
             <<<EOL
                                 
             foreach (RaceEvent in RaceEvents) {                                
@@ -110,10 +108,14 @@ EOL
                     declare Vec3 pos = RaceEvent.Player.Position;
                     declare Vec3 key = Vec3;
                     declare Boolean found =  False;
-                    foreach(cpPos in Positions) {                                              
+                    foreach(cpPos in Positions) {
+                        
+                        log("position:" ^ pos.X ^","^  pos.Y ^","^  pos.Z ^" to " ^ cpPos.X ^","^  cpPos.Y ^","^  cpPos.Z);
+                        log("Distance:" ^MathLib::Distance (pos, cpPos));
                         if (MathLib::Distance (pos, cpPos) < 12.5) {                        
                             key = cpPos;      
-                            found = True;                             
+                            found = True; 
+                            log("found!");
                             break;                     
                         }
                     }

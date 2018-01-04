@@ -191,7 +191,7 @@ class WidgetCurrentMap implements ListenerInterfaceExpApplication, ListenerInter
      */
     public function onStartRoundStart($count, $time)
     {
-        // TODO: Implement onStartRoundStart() method.
+        // do nothing
     }
 
     /**
@@ -204,7 +204,7 @@ class WidgetCurrentMap implements ListenerInterfaceExpApplication, ListenerInter
      */
     public function onStartRoundEnd($count, $time)
     {
-
+        // do nothing
     }
 
     /**
@@ -217,6 +217,7 @@ class WidgetCurrentMap implements ListenerInterfaceExpApplication, ListenerInter
      */
     public function onEndRoundStart($count, $time)
     {
+        // do nothing
     }
 
     /**
@@ -229,6 +230,6 @@ class WidgetCurrentMap implements ListenerInterfaceExpApplication, ListenerInter
      */
     public function onEndRoundEnd($count, $time)
     {
-
+        // do nothing
     }
 }
