@@ -81,7 +81,6 @@ class BaseStorageUpdateListener
         $prevousGameInfos = $this->gameDataStorage->getGameInfos();
 
         // TODO move this logic somewhere else.
-        var_dump($event->getParameters());
         $this->dispatcher->reset($this->mapStorage->getMap($event->getParameters()[0]['UId']));
 
         if ($prevousGameInfos->gameMode != $newGameInfos->gameMode || $prevousGameInfos->scriptName != $newGameInfos->scriptName) {
