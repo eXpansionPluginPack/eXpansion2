@@ -22,5 +22,13 @@ services:
         class: eXpansion\Bundle\Acme\ChatCommand\Disconnect
         arguments:
             $command: "disconnect"
-            $permission: 'script'
+            $permission: 'server'
+            $aliases: []
+
+
+    eXpansion\Bundle\Acme\ChatCommand\DumpMemory:
+        class: eXpansion\Bundle\Acme\ChatCommand\DumpMemory
+        arguments:
+            $command: "dumpmem"
+            $permission: 'server'
             $aliases: []
