@@ -77,15 +77,6 @@ class LapsRecordsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testEmptyMethods()
-    {
-        $lapsRecords = $this->getLapsRecords();
-
-        $lapsRecords->onPlayerEndRace(0, 0, 0, 0, 0, 0, 0, 0, 0);
-        $lapsRecords->onPlayerWayPoint(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0);
-    }
-
-
     /**
      * @return LapsRecords
      */

@@ -73,7 +73,7 @@ class RaceRecordsTest extends \PHPUnit_Framework_TestCase
                 $call(1);
             });
 
-        $this->getRaceRecords()->onApplicationReady();
+        $this->getRaceRecords()->setStatus(true);
     }
 
     public function testMapChange()
@@ -146,8 +146,6 @@ class RaceRecordsTest extends \PHPUnit_Framework_TestCase
         $raceRecords->onEndMapStart(0, 0, false, new Map());
         $raceRecords->onStartMatchStart(0, 0);
         $raceRecords->onStartMatchEnd(0, 0);
-        $raceRecords->onPlayerEndLap(0, 0, 0, 0, 0, 0, 0, 0, 0);
-        $raceRecords->onPlayerWayPoint(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0);
         $raceRecords->onEndMatchStart(0, 0);
         $raceRecords->onEndMatchEnd(0, 0);
         $raceRecords->onStartTurnStart(0, 0);
@@ -158,8 +156,6 @@ class RaceRecordsTest extends \PHPUnit_Framework_TestCase
         $raceRecords->onStartRoundEnd(0, 0);
         $raceRecords->onEndRoundStart(0, 0);
         $raceRecords->onEndRoundStart(0, 0);
-        $raceRecords->onApplicationInit();
-        $raceRecords->onApplicationStop();
         $raceRecords->getRecordsHandler();
 
 
