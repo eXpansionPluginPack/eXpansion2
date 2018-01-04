@@ -38,21 +38,6 @@ class RaceDataProvider extends RoundRaceDataProvider
      */
     public function isCompatible(Map $map): bool
     {
-        if (!$map->lapRace) {
-            return false;
-        }
-
-        $nbLaps = 1;
-        if ($map->lapRace) {
-            $nbLaps = $map->nbLaps;
-        }
-
-        $scriptSettings = $this->gameDataStorage->getScriptOptions();
-        if ($scriptSettings['S_ForceLapsNb'] != -1) {
-            $nbLaps = $scriptSettings['S_ForceLapsNb'];
-        }
-
-        // If rounds is configured to be single laps then no need for race data. lap is sufficient.
-        return $nbLaps > 1;
+        return !$map->lapRace;
     }
 }

@@ -31,7 +31,7 @@ services:
     expansion.framework.game_trackmania.data_providers.lap:
         class: eXpansion\Framework\GameTrackmania\DataProviders\LapDataProvider
         tags:
-            - {name: expansion.dataprovider, provider: "tm.script.race", interface: eXpansion\Framework\GameTrackmania\DataProviders\Listener\LapDataListenerInterface}
+            - {name: expansion.dataprovider, provider: "tm.script.lap", interface: eXpansion\Framework\GameTrackmania\DataProviders\Listener\LapDataListenerInterface}
             - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script}
             - {name: expansion.dataprovider.listener, event_name: Trackmania.Event.WayPoint, method: onWayPoint }
 

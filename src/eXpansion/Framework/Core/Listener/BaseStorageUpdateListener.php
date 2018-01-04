@@ -5,6 +5,7 @@ namespace eXpansion\Framework\Core\Listener;
 use eXpansion\Framework\Core\Model\Event\DedicatedEvent;
 use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
+use eXpansion\Framework\Core\Storage\MapStorage;
 use Maniaplanet\DedicatedServer\Connection;
 
 /**
@@ -22,6 +23,9 @@ class BaseStorageUpdateListener
     /** @var GameDataStorage */
     protected $gameDataStorage;
 
+    /** @var MapStorage */
+    protected $mapStorage;
+
     /** @var DispatcherInterface */
     protected $dispatcher;
 
@@ -34,10 +38,12 @@ class BaseStorageUpdateListener
     public function __construct(
         Connection $connection,
         GameDataStorage $gameDataStorage,
+        MapStorage $mapStorage,
         DispatcherInterface $dispatcher
     ) {
         $this->connection = $connection;
         $this->gameDataStorage = $gameDataStorage;
+        $this->mapStorage = $mapStorage;
         $this->dispatcher = $dispatcher;
 
         $gameInfos = $this->connection->getCurrentGameInfo();
@@ -75,7 +81,8 @@ class BaseStorageUpdateListener
         $prevousGameInfos = $this->gameDataStorage->getGameInfos();
 
         // TODO move this logic somewhere else.
-        $this->dispatcher->reset($event->getParameters()[0]);
+        var_dump($event->getParameters());
+        $this->dispatcher->reset($this->mapStorage->getMap($event->getParameters()[0]['UId']));
 
         if ($prevousGameInfos->gameMode != $newGameInfos->gameMode || $prevousGameInfos->scriptName != $newGameInfos->scriptName) {
             $this->gameDataStorage->setGameInfos(clone $newGameInfos);
