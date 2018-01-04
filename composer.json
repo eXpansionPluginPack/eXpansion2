@@ -1,8 +1,8 @@
 {
-    "name": "symfony/framework-standard-edition",
+    "name": "expansion-mp/expansion",
     "license": "MIT",
     "type": "project",
-    "description": "The \"Symfony Standard Edition\" distribution",
+    "description": "The next gen Maniaplanet server controller using symfony2 components",
     "autoload": {
         "psr-4": { "": "src/" },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
@@ -11,16 +11,6 @@
         "psr-4": { "Tests\\": "tests/" },
         "files": [ "vendor/symfony/symfony/src/Symfony/Component/VarDumper/Resources/functions/dump.php" ]
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/eXpansionPluginPack/manialink"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/eXpansionPluginPack/xml"
-        }
-    ],
     "require": {
         "php": ">=7.0",
         "bluepsyduck/maniascript": "^1.1",
