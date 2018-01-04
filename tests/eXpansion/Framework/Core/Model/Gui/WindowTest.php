@@ -17,9 +17,9 @@ use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use FML\Controls\Quad;
 use FML\Types\Renderable;
-use Tests\eXpansion\Framework\Core\TestCore;
+use PHPUnit\Framework\TestCase;
 
-class WindowTest extends TestCore
+class WindowTest extends TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $mockPlayerGroup;

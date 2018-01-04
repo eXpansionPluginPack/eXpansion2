@@ -9,10 +9,11 @@ use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
 use eXpansion\Framework\Core\Plugins\GuiHandler;
 use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
 use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
+use PHPUnit\Framework\TestCase;
 use Tests\eXpansion\Framework\Core\TestCore;
 use Tests\eXpansion\Framework\Core\TestHelpers\ManialinkDataTrait;
 
-class ManialinkFactoryTest extends TestCore
+class ManialinkFactoryTest extends TestCase
 {
     use ManialinkDataTrait;
 

@@ -9,20 +9,55 @@
 namespace Tests\eXpansion\Framework\Core\Helpers;
 
 use eXpansion\Framework\Core\Helpers\ChatNotification;
-use eXpansion\Framework\Core\Services\Application\Dispatcher;
+use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
-use Symfony\Component\Console\Output\NullOutput;
-use Tests\eXpansion\Framework\Core\TestCore;
+use Maniaplanet\DedicatedServer\Connection;
+use Symfony\Component\Translation\Translator;
+use Tests\eXpansion\Framework\Core\SimpleTestCore;
 
-class ChatNotificationTest extends TestCore
+class ChatNotificationTest extends SimpleTestCore
 {
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockPlayerStorage;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockConnection;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockConsole;
+
+    /** @var ChatNotification */
+    protected $chatNotification;
+
     protected function setUp()
     {
         parent::setUp();
 
-        $this->container->get(Console::class)->init(new NullOutput(), $this->container->get(Dispatcher::class));
+        $this->mockConnection = $this->getMockBuilder(Connection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->mockPlayerStorage = $this->getMockBuilder(PlayerStorage::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->mockConsole = $this->getMockBuilder(Console::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->chatNotification = new ChatNotification(
+            $this->mockConnection,
+            new Translations(
+                ['fr', 'de', 'fi', 'nl', 'en'],
+                $this->container->getParameter('expansion.config.core_chat_color_codes'),
+                $this->container->getParameter('expansion.config.core_chat_glyph_icons'),
+                $this->container->get('translator')
+            ),
+            $this->mockPlayerStorage,
+            $this->mockConsole
+        );
     }
 
 
@@ -31,17 +66,16 @@ class ChatNotificationTest extends TestCore
         $colorCodes = $this->container->getParameter('expansion.config.core_chat_color_codes');
         $colorCode = $colorCodes['test'];
 
-        $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
-        $dedicatedConnection->expects($this->once())
+        $this->mockConnection->expects($this->once())
             ->method('chatSendServerMessage')
             ->with('$z$s' . $colorCode . 'This is a test translation : Toto', 'toto');
 
         $player = new Player();
         $player->merge(['language' => 'en']);
-        $this->container->set(PlayerStorage::class, $this->getMockPlayerStorage($player));
+        $this->mockPlayerStorage->method('getPlayerInfo')
+            ->willReturn($player);
 
-        $chatNotification = $this->getChatNotificationHelper();
-        $chatNotification->sendMessage('expansion_core.test_color', 'toto', ['%test%' => 'Toto']);
+        $this->chatNotification->sendMessage('expansion_core.test_color', 'toto', ['%test%' => 'Toto']);
     }
 
     public function testSendMessageToAll() {
@@ -54,17 +88,16 @@ class ChatNotificationTest extends TestCore
             1 => ['Lang' => 'de', 'Text' => '$z$s' . $colorCode . 'This is a test translation : Toto'],
         ];
 
-        $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
-        $dedicatedConnection->expects($this->once())
+        $this->mockConnection->expects($this->once())
             ->method('chatSendServerMessage')
             ->with(new \PHPUnit_Framework_Constraint_ArraySubset($translate), null);
 
         $player = new Player();
         $player->merge(['language' => 'en']);
-        $this->container->set(PlayerStorage::class, $this->getMockPlayerStorage($player));
+        $this->mockPlayerStorage->method('getPlayerInfo')
+            ->willReturn($player);
 
-        $chatNotification = $this->getChatNotificationHelper();
-        $chatNotification->sendMessage('expansion_core.test_color', null, ['%test%' => 'Toto']);
+        $this->chatNotification->sendMessage('expansion_core.test_color', null, ['%test%' => 'Toto']);
     }
 
     public function testSendMessageToList()
@@ -77,14 +110,11 @@ class ChatNotificationTest extends TestCore
             1 => ['Lang' => 'de', 'Text' => '$z$s' . $colorCode . 'This is a test translation : Toto'],
         ];
 
-
-        $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
-        $dedicatedConnection->expects($this->once())
+        $this->mockConnection->expects($this->once())
             ->method('chatSendServerMessage')
             ->with(new \PHPUnit_Framework_Constraint_ArraySubset($translate), 'toto1,toto2');
 
-        $chatNotification = $this->getChatNotificationHelper();
-        $chatNotification->sendMessage('expansion_core.test_color', ['toto1', 'toto2'], ['%test%' => 'Toto']);
+        $this->chatNotification->sendMessage('expansion_core.test_color', ['toto1', 'toto2'], ['%test%' => 'Toto']);
     }
 
     public function testGetMessage()
@@ -92,19 +122,9 @@ class ChatNotificationTest extends TestCore
         $colorCodes = $this->container->getParameter('expansion.config.core_chat_color_codes');
         $colorCode = $colorCodes['test'];
 
-        $chatNotification = $this->getChatNotificationHelper();
-        $translation = $chatNotification->getMessage('expansion_core.test_color', ['%test%' => 'Toto'], 'en');
+        $translation = $this->chatNotification->getMessage('expansion_core.test_color', ['%test%' => 'Toto'], 'en');
 
         $this->assertEquals('$z$s' . $colorCode . 'This is a test translation : Toto', $translation);
 
-    }
-
-
-    /**
-     * @return ChatNotification
-     */
-    protected function getChatNotificationHelper()
-    {
-        return $this->container->get(ChatNotification::class);
     }
 }

@@ -13,11 +13,14 @@ use eXpansion\Framework\Core\Services\Console;
 use oliverde8\AsynchronousJobs\Job;
 use oliverde8\AsynchronousJobs\Job\CallbackCurl;
 use oliverde8\AsynchronousJobs\JobRunner;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Tests\eXpansion\Framework\Core\TestCore;
 
-class FactoryTest extends TestCore
+class FactoryTest extends TestCase
 {
+    protected $mockConsole;
+    protected $mockLogger;
 
     protected $triggered = false;
 
@@ -27,23 +30,21 @@ class FactoryTest extends TestCore
 
         $this->triggered = false;
 
-        $consoleMock = $this->createMock(Console::class);
-        $this->container->set(Console::class, $consoleMock);
+        $this->mockConsole = $this->createMock(Console::class);
 
-        $nullLogger = $this->createMock(NullLogger::class);
-        $this->container->set(NullLogger::class, $nullLogger);
+        $this->mockLogger = $this->createMock(NullLogger::class);
     }
 
 
     public function testGetRunner()
     {
-        $factory = new Factory($this->container->get(NullLogger::class), $this->container->get(Console::class));
+        $factory = new Factory($this->mockLogger, $this->mockConsole);
         $this->assertInstanceOf(JobRunner::class, $factory->getJobRunner());
     }
 
     public function testGetCurlJob()
     {
-        $factory = new Factory($this->container->get(NullLogger::class), $this->container->get(Console::class));
+        $factory = new Factory($this->mockLogger, $this->mockConsole);
 
         $jobRunner = $factory->getJobRunner();
         $job = $factory->createCurlJob('http://jsonplaceholder.typicode.com/posts', array($this, 'aCallback'));

@@ -2,7 +2,7 @@
 
 namespace eXpansion\Framework\Core\Helpers;
 
-use Symfony\Component\Translation\Translator;
+use Symfony\Component\Translation\TranslatorInterface;
 
 
 /**
@@ -13,7 +13,7 @@ use Symfony\Component\Translation\Translator;
  */
 class Translations
 {
-    /** @var Translator */
+    /** @var TranslatorInterface */
     protected $translator;
 
     /** @var string[] List of supported locales. */
@@ -34,7 +34,7 @@ class Translations
         array $supportedLocales,
         $colorCodes,
         $glyphIcons,
-        Translator $translator
+        TranslatorInterface $translator
     ) {
         $this->translator = $translator;
         $this->supportedLocales = $supportedLocales;
