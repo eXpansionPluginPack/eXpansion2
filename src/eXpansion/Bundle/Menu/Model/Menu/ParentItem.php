@@ -14,7 +14,7 @@ use FML\Controls\Quad;
  * @copyright 2017 eXpansion
  * @package eXpansion\Bundle\Menu\Model\Menu
  */
-class ParentItem extends AbstractItem implements ItemInterface
+class ParentItem extends AbstractItem
 {
     /** @var ItemBuilder */
     protected $itemBuilder;
