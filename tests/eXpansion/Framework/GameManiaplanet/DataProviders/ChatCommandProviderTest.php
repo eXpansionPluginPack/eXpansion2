@@ -4,14 +4,13 @@ namespace Tests\eXpansion\Framework\GameManiaplanet\DataProviders;
 
 use eXpansion\Framework\GameManiaplanet\DataProviders\ChatCommandDataProvider;
 use eXpansion\Framework\Core\Exceptions\PlayerException;
-use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\ChatOutput;
 use eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin;
 use eXpansion\Framework\Core\Model\Helpers\ChatNotificationInterface;
 use eXpansion\Framework\Core\Services\ChatCommands;
-use Symfony\Component\Console\Output\NullOutput;
 use Tests\eXpansion\Framework\Core\TestCore;
 use Tests\eXpansion\Framework\Core\TestHelpers\Model\TestChatCommand;
+use Tests\eXpansion\Framework\Core\TestHelpers\Model\TestMultiParameterChatCommand;
 
 class ChatCommandProviderTest extends TestCore
 {
@@ -94,6 +93,23 @@ class ChatCommandProviderTest extends TestCore
 
         $this->chatDataProvider->onPlayerChat(2, 'test2', "this is normal chat line", false);
         $this->chatDataProvider->onPlayerChat(1, 'test', "/test $cmdText", true);
+    }
+
+
+    public function testMultiParameterCommand()
+    {
+        $cmdText = 'login "here goes reason"';
+        $command = new TestMultiParameterChatCommand('/admin test', []);
+
+        $this->mockChatCommands
+            ->expects($this->once())
+            ->method('getChatCommand')
+            ->willReturn([$command, explode(' ', $cmdText)]);
+
+        $this->chatDataProvider->onPlayerChat(1, 'test', "/admin test $cmdText", true);
+
+        $this->assertEquals('login', $command->input->getArgument('login'));
+        $this->assertEquals('here goes reason', $command->input->getArgument('reason'));
     }
 
     /**

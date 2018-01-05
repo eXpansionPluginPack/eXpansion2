@@ -10,11 +10,10 @@ namespace Tests\eXpansion\Framework\Core\Model\ChatCommand;
 
 use eXpansion\Framework\Core\Exceptions\PlayerException;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
-use eXpansion\Framework\Core\Model\ChatCommand\AbstractChatCommand;
 use eXpansion\Framework\Core\Model\Helpers\ChatNotificationInterface;
-use Symfony\Component\Console\Exception\RuntimeException;
 use Tests\eXpansion\Framework\Core\TestCore;
 use Tests\eXpansion\Framework\Core\TestHelpers\Model\TestChatCommand;
+use Tests\eXpansion\Framework\Core\TestHelpers\Model\TestMultiParameterChatCommand;
 
 class AbstractChatCommandTest extends TestCore
 {
@@ -58,6 +57,15 @@ class AbstractChatCommandTest extends TestCore
 
         $cmd2->run('toto', $this->getChatOutputHelper(), '');
         $this->assertTrue($cmd2->executed);
+    }
+
+    public function testExecuteMultiParameter()
+    {
+        $cmd2 = new TestMultiParameterChatCommand('test', ['t']);
+        $cmd2->run('toto', $this->getChatOutputHelper(), 'toto "reason here"');
+
+        $this->assertEquals('toto', $cmd2->input->getArgument('login'));
+        $this->assertEquals('reason here', $cmd2->input->getArgument('reason'));
     }
 
     public function testExecuteError()
