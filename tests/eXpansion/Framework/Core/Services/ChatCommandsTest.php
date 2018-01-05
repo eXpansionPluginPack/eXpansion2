@@ -7,7 +7,7 @@ use eXpansion\Framework\Core\Model\ChatCommand\ChatCommandInterface;
 use eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin;
 use eXpansion\Framework\Core\Services\ChatCommands;
 use Tests\eXpansion\Framework\Core\TestCore;
-use Tests\eXpansion\Framework\Core\TestHelpers\Model\TestChatCommand;
+use Tests\eXpansion\Framework\Core\TestHelpers\Model\TestMultiParameterChatCommand;
 
 class ChatCommandsTest extends TestCore
 {
@@ -45,6 +45,20 @@ class ChatCommandsTest extends TestCore
         $this->expectException(CommandExistException::class);
         $service->registerPlugin('test', $plugin);
         $service->registerPlugin('test', $plugin);
+    }
+
+    public function testMultiParameterChatCommand()
+    {
+        $cmdText = 'login "here goes reason"';
+        $command = new TestMultiParameterChatCommand('admin utest', []);
+
+        $service = $this->getChatCommandService();
+        $service->registerPlugin('test', new ChatCommandPlugin([$command]));
+
+        list($fcommand, $parameter) = $service->getChatCommand(explode(' ', "admin utest $cmdText"));
+
+        $this->assertEquals($command, $fcommand);
+        $this->assertEquals(['login', '"here', 'goes', 'reason"'], $parameter);
     }
 
     public function testDelete()
