@@ -1,0 +1,30 @@
+services:
+    _defaults:
+        autowire: true
+        public: false
+
+    eXpansion\Bundle\Players\Plugins\MenuItems:
+        class: eXpansion\Bundle\Players\Plugins\MenuItems
+        public: true
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'exp.menu.items'}
+
+    eXpansion\Bundle\Players\Plugins\Gui\:
+        resource: "../../Plugins/Gui/*"
+        arguments:
+            $name:  'expansion_players.gui.list.window.title'
+            $sizeX: 60
+            $sizeY: 90
+            $posX:  null
+            $posY:  null
+            $dataCollectionFactory: '@expansion.gui.gridbuilder.datacollection.array'
+
+    eXpansion\Bundle\Players\Plugins\Gui\PlayersWindow:
+        class: eXpansion\Bundle\Players\Plugins\Gui\PlayersWindow
+        arguments:
+            $name:  'expansion_players.gui.players.window.title'
+            $sizeX: 200
+            $sizeY: 90
+            $posX:  null
+            $posY:  null
+            $dataCollectionFactory: '@expansion.gui.gridbuilder.datacollection.array'

@@ -44,10 +44,10 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
 
     /**
      * layoutLine constructor.
-     * @param float $startX
-     * @param float $startY
+     * @param float    $startX
+     * @param float    $startY
      * @param object[] $elements
-     * @param float $margin
+     * @param float    $margin
      * @throws \Exception
      */
     public function __construct($startX, $startY, $elements = [], $margin = 0.)
@@ -89,7 +89,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
         foreach ($this->elements as $idx => $element) {
 
             $element->setX($start + $this->getRelativeStartPosition($element));
-            $start += $element->getWidth() + $this->margin;
+            $start += $this->getRelativeWidth($element) + $this->margin;
 
             if ($element->getY() + $element->getHeight() > $sizeY) {
                 $this->setHeight($element->getHeight());
@@ -106,11 +106,36 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
      */
     private function getRelativeStartPosition($element)
     {
-        if ($element->getHorizontalAlign() == "center") {
-            return ($element->getWidth() / 2);
+        switch ($element->getHorizontalAlign()) {
+            case "left":
+                return 0;
+                break;
+            case "center":
+                return -($element->getWidth() / 2);
+                break;
+            case "right":
+                return -($element->getWidth() * 2);
+                break;
+            default:
+                return 0;
+                break;
         }
+    }
 
-        return 0;
+    /**
+     * @param Control $element
+     * @return float|int
+     */
+    private function getRelativeWidth($element)
+    {
+        switch ($element->getHorizontalAlign()) {
+            case "right":
+                return -$element->getWidth();
+            case "left":
+            case "center":
+            default :
+                return $element->getWidth();
+        }
     }
 
     /**
@@ -201,7 +226,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
     }
 
     /**
-     * @param object $element
+     * @param Renderable $element
      */
     public function addChild(Renderable $element)
     {
@@ -226,13 +251,13 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
      *
      * @api
      * @param Renderable $child Child Control to add
-     * @return static
+     * @return void
      * @deprecated Use addChild()
      * @see        Container::addChild()
      */
     public function add(Renderable $child)
     {
-        // TODO: Implement add() method.
+        // do nothing
     }
 
     /**
@@ -240,7 +265,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
      *
      * @api
      * @param Renderable[] $children Child Controls to add
-     * @return static
+     * @return void
      */
     public function addChildren(array $children)
     {
@@ -268,13 +293,13 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
      * Remove all children
      *
      * @api
-     * @return static
+     * @return void
      * @deprecated Use removeAllChildren()
      * @see        Container::removeAllChildren()
      */
     public function removeChildren()
     {
-        // TODO: Implement removeChildren() method.
+        // do nothing
     }
 
     /**
@@ -282,7 +307,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
      *
      * @api
      * @param bool $createIfEmpty If the format should be created if it doesn't exist yet
-     * @return Format
+     * @return void
      * @deprecated Use Style
      * @see        Style
      */
@@ -307,8 +332,8 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
 
     public function setAlign($hAling = "left", $vAlign = "top")
     {
-        $this->halign = $hAling;
-        $this->valign = $vAlign;
+        $this->hAlign = $hAling;
+        $this->vAlign = $vAlign;
 
         return $this;
     }
@@ -332,6 +357,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
 
     /**
      * @param null|string $frameId
+     * @return layoutLine
      */
     public function setId($frameId)
     {
@@ -350,6 +376,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
 
     /**
      * @param string $hAlign
+     * @return layoutLine
      */
     public function setHorizontalAlign(string $hAlign)
     {

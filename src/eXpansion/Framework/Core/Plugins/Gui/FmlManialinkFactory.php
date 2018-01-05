@@ -5,7 +5,7 @@ namespace eXpansion\Framework\Core\Plugins\Gui;
 
 use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryContext;
-use eXpansion\Framework\Gui\Ui\Factory as UiFactory;
+use eXpansion\Framework\Gui\Ui\Factory;
 use FML\Controls\Control;
 
 
@@ -20,15 +20,30 @@ class FmlManialinkFactory extends ManialinkFactory
     /** @var Translations */
     protected $translationsHelper;
 
-    /** @var UiFactory  */
+    /** @var Factory */
     protected $uiFactory;
 
-    public function __construct($name, $sizeX, $sizeY, $posX = null, $posY = null, ManialinkFactoryContext $context)
-    {
+    /**
+     * FmlManialinkFactory constructor.
+     * @param                         $name
+     * @param                         $sizeX
+     * @param                         $sizeY
+     * @param null                    $posX
+     * @param null                    $posY
+     * @param ManialinkFactoryContext $context
+     */
+    public function __construct(
+        $name,
+        $sizeX,
+        $sizeY,
+        $posX = null,
+        $posY = null,
+        ManialinkFactoryContext $context
+    ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
-
         // Hack for FML to use default MP alignements.
         Control::clearDefaultAlign();
+        $this->uiFactory = $context->getUiFactory();
     }
 
 

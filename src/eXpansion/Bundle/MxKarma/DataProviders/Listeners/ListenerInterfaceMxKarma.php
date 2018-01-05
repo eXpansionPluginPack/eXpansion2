@@ -15,13 +15,13 @@ interface ListenerInterfaceMxKarma
 
     /**
      * @param MxRating $mxRating
-     * @return mixed
+     * @return void
      */
     public function onMxKarmaVoteLoad(MxRating $mxRating);
 
     /**
      * @param MxVote[] $updatedVotes
-     * @return mixed
+     * @return void
      */
     public function onMxKarmaVoteSave($updatedVotes);
 

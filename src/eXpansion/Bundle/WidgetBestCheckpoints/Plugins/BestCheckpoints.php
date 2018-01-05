@@ -194,7 +194,7 @@ class BestCheckpoints implements ListenerInterfaceExpApplication, RecordsDataLis
      */
     public function onStartMatchStart($count, $time)
     {
-
+        $this->updater->setLocalRecord([]);
     }
 
     /**

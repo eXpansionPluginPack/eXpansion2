@@ -80,7 +80,7 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
             ->setTextSize(2)
             ->setScriptEvents(true)
             ->setId($this->id);
-        if ($this->action) {
+        if ($this->action !== null) {
             $input->addDataAttribute("action", $this->action);
         }
 
@@ -157,7 +157,7 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
     public function prepare(Script $script)
     {
         $script->addCustomScriptLabel(ScriptLabel::MouseClick, $this->getScriptMouseClick());
-        if ($this->action) {
+        if ($this->action !== null) {
             $script->addCustomScriptLabel(ScriptLabel::EntrySubmit, $this->getScriptEntrySubmit());
         }
     }

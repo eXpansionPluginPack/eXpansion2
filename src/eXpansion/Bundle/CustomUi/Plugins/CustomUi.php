@@ -2,9 +2,10 @@
 
 namespace eXpansion\Bundle\CustomUi\Plugins;
 
-use eXpansion\Bundle\CustomUi\Plugins\Gui\ChatHelperWidget;
 use eXpansion\Bundle\CustomUi\Plugins\Gui\CustomCheckpointWidget;
+use eXpansion\Bundle\CustomUi\Plugins\Gui\CustomScoreboardWidget;
 use eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSpeedWidget;
+use eXpansion\Bundle\CustomUi\Plugins\Gui\MarkersWidget;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
@@ -25,37 +26,58 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
     /**
      * @var Group
      */
-    private $players;
+    private $allPlayers;
     /**
-     * @var ChatHelperWidget
+     * @var CustomScoreboardWidget
      */
     private $customSpeedWidget;
     /**
      * @var CustomCheckpointWidget
      */
     private $customCheckpointWidget;
+    /**
+     * @var CustomScoreboardWidget
+     */
+    private $customScoreboardWidget;
+    /**
+     * @var MarkersWidget
+     */
+    private $markersWidget;
+    /**
+     * @var Group
+     */
+    private $players;
 
     /**
      * CustomUi constructor.
      *
      * @param Connection             $connection
      * @param PlayerStorage          $playerStorage
+     * @param Group                  $allPlayers
      * @param Group                  $players
      * @param CustomSpeedWidget      $customSpeedWidget
      * @param CustomCheckpointWidget $customCheckpointWidget
+     * @param CustomScoreboardWidget $customScoreboardWidget
+     * @param MarkersWidget          $markersWidget
      */
     public function __construct(
         Connection $connection,
         PlayerStorage $playerStorage,
+        Group $allPlayers,
         Group $players,
         CustomSpeedWidget $customSpeedWidget,
-        CustomCheckpointWidget $customCheckpointWidget
+        CustomCheckpointWidget $customCheckpointWidget,
+        CustomScoreboardWidget $customScoreboardWidget,
+        MarkersWidget $markersWidget
     ) {
         $this->connection = $connection;
         $this->playerStorage = $playerStorage;
-        $this->players = $players;
+        $this->allPlayers = $allPlayers;
         $this->customSpeedWidget = $customSpeedWidget;
         $this->customCheckpointWidget = $customCheckpointWidget;
+        $this->customScoreboardWidget = $customScoreboardWidget;
+        $this->markersWidget = $markersWidget;
+        $this->players = $players;
     }
 
     /**
@@ -77,7 +99,7 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
      */
     public function onApplicationInit()
     {
-        // TODO: Implement onApplicationInit() method.
+        // do nothing
     }
 
     /**
@@ -163,59 +185,10 @@ EOL;
 
         $this->connection->triggerModeScriptEvent('Trackmania.UI.SetProperties', [$properties]);
 
-        $scoretable = /** @lang XML */
-            <<<EOL
-<?xml version="1.0" encoding="utf-8"?>
-<scorestable version="1">
-    <styles>
-        <style id="LibST_Reset" />
-		<style id="LibST_TMWithLegends" />				
-    </styles>
-    <properties>
-        
-    </properties>
-     <columns>
-        <column id="EXP_finishes" action="create">
-			<width>3.</width>
-			<textalign>left</textalign>
-		</column>
-		<column id="LibST_TMBestTime" action="create">
-			<width>12.</width>
-			<defaultvalue>--:--.---</defaultvalue>
-			<textalign>right</textalign>
-		</column>
-		<column id="LibST_Avatar" action="create">
-			<width>6.</width>
-			<textalign>center</textalign>
-		</column>
-		<column id="LibST_Name" action="create">
-			<width>32.</width>
-			<textalign>left</textalign>
-		</column>
-		<column id="LibST_ManiaStars" action="create">
-			<width>3.</width>
-			<textalign>center</textalign>
-		</column>
-		<column id="LibST_Tools" action="create">
-			<width>3.</width>
-			<textalign>right</textalign>
-		</column>
-	 </columns>
-
-    <images>
-        <playercard>
-            <quad path="file://Media/Manialinks/Trackmania/ScoresTable/playerline-square.dds" />
-            <left path="file://Media/Manialinks/Trackmania/ScoresTable/playerline-left.dds" />
-            <right path="file://Media/Manialinks/Trackmania/ScoresTable/playerline-right.dds" />
-        </playercard>
-    </images>
-  
-</scorestable>
-EOL;
-
-        $this->connection->triggerModeScriptEvent('LibScoresTable2_SetStyleFromXml', ["TM", $scoretable]);
-        $this->customSpeedWidget->create($this->players);
-        $this->customCheckpointWidget->create($this->players);
+        $this->markersWidget->create($this->players);
+        $this->customScoreboardWidget->create($this->allPlayers);
+        $this->customSpeedWidget->create($this->allPlayers);
+        $this->customCheckpointWidget->create($this->allPlayers);
     }
 
     /**
@@ -225,7 +198,7 @@ EOL;
      */
     public function onApplicationStop()
     {
-        // TODO: Implement onApplicationStop() method.
+        // do nothing
     }
 
     public function onPlayerConnect(Player $player)
@@ -235,16 +208,16 @@ EOL;
 
     public function onPlayerDisconnect(Player $player, $disconnectionReason)
     {
-        // TODO: Implement onPlayerDisconnect() method.
+        // do nothing
     }
 
     public function onPlayerInfoChanged(Player $oldPlayer, Player $player)
     {
-        // TODO: Implement onPlayerInfoChanged() method.
+      // do nothing
     }
 
     public function onPlayerAlliesChanged(Player $oldPlayer, Player $player)
     {
-        // TODO: Implement onPlayerAlliesChanged() method.
+       // do nothing
     }
 }

@@ -53,8 +53,6 @@ class MemoryWidgetFactory extends WidgetFactory
     {
 
         $this->memoryMessage->setText(Test::$memoryMsg);
-        $now = uniqid("exp2");
-
         $message = "Time now:".date("h:i:s");
 
         $hash = self::$exp_hash;

@@ -47,10 +47,10 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
 
     /**
      * layoutLine constructor.
-     * @param float $startX
-     * @param float $startY
+     * @param float    $startX
+     * @param float    $startY
      * @param object[] $elements
-     * @param int $margin
+     * @param int      $margin
      * @throws \Exception
      */
     public function __construct($startX, $startY, $elements = [], $margin = 0)
@@ -82,16 +82,19 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
     /**
      * @param double $x
      * @param double $y
+     * @return layoutRow
      */
     public function setPosition($x, $y)
     {
         $this->startX = $x;
         $this->startY = $y;
+
+        return $this;
     }
 
     /**
      * @param mixed $startX
-     * @return
+     * @return layoutRow
      */
     public function setX($startX)
     {
@@ -102,7 +105,7 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
 
     /**
      * @param mixed $startY
-     * @return
+     * @return layoutRow
      */
     public function setY($startY)
     {
@@ -128,7 +131,6 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
         $startY = 0;
 
         foreach ($this->elements as $idx => $element) {
-            $pos = $element->getY();
             $element->setY($startY);
             $startY -= $element->getHeight() - $this->margin;
             $frame->addChild($element);
@@ -222,10 +224,13 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
 
     /**
      * @param string $class
+     * @return layoutRow
      */
     public function addClass($class)
     {
         $this->frameClasses[] = $class;
+
+        return $this;
     }
 
     /**
@@ -233,49 +238,48 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
      *
      * @api
      * @param Renderable $child Child Control to add
-     * @return static
      * @deprecated Use addChild()
      * @see        Container::addChild()
      */
     public function add(Renderable $child)
     {
-        // TODO: Implement add() method.
+
     }
 
     /**
      * Add new children
      *
      * @api
+     * @deprecated
      * @param Renderable[] $children Child Controls to add
-     * @return static
+     *
      */
     public function addChildren(array $children)
     {
-        // TODO: Implement addChildren() method.
+
     }
 
     /**
      * Remove all children
      *
      * @api
-     * @return static
+     *
      */
     public function removeAllChildren()
     {
-        // TODO: Implement removeAllChildren() method.
+
     }
 
     /**
      * Remove all children
      *
      * @api
-     * @return static
      * @deprecated Use removeAllChildren()
      * @see        Container::removeAllChildren()
      */
     public function removeChildren()
     {
-        // TODO: Implement removeChildren() method.
+
     }
 
     /**
@@ -283,13 +287,12 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
      *
      * @api
      * @param bool $createIfEmpty If the format should be created if it doesn't exist yet
-     * @return Format
      * @deprecated Use Style
      * @see        Style
      */
     public function getFormat($createIfEmpty = true)
     {
-        // TODO: Implement getFormat() method.
+
     }
 
     /**
@@ -297,25 +300,39 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
      *
      * @api
      * @param Format $format New Format
-     * @return static
      * @deprecated Use Style
      * @see        Style
      */
     public function setFormat(Format $format = null)
     {
-        // TODO: Implement setFormat() method.
+
     }
 
+    /**
+     * @param float $sizeX
+     * @param float $sizeY
+     * @return layoutRow
+     */
     private function setSize($sizeX, $sizeY)
     {
         $this->width = $sizeX;
         $this->height = $sizeY;
+
+        return $this;
+
     }
 
+    /**
+     * @param string $hAling
+     * @param string $vAlign
+     * @return layoutRow
+     */
     public function setAlign($hAling = "left", $vAlign = "top")
     {
-        $this->halign = $hAling;
-        $this->valign = $vAlign;
+        $this->hAlign = $hAling;
+        $this->vAlign = $vAlign;
+
+        return $this;
     }
 
 

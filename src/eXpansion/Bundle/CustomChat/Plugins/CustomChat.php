@@ -187,7 +187,7 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      */
     public function onApplicationInit()
     {
-        // TODO: Implement onApplicationInit() method.
+        // do nothing
     }
 
     /**
@@ -211,6 +211,6 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      */
     public function onApplicationStop()
     {
-        // TODO: Implement onApplicationStop() method.
+        // do nothing
     }
 }

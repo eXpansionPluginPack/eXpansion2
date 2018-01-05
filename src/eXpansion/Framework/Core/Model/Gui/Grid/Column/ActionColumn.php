@@ -16,7 +16,7 @@ class ActionColumn extends AbstractColumn
     /** @var array */
     protected $callable;
 
-    /** @var Renderable  */
+    /** @var Renderable */
     protected $renderer;
 
     /**
@@ -25,7 +25,7 @@ class ActionColumn extends AbstractColumn
      * @param string     $key
      * @param string     $name
      * @param float      $widthCoeficiency
-     * @param array      $callable
+     * @param callable   $callable
      * @param Renderable $renderer
      */
     public function __construct($key, $name, $widthCoeficiency, $callable, Renderable $renderer)

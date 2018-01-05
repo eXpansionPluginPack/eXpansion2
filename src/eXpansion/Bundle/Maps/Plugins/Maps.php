@@ -132,7 +132,7 @@ class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMap
      */
     public function onExpansionMapChange($currentMap, $previousMap)
     {
-        // TODO: Implement onExpansionMapChange() method.
+        // do nothing
     }
 
     /**
@@ -141,27 +141,27 @@ class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMap
      */
     public function onExpansionNextMapChange($nextMap, $previousNextMap)
     {
-        // TODO: Implement onExpansionNextMapChange() method.
+       // do nothing
     }
 
     /**
      * @param Map $map
      *
-     * @return mixed
+     * @return void
      */
     public function onBeginMap(Map $map)
     {
-
+        // do nothing
     }
 
     /**
      * @param Map $map
      *
-     * @return mixed
+     * @return void
      */
     public function onEndMap(Map $map)
     {
-        // TODO: Implement onEndMap() method.
+      // do nothing
     }
 
 }

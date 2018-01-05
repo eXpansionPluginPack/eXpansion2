@@ -94,7 +94,6 @@ abstract class AbstractConnectionCommand extends AbstractAdminChatCommand
         if ($group) {
             if ($groupName) {
                 $groupName = $this->adminGroupsHelper->getGroupLabel($group->getName());
-
             }
         }
 

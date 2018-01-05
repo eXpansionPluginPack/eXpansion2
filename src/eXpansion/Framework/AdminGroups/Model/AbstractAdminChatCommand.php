@@ -10,7 +10,7 @@ use eXpansion\Framework\Core\Model\ChatCommand\AbstractChatCommand;
  * Class AbstractAdminChatCommand
  *
  * @package eXpansion\Framework\AdminGroups\Model;
- * @author oliver de Cramer <oliverde8@gmail.com>
+ * @author  oliver de Cramer <oliverde8@gmail.com>
  */
 abstract class AbstractAdminChatCommand extends AbstractChatCommand
 {
@@ -25,16 +25,16 @@ abstract class AbstractAdminChatCommand extends AbstractChatCommand
     /**
      * AbstractAdminChatCommand constructor.
      *
-     * @param $command
-     * @param string $permission
-     * @param string[] $aliases
-     * @param AdminGroups $adminGroupsHelper
+     * @param             $command
+     * @param string      $permission
+     * @param string[]    $aliases
+     * @param AdminGroups $adminGroups
      */
     public function __construct(
         $command,
         $permission,
         array $aliases = [],
-        AdminGroups $adminGroupsHelper
+        AdminGroups $adminGroups
     ) {
         $newAliases = [];
         $newAliases[] = "adm $command";
@@ -49,7 +49,7 @@ abstract class AbstractAdminChatCommand extends AbstractChatCommand
 
         parent::__construct($command, $newAliases);
 
-        $this->adminGroupsHelper = $adminGroupsHelper;
+        $this->adminGroupsHelper = $adminGroups;
         $this->permission = $permission;
     }
 
@@ -76,7 +76,8 @@ abstract class AbstractAdminChatCommand extends AbstractChatCommand
      *
      * @return bool
      */
-    public function hasPermission($login) {
+    public function hasPermission($login)
+    {
         return $this->adminGroupsHelper->hasPermission($login, $this->permission);
     }
 }

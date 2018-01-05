@@ -41,13 +41,11 @@ class AdminShuffleCommand extends AbstractAdminChatCommand
      * @param                  $command
      * @param string           $permission
      * @param array            $aliases
-     * @param ChatNotification $functionName
      * @param AdminGroups      $adminGroupsHelper
-     * @param Connection       $connection
      * @param ChatNotification $chatNotification
      * @param PlayerStorage    $playerStorage
      * @param LoggerInterface  $logger
-     * @param Time             $timeHelper
+     * @param Connection       $connection
      * @param MapStorage       $mapStorage
      */
     public function __construct(
@@ -80,7 +78,6 @@ class AdminShuffleCommand extends AbstractAdminChatCommand
      */
     public function execute($login, InputInterface $input)
     {
-        $player = $this->playerStorage->getPlayerInfo($login)->getNickName();
         $allMaps = [];
         foreach ($this->mapStorage->getMaps() as $map) {
             $maps[] = $map->fileName;

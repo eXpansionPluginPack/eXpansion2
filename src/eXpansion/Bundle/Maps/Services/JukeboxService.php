@@ -91,7 +91,7 @@ class JukeboxService
      */
     public function addMap(Map $map, $login = null, $force = false, $addFirst = false)
     {
-        $player = null;
+
         if (!$login) {
             return false;
         }

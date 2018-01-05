@@ -2,15 +2,15 @@
 
 namespace eXpansion\Framework\Core\Services;
 
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ChatCommandInterface as ChatCommandPluginInterface;
 use eXpansion\Framework\Core\Exceptions\ChatCommand\CommandExistException;
 use eXpansion\Framework\Core\Model\ChatCommand\ChatCommandInterface;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ChatCommandInterface as ChatCommandPluginInterface;
 
 /**
  * Class ChatCommands store all currently active chat commands.
  *
  * @package eXpansion\Framework\Core\Services;
- * @author oliver de Cramer <oliverde8@gmail.com>
+ * @author  oliver de Cramer <oliverde8@gmail.com>
  */
 class ChatCommands
 {
@@ -37,7 +37,7 @@ class ChatCommands
     /**
      * Registers all chat commands of a plugin.
      *
-     * @param string $pluginId
+     * @param string                     $pluginId
      * @param ChatCommandPluginInterface $pluginService
      *
      * @throws CommandExistException
@@ -102,30 +102,34 @@ class ChatCommands
      * Find a chat command.
      *
      * @param string[] $cmdAndArgs
-     * @param integer $depth
+     * @param integer  $depth
      *
      * @return mixed
      */
-    protected function findChatCommand($cmdAndArgs, $depth)
+    protected function findChatCommand($cmdAndArgs, $depth, $orig = null)
     {
         if ($depth == 0) {
             return [null, []];
         }
 
-        $parameters = array_splice($cmdAndArgs, $depth - 1, 100);
+        if ($orig == null) {
+            $orig = $cmdAndArgs;
+        }
+
         $cmdAndArgs = array_splice($cmdAndArgs, 0, $depth);
+        $parameters = array_diff($orig, $cmdAndArgs);
         $command = implode(' ', $cmdAndArgs);
 
         return isset($this->commands[$command])
             ? [$this->commands[$command], $parameters]
-            : $this->findChatCommand($cmdAndArgs, $depth - 1);
+            : $this->findChatCommand($cmdAndArgs, $depth - 1, $orig);
     }
 
     /**
      * Register a command.
      *
-     * @param string $pluginId
-     * @param string $cmdTxt
+     * @param string               $pluginId
+     * @param string               $cmdTxt
      * @param ChatCommandInterface $command
      *
      * @throws CommandExistException

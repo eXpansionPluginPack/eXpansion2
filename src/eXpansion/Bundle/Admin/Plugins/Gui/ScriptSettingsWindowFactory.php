@@ -47,13 +47,14 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
      * @param                       $name
      * @param                       $sizeX
      * @param                       $sizeY
-     * @param null $posX
-     * @param null $posY
-     * @param WindowFactoryContext $context
-     * @param GridBuilderFactory $gridBuilderFactory
+     * @param null                  $posX
+     * @param null                  $posY
+     * @param WindowFactoryContext  $context
+     * @param GridBuilderFactory    $gridBuilderFactory
      * @param DataCollectionFactory $dataCollectionFactory
-     * @param AdminGroups $adminGroupsHelper
-     * @param Connection $connection
+     * @param AdminGroups           $adminGroupsHelper
+     * @param Connection            $connection
+     * @param Console               $console
      */
     public function __construct(
         $name,

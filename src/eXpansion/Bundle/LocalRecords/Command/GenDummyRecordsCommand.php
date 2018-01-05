@@ -49,7 +49,7 @@ class GenDummyRecordsCommand extends ContainerAwareCommand
      */
     private $console;
     /**
-     * @var MapQuery
+     * @var MapQueryBuilder
      */
     private $mapQuery;
 

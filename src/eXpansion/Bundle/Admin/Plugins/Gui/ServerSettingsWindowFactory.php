@@ -125,7 +125,6 @@ class ServerSettingsWindowFactory extends WindowFactory
         $frame = Frame::create();
         $firstColumn = $this->uiFactory->createLayoutRow(0, 0, [], 0);
         $secondColumn = $this->uiFactory->createLayoutRow(90, 0, [], 0);
-        $thirdColumn = $this->uiFactory->createLayoutRow(160, 0, [], 0);
 
         $label = $this->uiFactory->createLabel("Name", uiLabel::TYPE_HEADER);
         $this->serverName = $this->uiFactory->createInput("name_string", "", 60);

@@ -1,0 +1,56 @@
+services:
+    _defaults:
+        autowire: true
+        public: true
+
+    eXpansion\Bundle\Players\ChatCommand\Players:
+        class: eXpansion\Bundle\Players\ChatCommand\Players
+        arguments:
+          $command: players
+          $aliases: []
+
+    eXpansion\Bundle\Players\ChatCommand\Blacklist:
+        class: eXpansion\Bundle\Players\ChatCommand\OpenListWindow
+        arguments:
+          $command:              "blacklist"
+          $permission:           "blacklist.show"
+          $aliases:              []
+          $listWindow:           '@eXpansion\Bundle\Players\Plugins\Gui\BlackListWindow'
+
+    eXpansion\Bundle\Players\ChatCommand\Banlist:
+        class: eXpansion\Bundle\Players\ChatCommand\OpenListWindow
+        arguments:
+          $command:              "banlist"
+          $permission:           "banlist.show"
+          $aliases:              []
+          $listWindow:           '@eXpansion\Bundle\Players\Plugins\Gui\BanListWindow'
+
+
+    eXpansion\Bundle\Players\ChatCommand\Ignorelist:
+        class: eXpansion\Bundle\Players\ChatCommand\OpenListWindow
+        arguments:
+          $command:              "ignorelist"
+          $permission:           "ignorelist.show"
+          $aliases:              []
+          $listWindow:           '@eXpansion\Bundle\Players\Plugins\Gui\IgnoreListWindow'
+
+
+    eXpansion\Bundle\Players\ChatCommand\Guestlist:
+        class: eXpansion\Bundle\Players\ChatCommand\OpenListWindow
+        arguments:
+          $command:              "guestlist"
+          $permission:           "guestlist.show"
+          $aliases:              []
+          $listWindow:           '@eXpansion\Bundle\Players\Plugins\Gui\GuestListWindow'
+
+    expansion.players.plugins.chat_commands.players:
+        class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
+        arguments:
+            -
+                - '@eXpansion\Bundle\Players\ChatCommand\Players'
+                - '@eXpansion\Bundle\Players\ChatCommand\Blacklist'
+                - '@eXpansion\Bundle\Players\ChatCommand\Banlist'
+                - '@eXpansion\Bundle\Players\ChatCommand\Ignorelist'
+                - '@eXpansion\Bundle\Players\ChatCommand\Guestlist'
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}

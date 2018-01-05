@@ -9,6 +9,7 @@
 namespace eXpansion\Framework\Core\Storage\Data;
 
 use Maniaplanet\DedicatedServer\Structures\FileDesc;
+use Maniaplanet\DedicatedServer\Structures\LadderStats;
 use Maniaplanet\DedicatedServer\Structures\Skin;
 use Maniaplanet\DedicatedServer\Structures\Player as DedicatedPlayer;
 
@@ -115,7 +116,7 @@ class Player
     /** @var Skin[] */
     protected $skins;
 
-    /** @var mixed[] */
+    /** @var LadderStats */
     protected $ladderStats;
 
     /** @var int */
@@ -404,7 +405,7 @@ class Player
     }
 
     /**
-     * @return \mixed[]
+     * @return LadderStats
      */
     public function getLadderStats()
     {

@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Class DataProviderManager handles all the data providers.
  *
- * @TODO handle gamemode change.
+ * @TODO handle game mode change.
  *
  * @package eXpansion\Framework\Core\Services
  */
