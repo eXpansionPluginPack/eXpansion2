@@ -203,7 +203,7 @@ services:
     eXpansion\Framework\Core\Helpers\Countries:
         class: eXpansion\Framework\Core\Helpers\Countries
         arguments:
-            $contriesMapping: '%expansion.core.helper.countries.mapping%'
+            $countriesMapping: '%expansion.core.helper.countries.mapping%'
             $otherCountryCode: '%expansion.core.helper.countries.other_code%'
             $otherCountryLabel: '%expansion.core.helper.countries.other_label%'
 

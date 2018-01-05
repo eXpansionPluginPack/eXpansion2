@@ -15,7 +15,7 @@ services:
           $command:              "blacklist"
           $permission:           "blacklist.show"
           $aliases:              []
-          $listMode:             "blacklist"
+          $listWindow:           '@eXpansion\Bundle\Players\Plugins\Gui\BlackListWindow'
 
     eXpansion\Bundle\Players\ChatCommand\Banlist:
         class: eXpansion\Bundle\Players\ChatCommand\OpenListWindow
@@ -23,7 +23,7 @@ services:
           $command:              "banlist"
           $permission:           "banlist.show"
           $aliases:              []
-          $listMode:             "banlist"
+          $listWindow:           '@eXpansion\Bundle\Players\Plugins\Gui\BanListWindow'
 
 
     eXpansion\Bundle\Players\ChatCommand\Ignorelist:
@@ -32,7 +32,7 @@ services:
           $command:              "ignorelist"
           $permission:           "ignorelist.show"
           $aliases:              []
-          $listMode:             "ignorelist"
+          $listWindow:           '@eXpansion\Bundle\Players\Plugins\Gui\IgnoreListWindow'
 
 
     eXpansion\Bundle\Players\ChatCommand\Guestlist:
@@ -41,8 +41,7 @@ services:
           $command:              "guestlist"
           $permission:           "guestlist.show"
           $aliases:              []
-          $listMode:             "guestlist"
-
+          $listWindow:           '@eXpansion\Bundle\Players\Plugins\Gui\GuestListWindow'
 
     expansion.players.plugins.chat_commands.players:
         class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin

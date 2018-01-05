@@ -15,30 +15,29 @@ use eXpansion\Framework\GameManiaplanet\DataProviders\ChatCommandDataProvider;
 use eXpansion\Framework\Gui\Components\uiButton;
 use Maniaplanet\DedicatedServer\Connection;
 
-class ListWindow extends GridWindowFactory
+abstract class AbstractListWindow extends GridWindowFactory
 {
     /**
      * @var PlayerStorage
      */
-    private $playerStorage;
+    protected $playerStorage;
     /**
      * @var ChatCommandDataProvider
      */
-    private $chatCommandDataProvider;
+    protected $chatCommandDataProvider;
     /**
      * @var Connection
      */
-    private $connection;
+    protected $connection;
     /**
      * @var AdminGroups
      */
-    private $adminGroups;
+    protected $adminGroups;
 
-    protected $mode;
     /**
      * @var ChatNotification
      */
-    private $chatNotification;
+    protected $chatNotification;
 
     /**
      * PlayersWindow constructor.
@@ -83,27 +82,10 @@ class ListWindow extends GridWindowFactory
         $this->chatNotification = $chatNotification;
     }
 
-    /**
-     * @param mixed $mode
-     */
-    public function setMode($mode)
-    {
-        $this->mode = $mode;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMode()
-    {
-        return $this->mode;
-    }
-
     protected function createContent(
         ManialinkInterface $manialink
     ) {
         parent::createContent($manialink);
-        $manialink->setData('mode', $this->getMode());
         $this->updateData($manialink);
     }
 
@@ -136,7 +118,7 @@ class ListWindow extends GridWindowFactory
 
             )
             ->addActionColumn('login', 'expansion_players.gui.list.window.column.remove',
-                3, [$this, "callbackRemovePlayer"], $selectButton);
+                3, [$this, "playerCallback"], $selectButton);
 
 
         $manialink->setData('grid', $gridBuilder);
@@ -150,27 +132,29 @@ class ListWindow extends GridWindowFactory
     }
 
     /**
-     * @param Window|ManialinkInterface $manialink
-     * @throws \Maniaplanet\DedicatedServer\InvalidArgumentException
+     * Get list of players to display.
+     *
+     * @return array
+     */
+    abstract function getDataSet() : array;
+
+    /**
+     * Execute action for player.
+     *
+     * @param $login
+     *
+     * @return mixed
+     */
+    abstract function executeForPlayer($login);
+
+
+    /**
+     * @inheritdoc
      */
     public function updateData(
         $manialink
     ) {
-        $dataset = [];
-        switch ($manialink->getData("mode")) {
-            case "ignorelist":
-                $dataset = $this->connection->getIgnoreList();
-                break;
-            case "guestlist":
-                $dataset = $this->connection->getGuestList();
-                break;
-            case "banlist":
-                $dataset = $this->connection->getBanList();
-                break;
-            case "blacklist":
-                $dataset = $this->connection->getBlackList();
-                break;
-        }
+        $dataset = $this->getDataSet();
 
         $listData = [];
         foreach ($dataset as $player) {
@@ -179,7 +163,6 @@ class ListWindow extends GridWindowFactory
 
         $this->setData($manialink, $listData);
     }
-
 
     /**
      * @param ManialinkInterface $manialink
@@ -194,21 +177,7 @@ class ListWindow extends GridWindowFactory
         $args
     ) {
         try {
-            switch ($manialink->getData("mode")) {
-                case "ignorelist":
-                    $this->connection->unIgnore($args['login']);
-                    break;
-                case "guestlist":
-                    $this->connection->removeGuest($args['login']);
-                    break;
-                case "banlist":
-                    $this->connection->unBan($args['login']);
-                    break;
-                case "blacklist":
-                    $this->connection->unBlackList($args['login']);
-                    break;
-            }
-
+            $this->executeForPlayer($args['login']);
             $this->updateData($manialink);
         } catch (\Exception $e) {
             $this->chatNotification->sendMessage('expansion_players.chat.exception',

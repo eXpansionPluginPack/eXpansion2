@@ -3,7 +3,7 @@
 
 namespace eXpansion\Bundle\Players\ChatCommand;
 
-use eXpansion\Bundle\Players\Plugins\Gui\ListWindow;
+use eXpansion\Bundle\Players\Plugins\Gui\AbstractListWindow;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\AdminGroups\Model\AbstractAdminChatCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,9 +17,9 @@ use Symfony\Component\Console\Input\InputInterface;
  */
 class OpenListWindow extends AbstractAdminChatCommand
 {
-    private $listMode;
+
     /**
-     * @var ListWindow
+     * @var AbstractListWindow
      */
     private $listWindow;
 
@@ -30,20 +30,17 @@ class OpenListWindow extends AbstractAdminChatCommand
      * @param               $permission
      * @param array         $aliases
      * @param AdminGroups   $adminGroups
-     * @param ListWindow    $listWindow
-     * @param               $listMode
+     * @param AbstractListWindow    $listWindow
      */
     public function __construct(
         $command,
         $permission,
         array $aliases = [],
         AdminGroups $adminGroups,
-        ListWindow $listWindow,
-        $listMode
+        AbstractListWindow $listWindow
     ) {
         parent::__construct($command, $permission, $aliases, $adminGroups);
 
-        $this->listMode = $listMode;
         $this->listWindow = $listWindow;
     }
 
@@ -52,7 +49,6 @@ class OpenListWindow extends AbstractAdminChatCommand
      */
     public function execute($login, InputInterface $input)
     {
-        $this->listWindow->setMode($this->listMode);
         $this->listWindow->create($login);
     }
 }
