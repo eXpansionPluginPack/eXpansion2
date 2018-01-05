@@ -25,6 +25,9 @@ class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
     /** @var AdminGroups */
     protected $adminGroups;
 
+    /** @var Countries */
+    protected $countries;
+
     /**
      * JoinLeaveMessages constructor.
      *
@@ -37,12 +40,14 @@ class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
         Connection $connection,
         Console $console,
         ChatNotification $chatNotification,
-        AdminGroups $adminGroups
+        AdminGroups $adminGroups,
+        Countries $countries
     ) {
         $this->connection = $connection;
         $this->console = $console;
         $this->chatNotification = $chatNotification;
         $this->adminGroups = $adminGroups;
+        $this->countries = $countries;
     }
 
     /**
@@ -58,7 +63,7 @@ class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
                 "%group%" => $this->adminGroups->getGroupLabel($groupName),
                 "%nickname%" => $player->getNickName(),
                 "%login%" => $player->getLogin(),
-                "%path%" => Countries::parseCountryFromPath($player->getPath()),
+                "%path%" => $this->countries->parseCountryFromPath($player->getPath()),
                 "%ladder%" => $player->getLadderScore(),
             ]);
 
@@ -83,7 +88,7 @@ class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
                 "%group%" => $this->adminGroups->getGroupLabel($groupName),
                 "%nickname%" => $player->getNickName(),
                 "%login%" => $player->getLogin(),
-                "%path%" => Countries::parseCountryFromPath($player->getPath()),
+                "%path%" => $this->countries->parseCountryFromPath($player->getPath()),
                 "%ladder%" => $player->getLadderScore(),
             ]);
     }

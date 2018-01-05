@@ -38,6 +38,9 @@ class PlayersWindow extends GridWindowFactory
      */
     private $adminGroups;
 
+    /** @var Countries */
+    protected $countries;
+
     /**
      * PlayersWindow constructor.
      * @param                         $name
@@ -65,8 +68,8 @@ class PlayersWindow extends GridWindowFactory
         GridBuilderFactory $gridBuilderFactory,
         ChatCommandDataProvider $chatCommandDataProvider,
         Connection $connection,
-        AdminGroups $adminGroups
-
+        AdminGroups $adminGroups,
+        Countries $countries
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
 
@@ -76,6 +79,7 @@ class PlayersWindow extends GridWindowFactory
         $this->chatCommandDataProvider = $chatCommandDataProvider;
         $this->connection = $connection;
         $this->adminGroups = $adminGroups;
+        $this->countries = $countries;
     }
 
     protected function createContent(ManialinkInterface $manialink)
@@ -404,12 +408,12 @@ class PlayersWindow extends GridWindowFactory
         $players = $this->playerStorage->getOnline();
         $data = [];
         foreach ($players as $login => $player) {
-            $country = Countries::parseCountryFromPath($player->getPath());
+            $country = $this->countries->parseCountryFromPath($player->getPath());
             $data[] = [
                 "login" => $player->getLogin(),
                 "nickname" => TMString::trimLinks($player->getNickName()),
                 "country" => $country,
-                "zoneIcon" => "file://Media/Flags/".Countries::getCodeFromCountry($country).".dds",
+                "zoneIcon" => "file://Media/Flags/".$this->countries->getCodeFromCountry($country).".dds",
             ];
         }
         $this->setData($manialink, $data);
