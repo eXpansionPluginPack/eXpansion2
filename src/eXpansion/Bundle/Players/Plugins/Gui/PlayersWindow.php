@@ -41,6 +41,9 @@ class PlayersWindow extends GridWindowFactory
     /** @var Countries */
     protected $countries;
 
+    /** @var null|string */
+    protected $playerToSet = null;
+
     /**
      * PlayersWindow constructor.
      * @param                         $name
@@ -95,23 +98,47 @@ class PlayersWindow extends GridWindowFactory
 
             $ignoreList = $this->uiFactory->createButton("expansion_players.gui.players.window.ignorelist")
                 ->setTranslate(true)
-                ->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackChatCommand"],
-                    ["action" => "//ignorelist"]));
+                ->setAction(
+                    $this->actionFactory->createManialinkAction(
+                        $manialink,
+                        [$this, "callbackChatCommand"],
+                        ["action" => "//ignorelist"],
+                        true
+                    )
+                );
 
             $guestList = $this->uiFactory->createButton("expansion_players.gui.players.window.guestlist")
                 ->setTranslate(true)
-                ->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackChatCommand"],
-                    ["action" => "//guestlist"]));
+                ->setAction(
+                    $this->actionFactory->createManialinkAction(
+                        $manialink,
+                        [$this, "callbackChatCommand"],
+                        ["action" => "//guestlist"],
+                        true
+                    )
+                );
 
             $banList = $this->uiFactory->createButton("expansion_players.gui.players.window.banlist")
                 ->setTranslate(true)
-                ->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackChatCommand"],
-                    ["action" => "//banlist"]));
+                ->setAction(
+                    $this->actionFactory->createManialinkAction(
+                        $manialink,
+                        [$this, "callbackChatCommand"],
+                        ["action" => "//banlist"],
+                        true
+                    )
+                );
 
             $blackList = $this->uiFactory->createButton("expansion_players.gui.players.window.blacklist")
                 ->setTranslate(true)
-                ->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackChatCommand"],
-                    ["action" => "//blacklist"]));
+                ->setAction(
+                    $this->actionFactory->createManialinkAction(
+                        $manialink,
+                        [$this, "callbackChatCommand"],
+                        ["action" => "//blacklist"],
+                        true
+                    )
+                );
 
             $row = $this->uiFactory->createLayoutLine(125, 0,
                 [$guestList, $ignoreList, $banList, $blackList], 2);
@@ -131,8 +158,13 @@ class PlayersWindow extends GridWindowFactory
 
     protected function updateContent(ManialinkInterface $manialink)
     {
-
         parent::updateContent($manialink);
+
+        if ($this->playerToSet) {
+            $this->setPlayer($manialink, $this->playerToSet);
+            $this->playerToSet = null;
+        }
+
         $width = 60;
         $recipient = $manialink->getUserGroup()->getLogins()[0];
 
@@ -257,7 +289,6 @@ class PlayersWindow extends GridWindowFactory
      */
     protected function createGrid(ManialinkInterface $manialink)
     {
-
         $this->updateData($manialink);
 
         $selectButton = $this->uiFactory->createButton('expansion_players.gui.players.window.column.select',
@@ -315,7 +346,7 @@ class PlayersWindow extends GridWindowFactory
      */
     public function callbackSetPlayer($manialink, $login, $entries, $args)
     {
-        $this->setPlayer($manialink, $args['login']);
+        $this->playerToSet = $args['login'];
         $this->update($manialink->getUserGroup());
     }
 
@@ -325,9 +356,7 @@ class PlayersWindow extends GridWindowFactory
      */
     public function setPlayer($manialink, $login)
     {
-        foreach ($manialink->getData('playerActions') as $key => $action) {
-            $this->actionFactory->destroyAction($action);
-        }
+        var_dump('test');
 
         $actions = [
             "mute" => (string)$this->actionFactory->createManialinkAction($manialink, [$this, 'callbackIgnore'],
@@ -366,35 +395,35 @@ class PlayersWindow extends GridWindowFactory
             $this->callChatCommand($login, "//ignore ".$args['login']);
         }
         $this->updateData($manialink);
-        $this->update($manialink->getUserGroup());
+        $this->callbackSetPlayer($manialink, $login, [], ['login' => $args['login']]);
     }
 
     public function callbackKick($manialink, $login, $entries, $args)
     {
         $this->callChatCommand($login, "//kick ".$args['login'].' "'.$entries['reason'].'"');
         $this->updateData($manialink);
-        $this->update($manialink->getUserGroup());
+        $this->callbackSetPlayer($manialink, $login, [], ['login' => $args['login']]);
     }
 
     public function callbackGuest($manialink, $login, $entries, $args)
     {
         $this->callChatCommand($login, "//addguest ".$args['login']);
         $this->updateData($manialink);
-        $this->update($manialink->getUserGroup());
+        $this->callbackSetPlayer($manialink, $login, [], ['login' => $args['login']]);
     }
 
     public function callbackBan($manialink, $login, $entries, $args)
     {
         $this->callChatCommand($login, "//ban ".$args['login'].' "'.$entries['reason'].'"');
         $this->updateData($manialink);
-        $this->update($manialink->getUserGroup());
+        $this->callbackSetPlayer($manialink, $login, [], ['login' => $args['login']]);
     }
 
     public function callbackBlack($manialink, $login, $entries, $args)
     {
         $this->callChatCommand($login, "//black ".$args['login'].' "'.$entries['reason'].'"');
         $this->updateData($manialink);
-        $this->update($manialink->getUserGroup());
+        $this->callbackSetPlayer($manialink, $login, [], ['login' => $args['login']]);
     }
 
     public function callbackChatCommand($manialink, $login, $entries, $args)

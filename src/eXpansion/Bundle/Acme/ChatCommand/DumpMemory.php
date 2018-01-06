@@ -48,8 +48,11 @@ class DumpMemory extends AbstractAdminChatCommand
     public function execute($login, InputInterface $input)
     {
         if (function_exists('meminfo_dump')) {
+            $cycles = gc_collect_cycles();
             $date = date(DATE_ISO8601);
             meminfo_dump(fopen("eXpansion-mem-dump-$date.json", 'w'));
+
+            $this->chatNotification->sendMessage("$cycles collected, memdump written!");
         } else {
             $this->chatNotification->sendMessage('meminfo is not installed!', $login);
         }

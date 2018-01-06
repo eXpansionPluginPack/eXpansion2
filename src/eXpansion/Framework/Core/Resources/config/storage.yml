@@ -30,6 +30,10 @@ services:
         resource: "../../Storage/*"
         exclude: "../../Storage/Data/"
 
+    eXpansion\Framework\Core\Storage\PlayerStorage:
+        tags:
+            - {name: expansion.plugin, data_provider: exp.timer}
+
     eXpansion\Framework\Core\Storage\GameDataStorage:
         arguments:
             $gameModeCodes: "%expansion.storage.gamedata.mode.codes%"
