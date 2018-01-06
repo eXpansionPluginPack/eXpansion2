@@ -8,6 +8,7 @@ services:
               -
                 - '@eXpansion\Bundle\Acme\ChatCommand\Connect'
                 - '@eXpansion\Bundle\Acme\ChatCommand\Disconnect'
+                - '@eXpansion\Bundle\Acme\ChatCommand\DumpMemory'
           tags:
               - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}
 
