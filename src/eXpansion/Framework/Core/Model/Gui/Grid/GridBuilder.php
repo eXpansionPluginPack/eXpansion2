@@ -136,15 +136,15 @@ class GridBuilder implements DestroyableObject
         $this->manialink = $manialink;
 
         $this->actionFirstPage = $this->actionFactory
-            ->createManialinkAction($manialink, array($this, 'goToFirstPage'), []);
+            ->createManialinkAction($manialink, array($this, 'goToFirstPage'), [], true);
         $this->actionPreviousPage = $this->actionFactory
-            ->createManialinkAction($manialink, array($this, 'goToPreviousPage'), []);
+            ->createManialinkAction($manialink, array($this, 'goToPreviousPage'), [], true);
         $this->actionNextPage = $this->actionFactory
-            ->createManialinkAction($manialink, array($this, 'goToNextPage'), []);
+            ->createManialinkAction($manialink, array($this, 'goToNextPage'), [], true);
         $this->actionLastPage = $this->actionFactory
-            ->createManialinkAction($manialink, array($this, 'goToLastPage'), []);
+            ->createManialinkAction($manialink, array($this, 'goToLastPage'), [], true);
         $this->actionGotoPage = $this->actionFactory
-            ->createManialinkAction($manialink, array($this, 'goToPage'), []);
+            ->createManialinkAction($manialink, array($this, 'goToPage'), [], true);
 
         return $this;
     }

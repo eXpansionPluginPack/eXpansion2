@@ -42,13 +42,14 @@ class ActionFactory implements ListenerInterfaceMpLegacyManialink
      * @param ManialinkInterface $manialink
      * @param $callable
      * @param array $args
+     * @param boolean $permanent
      *
      * @return string action Id
      */
-    public function createManialinkAction(ManialinkInterface $manialink, $callable, $args)
+    public function createManialinkAction(ManialinkInterface $manialink, $callable, $args, $permanent = false)
     {
         $class = $this->class;
-        $action = new $class($callable, $args);
+        $action = new $class($callable, $args, $permanent);
         $this->actions[$action->getId()] = $action;
         $this->actionsByManialink[$manialink->getId()][$action->getId()] = $action;
         $this->manialinkByAction[$action->getId()] = $manialink;
@@ -74,6 +75,23 @@ class ActionFactory implements ListenerInterfaceMpLegacyManialink
     }
 
     /**
+     * Destroy actions that are not permanent actions.
+     *
+     * @param ManialinkInterface $manialink
+     */
+    public function destroyNotPermanentActions(ManialinkInterface $manialink)
+    {
+        if (isset($this->actionsByManialink[$manialink->getId()])) {
+            foreach ($this->actionsByManialink[$manialink->getId()] as $actionId => $action) {
+                if (!$action->isPermanent()) {
+                    $this->destroyAction($actionId);
+                }
+            }
+        }
+    }
+
+
+    /**
      * Destroy an individual action.
      *
      * @param $actionId
@@ -83,8 +101,6 @@ class ActionFactory implements ListenerInterfaceMpLegacyManialink
         if (isset($this->manialinkByAction[$actionId])) {
             unset($this->actionsByManialink[$this->manialinkByAction[$actionId]->getId()][$actionId]);
             unset($this->actions[$actionId]);
-            unset($this->manialinkByAction[$actionId]);
-
         }
     }
 

@@ -139,6 +139,7 @@ class ManialinkFactory implements ManialinkFactoryInterface
 
         $ml = $this->guiHandler->getManialink($group, $this);
         if ($ml) {
+            $this->actionFactory->destroyNotPermanentActions($ml);
             $this->updateContent($ml);
             $this->guiHandler->addToDisplay($ml, $this);
         }

@@ -82,7 +82,8 @@ class WindowFactory extends FmlManialinkFactory
         $actionId = $this->actionFactory->createManialinkAction(
             $manialink,
             [$this, 'closeManialink'],
-            []
+            [],
+            true
         );
 
         $manialink->setCloseAction($actionId);
