@@ -58,7 +58,7 @@ class ChatCommandsTest extends TestCore
         list($fcommand, $parameter) = $service->getChatCommand(explode(' ', "admin utest $cmdText"));
 
         $this->assertEquals($command, $fcommand);
-        $this->assertEquals(['login', '"here', 'goes', 'reason"'], $parameter);
+        $this->assertSame([2 => 'login', 3 => '"here', 4 => 'goes', 5 => 'reason"'], $parameter);
     }
 
     public function testDelete()
