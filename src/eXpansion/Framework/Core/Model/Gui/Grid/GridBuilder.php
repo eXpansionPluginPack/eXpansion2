@@ -272,7 +272,8 @@ class GridBuilder implements DestroyableObject
                 $action = $this->actionFactory->createManialinkAction(
                     $this->manialink,
                     [$this, 'sortColumn'],
-                    ["key" => $columnData->getKey()]);
+                    ["key" => $columnData->getKey()]
+                );
             }
 
             $data[] = [

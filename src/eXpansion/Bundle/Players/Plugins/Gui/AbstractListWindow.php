@@ -118,7 +118,7 @@ abstract class AbstractListWindow extends GridWindowFactory
 
             )
             ->addActionColumn('login', 'expansion_players.gui.list.window.column.remove',
-                3, [$this, "playerCallback"], $selectButton);
+                3, [$this, "callbackRemovePlayer"], $selectButton);
 
 
         $manialink->setData('grid', $gridBuilder);
