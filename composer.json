@@ -3,6 +3,12 @@
     "license": "MIT",
     "type": "project",
     "description": "The next gen Maniaplanet server controller using symfony2 components",
+    "bin": [
+        "bin/run.bat",
+        "bin/run.sh",
+        "bin/console",
+        "bin/symfony_requirements"
+    ],
     "autoload": {
         "psr-4": { "": "src/" },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
