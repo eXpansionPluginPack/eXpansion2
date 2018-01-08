@@ -3,10 +3,11 @@
     "license": "MIT",
     "type": "project",
     "description": "The next gen Maniaplanet server controller using symfony2 components",
-    "description": "The \"Symfony Standard Edition\" distribution",
     "bin": [
         "bin/run.bat",
-        "bin/run.sh"
+        "bin/run.sh",
+        "bin/console",
+        "bin/symfony_requirements"
     ],
     "autoload": {
         "psr-4": { "": "src/" },
