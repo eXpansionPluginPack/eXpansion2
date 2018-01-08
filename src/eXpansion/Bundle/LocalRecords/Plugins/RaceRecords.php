@@ -10,7 +10,7 @@ use eXpansion\Framework\GameTrackmania\DataProviders\Listener\ListenerInterfaceR
  * @package eXpansion\Bundle\LocalRecords\Plugins;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-class RaceRecordsRaceData extends BaseRecords implements ListenerInterfaceRaceData
+class RaceRecords extends BaseRecords implements ListenerInterfaceRaceData
 {
     /**
      * @inheritdoc
