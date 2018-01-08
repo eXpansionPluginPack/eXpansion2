@@ -2,7 +2,7 @@
 
 namespace eXpansion\Bundle\LocalRecords\Plugins;
 
-use eXpansion\Framework\GameTrackmania\DataProviders\Listener\LapDataListenerInterface;
+use eXpansion\Framework\GameTrackmania\DataProviders\Listener\ListenerInterfaceLapData;
 
 /**
  * Class RaceRecords
@@ -10,7 +10,7 @@ use eXpansion\Framework\GameTrackmania\DataProviders\Listener\LapDataListenerInt
  * @package eXpansion\Bundle\LocalRecords\Plugins;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-class LapsRecords extends BaseRecords implements LapDataListenerInterface
+class LapsRecords extends BaseRecords implements ListenerInterfaceLapData
 {
     /*
      * @inheritdoc

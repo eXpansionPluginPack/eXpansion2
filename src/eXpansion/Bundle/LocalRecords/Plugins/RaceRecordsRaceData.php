@@ -2,7 +2,7 @@
 
 namespace eXpansion\Bundle\LocalRecords\Plugins;
 
-use eXpansion\Framework\GameTrackmania\DataProviders\Listener\RaceDataListenerInterface;
+use eXpansion\Framework\GameTrackmania\DataProviders\Listener\ListenerInterfaceRaceData;
 
 /**
  * Class RaceRecords
@@ -10,7 +10,7 @@ use eXpansion\Framework\GameTrackmania\DataProviders\Listener\RaceDataListenerIn
  * @package eXpansion\Bundle\LocalRecords\Plugins;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-class RaceRecords extends BaseRecords implements RaceDataListenerInterface
+class RaceRecordsRaceData extends BaseRecords implements ListenerInterfaceRaceData
 {
     /**
      * @inheritdoc

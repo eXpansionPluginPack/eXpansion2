@@ -2,7 +2,7 @@
 
 namespace Tests\eXpansion\Bundle\LocalRecords\Plugins;
 
-use eXpansion\Bundle\LocalRecords\Plugins\RaceRecords;
+use eXpansion\Bundle\LocalRecords\Plugins\RaceRecordsRaceData;
 use eXpansion\Bundle\LocalRecords\Services\RecordHandler;
 use eXpansion\Bundle\LocalRecords\Services\RecordHandlerFactory;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
@@ -163,11 +163,11 @@ class RaceRecordsTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * @return RaceRecords
+     * @return RaceRecordsRaceData
      */
     protected function getRaceRecords()
     {
-        return new RaceRecords(
+        return new RaceRecordsRaceData(
             $this->recordHanlderFactoryMock,
             $this->playersGroup,
             $this->mapStorageMock,

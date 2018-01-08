@@ -8,7 +8,7 @@ namespace eXpansion\Framework\GameTrackmania\DataProviders\Listener;
  * @package eXpansion\Framework\GameTrackmania\DataProviders\Listener;
  * @author reaby
  */
-interface PlayerEventsListenerInterface
+interface ListenerInterfacePlayerEvents
 {
 
     /**
