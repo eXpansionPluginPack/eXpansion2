@@ -24,5 +24,7 @@ class LocalRecordsExtension extends Extension
         $loader->load('chat_commands.yml');
         $loader->load('commands.yml');
         $loader->load('gui.yml');
+        $loader->load('records_race.yml');
+        $loader->load('records_lap.yml');
     }
 }

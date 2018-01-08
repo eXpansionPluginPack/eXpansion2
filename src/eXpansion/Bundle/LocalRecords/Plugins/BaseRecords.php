@@ -4,7 +4,6 @@ namespace eXpansion\Bundle\LocalRecords\Plugins;
 
 use eXpansion\Bundle\LocalRecords\Services\RecordHandler;
 use eXpansion\Bundle\LocalRecords\Services\RecordHandlerFactory;
-use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
@@ -25,7 +24,7 @@ use Psr\Log\LoggerInterface;
  * @package eXpansion\Bundle\LocalRecords\Plugins;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpScriptMatch, ListenerInterfaceMpLegacyPlayer, ListenerInterfaceExpApplication
+class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpScriptMatch, ListenerInterfaceMpLegacyPlayer, StatusAwarePluginInterface
 {
     /** @var  RecordHandler */
     protected $recordsHandler;
@@ -47,9 +46,6 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
 
     /** @var LoggerInterface */
     protected $logger;
-
-    /** @var bool Is the plugin running forc current map */
-    protected $status = true;
 
     /**
      * BaseRecords constructor.
@@ -90,15 +86,18 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
         return $this->recordsHandler;
     }
 
+
     /**
      * called when init is done and callbacks are enabled
      *
      * @return void
      */
-    public function onApplicationReady()
+    public function setStatus($status)
     {
-        $map = $this->mapStorage->getCurrentMap();
-        $this->onStartMapStart(0, 0, 0, $map);
+        if ($status) {
+            $map = $this->mapStorage->getCurrentMap();
+            $this->onStartMapStart(0, 0, 0, $map);
+        }
     }
 
     /**
@@ -130,8 +129,6 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
      */
     public function startMap($map, $nbLaps)
     {
-        $this->status = true;
-
         // Load firs X records for this map.
         $this->recordsHandler->loadForMap($map->uId, $nbLaps);
 
@@ -147,10 +144,6 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
      */
     public function onPlayerConnect(Player $player)
     {
-        if (!$this->status) {
-            return;
-        }
-
         $this->recordsHandler->loadForPlayers($this->mapStorage->getCurrentMap()->uId, [1], [$player->getLogin()]);
     }
 
@@ -192,10 +185,6 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
      */
     public function onStartMatchEnd($count, $time)
     {
-        if (!$this->status) {
-            return;
-        }
-
         $this->recordsHandler->save();
     }
 
@@ -383,26 +372,6 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
      * @return mixed
      */
     public function onEndRoundEnd($count, $time)
-    {
-        // Nothing
-    }
-
-    /**
-     * called at eXpansion init
-     *
-     * @return void
-     */
-    public function onApplicationInit()
-    {
-        // Nothing
-    }
-
-    /**
-     * called when requesting application stop
-     *
-     * @return void
-     */
-    public function onApplicationStop()
     {
         // Nothing
     }

@@ -4,9 +4,11 @@ namespace eXpansion\Framework\Core\Services;
 
 use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
 use eXpansion\Framework\Core\Exceptions\DataProvider\UncompatibleException;
+use eXpansion\Framework\Core\Model\CompatibilityCheckDataProviderInterface;
 use eXpansion\Framework\Core\Model\ProviderListener;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
+use Maniaplanet\DedicatedServer\Structures\Map;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -64,26 +66,31 @@ class DataProviderManager
 
     /**
      * Initialize all the providers properly.
+     *
      * @param PluginManager $pluginManager
+     * @param Map           $map
      */
-    public function init(PluginManager $pluginManager)
+    public function init(PluginManager $pluginManager, Map $map)
     {
-        $this->reset($pluginManager);
+        $this->reset($pluginManager, $map);
     }
 
     /**
      * Reset
+     *
      * @param PluginManager $pluginManager
+     * @param Map           $map
      */
-    public function reset(PluginManager $pluginManager)
+    public function reset(PluginManager $pluginManager, Map $map)
     {
         $title = $this->gameDataStorage->getTitle();
         $mode = $this->gameDataStorage->getGameModeCode();
         $script = $this->gameDataStorage->getGameInfos()->scriptName;
+        $this->enabledProviderListeners = [];
 
         foreach ($this->providersByCompatibility as $provider => $data) {
 
-            $providerId = $this->getCompatibleProviderId($provider, $title, $mode, $script);
+            $providerId = $this->getCompatibleProviderId($provider, $title, $mode, $script, $map);
 
             if ($providerId) {
                 $providerService = $this->container->get($providerId);
@@ -130,12 +137,13 @@ class DataProviderManager
      * @param string $title
      * @param string $mode
      * @param string $script
+     * @param Map    $map
      *
      * @return bool
      */
-    public function isProviderCompatible($provider, $title, $mode, $script)
+    public function isProviderCompatible($provider, $title, $mode, $script, Map $map)
     {
-        return !is_null($this->getCompatibleProviderId($provider, $title, $mode, $script));
+        return !is_null($this->getCompatibleProviderId($provider, $title, $mode, $script, $map));
     }
 
     /**
@@ -143,10 +151,11 @@ class DataProviderManager
      * @param string $title
      * @param string $mode
      * @param string $script
+     * @param Map $map
      *
      * @return string|null
      */
-    public function getCompatibleProviderId($provider, $title, $mode, $script)
+    public function getCompatibleProviderId($provider, $title, $mode, $script, Map $map)
     {
         $parameters = [
             [$provider, $title, $mode, $script],
@@ -161,7 +170,14 @@ class DataProviderManager
         foreach ($parameters as $parameter) {
             $id = AssociativeArray::getFromKey($this->providersByCompatibility, $parameter);
             if (!is_null($id)) {
-                return $id;
+                $provider = $this->container->get($id);
+                if ($provider instanceof CompatibilityCheckDataProviderInterface) {
+                    if ($provider->isCompatible($map)) {
+                        return $id;
+                    }
+                } else {
+                    return $id;
+                }
             }
         }
 
@@ -176,12 +192,13 @@ class DataProviderManager
      * @param string $title The title to register it for.
      * @param string $mode The mode to register it for.
      * @param string $script The script to register it for.
+     * @param Map    $map Current map
      *
      * @throws UncompatibleException
      */
-    public function registerPlugin($provider, $pluginId, $title, $mode, $script)
+    public function registerPlugin($provider, $pluginId, $title, $mode, $script, Map $map)
     {
-        $providerId = $this->getCompatibleProviderId($provider, $title, $mode, $script);
+        $providerId = $this->getCompatibleProviderId($provider, $title, $mode, $script, $map);
 
         /** @var AbstractDataProvider $providerService */
         $providerService = $this->container->get($providerId);

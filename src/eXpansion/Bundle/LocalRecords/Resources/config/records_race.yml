@@ -1,0 +1,49 @@
+
+services:
+    _defaults:
+        autowire: true
+        public: true
+
+    #
+    # Services used to handle Records for Race results.
+    #
+    eXpansion.local_records.services.race_record_handler_factory:
+        class: eXpansion\Bundle\LocalRecords\Services\RecordHandlerFactory
+        arguments:
+            $ordering: ASC
+            $nbRecords: '%eXpansion.local_records.nb_records%'
+
+    # Plugins to save race records in all TM gamemodes.
+    expansion.local_records.plugins.race_records:
+        class: eXpansion\Bundle\LocalRecords\Plugins\RaceRecords
+        arguments:
+            $recordsHandlerFactory: '@eXpansion.local_records.services.race_record_handler_factory'
+            $allPlayersGroup: '@expansion.framework.core.user_groups.all_players'
+            $eventPrefix: 'expansion.local_records.race'
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
+            - {name: 'expansion.plugin', data_provider: 'mp.script.map'}
+            - {name: 'expansion.plugin', data_provider: 'mp.script.match'}
+            - {name: 'expansion.plugin', data_provider: 'tm.script.race'}
+
+    # Data provider to race records data to other plugins.
+    eXpansion.local_records.data_providers.race_records:
+        class: eXpansion\Bundle\LocalRecords\DataProviders\RecordsDataProvider
+        tags:
+          - {name: 'expansion.dataprovider', provider: "expansion.local_records.race", interface: 'eXpansion\Bundle\LocalRecords\DataProviders\Listener\RecordsDataListener'}
+          - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
+          - {name: 'expansion.dataprovider.parent', parent: 'expansion.local_records.plugins.race_records'}
+          - {name: 'expansion.dataprovider.listener', event_name: 'expansion.local_records.race.loaded', method: 'onRecordsLoaded'}
+          - {name: 'expansion.dataprovider.listener', event_name: 'expansion.local_records.race.first_time', method: 'onFirstRecord'}
+          - {name: 'expansion.dataprovider.listener', event_name: 'expansion.local_records.race.same_score', method: 'onSameScore'}
+          - {name: 'expansion.dataprovider.listener', event_name: 'expansion.local_records.race.same_position', method: 'onSamePosition'}
+          - {name: 'expansion.dataprovider.listener', event_name: 'expansion.local_records.race.better_position', method: 'onBetterPosition'}
+
+    # Plugin to have chat notificaiton for race records.
+    eXpansion.local_records.plugins.race_records_notifications:
+        class: eXpansion\Bundle\LocalRecords\Plugins\ChatNotification
+        arguments:
+            $translationPrefix: 'expansion_local_records.chat.race'
+            $positionForPublicMessage: 20
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'expansion.local_records.race'}

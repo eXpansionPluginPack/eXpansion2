@@ -6,12 +6,11 @@ use eXpansion\Framework\Core\Model\Plugin\PluginDescription;
 use eXpansion\Framework\Core\Model\Plugin\PluginDescriptionFactory;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
+use Maniaplanet\DedicatedServer\Structures\Map;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class PluginManager handles all the plugins.
- *
- * @TODO handle gamemode change.
  *
  * @package eXpansion\Framework\Core\Services
  */
@@ -62,33 +61,40 @@ class PluginManager
     }
 
     /**
-     * Initialize plugins.
+     * Initialize.
+     *
+     * @throws \eXpansion\Framework\Core\Exceptions\DataProvider\UncompatibleException
      */
-    public function init()
+    public function init(Map $map)
     {
-        $this->reset();
+        $this->reset($map);
     }
 
     /**
-     * Do a reset
+     * Do a reset to plugins/
+     *
+     * @param Map $map
+     *
+     * @throws \eXpansion\Framework\Core\Exceptions\DataProvider\UncompatibleException
      */
-    public function reset()
+    public function reset(Map $map)
     {
         $title = $this->gameDataStorage->getTitle();
         $mode = $this->gameDataStorage->getGameModeCode();
         $script = $this->gameDataStorage->getGameInfos()->scriptName;
 
-        $this->enableDisablePlugins($title, $mode, $script);
+        $this->enableDisablePlugins($title, $mode, $script, $map);
     }
 
     /**
-     * Enable all possible plugins.
+     * @param $title
+     * @param $mode
+     * @param $script
+     * @param Map $map
      *
-     * @param string $title
-     * @param string $mode
-     * @param string $script
+     * @throws \eXpansion\Framework\Core\Exceptions\DataProvider\UncompatibleException
      */
-    protected function enableDisablePlugins($title, $mode, $script)
+    protected function enableDisablePlugins($title, $mode, $script, Map $map)
     {
         $pluginsToEnable = [];
         $pluginsToProcess = $this->plugins;
@@ -98,7 +104,7 @@ class PluginManager
             $pluginsToProcessNew = [];
 
             foreach ($pluginsToProcess as $pluginId => $plugin) {
-                if ($this->isPluginCompatible($plugin, $pluginsToEnable, $title, $mode, $script)) {
+                if ($this->isPluginCompatible($plugin, $pluginsToEnable, $title, $mode, $script, $map)) {
                     $pluginsToEnable[$pluginId] = $plugin;
                 } else {
                     $pluginsToProcessNew[$pluginId] = $plugin;
@@ -108,12 +114,27 @@ class PluginManager
             $pluginsToProcess = $pluginsToProcessNew;
         } while ($lastEnabledPluginCount != count($pluginsToEnable) && !empty($pluginsToProcess));
 
+        /* Enable plugins so that the data providers are propelry connected */
+        $enableNotify = [];
         foreach ($pluginsToEnable as $plugin) {
-            $this->enablePlugin($plugin, $title, $mode, $script);
+            $enableNotify[] = $this->enablePlugin($plugin, $title, $mode, $script, $map);
         }
 
+        $disableNotify = [];
         foreach ($pluginsToProcess as $plugin) {
-            $this->disablePlugin($plugin);
+            $disableNotify[] = $this->disablePlugin($plugin);
+        }
+
+        /* Once all is connected send status update */
+        foreach ($enableNotify as $plugin) {
+            if (!is_null($plugin)) {
+                $plugin->setStatus(true);
+            }
+        }
+        foreach ($disableNotify as $plugin) {
+            if (!is_null($plugin)) {
+                $plugin->setStatus(false);
+            }
         }
     }
 
@@ -125,10 +146,11 @@ class PluginManager
      * @param $title
      * @param $mode
      * @param $script
+     * @param $map
      *
      * @return bool
      */
-    protected function isPluginCompatible(PluginDescription $plugin, $enabledPlugins, $title, $mode, $script)
+    protected function isPluginCompatible(PluginDescription $plugin, $enabledPlugins, $title, $mode, $script, Map $map)
     {
 
         // first check for other plugins.
@@ -141,7 +163,7 @@ class PluginManager
 
         // Now check for data providers.
         foreach ($plugin->getDataProviders() as $dataProvider) {
-            $providerId = $this->dataProviderManager->getCompatibleProviderId($dataProvider, $title, $mode, $script);
+            $providerId = $this->dataProviderManager->getCompatibleProviderId($dataProvider, $title, $mode, $script, $map);
 
             if (is_null($providerId) || !isset($enabledPlugins[$providerId])) {
                 // Either there are no data providers compatible or the only one compatible
@@ -151,8 +173,13 @@ class PluginManager
 
         // If data provider need to check if it was "the chosen one".
         if ($plugin->isIsDataProvider()) {
-            $selectedProvider = $this->dataProviderManager->getCompatibleProviderId($plugin->getDataProviderName(),
-                $title, $mode, $script);
+            $selectedProvider = $this->dataProviderManager->getCompatibleProviderId(
+                $plugin->getDataProviderName(),
+                $title,
+                $mode,
+                $script,
+                $map
+            );
 
             if ($plugin->getPluginId() != $selectedProvider) {
                 // This data provider wasn't the one selected and therefore the plugin isn't compatible.
@@ -163,41 +190,50 @@ class PluginManager
         return true;
     }
 
-
     /**
-     * Enable a plugin for a certain game mode.
+     * Enable a certain plugin.
      *
      * @param PluginDescription $plugin
      * @param $title
      * @param $mode
      * @param $script
+     * @param Map $map
+     *
+     * @return StatusAwarePluginInterface|null
+     *
+     * @throws \eXpansion\Framework\Core\Exceptions\DataProvider\UncompatibleException
      */
-    protected function enablePlugin(PluginDescription $plugin, $title, $mode, $script)
+    protected function enablePlugin(PluginDescription $plugin, $title, $mode, $script, Map $map)
     {
+        $notify = false;
         $plugin->setIsEnabled(true);
         $pluginService = $this->container->get($plugin->getPluginId());
 
         if ($pluginService instanceof StatusAwarePluginInterface && !isset($this->enabledPlugins[$plugin->getPluginId()])) {
-            $pluginService->setStatus(true);
+            $notify = true;
         }
 
         $this->console->getConsoleOutput()
             ->writeln("<info>Plugin <comment>'{$plugin->getPluginId()}'</comment> is enabled with providers :</info>");
         foreach ($plugin->getDataProviders() as $provider) {
-            $this->dataProviderManager->registerPlugin($provider, $plugin->getPluginId(), $title, $mode, $script);
+            $this->dataProviderManager->registerPlugin($provider, $plugin->getPluginId(), $title, $mode, $script, $map);
         }
 
         $this->enabledPlugins[$plugin->getPluginId()] = $plugin;
+
+        return $notify ? $pluginService : null;
     }
 
     /**
-     * Disable a plugin.
+     * Disable a plugin
      *
      * @param PluginDescription $plugin
      *
+     * @return StatusAwarePluginInterface|null
      */
     protected function disablePlugin(PluginDescription $plugin)
     {
+        $notify = false;
         $plugin->setIsEnabled(false);
         $pluginService = $this->container->get($plugin->getPluginId());
 
@@ -209,9 +245,11 @@ class PluginManager
             unset($this->enabledPlugins[$plugin->getPluginId()]);
 
             if ($pluginService instanceof StatusAwarePluginInterface) {
-                $pluginService->setStatus(true);
+                $notify = true;
             }
         }
+
+        return $notify ? $pluginService : null;
     }
 
     /**
