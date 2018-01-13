@@ -129,16 +129,18 @@ class RecordHandler
      */
     public function loadForMap($mapUid, $nbLaps)
     {
+        // Free old records from memory first.
         foreach ($this->records as $record) {
+            $record->clearAllReferences(false);
             unset($record);
         }
-
         foreach ($this->recordsPerPlayer as $record) {
+            $record->clearAllReferences(false);
             unset($record);
         }
-
         RecordTableMap::clearInstancePool();
 
+        // Load them amm new.
         $this->recordsPerPlayer = [];
         $this->positionPerPlayer = [];
 
@@ -178,10 +180,10 @@ class RecordHandler
 
     /**
      * Save all new records.
-     * @param bool $releaseRecords
+     *
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function save($releaseRecords = true)
+    public function save()
     {
 
         $con = Propel::getWriteConnection(RecordTableMap::DATABASE_NAME);
@@ -189,22 +191,11 @@ class RecordHandler
 
         foreach ($this->recordsPerPlayer as $record) {
             $record->save();
-            if ($releaseRecords) {
-                unset($record);
-            }
-
-        }
-
-        foreach ($this->records as $record) {
-            if ($releaseRecords) {
-                unset($record);
-            }
         }
 
         $con->commit();
 
         RecordTableMap::clearInstancePool();
-        PlayerTableMap::clearInstancePool();
     }
 
     /**

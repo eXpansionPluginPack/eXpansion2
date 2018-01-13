@@ -160,6 +160,7 @@ class MapInfoService implements ListenerInterfaceExpApplication, ListenerInterfa
 
         }
         $con->commit();
+        MapTableMap::clearInstancePool();
 
         $this->console->writeln("Sync done.");
 
