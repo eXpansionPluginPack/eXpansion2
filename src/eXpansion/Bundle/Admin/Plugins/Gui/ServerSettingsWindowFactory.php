@@ -250,8 +250,14 @@ class ServerSettingsWindowFactory extends WindowFactory
         $frame->addChild($tooltip);
 
         $apply = $this->uiFactory->createButton("Apply", uiButton::TYPE_DECORATED);
-        $apply->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackApply"],
-            ["options" => $manialink->getData('options')]));
+        $apply->setAction(
+            $this->actionFactory->createManialinkAction(
+                $manialink,
+                [$this, "callbackApply"],
+                ["options" => $manialink->getData('options')],
+                true
+            )
+        );
         $content = $manialink->getContentFrame();
         $apply->setPosition($content->getWidth() - $apply->getWidth(), -($content->getHeight() - $apply->getHeight()));
         $frame->addChild($apply);
