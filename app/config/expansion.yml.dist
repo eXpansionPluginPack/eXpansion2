@@ -1,0 +1,49 @@
+e_xpansion_core:
+    parameters:
+        core_chat_color_codes:
+            # default set of colors
+            default: '$dee'
+            muted: '$999'
+            info: '$add'
+            success: 'ada'
+            warning: '$dda'
+            danger: '$daa'
+            error: '$d77'
+            variable: '$fff'
+            # ui defaults
+            primary: '$3af'
+            secondary: '$fff'
+            highlight: '$fff'
+            # admin set of colors
+            admin_info: '$aff'
+            # special colors
+            separator: '$3af'
+            record: '$0f3'
+            record_top: '$0d3'
+            record_rank: '$afa'
+            # for unit test, dont change
+            test: '$f00'
+        core_chat_glyph_icons:
+            test: '✔'
+            success: '$0d0✔'
+            fail: '$b32✘'
+            server: '$afd'
+            info: '$fff'
+            warning: ''
+            error: '$d77'
+            admin: '$fff'
+            time: ''
+            record: ''
+e_xpansion_admin_groups:
+    groups:
+        master_admin:
+            label: Master Admin
+            logins:
+                - login1
+            permissions: [] # Master_admin has always all permissions.
+        admin:
+            label: Admin
+            logins: []
+            permissions:
+              - next
+              - restart

@@ -1,4 +1,5 @@
 /app/config/parameters.yml
+/app/config/expansion.yml
 /build/
 /phpunit.xml
 /var/*
@@ -16,7 +17,6 @@
 /web/bundles/
 /.idea/
 composer.phar
-/app/config/plugins/*.yml
 /tmp/
 /app/propel/*
 /docker/data/*
