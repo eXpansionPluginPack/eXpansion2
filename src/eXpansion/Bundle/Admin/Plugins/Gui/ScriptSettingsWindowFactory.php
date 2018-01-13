@@ -110,8 +110,14 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
         $apply->setTranslate(true);
         $apply->setPosition(($frame->getWidth() - $apply->getWidth()), -($frame->getHeight() - $apply->getHeight()));
 
-        $apply->setAction($this->actionFactory->createManialinkAction(
-            $manialink, [$this, "callbackApply"], []));
+        $apply->setAction(
+            $this->actionFactory->createManialinkAction(
+                $manialink,
+                [$this, "callbackApply"],
+                [],
+                true
+            )
+        );
 
 
         $manialink->addChild($apply);

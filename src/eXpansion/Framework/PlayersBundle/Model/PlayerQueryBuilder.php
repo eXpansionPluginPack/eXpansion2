@@ -60,6 +60,10 @@ class PlayerQueryBuilder
      */
     public function save(Player $player)
     {
+        // First clear references. Player has no references that needs saving.
+        $player->clearAllReferences(false);
+
+        // Save and free memory.
         $player->save();
         PlayerTableMap::clearInstancePool();
     }
