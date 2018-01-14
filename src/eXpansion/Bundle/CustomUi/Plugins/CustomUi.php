@@ -180,6 +180,7 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
 EOL;
 
         $this->connection->triggerModeScriptEvent('Trackmania.UI.SetProperties', [$properties]);
+        $this->connection->triggerModeScriptEvent('Shootmania.UI.SetProperties', [$properties]);
 
         $this->customScoreboardWidget->create($this->allPlayers);
         $this->customSpeedWidget->create($this->allPlayers);
