@@ -2,6 +2,10 @@
 <database name="expansion" namespace="eXpansion\Bundle\Maps\Model" defaultIdMethod="native">
 
     <table name="map">
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+            <parameter name="Charset" value="utf8"/>
+        </vendor>
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
         <column name="mapUid" type="varchar" size="50"/>
         <column name="name" type="varchar" size="150"/>
@@ -28,6 +32,10 @@
     </table>
 
     <table name="mxmap">
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+            <parameter name="Charset" value="utf8"/>
+        </vendor>
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
         <column name="trackUID" type="varchar" size="50" required="true"/>
         <column name="gbxMapName" type="varchar" size="150" required="false"/>
