@@ -123,9 +123,11 @@ class Player implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceMpScri
     public function updateWithScores($scores)
     {
         // Update the winner player.
-        $player = $this->getPlayer($scores['winnerplayer']);
-        if ($player) {
-            $this->playerQueryBuilder->save($player);
+        if (isset($scores['winnerplayer'])) {
+            $player = $this->getPlayer($scores['winnerplayer']);
+            if ($player) {
+                $this->playerQueryBuilder->save($player);
+            }
         }
 
         // Update remaining players.
