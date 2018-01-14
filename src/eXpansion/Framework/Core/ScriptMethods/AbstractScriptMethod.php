@@ -36,6 +36,12 @@ class AbstractScriptMethod
     {
         $this->toDispatch[] = $function;
 
+        if (is_null($this->dataProvider)) {
+            $this->currentData = null;
+            $this->dispatchData();
+            return;
+        }
+        
         if (is_null($this->currentData) && !$this->callMade) {
             $this->callMade = true;
             $this->dataProvider->request();
