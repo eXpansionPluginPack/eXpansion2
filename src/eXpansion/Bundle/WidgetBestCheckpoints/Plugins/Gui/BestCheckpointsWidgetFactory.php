@@ -79,7 +79,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
             
             ***onSelectDropdown***
             ***
-               declare Integer BestCp_Mode for LocalUser = 1;   
+              declare Integer BestCp_Mode for LocalUser = 0; 
                BestCp_Mode = TextLib::ToInteger(uiDropdown.DataAttributeGet("selected"));
                Refresh();        
             ***
@@ -112,7 +112,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                 declare CMlLabel Label <=> (Page.GetFirstChild("Cp_"^ (_Index+1)) as CMlLabel);
                 declare CMlQuad Bg <=> (Page.GetFirstChild("Bg_"^ (_Index+1)) as CMlQuad);          
                                                                               
-                declare Integer BestCp_Mode for LocalUser = 1;                  
+               declare Integer BestCp_Mode for LocalUser = 0;                
                 declare Text Color = "\$fff";
                 Bg.BgColor = TextLib::ToColor("000");                           
                 
@@ -151,7 +151,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                        Color = "\$fff";                                                                                                 
                     }
                     Label.Value = "\$fff\$o" ^ (_Index+1) ^ " \$o\$ff3" ^ TimeToText(Compare) ^ "\$fff" ^
-                     "diff: " ^ Color ^ TimeToText(_Score - Compare); 
+                     " diff: " ^ Color ^ TimeToText(_Score - Compare); 
                 }                                                
             }
             
@@ -159,7 +159,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                 declare Integer ElementCount for Page = $elementCount;  
                 declare Integer[Integer] MyCheckpoints for Page = Integer[Integer];       
                 declare Integer[Integer] MapBestCheckpoints for Page = Integer[Integer];                                                
-                declare Integer BestCp_Mode for LocalUser = 1;   
+               declare Integer BestCp_Mode for LocalUser = 0; 
                                                                                       
                 
                 for (k, 0, (ElementCount-1)) {                                                       
@@ -186,7 +186,7 @@ EOL
         $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::OnInit,
             <<<EOL
             declare Integer ElementCount for Page = $elementCount;
-            declare Integer BestCp_Mode for LocalUser = 1;   
+           declare Integer BestCp_Mode for LocalUser = 0; 
             declare CMlFrame Dropdown = (Page.GetFirstChild("Dropdown") as CMlFrame);    
             declare Integer[Integer] MyCheckpoints for Page = Integer[Integer];           
             declare Integer[Integer] MapBestCheckpoints for Page = Integer[Integer];              

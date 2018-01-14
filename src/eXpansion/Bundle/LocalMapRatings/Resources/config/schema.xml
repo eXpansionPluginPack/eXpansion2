@@ -2,11 +2,15 @@
 <database name="expansion" namespace="eXpansion\Bundle\LocalMapRatings\Model" defaultIdMethod="native">
 
     <table name="maprating">
-        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+            <parameter name="Charset" value="utf8"/>
+        </vendor>
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
         <column name="login" type="varchar" primaryString="1" size="255" required="true"/>
         <column name="mapUid" type="varchar" size="50" required="true"/>
         <column name="score" type="integer" required="true"/>
 
-        <behavior name="timestampable" />
+        <behavior name="timestampable"/>
     </table>
 </database>
