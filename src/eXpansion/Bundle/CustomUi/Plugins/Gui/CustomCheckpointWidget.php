@@ -54,13 +54,6 @@ class CustomCheckpointWidget extends WidgetFactory
             ->setOpacity(0.5)->setAlign("center", "center2");
         $frame->addChild($quad);
 
-        $quad = Quad::create("quad_top");
-        $quad->setPosition(0, -80)->setSize(400, 33)
-            ->setStyles("BgsPlayerCard", "BgRacePlayerLine")
-            ->setColorize("777")->setAlign("center", "center")->setRotation(180);
-        $frame->addChild($quad);
-
-
         $manialink->getFmlManialink()->getScript()->addScriptFunction("", <<<EOL
         Text TimeToText(Integer intime) {
                 declare time = MathLib::Abs(intime);
@@ -82,16 +75,14 @@ EOL
         );
 
         $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::OnInit, <<<EOL
-            declare CMlLabel CheckPointLabel = (Page.GetFirstChild("CurrentTime") as CMlLabel);
-            declare CMlQuad TopBg = (Page.GetFirstChild("quad_top") as CMlQuad);
+            declare CMlLabel CheckPointLabel = (Page.GetFirstChild("CurrentTime") as CMlLabel);        
             declare CMlQuad Bg = (Page.GetFirstChild("quad_bg") as CMlQuad);                                      
             declare CMlFrame Frame = (Page.GetFirstChild("Frame_Main") as CMlFrame);
             
             declare IsIntro = (
-                UI.UISequence == CUIConfig::EUISequence::Intro ||
-                UI.UISequence == CUIConfig::EUISequence::RollingBackgroundIntro ||
-                UI.UISequence == CUIConfig::EUISequence::Outro
+                UI.UISequence != CUIConfig::EUISequence::Playing                
             );              
+            
 EOL
         );
 
@@ -106,8 +97,7 @@ EOL
                 if (GUIPlayer == RaceEvent.Player && RaceEvent.Type == CTmRaceClientEvent::EType::Respawn) {
                      if (InputPlayer.RaceState == CTmMlPlayer::ERaceState::BeforeStart) {                     
                         CheckPointLabel.Value = "Cp: 0  00:00.000";
-                        Bg.BgColor = <0., 0., 0.>;
-                        TopBg.Hide();
+                        Bg.BgColor = <0., 0., 0.>;                        
                      }
                 }             
                 
@@ -119,16 +109,13 @@ EOL
                         CheckPointLabel.Value = "Cp: " ^(RaceEvent.CheckpointInLap+1) ^ "  " ^ TimeToText(RaceEvent
                         .LapTime - Score.Checkpoints[RaceEvent.CheckpointInLap]);
                         if (RaceEvent.LapTime < Score.Checkpoints[RaceEvent.CheckpointInLap]) {
-                            Bg.BgColor = <0., 0., 1.>;
-                            TopBg.Colorize = <0., 0., 1.>;
+                            Bg.BgColor = <0., 0., 1.>;                            
                         } else {
-                            Bg.BgColor = <1., 0., 0.>;
-                            TopBg.Colorize = <1., 0., 0.>;
+                            Bg.BgColor = <1., 0., 0.>;                            
                         }
                     } else {
                        CheckPointLabel.Value = "Cp: " ^(RaceEvent.CheckpointInLap+1) ^ "  " ^ TimeToText(RaceEvent
-                        .LapTime);
-                       TopBg.Colorize = <0.7, 0.7, 0.7>;
+                        .LapTime);                     
                     }
                                                                                                
                 }
@@ -139,7 +126,7 @@ EOL
 
     protected function updateContent(ManialinkInterface $manialink)
     {
-        parent::updateContent($manialink); 
+        parent::updateContent($manialink);
     }
 
 

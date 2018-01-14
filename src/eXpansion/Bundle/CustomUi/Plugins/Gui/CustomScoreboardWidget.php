@@ -21,8 +21,6 @@ class CustomScoreboardWidget extends WidgetFactory
      * @param                      $posX
      * @param                      $posY
      * @param WidgetFactoryContext $context
-     * @param Dispatcher           $dispatcher
-     * @param PlayerStorage        $playerStorage
      */
     public function __construct(
         $name,

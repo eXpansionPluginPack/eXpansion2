@@ -39,10 +39,7 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
      * @var CustomScoreboardWidget
      */
     private $customScoreboardWidget;
-    /**
-     * @var MarkersWidget
-     */
-    private $markersWidget;
+
     /**
      * @var Group
      */
@@ -76,7 +73,6 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
         $this->customSpeedWidget = $customSpeedWidget;
         $this->customCheckpointWidget = $customCheckpointWidget;
         $this->customScoreboardWidget = $customScoreboardWidget;
-        $this->markersWidget = $markersWidget;
         $this->players = $players;
     }
 
@@ -85,11 +81,11 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
      *
      * @param boolean $status
      *
-     * @return null
+     * @return void
      */
     public function setStatus($status)
     {
-
+        // do nothing
     }
 
     /**
@@ -185,7 +181,6 @@ EOL;
 
         $this->connection->triggerModeScriptEvent('Trackmania.UI.SetProperties', [$properties]);
 
-        $this->markersWidget->create($this->players);
         $this->customScoreboardWidget->create($this->allPlayers);
         $this->customSpeedWidget->create($this->allPlayers);
         $this->customCheckpointWidget->create($this->allPlayers);
@@ -203,7 +198,7 @@ EOL;
 
     public function onPlayerConnect(Player $player)
     {
-
+        // do nothing
     }
 
     public function onPlayerDisconnect(Player $player, $disconnectionReason)
@@ -213,11 +208,11 @@ EOL;
 
     public function onPlayerInfoChanged(Player $oldPlayer, Player $player)
     {
-      // do nothing
+        // do nothing
     }
 
     public function onPlayerAlliesChanged(Player $oldPlayer, Player $player)
     {
-       // do nothing
+        // do nothing
     }
 }
