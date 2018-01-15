@@ -13,89 +13,43 @@ class PlayerActionDataProvider extends AbstractDataProvider
 {
 
     /**
-     * @param int    $time
-     * @param string $shooterLogin
-     * @param string $victimLogin
-     * @param string $actionId
-     * @param mixed  $param1
-     * @param mixed  $param2
+     * @param $params
      * @return void
      */
-    public function onActionCustomEvent(
-        $time,
-        $shooterLogin,
-        $victimLogin,
-        $actionId,
-        $param1,
-        $param2
-    ) {
+    public function onActionCustomEvent($params)
+    {
         $this->dispatch(__FUNCTION__, [
-            $shooterLogin,
-            $victimLogin,
-            $actionId,
-            $param1,
-            $param2,
+            $params['shooter'],
+            $params['victim'],
+            $params['actionId'],
+            $params['param1'],
+            $params['param2'],
         ]);
     }
 
 
     /**
-     * @param int    $time
-     * @param string $login
-     * @param mixed  $actionInput
+     * @param $params
      * @return void
      */
-    public function onActionEvent(
-        $time,
-        $login,
-        $actionInput
-
-    ) {
+    public function onActionEvent($params)
+    {
         $this->dispatch(__FUNCTION__, [
-            $login,
-            $actionInput,
+            $params['login'],
+            $params['actioninput'],
         ]);
     }
 
 
     /**
      *
-     * @param int    $time
-     * @param string $login
-     * @param string $actionChange
+     * @param $params
      */
-    public function onPlayerRequestActionChange(
-        $time,
-        $login,
-        $actionChange
-    ) {
+    public function onPlayerRequestActionChange($params)
+    {
         $this->dispatch(__FUNCTION__, [
-            $login,
-            $actionChange,
-        ]);
-    }
-
-    /**
-     *
-     * @param int    $time
-     * @param string $login
-     * @param string $objectId
-     * @param string $modelId
-     * @param string $modelName
-     * @return void
-     */
-    public function onPlayerThrowsObject(
-        $time,
-        $login,
-        $objectId,
-        $modelId,
-        $modelName
-    ) {
-        $this->dispatch(__FUNCTION__, [
-            $login,
-            $objectId,
-            $modelId,
-            $modelName,
+            $params['login'],
+            $params['actionchange'],
         ]);
     }
 

@@ -1,0 +1,12 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+
+    eXpansion\Storm\Toto\Plugins\Test:
+        class: eXpansion\Storm\Toto\Plugins\Test
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'sm.player'}
+            - {name: 'expansion.plugin', data_provider: 'sm.player.shoot'}

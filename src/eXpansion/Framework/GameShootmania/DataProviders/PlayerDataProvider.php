@@ -16,149 +16,86 @@ class PlayerDataProvider extends AbstractDataProvider
     /**
      * Callback sent when a player is hit.
      *
-     * @param int    $time            server time when event occurred
-     * @param string $shooterLogin    login
-     * @param string $victimLogin     login
-     * @param int    $weapon          id of weapon: [1-laser, 2-rocket, 3-nucleus, 5-arrow]
-     * @param int    $damage          amount damage done by hit
-     * @param int    $points          amount of points scored by shooter
-     * @param float  $distance        distance between 2 players
-     * @param array  $shooterPosition position at level
-     * @param array  $victimPosition  position at level
-     *
+     * @param $params
      */
-    public function onPlayerHit(
-        $time,
-        $shooterLogin,
-        $victimLogin,
-        $weapon,
-        $damage,
-        $points,
-        $distance,
-        $shooterPosition,
-        $victimPosition
-    ) {
+    public function onPlayerHit($params)
+    {
         $this->dispatch(__FUNCTION__, [
-            $shooterLogin,
-            $victimLogin,
-            $weapon,
-            $damage,
-            $points,
-            $distance,
-            $shooterPosition,
-            $victimPosition,
+            $params['shooter'],
+            $params['victim'],
+            $params['weapon'],
+            $params['damage'],
+            $params['points'],
+            $params['distance'],
+            (object)$params['shooterPosition'],
+            (object)$params['victimPosition'],
         ]);
     }
 
     /**
      * Callback sent when a player is eliminated.
-     * @param int    $time
-     * @param string $shooterLogin
-     * @param string $victimLogin
-     * @param int    $weapon
-     * @param int    $damage
-     * @param array  $shooterPosition
-     * @param array  $victimPosition
+     *
+     * @param $params
      */
-    public function onArmorEmpty(
-        $time,
-        $shooterLogin,
-        $victimLogin,
-        $weapon,
-        $damage,
-        $shooterPosition,
-        $victimPosition
-    ) {
+    public function onArmorEmpty($params)
+    {
         $this->dispatch(__FUNCTION__, [
-            $shooterLogin,
-            $victimLogin,
-            $weapon,
-            $damage,
-            $shooterPosition,
-            $victimPosition,
+            $params['shooter'],
+            $params['victim'],
+            $params['weapon'],
+            $params['distance'],
+            (object)$params['shooterposition'],
+            (object)$params['victimposition'],
         ]);
     }
 
 
     /**
-     *
-     * @param int   $time
-     * @param array $players
-     * @param array $landmark
+     * @param $params
      */
-    public function onCapture(
-        $time,
-        $players,
-        $landmark
-    ) {
-
-        $landmarkObj = Landmark::fromArrayOfArray($landmark);
+    public function onCapture($params)
+    {
+        $landmarkObj = Landmark::fromArray($params['landmark']);
 
         $this->dispatch(__FUNCTION__, [
-            $players,
+            $params['players'],
             $landmarkObj,
         ]);
     }
 
     /**
-     * @param int    $time
-     * @param string $login
-     * @param string $sectorId
+     * @param $params
      */
-    public function onPlayerTriggersSector(
-        $time,
-        $login,
-        $sectorId
-    ) {
+    public function onPlayerTriggersSector($params) {
         $this->dispatch(__FUNCTION__, [
-            $login,
-            $sectorId,
+            $params['login'],
+            $params['sectorid'],
         ]);
     }
 
     /**
      *
-     * @param int    $time
-     * @param string $login
-     * @param string $objectId
-     * @param string $modelId
-     * @param string $modelName
+     * @param $params
      */
-    public function onPlayerTouchesObject(
-        $time,
-        $login,
-        $objectId,
-        $modelId,
-        $modelName
-    ) {
+    public function onPlayerTouchesObject($params) {
         $this->dispatch(__FUNCTION__, [
-            $login,
-            $objectId,
-            $modelId,
-            $modelName,
+            $params['login'],
+            $params['objectid'],
+            $params['modelid'],
+            $params['modelname'],
         ]);
     }
 
     /**
      *
-     * @param int    $time
-     * @param string $login
-     * @param string $objectId
-     * @param string $modelId
-     * @param string $modelName
+     * @param $params
      */
-    public function onPlayerThrowsObject(
-        $time,
-        $login,
-        $objectId,
-        $modelId,
-        $modelName
-    ) {
+    public function onPlayerThrowsObject($params) {
         $this->dispatch(__FUNCTION__, [
-            $login,
-            $objectId,
-            $modelId,
-            $modelName,
+            $params['login'],
+            $params['objectid'],
+            $params['modelid'],
+            $params['modelname'],
         ]);
     }
 

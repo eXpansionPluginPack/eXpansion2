@@ -13,7 +13,7 @@ use oliverde8\AssociativeArraySimplified\AssociativeArray;
  *
  * @author    de Cramer Oliver<oliverde8@gmail.com>
  * @copyright 2017 eXpansion
- * @package eXpansion\Framework\Core\Storage
+ * @package   eXpansion\Framework\Core\Storage
  */
 class GameDataStorage
 {
@@ -116,7 +116,18 @@ class GameDataStorage
      */
     public function getTitle()
     {
-        return $this->titles->get($this->getVersion()->titleId, self::TITLE_UNKNOWN);
+
+        $title = $this->titles->get($this->getVersion()->titleId, self::TITLE_UNKNOWN);
+        if ($title == self::TITLE_UNKNOWN) {
+            if (substr($this->getVersion()->titleId, 0, 2) == "TM") {
+                return "TM";
+            }
+            if (substr($this->getVersion()->titleId, 0, 2) == "SM") {
+                return "SM";
+            }
+        }
+
+        return $title;
     }
 
     /**

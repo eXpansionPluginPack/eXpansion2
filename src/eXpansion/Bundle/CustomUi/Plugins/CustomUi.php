@@ -5,11 +5,11 @@ namespace eXpansion\Bundle\CustomUi\Plugins;
 use eXpansion\Bundle\CustomUi\Plugins\Gui\CustomCheckpointWidget;
 use eXpansion\Bundle\CustomUi\Plugins\Gui\CustomScoreboardWidget;
 use eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSpeedWidget;
-use eXpansion\Bundle\CustomUi\Plugins\Gui\MarkersWidget;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Storage\Data\Player;
+use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use Maniaplanet\DedicatedServer\Connection;
@@ -28,7 +28,7 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
      */
     private $allPlayers;
     /**
-     * @var CustomScoreboardWidget
+     * @var CustomSpeedWidget
      */
     private $customSpeedWidget;
     /**
@@ -44,6 +44,10 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
      * @var Group
      */
     private $players;
+    /**
+     * @var GameDataStorage
+     */
+    private $gameDataStorage;
 
     /**
      * CustomUi constructor.
@@ -55,7 +59,7 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
      * @param CustomSpeedWidget      $customSpeedWidget
      * @param CustomCheckpointWidget $customCheckpointWidget
      * @param CustomScoreboardWidget $customScoreboardWidget
-     * @param MarkersWidget          $markersWidget
+     * @param GameDataStorage        $gameDataStorage
      */
     public function __construct(
         Connection $connection,
@@ -65,7 +69,8 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
         CustomSpeedWidget $customSpeedWidget,
         CustomCheckpointWidget $customCheckpointWidget,
         CustomScoreboardWidget $customScoreboardWidget,
-        MarkersWidget $markersWidget
+        GameDataStorage $gameDataStorage
+
     ) {
         $this->connection = $connection;
         $this->playerStorage = $playerStorage;
@@ -74,6 +79,7 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
         $this->customCheckpointWidget = $customCheckpointWidget;
         $this->customScoreboardWidget = $customScoreboardWidget;
         $this->players = $players;
+        $this->gameDataStorage = $gameDataStorage;
     }
 
     /**
@@ -85,30 +91,9 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
      */
     public function setStatus($status)
     {
-        // do nothing
-    }
-
-    /**
-     * called at eXpansion init
-     *
-     * @return void
-     */
-    public function onApplicationInit()
-    {
-        // do nothing
-    }
-
-    /**
-     * called when init is done and callbacks are enabled
-     *
-     * @return void
-     * @throws \Maniaplanet\DedicatedServer\InvalidArgumentException
-     */
-    public function onApplicationReady()
-    {
-
-        $properties = /** @lang XML */
-            <<<EOL
+        if ($status) {
+            $properties = /** @lang XML */
+                <<<EOL
     <ui_properties>
  		<!-- The map name and author displayed in the top right of the screen when viewing the scores table -->
  		<map_info visible="false" pos="-160. 80. 150." />
@@ -179,12 +164,42 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
  	</ui_properties>
 EOL;
 
-        $this->connection->triggerModeScriptEvent('Trackmania.UI.SetProperties', [$properties]);
-        $this->connection->triggerModeScriptEvent('Shootmania.UI.SetProperties', [$properties]);
+            $this->connection->triggerModeScriptEvent('Trackmania.UI.SetProperties', [$properties]);
+            $this->connection->triggerModeScriptEvent('Shootmania.UI.SetProperties', [$properties]);
 
-        $this->customScoreboardWidget->create($this->allPlayers);
-        $this->customSpeedWidget->create($this->allPlayers);
-        $this->customCheckpointWidget->create($this->allPlayers);
+            $this->customScoreboardWidget->create($this->allPlayers);
+
+            if ($this->gameDataStorage->getTitle() == "TM") {
+                $this->customSpeedWidget->create($this->allPlayers);
+                $this->customCheckpointWidget->create($this->allPlayers);
+            }
+
+        } else {
+            $this->customSpeedWidget->destroy($this->allPlayers);
+            $this->customCheckpointWidget->destroy($this->allPlayers);
+        }
+    }
+
+    /**
+     * called at eXpansion init
+     *
+     * @return void
+     */
+    public function onApplicationInit()
+    {
+        // do nothing
+    }
+
+    /**
+     * called when init is done and callbacks are enabled
+     *
+     * @return void
+     * @throws \Maniaplanet\DedicatedServer\InvalidArgumentException
+     */
+    public function onApplicationReady()
+    {
+
+
     }
 
     /**

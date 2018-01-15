@@ -17,6 +17,7 @@ parameters:
         'TMCanyon':        'TM'
         'TMLagoon@nadeo':  'TM'
         'TMLagoon':        'TM'
+        'obstacle@smokegun': 'SM'
 
     expansion.framework.core.storage.data.player.class: eXpansion\Framework\Core\Storage\Data\Player
 

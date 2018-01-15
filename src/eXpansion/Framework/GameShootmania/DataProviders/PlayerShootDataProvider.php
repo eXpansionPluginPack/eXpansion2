@@ -13,13 +13,11 @@ class PlayerShootDataProvider extends AbstractDataProvider
 {
 
     /**
-     * @param int    $time   server time when event occurred
-     * @param string $login  login
-     * @param int    $weapon id of weapon: 1-laser, 2-rocket, 3-nucleus, 5-arrow
+     * @param $params
      */
-    public function onShoot($time, $login, $weapon)
+    public function onShoot($params)
     {
-        $this->dispatch(__FUNCTION__, [$login, $weapon]);
+        $this->dispatch(__FUNCTION__, [$params['shooter'], $params['weapon']]);
     }
 
 }

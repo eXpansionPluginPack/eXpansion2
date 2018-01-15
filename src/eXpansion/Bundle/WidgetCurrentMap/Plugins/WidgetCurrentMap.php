@@ -6,11 +6,13 @@ use eXpansion\Bundle\WidgetCurrentMap\Plugins\Gui\CurrentMapWidgetFactory;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMatch;
 use Maniaplanet\DedicatedServer\Connection;
+use Maniaplanet\DedicatedServer\Structures\Map;
 
 
-class WidgetCurrentMap implements ListenerInterfaceExpApplication, ListenerInterfaceMpScriptMatch
+class WidgetCurrentMap implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacyMap
 {
     /** @var Connection */
     protected $connection;
@@ -33,6 +35,7 @@ class WidgetCurrentMap implements ListenerInterfaceExpApplication, ListenerInter
      * @param Connection              $connection
      * @param PlayerStorage           $playerStorage
      * @param CurrentMapWidgetFactory $widget
+     * @param Group                   $players
      */
     public function __construct(
         Connection $connection,
@@ -77,159 +80,23 @@ class WidgetCurrentMap implements ListenerInterfaceExpApplication, ListenerInter
 
     }
 
-    /**
-     * Callback sent when the "StartMatch" section start.
-     *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time  Server time when the callback was sent
+     /**
+     * @param Map $map
      *
      * @return void
      */
-    public function onStartMatchStart($count, $time)
+    public function onBeginMap(Map $map)
     {
         $this->widget->update($this->players);
     }
 
     /**
-     * Callback sent when the "StartMatch" section end.
-     *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time  Server time when the callback was sent
+     * @param Map $map
      *
      * @return void
      */
-    public function onStartMatchEnd($count, $time)
+    public function onEndMap(Map $map)
     {
-
-    }
-
-    /**
-     * Callback sent when the "EndMatch" section start.
-     *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time  Server time when the callback was sent
-     *
-     * @return void
-     */
-    public function onEndMatchStart($count, $time)
-    {
-
-    }
-
-    /**
-     * Callback sent when the "EndMatch" section end.
-     *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time  Server time when the callback was sent
-     *
-     * @return void
-     */
-    public function onEndMatchEnd($count, $time)
-    {
-
-    }
-
-    /**
-     * Callback sent when the "StartTurn" section start.
-     *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time  Server time when the callback was sent
-     *
-     * @return void
-     */
-    public function onStartTurnStart($count, $time)
-    {
-
-    }
-
-    /**
-     * Callback sent when the "StartTurn" section end.
-     *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time  Server time when the callback was sent
-     *
-     * @return void
-     */
-    public function onStartTurnEnd($count, $time)
-    {
-
-    }
-
-    /**
-     * Callback sent when the "EndMatch" section start.
-     *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time  Server time when the callback was sent
-     *
-     * @return void
-     */
-    public function onEndTurnStart($count, $time)
-    {
-
-    }
-
-    /**
-     * Callback sent when the "EndMatch" section end.
-     *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time  Server time when the callback was sent
-     *
-     * @return void
-     */
-    public function onEndTurnEnd($count, $time)
-    {
-
-    }
-
-    /**
-     * Callback sent when the "StartRound" section start.
-     *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time  Server time when the callback was sent
-     *
-     * @return void
-     */
-    public function onStartRoundStart($count, $time)
-    {
-        // do nothing
-    }
-
-    /**
-     * Callback sent when the "StartRound" section end.
-     *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time  Server time when the callback was sent
-     *
-     * @return void
-     */
-    public function onStartRoundEnd($count, $time)
-    {
-        // do nothing
-    }
-
-    /**
-     * Callback sent when the "EndMatch" section start.
-     *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time  Server time when the callback was sent
-     *
-     * @return void
-     */
-    public function onEndRoundStart($count, $time)
-    {
-        // do nothing
-    }
-
-    /**
-     * Callback sent when the "EndMatch" section end.
-     *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time  Server time when the callback was sent
-     *
-     * @return void
-     */
-    public function onEndRoundEnd($count, $time)
-    {
-        // do nothing
+        // TODO: Implement onEndMap() method.
     }
 }

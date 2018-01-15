@@ -12,65 +12,45 @@ use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
 class PlayerExtraDataProvider extends AbstractDataProvider
 {
 
-
     /**
-     * @param int    $time
-     * @param string $shooterLogin    Login of the player who shot
-     * @param string $victimLogin     Login of the player who dodged
-     * @param int    $weapon          Id of the weapon [1-Laser, 2-Rocket, 3-Nucleus, 5-Arrow]
-     * @param float  $distance        Distance of the near miss
-     * @param array  $shooterPosition position in level
-     * @param array  $victimPosition  position in level
+     * @param $params
      */
-    public function onNearMiss(
-        $time,
-        $shooterLogin,
-        $victimLogin,
-        $weapon,
-        $distance,
-        $shooterPosition,
-        $victimPosition
-    ) {
-        $this->dispatch(__FUNCTION__,
-            [$shooterLogin, $victimLogin, $weapon, $distance, $shooterPosition, $victimPosition]);
-    }
-
-    /**
-     * @param int    $time
-     * @param string $shooterLogin
-     * @param string $victimLogin
-     * @param int    $shooterWeapon
-     * @param int    $victimWeapon
-     */
-    public function onShotDeny($time, $shooterLogin, $victimLogin, $shooterWeapon, $victimWeapon)
+    public function onNearMiss($params)
     {
         $this->dispatch(__FUNCTION__,
-            [$shooterLogin, $victimLogin, $shooterWeapon, $victimWeapon]);
+            [
+                $params['shooter'],
+                $params['victim'],
+                $params['weapon'],
+                $params['distance'],
+                (object)$params['shooterposition'],
+                (object)$params['victimposition'],
+            ]);
+    }
+
+    /**
+     * @param $params
+     */
+    public function onShotDeny($params)
+    {
+        $this->dispatch(__FUNCTION__,
+            [$params['shooter'], $params['victim'], $params['shooterweapon'], $params['victimweapon']]);
     }
 
 
     /**
-     * @param int    $time
-     * @param string $login
+     * @param $params
      */
-    public function onFallDamage(
-        $time,
-        $login
-    ) {
-        $this->dispatch(__FUNCTION__,
-            [$login]);
+    public function onFallDamage($params)
+    {
+        $this->dispatch(__FUNCTION__, [$params['login']]);
     }
 
     /**
-     * @param int    $time
-     * @param string $login
+     * @param $params
      */
-    public function onRequestRespawn(
-        $time,
-        $login
-    ) {
-        $this->dispatch(__FUNCTION__,
-            [$login]);
+    public function onRequestRespawn($params) {
+        $this->dispatch(__FUNCTION__, [$params['login']]);
     }
 
 
