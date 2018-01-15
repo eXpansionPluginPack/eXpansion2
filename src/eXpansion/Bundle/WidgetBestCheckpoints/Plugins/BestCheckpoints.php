@@ -8,12 +8,14 @@ use eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\BestCheckpointsWidgetFact
 use eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\UpdaterWidgetFactory;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
+use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMatch;
 use Maniaplanet\DedicatedServer\Connection;
 
 
-class BestCheckpoints implements ListenerInterfaceExpApplication, RecordsDataListener, ListenerInterfaceMpScriptMatch
+class BestCheckpoints implements StatusAwarePluginInterface, ListenerInterfaceExpApplication, RecordsDataListener,
+    ListenerInterfaceMpScriptMatch
 {
     /** @var Connection */
     protected $connection;
@@ -38,7 +40,6 @@ class BestCheckpoints implements ListenerInterfaceExpApplication, RecordsDataLis
      */
     private $allPlayers;
 
-    private $justStarted = true;
 
     /**
      * Debug constructor.
@@ -71,11 +72,17 @@ class BestCheckpoints implements ListenerInterfaceExpApplication, RecordsDataLis
      *
      * @param boolean $status
      *
-     * @return null
+     * @return void
      */
     public function setStatus($status)
     {
-
+        if ($status) {
+            $this->widget->create($this->players);
+            $this->updater->create($this->allPlayers);
+        } else {
+            $this->widget->destroy($this->players);
+            $this->updater->destroy($this->allPlayers);
+        }
     }
 
     /**
@@ -96,8 +103,7 @@ class BestCheckpoints implements ListenerInterfaceExpApplication, RecordsDataLis
      */
     public function onApplicationReady()
     {
-        $this->widget->create($this->players);
-        $this->updater->create($this->allPlayers);
+
     }
 
     /**
@@ -207,7 +213,7 @@ class BestCheckpoints implements ListenerInterfaceExpApplication, RecordsDataLis
      */
     public function onStartMatchEnd($count, $time)
     {
-     //  $this->updater->update($this->allPlayers);
+        //  $this->updater->update($this->allPlayers);
     }
 
     /**

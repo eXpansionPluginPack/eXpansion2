@@ -8,8 +8,7 @@ services:
         tags:
           - {name: 'expansion.plugin', data_provider: 'exp.application'}
           - {name: 'expansion.plugin', data_provider: 'expansion.local_records.race'}
-          - {name: 'expansion.plugin', data_provider: 'expansion.local_records.lap'}
-          - {name: 'expansion.plugin.parent', parent: 'expansion.local_records.plugins.race_records'}
+
 # @todo fix widget dataproviders for laps mode, this works only now with ta...
 
     eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\BestCheckpointsWidgetFactory:
