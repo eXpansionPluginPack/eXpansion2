@@ -8,12 +8,14 @@ use eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\BestCheckpointsWidgetFact
 use eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\UpdaterWidgetFactory;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
+use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMatch;
 use Maniaplanet\DedicatedServer\Connection;
 
 
-class BestCheckpoints implements ListenerInterfaceExpApplication, RecordsDataListener, ListenerInterfaceMpScriptMatch
+class BestCheckpoints implements StatusAwarePluginInterface, ListenerInterfaceExpApplication, RecordsDataListener,
+    ListenerInterfaceMpScriptMatch
 {
     /** @var Connection */
     protected $connection;
