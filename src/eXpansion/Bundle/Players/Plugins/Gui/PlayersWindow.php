@@ -356,7 +356,6 @@ class PlayersWindow extends GridWindowFactory
      */
     public function setPlayer($manialink, $login)
     {
-        var_dump('test');
 
         $actions = [
             "mute" => (string)$this->actionFactory->createManialinkAction($manialink, [$this, 'callbackIgnore'],
