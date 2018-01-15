@@ -38,7 +38,6 @@ class BestCheckpoints implements ListenerInterfaceExpApplication, RecordsDataLis
      */
     private $allPlayers;
 
-    private $justStarted = true;
 
     /**
      * Debug constructor.
@@ -71,11 +70,17 @@ class BestCheckpoints implements ListenerInterfaceExpApplication, RecordsDataLis
      *
      * @param boolean $status
      *
-     * @return null
+     * @return void
      */
     public function setStatus($status)
     {
-
+        if ($status) {
+            $this->widget->create($this->players);
+            $this->updater->create($this->allPlayers);
+        } else {
+            $this->widget->destroy($this->players);
+            $this->updater->destroy($this->allPlayers);
+        }
     }
 
     /**
@@ -96,8 +101,7 @@ class BestCheckpoints implements ListenerInterfaceExpApplication, RecordsDataLis
      */
     public function onApplicationReady()
     {
-        $this->widget->create($this->players);
-        $this->updater->create($this->allPlayers);
+
     }
 
     /**
@@ -207,7 +211,7 @@ class BestCheckpoints implements ListenerInterfaceExpApplication, RecordsDataLis
      */
     public function onStartMatchEnd($count, $time)
     {
-     //  $this->updater->update($this->allPlayers);
+        //  $this->updater->update($this->allPlayers);
     }
 
     /**
