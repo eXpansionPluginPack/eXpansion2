@@ -5,7 +5,6 @@ services:
         arguments:
                 $players: '@expansion.framework.core.user_groups.all_players'
         tags:
-          - {name: 'expansion.plugin', data_provider: 'exp.application'}
           - {name: 'expansion.plugin', data_provider: 'mp.legacy.map'}
 
     eXpansion\Bundle\WidgetCurrentMap\Plugins\Gui\CurrentMapWidgetFactory:

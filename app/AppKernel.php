@@ -52,7 +52,6 @@ class AppKernel extends Kernel
 
         /* Register test bundles. */
         $bundles[] = new \eXpansion\Bundle\Acme\AcmeBundle();
-        $bundles[] = new \eXpansion\Storm\Toto\TotoBundle();
 
         return $bundles;
     }

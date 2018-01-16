@@ -1,15 +1,17 @@
 <?php
 
-namespace eXpansion\Storm\Toto\Plugins;
+namespace eXpansion\Bundle\Acme\Plugins;
 
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameShootmania\DataProviders\Listener\ListenerInterfaceSmPlayer;
+use eXpansion\Framework\GameShootmania\DataProviders\Listener\ListenerInterfaceSmPlayerExtra;
 use eXpansion\Framework\GameShootmania\DataProviders\Listener\ListenerInterfaceSmPlayerShoot;
 use eXpansion\Framework\GameShootmania\Structures\Landmark;
+use eXpansion\Framework\GameShootmania\Structures\Position;
 
-class Test implements ListenerInterfaceSmPlayer, ListenerInterfaceSmPlayerShoot
+class SmTest implements ListenerInterfaceSmPlayer, ListenerInterfaceSmPlayerShoot, ListenerInterfaceSmPlayerExtra
 {
     /**
      * @var ChatNotification
@@ -44,14 +46,14 @@ class Test implements ListenerInterfaceSmPlayer, ListenerInterfaceSmPlayerShoot
     /**
      * Callback sent when a player is hit.
      *
-     * @param string $shooterLogin    login
-     * @param string $victimLogin     login
-     * @param int    $weapon          id of weapon: [1-laser, 2-rocket, 3-nucleus, 5-arrow]
-     * @param int    $damage          amount damage done by hit
-     * @param int    $points          amount of points scored by shooter
-     * @param float  $distance        distance between 2 players
-     * @param array  $shooterPosition position at level
-     * @param array  $victimPosition  position at level
+     * @param string   $shooterLogin    login
+     * @param string   $victimLogin     login
+     * @param int      $weapon          id of weapon: [1-laser, 2-rocket, 3-nucleus, 5-arrow]
+     * @param int      $damage          amount damage done by hit
+     * @param int      $points          amount of points scored by shooter
+     * @param float    $distance        distance between 2 players
+     * @param Position $shooterPosition position at level
+     * @param Position $victimPosition  position at level
      * @return void
      */
     public function onPlayerHit(
@@ -61,8 +63,8 @@ class Test implements ListenerInterfaceSmPlayer, ListenerInterfaceSmPlayerShoot
         $damage,
         $points,
         $distance,
-        $shooterPosition,
-        $victimPosition
+        Position $shooterPosition,
+        Position $victimPosition
     ) {
         // do nothing
         $this->console->writeln($shooterLogin." -> ".$victimLogin." with: ".$damage);
@@ -83,8 +85,8 @@ class Test implements ListenerInterfaceSmPlayer, ListenerInterfaceSmPlayerShoot
         $victimLogin,
         $weapon,
         $damage,
-        $shooterPosition,
-        $victimPosition
+        Position $shooterPosition,
+        Position $victimPosition
     ) {
         $this->console->writeln("armor empty: ".$victimLogin." with: ".$damage);
     }
@@ -112,7 +114,7 @@ class Test implements ListenerInterfaceSmPlayer, ListenerInterfaceSmPlayerShoot
         $login,
         $sectorId
     ) {
-        $this->console->writeln('onPlayerTriggersSector: '.$login);
+        $this->console->writeln('Player Triggers Sector: '.$login." Sector:".$sectorId);
     }
 
     /**
@@ -157,5 +159,55 @@ class Test implements ListenerInterfaceSmPlayer, ListenerInterfaceSmPlayerShoot
     public function onShoot($login, $weapon)
     {
         $this->console->writeln('Shoot: '.$login.' Weapon: '.$weapon);
+    }
+
+    /**
+     * @param string   $shooterLogin    Login of the player who shot
+     * @param string   $victimLogin     Login of the player who dodged
+     * @param int      $weapon          Id of the weapon [1-Laser, 2-Rocket, 3-Nucleus, 5-Arrow]
+     * @param float    $distance        Distance of the near miss
+     * @param Position $shooterPosition position in level
+     * @param Position $victimPosition  position in level
+     * @return void
+     */
+    public function onNearMiss(
+        $shooterLogin,
+        $victimLogin,
+        $weapon,
+        $distance,
+        Position $shooterPosition,
+        Position $victimPosition
+    ) {
+        $this->console->writeln('NearMiss: '.$victimLogin.' Weapon: '.$weapon." Distance:".$distance);
+    }
+
+    /**
+     * @param string $shooterLogin
+     * @param string $victimLogin
+     * @param int    $shooterWeapon
+     * @param int    $victimWeapon
+     * @return void
+     */
+    public function onShotDeny($shooterLogin, $victimLogin, $shooterWeapon, $victimWeapon)
+    {
+        $this->console->writeln('Deny: '.$shooterLogin." -> ".$victimLogin);
+    }
+
+    /**
+     * @param string $login
+     * @return void
+     */
+    public function onFallDamage($login)
+    {
+        $this->console->writeln('FallDamage: '.$login);
+    }
+
+    /**
+     * @param string $login
+     * @return void
+     */
+    public function onRequestRespawn($login)
+    {
+        $this->console->writeln('Respawn: '.$login);
     }
 }

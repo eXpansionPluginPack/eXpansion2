@@ -21,6 +21,5 @@ class eXpansionGameShootmaniaExtension extends Extension
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('data_providers.yml');
-        $loader->load('script_methods.yml');
     }
 }

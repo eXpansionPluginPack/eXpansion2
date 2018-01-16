@@ -91,7 +91,7 @@ EOL
 
         $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::OnInit,
             <<<EOL
-            log(Now);
+            
             (Page.GetFirstChild("MapName") as CMlLabel).Value = Map.MapName;            
             (Page.GetFirstChild("AuthorName") as CMlLabel).Value = Map.AuthorNickName;
             if (Map.TMObjective_AuthorTime > -1) {

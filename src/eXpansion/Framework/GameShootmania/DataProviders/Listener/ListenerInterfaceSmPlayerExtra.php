@@ -9,6 +9,8 @@
 namespace eXpansion\Framework\GameShootmania\DataProviders\Listener;
 
 
+use eXpansion\Framework\GameShootmania\Structures\Position;
+
 interface ListenerInterfaceSmPlayerExtra
 {
 
@@ -17,8 +19,8 @@ interface ListenerInterfaceSmPlayerExtra
      * @param string $victimLogin     Login of the player who dodged
      * @param int    $weapon          Id of the weapon [1-Laser, 2-Rocket, 3-Nucleus, 5-Arrow]
      * @param float  $distance        Distance of the near miss
-     * @param array  $shooterPosition position in level
-     * @param array  $victimPosition  position in level
+     * @param Position  $shooterPosition position in level
+     * @param Position  $victimPosition  position in level
      * @return void
      */
     public function onNearMiss(
@@ -26,8 +28,8 @@ interface ListenerInterfaceSmPlayerExtra
         $victimLogin,
         $weapon,
         $distance,
-        $shooterPosition,
-        $victimPosition
+        Position $shooterPosition,
+        Position $victimPosition
     );
 
     /**

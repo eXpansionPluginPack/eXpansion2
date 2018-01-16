@@ -3,6 +3,7 @@
 namespace eXpansion\Framework\GameShootmania\DataProviders;
 
 use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
+use eXpansion\Framework\GameShootmania\Structures\Position;
 
 /**
  * Class PlayerDataProvider provides information to plugins about what is going on with players.
@@ -23,8 +24,8 @@ class PlayerExtraDataProvider extends AbstractDataProvider
                 $params['victim'],
                 $params['weapon'],
                 $params['distance'],
-                (object)$params['shooterposition'],
-                (object)$params['victimposition'],
+                Position::fromArray($params['shooterposition']),
+                Position::fromArray($params['victimposition']),
             ]);
     }
 
@@ -49,7 +50,8 @@ class PlayerExtraDataProvider extends AbstractDataProvider
     /**
      * @param $params
      */
-    public function onRequestRespawn($params) {
+    public function onRequestRespawn($params)
+    {
         $this->dispatch(__FUNCTION__, [$params['login']]);
     }
 

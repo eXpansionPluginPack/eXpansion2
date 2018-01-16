@@ -5,14 +5,14 @@ namespace eXpansion\Bundle\WidgetCurrentMap\Plugins;
 use eXpansion\Bundle\WidgetCurrentMap\Plugins\Gui\CurrentMapWidgetFactory;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
+use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMatch;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
 
-class WidgetCurrentMap implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacyMap
+class WidgetCurrentMap implements StatusAwarePluginInterface, ListenerInterfaceMpLegacyMap
 {
     /** @var Connection */
     protected $connection;
@@ -49,38 +49,17 @@ class WidgetCurrentMap implements ListenerInterfaceExpApplication, ListenerInter
         $this->players = $players;
     }
 
-    /**
-     * called at eXpansion init
-     *
-     * @return void
-     */
-    public function onApplicationInit()
+
+    public function setStatus($status)
     {
-
-
+        if ($status) {
+            $this->widget->create($this->players);
+        } else {
+            $this->widget->destroy($this->players);
+        }
     }
 
     /**
-     * called when init is done and callbacks are enabled
-     *
-     * @return void
-     */
-    public function onApplicationReady()
-    {
-        $this->widget->create($this->players);
-    }
-
-    /**
-     * called when requesting application stop
-     *
-     * @return void
-     */
-    public function onApplicationStop()
-    {
-
-    }
-
-     /**
      * @param Map $map
      *
      * @return void

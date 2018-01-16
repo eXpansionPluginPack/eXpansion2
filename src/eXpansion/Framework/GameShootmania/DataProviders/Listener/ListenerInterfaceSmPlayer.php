@@ -3,6 +3,7 @@
 namespace eXpansion\Framework\GameShootmania\DataProviders\Listener;
 
 use eXpansion\Framework\GameShootmania\Structures\Landmark;
+use eXpansion\Framework\GameShootmania\Structures\Position;
 
 interface ListenerInterfaceSmPlayer
 {
@@ -11,14 +12,14 @@ interface ListenerInterfaceSmPlayer
     /**
      * Callback sent when a player is hit.
      *
-     * @param string $shooterLogin    login
-     * @param string $victimLogin     login
-     * @param int    $weapon          id of weapon: [1-laser, 2-rocket, 3-nucleus, 5-arrow]
-     * @param int    $damage          amount damage done by hit
-     * @param int    $points          amount of points scored by shooter
-     * @param float  $distance        distance between 2 players
-     * @param array  $shooterPosition position at level
-     * @param array  $victimPosition  position at level
+     * @param string   $shooterLogin    login
+     * @param string   $victimLogin     login
+     * @param int      $weapon          id of weapon: [1-laser, 2-rocket, 3-nucleus, 5-arrow]
+     * @param int      $damage          amount damage done by hit
+     * @param int      $points          amount of points scored by shooter
+     * @param float    $distance        distance between 2 players
+     * @param Position $shooterPosition position at level
+     * @param Position $victimPosition  position at level
      * @return void
      */
     public function onPlayerHit(
@@ -28,18 +29,18 @@ interface ListenerInterfaceSmPlayer
         $damage,
         $points,
         $distance,
-        $shooterPosition,
-        $victimPosition
+        Position $shooterPosition,
+        Position $victimPosition
     );
 
     /**
      * Callback sent when a player is eliminated.
-     * @param string $shooterLogin    login
-     * @param string $victimLogin     login
-     * @param int    $weapon          id of weapon: [1-laser, 2-rocket, 3-nucleus, 5-arrow]
-     * @param int    $damage          amount damage done by hit
-     * @param array  $shooterPosition position at level
-     * @param array  $victimPosition  position at level
+     * @param string   $shooterLogin    login
+     * @param string   $victimLogin     login
+     * @param int      $weapon          id of weapon: [1-laser, 2-rocket, 3-nucleus, 5-arrow]
+     * @param int      $damage          amount damage done by hit
+     * @param Position $shooterPosition position at level
+     * @param Position $victimPosition  position at level
      * @return void
      */
     public function onArmorEmpty(
@@ -47,8 +48,8 @@ interface ListenerInterfaceSmPlayer
         $victimLogin,
         $weapon,
         $damage,
-        $shooterPosition,
-        $victimPosition
+        Position $shooterPosition,
+        Position $victimPosition
     );
 
     /**

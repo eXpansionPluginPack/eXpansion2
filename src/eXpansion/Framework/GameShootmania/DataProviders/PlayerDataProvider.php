@@ -4,6 +4,7 @@ namespace eXpansion\Framework\GameShootmania\DataProviders;
 
 use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
 use eXpansion\Framework\GameShootmania\Structures\Landmark;
+use eXpansion\Framework\GameShootmania\Structures\Position;
 
 /**
  * Class PlayerDataProvider provides information to plugins about what is going on with players.
@@ -27,8 +28,8 @@ class PlayerDataProvider extends AbstractDataProvider
             $params['damage'],
             $params['points'],
             $params['distance'],
-            (object)$params['shooterPosition'],
-            (object)$params['victimPosition'],
+            Position::fromArray($params['shooterposition']),
+            Position::fromArray($params['victimposition']),
         ]);
     }
 
@@ -44,8 +45,8 @@ class PlayerDataProvider extends AbstractDataProvider
             $params['victim'],
             $params['weapon'],
             $params['distance'],
-            (object)$params['shooterposition'],
-            (object)$params['victimposition'],
+            Position::fromArray($params['shooterposition']),
+            Position::fromArray($params['victimposition']),
         ]);
     }
 
@@ -55,18 +56,17 @@ class PlayerDataProvider extends AbstractDataProvider
      */
     public function onCapture($params)
     {
-        $landmarkObj = Landmark::fromArray($params['landmark']);
-
         $this->dispatch(__FUNCTION__, [
             $params['players'],
-            $landmarkObj,
+            Landmark::fromArray($params['landmark']),
         ]);
     }
 
     /**
      * @param $params
      */
-    public function onPlayerTriggersSector($params) {
+    public function onPlayerTriggersSector($params)
+    {
         $this->dispatch(__FUNCTION__, [
             $params['login'],
             $params['sectorid'],
@@ -77,7 +77,8 @@ class PlayerDataProvider extends AbstractDataProvider
      *
      * @param $params
      */
-    public function onPlayerTouchesObject($params) {
+    public function onPlayerTouchesObject($params)
+    {
         $this->dispatch(__FUNCTION__, [
             $params['login'],
             $params['objectid'],
@@ -90,7 +91,8 @@ class PlayerDataProvider extends AbstractDataProvider
      *
      * @param $params
      */
-    public function onPlayerThrowsObject($params) {
+    public function onPlayerThrowsObject($params)
+    {
         $this->dispatch(__FUNCTION__, [
             $params['login'],
             $params['objectid'],

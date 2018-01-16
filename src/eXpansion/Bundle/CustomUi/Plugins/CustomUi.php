@@ -8,14 +8,12 @@ use eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSpeedWidget;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
-use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use Maniaplanet\DedicatedServer\Connection;
 
 
-class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInterface, ListenerInterfaceMpLegacyPlayer
+class CustomUi implements StatusAwarePluginInterface, ListenerInterfaceExpApplication
 {
     /** @var Connection */
     protected $connection;
@@ -164,17 +162,20 @@ class CustomUi implements ListenerInterfaceExpApplication, StatusAwarePluginInte
  	</ui_properties>
 EOL;
 
-            $this->connection->triggerModeScriptEvent('Trackmania.UI.SetProperties', [$properties]);
-            $this->connection->triggerModeScriptEvent('Shootmania.UI.SetProperties', [$properties]);
 
-            $this->customScoreboardWidget->create($this->allPlayers);
+            if ($this->gameDataStorage->getTitle() == "SM") {
+                $this->connection->triggerModeScriptEvent('Shootmania.UI.SetProperties', [$properties]);
+            }
 
             if ($this->gameDataStorage->getTitle() == "TM") {
+                $this->connection->triggerModeScriptEvent('Trackmania.UI.SetProperties', [$properties]);
                 $this->customSpeedWidget->create($this->allPlayers);
                 $this->customCheckpointWidget->create($this->allPlayers);
             }
 
+
         } else {
+
             $this->customSpeedWidget->destroy($this->allPlayers);
             $this->customCheckpointWidget->destroy($this->allPlayers);
         }
@@ -194,12 +195,10 @@ EOL;
      * called when init is done and callbacks are enabled
      *
      * @return void
-     * @throws \Maniaplanet\DedicatedServer\InvalidArgumentException
      */
     public function onApplicationReady()
     {
-
-
+        // do nothing
     }
 
     /**
@@ -208,26 +207,6 @@ EOL;
      * @return void
      */
     public function onApplicationStop()
-    {
-        // do nothing
-    }
-
-    public function onPlayerConnect(Player $player)
-    {
-        // do nothing
-    }
-
-    public function onPlayerDisconnect(Player $player, $disconnectionReason)
-    {
-        // do nothing
-    }
-
-    public function onPlayerInfoChanged(Player $oldPlayer, Player $player)
-    {
-        // do nothing
-    }
-
-    public function onPlayerAlliesChanged(Player $oldPlayer, Player $player)
     {
         // do nothing
     }
