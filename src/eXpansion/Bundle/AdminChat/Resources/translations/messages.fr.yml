@@ -3,6 +3,9 @@ expansion_admin_chat:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}redémarré la carte !'
     description: 'Rejoue la carte courante.'
     label: "Redémarrer la carte"
+  shuffle:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}shuffles the maps list!'
+    description: 'Performs shuffle for current map list.'
   cancelvote:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}annule le vote!'
     description: '{info} annule le vote courant.'

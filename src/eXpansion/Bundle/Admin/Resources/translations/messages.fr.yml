@@ -1,6 +1,6 @@
 expansion_admin:
   chat:
-    nopermission: "| erreur | {error}Vous n’avez pas assez de permissions pour effectuer cette action."
+    nopermission: "| erreur | {error}Vous n’avez pas les permissions nécessaires pour effectuer cette action."
     dedicatedexception: '| erreur | {error}Erreur du serveur dedie : {highlight}%message%'
     removemap: "| admin | {admin_info}%level% %admin% {admin_info}enlevé la carte %map% {admin_info}de liste de lecture courante."
   gui:
@@ -11,8 +11,8 @@ expansion_admin:
       scriptsettings:
         title: 'Paramètres de script'
         column:
-          name: 'Nom des paramètres'
-          value: 'Valeur de la conf'
+          name: 'Nom du paramètre'
+          value: 'Valeur du paramètre'
         button:
           apply: 'Appliquer'
   menu:

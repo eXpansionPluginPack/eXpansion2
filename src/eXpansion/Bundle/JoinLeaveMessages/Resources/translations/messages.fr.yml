@@ -1,3 +1,4 @@
 expansion_join_leave_messages:
   connect: '|server| Connection |success| {default}%group% %nickname% {default}({muted}%login%{default}) from {variable}%path% {default}joins.'
   disconnect: '|server| Disconnect |success| {default}%group% %nickname% {default}({muted}%login%{default}) from {variable}%path% {default}leaves.'
+  applicationGreeter: '|server| {info}Welcome! This server uses {variable}eXpansion² v%version%{info} to manage UI and Records.'
