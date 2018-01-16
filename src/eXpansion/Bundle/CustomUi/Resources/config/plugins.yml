@@ -6,8 +6,8 @@ services:
           $allPlayers: "@expansion.framework.core.user_groups.all_players"
           $players: "@expansion.framework.core.user_groups.players"
         tags:
-          - {name: 'expansion.plugin', data_provider: 'exp.application'}
-          - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
+            - {name: 'expansion.plugin', data_provider: 'exp.application'}
+# @todo make possible to have plugins without data providers.
 
     eXpansion\Bundle\CustomUi\Plugins\Gui\CustomScoreboardWidget:
         class: eXpansion\Bundle\CustomUi\Plugins\Gui\CustomScoreboardWidget

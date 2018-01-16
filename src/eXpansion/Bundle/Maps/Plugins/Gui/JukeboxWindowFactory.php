@@ -171,6 +171,7 @@ class JukeboxWindowFactory extends GridWindowFactory
         $this->update($group);
     }
 
+
     public function createContent(ManialinkInterface $manialink)
     {
         parent::createContent($manialink);

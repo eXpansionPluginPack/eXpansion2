@@ -94,8 +94,11 @@ EOL
             
             (Page.GetFirstChild("MapName") as CMlLabel).Value = Map.MapName;            
             (Page.GetFirstChild("AuthorName") as CMlLabel).Value = Map.AuthorNickName;
-            (Page.GetFirstChild("AuthorTime") as CMlLabel).Value = TimeToText(Map.TMObjective_AuthorTime);
-                                                                                          
+            if (Map.TMObjective_AuthorTime > -1) {
+                (Page.GetFirstChild("AuthorTime") as CMlLabel).Value = TimeToText(Map.TMObjective_AuthorTime);
+            } else {
+            (Page.GetFirstChild("AuthorTime") as CMlLabel).Value = "";
+            }                                        
 EOL
         );
 
@@ -107,6 +110,7 @@ EOL
 
     protected function updateContent(ManialinkInterface $manialink)
     {
+        echo "updated!";
         parent::updateContent($manialink);
     }
 
