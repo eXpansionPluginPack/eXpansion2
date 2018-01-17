@@ -41,6 +41,7 @@ e_xpansion_admin_groups:
             logins:
                 - oliverde8
                 - reaby
+                - smokegun
             permissions: [] # Master_admin has always all permissions.
         admin:
             label: Admin

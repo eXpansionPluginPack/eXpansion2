@@ -91,7 +91,7 @@ services:
         arguments:
             $allPlayers: "@expansion.framework.core.user_groups.all_players"
             $uiProperties: "%expansion.custom_ui.ui_properties%"
-            $setPropertiesScriptEvent: 'Trackmania.UI.SetProperties'
+            $setPropertiesScriptEvent: 'Shootmania.UI.SetProperties'
             $customWidgets:
                 - '@eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSmSpeedWidget'
         tags:
