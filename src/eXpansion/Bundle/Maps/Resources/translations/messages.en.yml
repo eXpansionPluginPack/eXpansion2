@@ -47,6 +47,8 @@ expansion_mx:
               envir: "Envir."
               awards: '$ff0🏆'
               length: "Length"
+              difficulty: "Difficulty"
+              maptype: "Map Type"
               style: "Style"
               add: "Install"
 

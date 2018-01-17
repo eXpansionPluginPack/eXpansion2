@@ -168,7 +168,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
         ];
 
         if (!$mxsite) {
-            $mxsite = "TM";
+            $mxsite = $this->gameDataStorage->getTitle();
         }
 
         $group = $this->adminGroups->getLoginUserGroups($login);
