@@ -10,3 +10,9 @@ services:
         tags:
             - {name: expansion.dataprovider, provider: "exp.custom_ui.compatibility.sm", interface: eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface}
             - {name: expansion.dataprovider.compatibility, title: 'SM'}
+
+    expansion.bundle.custom_ui.data_providers.compatibility.obs:
+        class: eXpansion\Framework\Core\DataProviders\EmptyDataProvider
+        tags:
+            - {name: expansion.dataprovider, provider: "exp.custom_ui.compatibility.obs", interface: eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface}
+            - {name: expansion.dataprovider.compatibility, title: 'SM', script: 'Obstacle.Script.txt'}

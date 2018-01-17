@@ -59,6 +59,9 @@ class CustomUi implements StatusAwarePluginInterface
     public function setStatus($status)
     {
         if ($status) {
+            $this->connection->triggerModeScriptEvent("Shootmania.UI.ResetProperties");
+            $this->connection->triggerModeScriptEvent("Trackmania.UI.ResetProperties");
+
             $xml = new \SimpleXMLElement('<ui_properties/>');
             foreach ($this->uiProperties as $property => $propertyDetails) {
                 $this->configureUiProperty($xml->addChild($property), $propertyDetails);
@@ -79,6 +82,9 @@ class CustomUi implements StatusAwarePluginInterface
             foreach ($this->customWidgets as $widget) {
                 $widget->destroy($this->allPlayers);
             }
+            $this->connection->triggerModeScriptEvent("Shootmania.UI.ResetProperties");
+            $this->connection->triggerModeScriptEvent("Trackmania.UI.ResetProperties");
+
         }
     }
 

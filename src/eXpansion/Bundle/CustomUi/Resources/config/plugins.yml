@@ -61,10 +61,14 @@ parameters:
         checkpoint_ranking: {visible: false, pos: "0. 84. 5."}
 
         # Scores table displayed in the middle of the screen
-        scorestable: {alt_visible: false, visible: true}
+        scorestable: {alt_visible: true, visible: true}
 
         # Number of players spectating us displayed at the bottom right of the screen
         viewers_count: {visible: true, pos: "157. -40. 5."}
+
+    expansion.custom_ui.obs_properties:
+        -
+          -
 
 services:
     _defaults:
@@ -96,3 +100,14 @@ services:
                 - '@eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSmSpeedWidget'
         tags:
             - {name: 'expansion.plugin', data_provider: 'exp.custom_ui.compatibility.sm'}
+
+    expansion.bundle.custom_ui.plugins.obstacle_custom_ui:
+        class: eXpansion\Bundle\CustomUi\Plugins\CustomUi
+        arguments:
+            $allPlayers: "@expansion.framework.core.user_groups.all_players"
+            $uiProperties: "%expansion.custom_ui.obs_properties%"
+            $setPropertiesScriptEvent: 'Shootmania.UI.ResetProperties'
+            $customWidgets:
+                - '@eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSmSpeedWidget'
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'exp.custom_ui.compatibility.obs'}
