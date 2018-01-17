@@ -2,7 +2,6 @@
 
 namespace eXpansion\Bundle\Maps\Plugins\Gui;
 
-use eXpansion\Bundle\Maps\Plugins\Jukebox;
 use eXpansion\Bundle\Maps\Plugins\ManiaExchange;
 use eXpansion\Bundle\Maps\Structure\MxInfo;
 use eXpansion\Framework\Core\Helpers\Http;
@@ -16,9 +15,11 @@ use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\GridWindowFactory;
+use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\Gui\Components\uiButton;
 use eXpansion\Framework\Gui\Components\uiDropdown;
 use eXpansion\Framework\Gui\Components\uiLabel;
+use FML\Controls\Quad;
 
 class ManiaExchangeWindowFactory extends GridWindowFactory
 {
@@ -34,11 +35,8 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
     public $tpackBox;
 
     public $tpack = [
+        "Server Titlepack" => "!server",
         "All" => "",
-        "Stadium" => "Stadium,TMStadium",
-        "Canyon" => "Canyon,TmCanyon",
-        "Valley" => "Valley,TmValley",
-        "Lagoon" => "Lagoon,TmLagoon",
     ];
 
     /** @var  uiDropdown */
@@ -93,28 +91,33 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
      * @var Http
      */
     private $http;
+    /**
+     * @var GameDataStorage
+     */
+    private $gameDataStorage;
 
     /**
      * ManiaExchangeWindowFactory constructor.
      *
-     * @param $name
-     * @param $sizeX
-     * @param $sizeY
-     * @param null $posX
-     * @param null $posY
-     * @param WindowFactoryContext $context
-     * @param GridBuilderFactory $gridBuilderFactory
+     * @param                       $name
+     * @param                       $sizeX
+     * @param                       $sizeY
+     * @param null                  $posX
+     * @param null                  $posY
+     * @param WindowFactoryContext  $context
+     * @param GridBuilderFactory    $gridBuilderFactory
      * @param DataCollectionFactory $dataCollectionFactory
-     * @param Time $time
-     * @param ManiaExchange $mxPlugin
-     * @param Http $http
-     * @param $tracksearch
-     * @param $order
-     * @param $length
-     * @param $mapStylesTm
-     * @param $mapStylesSm
-     * @param $difficulties
-     * @param $operator
+     * @param Time                  $time
+     * @param ManiaExchange         $mxPlugin
+     * @param Http                  $http
+     * @param GameDataStorage       $gameDataStorage
+     * @param                       $tracksearch
+     * @param                       $order
+     * @param                       $length
+     * @param                       $mapStylesTm
+     * @param                       $mapStylesSm
+     * @param                       $difficulties
+     * @param                       $operator
      */
     public function __construct(
         $name,
@@ -128,6 +131,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         Time $time,
         ManiaExchange $mxPlugin,
         Http $http,
+        GameDataStorage $gameDataStorage,
         $tracksearch,
         $order,
         $length,
@@ -152,6 +156,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $this->difficulties = array_flip($difficulties);
         $this->operator = array_flip($operator);
         $this->http = $http;
+        $this->gameDataStorage = $gameDataStorage;
     }
 
     /**
@@ -218,8 +223,11 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $manialink->addChild($label);
 
         /// second line
-
-        $this->sitebox = $this->uiFactory->createDropdown("site", ["Trackmania" => "tm", "Storm" => "sm"], 0);
+        $idx = 0;
+        if ($this->gameDataStorage->getTitle() == "SM") {
+            $idx = 1;
+        }
+        $this->sitebox = $this->uiFactory->createDropdown("site", ["Trackmania" => "tm", "Storm" => "sm"], $idx);
         $this->sitebox->setPosition(0, -14, 2);
         $manialink->addChild($this->sitebox);
 
@@ -242,7 +250,10 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $all->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackInstallAll'],
             ["ml" => $manialink]));
 
-        $line = $this->uiFactory->createLayoutLine(64, -14, [$mapname, $author, $search, $all], 2);
+        $spacer = Quad::create();
+        $spacer->setSize(7, 3)->setOpacity(0);
+
+        $line = $this->uiFactory->createLayoutLine(64, -14, [$mapname, $author, $spacer, $search, $all], 2);
         $manialink->addChild($line);
 
         $addButton = $this->uiFactory->createConfirmButton('Install', uiButton::TYPE_DEFAULT);
@@ -269,9 +280,41 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
                 'expansion_mx.gui.mxsearch.column.author',
                 3,
                 true
-            )->addTextColumn(
-                'envir',
-                'expansion_mx.gui.mxsearch.column.envir',
+            );
+
+
+        if ($this->gameDataStorage->getTitle() == "TM") {
+            $gridBuilder
+                ->addTextColumn(
+                    'envir',
+                    'expansion_mx.gui.mxsearch.column.envir',
+                    2,
+                    true,
+                    false
+                )->addTextColumn(
+                    'awards',
+                    'expansion_mx.gui.mxsearch.column.awards',
+                    1,
+                    true,
+                    false
+                )->addTextColumn(
+                    'length',
+                    'expansion_mx.gui.mxsearch.column.length',
+                    2,
+                    true,
+                    false
+                )->addTextColumn(
+                    'style',
+                    'expansion_mx.gui.mxsearch.column.style',
+                    2,
+                    true,
+                    false
+                );
+        }
+        if ($this->gameDataStorage->getTitle() == "SM") {
+            $gridBuilder->addTextColumn(
+                'maptype',
+                'expansion_mx.gui.mxsearch.column.maptype',
                 2,
                 true,
                 false
@@ -282,20 +325,16 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
                 true,
                 false
             )->addTextColumn(
-                'length',
-                'expansion_mx.gui.mxsearch.column.length',
+                'difficulty',
+                'expansion_mx.gui.mxsearch.column.difficulty',
                 2,
                 true,
                 false
-            )->addTextColumn(
-                'style',
-                'expansion_mx.gui.mxsearch.column.style',
-                2,
-                true,
-                false
-            )
-            ->addActionColumn('add', 'expansion_mx.gui.mxsearch.column.add', 2, array($this, 'callbackAdd'),
-                $addButton);
+            );
+        }
+
+        $gridBuilder->addActionColumn('add', 'expansion_mx.gui.mxsearch.column.add', 2, array($this, 'callbackAdd'),
+            $addButton);
         $this->setGridPosition(0, -24);
 
         $content = $manialink->getContentFrame();
@@ -306,12 +345,15 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
 
     /**
      * @param ManialinkInterface $manialink
-     * @param $login
-     * @param $params
-     * @param $args
+     * @param                    $login
+     * @param                    $params
+     * @param                    $args
      */
     public function callbackAdd(ManialinkInterface $manialink, $login, $params, $args)
     {
+        if ($params['site'] == "") {
+            $params['site'] = strtolower($this->gameDataStorage->getTitle());
+        }
         $this->mxPlugin->addMapToQueue($login, $args['mxid'], $params['site']);
     }
 
@@ -329,9 +371,9 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
 
     /**
      * @param ManialinkInterface $manialink
-     * @param $login
-     * @param $params
-     * @param $arguments
+     * @param                    $login
+     * @param                    $params
+     * @param                    $arguments
      */
     public function callbackSearch(ManialinkInterface $manialink, $login, $params, $arguments)
     {
@@ -348,7 +390,12 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $options = "";
 
         if ($params->tpack) {
-            $options .= "&tpack=".$params->tpack;
+            $title = $params->tpack;
+            if ($params->tpack == "!server") {
+                $title = explode("@", $this->gameDataStorage->getVersion()->titleId);
+                $title = $title[0];
+            }
+            $options .= "&tpack=".$title;
         }
         if ($params->operator != -1) {
             $options .= "&lengthop=".$params->operator;
@@ -392,6 +439,8 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
                 "envir" => $map->environmentName,
                 "awards" => $map->awardCount ? '$ff0🏆 $fff'.$map->awardCount : "",
                 "length" => $map->lengthName,
+                "difficulty" => $map->difficultyName,
+                "maptype" => $map->mapType,
                 "style" => $map->styleName,
                 "mxid" => $map->trackID,
                 "mxsite" => $params->site,

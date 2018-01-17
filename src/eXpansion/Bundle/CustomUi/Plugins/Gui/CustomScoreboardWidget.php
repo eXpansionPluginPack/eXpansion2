@@ -8,6 +8,7 @@ use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
 use eXpansion\Framework\Core\Services\Application\Dispatcher;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
+use FML\Controls\Frame;
 use FML\Script\ScriptLabel;
 
 class CustomScoreboardWidget extends WidgetFactory
@@ -41,17 +42,13 @@ class CustomScoreboardWidget extends WidgetFactory
     {
         parent::createContent($manialink);
 
-        $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::OnInit, <<<EOL
-            ClientUI.ScoreTableOnlyManialink = True;            
-            ClientUI.ScoreTable = """
-            <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-            <manialink version="3">
-                <quad pos="0 50" z-index="0" size="140 20" bgcolor="FFFA" halign="center"/>
-            </manialink>            
-            """;
-                        
-EOL
-        );
+        $manialink->getFmlManialink()->setLayer("ScoresTable");
+
+        $frame = $this->uiFactory->createLayoutRow(-105, -50);
+        $frame->addChild($this->uiFactory->createLabel("World Records"));
+        $frame->addChild($this->uiFactory->createLine(0, 0)->setLength(40)->setStroke(0.33)->setColor("fff"));
+
+        $manialink->addChild($frame);
 
 
 
