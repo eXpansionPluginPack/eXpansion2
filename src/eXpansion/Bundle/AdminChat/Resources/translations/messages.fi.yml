@@ -3,6 +3,9 @@ expansion_admin_chat:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}käynnistää uudelleen kartan!'
     description: 'Pelaa uudelleen nykyinen kartta.'
     label: "Käynnistä uudelleen kartta"
+  shuffle:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}shuffles the maps list!'
+    description: 'Performs shuffle for current map list.'
   cancelvote:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}peruutaa äänestyksen!'
     description: '{info} peruutaa nykyisen äänestyksen.'

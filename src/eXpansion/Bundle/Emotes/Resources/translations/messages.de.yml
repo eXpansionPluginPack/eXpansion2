@@ -1,0 +1,17 @@
+expansion_emotes:
+  prefix: '%nickname%$z$z$fff $ff0$i'
+  gg1: '%prefix% Gutes Spiel!'
+  gg2: '%prefix% Großartiges Spiel!'
+  bb1: "%prefix% Tschüs!"
+  bb2: "%prefix% Bis später!"
+  bb3: "%prefix% Bis später!"
+  bb4: "%prefix% Ciao!"
+  bb5: "%prefix% Tschüs!"
+  thx1: "%prefix% Danke!"
+  thx2: "%prefix% Danke!"
+  thx3: "%prefix% Vielen Dank!"
+  menu:
+    label: "Emotes"
+    gg: "Gutes Spiel!"
+    bb: "Tschüs!"
+    thx: "Danke!"

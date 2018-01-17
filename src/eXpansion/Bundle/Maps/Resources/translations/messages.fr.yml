@@ -1,8 +1,8 @@
 expansion_jukebox:
   chat:
-    addmap: '|info| {variable}%nickname% {info}added map {variable}%mapname%{info} to Jukebox. Queue length: {variable}%length%'
-    removemap: '|info| {info}Map dropped from jukebox {variable}%mapname%{info} wished by {variable}%nickname%{info}. Queue length: {variable}%length%'
-    noremove: "|warning| {warning}You can't remove map %mapname% {warning}from queue."
+    addmap: '|info| {variable}%nickname% {info}a ajouté la carte {variable}%mapname%{info} à la file d''attente. Longueur de la file d’attente : {variable}%length%'
+    removemap: '|info| {variable}%nickname% {info} a supprimé la carte {variable}%mapname%{info} de la file d''attente. Longueur de la file d’attente : {variable}%length%'
+    noremove: "|warning| {warning}Vous ne pouvez pas supprimer la carte %mapname% {warning}de la file d’attente ."
     noadd: "|warning| {warning}You can't add map %mapname% {warning}to queue, since you already have map at queue."
     nomap: '|error| {error}No map was not found.'
     nopermission: "|error| {error}You don't have enough permissions to clear jukebox."

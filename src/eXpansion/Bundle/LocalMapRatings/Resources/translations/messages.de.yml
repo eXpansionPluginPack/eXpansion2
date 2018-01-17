@@ -3,6 +3,6 @@ expansion_local_mapratings:
   gui:
     race:
       window:
-        title: 'Evaluations de la carte'
+        title: 'Map Rating'
         column:
           position: '#'
