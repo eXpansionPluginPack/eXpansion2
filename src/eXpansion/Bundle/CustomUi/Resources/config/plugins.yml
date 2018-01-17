@@ -49,3 +49,13 @@ services:
           $posY: -70
           $sizeX: null
           $sizeY: null
+
+    eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSmSpeedWidget:
+        class: eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSmSpeedWidget
+        autowire: true
+        arguments:
+          $name:  "Speed"
+          $posX: 140
+          $posY: -70
+          $sizeX: null
+          $sizeY: null

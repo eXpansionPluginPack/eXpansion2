@@ -44,7 +44,7 @@ class CustomSpeedWidget extends WidgetFactory
         $frame->setScale(1);
         $manialink->addChild($frame);
 
-        $lbl = $this->uiFactory->createLabel("0:00");
+        $lbl = $this->uiFactory->createLabel("");
         $lbl->setPosition(0, 6)->setAlign("center", "center")
             ->setSize(20, 4)->setTextSize(5)->setTextFont("RajdhaniMono")->setId("Label_Countdown");
         $frame->addChild($lbl);
@@ -156,7 +156,6 @@ EOL
                 Countdown.TextColor = <.9, 0.0, 0.0>;
            }
            
-     
             if (GUIPlayer != Null && GUIPlayer.IsSpawned) {
                 declare Real speed = GUIPlayer.DisplaySpeed / 1000.;		                
                 Gear.Value= "" ^ GUIPlayer.EngineCurGear;
@@ -172,7 +171,7 @@ EOL
                 RPM1.RelativeRotation  = -180.;
                 RPM2.RelativeRotation  = 0.;
             }                        
-
+      
 EOL
         );
 

@@ -4,6 +4,7 @@ namespace eXpansion\Bundle\CustomUi\Plugins;
 
 use eXpansion\Bundle\CustomUi\Plugins\Gui\CustomCheckpointWidget;
 use eXpansion\Bundle\CustomUi\Plugins\Gui\CustomScoreboardWidget;
+use eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSmSpeedWidget;
 use eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSpeedWidget;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
@@ -46,6 +47,10 @@ class CustomUi implements StatusAwarePluginInterface, ListenerInterfaceExpApplic
      * @var GameDataStorage
      */
     private $gameDataStorage;
+    /**
+     * @var CustomSmSpeedWidget
+     */
+    private $customSmSpeedWidget;
 
     /**
      * CustomUi constructor.
@@ -55,6 +60,7 @@ class CustomUi implements StatusAwarePluginInterface, ListenerInterfaceExpApplic
      * @param Group                  $allPlayers
      * @param Group                  $players
      * @param CustomSpeedWidget      $customSpeedWidget
+     * @param CustomSmSpeedWidget      $customSpeedWidget
      * @param CustomCheckpointWidget $customCheckpointWidget
      * @param CustomScoreboardWidget $customScoreboardWidget
      * @param GameDataStorage        $gameDataStorage
@@ -65,6 +71,7 @@ class CustomUi implements StatusAwarePluginInterface, ListenerInterfaceExpApplic
         Group $allPlayers,
         Group $players,
         CustomSpeedWidget $customSpeedWidget,
+        CustomSmSpeedWidget $customSmSpeedWidget,
         CustomCheckpointWidget $customCheckpointWidget,
         CustomScoreboardWidget $customScoreboardWidget,
         GameDataStorage $gameDataStorage
@@ -78,6 +85,7 @@ class CustomUi implements StatusAwarePluginInterface, ListenerInterfaceExpApplic
         $this->customScoreboardWidget = $customScoreboardWidget;
         $this->players = $players;
         $this->gameDataStorage = $gameDataStorage;
+        $this->customSmSpeedWidget = $customSmSpeedWidget;
     }
 
     /**
@@ -155,7 +163,7 @@ class CustomUi implements StatusAwarePluginInterface, ListenerInterfaceExpApplic
  		<checkpoint_ranking visible="false" pos="0. 84. 5." />
  		
  		<!-- Scores table displayed in the middle of the screen --> 		
- 		<scorestable alt_visible="false" />
+ 		<scorestable alt_visible="false" visible="true"/>
  		
  		<!-- Number of players spectating us displayed at the bottom right of the screen --> 		
  		<viewers_count visible="true" pos="157. -40. 5." /> 	
@@ -165,19 +173,24 @@ EOL;
 
             if ($this->gameDataStorage->getTitle() == "SM") {
                 $this->connection->triggerModeScriptEvent('Shootmania.UI.SetProperties', [$properties]);
+                $this->customSmSpeedWidget->create($this->allPlayers);
             }
+
+
 
             if ($this->gameDataStorage->getTitle() == "TM") {
                 $this->connection->triggerModeScriptEvent('Trackmania.UI.SetProperties', [$properties]);
                 $this->customSpeedWidget->create($this->allPlayers);
                 $this->customCheckpointWidget->create($this->allPlayers);
+                $this->customScoreboardWidget->create($this->allPlayers);
             }
 
 
         } else {
-
+            $this->customSmSpeedWidget->destroy($this->allPlayers);
             $this->customSpeedWidget->destroy($this->allPlayers);
             $this->customCheckpointWidget->destroy($this->allPlayers);
+            $this->customScoreboardWidget->destroy($this->allPlayers);
         }
     }
 
