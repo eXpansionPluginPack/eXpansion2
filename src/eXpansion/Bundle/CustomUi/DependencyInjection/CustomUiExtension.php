@@ -22,5 +22,7 @@ class CustomUiExtension extends Extension
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('plugins.yml');
+        $loader->load('data_providers.yml');
+        $loader->load('gui.yml');
     }
 }
