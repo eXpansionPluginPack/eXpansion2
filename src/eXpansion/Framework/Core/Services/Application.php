@@ -51,7 +51,6 @@ class Application extends AbstractApplication {
             foreach ($calls as $call) {
                 $method = preg_replace('/^[[:alpha:]]+\./', '', $call[0]); // remove trailing "Whatever."
                 $params = (array) $call[1];
-
                 $this->dispatcher->dispatch($method, $params);
             }
         }

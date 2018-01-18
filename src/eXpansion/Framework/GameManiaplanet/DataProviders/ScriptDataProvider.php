@@ -16,4 +16,9 @@ class ScriptDataProvider extends AbstractDataProvider
     {
         $this->dispatch('onModeScriptCallbackArray', [$eventName, $parameters]);
     }
+
+    public function onModeScriptCallback($eventName, $parameters)
+    {
+        $this->dispatch('onModeScriptCallback', [$eventName, $parameters]);
+    }
 }

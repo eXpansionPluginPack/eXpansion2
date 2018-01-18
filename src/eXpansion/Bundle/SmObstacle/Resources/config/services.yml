@@ -1,0 +1,36 @@
+services:
+    _defaults:
+        autowire: true
+        public: true
+
+    expansion.framework.game_shootmania.obstacle.data_providers.player:
+           class: eXpansion\Bundle\SmObstacle\DataProviders\ObstaclePlayerDataProvider
+           tags:
+               - {name: expansion.dataprovider, provider: "sm.obstacle.player", interface: eXpansion\Bundle\SmObstacle\DataProviders\Listener\ListenerInterfaceSmObstaclePlayer}
+               - {name: expansion.dataprovider.compatibility, title: SM, gamemode: script, script: "ShootMania\\Obstacle.Script.txt" }
+               - {name: expansion.dataprovider.listener, event_name: Obstacle_OnFinish, method: onPlayerFinish}
+
+     # Plugins to save race records in all TM gamemodes.
+    expansion.local_records.plugins.obstacle_records:
+           class: eXpansion\Bundle\SmObstacle\Plugins\ObstacleRecords
+           arguments:
+               $recordsHandlerFactory: '@eXpansion.local_records.services.race_record_handler_factory'
+               $allPlayersGroup: '@expansion.framework.core.user_groups.all_players'
+               $eventPrefix: 'expansion.local_records.race'
+           tags:
+               - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
+               - {name: 'expansion.plugin', data_provider: 'mp.legacy.map'}
+               - {name: 'expansion.plugin', data_provider: 'sm.obstacle.player'}
+
+    # Data provider to race records data to other plugins.
+    eXpansion.local_records.data_providers.obstacle_records:
+           class: eXpansion\Bundle\LocalRecords\DataProviders\RecordsDataProvider
+           tags:
+               - {name: 'expansion.dataprovider', provider: "expansion.local_records.race", interface: eXpansion\Bundle\LocalRecords\DataProviders\Listener\RecordsDataListener}
+               - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
+               - {name: 'expansion.dataprovider.parent', parent: 'expansion.local_records.plugins.obstacle_records'}
+               - {name: 'expansion.dataprovider.listener', event_name: 'expansion.local_records.race.loaded', method: 'onRecordsLoaded'}
+               - {name: 'expansion.dataprovider.listener', event_name: 'expansion.local_records.race.first_time', method: 'onFirstRecord'}
+               - {name: 'expansion.dataprovider.listener', event_name: 'expansion.local_records.race.same_score', method: 'onSameScore'}
+               - {name: 'expansion.dataprovider.listener', event_name: 'expansion.local_records.race.same_position', method: 'onSamePosition'}
+               - {name: 'expansion.dataprovider.listener', event_name: 'expansion.local_records.race.better_position', method: 'onBetterPosition'}

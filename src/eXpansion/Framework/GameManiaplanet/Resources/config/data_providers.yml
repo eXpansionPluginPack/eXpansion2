@@ -145,3 +145,4 @@ services:
             - {name: 'expansion.dataprovider', provider: "mp.legacy.script", interface: "%expansion.framework.core.data_providers.script_data_provider.interface%"}
             - {name: 'expansion.dataprovider.compatibility', title: ALL, gamemode: script}
             - {name: 'expansion.dataprovider.listener', event_name: ModeScriptCallbackArray, method: onModeScriptCallbackArray}
+            - {name: 'expansion.dataprovider.listener', event_name: ModeScriptCallback, method: onModeScriptCallback}

@@ -32,9 +32,21 @@ class ScriptAdapter implements ListenerInterfaceMpLegacyScript
      *
      * @return mixed
      */
-    public function onModeScriptCallbackArray($eventName, $parameters)
+    public function onModeScriptCallback($eventName, $parameters)
     {
         $parameters = $this->parseParameters($parameters);
+        $this->dispatcher->dispatch($eventName, [$parameters]);
+    }
+
+    /**
+     * @param string $eventName Name of the event.
+     * @param mixed  $parameters Parameters.
+     *
+     * @return mixed
+     */
+    public function onModeScriptCallbackArray($eventName, $parameters)
+    {
+        $parameters = $this->parseParameters($parameters[0]);
         $this->dispatcher->dispatch($eventName, [$parameters]);
     }
 
@@ -47,8 +59,8 @@ class ScriptAdapter implements ListenerInterfaceMpLegacyScript
      */
     protected function parseParameters($parameters)
     {
-        if (isset($parameters[0])) {
-            $params = json_decode($parameters[0], true);
+        if (isset($parameters)) {
+            $params = json_decode($parameters, true);
             if ($params) {
                 return $params;
             }

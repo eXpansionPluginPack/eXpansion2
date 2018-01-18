@@ -17,4 +17,12 @@ interface ListenerInterfaceMpLegacyScript
      * @return void
      */
     public function onModeScriptCallbackArray($eventName, $parameters);
+
+    /**
+     * @param string $eventName Name of the event.
+     * @param mixed $parameters Parameters.
+     *
+     * @return void
+     */
+    public function onModeScriptCallback($eventName, $parameters);
 }

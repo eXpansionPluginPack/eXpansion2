@@ -1,5 +1,6 @@
 /app/config/parameters.yml
 /app/config/expansion.yml
+/app/bootstrap.php.cache
 /build/
 /phpunit.xml
 /var/*
