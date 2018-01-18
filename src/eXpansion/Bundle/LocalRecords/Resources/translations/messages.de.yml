@@ -1,0 +1,51 @@
+expansion_local_records:
+  chat:
+    race:
+      new:
+        top1: '|record| {record_rank}Erste {record_top}Lokale Bestzeit! {variable}|time| %score% {record_top}durch {variable}%nickname%'
+        top5: '|record| {record_rank}%position% {record_top}Lokale Bestzeit! {variable}|time| %score% {record_top}durch {variable}%nickname%'
+        any: '|record| {record_rank}%position% {record}Lokale Bestzeit! {variable}|time| %score% {record}durch {variable}%nickname%'
+      better:
+        top1: '|record| {record_rank}Erste {record_top}Lokale Bestzeit! {variable}|time| %score%{record_top}({variable}%by%{record_top}) {record_top}durch {variable}%nickname%'
+        top5: '|record| {record_rank}%position% {record_top}Lokal Bestzeit! {variable}|time| %score%{record_top}({variable}%by%{record_top}) {record_top}durch {variable}%nickname%'
+        any: '|record| {record_rank}%position% {record}Lokale Bestzeit! {variable}|time| %score%{record}({variable}%by%{record}) {record}durch {variable}%nickname%'
+      secures:
+        top1: '|record| {record_rank}Erste {record_top}Lokale Bestzeit! {variable}|time| %score%{record_top}({variable}%by%{record_top}) {record_top}verbessert durch {variable}%nickname% '
+        top5: '|record| {record_rank}%position% {record_top}Lokale Bestzeit! {variable}|time| %score%{record_top}({variable}%by%{record_top}) {record_top}verbessert durch {variable}%nickname%'
+        any: '|record| {record_rank}%position% {record}Lokale Bestzeit! {variable}|time| %score%{record}({variable}%by%{record}) {record}verbessert durch {variable}%nickname%'
+      loaded:
+        top1: '|record| {record_rank}Erste {record_top}Lokale Bestzeit mit {variable}|time| %score% {record_top}Holder: {variable}%nickname% '
+        any: '|record| {record}Du hältst die {record_rank}%position% {record}Lokale Bestzeit mit {variable}|time| %score%'
+    lap:
+      new:
+        top1: '|record| {record_rank}Erste {record_top} Lokale Runden-Bestzeit! {variable}|time| %score% {record_top}durch {variable}%nickname%'
+        top5: '|record| {record_rank}%position% {record_top}Lokale Rundenbestzeit! {variable}|time| %score% {record_top}durch {variable}%nickname%'
+        any: '|record| {record_rank}%position% {record}Lokale Rundenbestzeit! {variable}|time| %score% {record}durch {variable}%nickname%'
+      better:
+        top1: '|record| {record_rank}Erste {record_top}Lokale Rundenbestzeit! {variable}|time| %score%{record_top}({variable}%by%{record_top}) {record_top}durch {variable}%nickname%'
+        top5: '|record| {record_rank}%position% {record_top}Rundenbestzeit! {variable}|time| %score%{record_top}({variable}%by%{record_top}) {record_top}durch {variable}%nickname%'
+        any: '|record| {record_rank}%position% {record}Rundenbestzeit! {variable}|time| %score%{record}({variable}%by%{record}) {record}durch {variable}%nickname%'
+      secures:
+        top1: '|record| {record_rank}Erste {record_top}Rundenbestzeit! {variable}|time| %score%{record_top}({variable}%by%{record_top}) {record_top}verbessert durch {variable}%nickname% '
+        top5: '|record| {record_rank}%position% {record_top}Rundenbestzeit! {variable}|time| %score%{record_top}({variable}%by%{record_top}) {record_top}verbessert durch {variable}%nickname%'
+        any: '|record| {record_rank}%position% {record}Rundenbestzeit! {variable}|time| %score%{record}({variable}%by%{record}) {record}verbessert durch {variable}%nickname%'
+      loaded:
+        top1: '|record| {variable}%nickname% {record_top}hält {record_rank}die erste{record_top}Rundenbestzeit mit {variable}|time| %score%'
+        any: '|record| {record}Du hältst die {record_rank}%position% {record}Rundenbestzeit mit {variable}|time| %score%'
+  gui:
+    race:
+      window:
+        title: 'Lokale Bestzeiten'
+        column:
+          position: '#'
+          score: 'Zeit'
+          nickname: 'Nickname'
+          login: 'Login'
+  menu:
+    label: "Bestzeiten"
+    race_recs: "Renn-Bestzeiten"
+    laps_recs: "Rundenbestzeiten"
+    prev:
+      race_recs: "Vorherige Bestzeiten"
+      laps_recs: "Vorherige Rundenbestzeiten"
+

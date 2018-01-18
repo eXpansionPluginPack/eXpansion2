@@ -1,4 +1,6 @@
 expansion_votemanager:
+  chat:
+    admin_pass: "|info| {admin_info}%level% %admin% {admin_info}passes the vote!"
   menu:
     restart: "Käynnistä uudelleen"
     skip: "Ohita kartta"

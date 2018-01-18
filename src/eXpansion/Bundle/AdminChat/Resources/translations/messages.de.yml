@@ -1,0 +1,86 @@
+expansion_admin_chat:
+  restartmap:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}startet die Karte neu!'
+    description: 'Replay der aktuellen Karte.'
+    label: "Neustart der Karte"
+  shuffle:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}mischt die Map-Liste!'
+    description: 'Führt einen Shuffle der aktuellen Kartenliste aus.'
+  cancelvote:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}bricht Vote ab!'
+    description: '{info} Bricht die aktuelle Abstimmung ab.'
+    label: "Aktuelle Abstimmung abbrechen"
+  nextmap:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}überspringt die Karte!'
+    description: '{info} Überspringen der aktuellen und Start der nächsten Karte.'
+    label: "Karte überspringen"
+  setservername:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}ändert den Server-Namen. Neuer Server-Name ist {highlight}%parameter%'
+    description: '{info}Ändert den Server-Namen.'
+  setservercomment:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}ändert den Server-Kommentar. Neuer Server-Kommentar ist {highlight}%parameter%'
+    description: '{info}Ändert den Servers-Kommentar.'
+  savematchsettings:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} Match Settings gespeichert: {highlight}%parameter%'
+    description: '{info}Den Server-Namen ändern.'
+  loadmatchsettings:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} Match-Settings geladen: {highlight}%parameter%'
+    description: '{info}Ändern des Server-Namens.'
+  kick:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}kickt {highlight}%player% {admin_info}. Grund: {highlight}%reason%'
+    description: '{info}Einen Spieler vom Server kicken.'
+  ban:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}sperrt{highlight}%player% {admin_info}. Grund: {highlight}%reason%'
+    description: '{info}Einen Spieler für den Server sperren.'
+  unban:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}entsperrt den Spieler mit dem Login: {highlight}%parameter%'
+    description: '{info}Entsperrt einen Spieler für den Server.'
+  cleanbanlist:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} bereinigt die Sperrliste.'
+    description: '{info}Bereinigt die Sperrliste.'
+  black:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}setzt {highlight}%player% auf die Sperrliste {admin_info}. Grund: {highlight}%reason%'
+    description: '{info}Einen Spieler auf die Sperrliste setzen.'
+  unblack:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}nimmt den Spieler mit dem Login {highlight}%parameter% von der Sperrliste'
+    description: '{info}Spieler von der Sperrliste des Servers löschen.'
+  cleanblacklist:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} bereinigt die Sperrliste.'
+    description: '{info}Bereinigt die Sperrliste.'
+  saveblacklist:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}speichert die Sperrliste. Dateiname: {highlight}%parameter%'
+    description: '{info}Speichert die Sperrliste des Servers. Der Speicherpfad ist relativ zum config-Verzeichnis.'
+  loadblacklist:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} lädt die Sperrliste. Dateiame: {highlight}%parameter%'
+    description: '{info}Lädt die Sperrliste. Speicherpfad ist relativ zum config-Verzeichnis.'
+  getserverplanets:
+    msg: '|info| {admin_info} Der Server hat {highlight}%return% {admin_info} Planets.'
+    description: '{info}Zeige Server Planets.'
+  ignore:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}ignoriert den Spieler mit dem Login: {highlight}%parameter%'
+    description: '{info}Stellt Spieler im Chat stumm (mute).'
+  unignore:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}hebt Chat-Sperre von {highlight}%parameter% auf'
+    description: '{info}Hebt Chat-Sperren auf.'
+  addguest:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}fügt {highlight}%parameter% zur Gästeliste hinzu.'
+    description: '{info}Spieler zur Gästeliste hinzufügen. Gäste können dem Server ohne Passwort beitreten.'
+  removequest:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}entfernt {highlight}%parameter% von der Gästeliste.'
+    description: '{info}Spieler von der Gästeliste entfernen.'
+  cleanguestlist:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} bereinigt die Gästeliste.'
+    description: '{info}Leert die Gästeliste.'
+  saveguestlist:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}speichert die Gästeliste. Dateiname: {highlight}%parameter%'
+    description: '{info}Speichert die Gästeliste. Speicherort ist relativ zum Server-Config-Verzeichnis.'
+  loadguestlist:
+    msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}Lädt die Gästeliste. Dateiname: {highlight}%parameter%'
+    description: '{info}Lädt die Gästeliste. Speicherpfad ist relativ zum config-Verzeichnis.'
+  setserverpasswordforplayer:
+    msg: '|admin| {admin_info}Neues Server-Passwort ist: "{highlight}%parameter%{admin_info}"'
+    description: '{info}Setzt ein neues Server-Passwort'
+  setserverpasswordforspectator:
+    msg: '|admin| {admin_info}Neues Passwort für Zuschauer ist: "{highlight}%parameter%{admin_info}"'
+    description: '{info}Setzt ein neues Zuschauerpasswort'
+  dedicatedexception: '|error| {error}Dedicated Server-Fehler: {highlight}%message%'

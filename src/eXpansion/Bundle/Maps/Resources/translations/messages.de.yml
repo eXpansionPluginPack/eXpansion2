@@ -1,0 +1,75 @@
+expansion_jukebox:
+  chat:
+    addmap: '|info| {variable}%nickname% {info}fügte die Map {variable}%mapname%{info} zur Jukebox hinzu. Länge der Wunschliste: {variable}%length%'
+    removemap: '|info| {info}Map aus Jukebox entfernt {variable}%mapname%{info} auf Wunsch von {variable}%nickname%{info}. Länge der Wunschliste: {variable}%length%'
+    noremove: "|warning| {warning}Du kannst die Map %mapname% nicht aus der Wunschliste entfernen{warning}."
+    noadd: "|warning| {warning}Du kannst die Map %mapname% nicht zur Wunschliste hinzufügen,{warning} da Du dort bereits eine Liste hinzugefügt hast."
+    nomap: '|error| {error}Keine Map gefunden.'
+    nopermission: "|error| {error}Du hast nicht die Erlaubnis, die Jukebox zu leeren."
+    clear: "|info| {admin_info}%adminlevel% %admin% {admin_info}leert die Liste der Jukebox!"
+    nextjbmap: '|info| {info}Nächste Map {variable}%mapname%{info} von {variable}%mapauthor% {info} gewünscht von {variable}%nickname%{info}. Länge der Wunschliste: {variable}%length%'
+    nextmap: '|info| {info}Nächste Map {variable}%name%{info} von {variable}%author%'
+    beginmap: '|info| {info}Aktuelle Map: {variable}%name%{info} von {variable}%author%'
+  command:
+    jukebox:
+      help: 'Verwendung: /jukebox :number:  oder /jukebox drop; für Admins auch /jukebox clear'
+      description: "Eine Zahl fügt die Map mit diesem Index zur Jukebox hinzu, 'drop' löscht Deinen Wunsch; Admins können mit 'clear' alle Maps aus der Wunschliste entfernen."
+expansion_mx:
+  command:
+    add:
+      description: "Fügt eine Map von Mania-Exchange hinzu. Verwendung: //add 3 tm oder //add 3 sm"
+      mxid: "Mania-Exchange Map-ID (numerisch)"
+      site: "akzeptiert tm und sm"
+    remove:
+      description: "Entfernt derzeitige Map oder Map mit angegebener ID"
+      index: "numerischer Wert von /maps oder 'this'"
+  chat:
+    nopermission: "|error| {error}Du verfügst nicht über die notwendigen Rechte, um eine Map von Mania-Exchange hinzuzufügen."
+    apierror: '|error| {error}Mania-Exchange API-Fehler: "{highlight}%message% {error}" ({highlight}%status%{error})'
+    httperror: '|error| {error}Mania-Exchange HTTP-Fehler: "{highlight}%message% {error}" ({highlight}%status%{error})'
+    decline: "|admin| {error}Map-Autor lehnt Download der Map ab."
+    success: "|admin| {info}Map {variable}%mapname% {info}von {variable}%mapauthor% {info}wurde erfolgreich von Mania-Exchange hinzugefügt."
+    start: "|admin| {info}Download von {highlight}%id% {info}von {highlight}%site% {info}Mania-Exchange startet."
+    fail: "|error| {error}Die Map ist nicht mit dem aktuellen Title Pack kompatibel und wird nicht hinzugefügt!"
+    dedicatedexception: '|error| {error}Dedicated Server-Fehler: {highlight}%message%'
+    exception: '|error| {error}Fehler: {highlight}%message%'
+  gui:
+    mxsearch:
+      title: 'Mania-Exchange: Suche'
+      button:
+        install: "installieren"
+      column:
+        index: "#"
+        name: "Name"
+        author: "Autor"
+        envir: "Umgebung"
+        awards: '$ff0🏆'
+        length: "Länge"
+        style: "Stil"
+        add: "Installieren"
+expansion_maps:
+  chat:
+    nopermission: "|error| {error}Du verfügst nicht über die benötigten Rechte für diese Aktion."
+    dedicatedexception: '|error| {error}Dedicated Server-Fehler: {highlight}%message%'
+    removemap: "|admin| {admin_info}%level% %admin% {admin_info}entfernt Map %map% {admin_info}aus der aktuellen Playlist."
+  gui:
+    button:
+      drop: "löschen"
+      clear: "löschen"
+    window:
+      title: 'Server-Maps'
+      jbtitle: 'Jukebox'
+      column:
+        index: '#'
+        name: 'Name'
+        author: 'Autor'
+        goldtime: 'Zeit'
+        nickname: 'Nickname'
+        drop: 'Löschen'
+        wish: 'Hinzufügen'
+        remove: "Remove"
+  menu:
+    label: "Maps"
+    list: "List server maps"
+    jukebox: "Jukebox"
+    searchmx: "Search Mania Exchange"
