@@ -1,0 +1,21 @@
+expansion_admin:
+  chat:
+    nopermission: "|error| {error}Du hast keine ausreichende Berechtigung für diese Aktion."
+    dedicatedexception: '|error| {error}Dedicated-Server-Fehler: {highlight}%message%'
+    removemap: "|admin| {admin_info}%level% %admin% {admin_info}löscht Karte %map% {admin_info}von der aktuellen Playlist."
+  gui:
+    button:
+      drop: "löschen"
+      clear: "Eingabe löschen"
+    window:
+      scriptsettings:
+        title: 'Skript-Einstellungen'
+        column:
+          name: 'Name der Einstellung'
+          value: 'Wert der Einstellung'
+        button:
+          apply: 'Anwenden'
+  menu:
+    server: "Server"
+    server_settings: "Server-Einstellungen"
+    script_settings: "Skript-Einstellungen"

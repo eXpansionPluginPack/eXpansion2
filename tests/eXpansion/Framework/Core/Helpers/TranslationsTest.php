@@ -50,12 +50,10 @@ class TranslationsTest extends TestCore
         $translationHelper = $this->getTranslationHelper();
 
         $tranlationEn = $translationHelper->getTranslations('expansion_core.test', ['%test%' => 'TOTO']);
-        $this->assertEquals(
+        $this->assertArraySubset(
             [
                 0 => ['Lang' => 'fr', 'Text' => "Ceci est une trad de test : TOTO"],
-                1 => ['Lang' => 'de', 'Text' => "This is a test translation : TOTO"],
                 2 => ['Lang' => 'fi', 'Text' => "Tämä on testikäännös : TOTO"],
-                3 => ['Lang' => 'nl', 'Text' => "This is a test translation : TOTO"],
                 4 => ['Lang' => 'en', 'Text' => "This is a test translation : TOTO"],
             ],
             $tranlationEn

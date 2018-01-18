@@ -4,16 +4,16 @@ expansion_core:
   test_glyph: '|test|Ceci est une trad de test : %test%'
   test_color_glyph: '|test|{test} Ceci est une trad de test : %test%'
   chat_commands:
-    wrong_chat: "{error}This chat command does not exists. {info}Please use /help to see all available chat commands."
-    no_description: "{info}Sorry, this command has no description."
-    no_help: "{info}Sorry, this command has no help message."
+    wrong_chat: "{error}Cette commande n’existe pas. {info}Utilisez /help pour afficher toutes les commandes disponibles."
+    no_description: "{info}Désolé, cette commande n’a pas de description."
+    no_help: "{info}Désolé, cette commande n’a pas de message d'aide."
   windows:
     chat_commands:
-      title: Chat Commands
+      title: Commandes de chat
       column_command: Commande
       column_description: Description
     chat_commands_description:
-      title: Chat Command Description
-      aliases: Aliases
+      title: Description de la commande
+      aliases: Alias
       description: Description
-      help: Help
+      help: Aide

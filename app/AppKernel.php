@@ -74,6 +74,7 @@ class AppKernel extends Kernel
             new \eXpansion\Framework\Core\eXpansionCore(),
             new \eXpansion\Framework\GameManiaplanet\eXpansionGameManiaplanetBundle(),
             new \eXpansion\Framework\GameTrackmania\eXpansionGameTrackmaniaBundle(),
+            new \eXpansion\Framework\GameShootmania\eXpansionGameShootmaniaBundle(),
             new \eXpansion\Framework\AdminGroups\eXpansionAdminGroupsBundle(),
             new \eXpansion\Framework\Gui\eXpansionGuiBundle(),
             new \eXpansion\Framework\PlayersBundle\eXpansionFrameworkPlayersBundle(),
