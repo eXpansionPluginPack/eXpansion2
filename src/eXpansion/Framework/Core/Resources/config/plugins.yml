@@ -75,3 +75,13 @@ services:
         class: 'eXpansion\Framework\Core\Plugins\StartGreeter'
         tags:
             - {name: expansion.plugin, data_provider: exp.application}
+
+    #
+    # Plugin to keep database connection persisting.
+    #
+    eXpansion\Framework\Core\Plugins\DatabaseConnectionPersist:
+        class: 'eXpansion\Framework\Core\Plugins\DatabaseConnectionPersist'
+        arguments:
+            $pingInterval: 300 #Ping database every 5 minutes.
+        tags:
+            - {name: expansion.plugin, data_provider: exp.timer}
