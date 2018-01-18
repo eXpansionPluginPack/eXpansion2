@@ -16,6 +16,9 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
     const rowCount = 3;
     const columnCount = 6;
 
+    /** @var UpdaterWidgetFactory */
+    protected $updaterWidgetFactory;
+
     /***
      * MenuFactory constructor.
      *
@@ -34,11 +37,11 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
         $posX,
         $posY,
         WidgetFactoryContext $context,
-        Factory $uiFactory
+        UpdaterWidgetFactory $updaterWidgetFactory
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
 
-        $this->uiFactory = $uiFactory;
+        $this->updaterWidgetFactory = $updaterWidgetFactory;
     }
 
     /**
@@ -48,6 +51,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
     {
         $elementCount = 0;
         $rows = $this->uiFactory->createLayoutRow(0, 0, [], -1);
+        $cpVariable = $this->updaterWidgetFactory->getVariable('LocalRecordCheckpoints')->getVariableName();
 
         for ($i = 0; $i < self::rowCount; $i++) {
             $elements = [];
@@ -107,7 +111,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                 if (_Index > ElementCount) {
                     return;
                 }
-                declare Integer[Integer] BestCp_LocalRecordCheckpoints for LocalUser = Integer[Integer];
+                {$this->updaterWidgetFactory->getScriptInitialization()}
                 declare Integer[Integer] MapBestCheckpoints for Page = Integer[Integer];                                
                 declare CMlLabel Label <=> (Page.GetFirstChild("Cp_"^ (_Index+1)) as CMlLabel);
                 declare CMlQuad Bg <=> (Page.GetFirstChild("Bg_"^ (_Index+1)) as CMlQuad);          
@@ -127,8 +131,8 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                         }                 
                     }
                     case 1: {
-                        if (BestCp_LocalRecordCheckpoints.existskey(_Index)) {
-                            Compare = BestCp_LocalRecordCheckpoints[_Index];                            
+                        if ($cpVariable.existskey(_Index)) {
+                            Compare = {$cpVariable}[_Index];                            
                         } else {
                             Compare = 99999999;
                         }                       
@@ -186,13 +190,13 @@ EOL
         $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::OnInit,
             <<<EOL
             declare Integer ElementCount for Page = $elementCount;
-           declare Integer BestCp_Mode for LocalUser = 0; 
+            declare Integer BestCp_Mode for LocalUser = 0; 
             declare CMlFrame Dropdown = (Page.GetFirstChild("Dropdown") as CMlFrame);    
             declare Integer[Integer] MyCheckpoints for Page = Integer[Integer];           
             declare Integer[Integer] MapBestCheckpoints for Page = Integer[Integer];              
-            declare Integer[Integer] BestCp_LocalRecordCheckpoints for LocalUser = Integer[Integer];
-            declare Text BestCp_LocalRecord_Check for LocalUser = "";
-            declare Text BestCp_LocalRecord_OldCheck = "";            
+            
+            {$this->updaterWidgetFactory->getScriptInitialization(true)}
+                     
             declare Integer[Integer] CompareCheckpoints for Page = Integer[Integer];            
             declare Integer MapBestTime = 99999999;
                                                         
@@ -236,10 +240,7 @@ EOL
             <<<EOL
             
             // handle new record
-            if (BestCp_LocalRecord_Check != BestCp_LocalRecord_OldCheck) {
-                BestCp_LocalRecord_Check = BestCp_LocalRecord_OldCheck;                          
-                Refresh();
-            }
+            {$this->updaterWidgetFactory->getScriptOnChange('Refresh();')}
                                     
             foreach (RaceEvent in RaceEvents) {
                 if (GUIPlayer == RaceEvent.Player && RaceEvent.Type == CTmRaceClientEvent::EType::Respawn) {
@@ -269,7 +270,7 @@ EOL
                                                                                                                                                                                                                                                                                                                                                                
                                                     
                         } else {                          
-                            if (GUIPlayer == RaceEvent.Player && BestCp_LocalRecordCheckpoints.count > 0 && 
+                            if (GUIPlayer == RaceEvent.Player && $cpVariable.count > 0 && 
                             MapBestTime != 99999999) {                                                                                          
                                 if (RaceEvent.IsEndLap && RaceEvent.IsEndRace == False) {                                        
                                     MyCheckpoints = Integer[Integer]; 
@@ -290,7 +291,7 @@ EOL
                                     }
                                 }
                                 case 1: {
-                                   if (BestCp_LocalRecordCheckpoints.count > 0) {
+                                   if ($cpVariable.count > 0) {
                                         UpdateCp(RaceEvent.CheckpointInLap, RaceEvent.LapTime, True);
                                    }                                
                                 }                            
