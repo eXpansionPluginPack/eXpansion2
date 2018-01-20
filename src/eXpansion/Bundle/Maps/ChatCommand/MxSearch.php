@@ -4,13 +4,9 @@
 namespace eXpansion\Bundle\Maps\ChatCommand;
 
 use eXpansion\Bundle\Maps\Plugins\Gui\ManiaExchangeWindowFactory;
-use eXpansion\Bundle\Maps\Plugins\Gui\MapsWindowFactory;
-use eXpansion\Bundle\Maps\Plugins\ManiaExchange;
-use eXpansion\Bundle\Maps\Plugins\Maps;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
-use eXpansion\Framework\Core\Model\ChatCommand\AbstractChatCommand;
+use eXpansion\Framework\AdminGroups\Model\AbstractAdminChatCommand;
 use Symfony\Component\Console\Input\InputInterface;
-use Tests\eXpansion\Framework\AdminGroups\TestHelpers\AdminChatCommand;
 
 
 /**
@@ -19,7 +15,7 @@ use Tests\eXpansion\Framework\AdminGroups\TestHelpers\AdminChatCommand;
  * @package eXpansion\Bundle\LocalRecords\ChatCommand;
  * @author  reaby
  */
-class MxSearch extends AdminChatCommand
+class MxSearch extends AbstractAdminChatCommand
 {
     /** @var ManiaExchangeWindowFactory */
     protected $maniaExchangeWindowFactory;
