@@ -154,14 +154,18 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
         $nick = str_replace(['$<', '$>'], '', $nick);
         $text = str_replace(['$<', '$>'], '', $text);
         $text = str_replace(array_keys($replacements), array_values($replacements), $text);
-        $separator = '';
+        $separator = '$aaa⏵';
+        $prefix = '';
+        $postfix = '';
         if ($this->adminGroups->isAdmin($player->getLogin())) {
-            $separator = '';
+            $separator = ' $eed$n►$z$s';
+            $prefix = '';
+            $postfix = '';
         }
 
         try {
             $this->connection->chatSendServerMessage(
-                '$fff$<'.$nick.'$>$z$s$fff '.$separator.' '.$color.$text, $group
+                $prefix.'$fff$<'.$nick.'$>$z$s'.$postfix.$separator.' '.$color.$text, $group
             );
         } catch (\Exception $e) {
             $this->console->writeln('$ff0 error while sending chat: $fff'.$e->getMessage());

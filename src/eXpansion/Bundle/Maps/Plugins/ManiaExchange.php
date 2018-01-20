@@ -79,15 +79,15 @@ class ManiaExchange implements ListenerInterfaceExpApplication
 
     /**
      * ManiaExchange constructor.
-     * @param Connection $connection
+     * @param Connection       $connection
      * @param ChatNotification $chatNotification
-     * @param Http $http
-     * @param AdminGroups $adminGroups
-     * @param GameDataStorage $gameDataStorage
-     * @param Console $console
-     * @param LoggerInterface $logger
-     * @param JukeboxService $jukebox
-     * @param FileSystem $fileSystem
+     * @param Http             $http
+     * @param AdminGroups      $adminGroups
+     * @param GameDataStorage  $gameDataStorage
+     * @param Console          $console
+     * @param LoggerInterface  $logger
+     * @param JukeboxService   $jukebox
+     * @param FileSystem       $fileSystem
      */
     public function __construct(
         Connection $connection,
@@ -127,9 +127,9 @@ class ManiaExchange implements ListenerInterfaceExpApplication
 
     /**
      * add map to queue
-     * @param string $login
+     * @param string  $login
      * @param integer $id
-     * @param string $mxsite "TM" or "SM"
+     * @param string  $mxsite "TM" or "SM"
      */
     public function addMapToQueue($login, $id, $mxsite)
     {
@@ -168,7 +168,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
         ];
 
         if (!$mxsite) {
-            $mxsite = "TM";
+            $mxsite = $this->gameDataStorage->getTitle();
         }
 
         $group = $this->adminGroups->getLoginUserGroups($login);
@@ -200,6 +200,16 @@ class ManiaExchange implements ListenerInterfaceExpApplication
                 ["%status%" => $json['StatusCode'], "%message%" => $json['Message']]
             );
             $this->downloadProgressing = false;
+
+            return;
+        }
+        if (!isset($json[0])) {
+            $this->chatNotification->sendMessage(
+                'expansion_mx.chat.json',
+                $group,
+                ["%message%" => "Can't find info structure."]
+            );
+
             return;
         }
 
@@ -212,7 +222,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
                 CURLOPT_HTTPHEADER => [
                     "Content-Type" => "application/json",
                     "X-ManiaPlanet-ServerLogin" => $this->gameDataStorage->getSystemInfo()->serverLogin,
-                ]
+                ],
             ];
 
             $this->http->get("https://".strtolower($additionalData['site']).
@@ -242,6 +252,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
                     []
                 );
                 $this->downloadProgressing = false;
+
                 return;
             }
 
@@ -252,6 +263,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
             );
 
             $this->downloadProgressing = false;
+
             return;
         }
 
@@ -272,8 +284,9 @@ class ManiaExchange implements ListenerInterfaceExpApplication
         $filename = $data['mxId']."-".$authorName."-".$mapName.".Map.Gbx";
 
         try {
+            $titlepack = $this->gameDataStorage->getSystemInfo()->titleId;
             $fileSystem = $this->fileSystem->getUserData();
-            $dir = 'Maps'.DIRECTORY_SEPARATOR.$info->titlePack;
+            $dir = 'Maps'.DIRECTORY_SEPARATOR.$titlepack;
             $file = $dir.DIRECTORY_SEPARATOR.$filename;
 
             if (!$fileSystem->createDir($dir)) {
@@ -286,14 +299,13 @@ class ManiaExchange implements ListenerInterfaceExpApplication
                 $fileSystem->write($file, $result->getResponse());
             }
 
+             if (!$this->connection->checkMapForCurrentServerParams($titlepack.DIRECTORY_SEPARATOR.$filename)) {
+                 $this->chatNotification->sendMessage("expansion_mx.chat.fail");
 
-            if (!$this->connection->checkMapForCurrentServerParams($info->titlePack.DIRECTORY_SEPARATOR.$filename)) {
-                $this->chatNotification->sendMessage("expansion_mx.chat.fail");
+                 return;
+             }
 
-                return;
-            }
-
-            $map = $this->connection->getMapInfo($info->titlePack.DIRECTORY_SEPARATOR.$filename);
+            $map = $this->connection->getMapInfo($titlepack.DIRECTORY_SEPARATOR.$filename);
             $this->connection->addMap($map->fileName);
 
             $this->jukebox->addMap($map, $data['login']);
@@ -327,7 +339,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
 
     /**
      * @param DedicatedMap $map
-     * @param MxInfo $mxInfo
+     * @param MxInfo       $mxInfo
      * @throws \Propel\Runtime\Exception\PropelException
      */
     protected function persistMapData($map, $mxInfo)
