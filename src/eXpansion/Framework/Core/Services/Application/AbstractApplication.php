@@ -15,7 +15,7 @@ abstract class AbstractApplication implements RunInterface
     const EVENT_READY = "expansion.ready";
     const EVENT_STOP = "expansion.stop";
 
-    const EXPANSION_VERSION = "2.0.0.0";
+    const EXPANSION_VERSION = "2.0.0.0-alpha1";
     const SCRIPT_API_VERSION = "2.3.0";
 
     /** @var Connection */
