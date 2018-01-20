@@ -5,8 +5,8 @@ cd "$( dirname "${BASH_SOURCE[0]}" )"
 cd ..
 
 echo "Checking for database updates"
-./bin/console propel:migration:diff
-./bin/console propel:migration:migrate
+./bin/console propel:migration:diff --env=prod
+./bin/console propel:migration:migrate --env=prod
 
 echo ""
 echo "Clearing caches"
