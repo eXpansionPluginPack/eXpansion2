@@ -1,0 +1,10 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    eXpansion\Framework\Config\Services\:
+        resource: '../../Ui/*'
+        tags:
+            - {name: "expansion.config.ui", priority: 0}

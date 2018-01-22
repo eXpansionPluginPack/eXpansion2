@@ -9,8 +9,8 @@ use Psr\Log\LoggerInterface;
 /**
  * Class DatabaseConnectionPersist
  *
- * @author    de Cramer Oliver<oldec@smile.fr>
- * @copyright 2018 Smile
+ * @author    de Cramer Oliver<oliverde8@gmail.com>
+ * @copyright 2018 eXpansion
  * @package eXpansion\Framework\Core\Plugins
  */
 class DatabaseConnectionPersist implements ListenerInterfaceExpTimer
