@@ -1,0 +1,12 @@
+services:
+    expansion.bundle.custom_ui.data_providers.compatibility.tm:
+        class: eXpansion\Framework\Core\DataProviders\EmptyDataProvider
+        tags:
+            - {name: expansion.dataprovider, provider: "exp.custom_ui.compatibility.tm", interface: eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface}
+            - {name: expansion.dataprovider.compatibility, title: 'TM'}
+
+    expansion.bundle.custom_ui.data_providers.compatibility.sm:
+        class: eXpansion\Framework\Core\DataProviders\EmptyDataProvider
+        tags:
+            - {name: expansion.dataprovider, provider: "exp.custom_ui.compatibility.sm", interface: eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface}
+            - {name: expansion.dataprovider.compatibility, title: 'SM'}
