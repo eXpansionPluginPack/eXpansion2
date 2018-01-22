@@ -386,7 +386,7 @@ class PlayersWindow extends GridWindowFactory
 
     public function callbackIgnore($manialink, $login, $entries, $args)
     {
-        $status = $this->getIgnoredStatus($login);
+        $status = $this->getIgnoredStatus($args['login']);
 
         if ($status) {
             $this->callChatCommand($login, "//unignore ".$args['login']);
