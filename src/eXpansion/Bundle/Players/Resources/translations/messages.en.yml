@@ -16,6 +16,12 @@ expansion_players:
         guestlist: "Guest list"
         ignorelist: "Ignore list"
         banlist: "Ban list"
+        guest: "Guest"
+        allow: "Allow"
+        mute: "Mute"
+        kick: "Kick"
+        ban: "Ban"
+        black: "Black"
         column:
           flag: '#'
           from: 'From'

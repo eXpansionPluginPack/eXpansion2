@@ -236,10 +236,10 @@ class PlayersWindow extends GridWindowFactory
         $login = $manialink->getData('playerLogin');
 
         if ($this->getIgnoredStatus($login)) {
-            $muteText = "Allow";
+            $muteText = "expansion_players.gui.players.window.allow";
             $color = uiButton::COLOR_SUCCESS;
         } else {
-            $muteText = "Mute";
+            $muteText = "expansion_players.gui.players.window.mute";
             $color = uiButton::COLOR_WARNING;
         }
 
@@ -247,7 +247,7 @@ class PlayersWindow extends GridWindowFactory
             $this->uiFactory->createConfirmButton($muteText, uiButton::TYPE_DEFAULT)
                 ->setAction($actions['mute'])
                 ->setBackgroundColor($color),
-            $this->uiFactory->createConfirmButton("Guest", uiButton::TYPE_DEFAULT)
+            $this->uiFactory->createConfirmButton("expansion_players.gui.players.window.guest", uiButton::TYPE_DEFAULT)
                 ->setAction($actions['guest'])
                 ->setBackgroundColor(UiButton::COLOR_DEFAULT),
         ];
@@ -267,13 +267,13 @@ class PlayersWindow extends GridWindowFactory
 
 
         $elem = [
-            $this->uiFactory->createConfirmButton("Kick", uiButton::TYPE_DEFAULT)
+            $this->uiFactory->createConfirmButton("expansion_players.gui.players.window.kick", uiButton::TYPE_DEFAULT)
                 ->setAction($actions['kick'])
                 ->setBackgroundColor(UiButton::COLOR_DEFAULT),
-            $this->uiFactory->createConfirmButton("Ban", uiButton::TYPE_DEFAULT)
+            $this->uiFactory->createConfirmButton("expansion_players.gui.players.window.ban", uiButton::TYPE_DEFAULT)
                 ->setAction($actions['ban'])
                 ->setBackgroundColor(UiButton::COLOR_DEFAULT),
-            $this->uiFactory->createConfirmButton("Black", uiButton::TYPE_DEFAULT)
+            $this->uiFactory->createConfirmButton("expansion_players.gui.players.window.black", uiButton::TYPE_DEFAULT)
                 ->setAction($actions['black'])
                 ->setBackgroundColor(UiButton::COLOR_SECONDARY),
 

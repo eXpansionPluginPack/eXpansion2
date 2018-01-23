@@ -179,7 +179,7 @@ class VoteService
         }
 
         if (!isset($this->votePlugins[$typeCode])) {
-            $this->chatNotification->sendMessage("|error| Unknown vote type : $typeCode");
+            // no vote-plugin found for native vote, so return silently
             return;
         }
 
