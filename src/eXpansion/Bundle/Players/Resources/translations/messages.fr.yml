@@ -2,28 +2,28 @@ expansion_players:
   gui:
     list:
       window:
-        title: "Manage player lists"
+        title: "Gérer la liste de joueur"
         column:
-          remove: "Remove"
+          remove: "Supprimer"
     players:
       window:
-        title: 'Players'
-        reason: 'Reason'
-        language: 'Client Language'
-        gameversion: 'Game Version'
-        ladder: 'Ladder points'
-        blacklist: "Black list"
-        guestlist: "Guest list"
-        ignorelist: "Ignore list"
-        banlist: "Ban list"
+        title: 'Joueurs'
+        reason: 'Raison'
+        language: 'Langue du client'
+        gameversion: 'Version du jeu'
+        ladder: 'Points Ladder'
+        blacklist: "Liste noire"
+        guestlist: "Liste des invités"
+        ignorelist: "Liste des ignorés"
+        banlist: "Liste noire"
         column:
           flag: '#'
-          from: 'From'
-          nickname: 'NickName'
+          from: 'De'
+          nickname: 'Pseudo'
           login: 'Login'
-          select: 'Select'
+          select: 'Sélectionner'
   chat:
-    exception: '|error| {error}Dedicated Server error: {highlight}%message%'
+    exception: '|error| {error}Erreur du serveur dédié : {highlight}%message%'
   menu:
-    label: "Players"
-    list: "Player List"
+    label: "Joueurs"
+    list: "Liste des joueurs"

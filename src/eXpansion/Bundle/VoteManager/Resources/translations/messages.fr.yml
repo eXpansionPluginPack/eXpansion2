@@ -1,17 +1,17 @@
 expansion_votemanager:
   chat:
-    admin_pass: "|info| {admin_info}%level% %admin% {admin_info}passes the vote!"
+    admin_pass: "|info| {admin_info}%level% %admin% {admin_info}passe le vote !"
   menu:
-    restart: "Restart Map"
-    skip: "Skip Map"
+    restart: "Redémarrer la carte"
+    skip: "Passer la carte"
   gui:
     vote_widget:
-      restart: "Restart Map ?"
-      skip: "Skip Map ?"
+      restart: "Redémarrer la carte ?"
+      skip: "Passer la carte ?"
   nextmap:
-    question: "Skip Map ?"
+    question: "Passer la carte ?"
   restartmap:
-    question: "Restart Map ?"
+    question: "Redémarrer la carte ?"
   error:
-    already_started: "|error| Vote of this type has already started."
-    in_progress: "|error| There is already a vote in progress"
+    already_started: "|error| Un vote de ce type a déjà commencé."
+    in_progress: "|error| Il y a déjà un vote en cours."

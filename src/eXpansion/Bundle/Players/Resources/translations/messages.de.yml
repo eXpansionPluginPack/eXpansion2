@@ -15,7 +15,7 @@ expansion_players:
         blacklist: "Blacklist"
         guestlist: "Gästeliste"
         ignorelist: "Ignorieren-Liste"
-        banlist: "Blacklist"
+        banlist: "Ban-Liste"
         column:
           flag: '#'
           from: 'Von'
