@@ -1,4 +1,4 @@
 expansion_join_leave_messages:
-  connect: '|server| Uusi yhteys |success| {default}%group% %nickname% {default}({muted}%login%{default}) {variable}%path%{default}.'
-  disconnect: '|server| Yhteys katkaistu |success| {default}%group% %nickname% {default}({muted}%login%{default}) {variable}%path%{default}.'
+  connect: '|server| {default}%group% %nickname% {default}({muted}%login%{default}) from {variable}%path% {default}joins.'
+  disconnect: '|server| {default}%group% %nickname% {default}({muted}%login%{default}) from {variable}%path%  {default}leaves.'
   applicationGreeter: '|server| {info}Welcome! This server uses {variable}eXpansion² v%version%{info} to manage UI and Records.'
