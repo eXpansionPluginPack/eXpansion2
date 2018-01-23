@@ -98,6 +98,17 @@ class VoteServiceTest extends \PHPUnit_Framework_TestCase
         $this->voteService->startVote($player, 'TestCode', ['toto']);
     }
 
+    public function testUnknownVotePlugin()
+    {
+        $this->mockChatNotification
+            ->expects($this->never())
+            ->method('sendMessage')
+            ->with(new \PHPUnit_Framework_Constraint_StringContains('error'));
+
+        $player = $this->getPlayer('test', false);
+        $this->voteService->startVote($player, 'TestCodeUnknown', ['toto']);
+    }
+    
     public function testCancelVote()
     {
         $this->mockVotePlugin->expects($this->once())->method('cancel');
