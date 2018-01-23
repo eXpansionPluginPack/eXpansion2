@@ -25,7 +25,7 @@ class JukeboxService
      * JukeboxService constructor.
      *
      * @param PlayerStorage $playerStorage
-     * @param AdminGroups   $adminGroups
+     * @param AdminGroups $adminGroups
      */
     public function __construct(PlayerStorage $playerStorage, AdminGroups $adminGroups)
     {
@@ -54,7 +54,7 @@ class JukeboxService
     /**
      * Adds map as first item
      *
-     * @param Map  $map
+     * @param Map $map
      * @param null $login
      * @param bool $force
      *
@@ -68,7 +68,7 @@ class JukeboxService
     /**
      * Adds map as last item
      *
-     * @param Map  $map
+     * @param Map $map
      * @param null $login
      * @param bool $force
      *
@@ -82,7 +82,7 @@ class JukeboxService
     /**
      * Adds map as last or first item
      *
-     * @param Map  $map
+     * @param Map $map
      * @param null $login
      * @param bool $force
      * @param bool $addFirst
@@ -125,7 +125,7 @@ class JukeboxService
     }
 
     /**
-     * @param Map  $map
+     * @param Map $map
      * @param      $login
      * @param bool $force
      *
@@ -138,7 +138,6 @@ class JukeboxService
         }
 
         if (!$login) {
-
             return false;
         }
         // no some restrictions for admin
@@ -149,8 +148,6 @@ class JukeboxService
             $check = $this->getMap($login);
             if ($check && $check->getMap() === $map) {
                 return $this->remove($map);
-
-
             }
         }
 
@@ -159,7 +156,7 @@ class JukeboxService
 
     /**
      * @param JukeboxMap $map
-     * @param bool       $addFirst
+     * @param bool $addFirst
      *
      * @return void
      */
@@ -174,14 +171,14 @@ class JukeboxService
     }
 
     /**
-     * @param $login
+     * @param string $login
      *
      * @return bool|JukeboxMap
      */
     public function getMap($login)
     {
         foreach ($this->mapQueue as $jukeboxMap) {
-            if ($jukeboxMap->getPlayer()->getLogin() == $login) {
+            if ($jukeboxMap->getPlayer()->getLogin() === $login) {
                 return $jukeboxMap;
             }
         }
