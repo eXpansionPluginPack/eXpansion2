@@ -7,14 +7,14 @@ use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\AdminGroups\Model\AbstractAdminChatCommand;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 
 
 /**
- * Class BasicEmote to handle basic emote chat oommands.
  *
- * @package eXpansion\Bundle\Emotes\ChatCommand;
+ * @package eXpansion\Bundle\CustomChat\ChatCommand;
  * @author reaby
  */
 class ControlCommand extends AbstractAdminChatCommand
@@ -33,6 +33,10 @@ class ControlCommand extends AbstractAdminChatCommand
      * @var PlayerStorage
      */
     private $playerStorage;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * BasicEmote constructor.
@@ -44,6 +48,7 @@ class ControlCommand extends AbstractAdminChatCommand
      * @param ChatNotification $chatNotification
      * @param PlayerStorage $playerStorage
      * @param CustomChat $customChat
+     * @param LoggerInterface $logger
      */
     public function __construct(
         $command,
@@ -52,13 +57,14 @@ class ControlCommand extends AbstractAdminChatCommand
         AdminGroups $adminGroups,
         ChatNotification $chatNotification,
         PlayerStorage $playerStorage,
-        CustomChat $customChat
+        CustomChat $customChat,
+        LoggerInterface $logger
     ) {
         parent::__construct($command, $permission, $aliases, $adminGroups);
         $this->chatNotification = $chatNotification;
-        $this->adminGroup = $adminGroups;
         $this->customChat = $customChat;
         $this->playerStorage = $playerStorage;
+        $this->logger = $logger;
     }
 
     /**
@@ -89,12 +95,14 @@ class ControlCommand extends AbstractAdminChatCommand
             case "on":
                 $this->chatNotification->sendMessage("expansion_customchat.chat.enabled", null,
                     ['%admin%' => $groupName, '%nickname%' => $nickName]);
+                $this->logger->info("[" . $login . "] Public chat is now enabled!");
                 $this->customChat->setStatus(true);
                 break;
             case "disable":
             case "off":
                 $this->chatNotification->sendMessage("expansion_customchat.chat.disabled", null,
                     ['%admin%' => $groupName, '%nickname%' => $nickName]);
+                $this->logger->info("[" . $login . "] Public chat is now disabled!");
                 $this->customChat->setStatus(false);
                 break;
             default:

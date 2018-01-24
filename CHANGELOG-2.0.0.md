@@ -15,7 +15,8 @@
 * Fixed issue #235
     * Added missing translations for players-window.
     * Removed error message at vote manager, when a plugin is not bind for native vote equivalent.
-   
+* Enhanced admin logging and added nicer error messages for missing dedicated and database connections.
+
 # 2.0.0.0-alpha1 (2018-01-20)
 
 **It starts again!**

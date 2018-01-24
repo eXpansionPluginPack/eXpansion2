@@ -9,6 +9,8 @@
 namespace eXpansion\Framework\Core\Services\DedicatedConnection;
 
 use Maniaplanet\DedicatedServer\Connection;
+use Maniaplanet\DedicatedServer\Xmlrpc\TransportException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Service factory to create connection to the dedicated server.
@@ -31,6 +33,10 @@ class Factory
 
     /** @var string */
     protected $password;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * Factory constructor.
@@ -40,14 +46,16 @@ class Factory
      * @param int $timeout
      * @param string $user
      * @param string $password
+     * @param LoggerInterface $logger
      */
-    public function __construct($host, $port, $timeout, $user, $password)
+    public function __construct($host, $port, $timeout, $user, $password, LoggerInterface $logger)
     {
         $this->host = $host;
         $this->port = $port;
         $this->timeout = $timeout;
         $this->user = $user;
         $this->password = $password;
+        $this->logger = $logger;
     }
 
     /**
@@ -57,12 +65,19 @@ class Factory
      */
     public function createConnection()
     {
-        return Connection::factory(
-            $this->host,
-            $this->port,
-            $this->timeout,
-            $this->user,
-            $this->password
-        );
+        try {
+            return Connection::factory(
+                $this->host,
+                $this->port,
+                $this->timeout,
+                $this->user,
+                $this->password
+            );
+        } catch (TransportException $ex) {
+            echo "Looks like your Dedicated server is either offline or has wrong config settings.\n";
+            echo "Error message: " . $ex->getMessage();
+            $this->logger->error("Unable to open connection for Dedicated server", ["exception" => $ex]);
+            exit(1);
+        }
     }
 }

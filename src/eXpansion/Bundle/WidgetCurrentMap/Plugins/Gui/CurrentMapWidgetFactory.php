@@ -110,7 +110,6 @@ EOL
 
     protected function updateContent(ManialinkInterface $manialink)
     {
-        echo "updated!";
         parent::updateContent($manialink);
     }
 

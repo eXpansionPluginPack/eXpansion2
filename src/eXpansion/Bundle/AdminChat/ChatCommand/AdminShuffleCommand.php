@@ -6,6 +6,7 @@ use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\AdminGroups\Model\AbstractAdminChatCommand;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\Time;
+use eXpansion\Framework\Core\Helpers\TMString;
 use eXpansion\Framework\Core\Storage\MapStorage;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
@@ -34,19 +35,23 @@ class AdminShuffleCommand extends AbstractAdminChatCommand
      * @var Connection
      */
     private $connection;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * AdminCommand constructor.
      *
      * @param                  $command
-     * @param string           $permission
-     * @param array            $aliases
-     * @param AdminGroups      $adminGroupsHelper
+     * @param string $permission
+     * @param array $aliases
+     * @param AdminGroups $adminGroupsHelper
      * @param ChatNotification $chatNotification
-     * @param PlayerStorage    $playerStorage
-     * @param LoggerInterface  $logger
-     * @param Connection       $connection
-     * @param MapStorage       $mapStorage
+     * @param PlayerStorage $playerStorage
+     * @param LoggerInterface $logger
+     * @param Connection $connection
+     * @param MapStorage $mapStorage
      */
     public function __construct(
         $command,
@@ -71,6 +76,7 @@ class AdminShuffleCommand extends AbstractAdminChatCommand
         $this->mapStorage = $mapStorage;
         $this->adminGroupsHelper = $adminGroupsHelper;
         $this->connection = $connection;
+        $this->logger = $logger;
     }
 
     /**
@@ -83,7 +89,7 @@ class AdminShuffleCommand extends AbstractAdminChatCommand
             $maps[] = $map->fileName;
             $allMaps[] = $map->fileName;
             if (count($maps) > 250) {
-                $this->connection->removeMapList($maps,true);
+                $this->connection->removeMapList($maps, true);
                 $maps = [];
             }
         }
@@ -108,6 +114,10 @@ class AdminShuffleCommand extends AbstractAdminChatCommand
         $admin = $this->playerStorage->getPlayerInfo($login)->getNickName();
         $this->chatNotification->sendMessage('expansion_admin_chat.shuffle.msg', null,
             ["%adminLevel%" => $level, "%admin%" => $admin]);
+
+        $logMessage = $this->chatNotification->getMessage('expansion_admin_chat.shuffle.msg',
+            ["%adminLevel%" => $level, "%admin%" => $admin], "en");
+        $this->logger->info("[". $login. "] " . TMString::trimStyles($logMessage));
 
     }
 }

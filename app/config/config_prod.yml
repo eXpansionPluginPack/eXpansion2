@@ -19,3 +19,8 @@ monolog:
             level: debug
         console:
             type: console
+        admin:
+            type:     stream
+            level:    debug
+            path:     '%kernel.logs_dir%/admin.log'
+            channels: [admin]

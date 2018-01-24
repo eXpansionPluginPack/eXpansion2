@@ -5,6 +5,9 @@ namespace eXpansion\Framework\Core\Services\Application;
 
 use eXpansion\Framework\Core\Services\Console;
 use Maniaplanet\DedicatedServer\Connection;
+use Propel\Runtime\Connection\Exception\ConnectionException;
+use Propel\Runtime\Propel;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class AbstractApplication implements RunInterface
@@ -29,6 +32,10 @@ abstract class AbstractApplication implements RunInterface
 
     /** @var bool */
     protected $isRunning = true;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * Application constructor.
@@ -36,15 +43,18 @@ abstract class AbstractApplication implements RunInterface
      * @param DispatcherInterface $dispatcher
      * @param Connection $connection
      * @param Console $output
+     * @param LoggerInterface $logger
      */
     public function __construct(
         DispatcherInterface $dispatcher,
         Connection $connection,
-        Console $output
+        Console $output,
+        LoggerInterface $logger
     ) {
         $this->connection = $connection;
         $this->dispatcher = $dispatcher;
         $this->console = $output;
+        $this->logger = $logger;
     }
 
     /**
@@ -88,13 +98,22 @@ abstract class AbstractApplication implements RunInterface
         try {
             $this->connection->triggerModeScriptEvent("XmlRpc.EnableCallbacks", ["True"]);
             $this->connection->triggerModeScriptEvent("XmlRpc.SetApiVersion", [self::SCRIPT_API_VERSION]);
+            Propel::getConnection()->inTransaction();
+        } catch (ConnectionException $propelException) {
+
+            $this->console->writeln("\nLooks like your database connection is down, see logs for more details.");
+            $this->console->writeln("Please check-in later, when you database is up and running.");
+            $this->logger->error("Unable to open connection for database server", ["exception" => $propelException]);
+            exit(1);
         } catch (\Exception $exception) {
-            $this->connection->saveMatchSettings('MatchSettings/eXpansion-mode-fail-'.date(DATE_ISO8601).'.txt');
+            $this->connection->saveMatchSettings('MatchSettings/eXpansion-mode-fail-' . date(DATE_ISO8601) . '.txt');
             throw $exception;
         }
 
         $this->console->writeln("preflight checks OK.");
+
         $this->dispatcher->dispatch(self::EVENT_READY, []);
+
         $this->console->writeln("And takeoff");
 
         do {
@@ -108,7 +127,7 @@ abstract class AbstractApplication implements RunInterface
 
             // If we got lot's of time and it's been a while since last GC collect let's run a garbage collector
             // cycle this iteration.
-            if ($delay > $cycleTime/2 && $lastGcTime < (time() - $gcCycleTime)) {
+            if ($delay > $cycleTime / 2 && $lastGcTime < (time() - $gcCycleTime)) {
                 // PHP does this automatically as well but in some mysterious ways it can sometimes keep in memory
                 // hundred of mb's before running it.
                 gc_collect_cycles();

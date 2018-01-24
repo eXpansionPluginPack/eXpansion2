@@ -2,6 +2,7 @@
 
 namespace eXpansion\Bundle\AdminChat\ChatCommand;
 
+use eXpansion\Framework\Core\Helpers\TMString;
 use Symfony\Component\Console\Input\InputInterface;
 use Maniaplanet\DedicatedServer\Xmlrpc\Exception as DedicatedException;
 
@@ -29,7 +30,11 @@ class AdminReturnCommand extends AdminCommand
                 $this->isPublic ? null : $login,
                 ['%adminLevel%' => $group, '%admin%' => $nickName, '%return%' => $return]
             );
-        }  catch (DedicatedException $e) {
+            $logMessage = $this->chatNotification->getMessage($this->chatMessage,
+                ['%adminLevel%' => $group, '%admin%' => $nickName, '%return%' => $return], "en");
+            $this->logger->info("[". $login. "] " . TMString::trimStyles($logMessage));
+
+        } catch (DedicatedException $e) {
             $this->logger->error("Error on admin command", ["exception" => $e]);
             $this->chatNotification->sendMessage("expansion_admin_chat.dedicatedexception", $login,
                 ["%message%" => $e->getMessage()]);

@@ -11,6 +11,7 @@ use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
 use Maniaplanet\DedicatedServer\Connection;
+use Psr\Log\LoggerInterface;
 
 
 class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacyChat
@@ -34,27 +35,34 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      * @var PlayerStorage
      */
     private $playerStorage;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * CustomChat constructor.
-     * @param Connection       $connection
-     * @param Console          $console
-     * @param AdminGroups      $adminGroups
+     * @param Connection $connection
+     * @param Console $console
+     * @param AdminGroups $adminGroups
      * @param ChatNotification $chatNotification
-     * @param PlayerStorage    $playerStorage
+     * @param PlayerStorage $playerStorage
+     * @param LoggerInterface $logger
      */
     function __construct(
         Connection $connection,
         Console $console,
         AdminGroups $adminGroups,
         ChatNotification $chatNotification,
-        PlayerStorage $playerStorage
+        PlayerStorage $playerStorage,
+        LoggerInterface $logger
     ) {
         $this->connection = $connection;
         $this->console = $console;
         $this->adminGroups = $adminGroups;
         $this->chatNotification = $chatNotification;
         $this->playerStorage = $playerStorage;
+        $this->logger = $logger;
     }
 
     /**
@@ -105,21 +113,21 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
                         if (count($diff) > 0) {
                             $this->sendChat($player, $text, '$ff0', $group);
                         }
-                        $this->console->writeln('$ff0['.$nick.'$ff0] '.$text);
+                        $this->console->writeln('$ff0[' . $nick . '$ff0] ' . $text);
 
                         return;
                     } else {
                         $this->sendChat($player, $text, '$ff0', null);
-                        $this->console->writeln('$ff0['.$nick.'$ff0] '.$text);
+                        $this->console->writeln('$ff0[' . $nick . '$ff0] ' . $text);
 
                         return;
                     }
                 } else {
                     $this->sendChat($player, $text, '$ff0', null);
-                    $this->console->writeln('$ff0['.$nick.'$ff0] '.$text);
+                    $this->console->writeln('$ff0[' . $nick . '$ff0] ' . $text);
                 }
             } else {
-                $this->console->writeln('$333['.$nick.'$333] '.$text);
+                $this->console->writeln('$333[' . $nick . '$333] ' . $text);
                 $this->chatNotification->sendMessage('expansion_customchat.chat.disabledstate',
                     $player->getLogin());
             }
@@ -131,7 +139,7 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      * @param Player $player
      * @param        $text
      * @param        $color
-     * @param null   $group
+     * @param null $group
      */
     private function sendChat(Player $player, $text, $color, $group = null)
     {
@@ -165,10 +173,11 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
 
         try {
             $this->connection->chatSendServerMessage(
-                $prefix.'$fff$<'.$nick.'$>$z$s'.$postfix.$separator.' '.$color.$text, $group
+                $prefix . '$fff$<' . $nick . '$>$z$s' . $postfix . $separator . ' ' . $color . $text, $group
             );
         } catch (\Exception $e) {
-            $this->console->writeln('$ff0 error while sending chat: $fff'.$e->getMessage());
+            $this->console->writeln('$ff0 error while sending chat: $fff' . $e->getMessage());
+            $this->logger->error("Error while sending custom chat", ['exception' => $e]);
         }
     }
 
@@ -204,7 +213,8 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
         try {
             $this->connection->chatEnableManualRouting();
         } catch (\Exception $e) {
-            $this->console->writeln('Error while enabling custom chat: $f00'.$e->getMessage());
+            $this->console->writeln('Error while enabling custom chat: $f00' . $e->getMessage());
+            $this->logger->error("Error enabling custom chat", ['exception' => $e]);
         }
     }
 

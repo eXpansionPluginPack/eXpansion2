@@ -5,6 +5,7 @@ namespace eXpansion\Bundle\AdminChat\ChatCommand;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\Time;
+use eXpansion\Framework\Core\Helpers\TMString;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Xmlrpc\Exception as DedicatedException;
@@ -122,6 +123,11 @@ class OneParameterCommand extends AbstractConnectionCommand
                 $this->isPublic ? null : $login,
                 ['%adminLevel%' => $group, '%admin%' => $nickName, "%parameter%" => $parameter]
             );
+
+            $logMessage = $this->chatNotification->getMessage($this->chatMessage,
+                ['%adminLevel%' => $group, '%admin%' => $nickName, "%parameter%" => $parameter], "en");
+            $this->logger->info("[". $login. "] " . TMString::trimStyles($logMessage));
+
         } catch (DedicatedException $e) {
             $this->logger->error("Error on admin command", ["exception" => $e]);
             $this->chatNotification->sendMessage("expansion_admin_chat.dedicatedexception", $login,

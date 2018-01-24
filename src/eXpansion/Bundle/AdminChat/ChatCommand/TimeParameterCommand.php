@@ -2,6 +2,7 @@
 
 namespace eXpansion\Bundle\AdminChat\ChatCommand;
 
+use eXpansion\Framework\Core\Helpers\TMString;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Maniaplanet\DedicatedServer\Xmlrpc\Exception as DedicatedException;
@@ -77,6 +78,11 @@ class TimeParameterCommand extends AbstractConnectionCommand
                 $this->isPublic ? null : $login,
                 ['%adminLevel%' => $group, '%admin%' => $nickName, "%parameter%" => $parameter]
             );
+
+            $logMessage = $this->chatNotification->getMessage($this->chatMessage,
+                ['%adminLevel%' => $group, '%admin%' => $nickName, "%parameter%" => $parameter], "en");
+            $this->logger->info("[". $login. "] " . TMString::trimStyles($logMessage));
+
         }  catch (DedicatedException $e) {
             $this->logger->error("Error on admin command", ["exception" => $e]);
             $this->chatNotification->sendMessage("expansion_admin_chat.dedicatedexception", $login,
