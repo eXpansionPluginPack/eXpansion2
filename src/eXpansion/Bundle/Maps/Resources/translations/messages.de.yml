@@ -27,7 +27,7 @@ expansion_mx:
     nopermission: "|error| {error}Du verfügst nicht über die notwendigen Rechte, um eine Map von Mania-Exchange hinzuzufügen."
     apierror: '|error| {error}Mania-Exchange API-Fehler: "{highlight}%message% {error}" ({highlight}%status%{error})'
     httperror: '|error| {error}Mania-Exchange HTTP-Fehler: "{highlight}%message% {error}" ({highlight}%status%{error})'
-    jsonerror: '|error| {error}Mania-Exchange Json Error: "{highlight}%message%'
+    jsonerror: '|error| {error}Mania-Exchange Json-Fehler: "{highlight}%message%'
     decline: "|admin| {error}Map-Autor lehnt Download der Map ab."
     success: "|admin| {info}Map {variable}%mapname% {info}von {variable}%mapauthor% {info}wurde erfolgreich von Mania-Exchange hinzugefügt."
     start: "|admin| {info}Download von {highlight}%id% {info}von {highlight}%site% {info}Mania-Exchange startet."
@@ -46,8 +46,8 @@ expansion_mx:
         envir: "Umgebung"
         awards: '$ff0🏆'
         length: "Länge"
-        difficulty: "Difficulty"
-        maptype: "Map Type"
+        difficulty: "Schwierigkeit"
+        maptype: "Art der Map"
         style: "Stil"
         add: "Installieren"
 expansion_maps:
