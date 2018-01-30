@@ -83,7 +83,7 @@ class AdminShuffleCommand extends AbstractAdminChatCommand
             $maps[] = $map->fileName;
             $allMaps[] = $map->fileName;
             if (count($maps) > 250) {
-                $this->connection->removeMapList($maps,true);
+                $this->connection->removeMapList($maps);
                 $maps = [];
             }
         }
@@ -98,6 +98,7 @@ class AdminShuffleCommand extends AbstractAdminChatCommand
             $maps[] = $mapFile;
             if (count($maps) > 250) {
                 $this->connection->insertMapList($maps, true);
+                $maps = [];
             }
         }
         // for remaining maps, which didn't fit to 200
