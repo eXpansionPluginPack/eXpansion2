@@ -7,7 +7,11 @@ use eXpansion\Framework\Config\Model\ConfigInterface;
 use eXpansion\Framework\Config\Ui\UiInterface;
 use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
 
+use eXpansion\Framework\Core\Storage\GameDataStorage;
+use League\Flysystem\File;
+use League\Flysystem\Filesystem;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class ConfigManager
@@ -18,8 +22,20 @@ use oliverde8\AssociativeArraySimplified\AssociativeArray;
  */
 class ConfigManager
 {
+    /** @var DispatcherInterface */
+    protected $dispatcher;
+
+    /** @var GameDataStorage */
+    protected $gameDataStorage;
+
+    /** @var Filesystem */
+    protected $filesystem;
+
+    /** @var LoggerInterface */
+    protected $logger;
+
     /** @var ConfigInterface */
-    protected $configurations = [];
+    protected $configurationDefinitions = [];
 
     /** @var string[] */
     protected $configurationIds = [];
@@ -27,52 +43,125 @@ class ConfigManager
     /** @var AssociativeArray */
     protected $configTree;
 
-    /** @var DispatcherInterface */
-    protected $dispatcher;
+    /** @var AssociativeArray */
+    protected $globalConfigurations;
+
+    /** @var AssociativeArray */
+    protected $keyConfigurations;
+
+    /** @var AssociativeArray */
+    protected $serverConfigurations;
 
     /** @var bool  */
     protected $disableDispatch = false;
-
-    /** @var UiInterface[] */
-    protected $uiHandlers = [];
 
     /**
      * ConfigManager constructor.
      *
      * @param DispatcherInterface $dispatcher
      */
-    public function __construct(DispatcherInterface $dispatcher)
-    {
+    public function __construct(
+        DispatcherInterface $dispatcher,
+        GameDataStorage $gameDataStorage,
+        Filesystem $filesystem,
+        LoggerInterface $logger
+    ) {
         $this->dispatcher = $dispatcher;
+        $this->gameDataStorage = $gameDataStorage;
+        $this->filesystem = $filesystem;
+        $this->logger = $logger;
 
         $this->configTree = new AssociativeArray();
     }
 
-
     /**
-     * Called when a config changed to dispatch event.
+     * Set the raw value of a configuration variable.
      *
-     * @param ConfigInterface $config
-     * @param mixed           $oldValue
+     * @param $path
+     * @param $value
      *
+     * @return bool
      * @throws UnhandledConfigurationException
      */
-    public function valueChanged(ConfigInterface $config, $oldValue)
+    public function set($path, $value)
     {
-        if (!isset($this->configurations[spl_object_hash($config)])) {
-            throw new UnhandledConfigurationException("'{$config->getName()}' is not handled by the config manager!");
+        /** @var ConfigInterface $configDefinition */
+        $configDefinition = $this->configTree->get($path);
+        if (is_null($configDefinition)) {
+            throw new UnhandledConfigurationException("'{$path}' is not handled by the config manager!");
         }
 
-        if ($this->disableDispatch) {
-            return;
+        // Fetch old value for event.
+        $oldValue = $this->get($path);
+
+        // Put new value.
+        $configs = $this->getAllConfigs($configDefinition->getScope());
+        $configs->set($path, $value);
+
+        // Dispatch and save changes.
+        if ($this->disableDispatch || $oldValue === $value) {
+            $this->logger->debug(
+                'New conig was set, but no changes, save and dispatch are canceled!',
+                ['path' => $path]
+            );
+            return true;
         }
 
-        $this->saveConfigValue($config);
-
+        $this->saveConfigValues();
         $this->dispatcher->dispatch(
-            'expansion.config_change',
-            ['config' => $config, 'id' => $this->configurationIds[spl_object_hash($config)], 'oldValue' => $oldValue]
+            'expansion.config.change',
+            [
+                'config' => $configDefinition,
+                'id' => $this->configurationIds[spl_object_hash($configDefinition)],
+                'oldValue' => $oldValue
+            ]
         );
+    }
+
+    /**
+     * Get the raw value of a configuration variable.
+     *
+     * @param $path
+     *
+     * @return mixed
+     * @throws UnhandledConfigurationException
+     */
+    public function get($path)
+    {
+        /** @var ConfigInterface $configDefinition */
+        $configDefinition = $this->configTree->get($path);
+        if (is_null($configDefinition)) {
+            throw new UnhandledConfigurationException("'{$path}' is not handled by the config manager!");
+        }
+
+        $configs = $this->getAllConfigs($configDefinition->getScope());
+        $value = $configs->get($path);
+
+        if (is_null($value)) {
+            return $configDefinition->getDefaultValue();
+        }
+
+        return $value;
+    }
+
+    /**
+     * @param $scope
+     *
+     * @return AssociativeArray
+     */
+    public function getAllConfigs($scope)
+    {
+        $this->loadConfigValues();
+
+        switch ($scope) {
+            case ConfigInterface::SCOPE_SERVER:
+                return $this->serverConfigurations;
+            case ConfigInterface::SCOPE_KEY:
+                return $this->keyConfigurations;
+            case ConfigInterface::SCOPE_GLOBAL:
+            default:
+                return $this->globalConfigurations;
+        }
     }
 
     /**
@@ -83,38 +172,68 @@ class ConfigManager
      */
     public function registerConfig(ConfigInterface $config, $id)
     {
-        $this->configurations[spl_object_hash($config)] = $config;
+        $this->configurationDefinitions[spl_object_hash($config)] = $config;
         $this->configurationIds[spl_object_hash($config)] = $id;
         $this->configTree->set($config->getPath(), $config);
-
-        $this->loadConfigValue($config);
-    }
-
-    public function registerUi(UiInterface $ui)
-    {
-        $this->uiHandlers[] = $ui;
     }
 
     /**
-     * Load config value from somewhere.
-     *
-     * @param ConfigInterface $config
+     * Loads all config value from the json files.
      */
-    protected function loadConfigValue(ConfigInterface $config)
+    public function loadConfigValues()
     {
-        $this->disableDispatch = true;
-        // TODO load config from somewhere...
-        $this->disableDispatch = false;
+        if (!is_null($this->globalConfigurations)) {
+            return;
+        }
+
+        $this->globalConfigurations = new AssociativeArray();
+        $this->keyConfigurations = new AssociativeArray();
+        $this->serverConfigurations = new AssociativeArray();
+
+        /** @var AssociativeArray[] $configs */
+        $configs = [
+            'global' => $this->globalConfigurations,
+            'key' => $this->keyConfigurations,
+            'server-' . $this->gameDataStorage->getSystemInfo()->serverLogin => $this->serverConfigurations,
+        ];
+
+        foreach ($configs as $filekey => $config) {
+            $this->logger->debug(
+                'Loading config file',
+                ['file' => "config-$filekey.json"]
+            );
+
+            /** @var File $file */
+            $file = $this->filesystem->get("config-$filekey.json");
+
+            if ($file->exists()) {
+                $values = json_decode($file->read(), true);
+                $config->setData($values);
+            }
+        }
     }
 
     /**
-     * Load config value from somewhere.
-     *
-     * @param ConfigInterface $config
+     * Saves all config values in json files.
      */
-    protected function saveConfigValue(ConfigInterface $config)
+    public function saveConfigValues()
     {
-        // TODO save config somewhere...
+        /** @var AssociativeArray[] $configs */
+        $configs = [
+            'global' => $this->globalConfigurations,
+            'key' => $this->keyConfigurations,
+            'server-' . $this->gameDataStorage->getSystemInfo()->serverLogin => $this->serverConfigurations,
+        ];
+
+        foreach ($configs as $filekey => $config) {
+            $this->logger->debug(
+                'Saving config file',
+                ['file' => "config-$filekey.json"]
+            );
+
+            $encoded = json_encode($config->getArray(), JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
+            $this->filesystem->put("config-$filekey.json", $encoded);
+        }
     }
 
     /**
@@ -122,26 +241,8 @@ class ConfigManager
      *
      * @return AssociativeArray
      */
-    public function getConfigTree(): AssociativeArray
+    public function getConfigDefinitionTree(): AssociativeArray
     {
         return $this->configTree;
-    }
-
-    /**
-     * Get proper handler to generate ui for a config element.
-     *
-     * @param ConfigInterface $config
-     *
-     * @return UiInterface|null
-     */
-    public function getUiHandler(ConfigInterface $config)
-    {
-        foreach ($this->uiHandlers as $ui) {
-            if ($ui->isCompatible($config)) {
-                return $ui;
-            }
-        }
-
-        return null;
     }
 }

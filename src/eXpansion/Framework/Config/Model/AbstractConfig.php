@@ -19,13 +19,13 @@ class AbstractConfig implements ConfigInterface
     protected $name;
 
     /** @var string */
+    protected $scope;
+
+    /** @var string */
     protected $description;
 
     /** @var mixed */
     protected $defaultValue;
-
-    /** @var mixed */
-    protected $rawValue;
 
     /** @var ConfigManager */
     protected $configManager;
@@ -35,12 +35,19 @@ class AbstractConfig implements ConfigInterface
      *
      * @param string $path
      * @param string $name
+     * @param string $scope
      * @param string $description
      * @param mixed $defaultValue
      * @param ConfigManager $configManager
      */
-    public function __construct(string $path, string $name, string $description, mixed $defaultValue, ConfigManager $configManager)
-    {
+    public function __construct(
+        string $path,
+        string $scope,
+        string $name,
+        string $description,
+        mixed $defaultValue,
+        ConfigManager $configManager
+    ) {
         $this->path = $path;
         $this->name = $name;
         $this->description = $description;
@@ -50,9 +57,7 @@ class AbstractConfig implements ConfigInterface
 
 
     /**
-     * Get path to the config. 'exemple : expansion/localrecors'
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getPath(): string
     {
@@ -60,9 +65,7 @@ class AbstractConfig implements ConfigInterface
     }
 
     /**
-     * Get name of the configuration.
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getName(): string
     {
@@ -70,9 +73,7 @@ class AbstractConfig implements ConfigInterface
     }
 
     /**
-     * Get description.
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getDescription(): string
     {
@@ -80,9 +81,23 @@ class AbstractConfig implements ConfigInterface
     }
 
     /**
-     * Get default raw value.
-     *
-     * @return mixed
+     * @inheritdoc
+     */
+    public function getScope() : string
+    {
+        return $this->scope;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isHidden(): boolean
+    {
+        return false;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function getDefaultValue()
     {
@@ -90,32 +105,18 @@ class AbstractConfig implements ConfigInterface
     }
 
     /**
-     * Get raw value.
-     *
-     * @return mixed
+     * @inheritdoc
      */
     public function getRawValue()
     {
-        return $this->rawValue;
+        return $this->configManager->get($this->path);
     }
 
     /**
-     * Set raw value.
-     *
-     * @param mixed $value
-     *
-     * @throws \eXpansion\Framework\Config\Exception\UnhandledConfigurationException
+     * @inheritdoc
      */
     public function setRawValue($value)
     {
-        if ($value == $this->rawValue) {
-            // no change ignore set.
-            return;
-        }
-
-        $oldValue = $this->rawValue;
-        $this->rawValue = $value;
-
-        $this->configManager->valueChanged($this, $oldValue);
+        return $this->configManager->set($this->path, $value);
     }
 }

@@ -8,3 +8,9 @@ services:
 
     eXpansion\Framework\Config\Services\ConfigManager:
         class: 'eXpansion\Framework\Config\Services\ConfigManager'
+        arguments:
+            $filesystem: '@oneup_flysystem.expansion_config_filesystem'
+
+
+    eXpansion\Framework\Config\Services\ConfigUiManager:
+        class: 'eXpansion\Framework\Config\Services\ConfigUiManager'

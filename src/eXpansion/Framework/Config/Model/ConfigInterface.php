@@ -13,6 +13,10 @@ use eXpansion\Framework\Config\Services\ConfigManager;
  */
 interface ConfigInterface
 {
+    const SCOPE_GLOBAL = 'global';
+    const SCOPE_KEY = 'key';
+    const SCOPE_SERVER = 'server';
+
     /**
      * Get path to the config. 'exemple : expansion/localrecors/race_nb'
      *
@@ -35,6 +39,20 @@ interface ConfigInterface
     public function getDescription() : string;
 
     /**
+     * Get the scope of the variable.
+     *
+     * @return string
+     */
+    public function getScope() : string;
+
+    /**
+     * Do we display the config in the config windows.
+     *
+     * @return bool
+     */
+    public function isHidden(): boolean;
+
+    /**
      * Get default raw value.
      *
      * @return mixed
@@ -53,7 +71,7 @@ interface ConfigInterface
      *
      * @param mixed $value
      *
-     * @return void
+     * @return boolean true if sucessfuly changed and false if not.
      */
     public function setRawValue($value);
 }

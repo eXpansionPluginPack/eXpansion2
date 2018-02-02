@@ -3,6 +3,7 @@
 namespace eXpansion\Framework\Config\DependencyInjection\Compiler;
 
 use eXpansion\Framework\Config\Services\ConfigManager;
+use eXpansion\Framework\Config\Services\ConfigUiManager;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -41,6 +42,7 @@ class ConfigPass implements CompilerPassInterface
         }
 
         // Find all services to display configs.
+        $definition = $container->getDefinition(ConfigUiManager::class);
         $services = $this->findAndSortTaggedServices('expansion.config.ui', $container);
         foreach($services as $service) {
             $definition->addMethodCall(
