@@ -4,8 +4,11 @@ namespace eXpansion\Framework\Config\Ui\Window;
 
 use eXpansion\Framework\Config\Model\ConfigInterface;
 use eXpansion\Framework\Config\Services\ConfigManager;
+use eXpansion\Framework\Config\Services\ConfigManagerInterface;
+use eXpansion\Framework\Config\Services\ConfigUiManager;
 use eXpansion\Framework\Core\Exceptions\PlayerException;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
+use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WindowFactory;
 use FML\Controls\Frame;
 
@@ -21,8 +24,28 @@ class ConfigWindowFactory extends WindowFactory
     /** @var string */
     protected $currentPath;
 
-    /** @var ConfigManager */
+    /** @var ConfigManagerInterface */
     protected $configManager;
+
+    /** @var ConfigUiManager */
+    protected $configUiManager;
+
+    public function __construct(
+        $name,
+        $sizeX,
+        $sizeY,
+        $posX = null,
+        $posY = null,
+        WindowFactoryContext $context,
+        ConfigManagerInterface $configManager,
+        ConfigUiManager $configUiManager
+    ) {
+        parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
+
+        $this->configManager = $configManager;
+        $this->configUiManager = $configUiManager;
+    }
+
 
     /**
      * @inheritdoc
@@ -35,16 +58,16 @@ class ConfigWindowFactory extends WindowFactory
 
         $manialink->setData('current_path', $this->currentPath);
 
-        // TODO should be using the grid here. But the grid is not flexible enought! :(
+        // TODO should use scrollbars here as we can't use grid.
         // see how grid is built to fix this.
-        $configs = $this->configManager->getConfigTree()->get($this->currentPath);
+        $configs = $this->configManager->getConfigDefinitionTree()->get($this->currentPath);
         $elements = [];
         foreach ($configs as $config) {
             if (!is_object($config) || !($config instanceof ConfigInterface)) {
                 throw new PlayerException("{$this->currentPath} is not valid configuration path");
             }
 
-            $elements[] = $this->configManager->getUiHandler($config)->build($config, $this->sizeX - 8);
+            $elements[] = $this->configUiManager->getUiHandler($config)->build($config, $this->sizeX - 8);
         }
         $contentFrame->addChild($this->uiFactory->createLayoutLine(0, 0, $elements));
 
@@ -67,7 +90,7 @@ class ConfigWindowFactory extends WindowFactory
      */
     public function saveCallback(ManialinkInterface $manialink, $login, $entries, $args)
     {
-        $configs = $this->configManager->getConfigTree();
+        $configs = $this->configManager->getConfigDefinitionTree();
 
         foreach ($entries as $configPath => $configValue) {
             $config = $configs->get($configPath);

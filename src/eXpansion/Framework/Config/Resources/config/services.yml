@@ -6,7 +6,7 @@ services:
         autoconfigure: true
         public: true
 
-    eXpansion\Framework\Config\Services\ConfigManager:
+    eXpansion\Framework\Config\Services\ConfigManagerInterface:
         class: 'eXpansion\Framework\Config\Services\ConfigManager'
         arguments:
             $filesystem: '@oneup_flysystem.expansion_config_filesystem'

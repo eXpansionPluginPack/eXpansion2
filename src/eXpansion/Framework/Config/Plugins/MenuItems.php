@@ -5,7 +5,7 @@ namespace eXpansion\Framework\Config\Plugins;
 use eXpansion\Bundle\Menu\DataProviders\Listener\ListenerMenuItemProviderInterface;
 use eXpansion\Bundle\Menu\Model\Menu\ChatCommandItem;
 use eXpansion\Bundle\Menu\Model\Menu\ParentItem;
-use eXpansion\Framework\Config\Services\ConfigManager;
+use eXpansion\Framework\Config\Services\ConfigManagerInterface;
 
 /**
  * Class MenuItems
@@ -16,9 +16,18 @@ use eXpansion\Framework\Config\Services\ConfigManager;
  */
 class MenuItems implements ListenerMenuItemProviderInterface
 {
-
-    /** @var ConfigManager */
+    /** @var ConfigManagerInterface */
     protected $configManager;
+
+    /**
+     * MenuItems constructor.
+     *
+     * @param ConfigManagerInterface $configManager
+     */
+    public function __construct(ConfigManagerInterface $configManager)
+    {
+        $this->configManager = $configManager;
+    }
 
 
     /**
@@ -37,7 +46,7 @@ class MenuItems implements ListenerMenuItemProviderInterface
             null
         );
 
-        $configTree = $this->configManager->getConfigTree();
+        $configTree = $this->configManager->getConfigDefinitionTree();
         $this->registerConfigItems($root, 'admin/config', $configTree->getArray());
     }
 

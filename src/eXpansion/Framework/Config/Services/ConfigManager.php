@@ -20,7 +20,7 @@ use Psr\Log\LoggerInterface;
  * @copyright 2018 eXpansion
  * @package eXpansion\Framework\Config\Services
  */
-class ConfigManager
+class ConfigManager implements ConfigManagerInterface
 {
     /** @var DispatcherInterface */
     protected $dispatcher;
@@ -75,15 +75,9 @@ class ConfigManager
     }
 
     /**
-     * Set the raw value of a configuration variable.
-     *
-     * @param $path
-     * @param $value
-     *
-     * @return bool
-     * @throws UnhandledConfigurationException
+     * @inheritdoc
      */
-    public function set($path, $value)
+    public function set($path, $value) : bool
     {
         /** @var ConfigInterface $configDefinition */
         $configDefinition = $this->configTree->get($path);
@@ -119,12 +113,7 @@ class ConfigManager
     }
 
     /**
-     * Get the raw value of a configuration variable.
-     *
-     * @param $path
-     *
-     * @return mixed
-     * @throws UnhandledConfigurationException
+     * @inheritdoc
      */
     public function get($path)
     {
@@ -145,11 +134,9 @@ class ConfigManager
     }
 
     /**
-     * @param $scope
-     *
-     * @return AssociativeArray
+     * @inheritdoc
      */
-    public function getAllConfigs($scope)
+    public function getAllConfigs($scope) : AssociativeArray
     {
         $this->loadConfigValues();
 
@@ -178,7 +165,7 @@ class ConfigManager
     }
 
     /**
-     * Loads all config value from the json files.
+     * @inheritdoc
      */
     public function loadConfigValues()
     {
@@ -214,7 +201,7 @@ class ConfigManager
     }
 
     /**
-     * Saves all config values in json files.
+     * @inheritdoc
      */
     public function saveConfigValues()
     {
@@ -237,9 +224,7 @@ class ConfigManager
     }
 
     /**
-     * Get the config tree.
-     *
-     * @return AssociativeArray
+     * @inheritdoc
      */
     public function getConfigDefinitionTree(): AssociativeArray
     {
