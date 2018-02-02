@@ -1,0 +1,3 @@
+expansion_admingroups:
+  chat_commands:
+    no_permission: "{error}Du verfügst nicht über die Berechtigung für dieses Chat-Kommando."

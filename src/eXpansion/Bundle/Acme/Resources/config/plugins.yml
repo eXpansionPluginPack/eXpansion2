@@ -22,6 +22,14 @@ services:
             - {name: 'expansion.plugin', data_provider: 'exp.timer'}
             - {name: 'expansion.plugin', data_provider: 'exp.application'}
 
+    eXpansion\Bundle\Acme\Plugins\SmTest:
+        class:  eXpansion\Bundle\Acme\Plugins\SmTest
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'sm.player'}
+            - {name: 'expansion.plugin', data_provider: 'sm.player.shoot'}
+
+
+
     eXpansion\Bundle\Acme\Plugins\Gui\WindowFactory:
             arguments:
                 $name:  "test window"

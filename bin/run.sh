@@ -4,13 +4,13 @@
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 cd ..
 
-echo "Checking for database updates"
-./bin/console propel:migration:diff
-./bin/console propel:migration:migrate
+echo "Clearing caches"
+rm -rf var/cache/*
 
 echo ""
-echo "Clearing caches"
-./bin/console cache:clear --no-warmup --env=prod
+echo "Checking for database updates"
+./bin/console propel:migration:diff --env=prod
+./bin/console propel:migration:migrate --env=prod
 
 echo ""
 echo "Launching eXpansion"

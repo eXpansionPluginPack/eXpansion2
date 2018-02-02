@@ -1,0 +1,10 @@
+expansion_menu:
+  menu: "Menü:"
+  menu_open: "Menü"
+  menu_close: "Menü schließen"
+  admin:
+    label: Admin
+  general:
+    label: Allgemeines
+    help: Hilfe
+

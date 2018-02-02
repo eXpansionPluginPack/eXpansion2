@@ -51,7 +51,6 @@ class ChatNotificationTest extends TestCore
 
         $translate = [
             0 => ['Lang' => 'fr', 'Text' => '$z$s' . $colorCode . 'Ceci est une trad de test : Toto'],
-            1 => ['Lang' => 'de', 'Text' => '$z$s' . $colorCode . 'This is a test translation : Toto'],
         ];
 
         $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
@@ -74,7 +73,6 @@ class ChatNotificationTest extends TestCore
 
         $translate = [
             0 => ['Lang' => 'fr', 'Text' => '$z$s' . $colorCode . 'Ceci est une trad de test : Toto'],
-            1 => ['Lang' => 'de', 'Text' => '$z$s' . $colorCode . 'This is a test translation : Toto'],
         ];
 
 

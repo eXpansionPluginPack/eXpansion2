@@ -1,0 +1,29 @@
+expansion_players:
+  gui:
+    list:
+      window:
+        title: "Spielerlisten verwalten"
+        column:
+          remove: "Entfernen"
+    players:
+      window:
+        title: 'Spieler'
+        reason: 'Grund'
+        language: 'Client-Sprache'
+        gameversion: 'Version des Spiels'
+        ladder: 'Ladder-Punkte'
+        blacklist: "Blacklist"
+        guestlist: "Gästeliste"
+        ignorelist: "Ignorieren-Liste"
+        banlist: "Blacklist"
+        column:
+          flag: '#'
+          from: 'Von'
+          nickname: 'Nickname'
+          login: 'Login'
+          select: 'Auswählen'
+  chat:
+    exception: '|error| {error}Dedicated Server-Fehler: {highlight}%message%'
+  menu:
+    label: "Spieler"
+    list: "Spielerliste"

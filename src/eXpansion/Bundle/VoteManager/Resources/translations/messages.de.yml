@@ -1,0 +1,17 @@
+expansion_votemanager:
+  chat:
+    admin_pass: "|info| {admin_info}%level% %admin% {admin_info}Akzeptiert die Abstimmung!"
+  menu:
+    restart: "Neustart der Karte"
+    skip: "Karte überspringen"
+  gui:
+    vote_widget:
+      restart: "Neustart der Karte?"
+      skip: "Karte überspringen?"
+  nextmap:
+    question: "Karte überspringen?"
+  restartmap:
+    question: "Neustart der Karte?"
+  error:
+    already_started: "|error| Abstimmung dieser Art hat bereits begonnen."
+    in_progress: "|error| Es ist bereits eine Abstimmung aktiv"

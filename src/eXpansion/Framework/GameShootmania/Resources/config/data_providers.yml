@@ -1,0 +1,43 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    expansion.framework.game_shootmania.data_providers.playershoot:
+        class: eXpansion\Framework\GameShootmania\DataProviders\PlayerShootDataProvider
+        tags:
+            - {name: expansion.dataprovider, provider: "sm.player.shoot", interface: eXpansion\Framework\GameShootmania\DataProviders\Listener\ListenerInterfaceSmPlayerShoot}
+            - {name: expansion.dataprovider.compatibility, title: 'SM'}
+            - {name: expansion.dataprovider.listener, event_name: Shootmania.Event.OnShoot, method: onShoot}
+
+    expansion.framework.game_shootmania.data_providers.player:
+        class: eXpansion\Framework\GameShootmania\DataProviders\PlayerDataProvider
+        tags:
+            - {name: expansion.dataprovider, provider: "sm.player", interface: eXpansion\Framework\GameShootmania\DataProviders\Listener\ListenerInterfaceSmPlayer}
+            - {name: expansion.dataprovider.compatibility, title: 'SM'}
+            - {name: expansion.dataprovider.listener, event_name: Shootmania.Event.OnHit, method: onPlayerHit}
+            - {name: expansion.dataprovider.listener, event_name: Shootmania.Event.OnArmorEmpty, method: onArmorEmpty}
+            - {name: expansion.dataprovider.listener, event_name: Shootmania.Event.OnCapture, method: onCapture}
+            - {name: expansion.dataprovider.listener, event_name: Shootmania.Event.OnPlayerTriggersSector, method: onPlayerTriggersSector}
+            - {name: expansion.dataprovider.listener, event_name: Shootmania.Event.OnPlayerTouchesObject, method: onPlayerTouchesObject}
+            - {name: expansion.dataprovider.listener, event_name: Shootmania.Event.OnPlayerThrowsObject, method: onPlayerThrowsObject}
+
+    expansion.framework.game_shootmania.data_providers.playerextra:
+        class: eXpansion\Framework\GameShootmania\DataProviders\PlayerExtraDataProvider
+        tags:
+            - {name: expansion.dataprovider, provider: "sm.player.extra", interface: eXpansion\Framework\GameShootmania\DataProviders\Listener\ListenerInterfaceSmPlayerExtra}
+            - {name: expansion.dataprovider.compatibility, title: 'SM'}
+            - {name: expansion.dataprovider.listener, event_name: Shootmania.Event.OnNearMiss, method: onNearMiss}
+            - {name: expansion.dataprovider.listener, event_name: Shootmania.Event.OnShotDeny, method: onShotDeny}
+            - {name: expansion.dataprovider.listener, event_name: Shootmania.Event.OnFallDamage, method: onFallDamage}
+            - {name: expansion.dataprovider.listener, event_name: Shootmania.Event.OnPlayerRequestRespawn, method: onRequestRespawn}
+
+    expansion.framework.game_shootmania.data_providers.playeraction:
+        class: eXpansion\Framework\GameShootmania\DataProviders\PlayerActionDataProvider
+        tags:
+            - {name: expansion.dataprovider, provider: "sm.player.actions", interface: eXpansion\Framework\GameShootmania\DataProviders\Listener\ListenerInterfaceSmPlayerActions}
+            - {name: expansion.dataprovider.compatibility, title: 'SM'}
+            - {name: expansion.dataprovider.listener, event_name: Shootmania.Event.OnActionCustomEvent, method: onActionCustomEvent}
+            - {name: expansion.dataprovider.listener, event_name: Shootmania.Event.OnActionEvent, method: onActionEvent}
+            - {name: expansion.dataprovider.listener, event_name: Shootmania.Event.OnPlayerRequestActionChange, method: onPlayerRequestActionChange}

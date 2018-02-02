@@ -2,21 +2,19 @@
 
 namespace eXpansion\Bundle\Maps\ChatCommand;
 
-use eXpansion\Bundle\AdminChat\ChatCommand\AbstractConnectionCommand;
 use eXpansion\Bundle\Maps\Plugins\ManiaExchange;
 use eXpansion\Bundle\Maps\Plugins\Maps;
-use eXpansion\Bundle\Maps\Services\JukeboxService;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
+use eXpansion\Framework\AdminGroups\Model\AbstractAdminChatCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Tests\eXpansion\Framework\AdminGroups\TestHelpers\AdminChatCommand;
 
 /**
  *
  * @author  Reaby
  *
  */
-class Remove extends AdminChatCommand
+class Remove extends AbstractAdminChatCommand
 {
 
     /** @var  Maps */

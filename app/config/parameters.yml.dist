@@ -3,13 +3,13 @@
 
 parameters:
     database_driver: mysql
-    database_host: mysql
+    database_host: '127.0.0.1'
     database_port: ~
     database_name: expansion
     database_user: root
     database_password: ~
 
-    dedicated_host: localhost
+    dedicated_host: '127.0.0.1'
     dedicated_port: 5000
     dedicated_timeout: 5
     dedicated_user: SuperAdmin

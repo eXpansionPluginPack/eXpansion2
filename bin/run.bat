@@ -5,12 +5,12 @@ cd ..
 
 chcp 65001
 
-ECHO Checking for database updates
-php bin/console propel:migration:diff
-php bin/console propel:migration:migrate
-
 ECHO Clearing caches
-php bin/console cache:clear --no-warmup --env=prod
+RMDIR /S /Q var\cache\prod
+
+ECHO Checking for database updates
+php bin/console propel:migration:diff --env=prod
+php bin/console propel:migration:migrate --env=prod
 
 ECHO Launching eXpansion
 php bin\console eXpansion:run -vvv --env=prod
