@@ -145,3 +145,10 @@ services:
             - {name: 'expansion.dataprovider', provider: "mp.legacy.script", interface: "%expansion.framework.core.data_providers.script_data_provider.interface%"}
             - {name: 'expansion.dataprovider.compatibility', title: ALL, gamemode: script}
             - {name: 'expansion.dataprovider.listener', event_name: ModeScriptCallbackArray, method: onModeScriptCallbackArray}
+
+    # This provider doesen't provide anydata. just used to set api version.
+    expansion.framework.core.data_providers.script_api_version_setter:
+        class: eXpansion\Framework\GameManiaplanet\DataProviders\ScriptApiVersionSetterDataProvider
+        tags:
+            - {name: 'expansion.dataprovider', provider: "mp.script.api_set_version", interface: "%expansion.framework.core.data_providers.script_data_provider.interface%"}
+            - {name: 'expansion.dataprovider.compatibility', title: ALL, gamemode: script}
