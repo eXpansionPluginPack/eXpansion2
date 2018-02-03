@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Core\Plugins\Gui;
 
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryContext;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Script\Variable;
@@ -17,7 +18,7 @@ use FML\Script\ScriptLabel;
  * @copyright 2018 eXpansion
  * @package eXpansion\Framework\Core\Plugins\Gui
  */
-class ScriptVariableUpdateFactory extends WidgetFactory
+class ScriptVariableUpdateFactory extends WidgetFactory implements ListenerInterfaceExpTimer
 {
     /** @var Variable[] */
     protected $variables = [];
@@ -25,24 +26,31 @@ class ScriptVariableUpdateFactory extends WidgetFactory
     /** @var Variable */
     protected $checkVariable;
 
+    /** @var int */
+    protected $maxUpdateFrequency;
+
     /** @var Variable */
     protected $checkOldVariable;
 
     /** @var Group */
     protected $playerGroup;
 
+    protected $queuedForUpdate = null;
+
     /**
-     * AbstractScriptVariableUpdateFactory constructor.
+     * ScriptVariableUpdateFactory constructor.
      *
-     * @param $name
-     * @param array $variables
-     * @param Group $playerGroup
-     * @param ManialinkFactoryContext $context
+     * @param                      $name
+     * @param array                $variables
+     * @param int                  $maxUpdateFrequency
+     * @param Group                $playerGroup
+     * @param WidgetFactoryContext $context
      */
-    public function __construct($name, array  $variables, Group $playerGroup, WidgetFactoryContext $context)
+    public function __construct($name, array  $variables, int $maxUpdateFrequency = 5, Group $playerGroup, WidgetFactoryContext $context)
     {
         parent::__construct($name, 0, 0, 0, 0, $context);
         $this->playerGroup = $playerGroup;
+        $this->maxUpdateFrequency = $maxUpdateFrequency;
 
         foreach ($variables as $variable) {
             $this->variables[$variable['name']] = new Variable(
@@ -71,8 +79,9 @@ class ScriptVariableUpdateFactory extends WidgetFactory
             $uniqueId = '"' . uniqid('exp_') . '"';
             $this->checkVariable->setValue($uniqueId);
 
-            // TODO improve this to have update run with a max frequency of once each 5s.
-            $this->update($this->playerGroup);
+            if (is_null($this->queuedForUpdate)) {
+                $this->queuedForUpdate = time();
+            }
         }
 
     }
@@ -113,9 +122,6 @@ class ScriptVariableUpdateFactory extends WidgetFactory
                 {$this->checkOldVariable->getVariableName()} = {$this->checkVariable->getVariableName()};
                 $toExecute
             }
-            log("Checking old new variable");
-            log({$this->checkVariable->getVariableName()});
-            log({$this->checkOldVariable->getVariableName()});
 EOL;
     }
 
@@ -159,6 +165,8 @@ EOL;
         $script = new Script();
         $script->addCustomScriptLabel(ScriptLabel::OnInit, $scriptContent);
         $manialink->getFmlManialink()->setScript($script);
+
+        $this->queuedForUpdate = null;
     }
 
     /**
@@ -183,5 +191,33 @@ EOL;
     public function destroy(Group $group = null)
     {
         parent::destroy($this->playerGroup);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function onPreLoop()
+    {
+        // Nothing
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function onPostLoop()
+    {
+        // Nothing
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function onEverySecond()
+    {
+        if (!is_null($this->queuedForUpdate)) {
+            if (time() - $this->queuedForUpdate > $this->maxUpdateFrequency) {
+                $this->update($this->playerGroup);
+            }
+        }
     }
 }

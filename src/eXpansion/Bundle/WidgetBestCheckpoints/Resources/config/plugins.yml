@@ -28,3 +28,5 @@ services:
                 $playerGroup : "@expansion.framework.core.user_groups.all_players"
                 $variables:
                   - {name: "LocalRecordCheckpoints", type: "Integer[Integer]", default: "Integer[Integer]"}
+            tags:
+                - {name: expansion.plugin, data_provider: exp.timer}
