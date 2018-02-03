@@ -15,7 +15,7 @@ expansion_players:
         blacklist: "Blacklist"
         guestlist: "Gästeliste"
         ignorelist: "Ignorieren-Liste"
-        banlist: "Blacklist"
+        banlist: "Ban-Liste"
         column:
           flag: '#'
           from: 'Von'
@@ -23,7 +23,7 @@ expansion_players:
           login: 'Login'
           select: 'Auswählen'
   chat:
-    exception: '|error| {error}Dedicated Server-Fehler: {highlight}%message%'
+    exception: "|error| {error}Dedicated Server-Fehler: {highlight}%message%"
   menu:
     label: "Spieler"
     list: "Spielerliste"

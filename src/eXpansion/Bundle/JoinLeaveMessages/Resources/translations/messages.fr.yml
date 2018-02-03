@@ -1,4 +1,4 @@
 expansion_join_leave_messages:
-  connect: '|server| Connexion|success| {default}%group% %nickname% {default}({muted}%login%{default}) de {variable}%path% {default}rejoint.'
-  disconnect: '|server| Déconnexion |success| {default}%group% %nickname% {default}({muted}%login%{default}) de {variable}%path% {default}quitte.'
-  applicationGreeter: '|server| {info}Bienvenu ! Ce serveur utilise {variable}eXpansion² v%version%{info} pour gérer l’interface utilisateur et les records.'
+  connect: '|server| {default}%group% %nickname% {default}({muted}%login%{default}) from {variable}%path% {default}joins.'
+  disconnect: '|server| {default}%group% %nickname% {default}({muted}%login%{default}) from {variable}%path%  {default}leaves.'
+  applicationGreeter: '| serveur | {info}Bienvenu ! Ce serveur utilise {variable}eXpansion² v%version%{info} pour gérer l’interface utilisateur et les records.'

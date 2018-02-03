@@ -27,6 +27,7 @@ expansion_mx:
     nopermission: "|error| {error}Oikeutesi eivät riitä lisätä karttaa Mania-Exchangesta."
     apierror: '|error| {error}Mania-Exchange Api-virhe: "{highlight}%message% {error}" ({highlight}%status%{error})'
     httperror: '|error| {error}Mania-Exchange Http-virhe: "{highlight}%message% {error}" ({highlight}%status%{error})'
+    jsonerror: '|error| {error}Mania-Exchange Json Error: "{highlight}%message%'
     decline: "|admin| {error}Kartan tekijä on kieltänyt tämän kartan lataamisen."
     success: "|admin| {info}Kartta {variable}%mapname% {info}tekijä {variable}%mapauthor% {info}lisätty onnistuneesti Mania-Exchangesta."
     start: "|admin| {info}Lataus alkaa kartalle {highlight}%id% {info}peli: {highlight}%site% {info}Mania-Exchange."
@@ -45,6 +46,8 @@ expansion_mx:
         envir: "Ymp."
         awards: '$ff0🏆'
         length: "Pituus"
+        difficulty: "Difficulty"
+        maptype: "Map Type"
         style: "Tyyli"
         add: "Asennus"
 expansion_maps:

@@ -83,4 +83,4 @@ expansion_admin_chat:
   setserverpasswordforspectator:
     msg: '|admin| {admin_info}Neues Passwort für Zuschauer ist: "{highlight}%parameter%{admin_info}"'
     description: '{info}Setzt ein neues Zuschauerpasswort'
-  dedicatedexception: '|error| {error}Dedicated Server-Fehler: {highlight}%message%'
+  dedicatedexception: "|error| {error}Dedicated Server-Fehler: {highlight}%message%"
