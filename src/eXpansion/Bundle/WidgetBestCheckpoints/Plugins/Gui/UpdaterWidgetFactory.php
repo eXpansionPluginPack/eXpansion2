@@ -14,7 +14,6 @@ class UpdaterWidgetFactory extends ScriptVariableUpdateFactory
      */
     public function setLocalRecord($checkpoints)
     {
-        // TODO this should use more generic service dedicated to this.
         if (count($checkpoints) > 0) {
             $this->updateValue('LocalRecordCheckpoints', Builder::getArray($checkpoints, true));
         } else {

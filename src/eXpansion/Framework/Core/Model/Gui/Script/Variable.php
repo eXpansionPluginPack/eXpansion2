@@ -34,12 +34,13 @@ class Variable
      * @param null|string $for
      * @param bool $isUnique
      */
-    public function __construct(string $variableName, string $type, string $for = '', bool $isUnique = false)
+    public function __construct(string $variableName, string $type, string $for = '', string $value, bool $isUnique = false)
     {
         $this->variableName = $variableName;
         $this->type = $type;
         $this->for = $for;
         $this->isUnique = $isUnique;
+        $this->value = $value;
     }
 
     /**
@@ -104,7 +105,7 @@ class Variable
     {
         $varName = $this->getVariableName();
         $for = !empty($this->for) ? "for $this->for" : "";
-        return "declare Real $varName $for = $this->value;";
+        return "declare $this->type $varName $for = $this->value;";
     }
 
     /**

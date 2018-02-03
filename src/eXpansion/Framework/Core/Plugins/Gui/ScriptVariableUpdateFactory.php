@@ -25,6 +25,9 @@ class ScriptVariableUpdateFactory extends WidgetFactory
     /** @var Variable */
     protected $checkVariable;
 
+    /** @var Variable */
+    protected $checkOldVariable;
+
     /** @var Group */
     protected $playerGroup;
 
@@ -50,7 +53,9 @@ class ScriptVariableUpdateFactory extends WidgetFactory
             );
         }
 
-        $this->checkVariable = new Variable('check', 'Text', 'This', uniqid('exp_'));
+        $uniqueId = uniqid('exp_');
+        $this->checkVariable = new Variable('check', 'Text', 'This', "\"$uniqueId\"");
+        $this->checkOldVariable = new Variable('check_old', 'Text', 'This', "\"$uniqueId\"");
     }
 
     /**
@@ -63,7 +68,8 @@ class ScriptVariableUpdateFactory extends WidgetFactory
     {
         if ($this->variables[$variable]->getValue() != $newValue) {
             $this->variables[$variable]->setValue($newValue);
-            $this->checkVariable->setValue(uniqid('exp_'));
+            $uniqueId = '"' . uniqid('exp_') . '"';
+            $this->checkVariable->setValue($uniqueId);
 
             // TODO improve this to have update run with a max frequency of once each 5s.
             $this->update($this->playerGroup);
@@ -103,10 +109,13 @@ class ScriptVariableUpdateFactory extends WidgetFactory
     public function getScriptOnChange($toExecute)
     {
         return <<<EOL
-            if ({$this->checkVariable->getVariableName()} != {$this->checkVariable->getVariableName()} _Old) {
-                {$this->checkVariable->getVariableName()} _Old = {$this->checkVariable->getVariableName()};
+            if ({$this->checkVariable->getVariableName()} != {$this->checkOldVariable->getVariableName()}) {
+                {$this->checkOldVariable->getVariableName()} = {$this->checkVariable->getVariableName()};
                 $toExecute
             }
+            log("Checking old new variable");
+            log({$this->checkVariable->getVariableName()});
+            log({$this->checkOldVariable->getVariableName()});
 EOL;
     }
 
@@ -125,9 +134,10 @@ EOL;
             }
         }
         $scriptContent .= $this->checkVariable->getScriptDeclaration() . "\n";
+        $scriptContent .= $this->checkOldVariable->getScriptDeclaration() . "\n";
         if ($defaultValues) {
             $scriptContent .= $this->checkVariable->getScriptValueSet() . "\n";
-            $scriptContent .= $this->checkVariable->getVariableName() . '_Old = "";';
+            $scriptContent .= $this->checkOldVariable->getVariableName() . ' = "";';
         }
 
         return $scriptContent;
@@ -143,7 +153,7 @@ EOL;
         $manialink->getFmlManialink()->removeAllChildren();
 
         // Get script with new values.
-        $scriptContent = $this->getScriptInitialization();
+        $scriptContent = $this->getScriptInitialization(true);
 
         // Update FML Manialink
         $script = new Script();
