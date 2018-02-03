@@ -16,6 +16,8 @@
     * Added missing translations for players-window.
     * Removed error message at vote manager, when a plugin is not bind for native vote equivalent.
 * Fixed issue when shuffling maps if there are more then 250 maps. 
+* Fixed issue #243
+    * If custom script mode doesen't have method `setApiVersion` eXpansion crashes.
 
 # 2.0.0.0-alpha1 (2018-01-20)
 

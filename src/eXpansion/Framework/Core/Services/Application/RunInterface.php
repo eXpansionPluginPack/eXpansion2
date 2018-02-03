@@ -8,17 +8,22 @@ interface RunInterface
 {
     /**
      * @param OutputInterface $output
+     *
      * @return mixed
      */
     public function init(OutputInterface $output);
 
     /**
-     * @return mixed
+     * Run expansion
+     *
+     * @return void
      */
     public function run();
 
     /**
-     * @return mixed
+     * Stop application.
+     *
+     * @return void
      */
     public function stopApplication();
 }
