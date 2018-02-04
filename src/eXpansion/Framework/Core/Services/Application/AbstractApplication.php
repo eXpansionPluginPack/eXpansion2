@@ -18,8 +18,7 @@ abstract class AbstractApplication implements RunInterface
     const EVENT_READY = "expansion.ready";
     const EVENT_STOP = "expansion.stop";
 
-    const EXPANSION_VERSION = "2.0.0.0";
-    const SCRIPT_API_VERSION = "2.4.0";
+    const EXPANSION_VERSION = "dev";
 
     /** @var Connection */
     protected $connection;
@@ -76,6 +75,8 @@ abstract class AbstractApplication implements RunInterface
 
     /**
      * Run eXpansion
+     *
+     * @inheritdoc
      */
     public function run()
     {
@@ -97,7 +98,6 @@ abstract class AbstractApplication implements RunInterface
         // need to send this for scripts to start callback handling
         try {
             $this->connection->triggerModeScriptEvent("XmlRpc.EnableCallbacks", ["True"]);
-            $this->connection->triggerModeScriptEvent("XmlRpc.SetApiVersion", [self::SCRIPT_API_VERSION]);
             Propel::getConnection()->inTransaction();
         } catch (ConnectionException $propelException) {
 
@@ -105,6 +105,7 @@ abstract class AbstractApplication implements RunInterface
             $this->console->writeln("Please check-in later, when you database is up and running.");
             $this->logger->error("Unable to open connection for database server", ["exception" => $propelException]);
             exit(1);
+
         } catch (\Exception $exception) {
             $this->connection->saveMatchSettings('MatchSettings/eXpansion-mode-fail-' . date(DATE_ISO8601) . '.txt');
             throw $exception;

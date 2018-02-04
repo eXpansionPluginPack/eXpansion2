@@ -104,6 +104,7 @@ class AdminShuffleCommand extends AbstractAdminChatCommand
             $maps[] = $mapFile;
             if (count($maps) > 250) {
                 $this->connection->insertMapList($maps, true);
+                $maps = [];
             }
         }
         // for remaining maps, which didn't fit to 200

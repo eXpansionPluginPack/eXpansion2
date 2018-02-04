@@ -1,7 +1,7 @@
 expansion_admin:
   chat:
     nopermission: "|error| {error}Du hast keine ausreichende Berechtigung für diese Aktion."
-    dedicatedexception: '|error| {error}Dedicated-Server-Fehler: {highlight}%message%'
+    dedicatedexception: "|error| {error}Dedicated-Server-Fehler: {highlight}%message%"
     removemap: "|admin| {admin_info}%level% %admin% {admin_info}löscht Karte %map% {admin_info}von der aktuellen Playlist."
   gui:
     button:

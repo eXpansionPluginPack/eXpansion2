@@ -1,12 +1,12 @@
 expansion_admin:
   chat:
-    nopermission: "| erreur | {error}Vous n’avez pas les permissions nécessaires pour effectuer cette action."
-    dedicatedexception: '| erreur | {error}Erreur du serveur dédié : {highlight}%message%'
-    removemap: "| admin | {admin_info}%level% %admin% {admin_info}Supprime la carte %map% {admin_info}de la liste de lecture actuelle."
+    nopermission: "|error| {error}Vous n’avez pas les permissions nécessaires pour effectuer cette action."
+    dedicatedexception: '|error| {error}Erreur du serveur dédié : {highlight}%message%'
+    removemap: "|admin| {admin_info}%level% %admin% {admin_info}Supprime la carte %map% {admin_info}de la liste de lecture actuelle."
   gui:
     button:
       drop: "supprimer"
-      clear: "nettoyer"
+      clear: "vider"
     window:
       scriptsettings:
         title: 'Paramètres de script'
