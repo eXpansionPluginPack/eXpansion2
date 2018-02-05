@@ -2,7 +2,7 @@ expansion_votemanager:
   chat:
     admin_pass: "|info| {admin_info}%level% %admin% {admin_info}passes the vote!"
   menu:
-    restart: "Käynnistä uudelleen"
+    restart: "Käynnistä uudelleen kartta"
     skip: "Ohita kartta"
   gui:
     vote_widget:
@@ -11,7 +11,7 @@ expansion_votemanager:
   nextmap:
     question: "Ohita kartta ?"
   restartmap:
-    question: "Käynnistä uudelleen kartta ?"
+    question: "Käynnistä uudelleen ?"
   error:
     already_started: "|error| Tämän tyyppinen äänestys on jo käynnissä."
     in_progress: "|error| Äänestys on jo käynnissä"

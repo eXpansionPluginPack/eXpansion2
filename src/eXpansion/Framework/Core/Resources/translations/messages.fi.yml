@@ -1,8 +1,8 @@
 expansion_core:
-  test: 'Tämä on testikäännös : %test%'
-  test_color: '{test}tämä on testikäännös : %test%'
-  test_glyph: '|test|Tämä on testikäännös : %test%'
-  test_color_glyph: '{test}|test|Tämä on testikäännös : %test%'
+  test: "Tämä on testikäännös : %test%"
+  test_color: "{test}tämä on testikäännös : %test%"
+  test_glyph: "|test|Tämä on testikäännös : %test%"
+  test_color_glyph: "{test}|test|Tämä on testikäännös : %test%"
   chat_commands:
     wrong_chat: "{error}Chat-komentoa ei löydy. {info}Kirjoita /help nähdäksesi kaikki komennot."
     no_description: "{info}Komennolla ei ole kuvausta."

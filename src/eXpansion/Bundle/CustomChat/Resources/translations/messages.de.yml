@@ -2,5 +2,5 @@ expansion_customchat:
   chat:
     enabled: "|admin| {admin_info}%admin% %nickname% {variable}aktiviert {admin_info}den öffentlichen Chat."
     disabled: "|admin| {admin_info}%admin% %nickname% {variable}deaktiviert {admin_info} den öffentlichen Chat."
-    invalid: '|info| {info} ungültiger Parameter für den Befehl. Gültige Werte sind: %variable%enable, disable, on, off'
+    invalid: "|info| {info} ungültiger Parameter für den Befehl. Gültige Werte sind: %variable%enable, disable, on, off"
     disabledstate: "|info| {info} Der öffentliche Chat ist derzeit deaktiviert. Du kannst aber persönliche Nachrichten (PN) schicken."

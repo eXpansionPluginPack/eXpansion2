@@ -1,8 +1,8 @@
 expansion_core:
-  test: 'Dies ist eine Test-Übersetzung: %test%'
-  test_color: '{test}Dies ist eine Test-Übersetzung: %test%'
-  test_glyph: '|test|Dies ist eine Test-Übersetzung: %test%'
-  test_color_glyph: '{test}|test|Dies ist eine Test-Übersetzung: %test%'
+  test: "Dies ist eine Test-Übersetzung: %test%"
+  test_color: "{test}Dies ist eine Test-Übersetzung: %test%"
+  test_glyph: "|test|Dies ist eine Test-Übersetzung: %test%"
+  test_color_glyph: "{test}|test|Dies ist eine Test-Übersetzung: %test%"
   chat_commands:
     wrong_chat: "{error}Dieser Chat-Befehl existiert nicht. {info}Bitte verwende /help um alle verfügbaren Chat-Befehle zu sehen."
     no_description: "{info}Sorry, für diesen Befehl existiert keine Beschreibung."

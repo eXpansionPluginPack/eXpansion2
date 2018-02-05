@@ -3,73 +3,76 @@ expansion_jukebox:
     addmap: '|info| {variable}%nickname% {info}a ajouté la carte {variable}%mapname%{info} à la file d''attente. Longueur de la file d’attente : {variable}%length%'
     removemap: '|info| {variable}%nickname% {info} a supprimé la carte {variable}%mapname%{info} de la file d''attente. Longueur de la file d’attente : {variable}%length%'
     noremove: "|warning| {warning}Vous ne pouvez pas supprimer la carte %mapname% {warning}de la file d’attente ."
-    noadd: "|warning| {warning}You can't add map %mapname% {warning}to queue, since you already have map at queue."
-    nomap: '|error| {error}No map was not found.'
-    nopermission: "|error| {error}You don't have enough permissions to clear jukebox."
-    clear: "|info| {admin_info}%adminlevel% %admin% {admin_info}clears the Jukebox queue!"
-    nextjbmap: '|info| {info}Next map {variable}%mapname%{info} by {variable}%mapauthor% {info} wished by {variable}%nickname%{info}. Queue length: {variable}%length%'
-    nextmap: '|info| {info}Next map {variable}%name%{info} by {variable}%author%'
-    beginmap: '|info| {info}Now playing {variable}%name%{info} by {variable}%author%'
+    noadd: "|warning| {warning}Vous ne pouvez pas ajouter la carte %mapname%{warning} car vous avez déjà une carte dans la file d’attente."
+    nomap: '|error| {error}Aucune carte n’a été trouvée.'
+    nopermission: "|error| {error}Vous n’avez pas les permissions nécessaires pour vider la file d'attente."
+    clear: "|info| {admin_info}%adminlevel% %admin% {admin_info}vide la file d'attente !"
+    nextjbmap: '|info| {info}Prochaine carte {variable}%mapname%{info} par {variable}%mapauthor% {info} demandée par {variable}%nickname%{info}. Taille de la file d''attente: {variable}%length%'
+    nextmap: '|info| {info}Prochaine carte {variable}%name%{info} par {variable}%author%'
+    beginmap: '|info| {info}Carte en cours {variable}%name%{info} par {variable}%author%'
   command:
     jukebox:
-      help: 'usage /jukebox :number:  or /jukebox drop, for admins also /jukebox clear'
-      description: "numeric value adds map with index to jukebox, keyword 'drop' will drop your wish, and for admins keyword 'clear' will clear all maps from queue"
+      help: "Utilisation /jukebox :number:  ou /jukebox drop, pour les admins /jukebox clear"
+      description: "Un nombre ajoute la map correspondante à la file d'attente, le mot-clé \"drop\" supprime votre vœu, le mot-clé admin \"clear\" supprime toutes les maps de la file d'attente"
 expansion_mx:
   command:
     add:
-      description: "Adds a map from Mania-Exchange. usage //add 3 tm or //add 3 sm"
-      mxid: "numeric value of Mania-Exchange map id"
-      site: "accepts tm or sm"
+      description: "Ajoute une map depuis Mania-Exchange. utilisation //add 3 tm ou //add 3 sm"
+      mxid: "Id Mania-Exchange sous forme numérique"
+      site: "Accepte tm ou sm"
     remove:
-      description: "removes map current map or map with index"
-      index: "numeric value from /maps or 'this'"
+      description: "supprime la carte actuelle ou la carte avec l'id"
+      index: "valeur numérique de /maps ou \"this\""
   chat:
-    nopermission: "|error| {error}You don't have enough permissions to add map from Mania-Exchange."
-    apierror: '|error| {error}Mania-Exchange Api Error: "{highlight}%message% {error}" ({highlight}%status%{error})'
-    httperror: '|error| {error}Mania-Exchange Http Error: "{highlight}%message% {error}" ({highlight}%status%{error})'
-    decline: "|admin| {error}Map author has declined downloading this map."
+    nopermission: "|error| {error}Vous n'avez pas les permissions nécessaires pour ajouter une carte depuis Mania Exchange."
+    apierror: "|error| {error}Erreur de l'API Mania-Exchange: \"{highlight}%message% {error}\" ({highlight}%status%{error})"
+    httperror: "|error| {error}Erreur Mania-Exchange Http: \"{highlight}%message% {error}\" ({highlight}%status%{error})"
+    jsonerror: "|error| {error}Mania-Exchange Json Error: \"{highlight}%message%"
+    decline: "|admin| {error}L'auteur de la carte a désactivé le téléchargement de cette carte."
     success: "|admin| {info}Map {variable}%mapname% {info}by {variable}%mapauthor% {info}added successfully from Mania-Exchange."
     start: "|admin| {info}Download starting for {highlight}%id% {info}from {highlight}%site% {info}Mania-Exchange."
     fail: "|error| {error}Map is not compatible with current server title pack or settings! Map is not added!"
-    dedicatedexception: '|error| {error}Dedicated Server error: {highlight}%message%'
-    exception: '|error| {error}Error: {highlight}%message%'
+    dedicatedexception: "|error| {error}Erreur du serveur dédié : {highlight}%message%"
+    exception: "|error| {error}Error: {highlight}%message%"
   gui:
     mxsearch:
-      title: 'Mania-Exchange: Search'
+      title: "Mania-Exchange: Search"
       button:
-        install: "install"
+        install: "installer"
       column:
         index: "#"
-        name: "Name"
-        author: "Author"
+        name: "Nom"
+        author: "Auteur"
         envir: "Envir."
         awards: '$ff0🏆'
-        length: "Length"
+        length: "Durée"
+        difficulty: "Difficulty"
+        maptype: "Map Type"
         style: "Style"
-        add: "Install"
+        add: "Installer"
 expansion_maps:
   chat:
-    nopermission: "|error| {error}You don't have enough permissions to do this."
-    dedicatedexception: '|error| {error}Dedicated Server error: {highlight}%message%'
-    removemap: "|admin| {admin_info}%level% %admin% {admin_info}removes map %map% {admin_info}from current playlist."
+    nopermission: "|error| {error}Vous n’avez pas les permissions nécessaires pour effectuer cette action."
+    dedicatedexception: "|error| {error}Erreur du serveur dédié : {highlight}%message%"
+    removemap: "|admin| {admin_info}%level% %admin% {admin_info}Supprime la carte %map% {admin_info}de la liste de lecture actuelle."
   gui:
     button:
-      drop: "drop"
-      clear: "clear"
+      drop: "supprimer"
+      clear: "vider"
     window:
-      title: 'Server Maps'
+      title: 'Cartes du serveur'
       jbtitle: 'Jukebox'
       column:
         index: '#'
-        name: 'Name'
-        author: 'Author'
+        name: 'Nom'
+        author: 'Auteur'
         goldtime: 'Time'
-        nickname: 'Nickname'
-        drop: 'Drop'
-        wish: 'Add'
-        remove: "Remove"
+        nickname: 'Pseudo'
+        drop: 'Supprimer'
+        wish: 'Ajouter'
+        remove: "Supprimer"
   menu:
-    label: "Maps"
-    list: "List server maps"
+    label: "Cartes"
+    list: "Liste des cartes du serveur"
     jukebox: "Jukebox"
-    searchmx: "Search Mania Exchange"
+    searchmx: "Chercher sur Mania Exchange"

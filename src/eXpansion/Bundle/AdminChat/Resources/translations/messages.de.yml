@@ -22,10 +22,10 @@ expansion_admin_chat:
     description: '{info}Ändert den Servers-Kommentar.'
   savematchsettings:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} Match Settings gespeichert: {highlight}%parameter%'
-    description: '{info}Den Server-Namen ändern.'
+    description: '{info}Ändert den Server-Namen.'
   loadmatchsettings:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} Match-Settings geladen: {highlight}%parameter%'
-    description: '{info}Ändern des Server-Namens.'
+    description: '{info}Ändert den Server-Namen.'
   kick:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info}kickt {highlight}%player% {admin_info}. Grund: {highlight}%reason%'
     description: '{info}Einen Spieler vom Server kicken.'
@@ -83,4 +83,4 @@ expansion_admin_chat:
   setserverpasswordforspectator:
     msg: '|admin| {admin_info}Neues Passwort für Zuschauer ist: "{highlight}%parameter%{admin_info}"'
     description: '{info}Setzt ein neues Zuschauerpasswort'
-  dedicatedexception: '|error| {error}Dedicated Server-Fehler: {highlight}%message%'
+  dedicatedexception: "|error| {error}Dedicated-Server-Fehler: {highlight}%message%"
