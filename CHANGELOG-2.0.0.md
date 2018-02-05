@@ -36,7 +36,7 @@
 
     * If custom script mode doesen't have method `setApiVersion` eXpansion crashes.
 
-
+* Enhanced admin logging and added nicer error messages for missing dedicated and database connections.
 
 # 2.0.0.0-alpha1 (2018-01-20)
 

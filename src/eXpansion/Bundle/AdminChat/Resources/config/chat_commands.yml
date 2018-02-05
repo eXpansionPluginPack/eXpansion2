@@ -12,6 +12,7 @@ services:
             $permission:  "restart"
             $aliases:     ['res', 'restartmap']
             $functionName: "restartMap"
+            $logger: "@monolog.logger.admin"
 
     expansion.admin_chat.chat_command.shuffle_maplist:
         class: eXpansion\Bundle\AdminChat\ChatCommand\AdminShuffleCommand
@@ -19,7 +20,7 @@ services:
             $command:      "shuffle"
             $permission:   "maps"
             $aliases:      []
-
+            $logger: "@monolog.logger.admin"
     expansion.admin_chat.chat_command.cancel:
         class: eXpansion\Bundle\AdminChat\ChatCommand\AdminVoteCommand
         arguments:
@@ -27,7 +28,7 @@ services:
             $permission:   "votes"
             $aliases:      []
             $functionName: "cancelVote"
-
+            $logger: "@monolog.logger.admin"
 
     expansion.admin_chat.chat_command.next:
         class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
@@ -36,7 +37,7 @@ services:
             $permission:   "next"
             $aliases:      ['skip', 'nextmap']
             $functionName: "nextMap"
-
+            $logger: "@monolog.logger.admin"
 
     expansion.admin_chat.chat_command.set_server_name:
         class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
@@ -46,6 +47,7 @@ services:
             $aliases:              []
             $functionName:         "setServerName"
             $parameterDescription: 'sets new server name, uses "" if spaces used.'
+            $logger: "@monolog.logger.admin"
 
     expansion.admin_chat.chat_command.save_matchsettings:
         class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
@@ -54,7 +56,8 @@ services:
             $permission:           "matchsettings"
             $aliases:              []
             $functionName:         "saveMatchSettings"
-            $parameterDescription: 'matchsetting to save, ends with .txt'
+            $parameterDescription: 'match setting to save, ends with .txt'
+            $logger: "@monolog.logger.admin"
 
     expansion.admin_chat.chat_command.load_matchsettings:
         class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
@@ -63,7 +66,8 @@ services:
             $permission:           "matchsettings"
             $aliases:              []
             $functionName:         "loadMatchSettings"
-            $parameterDescription: 'matchsetting to load, ends with .txt'
+            $parameterDescription: 'match setting to load, ends with .txt'
+            $logger: "@monolog.logger.admin"
 
     expansion.admin_chat.chat_command.set_server_comment:
         class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
@@ -73,7 +77,7 @@ services:
             $aliases:              []
             $functionName:         "setServerComment"
             $parameterDescription: 'sets new server comment, use "" if spaces used.'
-
+            $logger: "@monolog.logger.admin"
 
     expansion.admin_chat.chat_command.kick:
         class: eXpansion\Bundle\AdminChat\ChatCommand\ReasonUserCommand
@@ -84,7 +88,7 @@ services:
             $functionName:               "kick"
             $parameterLoginDescription:  'Login of player to kick.'
             $parameterReasonDescription: 'The reason for kicking.'
-
+            $logger: "@monolog.logger.admin"
     #
     # Commands to ban/unban a player and clean ban list.
     #
@@ -97,6 +101,7 @@ services:
             $functionName:         "ban"
             $parameterLoginDescription: 'Login of player to ban.'
             $parameterReasonDescription: 'The reason for banning.'
+            $logger: "@monolog.logger.admin"
 
     expansion.admin_chat.chat_command.unban:
         class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
@@ -106,17 +111,17 @@ services:
             $aliases:              []
             $functionName:         "unBan"
             $parameterDescription: "Login of the player to unban"
-
+            $logger: "@monolog.logger.admin"
 
     expansion.admin_chat.chat_command.cleanban:
-          class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
-          arguments:
-              $command:      "cleanbanlist"
-              $permission:   "cleanbanlist"
-              $aliases:      []
-              $functionName: "cleanBanList"
-
-    #
+        class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
+        arguments:
+            $command:      "cleanbanlist"
+            $permission:   "cleanbanlist"
+            $aliases:      []
+            $functionName: "cleanBanList"
+            $logger: "@monolog.logger.admin"
+  #
     # Command to black/unblack a player and manage the blacklist
     #
     expansion.admin_chat.chat_command.black:
@@ -128,132 +133,147 @@ services:
             $functionName:         "banAndBlackList"
             $parameterLoginDescription: 'Login of player to black.'
             $parameterReasonDescription: 'The reason for black listing.'
+            $logger: "@monolog.logger.admin"
 
     expansion.admin_chat.chat_command.unblack:
         class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
         arguments:
-           $command:      "unblack"
-           $permission:   "unblack"
-           $aliases:      []
-           $functionName:         "unBlacklist"
-           $parameterDescription: "Login of the player to unblack"
+            $command:      "unblack"
+            $permission:   "unblack"
+            $aliases:      []
+            $functionName:         "unBlacklist"
+            $parameterDescription: "Login of the player to unblack"
+            $logger: "@monolog.logger.admin"
 
     expansion.admin_chat.chat_command.cleanblacklist:
-          class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
-          arguments:
-              $command:      "cleanblacklist"
-              $permission:   "cleanblacklist"
-              $aliases:      []
-              $functionName: "cleanBlackList"
+        class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
+        arguments:
+            $command:      "cleanblacklist"
+            $permission:   "cleanblacklist"
+            $aliases:      []
+            $functionName: "cleanBlackList"
+            $logger: "@monolog.logger.admin"
 
     expansion.admin_chat.chat_command.saveblacklist:
-          class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          arguments:
-              $command:      "saveblacklist"
-              $permission:   "saveblacklist"
-              $aliases:      []
-              $functionName:         "saveBlackList"
-              $parameterDescription: "Filename to save the list"
+        class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
+        arguments:
+            $command:      "saveblacklist"
+            $permission:   "saveblacklist"
+            $aliases:      []
+            $functionName:         "saveBlackList"
+            $parameterDescription: "Filename to save the list"
+            $logger: "@monolog.logger.admin"
 
     expansion.admin_chat.chat_command.loadblacklist:
-          class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          arguments:
-              $command:      "loadblacklist"
-              $permission:   "loadblacklist"
-              $aliases:      []
-              $functionName:         "loadBlackList"
-              $parameterDescription: "Filename to load the list"
+        class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
+        arguments:
+            $command:      "loadblacklist"
+            $permission:   "loadblacklist"
+            $aliases:      []
+            $functionName:         "loadBlackList"
+            $parameterDescription: "Filename to load the list"
+            $logger: "@monolog.logger.admin"
 
     #
     # Command to ignore/unignore users and manage the list.
     #
     expansion.admin_chat.chat_command.ignore:
-          class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          arguments:
-              $command:              "ignore"
-              $permission:           "ignore"
-              $aliases:              []
-              $functionName:         "ignore"
-              $parameterDescription: "Login of the player to ignore."
+        class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
+        arguments:
+            $command:              "ignore"
+            $permission:           "ignore"
+            $aliases:              []
+            $functionName:         "ignore"
+            $parameterDescription: "Login of the player to ignore."
+            $logger: "@monolog.logger.admin"
 
     expansion.admin_chat.chat_command.unignore:
-          class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          arguments:
-              $command:              "unignore"
-              $permission:           "unignore"
-              $aliases:              []
-              $functionName:         "unignore"
-              $parameterDescription: "Login of the player to unignore."
+        class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
+        arguments:
+            $command:              "unignore"
+            $permission:           "unignore"
+            $aliases:              []
+            $functionName:         "unignore"
+            $parameterDescription: "Login of the player to unignore."
+            $logger: "@monolog.logger.admin"
 
     #
     # Command to add/remove guests and manage the list
     #
     expansion.admin_chat.chat_command.addguest:
-          class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          arguments:
-              $command:              "addguest"
-              $permission:           "addguest"
-              $aliases:              []
-              $functionName:         "addGuest"
-              $parameterDescription: "Login of the player to add a player to your guest list."
+        class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
+        arguments:
+            $command:              "addguest"
+            $permission:           "addguest"
+            $aliases:              []
+            $functionName:         "addGuest"
+            $parameterDescription: "Login of the player to add a player to your guest list."
+            $logger: "@monolog.logger.admin"
 
     expansion.admin_chat.chat_command.removeguest:
-          class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          arguments:
-              $command:              "removeguest"
-              $permission:           "removeguest"
-              $aliases:              []
-              $functionName:         "removeGuest"
-              $parameterDescription: "Login of the player to remove from the guestlist."
+        class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
+        arguments:
+            $command:              "removeguest"
+            $permission:           "removeguest"
+            $aliases:              []
+            $functionName:         "removeGuest"
+            $parameterDescription: "Login of the player to remove from the guestlist."
+            $logger: "@monolog.logger.admin"
 
     expansion.admin_chat.chat_command.cleanguestlist:
-          class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
-          arguments:
-              $command:              "cleanguestlist"
-              $permission:           "cleanguestlist"
-              $aliases:              []
-              $functionName:         "cleanGuestList"
+        class: eXpansion\Bundle\AdminChat\ChatCommand\AdminCommand
+        arguments:
+            $command:              "cleanguestlist"
+            $permission:           "cleanguestlist"
+            $aliases:              []
+            $functionName:         "cleanGuestList"
+            $logger: "@monolog.logger.admin"
 
     expansion.admin_chat.chat_command.saveguestlist:
-          class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          arguments:
-              $command:              "saveguestlist"
-              $permission:           "saveguestlist"
-              $aliases:              []
-              $functionName:         "saveGuestList"
-              $parameterDescription: "Filename to save the list"
+        class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
+        arguments:
+            $command:              "saveguestlist"
+            $permission:           "saveguestlist"
+            $aliases:              []
+            $functionName:         "saveGuestList"
+            $parameterDescription: "Filename to save the list"
+            $logger: "@monolog.logger.admin"
 
     expansion.admin_chat.chat_command.loadguestlist:
-          class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          arguments:
-              $command:              "loadguestlist"
-              $permission:           "loadguestlist"
-              $aliases:              []
-              $functionName:         "loadGuestList"
-              $parameterDescription: "Filename to load the list"
+        class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
+        arguments:
+            $command:              "loadguestlist"
+            $permission:           "loadguestlist"
+            $aliases:              []
+            $functionName:         "loadGuestList"
+            $parameterDescription: "Filename to load the list"
+            $logger: "@monolog.logger.admin"
 
     expansion.admin_chat.chat_command.planets:
-          class: eXpansion\Bundle\AdminChat\ChatCommand\AdminReturnCommand
-          arguments:
-              $command:              "planets"
-              $permission:           "planets"
-              $aliases:              []
-              $functionName:         "getServerPlanets"
+        class: eXpansion\Bundle\AdminChat\ChatCommand\AdminReturnCommand
+        arguments:
+            $command:              "planets"
+            $permission:           "planets"
+            $aliases:              []
+            $functionName:         "getServerPlanets"
+            $logger: "@monolog.logger.admin"
 
     expansion.admin_chat.chat_command.password:
-          class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          arguments:
-              $command:              "password"
-              $permission:           "password"
-              $aliases:              []
-              $functionName:         "setServerPasswordForPlayer"
-              $parameterDescription: "New server join password"
+        class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
+        arguments:
+            $command:              "password"
+            $permission:           "password"
+            $aliases:              []
+            $functionName:         "setServerPasswordForPlayer"
+            $parameterDescription: "New server join password"
+            $logger: "@monolog.logger.admin"
 
     expansion.admin_chat.chat_command.specpass:
-          class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
-          arguments:
-              $command:              "specpassword"
-              $permission:           "specpassword"
-              $aliases:              []
-              $functionName:         "setServerPasswordForSpectator"
-              $parameterDescription: "New server spectator join password"
+        class: eXpansion\Bundle\AdminChat\ChatCommand\OneParameterCommand
+        arguments:
+            $command:              "specpassword"
+            $permission:           "specpassword"
+            $aliases:              []
+            $functionName:         "setServerPasswordForSpectator"
+            $parameterDescription: "New server spectator join password"
+            $logger: "@monolog.logger.admin"

@@ -8,6 +8,7 @@ services:
             $command:     "chat"
             $permission:  "chat"
             $aliases:     []
+            $logger: "@monolog.logger.admin"
 
     expansion.custom_chat.plugins.chat_command_register:
         class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin

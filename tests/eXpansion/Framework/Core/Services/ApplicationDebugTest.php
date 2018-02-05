@@ -7,6 +7,7 @@ namespace Tests\eXpansion\Framework\Core\Services;
 use eXpansion\Framework\Core\Services\Application;
 use eXpansion\Framework\Core\Services\ApplicationDebug;
 use eXpansion\Framework\Core\Services\Console;
+use Psr\Log\NullLogger;
 use Tests\eXpansion\Framework\Core\TestCore;
 
 
@@ -30,7 +31,8 @@ class ApplicationDebugTest extends TestCore
         $application = new ApplicationDebug(
             $this->container->get(Application\DispatchLogger::class),
             $this->container->get('expansion.service.dedicated_connection'),
-            $this->container->get(Console::class)
+            $this->container->get(Console::class),
+            new NullLogger()
         );
         // We need to stop the application so that it doesen't run indefinitively.
         $application->stopApplication();

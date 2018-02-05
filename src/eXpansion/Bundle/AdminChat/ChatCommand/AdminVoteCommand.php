@@ -5,6 +5,7 @@ namespace eXpansion\Bundle\AdminChat\ChatCommand;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\Time;
+use eXpansion\Framework\Core\Helpers\TMString;
 use eXpansion\Framework\Core\Services\Application\Dispatcher;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
@@ -77,5 +78,12 @@ class AdminVoteCommand extends AdminCommand
         parent::execute($login, $input);
         $player = $this->playerStorage->getPlayerInfo($login);
         $this->dispatcher->dispatch("votemanager.votecancelled", [$player, null, null]);
+
+        $level = $this->adminGroupsHelper->getLoginGroupLabel($login);
+        $admin = $player->getNickName();
+
+        $logMessage = $this->chatNotification->getMessage('%adminLevel% %admin% cancels current vote.',
+            ["%adminLevel%" => $level, "%admin%" => $admin]);
+        $this->logger->info("[". $login. "] " . TMString::trimStyles($logMessage));
     }
 }
