@@ -12,7 +12,7 @@ expansion_jukebox:
     beginmap: '|info| {info}Pelissä nyt {variable}%name%{info} tekijä {variable}%author%'
   command:
     jukebox:
-      help: 'käyttö /jukebox :number: tai /jukebox drop, ylläpitäjillle myös /jukebox clear'
+      help: "käyttö /jukebox :number: tai /jukebox drop, ylläpitäjillle myös /jukebox clear"
       description: "numeroarvo lisää karttan indeksillä jukeboksiin. sanalla ”drop” voit poistaa toiveesi ja ylläpitäjät: 'clear' tyhjentää kaikki kartat jonosta"
 expansion_mx:
   command:
@@ -25,18 +25,18 @@ expansion_mx:
       index: "numerollinen arvo /maps-komennosta tai \"this\""
   chat:
     nopermission: "|error| {error}Oikeutesi eivät riitä lisätä karttaa Mania-Exchangesta."
-    apierror: '|error| {error}Mania-Exchange Api-virhe: "{highlight}%message% {error}" ({highlight}%status%{error})'
-    httperror: '|error| {error}Mania-Exchange Http-virhe: "{highlight}%message% {error}" ({highlight}%status%{error})'
-    jsonerror: '|error| {error}Mania-Exchange Json Error: "{highlight}%message%'
+    apierror: "|error| {error}Mania-Exchange Api-virhe: \"{highlight}%message% {error}\" ({highlight}%status%{error})"
+    httperror: "|error| {error}Mania-Exchange Http-virhe: \"{highlight}%message% {error}\" ({highlight}%status%{error})"
+    jsonerror: "|error| {error}Mania-Exchange Json Error: \"{highlight}%message%"
     decline: "|admin| {error}Kartan tekijä on kieltänyt tämän kartan lataamisen."
     success: "|admin| {info}Kartta {variable}%mapname% {info}tekijä {variable}%mapauthor% {info}lisätty onnistuneesti Mania-Exchangesta."
     start: "|admin| {info}Lataus alkaa kartalle {highlight}%id% {info}peli: {highlight}%site% {info}Mania-Exchange."
     fail: "|error| {error}Kartta ei ole yhteensopiva palvelimen nykyiseen titlepackkiin tai asetuksiin! Karttaa ei ole lisätty!"
-    dedicatedexception: '|error| {error}Pelipalvelimen virhe:{highlight}%message%'
-    exception: '|error| {error}Virhe: {highlight}%message%'
+    dedicatedexception: "|error| {error}Pelipalvelimen virhe:{highlight}%message%"
+    exception: "|error| {error}Virhe: {highlight}%message%"
   gui:
     mxsearch:
-      title: 'Mania-Exchange: Haku'
+      title: "Mania-Exchange: Haku"
       button:
         install: "asenna"
       column:
@@ -53,7 +53,7 @@ expansion_mx:
 expansion_maps:
   chat:
     nopermission: "|error| {error}Sinulla ei ole riittävästi oikeuksia tämän suorittamiseen."
-    dedicatedexception: '|error| {error}Pelipalvelimen virhe:{highlight}%message%'
+    dedicatedexception: "|error| {error}Pelipalvelimen virhe:{highlight}%message%"
     removemap: "|admin| {admin_info}%level% %admin% {admin_info}poistaa kartan %map% {admin_info}nykyisestä karttalistasta."
   gui:
     button:
