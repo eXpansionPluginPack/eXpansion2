@@ -98,14 +98,6 @@ abstract class AbstractApplication implements RunInterface
         // need to send this for scripts to start callback handling
         try {
             $this->connection->triggerModeScriptEvent("XmlRpc.EnableCallbacks", ["True"]);
-            Propel::getConnection()->inTransaction();
-        } catch (ConnectionException $propelException) {
-
-            $this->console->writeln("\nLooks like your database connection is down, see logs for more details.");
-            $this->console->writeln("Please check-in later, when you database is up and running.");
-            $this->logger->error("Unable to open connection for database server", ["exception" => $propelException]);
-            exit(1);
-
         } catch (\Exception $exception) {
             $this->connection->saveMatchSettings('MatchSettings/eXpansion-mode-fail-' . date(DATE_ISO8601) . '.txt');
             throw $exception;
