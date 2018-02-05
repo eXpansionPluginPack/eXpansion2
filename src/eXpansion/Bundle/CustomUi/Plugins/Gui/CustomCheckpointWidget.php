@@ -44,22 +44,31 @@ class CustomCheckpointWidget extends WidgetFactory
         $frame = Frame::create("Frame_Main");
         $manialink->addChild($frame);
 
-        $lbl = $this->uiFactory->createLabel("Cp: 0  00:00.000", uiLabel::TYPE_TITLE, "CurrentTime");
-        $lbl->setPosition(0, -70)->setAlign("center", "center2")->setTextSize(4);
-
+        $lbl = $this->uiFactory->createLabel("0  \$bcc-:--.---", uiLabel::TYPE_TITLE, "CurrentTime");
+        $lbl->setPosition(0, -70)->setAlign("center", "center2")->setTextSize(3);
         $frame->addChild($lbl);
 
         $quad = Quad::create("quad_bg");
-        $quad->setPosition(0, -70)->setSize(44, 8)->setBackgroundColor("000")
-            ->setOpacity(0.5)->setAlign("center", "center2");
+        $quad->setPosition(0, -70)->setSize(35, 6)->setBackgroundColor("000")
+            ->setOpacity(0.5)->setAlign("center", "center");
         $frame->addChild($quad);
 
         $manialink->getFmlManialink()->getScript()->addScriptFunction("", <<<EOL
-        Text TimeToText(Integer intime) {
-                declare time = MathLib::Abs(intime);
+            Text FormatSec(Real sec, Text color, Text highlite) {
+                if (sec > 10.) {
+                    return highlite ^ TextLib::FormatReal(sec,3,False,False);
+                } 
+                return color ^ 0 ^ highlite ^ TextLib::FormatReal(sec,3,False,False);                                
+            }
+            
+            Text TimeToText(Integer intime) {
+                declare Text highlite = "\$eff";
+                declare Text color = "\$bcc";
+                declare time = MathLib::Abs(intime);                	
                 declare Integer cent = time % 1000;	
-                declare Integer sec = (time / 1000) % 60;
-                declare Integer min = time / 60000;
+                declare Integer sec2 = (time / 1000) % 60;
+                declare Real sec = 1. * sec2 + cent * 0.001;
+                declare Integer min = (time / 60000) % 60;                                                
                 declare Integer hour = time / 3600000;
                 declare Text sign = "";
                 if (intime < 0)  {
@@ -67,10 +76,21 @@ class CustomCheckpointWidget extends WidgetFactory
                 }
                 
                 if (hour > 0) {
-                    return sign ^ hour ^ ":" ^ TextLib::FormatInteger(min,2) ^ ":" ^ TextLib::FormatInteger(sec,2) ^ "." ^ TextLib::FormatInteger(cent,3);
+                    return highlite ^ sign ^ hour ^ "'" ^ TextLib::FormatInteger(min,2) ^ ":" ^ FormatSec(sec, highlite,highlite);
+                }
+                
+                if (min == 0) {
+                    return color ^ sign ^ "0:" ^ FormatSec(sec, color, highlite);
+                }
+                                                            
+                if (min > 10)  {
+                   return highlite ^ sign ^ min ^ ":" ^ FormatSec(sec, highlite, highlite);
                 } 
-                return sign ^ TextLib::FormatInteger(min,2) ^ ":" ^ TextLib::FormatInteger(sec,2) ^ "." ^ TextLib::FormatInteger(cent,3);                                
+                
+                return color ^ sign ^ 0 ^ highlite ^ min ^ ":" ^ FormatSec(sec, highlite, highlite);                  
+                                                                     
             }
+
 EOL
         );
 
@@ -93,10 +113,10 @@ EOL
             } else if (!Frame.Visible && !IsIntro) {            
                 Frame.Visible = True;                        
             }                      
-          foreach (RaceEvent in RaceEvents) {
+               foreach (RaceEvent in RaceEvents) {
                 if (GUIPlayer == RaceEvent.Player && RaceEvent.Type == CTmRaceClientEvent::EType::Respawn) {
                      if (InputPlayer.RaceState == CTmMlPlayer::ERaceState::BeforeStart) {                     
-                        CheckPointLabel.Value = "Cp: 0  00:00.000";
+                        CheckPointLabel.Value = "0  \$bcc-:--.---";
                         Bg.BgColor = <0., 0., 0.>;                        
                      }
                 }             
@@ -106,7 +126,7 @@ EOL
                     declare CTmResult Score <=> RaceEvent.Player.Score.BestLap;
                    // TopBg.Show();                    
                     if (Score.Checkpoints.existskey(RaceEvent.CheckpointInLap) ) {
-                        CheckPointLabel.Value = "Cp: " ^(RaceEvent.CheckpointInLap+1) ^ "  " ^ TimeToText(RaceEvent
+                        CheckPointLabel.Value = (RaceEvent.CheckpointInLap+1) ^ "  " ^ TimeToText(RaceEvent
                         .LapTime - Score.Checkpoints[RaceEvent.CheckpointInLap]);
                         if (RaceEvent.LapTime < Score.Checkpoints[RaceEvent.CheckpointInLap]) {
                             Bg.BgColor = <0., 0., 1.>;                            
@@ -114,7 +134,7 @@ EOL
                             Bg.BgColor = <1., 0., 0.>;                            
                         }
                     } else {
-                       CheckPointLabel.Value = "Cp: " ^(RaceEvent.CheckpointInLap+1) ^ "  " ^ TimeToText(RaceEvent
+                       CheckPointLabel.Value = (RaceEvent.CheckpointInLap+1) ^ "  " ^ TimeToText(RaceEvent
                         .LapTime);                     
                     }
                                                                                                

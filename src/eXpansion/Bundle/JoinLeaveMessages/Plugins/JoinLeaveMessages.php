@@ -55,6 +55,11 @@ class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
      */
     public function onPlayerConnect(Player $player)
     {
+        $this->chatNotification->sendMessage(
+            'expansion_join_leave_messages.applicationGreeter',
+            $player->getLogin(),
+            ["%version%" => AbstractApplication::EXPANSION_VERSION]);
+
         $groupName = $this->adminGroups->getLoginUserGroups($player->getLogin())->getName();
         $this->chatNotification->sendMessage(
             "expansion_join_leave_messages.connect",
@@ -67,10 +72,7 @@ class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
                 "%ladder%" => $player->getLadderScore(),
             ]);
 
-        $this->chatNotification->sendMessage(
-            'expansion_join_leave_messages.applicationGreeter',
-            $player->getLogin(),
-            ["%version%" => AbstractApplication::EXPANSION_VERSION]);
+
 
     }
 

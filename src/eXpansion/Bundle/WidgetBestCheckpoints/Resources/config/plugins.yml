@@ -8,15 +8,14 @@ services:
         tags:
           - {name: 'expansion.plugin', data_provider: 'expansion.local_records.race'}
           - {name: 'expansion.plugin', data_provider: 'mp.legacy.map'}
-          #@todo fix widget dataproviders for laps mode, this works only now with ta...
 
     eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\BestCheckpointsWidgetFactory:
             class: eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\BestCheckpointsWidgetFactory
             autowire: true
             arguments:
                 $name:  "BestCheckpoints"
-                $posX: -120
-                $posY: 88
+                $posX: -100
+                $posY: 89
                 $sizeX: null
                 $sizeY: null
 

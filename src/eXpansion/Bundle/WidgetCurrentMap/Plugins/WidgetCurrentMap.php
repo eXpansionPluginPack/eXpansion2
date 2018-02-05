@@ -76,6 +76,6 @@ class WidgetCurrentMap implements StatusAwarePluginInterface, ListenerInterfaceM
      */
     public function onEndMap(Map $map)
     {
-        // TODO: Implement onEndMap() method.
+
     }
 }

@@ -12,7 +12,7 @@ services:
             autowire: true
             arguments:
                 $name:  "Current Map"
-                $posX: 158
-                $posY: 88
+                $posX: 129
+                $posY: 87
                 $sizeX: null
                 $sizeY: null

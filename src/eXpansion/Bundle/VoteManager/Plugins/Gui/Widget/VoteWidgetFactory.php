@@ -2,9 +2,7 @@
 
 namespace eXpansion\Bundle\VoteManager\Plugins\Gui\Widget;
 
-use eXpansion\Bundle\VoteManager\Plugins\Votes\AbstractVotePlugin;
 use eXpansion\Bundle\VoteManager\Services\VoteService;
-use eXpansion\Bundle\VoteManager\Structures\Vote;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
@@ -13,6 +11,7 @@ use eXpansion\Framework\Gui\Builders\WidgetBackground;
 use eXpansion\Framework\Gui\Components\uiButton;
 use eXpansion\Framework\Gui\Components\uiLabel;
 use eXpansion\Framework\Gui\Ui\Factory;
+use FML\Controls\Frame;
 use FML\Controls\Quad;
 use FML\Script\ScriptLabel;
 
@@ -32,14 +31,14 @@ class VoteWidgetFactory extends WidgetFactory
     /***
      * MenuFactory constructor.
      *
-     * @param $name
-     * @param $sizeX
-     * @param $sizeY
-     * @param null $posX
-     * @param null $posY
+     * @param                      $name
+     * @param                      $sizeX
+     * @param                      $sizeY
+     * @param null                 $posX
+     * @param null                 $posY
      * @param WidgetFactoryContext $context
-     * @param Factory $uiFactory
-     * @param VoteService $voteService
+     * @param Factory              $uiFactory
+     * @param VoteService          $voteService
      */
     public function __construct(
         $name,
@@ -62,6 +61,10 @@ class VoteWidgetFactory extends WidgetFactory
      */
     protected function createContent(ManialinkInterface $manialink)
     {
+        $frame = Frame::create();
+        $frame->setScale(0.8);
+        $manialink->addChild($frame);
+
         $label = $this->uiFactory->createLabel("", UiLabel::TYPE_HEADER);
         $label->setTextColor("fff")
             ->setPosition(self::x / 2, -1)
@@ -69,7 +72,7 @@ class VoteWidgetFactory extends WidgetFactory
             ->setAlign("center", "top")
             ->setTranslate(true);
         $this->label = $label;
-        $manialink->addChild($this->label);
+        $frame->addChild($this->label);
 
         $btnPosition = -9;
         $btn = $this->uiFactory->createButton(" F1", UiButton::TYPE_DEFAULT);
@@ -79,7 +82,7 @@ class VoteWidgetFactory extends WidgetFactory
         $btn->setAction(
             $this->actionFactory->createManialinkAction($manialink, [$this, "callbackYes"], null)
         );
-        $manialink->addChild($btn);
+        $frame->addChild($btn);
 
         $btn = $this->uiFactory->createButton(" F2", UiButton::TYPE_DEFAULT);
         $btn->setSize(18, 6)->setPosition(self::x - 19, $btnPosition)
@@ -88,38 +91,38 @@ class VoteWidgetFactory extends WidgetFactory
         $btn->setAction(
             $this->actionFactory->createManialinkAction($manialink, [$this, "callbackNo"], null)
         );
-        $manialink->addChild($btn);
+        $frame->addChild($btn);
 
         $quad = Quad::create();
         $quad->setAlign("center", "center2");
         $quad->setSize(0.5, 9);
         $quad->setPosition(self::x / 2, $btnPosition - 3)
             ->setBackgroundColor("fff");
-        $manialink->addChild($quad);
+        $frame->addChild($quad);
 
         $quad = Quad::create("yes");
         $quad->setAlign("left", "top");
         $quad->setSize((self::x - 20 * 2) / 2, 6);
         $quad->setPosition(20, $btnPosition)
             ->setBackgroundColor("0f09");
-        $manialink->addChild($quad);
+        $frame->addChild($quad);
 
         $quad = Quad::create("no");
         $quad->setAlign("right", "top");
         $quad->setSize((self::x - 20 * 2) / 2, 6);
         $quad->setPosition(self::x - 20, $btnPosition)
             ->setBackgroundColor("f009");
-        $manialink->addChild($quad);
+        $frame->addChild($quad);
 
         $quad = Quad::create("timer");
         $quad->setSize(self::x - 4, 1);
         $quad->setPosition(2, -self::y + 1)
             ->setAlign("left", "bottom")
             ->setBackgroundColor("fffa");
-        $manialink->addChild($quad);
+        $frame->addChild($quad);
 
         $bg = new WidgetBackground(90, 20);
-        $manialink->addChild($bg);
+        $frame->addChild($bg);
 
         $x = self::x;
         $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::KeyPress,
@@ -167,7 +170,6 @@ EOL
 EOL
         );
 
-
     }
 
     public function setMessage($message)
@@ -178,7 +180,7 @@ EOL
 
     protected function updateContent(ManialinkInterface $manialink)
     {
-        parent::updateContent($manialink); 
+        parent::updateContent($manialink);
     }
 
     public function callbackYes($manialink, $login, $entries, $args)

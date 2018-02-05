@@ -13,8 +13,8 @@ use FML\Script\ScriptLabel;
 
 class BestCheckpointsWidgetFactory extends WidgetFactory
 {
-    const rowCount = 3;
-    const columnCount = 6;
+    const rowCount = 2;
+    const columnCount = 9;
 
     /** @var UpdaterWidgetFactory */
     protected $updaterWidgetFactory;
@@ -57,8 +57,11 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
             $elements = [];
             for ($c = 0; $c < self::columnCount; $c++) {
                 if ($elementCount == 0) {
-                    $dropdown = $this->uiFactory->createDropdown("select", ["Live 1" => "1", "Local 1" =>
-                        "2"],
+                    $dropdown = $this->uiFactory->createDropdown("select", [
+                        "Live 1" => "1",
+                        "Local 1" =>
+                            "2",
+                    ],
                         0,
                         false);
                     $dropdown->setWidth(35)->setId("Dropdown");
@@ -88,11 +91,22 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                Refresh();        
             ***
             
+            
+            Text FormatSec(Real sec, Text color, Text highlite) {
+                if (sec > 10.) {
+                    return highlite ^ TextLib::FormatReal(sec,3,False,False);
+                } 
+                return color ^ 0 ^ highlite ^ TextLib::FormatReal(sec,3,False,False);                                
+            }
+            
             Text TimeToText(Integer intime) {
-                declare time = MathLib::Abs(intime);
+                declare Text highlite = "\$eff";
+                declare Text color = "\$bcc";
+                declare time = MathLib::Abs(intime);                	
                 declare Integer cent = time % 1000;	
-                declare Integer sec = (time / 1000) % 60;
-                declare Integer min = time / 60000;
+                declare Integer sec2 = (time / 1000) % 60;
+                declare Real sec = 1. * sec2 + cent * 0.001;
+                declare Integer min = (time / 60000) % 60;                                                
                 declare Integer hour = time / 3600000;
                 declare Text sign = "";
                 if (intime < 0)  {
@@ -100,9 +114,19 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                 }
                 
                 if (hour > 0) {
-                    return sign ^ hour ^ ":" ^ TextLib::FormatInteger(min,2) ^ ":" ^ TextLib::FormatInteger(sec,2) ^ "." ^ TextLib::FormatInteger(cent,3);
+                    return highlite ^ sign ^ hour ^ "'" ^ TextLib::FormatInteger(min,2) ^ ":" ^ FormatSec(sec, highlite,highlite);
+                }
+                
+                if (min == 0) {
+                    return color ^ sign ^ "00:" ^ FormatSec(sec, color, highlite);
+                }
+                                                            
+                if (min > 10)  {
+                   return highlite ^ sign ^ min ^ ":" ^ FormatSec(sec, highlite, highlite);
                 } 
-                return sign ^ TextLib::FormatInteger(min,2) ^ ":" ^ TextLib::FormatInteger(sec,2) ^ "." ^ TextLib::FormatInteger(cent,3);                                
+                
+                return color ^ sign ^ 0 ^ highlite ^ min ^ ":" ^ FormatSec(sec, highlite, highlite);                  
+                                                                     
             }
 
 
@@ -116,7 +140,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                 declare CMlLabel Label <=> (Page.GetFirstChild("Cp_"^ (_Index+1)) as CMlLabel);
                 declare CMlQuad Bg <=> (Page.GetFirstChild("Bg_"^ (_Index+1)) as CMlQuad);          
                                                                               
-               declare Integer BestCp_Mode for LocalUser = 0;                
+                declare Integer BestCp_Mode for LocalUser = 0;                
                 declare Text Color = "\$fff";
                 Bg.BgColor = TextLib::ToColor("000");                           
                 
@@ -130,7 +154,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                             Compare = 99999999;
                         }                 
                     }
-                    case 1: {
+                    case 1: {                      
                         if ($cpVariable.existskey(_Index)) {
                             Compare = {$cpVariable}[_Index];                            
                         } else {
@@ -141,10 +165,9 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                                  
                 if (_Score == 99999999) {                                             
                     if ( Compare > 0 && Compare != 99999999  ) {
-                        Label.Value = "\$fff\$o" ^ (_Index+1) ^ " \$o\$ff3" ^ TimeToText(Compare);                    
-                                
+                        Label.Value = "\$fff\$o" ^ (_Index+1) ^ " \$o\$bcc" ^ TimeToText(Compare);                                
                     } else {
-                       Label.Value = "\$fff\$o" ^ (_Index+1) ^ " \$o\$ff3 --:--.---";
+                       Label.Value = "\$fff\$o" ^ (_Index+1) ^ " \$o\$bcc --:--.---";
                     }                    
                 } else {
                     if (_Score < Compare) {                    
@@ -154,8 +177,8 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                        Bg.BgColor = TextLib::ToColor("f00");
                        Color = "\$fff";                                                                                                 
                     }
-                    Label.Value = "\$fff\$o" ^ (_Index+1) ^ " \$o\$ff3" ^ TimeToText(Compare) ^ "\$fff" ^
-                     " diff: " ^ Color ^ TimeToText(_Score - Compare); 
+                    // Label.Value = "\$fff\$o" ^ (_Index+1) ^ " \$o\$bcc" ^ TimeToText(Compare) ^ "\$fff" ^ " diff: " ^ Color ^ TimeToText(_Score - Compare); 
+                    Label.Value = "\$fff\$o" ^ (_Index+1) ^ " \$o\$bcc" ^ TimeToText(Compare); 
                 }                                                
             }
             
@@ -163,7 +186,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                 declare Integer ElementCount for Page = $elementCount;  
                 declare Integer[Integer] MyCheckpoints for Page = Integer[Integer];       
                 declare Integer[Integer] MapBestCheckpoints for Page = Integer[Integer];                                                
-               declare Integer BestCp_Mode for LocalUser = 0; 
+                declare Integer BestCp_Mode for LocalUser = 0; 
                                                                                       
                 
                 for (k, 0, (ElementCount-1)) {                                                       
@@ -195,7 +218,7 @@ EOL
             declare Integer[Integer] MyCheckpoints for Page = Integer[Integer];           
             declare Integer[Integer] MapBestCheckpoints for Page = Integer[Integer];              
             
-            {$this->updaterWidgetFactory->getScriptInitialization(true)}
+            {$this->updaterWidgetFactory->getScriptInitialization()}
                      
             declare Integer[Integer] CompareCheckpoints for Page = Integer[Integer];            
             declare Integer MapBestTime = 99999999;
@@ -240,7 +263,11 @@ EOL
             <<<EOL
             
             // handle new record
-            {$this->updaterWidgetFactory->getScriptOnChange('Refresh();')}
+            {$this->updaterWidgetFactory->getScriptOnChange('
+            log(Now ^ " rok"); 
+            log(LocalRecordCheckpoints);
+            Refresh();
+            ')}
                                     
             foreach (RaceEvent in RaceEvents) {
                 if (GUIPlayer == RaceEvent.Player && RaceEvent.Type == CTmRaceClientEvent::EType::Respawn) {
@@ -312,13 +339,13 @@ EOL
      */
     private function createColumnBox($index)
     {
-        $width = 35;
+        $width = 18;
         $height = 4;
 
         $frame = Frame::create();
 
         $label = $this->uiFactory->createLabel();
-        $label->setAlign("left", "center");
+        $label->setAlign("left", "center2");
         $label->setTextSize(1)->setPosition(1, -($height / 2));
         $label->setSize($width, $height)
             ->setId("Cp_".$index);

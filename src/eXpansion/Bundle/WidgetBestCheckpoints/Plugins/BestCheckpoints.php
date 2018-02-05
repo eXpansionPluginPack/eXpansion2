@@ -93,6 +93,7 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
      */
     public function onLocalRecordsLoaded($records)
     {
+        echo "rok";
         if (count($records) > 0) {
             $this->updater->setLocalRecord($records[0]->getCheckpoints());
         } else {
@@ -110,8 +111,7 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
      */
     public function onLocalRecordsFirstRecord(Record $record, $records, $position)
     {
-        $rec = $record->getCheckpoints();
-        $this->updater->setLocalRecord($rec);
+        $this->updater->setLocalRecord($record->getCheckpoints());
         $this->updater->update($this->allPlayers);
     }
 
