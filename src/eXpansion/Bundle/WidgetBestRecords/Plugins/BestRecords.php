@@ -1,11 +1,10 @@
 <?php
 
-namespace eXpansion\Bundle\WidgetBestCheckpoints\Plugins;
+namespace eXpansion\Bundle\WidgetBestRecords\Plugins;
 
 use eXpansion\Bundle\LocalRecords\DataProviders\Listener\RecordsDataListener;
 use eXpansion\Bundle\LocalRecords\Model\Record;
-use eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\BestCheckpointsWidgetFactory;
-use eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\UpdaterWidgetFactory;
+use eXpansion\Bundle\WidgetBestRecords\Plugins\Gui\BestRecordsWidgetFactory;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
@@ -14,7 +13,7 @@ use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
 
-class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener, ListenerInterfaceMpLegacyMap
+class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, ListenerInterfaceMpLegacyMap
 {
     /** @var Connection */
     protected $connection;
@@ -23,17 +22,14 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
      */
     private $playerStorage;
     /**
-     * @var BestCheckpointsWidgetFactory
+     * @var BestRecordsWidgetFactory
      */
     private $widget;
     /**
      * @var Group
      */
     private $players;
-    /**
-     * @var UpdaterWidgetFactory
-     */
-    private $updater;
+
     /**
      * @var Group
      */
@@ -43,18 +39,16 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
     /**
      * Debug constructor.
      *
-     * @param Connection                   $connection
-     * @param PlayerStorage                $playerStorage
-     * @param BestCheckPointsWidgetFactory $widget
-     * @param UpdaterWidgetFactory         $updater
-     * @param Group                        $players
-     * @param Group                        $allPlayers
+     * @param Connection               $connection
+     * @param PlayerStorage            $playerStorage
+     * @param BestRecordsWidgetFactory $widget
+     * @param Group                    $players
+     * @param Group                    $allPlayers
      */
     public function __construct(
         Connection $connection,
         PlayerStorage $playerStorage,
-        BestCheckPointsWidgetFactory $widget,
-        UpdaterWidgetFactory $updater,
+        BestRecordsWidgetFactory $widget,
         Group $players,
         Group $allPlayers
     ) {
@@ -62,7 +56,6 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
         $this->playerStorage = $playerStorage;
         $this->widget = $widget;
         $this->players = $players;
-        $this->updater = $updater;
         $this->allPlayers = $allPlayers;
     }
 
@@ -76,11 +69,11 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
     public function setStatus($status)
     {
         if ($status) {
-            $this->widget->create($this->players);
-            $this->updater->create($this->allPlayers);
+            $map = $this->connection->getCurrentMapInfo();
+            $this->widget->setAuthorTime($map->author, $map->goldTime);
+            $this->widget->create($this->allPlayers);
         } else {
-            $this->widget->destroy($this->players);
-            $this->updater->destroy($this->allPlayers);
+            $this->widget->destroy($this->allPlayers);
         }
     }
 
@@ -92,11 +85,11 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
     public function onLocalRecordsLoaded($records)
     {
         if (count($records) > 0) {
-            $this->updater->setLocalRecord($records[0]->getCheckpoints());
+            $this->widget->setLocalRecord($records[0]);
         } else {
-            $this->updater->setLocalRecord([]);
+            $this->widget->setLocalRecord(null);
         }
-        $this->updater->update($this->allPlayers);
+        $this->widget->update($this->allPlayers);
     }
 
     /**
@@ -108,8 +101,8 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
      */
     public function onLocalRecordsFirstRecord(Record $record, $records, $position)
     {
-        $this->updater->setLocalRecord($record->getCheckpoints());
-        $this->updater->update($this->allPlayers);
+        $this->widget->setLocalRecord($record);
+        $this->widget->update($this->allPlayers);
     }
 
     /**
@@ -136,8 +129,8 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
     public function onLocalRecordsBetterPosition(Record $record, Record $oldRecord, $records, $position, $oldPosition)
     {
         if ($position == 1) {
-            $this->updater->setLocalRecord($record->getCheckpoints());
-            $this->updater->update($this->allPlayers);
+            $this->widget->setLocalRecord($record);
+            $this->widget->update($this->allPlayers);
         }
     }
 
@@ -152,8 +145,8 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
     public function onLocalRecordsSamePosition(Record $record, Record $oldRecord, $records, $position)
     {
         if ($position == 1) {
-            $this->updater->setLocalRecord($record->getCheckpoints());
-            $this->updater->update($this->allPlayers);
+            $this->widget->setLocalRecord($record);
+            $this->widget->update($this->allPlayers);
         }
     }
 
@@ -165,7 +158,7 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
      */
     public function onBeginMap(Map $map)
     {
-
+        $this->widget->setAuthorTime($map->author, $map->authorTime);
     }
 
     /**
@@ -175,6 +168,6 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
      */
     public function onEndMap(Map $map)
     {
-        $this->updater->setLocalRecord([]);
+
     }
 }

@@ -6,9 +6,9 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
-use eXpansion\Framework\Gui\Builders\WidgetBackground;
 use eXpansion\Framework\Gui\Ui\Factory;
 use FML\Controls\Frame;
+use FML\Controls\Quad;
 use FML\Script\ScriptLabel;
 
 class BestCheckpointsWidgetFactory extends WidgetFactory
@@ -28,7 +28,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
      * @param null                 $posX
      * @param null                 $posY
      * @param WidgetFactoryContext $context
-     * @param Factory              $uiFactory
+     * @param UpdaterWidgetFactory $updaterWidgetFactory
      */
     public function __construct(
         $name,
@@ -64,7 +64,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                     ],
                         0,
                         false);
-                    $dropdown->setWidth(35)->setId("Dropdown");
+                    $dropdown->setWidth(18)->setId("Dropdown");
                     $elements[] = $dropdown;
                 } else {
                     $elements[] = $this->createColumnBox($elementCount);
@@ -351,8 +351,9 @@ EOL
             ->setId("Cp_".$index);
         $frame->addChild($label);
 
-        $background = new WidgetBackground($width, $height);
-        $background->setId("Bg_".$index);
+        $background = Quad::create("Bg_".$index);
+        $background->setSize($width, $height)
+            ->setBackgroundColor("001")->setOpacity(0.3);
         $frame->addChild($background);
 
         $frame->setSize($width, $height);
