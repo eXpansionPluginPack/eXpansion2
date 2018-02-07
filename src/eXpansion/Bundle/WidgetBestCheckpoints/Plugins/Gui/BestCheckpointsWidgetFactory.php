@@ -263,11 +263,7 @@ EOL
             <<<EOL
             
             // handle new record
-            {$this->updaterWidgetFactory->getScriptOnChange('
-            log(Now ^ " rok"); 
-            log(LocalRecordCheckpoints);
-            Refresh();
-            ')}
+            {$this->updaterWidgetFactory->getScriptOnChange('Refresh();')}
                                     
             foreach (RaceEvent in RaceEvents) {
                 if (GUIPlayer == RaceEvent.Player && RaceEvent.Type == CTmRaceClientEvent::EType::Respawn) {

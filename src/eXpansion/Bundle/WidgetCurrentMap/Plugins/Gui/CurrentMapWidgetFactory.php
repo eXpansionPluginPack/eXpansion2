@@ -2,33 +2,50 @@
 
 namespace eXpansion\Bundle\WidgetCurrentMap\Plugins\Gui;
 
+use eXpansion\Bundle\LocalMapRatings\Model\Maprating;
+use eXpansion\Bundle\LocalMapRatings\Services\MapRatingsService;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
+use eXpansion\Framework\GameManiaplanet\DataProviders\ChatCommandDataProvider;
 use eXpansion\Framework\Gui\Components\uiLabel;
-use eXpansion\Framework\Gui\Ui\Factory;
 use FML\Script\ScriptLabel;
 
 class CurrentMapWidgetFactory extends WidgetFactory
 {
+
+    /** @var UiLabel */
+    public $lblNo;
+
+    /** @var UiLabel */
+    public $lblYes;
     /**
      * @var GameDataStorage
      */
     private $gameDataStorage;
+    /**
+     * @var MapRatingsService
+     */
+    private $mapRatingsService;
+    /**
+     * @var ChatCommandDataProvider
+     */
+    private $chatCommandDataProvider;
 
     /***
      * MenuFactory constructor.
      *
-     * @param                      $name
-     * @param                      $sizeX
-     * @param                      $sizeY
-     * @param null                 $posX
-     * @param null                 $posY
-     * @param WidgetFactoryContext $context
-     * @param Factory              $uiFactory
-     * @param GameDataStorage      $gameDataStorage
+     * @param                         $name
+     * @param                         $sizeX
+     * @param                         $sizeY
+     * @param null                    $posX
+     * @param null                    $posY
+     * @param WidgetFactoryContext    $context
+     * @param GameDataStorage         $gameDataStorage
+     * @param MapRatingsService       $mapRatingsService
+     * @param ChatCommandDataProvider $chatCommandDataProvider
      */
     public function __construct(
         $name,
@@ -37,14 +54,16 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $posX,
         $posY,
         WidgetFactoryContext $context,
-        Factory $uiFactory,
-        GameDataStorage $gameDataStorage
+        GameDataStorage $gameDataStorage,
+        MapRatingsService $mapRatingsService,
+        ChatCommandDataProvider $chatCommandDataProvider
 
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
 
-        $this->uiFactory = $uiFactory;
         $this->gameDataStorage = $gameDataStorage;
+        $this->mapRatingsService = $mapRatingsService;
+        $this->chatCommandDataProvider = $chatCommandDataProvider;
     }
 
     /**
@@ -54,30 +73,34 @@ class CurrentMapWidgetFactory extends WidgetFactory
     {
         parent::createContent($manialink);
 
+        $tooltip = $this->uiFactory->createTooltip();
+        $manialink->addChild($tooltip);
 
-
+        /* first row */
         $lbl = $this->uiFactory->createLabel("unknown map", uiLabel::TYPE_NORMAL, "MapName");
         $lbl->setAlign("center", "center");
         $lbl->setTextSize(1)->setSize(60, 4);
         $lbl->setAreaColor("0017")->setAreaFocusColor("0013")->setScriptEvents(true);
-
         $manialink->addChild($lbl);
 
-        $line = $this->uiFactory->createLayoutLine(-(19/2)-1.5, -5, [], 1.5);
+        /* second row */
+        $line = $this->uiFactory->createLayoutLine(-(19 / 2) - 1, -5, [], 0.75);
         $manialink->addChild($line);
 
         $lbl = $this->uiFactory->createLabel("0 / 0", uiLabel::TYPE_NORMAL, "Players");
         $lbl->setTextPrefix("👥  ");
         $lbl->setAlign("center", "center2");
-        $lbl->setTextSize(1)->setSize(19, 4);
+        $lbl->setTextSize(1)->setSize(19.5, 4);
         $lbl->setAreaColor("0017")->setAreaFocusColor("0017")->setScriptEvents(true);
+        $tooltip->addTooltip($lbl, "Players on server");
         $line->addChild($lbl);
 
         $lbl = $this->uiFactory->createLabel("0 / 0", uiLabel::TYPE_NORMAL, "Spectators");
         $lbl->setTextPrefix("🎥  ");
         $lbl->setAlign("center", "center2");
-        $lbl->setTextSize(1)->setSize(19, 4);
+        $lbl->setTextSize(1)->setSize(19.5, 4);
         $lbl->setAreaColor("0017")->setAreaFocusColor("0017")->setScriptEvents(true);
+        $tooltip->addTooltip($lbl, "Spectators on server");
         $line->addChild($lbl);
 
         $ladderMin = $this->gameDataStorage->getServerOptions()->ladderServerLimitMin / 1000;
@@ -85,33 +108,85 @@ class CurrentMapWidgetFactory extends WidgetFactory
 
         $lbl = $this->uiFactory->createLabel($ladderMin." - ".$ladderMax."k", uiLabel::TYPE_NORMAL);
         $lbl->setAlign("center", "center2");
-        $lbl->setTextSize(1)->setSize(19, 4);
+        $lbl->setTextSize(1)->setSize(19.5, 4);
         $lbl->setAreaColor("0017")->setAreaFocusColor("0017")->setScriptEvents(true);
+        $tooltip->addTooltip($lbl, "Ladder limits");
         $line->addChild($lbl);
+
+        /* third row */
+        $line2 = $this->uiFactory->createLayoutLine(-16, -10, [], 1.33);
+        $manialink->addChild($line2);
+
+        $lbl = $this->uiFactory->createLabel("Recs", uiLabel::TYPE_NORMAL);
+        $lbl->setAlign("center", "center2");
+        $lbl->setTextSize(1)->setSize(14, 4);
+        $lbl->setAreaColor("0017")->setAreaFocusColor("0014")->setScriptEvents(true);
+        $lbl->setAction($this->actionFactory->createManialinkAction(
+            $manialink, [$this, "callbackShowRecs"], [], true)
+        );
+        $tooltip->addTooltip($lbl, "Show Local Records");
+        $line2->addChild($lbl);
+
+        $lbl = $this->uiFactory->createLabel("Maps", uiLabel::TYPE_NORMAL);
+        $lbl->setAlign("center", "center2");
+        $lbl->setTextSize(1)->setSize(14, 4);
+        $lbl->setAreaColor("0017")->setAreaFocusColor("0014")->setScriptEvents(true);
+        $lbl->setAction($this->actionFactory->createManialinkAction(
+            $manialink, [$this, "callbackShowMapList"], [], true)
+        );
+        $tooltip->addTooltip($lbl, "Show Map List");
+        $line2->addChild($lbl);
+
+        $lbl = $this->uiFactory->createLabel("", uiLabel::TYPE_NORMAL);
+        $lbl->setTextPrefix("  ");
+        $lbl->setAlign("center", "center2");
+        $lbl->setTextSize(1)->setSize(14, 4);
+        $lbl->setAreaColor("0017")->setAreaFocusColor("0707")->setScriptEvents(true);
+        $lbl->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackVoteYes"], [], true));
+        $tooltip->addTooltip($lbl, "Vote up the map");
+        $this->lblYes = $lbl;
+        $line2->addChild($this->lblYes);
+
+        $lbl = $this->uiFactory->createLabel("", uiLabel::TYPE_NORMAL);
+        $lbl->setTextPrefix("  ");
+        $lbl->setAlign("center", "center2");
+        $lbl->setTextSize(1)->setSize(14, 4);
+        $lbl->setAreaColor("0017")->setAreaFocusColor("7007")->setScriptEvents(true);
+        $lbl->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackVoteNo"], [], true));
+        $tooltip->addTooltip($lbl, "Vote down the map");
+        $this->lblNo = $lbl;
+        $line2->addChild($this->lblNo);
 
 
         $playersMax = $ladderMax = $this->gameDataStorage->getServerOptions()->currentMaxPlayers;
         $spectatorMax = $ladderMax = $this->gameDataStorage->getServerOptions()->currentMaxSpectators;
+        $manialink->getFmlManialink()->getScript()->addScriptFunction("",
+            <<<EOL
+               Void updatePlayers() {
+                   declare Integer serverPlayers = 0;
+                   declare Integer serverSpectators = 0;
+                   
+                   foreach (Player in Players) {               
+                       if (Player.RequestsSpectate) {
+                            serverSpectators += 1;
+                       } else {
+                            serverPlayers += 1;
+                       }               
+                   }                     
+                   
+                   (Page.GetFirstChild("Players") as CMlLabel).Value = serverPlayers ^ " / {$playersMax}";
+                   (Page.GetFirstChild("Spectators") as CMlLabel).Value = serverSpectators ^ " / {$spectatorMax}";
+               }
+EOL
+        );
+
 
         $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::Loop,
             <<<EOL
-    
+            
            if (AllPlayerCount != Players.count) {
                AllPlayerCount = Players.count;
-               declare Integer serverPlayers = 0;
-               declare Integer serverSpectators = 0;
-               
-               foreach (Player in Players) {               
-                   if (Player.RequestsSpectate) {
-                        serverSpectators += 1;
-                   } else {
-                        serverPlayers += 1;
-                   }               
-               }                     
-               
-               (Page.GetFirstChild("Players") as CMlLabel).Value = serverPlayers ^ " / {$playersMax}";
-               (Page.GetFirstChild("Spectators") as CMlLabel).Value = serverSpectators ^ " / {$spectatorMax}";
-                              
+               updatePlayers();
            }   
     
 EOL
@@ -119,19 +194,69 @@ EOL
 
         $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::OnInit,
             <<<EOL
-            declare Integer AllPlayerCount = -1;                        
+            declare Integer AllPlayerCount = -1;                                               
             (Page.GetFirstChild("MapName") as CMlLabel).Value = Map.AuthorNickName ^ "\$z\$s - " ^ Map.MapName;                                         
-                                                            
+            updatePlayers();                                                                                     
 EOL
         );
 
         $manialink->addChild($line);
+
+    }
+
+    /**
+     * @param ManialinkInterface|Widget $manialink
+     * @param string                    $login
+     * @param array                     $entries
+     * @param array                     $args
+     */
+    public function callbackVoteYes(ManialinkInterface $manialink, $login, $entries, $args)
+    {
+        $this->mapRatingsService->changeRating($login, 1);
+    }
+
+    /**
+     * @param ManialinkInterface|Widget $manialink
+     * @param string                    $login
+     * @param array                     $entries
+     * @param array                     $args
+     */
+    public function callbackVoteNo(ManialinkInterface $manialink, $login, $entries, $args)
+    {
+        $this->mapRatingsService->changeRating($login, -1);
+    }
+
+    public function callbackShowMapList(ManialinkInterface $manialink, $login, $entries, $args)
+    {
+        $this->chatCommandDataProvider->onPlayerChat($login, $login, "/maps", true);
+    }
+
+    public function callbackShowRecs(ManialinkInterface $manialink, $login, $entries, $args)
+    {
+        $this->chatCommandDataProvider->onPlayerChat($login, $login, "/recs", true);
     }
 
 
-    protected function updateContent(ManialinkInterface $manialink)
+
+
+    /** @param Maprating[] $ratings */
+    public function setMapRatings($ratings)
     {
-        parent::updateContent($manialink);
+        $yes = 0;
+        $no = 0;
+        foreach ($ratings as $login => $rating) {
+            $score = $rating->getScore();
+
+            if ($score === 1) {
+                $yes++;
+            }
+            if ($score === -1) {
+                $no++;
+            }
+        }
+
+        $this->lblYes->setText($yes.' $cbb/ '.count($ratings));
+        $this->lblNo->setText($no.' $cbb/ '.count($ratings));
     }
 
 }

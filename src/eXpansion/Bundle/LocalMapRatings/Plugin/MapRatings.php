@@ -115,7 +115,7 @@ class MapRatings implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      */
     public function onApplicationReady()
     {
-        $this->mapRatingsWidget->create($this->players);
+    //    $this->mapRatingsWidget->create($this->players);
         $this->mapRatingsService->load($this->mapStorage->getCurrentMap());
 
     }
@@ -361,8 +361,8 @@ class MapRatings implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      */
     public function onMapRatingsLoaded($ratings)
     {
-        $this->mapRatingsWidget->setRatings($ratings);
-        $this->mapRatingsWidget->update($this->players);
+      //  $this->mapRatingsWidget->setRatings($ratings);
+      //  $this->mapRatingsWidget->update($this->players);
     }
 
     /**
@@ -375,7 +375,7 @@ class MapRatings implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      */
     public function onMapRatingsChanged($login, $score, $ratings)
     {
-        $this->mapRatingsWidget->setRatings($ratings);
-        $this->mapRatingsWidget->update($this->players);
+        // $this->mapRatingsWidget->setRatings($ratings);
+        // $this->mapRatingsWidget->update($this->players);
     }
 }

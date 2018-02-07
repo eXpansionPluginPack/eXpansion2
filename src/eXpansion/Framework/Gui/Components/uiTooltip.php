@@ -78,12 +78,12 @@ class uiTooltip extends abstractUiElement implements ScriptFeatureable
             if (exp_tooltip_rel.Y > -10.) {
                 exp_tooltip.RelativePosition_V3 = exp_tooltip_rel + <4., 0.>;
             } else { 
-               exp_tooltip.RelativePosition_V3 = exp_tooltip_rel + <4., 10.>;
+               exp_tooltip.RelativePosition_V3 = exp_tooltip_rel + <4., 4.>;
             }
             if (exp_tooltip_delay + 1000 < Now) {
                 if (exp_tooltip_toggle) {
-                    AnimMgr.Add(exp_tooltip.Controls[0], "<elem scale=\"1\" />",  250, CAnimManager::EAnimManagerEasing::BackOut);
-                    AnimMgr.Add(exp_tooltip.Controls[1], "<elem scale=\"1\" />",  250, CAnimManager::EAnimManagerEasing::BackOut);
+                    AnimMgr.Add(exp_tooltip.Controls[0], "<elem scale=\"1\" />",  150, CAnimManager::EAnimManagerEasing::BackOut);
+                    AnimMgr.Add(exp_tooltip.Controls[1], "<elem scale=\"1\" />",  150, CAnimManager::EAnimManagerEasing::BackOut);
                     exp_tooltip_toggle = False;
                 }          	    					
             }								
