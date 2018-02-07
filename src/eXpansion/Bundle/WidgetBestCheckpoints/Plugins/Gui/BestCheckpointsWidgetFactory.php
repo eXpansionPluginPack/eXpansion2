@@ -178,7 +178,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                        Color = "\$fff";                                                                                                 
                     }
                     // Label.Value = "\$fff\$o" ^ (_Index+1) ^ " \$o\$bcc" ^ TimeToText(Compare) ^ "\$fff" ^ " diff: " ^ Color ^ TimeToText(_Score - Compare); 
-                    Label.Value = "\$fff\$o" ^ (_Index+1) ^ " \$o\$bcc" ^ TimeToText(Compare); 
+                    Label.Value = "\$fff\$o" ^ (_Index+1) ^ " \$o\$bcc" ^ TimeToText(_Score - Compare); 
                 }                                                
             }
             
