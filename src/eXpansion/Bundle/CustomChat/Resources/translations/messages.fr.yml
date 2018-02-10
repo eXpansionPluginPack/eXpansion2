@@ -2,5 +2,5 @@ expansion_customchat:
   chat:
     enabled: "|admin| {admin_info}%admin% %nickname% {variable}a activé {admin_info}le chat public."
     disabled: "|admin| {admin_info}%admin% %nickname% {variable}a désactive {admin_info}le chat public."
-    invalid: '|info| {info} Valeur incorrecte pour la commande. Les valeurs possible sont %variable%enable, disable, on, off'
+    invalid: "|info| {info} Valeur incorrecte pour la commande. Les valeurs possible sont %variable%enable, disable, on, off"
     disabledstate: "|info| {info} Le chat public est désactivé pour le moment. Vous êtes autorisé à envoyer des messages personnels."

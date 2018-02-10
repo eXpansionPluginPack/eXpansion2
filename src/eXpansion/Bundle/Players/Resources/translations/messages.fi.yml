@@ -4,7 +4,7 @@ expansion_players:
       window:
         title: "Manage player lists"
         column:
-          remove: "Remove"
+          remove: "Poista"
     players:
       window:
         title: 'Players'
@@ -16,14 +16,20 @@ expansion_players:
         guestlist: "Guest list"
         ignorelist: "Ignore list"
         banlist: "Ban list"
+        guest: "Guest"
+        allow: "Allow"
+        mute: "Mute"
+        kick: "Kick"
+        ban: "Ban"
+        black: "Black"
         column:
           flag: '#'
           from: 'From'
-          nickname: 'NickName'
-          login: 'Login'
+          nickname: 'Nimimerkki'
+          login: 'Käyttäjänimi'
           select: 'Select'
   chat:
-    exception: '|error| {error}Dedicated Server error: {highlight}%message%'
+    exception: "|error| {error}Pelipalvelimen virhe:{highlight}%message%"
   menu:
     label: "Players"
     list: "Player List"

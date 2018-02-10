@@ -12,7 +12,7 @@ expansion_jukebox:
     beginmap: '|info| {info}Carte en cours {variable}%name%{info} par {variable}%author%'
   command:
     jukebox:
-      help: 'Utilisation /jukebox :number:  ou /jukebox drop, pour les admins /jukebox clear'
+      help: "Utilisation /jukebox :number:  ou /jukebox drop, pour les admins /jukebox clear"
       description: "Un nombre ajoute la map correspondante à la file d'attente, le mot-clé \"drop\" supprime votre vœu, le mot-clé admin \"clear\" supprime toutes les maps de la file d'attente"
 expansion_mx:
   command:
@@ -25,18 +25,18 @@ expansion_mx:
       index: "valeur numérique de /maps ou \"this\""
   chat:
     nopermission: "|error| {error}Vous n'avez pas les permissions nécessaires pour ajouter une carte depuis Mania Exchange."
-    apierror: '|error| {error}Erreur de l''API Mania-Exchange: "{highlight}%message% {error}" ({highlight}%status%{error})'
-    httperror: '|error| {error}Erreur Mania-Exchange Http: "{highlight}%message% {error}" ({highlight}%status%{error})'
-    jsonerror: '|error| {error}Mania-Exchange Json Error: "{highlight}%message%'
+    apierror: "|error| {error}Erreur de l'API Mania-Exchange: \"{highlight}%message% {error}\" ({highlight}%status%{error})"
+    httperror: "|error| {error}Erreur Mania-Exchange Http: \"{highlight}%message% {error}\" ({highlight}%status%{error})"
+    jsonerror: "|error| {error}Mania-Exchange Json Error: \"{highlight}%message%"
     decline: "|admin| {error}L'auteur de la carte a désactivé le téléchargement de cette carte."
     success: "|admin| {info}Map {variable}%mapname% {info}by {variable}%mapauthor% {info}added successfully from Mania-Exchange."
     start: "|admin| {info}Download starting for {highlight}%id% {info}from {highlight}%site% {info}Mania-Exchange."
     fail: "|error| {error}Map is not compatible with current server title pack or settings! Map is not added!"
-    dedicatedexception: '|error| {error}Dedicated Server error: {highlight}%message%'
-    exception: '|error| {error}Error: {highlight}%message%'
+    dedicatedexception: "|error| {error}Erreur du serveur dédié : {highlight}%message%"
+    exception: "|error| {error}Error: {highlight}%message%"
   gui:
     mxsearch:
-      title: 'Mania-Exchange: Search'
+      title: "Mania-Exchange: Search"
       button:
         install: "installer"
       column:
@@ -53,7 +53,7 @@ expansion_mx:
 expansion_maps:
   chat:
     nopermission: "|error| {error}Vous n'avez pas les permissions nécessaire pour faire cela."
-    dedicatedexception: '|error| {error}Erreur du serveur dédié : {highlight}%message%'
+    dedicatedexception: "|error| {error}Erreur du serveur dédié : {highlight}%message%"
     removemap: "|admin| {admin_info}%level% %admin% {admin_info}supprime la carte %map% {admin_info}de la playlist actuelle."
   gui:
     button:

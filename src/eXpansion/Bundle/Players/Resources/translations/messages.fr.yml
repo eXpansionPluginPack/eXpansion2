@@ -16,6 +16,12 @@ expansion_players:
         guestlist: "Liste des invités"
         ignorelist: "Liste des ignorés"
         banlist: "Liste noire"
+        guest: "Guest"
+        allow: "Allow"
+        mute: "Mute"
+        kick: "Kick"
+        ban: "Ban"
+        black: "Black"
         column:
           flag: '#'
           from: 'De'
@@ -23,7 +29,7 @@ expansion_players:
           login: 'Login'
           select: 'Sélectionner'
   chat:
-    exception: '|error| {error}Erreur du serveur dédié : {highlight}%message%'
+    exception: "|error| {error}Erreur du serveur dédié : {highlight}%message%"
   menu:
     label: "Joueurs"
     list: "Liste des joueurs"

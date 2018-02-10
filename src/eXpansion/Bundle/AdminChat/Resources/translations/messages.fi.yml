@@ -22,10 +22,10 @@ expansion_admin_chat:
     description: '{info}Muuta palvelimen kommentti.'
   savematchsettings:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} saved match settings: {highlight}%parameter%'
-    description: '{info}Change the name of the server.'
+    description: '{info}Muuta palvelimen nimi.'
   loadmatchsettings:
     msg: '|admin| {admin_info}%adminLevel% %admin% {admin_info} loaded match settings: {highlight}%parameter%'
-    description: '{info}Change the name of the server.'
+    description: '{info}Muuta palvelimen nimi.'
   kick:
     msg: '| admin | {admin_info}%adminLevel% %admin% {admin_info}poistaa pelaajan {highlight}%player% {admin_info}palvelimelta. Syy: {highlight}%reason%'
     description: '{info}Poista pelaaja palvelimelta.'
@@ -83,4 +83,4 @@ expansion_admin_chat:
   setserverpasswordforspectator:
     msg: '|admin| {admin_info}New spectators join password for server is: "{highlight}%parameter%{admin_info}"'
     description: '{info}Sets new specator password'
-  dedicatedexception: '|error| {error}Dedicated Server error: {highlight}%message%'
+  dedicatedexception: "|error| {error}Pelipalvelimen virhe:{highlight}%message%"

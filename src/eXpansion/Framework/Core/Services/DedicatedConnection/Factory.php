@@ -62,6 +62,8 @@ class Factory
      * Connect to the dedicated server.
      *
      * @return Connection
+     *
+     * @throws TransportException When can't connect.
      */
     public function createConnection()
     {
@@ -77,7 +79,8 @@ class Factory
             echo "Looks like your Dedicated server is either offline or has wrong config settings.\n";
             echo "Error message: " . $ex->getMessage();
             $this->logger->error("Unable to open connection for Dedicated server", ["exception" => $ex]);
-            exit(1);
+
+            throw $ex;
         }
     }
 }

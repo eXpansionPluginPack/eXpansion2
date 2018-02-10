@@ -1,8 +1,8 @@
 expansion_core:
-  test: 'Ceci est une trad de test : %test%'
-  test_color: '{test}Ceci est une trad de test : %test%'
-  test_glyph: '|test|Ceci est une trad de test : %test%'
-  test_color_glyph: '|test|{test} Ceci est une trad de test : %test%'
+  test: "Ceci est une trad de test : %test%"
+  test_color: "{test}Ceci est une trad de test : %test%"
+  test_glyph: "|test|Ceci est une trad de test : %test%"
+  test_color_glyph: "|test|{test} Ceci est une trad de test : %test%"
   chat_commands:
     wrong_chat: "{error}Cette commande n’existe pas. {info}Utilisez /help pour afficher toutes les commandes disponibles."
     no_description: "{info}Désolé, cette commande n’a pas de description."
