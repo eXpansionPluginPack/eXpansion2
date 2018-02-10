@@ -22,6 +22,5 @@ class LocalMapRatingsExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('plugins.yml');
-        $loader->load('gui.yml');
     }
 }

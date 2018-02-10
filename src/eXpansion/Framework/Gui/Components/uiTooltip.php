@@ -80,10 +80,10 @@ class uiTooltip extends abstractUiElement implements ScriptFeatureable
             } else { 
                exp_tooltip.RelativePosition_V3 = exp_tooltip_rel + <4., 4.>;
             }
-            if (exp_tooltip_delay + 1000 < Now) {
+            if (exp_tooltip_delay + 500 < Now) {
                 if (exp_tooltip_toggle) {
-                    AnimMgr.Add(exp_tooltip.Controls[0], "<elem scale=\"1\" />",  150, CAnimManager::EAnimManagerEasing::BackOut);
-                    AnimMgr.Add(exp_tooltip.Controls[1], "<elem scale=\"1\" />",  150, CAnimManager::EAnimManagerEasing::BackOut);
+                    AnimMgr.Add(exp_tooltip.Controls[0], "<elem scale=\"1\" />",  450, CAnimManager::EAnimManagerEasing::ElasticOut);
+                    AnimMgr.Add(exp_tooltip.Controls[1], "<elem scale=\"1\" />",  450, CAnimManager::EAnimManagerEasing::ElasticOut);
                     exp_tooltip_toggle = False;
                 }          	    					
             }								
@@ -116,8 +116,8 @@ class uiTooltip extends abstractUiElement implements ScriptFeatureable
                 exp_tooltip_move = False;
                 exp_tooltip_delay = 0;  
                 exp_tooltip_toggle = True;                         
-                //AnimMgr.Add(exp_tooltip.Controls[0], "<elem scale=\"0\" />",  30, CAnimManager::EAnimManagerEasing::Linear);
-            	//AnimMgr.Add(exp_tooltip.Controls[1], "<elem scale=\"0\" />",  30, CAnimManager::EAnimManagerEasing::Linear);
+                //AnimMgr.Add(exp_tooltip.Controls[0], "<elem scale=\"0\" />",  30, CAnimManager::EAnimManagerEasing::ElasticOut);
+            	//AnimMgr.Add(exp_tooltip.Controls[1], "<elem scale=\"0\" />",  30, CAnimManager::EAnimManagerEasing::ElasticOut);
             	 (exp_tooltip.Controls[0] as CMlLabel).RelativeScale = 0.;
             	 (exp_tooltip.Controls[1] as CMlQuad).RelativeScale = 0.;          	                                	
             }    

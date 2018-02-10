@@ -31,14 +31,6 @@ class MapRatings implements ListenerInterfaceExpApplication, ListenerInterfaceMp
     private $playerStorage;
 
     /**
-     * @var Dispatcher
-     */
-    private $dispatcher;
-    /**
-     * @var MapRatingsWidget
-     */
-    private $mapRatingsWidget;
-    /**
      * @var Group
      */
     private $players;
@@ -49,22 +41,19 @@ class MapRatings implements ListenerInterfaceExpApplication, ListenerInterfaceMp
 
     /**
      * MapRatingService constructor.
-     * @param MapStorage        $mapStorage
-     * @param PlayerStorage     $playerStorage
-     * @param MapRatingsWidget  $mapRatingsWidget
+     * @param MapStorage $mapStorage
+     * @param PlayerStorage $playerStorage
      * @param MapRatingsService $mapRatingsService
-     * @param Group             $players
+     * @param Group $players
      */
     public function __construct(
         MapStorage $mapStorage,
         PlayerStorage $playerStorage,
-        MapRatingsWidget $mapRatingsWidget,
         MapRatingsService $mapRatingsService,
         Group $players
     ) {
         $this->mapStorage = $mapStorage;
         $this->playerStorage = $playerStorage;
-        $this->mapRatingsWidget = $mapRatingsWidget;
         $this->players = $players;
         $this->mapRatingsService = $mapRatingsService;
     }
@@ -115,9 +104,7 @@ class MapRatings implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      */
     public function onApplicationReady()
     {
-    //    $this->mapRatingsWidget->create($this->players);
         $this->mapRatingsService->load($this->mapStorage->getCurrentMap());
-
     }
 
     /**
@@ -361,8 +348,7 @@ class MapRatings implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      */
     public function onMapRatingsLoaded($ratings)
     {
-      //  $this->mapRatingsWidget->setRatings($ratings);
-      //  $this->mapRatingsWidget->update($this->players);
+
     }
 
     /**
@@ -375,7 +361,6 @@ class MapRatings implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      */
     public function onMapRatingsChanged($login, $score, $ratings)
     {
-        // $this->mapRatingsWidget->setRatings($ratings);
-        // $this->mapRatingsWidget->update($this->players);
+
     }
 }

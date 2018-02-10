@@ -80,7 +80,7 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $lbl = $this->uiFactory->createLabel("unknown map", uiLabel::TYPE_NORMAL, "MapName");
         $lbl->setAlign("center", "center");
         $lbl->setTextSize(1)->setSize(60, 4);
-        $lbl->setAreaColor("0017")->setAreaFocusColor("0013")->setScriptEvents(true);
+        $lbl->setAreaColor("0017")->setAreaFocusColor("0017")->setScriptEvents(true);
         $manialink->addChild($lbl);
 
         /* second row */
@@ -91,7 +91,8 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $lbl->setTextPrefix("👥  ");
         $lbl->setAlign("center", "center2");
         $lbl->setTextSize(1)->setSize(19.5, 4);
-        $lbl->setAreaColor("0017")->setAreaFocusColor("0017")->setScriptEvents(true);
+        $lbl->setAreaColor("0017")->setAreaFocusColor("0013")->setScriptEvents(true);
+        $lbl->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackShowPlayers"], [], true));
         $tooltip->addTooltip($lbl, "Players on server");
         $line->addChild($lbl);
 
@@ -234,6 +235,11 @@ EOL
     public function callbackShowRecs(ManialinkInterface $manialink, $login, $entries, $args)
     {
         $this->chatCommandDataProvider->onPlayerChat($login, $login, "/recs", true);
+    }
+
+    public function callbackShowPlayers(ManialinkInterface $manialink, $login, $entries, $args)
+    {
+        $this->chatCommandDataProvider->onPlayerChat($login, $login, "/players", true);
     }
 
 
