@@ -2,11 +2,11 @@
 
 namespace eXpansion\Framework\Core\Plugins\Gui;
 
-use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpUserGroup;
 use eXpansion\Framework\Core\Model\Gui\Manialink;
 use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryContext;
 use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryInterface;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
+use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\GuiHandler;
 use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
@@ -55,8 +55,8 @@ class ManialinkFactory implements ManialinkFactoryInterface
      * @param                         $name
      * @param                         $sizeX
      * @param                         $sizeY
-     * @param null $posX
-     * @param null $posY
+     * @param null                    $posX
+     * @param null                    $posY
      * @param ManialinkFactoryContext $context
      */
     public function __construct(
@@ -110,6 +110,7 @@ class ManialinkFactory implements ManialinkFactoryInterface
 
         if (!is_null($this->guiHandler->getManialink($group, $this))) {
             $this->update($group);
+
             return $group;
         }
 
@@ -140,8 +141,16 @@ class ManialinkFactory implements ManialinkFactoryInterface
         $ml = $this->guiHandler->getManialink($group, $this);
         if ($ml) {
             $this->actionFactory->destroyNotPermanentActions($ml);
+            if ($ml instanceof Window) {
+                $ml->busyCounter += 1;
+                echo "counter:".$ml->busyCounter."-".($ml->busyCounter % 3)."\n";
+                if ($ml->isBusy && $ml->busyCounter > 1) {
+                    $ml->setBusy(false);
+                }
+            }
             $this->updateContent($ml);
             $this->guiHandler->addToDisplay($ml, $this);
+
         }
     }
 

@@ -149,7 +149,9 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
         $replacements = [
             "(y)" => "",
             ":yes:" => "",
+            ":thumbsup:" => "",
             ":no:" => "",
+            ":thumbsdown:" => "",
             "(n)" => "",
             ":happy:" => "",
             ":smile:" => "",

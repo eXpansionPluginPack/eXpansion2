@@ -2,17 +2,11 @@
 
 namespace eXpansion\Framework\Core\Plugins\Gui;
 
-use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactory;
-use eXpansion\Framework\Core\Model\Gui\Manialink;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
-use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
 use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
-use eXpansion\Framework\Core\Plugins\GuiHandler;
-use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
-use FML\Controls\Control;
 
 /**
  * Class ManialiveFactory allow the creation of manialinks.
@@ -32,8 +26,8 @@ class WindowFactory extends FmlManialinkFactory
      * @param                      $name
      * @param                      $sizeX
      * @param                      $sizeY
-     * @param null $posX
-     * @param null $posY
+     * @param null                 $posX
+     * @param null                 $posY
      * @param WindowFactoryContext $context
      */
     public function __construct(
@@ -95,4 +89,16 @@ class WindowFactory extends FmlManialinkFactory
     {
         $this->destroy($manialink->getUserGroup());
     }
+
+    /**
+     * @param ManialinkInterface|Window $manialink
+     * @param bool|string               $busyStatus
+     */
+    public function setBusy(ManialinkInterface $manialink, $busyStatus = true)
+    {
+        $manialink->setBusy($busyStatus);
+        $this->update($manialink->getUserGroup());
+    }
+
+
 }

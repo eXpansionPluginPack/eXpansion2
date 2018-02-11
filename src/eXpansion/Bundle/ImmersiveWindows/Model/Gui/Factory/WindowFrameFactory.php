@@ -11,15 +11,11 @@ use eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactory as OriginalWin
 use eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactoryInterface;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
-use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Gui\Components\uiButton;
 use eXpansion\Framework\Gui\Ui\Factory;
 use FML\Controls\Frame;
-use FML\Controls\Label;
 use FML\Controls\Quad;
-use FML\ManiaLink;
-use FML\Script\ScriptLabel;
 
 /**
  * Class WindowFrameFactory
@@ -59,9 +55,11 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
      * WindowFrameFactory constructor.
      *
      * @param ManiaScriptFactory $maniaScriptFactory
-     * @param MenuTabsFactory $menuTabsFactory
-     * @param MenuItemProvider $menuItemProvider
-     * @param Factory $uiFactory
+     * @param MenuTabsFactory    $menuTabsFactory
+     * @param MenuItemProvider   $menuItemProvider
+     * @param Factory            $uiFactory
+     * @param MenuContentFactory $menuContentFactory
+     * @param WindowsGuiHandler  $windowsGuiHandler
      */
     public function __construct(
         ManiaScriptFactory $maniaScriptFactory,
@@ -81,11 +79,11 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
     }
 
     /**
-     * @param ManialinkInterface $manialink
-     * @param Frame $mainFrame
-     * @param $name
-     * @param float $sizeX
-     * @param float $sizeY
+     * @param Window $manialink
+     * @param Frame  $mainFrame
+     * @param        $name
+     * @param float  $sizeX
+     * @param float  $sizeY
      * @return uiButton|\FML\Controls\Control
      */
     public function build(
@@ -118,7 +116,7 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
 
         $closeButton = $this->uiFactory->createButton('Close', uiButton::TYPE_DECORATED);
         $closeButton->setBorderColor(uiButton::COLOR_WARNING)->setFocusColor(uiButton::COLOR_WARNING);
-        $closeButton->setPosition(160 - ($closeButton->getWidth()/2), -90 - $mainFrame->getY());
+        $closeButton->setPosition(160 - ($closeButton->getWidth() / 2), -90 - $mainFrame->getY());
         $closeButton->setId("uiCloseButton");
         $frame->addChild($closeButton);
 
@@ -153,9 +151,9 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
      * Callback when an item of the menu is clicked on.
      *
      * @param ManialinkInterface $manialink
-     * @param $login
-     * @param $params
-     * @param $args
+     * @param                    $login
+     * @param                    $params
+     * @param                    $args
      */
     public function callbackItemClick(ManialinkInterface $manialink, $login, $params, $args)
     {

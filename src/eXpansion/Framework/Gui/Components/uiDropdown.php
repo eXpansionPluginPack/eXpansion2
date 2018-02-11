@@ -261,6 +261,7 @@ EOD;
         foreach ($this->options as $idx => $data) {
             if ($value == $data) {
                 $this->setSelectedIndex($x);
+                return;
             }
             $x++;
         }

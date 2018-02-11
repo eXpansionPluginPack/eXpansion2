@@ -4,6 +4,7 @@ namespace eXpansion\Bundle\Maps\Plugins\Gui;
 
 use eXpansion\Bundle\Maps\Plugins\ManiaExchange;
 use eXpansion\Bundle\Maps\Structure\MxInfo;
+use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\Http;
 use eXpansion\Framework\Core\Helpers\Structures\HttpResult;
 use eXpansion\Framework\Core\Helpers\Time;
@@ -15,11 +16,13 @@ use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\GridWindowFactory;
+use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\Gui\Components\uiButton;
 use eXpansion\Framework\Gui\Components\uiDropdown;
 use eXpansion\Framework\Gui\Components\uiLabel;
 use FML\Controls\Quad;
+use Psr\Log\LoggerInterface;
 
 class ManiaExchangeWindowFactory extends GridWindowFactory
 {
@@ -95,6 +98,14 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
      * @var GameDataStorage
      */
     private $gameDataStorage;
+    /**
+     * @var Console
+     */
+    private $console;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * ManiaExchangeWindowFactory constructor.
@@ -111,6 +122,8 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
      * @param ManiaExchange         $mxPlugin
      * @param Http                  $http
      * @param GameDataStorage       $gameDataStorage
+     * @param Console               $console
+     * @param LoggerInterface       $logger
      * @param                       $tracksearch
      * @param                       $order
      * @param                       $length
@@ -132,6 +145,8 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         ManiaExchange $mxPlugin,
         Http $http,
         GameDataStorage $gameDataStorage,
+        Console $console,
+        LoggerInterface $logger,
         $tracksearch,
         $order,
         $length,
@@ -147,16 +162,19 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $this->dataCollectionFactory = $dataCollectionFactory;
         $this->timeFormatter = $time;
         $this->mxPlugin = $mxPlugin;
-        $this->tracksearch = array_flip($tracksearch);
+        $this->http = $http;
+        $this->gameDataStorage = $gameDataStorage;
 
+        $this->tracksearch = array_flip($tracksearch);
         $this->order = array_flip($order);
         $this->length = array_flip($length);
         $this->mapStylesTm = array_flip($mapStylesTm);
         $this->mapStylesSm = array_flip($mapStylesSm);
         $this->difficulties = array_flip($difficulties);
         $this->operator = array_flip($operator);
-        $this->http = $http;
-        $this->gameDataStorage = $gameDataStorage;
+
+        $this->console = $console;
+        $this->logger = $logger;
     }
 
     /**
@@ -242,13 +260,13 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
 
         $search = $this->uiFactory->createButton('🔍 Search', uiButton::TYPE_DECORATED);
         $search->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackSearch'],
-            ["ml" => $manialink]));
+            null, true));
 
         $all = $this->uiFactory->createConfirmButton('Install view', uiButton::TYPE_DEFAULT);
         $tooltip->addTooltip($all, "Install all maps from the view");
         $all->setBackgroundColor("f00");
-        $all->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackInstallAll'],
-            ["ml" => $manialink]));
+        $all->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackInstallAll'], null,
+            true));
 
         $spacer = Quad::create();
         $spacer->setSize(7, 3)->setOpacity(0);
@@ -391,7 +409,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
 
         if ($params->tpack) {
             $title = $params->tpack;
-            if ($params->tpack == "!server") {
+            if ($params->tpack === "!server") {
                 $title = explode("@", $this->gameDataStorage->getVersion()->titleId);
                 $title = $title[0];
             }
@@ -400,14 +418,20 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         if ($params->operator != -1) {
             $options .= "&lengthop=".$params->operator;
         }
+        $map = "";
+        if ($params->map) {
+            $map = "&trackname=".urlencode($params->map);
+        }
 
-        $args = "&mode=".$params->mode."&trackname=".urlencode($params->map)."&anyauthor=".urlencode($params->author).
+        $args = "&mode=".$params->mode.$map."&anyauthor=".urlencode($params->author).
             "&style=".$params->style."&priord=".$params->order."&length=".$params->length.
             "&limit=100&gv=1".$options;
 
         $query = 'https://'.$params->site.'.mania-exchange.com/tracksearch2/search?api=on'.$args;
 
+        $this->setBusy($manialink, "Searching, please wait...");
         $this->http->get($query, [$this, 'setMaps'], ['login' => $login, 'params' => $params, 'ml' => $manialink]);
+
 
     }
 
@@ -423,7 +447,8 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $this->gridBuilder->goToFirstPage($manialink);
 
         if ($result->hasError()) {
-            echo $result->getError();
+            $this->console->writeln('$d00Error: '.$result->getError().' while searching maps from MX, see logs for more details');
+            $this->logger->error("error while searching maps from mx: ".$result->getError());
 
             return;
         }
@@ -448,7 +473,6 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         }
 
         $this->setData($manialink, $data);
-        $group = $this->groupFactory->createForPlayer($result->getAdditionalData()['login']);
-        $this->update($group);
+        $this->update($result->getAdditionalData()['login']);
     }
 }

@@ -36,16 +36,17 @@ class MapRatingsService
     /**
      * MapRatingsService constructor.
      * @param MapratingQueryBuilder $mapratingQueryBuilder
-     * @param PlayerQueryBuilder    $playerQueryBuilder
-     * @param Dispatcher            $dispatcher
-     * @param MapStorage            $mapStorage
+     * @param PlayerQueryBuilder $playerQueryBuilder
+     * @param Dispatcher $dispatcher
+     * @param MapStorage $mapStorage
      */
     public function __construct(
         MapratingQueryBuilder $mapratingQueryBuilder,
         PlayerQueryBuilder $playerQueryBuilder,
         Dispatcher $dispatcher,
         MapStorage $mapStorage
-    ) {
+    )
+    {
 
         $this->mapratingQueryBuilder = $mapratingQueryBuilder;
         $this->playerQueryBuilder = $playerQueryBuilder;
@@ -56,7 +57,6 @@ class MapRatingsService
 
     /**
      * @param Map $map
-     * @throws \Propel\Runtime\Exception\PropelException
      *
      * @return void
      */
@@ -98,7 +98,7 @@ class MapRatingsService
 
     /**
      * @param string $login
-     * @param int    $score
+     * @param int $score
      */
     public function changeRating($login, $score)
     {
