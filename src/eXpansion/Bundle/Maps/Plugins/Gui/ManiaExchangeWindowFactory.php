@@ -4,7 +4,6 @@ namespace eXpansion\Bundle\Maps\Plugins\Gui;
 
 use eXpansion\Bundle\Maps\Plugins\ManiaExchange;
 use eXpansion\Bundle\Maps\Structure\MxInfo;
-use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\Http;
 use eXpansion\Framework\Core\Helpers\Structures\HttpResult;
 use eXpansion\Framework\Core\Helpers\Time;
@@ -447,7 +446,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $this->gridBuilder->goToFirstPage($manialink);
 
         if ($result->hasError()) {
-            $this->console->writeln('$d00Error: '.$result->getError().' while searching maps from MX, see logs for more details');
+            $this->console->writeln('$d00Error: '.$result->getError().' while searching maps from MX, see logs for more details.');
             $this->logger->error("error while searching maps from mx: ".$result->getError());
 
             return;

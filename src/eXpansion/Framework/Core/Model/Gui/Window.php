@@ -68,7 +68,11 @@ class Window extends FmlManialink
     }
 
     /**
+     * Set the window to busy state,
+     * the window will dim and status message is displayed
+     *
      * @param bool $bool sets busy status of the window
+     * @return void
      */
     public function setBusy($bool = true)
     {

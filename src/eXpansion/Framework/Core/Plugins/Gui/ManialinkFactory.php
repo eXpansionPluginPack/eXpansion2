@@ -95,8 +95,10 @@ class ManialinkFactory implements ManialinkFactoryInterface
     }
 
     /**
-     * @inheritdoc
+     * Creates a new manialink.
+     *
      * @param string|array|Group $group
+     * @return array|Group|string
      */
     public function create($group)
     {
@@ -125,7 +127,8 @@ class ManialinkFactory implements ManialinkFactoryInterface
     }
 
     /**
-     * @inheritdoc
+     * Request an update for manialink.
+     *
      * @param string|array|Group $group
      */
     public function update($group)
@@ -143,7 +146,7 @@ class ManialinkFactory implements ManialinkFactoryInterface
             $this->actionFactory->destroyNotPermanentActions($ml);
             if ($ml instanceof Window) {
                 $ml->busyCounter += 1;
-                echo "counter:".$ml->busyCounter."-".($ml->busyCounter % 3)."\n";
+
                 if ($ml->isBusy && $ml->busyCounter > 1) {
                     $ml->setBusy(false);
                 }
@@ -177,7 +180,10 @@ class ManialinkFactory implements ManialinkFactoryInterface
     }
 
     /**
-     * @inheritdoc
+     *  Hides and frees manialink resources
+     *
+     * @param Group $group
+     *
      */
     public function destroy(Group $group)
     {

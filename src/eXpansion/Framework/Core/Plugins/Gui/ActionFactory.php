@@ -2,10 +2,9 @@
 
 namespace eXpansion\Framework\Core\Plugins\Gui;
 
-use Doctrine\Bundle\DoctrineBundle\ManagerConfigurator;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyManialink;
 use eXpansion\Framework\Core\Model\Gui\Action;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyManialink;
 
 /**
  * Class ActionFactory Handles available Gui Actions.
@@ -40,15 +39,16 @@ class ActionFactory implements ListenerInterfaceMpLegacyManialink
      * Create a Manialink action for a manialink.
      *
      * @param ManialinkInterface $manialink
-     * @param $callable
-     * @param array $args
-     * @param boolean $permanent
+     * @param                    $callable
+     * @param array              $args
+     * @param boolean            $permanent
      *
      * @return string action Id
      */
     public function createManialinkAction(ManialinkInterface $manialink, $callable, $args, $permanent = false)
     {
         $class = $this->class;
+        /** @var Action $action */
         $action = new $class($callable, $args, $permanent);
         $this->actions[$action->getId()] = $action;
         $this->actionsByManialink[$manialink->getId()][$action->getId()] = $action;
@@ -107,8 +107,8 @@ class ActionFactory implements ListenerInterfaceMpLegacyManialink
     /**
      * When a player uses an action dispatch information.
      *
-     * @param $login
-     * @param $actionId
+     * @param       $login
+     * @param       $actionId
      * @param array $entryValues
      *
      */
