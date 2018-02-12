@@ -83,18 +83,30 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
         $frame->setPosition($this->startX, $this->startY);
         $frame->addClasses($this->frameClasses);
 
-        $start = 0;
+
         $sizeY = 0;
-
+        /** @var Control $oldElement */
+        $oldElement = null;
         foreach ($this->elements as $idx => $element) {
+            if ($idx === 0) {
+                $start = $this->getRelativeStartPosition($element);
+            } else {
+                $start = $this->getStartPosition($oldElement) + $this->getRelativeWidth($oldElement) + $this->margin;
+            }
 
-            $element->setX($start + $this->getRelativeStartPosition($element));
-            $start += $this->getRelativeWidth($element) + $this->margin;
+            if ($oldElement && $element->getHorizontalAlign() == "left" && $oldElement->getHorizontalAlign() == "center") {
+                $element->setX($start - ($oldElement->getWidth() / 2) + ($element->getWidth() / 2));
+            } elseif ($oldElement && $element->getHorizontalAlign() == "center" && $oldElement->getHorizontalAlign() == "left") {
+                $element->setX($start - ($oldElement->getWidth() / 2) + ($element->getWidth() / 2));
+            } else {
+                $element->setX($start);
+            }
 
             if ($element->getY() + $element->getHeight() > $sizeY) {
                 $this->setHeight($element->getHeight());
             }
             $frame->addChild($element);
+            $oldElement = $element;
         }
 
         return $frame->render($domDocument);
@@ -106,19 +118,22 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
      */
     private function getRelativeStartPosition($element)
     {
+        if (is_null($element)) {
+            return 0;
+        }
         switch ($element->getHorizontalAlign()) {
             case "left":
                 return 0;
-                break;
+
             case "center":
-                return -($element->getWidth() / 2);
-                break;
+                return 0.5 * $element->getWidth();
+
             case "right":
                 return -($element->getWidth() * 2);
-                break;
+
             default:
                 return 0;
-                break;
+
         }
     }
 
@@ -128,14 +143,32 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
      */
     private function getRelativeWidth($element)
     {
+        if (is_null($element)) {
+            return 0;
+        }
         switch ($element->getHorizontalAlign()) {
             case "right":
                 return -$element->getWidth();
-            case "left":
             case "center":
+                return $element->getWidth();
+            case "left":
+                return $element->getWidth();
             default :
                 return $element->getWidth();
         }
+    }
+
+    /**
+     * @param Control $element
+     * @return float|int
+     */
+    private function getStartPosition($element)
+    {
+        if (is_null($element)) {
+            return 0;
+        }
+
+        return $element->getX();
     }
 
     /**
