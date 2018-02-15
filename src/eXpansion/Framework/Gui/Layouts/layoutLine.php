@@ -62,8 +62,8 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
         $sizeY = 0;
         foreach ($this->elements as $idx => $element) {
             $this->width += $element->getWidth() + $this->margin;
-            if (($element->getY() + $element->getHeight()) > $sizeY) {
-                $sizeY = $element->getY() + $element->getHeight();
+            if ((abs($element->getY()) + $element->getHeight()) > $sizeY) {
+                $sizeY = abs($element->getY()) + $element->getHeight();
                 $this->setHeight($sizeY);
             }
         }
@@ -84,6 +84,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
         $frame->setPosition($this->startX, $this->startY);
         $frame->addClasses($this->frameClasses);
         $sizeY = 0;
+        $sizeX = 0;
         /** @var Control $oldElement */
         $oldElement = null;
         foreach ($this->elements as $idx => $element) {
@@ -119,14 +120,16 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
                 $element->setX($start);
             }
 
-            if (($element->getY() + $element->getHeight()) > $sizeY) {
-                $sizeY = $element->getY() + $element->getHeight();
-                $this->setHeight($element->getY() + $element->getHeight());
+            if ((abs($element->getY()) + $element->getHeight()) > $sizeY) {
+                $sizeY = abs($element->getY()) + $element->getHeight();
+                $this->setHeight($sizeY);
             }
             $frame->addChild($element);
             $oldElement = $element;
+            $sizeX += $element->getWidth() + $this->margin;
         }
 
+        $this->setWidth($sizeX);
         return $frame->render($domDocument);
     }
 
@@ -284,8 +287,8 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
     {
         $this->elements[] = $element;
         $this->width += $element->getWidth() + $this->margin;
-        if (($element->getY() + $element->getHeight()) > $this->getHeight()) {
-            $this->setHeight($element->getY() + $element->getHeight());
+        if ((abs($element->getY()) + $element->getHeight()) > $this->getHeight()) {
+            $this->setHeight(abs($element->getY()) + $element->getHeight());
         }
     }
 

@@ -212,7 +212,7 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
     public function addChild(Renderable $element)
     {
         $this->elements[] = $element;
-
+        $this->updateSize();
     }
 
     public function getChildren()
@@ -340,5 +340,13 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
         return $this;
     }
 
+    public function getHorizontalAlign()
+    {
+        return $this->hAlign;
+    }
 
+    public function getVerticalAlign()
+    {
+        return $this->vAlign;
+    }
 }
