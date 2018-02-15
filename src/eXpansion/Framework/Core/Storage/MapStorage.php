@@ -68,7 +68,7 @@ class MapStorage
     public function getMap($uid)
     {
         /** @var Map $map */
-        $map = AssociativeArray::getFromKey($this->maps, $uid,  new Map());
+        $map = AssociativeArray::getFromKey($this->maps, $uid, new Map());
 
         if ($map->fileName && $map->lapRace === null) {
             $map = $this->connection->getMapInfo($map->fileName);
@@ -87,7 +87,7 @@ class MapStorage
      */
     public function getMapByIndex($index)
     {
-        $map = array_slice($this->maps, (int)$index, 1, false);
+        $map = array_slice($this->maps, (int) $index, 1, false);
 
         return end($map);
     }

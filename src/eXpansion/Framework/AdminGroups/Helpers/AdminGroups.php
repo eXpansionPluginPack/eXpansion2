@@ -137,6 +137,9 @@ class AdminGroups
         }
     }
 
+    /**
+     * @param string $permission
+     */
     protected function hasLoginPermission($login, $permission)
     {
         if ($login instanceof Player) {

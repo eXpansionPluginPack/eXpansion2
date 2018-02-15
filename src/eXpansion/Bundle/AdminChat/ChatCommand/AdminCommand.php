@@ -82,8 +82,8 @@ class AdminCommand extends AbstractConnectionCommand
             $timeHelper
         );
 
-        $this->description = 'expansion_admin_chat.' . strtolower($functionName) . '.description';
-        $this->chatMessage = 'expansion_admin_chat.' . strtolower($functionName) . '.msg';
+        $this->description = 'expansion_admin_chat.'.strtolower($functionName).'.description';
+        $this->chatMessage = 'expansion_admin_chat.'.strtolower($functionName).'.msg';
         $this->functionName = $functionName;
     }
 
@@ -104,7 +104,7 @@ class AdminCommand extends AbstractConnectionCommand
 
             $logMessage = $this->chatNotification->getMessage($this->chatMessage,
                 ['%adminLevel%' => $group, '%admin%' => $nickName], "en");
-            $this->logger->info("[". $login. "] " . TMString::trimStyles($logMessage));
+            $this->logger->info("[".$login."] ".TMString::trimStyles($logMessage));
 
         } catch (DedicatedException $e) {
             $this->logger->error("Error on admin command", ["exception" => $e]);

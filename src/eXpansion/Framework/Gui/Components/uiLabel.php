@@ -69,6 +69,9 @@ class uiLabel extends Label
         return parent::render($domDocument);
     }
 
+    /**
+     * @param boolean $translate
+     */
     public function setTranslate($translate)
     {
         if ($translate) {

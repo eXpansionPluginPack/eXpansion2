@@ -394,7 +394,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
      */
     public function callbackSearch(ManialinkInterface $manialink, $login, $params, $arguments)
     {
-        $params = (object)$params;
+        $params = (object) $params;
 
         $this->modebox->setSelectedByValue($params->mode);
         $this->orderbox->setSelectedByValue($params->order);

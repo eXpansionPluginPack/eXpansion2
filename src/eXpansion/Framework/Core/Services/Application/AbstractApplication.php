@@ -99,7 +99,7 @@ abstract class AbstractApplication implements RunInterface
         try {
             $this->connection->triggerModeScriptEvent("XmlRpc.EnableCallbacks", ["True"]);
         } catch (\Exception $exception) {
-            $this->connection->saveMatchSettings('MatchSettings/eXpansion-mode-fail-' . date(DATE_ISO8601) . '.txt');
+            $this->connection->saveMatchSettings('MatchSettings/eXpansion-mode-fail-'.date(DATE_ISO8601).'.txt');
             throw $exception;
         }
 

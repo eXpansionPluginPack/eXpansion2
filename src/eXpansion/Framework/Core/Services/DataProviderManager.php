@@ -6,12 +6,9 @@ use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
 use eXpansion\Framework\Core\Exceptions\DataProvider\UncompatibleException;
 use eXpansion\Framework\Core\Model\CompatibilityCheckDataProviderInterface;
 use eXpansion\Framework\Core\Model\ProviderListener;
-use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use Maniaplanet\DedicatedServer\Structures\Map;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

@@ -132,7 +132,7 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
     }
 
     /**
-     * @return float
+     * @return integer
      */
     public function getWidth()
     {

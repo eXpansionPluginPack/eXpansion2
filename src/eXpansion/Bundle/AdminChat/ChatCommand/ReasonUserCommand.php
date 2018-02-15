@@ -99,8 +99,8 @@ class ReasonUserCommand extends AbstractConnectionCommand
             $timeHelper
         );
 
-        $this->description = 'expansion_admin_chat.' . strtolower($functionName) . '.description';
-        $this->chatMessage = 'expansion_admin_chat.' . strtolower($functionName) . '.msg';
+        $this->description = 'expansion_admin_chat.'.strtolower($functionName).'.description';
+        $this->chatMessage = 'expansion_admin_chat.'.strtolower($functionName).'.msg';
         $this->functionName = $functionName;
         $this->parameterLoginDescription = $parameterLoginDescription;
         $this->parameterReasonDescription = $parameterReasonDescription;
@@ -149,7 +149,7 @@ class ReasonUserCommand extends AbstractConnectionCommand
                     '%player%' => $playerNickName,
                     "%reason%" => $reason
                 ], "en");
-            $this->logger->info("[". $login. "] " . TMString::trimStyles($logMessage));
+            $this->logger->info("[".$login."] ".TMString::trimStyles($logMessage));
 
 
         } catch (DedicatedException $e) {

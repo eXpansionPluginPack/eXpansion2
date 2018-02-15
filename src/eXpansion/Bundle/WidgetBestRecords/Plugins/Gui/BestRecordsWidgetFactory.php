@@ -8,7 +8,6 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
-use eXpansion\Framework\Gui\Components\uiLabel;
 
 class BestRecordsWidgetFactory extends WidgetFactory
 {
@@ -115,6 +114,10 @@ class BestRecordsWidgetFactory extends WidgetFactory
         $manialink->addChild($line3);
     }
 
+    /**
+     * @param string $text
+     * @param string $color
+     */
     private function createLabel($text, $color)
     {
         return $this->uiFactory->createLabel($text, UiLabel::TYPE_NORMAL)->setTranslate(false)
@@ -123,6 +126,9 @@ class BestRecordsWidgetFactory extends WidgetFactory
     }
 
 
+    /**
+     * @param Record|null $record
+     */
     public function setLocalRecord($record)
     {
         if ($record instanceof Record) {

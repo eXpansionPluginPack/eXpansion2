@@ -69,7 +69,7 @@ class FileSystem
     {
         if (is_null($this->localAdapter)) {
             $dir = $this->connection->getMapsDirectory();
-            $this->localAdapter = new \League\Flysystem\Filesystem(new Local($dir . '/../'));
+            $this->localAdapter = new \League\Flysystem\Filesystem(new Local($dir.'/../'));
         }
 
         return $this->localAdapter;

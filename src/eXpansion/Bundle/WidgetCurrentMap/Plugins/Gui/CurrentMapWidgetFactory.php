@@ -87,7 +87,7 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $line = $this->uiFactory->createLayoutLine(0, -4.45, [], 0.5);
         $line->setAlign("left", "top");
         $manialink->addChild($line);
-        $div = ((60 - 1)/ 3);
+        $div = ((60 - 1) / 3);
 
         $lbl = $this->uiFactory->createLabel("0 / 0", uiLabel::TYPE_NORMAL, "Players");
         $lbl->setTextPrefix("👥  ");

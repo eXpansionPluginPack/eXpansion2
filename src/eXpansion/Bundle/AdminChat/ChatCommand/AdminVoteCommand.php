@@ -84,6 +84,6 @@ class AdminVoteCommand extends AdminCommand
 
         $logMessage = $this->chatNotification->getMessage('%adminLevel% %admin% cancels current vote.',
             ["%adminLevel%" => $level, "%admin%" => $admin]);
-        $this->logger->info("[". $login. "] " . TMString::trimStyles($logMessage));
+        $this->logger->info("[".$login."] ".TMString::trimStyles($logMessage));
     }
 }

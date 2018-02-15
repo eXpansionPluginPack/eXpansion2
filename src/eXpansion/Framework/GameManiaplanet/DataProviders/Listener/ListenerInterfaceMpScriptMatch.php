@@ -92,14 +92,14 @@ interface ListenerInterfaceMpScriptMatch
      */
     public function onEndTurnEnd($count, $time);
 
-     /**
-     * Callback sent when the "StartRound" section start.
-     *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time  Server time when the callback was sent
-     *
-     * @return void
-     */
+        /**
+         * Callback sent when the "StartRound" section start.
+         *
+         * @param int $count Each time this section is played, this number is incremented by one
+         * @param int $time  Server time when the callback was sent
+         *
+         * @return void
+         */
     public function onStartRoundStart($count, $time);
 
     /**

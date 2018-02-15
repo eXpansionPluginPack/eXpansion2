@@ -1,7 +1,6 @@
 <?php
 
 namespace eXpansion\Bundle\Players\Plugins\Gui;
-use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 
 /**
  * Class IgnoreListWindow

@@ -35,7 +35,7 @@ class ItemBuilder
      *
      * @return ItemInterface
      */
-    public function create($class, $id, $path, $label, $permission, $options =[])
+    public function create($class, $id, $path, $label, $permission, $options = [])
     {
         foreach ($this->itemFactories as $itemFactory) {
             if ($itemFactory->supports($class)) {

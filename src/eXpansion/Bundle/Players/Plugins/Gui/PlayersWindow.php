@@ -148,7 +148,7 @@ class PlayersWindow extends GridWindowFactory
         }
 
 
-        $frame = Frame::create();;
+        $frame = Frame::create(); ;
         $frame->setPosition(120, -16);
 
         $manialink->setData("playerFrame", $frame);
@@ -358,23 +358,23 @@ class PlayersWindow extends GridWindowFactory
     {
 
         $actions = [
-            "mute" => (string)$this->actionFactory->createManialinkAction($manialink, [$this, 'callbackIgnore'],
+            "mute" => (string) $this->actionFactory->createManialinkAction($manialink, [$this, 'callbackIgnore'],
                 [
                     "login" => $login,
                 ]),
-            "kick" => (string)$this->actionFactory->createManialinkAction($manialink, [$this, 'callbackKick'],
+            "kick" => (string) $this->actionFactory->createManialinkAction($manialink, [$this, 'callbackKick'],
                 [
                     "login" => $login,
                 ]),
-            "ban" => (string)$this->actionFactory->createManialinkAction($manialink, [$this, 'callbackBan'],
+            "ban" => (string) $this->actionFactory->createManialinkAction($manialink, [$this, 'callbackBan'],
                 [
                     "login" => $login,
                 ]),
-            "black" => (string)$this->actionFactory->createManialinkAction($manialink, [$this, 'callbackBlack'],
+            "black" => (string) $this->actionFactory->createManialinkAction($manialink, [$this, 'callbackBlack'],
                 [
                     "login" => $login,
                 ]),
-            "guest" => (string)$this->actionFactory->createManialinkAction($manialink, [$this, 'callbackGuest'],
+            "guest" => (string) $this->actionFactory->createManialinkAction($manialink, [$this, 'callbackGuest'],
                 [
                     "login" => $login,
                 ]),

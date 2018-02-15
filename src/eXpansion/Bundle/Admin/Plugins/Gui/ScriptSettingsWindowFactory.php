@@ -12,9 +12,7 @@ use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\GridWindowFactory;
 use eXpansion\Framework\Core\Services\Console;
 use FML\Controls\Frame;
-use FML\Script\Features\ScriptFeature;
 use FML\Script\Script;
-use FML\Script\ScriptLabel;
 use Maniaplanet\DedicatedServer\Connection;
 
 

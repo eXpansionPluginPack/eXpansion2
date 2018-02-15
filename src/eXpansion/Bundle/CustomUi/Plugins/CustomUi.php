@@ -84,7 +84,7 @@ class CustomUi implements StatusAwarePluginInterface
 
     /**
      * @param \SimpleXMLElement $element
-     * @param array $elementProperties
+     * @param string $elementProperties
      */
     protected function configureUiProperty(\SimpleXMLElement $element, $elementProperties)
     {

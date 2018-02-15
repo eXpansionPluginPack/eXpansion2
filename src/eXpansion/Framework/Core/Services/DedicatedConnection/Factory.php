@@ -77,7 +77,7 @@ class Factory
             );
         } catch (TransportException $ex) {
             echo "Looks like your Dedicated server is either offline or has wrong config settings.\n";
-            echo "Error message: " . $ex->getMessage();
+            echo "Error message: ".$ex->getMessage();
             $this->logger->error("Unable to open connection for Dedicated server", ["exception" => $ex]);
 
             throw $ex;

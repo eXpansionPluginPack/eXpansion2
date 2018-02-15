@@ -70,7 +70,7 @@ class Factory implements ListenerInterfaceExpTimer
         $curlJob->setUrl($url);
         $curlJob->setOptions($options);
         if (is_object($parameters)) {
-            $parameters = (array)$parameters;
+            $parameters = (array) $parameters;
         }
         $curlJob->setParameters($parameters);
         $curlJob->setAdditionalData($additionalData);
