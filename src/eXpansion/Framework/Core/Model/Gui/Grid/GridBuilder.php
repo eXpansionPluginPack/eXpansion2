@@ -256,6 +256,7 @@ class GridBuilder implements DestroyableObject
         $frame->setSize($width, $height);
 
         $posY = 0.;
+
         $tooltip = $this->uiFactory->createTooltip();
         $frame->addChild($tooltip);
 

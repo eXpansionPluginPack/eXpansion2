@@ -31,8 +31,10 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
 
     protected $textFormat = "Basic";
 
-    /** @var null|string  */
+    /** @var null|string */
     protected $id = null;
+
+    protected $horizontalAlign = "left";
 
     public function __construct($name, $default = "", $width = 30, $textFormat = "Basic")
     {
@@ -53,7 +55,6 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
     {
         $frame = new Frame();
         $frame->setPosition($this->posX, $this->posY)
-
             ->addClasses(["uiContainer", "uiInput"]);
 
         $quad = new Quad();
@@ -61,23 +62,27 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
             ->setScale(0.5)
             ->setPosition($this->width / 2, -$this->height / 2)
             ->setStyles('Bgs1', 'BgColorContour')
-            ->setAlign("center", "center")
+            ->setAlign("center", "center2")
             ->setBackgroundColor('FFFA')
             ->addClass("uiInput")
             ->setScriptEvents(true)
             ->setDataAttributes($this->_dataAttributes)->addClasses($this->_classes);
 
         $input = new Entry();
+        $posX = 0;
+        if ($this->horizontalAlign == "center") {
+            $posX = $this->width / 2;
+        }
         $input->setSize($this->width, $this->height)
-            ->setPosition(0, 0)
+            ->setPosition($posX, -($this->height / 2))
             ->setDefault($this->default)
             ->setSelectText(true)
-            ->setAlign("left", "top")
+            ->setAlign($this->horizontalAlign, "center")
             ->setAreaColor("0005")
             ->setAreaFocusColor('000a')
             ->setTextFormat($this->textFormat)
             ->setName($this->name)
-            ->setTextSize(2)
+            ->setTextSize(1.5)
             ->setScriptEvents(true)
             ->setId($this->id);
         if ($this->action !== null) {
@@ -246,5 +251,21 @@ EOL;
     public function setId(string $id)
     {
         $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHorizontalAlign(): string
+    {
+        return $this->horizontalAlign;
+    }
+
+    /**
+     * @param string $horizontalAlign
+     */
+    public function setHorizontalAlign(string $horizontalAlign)
+    {
+        $this->horizontalAlign = $horizontalAlign;
     }
 }

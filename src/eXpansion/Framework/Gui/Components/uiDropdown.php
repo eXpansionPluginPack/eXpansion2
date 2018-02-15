@@ -103,44 +103,44 @@ EOD;
         return /** @lang textmate */
             <<<'EOD'
 
-Void uiRenderDropdown(CMlFrame frame) {
-	declare selected = TextLib::ToInteger(frame.DataAttributeGet("selected"));
-	declare index = 0;
-	
-    declare options = (frame.Controls[3] as CMlFrame);
-    
-    	if (frame.DataAttributeGet("open") == "1") {		   
-		    frame.Controls[3].Show();
-	    } else {
-    		 frame.Controls[3].Hide();
-    	}
-	
-        foreach (option in options.Controls) {
-            if (selected == index) {
-                (frame.Controls[1] as CMlLabel).Value = (option as CMlLabel).Value;
-                (frame.Controls[2] as CMlEntry).Value = option.DataAttributeGet("value");
-            }										
-        index+= 1;
-    }
-}	
-
-Void uiToggleDropdown (CMlFrame frame) { 
-    if (frame.DataAttributeGet("open") == "1") {	
-        frame.DataAttributeSet("open","0");
-    } else {
-        frame.DataAttributeSet("open","1");
-    }
-     uiRenderDropdown(frame);
-}
-
-Void uiSelectDropdown (CMlLabel label) {
-    declare uiDropdown = label.Parent.Parent;
-	uiDropdown.DataAttributeSet("selected", label.DataAttributeGet("index"));
-	uiDropdown.DataAttributeSet("value", label.DataAttributeGet("value"));
-	uiRenderDropdown(uiDropdown);
-	uiToggleDropdown(uiDropdown);
-	+++onSelectDropdown+++
-}
+            Void uiRenderDropdown(CMlFrame frame) {
+                declare selected = TextLib::ToInteger(frame.DataAttributeGet("selected"));
+                declare index = 0;
+                
+                declare options = (frame.Controls[3] as CMlFrame);
+                
+                    if (frame.DataAttributeGet("open") == "1") {		   
+                        frame.Controls[3].Show();
+                    } else {
+                         frame.Controls[3].Hide();
+                    }
+                
+                    foreach (option in options.Controls) {
+                        if (selected == index) {
+                            (frame.Controls[1] as CMlLabel).Value = (option as CMlLabel).Value;
+                            (frame.Controls[2] as CMlEntry).Value = option.DataAttributeGet("value");
+                        }										
+                    index+= 1;
+                }
+            }	
+            
+            Void uiToggleDropdown (CMlFrame frame) { 
+                if (frame.DataAttributeGet("open") == "1") {	
+                    frame.DataAttributeSet("open","0");
+                } else {
+                    frame.DataAttributeSet("open","1");
+                }
+                 uiRenderDropdown(frame);
+            }
+            
+            Void uiSelectDropdown (CMlLabel label) {
+                declare uiDropdown = label.Parent.Parent;
+                uiDropdown.DataAttributeSet("selected", label.DataAttributeGet("index"));
+                uiDropdown.DataAttributeSet("value", label.DataAttributeGet("value"));
+                uiRenderDropdown(uiDropdown);
+                uiToggleDropdown(uiDropdown);
+                +++onSelectDropdown+++
+            }
 
 EOD;
     } // end of getScriptRenderCheckbox
@@ -178,6 +178,7 @@ EOD;
         $labelMark->setAlign("left", "center");
         $labelMark->setPosition(0, -($this->height / 2));
         $labelMark->setSize(5, 5)->setX($this->width - 5);
+        $labelMark->setScriptEvents(true)->addClass("uiSelectElement");
 
         $baseLabel = new Label();
         $baseLabel->setAreaColor("000")->setAreaFocusColor("333")

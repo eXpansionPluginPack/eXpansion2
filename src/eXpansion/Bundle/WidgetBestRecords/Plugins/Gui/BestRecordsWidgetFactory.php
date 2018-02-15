@@ -78,11 +78,11 @@ class BestRecordsWidgetFactory extends WidgetFactory
     {
         parent::createContent($manialink);
 
-        $line = $this->uiFactory->createLayoutLine(0, 0, [], 1);
+        $line = $this->uiFactory->createLayoutLine(0, 0, [], 0.5);
         $lbl = $this->createLabel("Author", "0017")->setSize(15, 4);
         $line->addChild($lbl);
 
-        $this->lblAuthorNick = $this->createLabel("n/a", "0023")->setSize(25, 4);
+        $this->lblAuthorNick = $this->createLabel("n/a", "0023")->setSize(33, 4);
         $line->addChild($this->lblAuthorNick);
 
         $this->lblAuthorTime = $this->createLabel("-:--:---", "0015")->setSize(12, 4);
@@ -90,24 +90,24 @@ class BestRecordsWidgetFactory extends WidgetFactory
         $line->addChild($this->lblAuthorTime);
         $manialink->addChild($line);
 
-        $line2 = $this->uiFactory->createLayoutLine(0, -5, [], 1);
+        $line2 = $this->uiFactory->createLayoutLine(0, -4.45, [], 0.5);
 
         $lbl = $this->createLabel("Record", "0017")->setSize(15, 4);
         $line2->addChild($lbl);
 
-        $this->lblLocalNick = $this->createLabel("n/a", "0023")->setSize(25, 4);
+        $this->lblLocalNick = $this->createLabel("n/a", "0023")->setSize(33, 4);
         $line2->addChild($this->lblLocalNick);
 
         $this->lblLocalTime = $this->createLabel("-:--:---", "0015")->setSize(12, 4);
         $line2->addChild($this->lblLocalTime);
         $manialink->addChild($line2);
 
-        $line3 = $this->uiFactory->createLayoutLine(0, -10, [], 1);
+        $line3 = $this->uiFactory->createLayoutLine(0, -9.0, [], 0.5);
 
         $lbl = $this->createLabel("Dedimania", "0017")->setSize(15, 4);
         $line3->addChild($lbl);
 
-        $this->lblDediNick = $this->createLabel("n/a", "0023")->setSize(25, 4);
+        $this->lblDediNick = $this->createLabel("n/a", "0023")->setSize(33, 4);
         $line3->addChild($this->lblDediNick);
 
         $this->lblDediTime = $this->createLabel("-:--:---", "0015")->setSize(12, 4);

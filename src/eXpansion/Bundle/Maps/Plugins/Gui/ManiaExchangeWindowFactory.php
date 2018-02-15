@@ -187,52 +187,52 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $manialink->addChild($tooltip);
 
         $this->modebox = $this->uiFactory->createDropdown("mode", $this->tracksearch, 0);
-        $this->modebox->setPosition($x, -6, 2);
+        $this->modebox->setPosition($x, -4, 2);
         $manialink->addChild($this->modebox);
 
         $label = $this->uiFactory->createLabel("Sort by", uiLabel::TYPE_HEADER);
         $label->setPosition($x, 0);
         $manialink->addChild($label);
 
-        $x += 32;
+        $x += 31;
         $this->orderbox = $this->uiFactory->createDropdown("order", $this->order, 0);
-        $this->orderbox->setPosition($x, -6, 2);
+        $this->orderbox->setPosition($x, -4, 2);
         $manialink->addChild($this->orderbox);
 
         $label = $this->uiFactory->createLabel("Order", uiLabel::TYPE_HEADER);
         $label->setPosition($x, 0);
         $manialink->addChild($label);
 
-        $x += 32;
+        $x += 31;
         $this->opbox = $this->uiFactory->createDropdown("operator", $this->operator, 0);
-        $this->opbox->setPosition($x, -6, 2);
+        $this->opbox->setPosition($x, -4, 2);
         $manialink->addChild($this->opbox);
 
         $label = $this->uiFactory->createLabel("Operator", uiLabel::TYPE_HEADER);
         $label->setPosition($x, 0);
         $manialink->addChild($label);
 
-        $x += 32;
+        $x += 31;
         $this->lengthBox = $this->uiFactory->createDropdown("length", $this->length, 0);
-        $this->lengthBox->setPosition($x, -6, 2);
+        $this->lengthBox->setPosition($x, -4, 2);
         $manialink->addChild($this->lengthBox);
 
         $label = $this->uiFactory->createLabel("Length", uiLabel::TYPE_HEADER);
         $label->setPosition($x, 0);
         $manialink->addChild($label);
 
-        $x += 32;
+        $x += 31;
         $this->stylebox = $this->uiFactory->createDropdown("style", $this->mapStylesTm, 0);
-        $this->stylebox->setPosition($x, -6, 2);
+        $this->stylebox->setPosition($x, -4, 2);
         $manialink->addChild($this->stylebox);
 
         $label = $this->uiFactory->createLabel("Style", uiLabel::TYPE_HEADER);
         $label->setPosition($x, 0);
         $manialink->addChild($label);
 
-        $x += 32;
+        $x += 31;
         $this->difficultiesBox = $this->uiFactory->createDropdown("difficulties", $this->difficulties, 0);
-        $this->difficultiesBox->setPosition($x, -6, 2);
+        $this->difficultiesBox->setPosition($x, -4, 2);
         $manialink->addChild($this->difficultiesBox);
 
         $label = $this->uiFactory->createLabel("Difficulty", uiLabel::TYPE_HEADER);
@@ -245,11 +245,11 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
             $idx = 1;
         }
         $this->sitebox = $this->uiFactory->createDropdown("site", ["Trackmania" => "tm", "Storm" => "sm"], $idx);
-        $this->sitebox->setPosition(0, -14, 2);
+        $this->sitebox->setPosition(0, -10, 2);
         $manialink->addChild($this->sitebox);
 
         $this->tpackBox = $this->uiFactory->createDropdown("tpack", $this->tpack, 0);
-        $this->tpackBox->setPosition(32, -14, 2);
+        $this->tpackBox->setPosition(31, -10, 2);
         $manialink->addChild($this->tpackBox);
 
         $mapname = $this->uiFactory->createInput("map");
@@ -270,7 +270,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $spacer = Quad::create();
         $spacer->setSize(7, 3)->setOpacity(0);
 
-        $line = $this->uiFactory->createLayoutLine(64, -14, [$mapname, $author, $spacer, $search, $all], 2);
+        $line = $this->uiFactory->createLayoutLine(62, -10, [$mapname, $author, $search, $spacer, $all], 1);
         $manialink->addChild($line);
 
         $addButton = $this->uiFactory->createConfirmButton('Install', uiButton::TYPE_DEFAULT);
@@ -352,10 +352,10 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
 
         $gridBuilder->addActionColumn('add', 'expansion_mx.gui.mxsearch.column.add', 2, array($this, 'callbackAdd'),
             $addButton);
-        $this->setGridPosition(0, -24);
+        $this->setGridPosition(0, -18);
 
         $content = $manialink->getContentFrame();
-        $this->setGridSize($content->getWidth(), $content->getHeight() - 24);
+        $this->setGridSize($content->getWidth(), $content->getHeight() - 18);
         $manialink->setData('grid', $gridBuilder);
         $this->gridBuilder = $gridBuilder;
     }

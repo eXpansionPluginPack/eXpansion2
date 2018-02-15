@@ -14,7 +14,7 @@ use FML\Script\ScriptLabel;
 class BestCheckpointsWidgetFactory extends WidgetFactory
 {
     const rowCount = 2;
-    const columnCount = 9;
+    const columnCount = 10;
 
     /** @var UpdaterWidgetFactory */
     protected $updaterWidgetFactory;
@@ -50,7 +50,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
     protected function createContent(ManialinkInterface $manialink)
     {
         $elementCount = 0;
-        $rows = $this->uiFactory->createLayoutRow(0, 0, [], -1);
+        $rows = $this->uiFactory->createLayoutRow(0, 0, [], -0.5);
         $cpVariable = $this->updaterWidgetFactory->getVariable('LocalRecordCheckpoints')->getVariableName();
 
         for ($i = 0; $i < self::rowCount; $i++) {
@@ -71,7 +71,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                 }
                 $elementCount++;
             }
-            $line = $this->uiFactory->createLayoutLine(0, 0, $elements, 1);
+            $line = $this->uiFactory->createLayoutLine(0, 0, $elements, 0.5);
 
             $rows->addChild($line);
         }

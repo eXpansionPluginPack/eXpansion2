@@ -36,7 +36,7 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
 
     public function __construct($text = "button", $type = self::TYPE_DEFAULT)
     {
-        $this->setHorizontalAlign("center");
+        $this->setHorizontalAlign("left");
         $this->setVerticalAlign("center");
 
         $this->text = $text;

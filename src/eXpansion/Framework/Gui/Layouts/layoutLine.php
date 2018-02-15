@@ -124,16 +124,12 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
         switch ($element->getHorizontalAlign()) {
             case "left":
                 return 0;
-
             case "center":
                 return 0.5 * $element->getWidth();
-
             case "right":
                 return -($element->getWidth() * 2);
-
             default:
                 return 0;
-
         }
     }
 

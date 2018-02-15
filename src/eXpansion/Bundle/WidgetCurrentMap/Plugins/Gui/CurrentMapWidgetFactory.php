@@ -78,28 +78,31 @@ class CurrentMapWidgetFactory extends WidgetFactory
 
         /* first row */
         $lbl = $this->uiFactory->createLabel("unknown map", uiLabel::TYPE_NORMAL, "MapName");
-        $lbl->setAlign("center", "center");
+        $lbl->setAlign("center", "center2")->setPosition(30, 0);
         $lbl->setTextSize(1)->setSize(60, 4);
         $lbl->setAreaColor("0017")->setAreaFocusColor("0017")->setScriptEvents(true);
         $manialink->addChild($lbl);
 
         /* second row */
-        $line = $this->uiFactory->createLayoutLine(-(19 / 2) - 1, -5, [], 0.75);
+        $line = $this->uiFactory->createLayoutLine(0, -4.45, [], 0.5);
+        $line->setAlign("left", "top");
         $manialink->addChild($line);
+        $div = ((60 - 1)/ 3);
 
         $lbl = $this->uiFactory->createLabel("0 / 0", uiLabel::TYPE_NORMAL, "Players");
         $lbl->setTextPrefix("👥  ");
         $lbl->setAlign("center", "center2");
-        $lbl->setTextSize(1)->setSize(19.5, 4);
+        $lbl->setTextSize(1)->setSize($div, 4);
         $lbl->setAreaColor("0017")->setAreaFocusColor("0013")->setScriptEvents(true);
-        $lbl->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackShowPlayers"], [], true));
+        $lbl->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackShowPlayers"], [],
+            true));
         $tooltip->addTooltip($lbl, "Players on server");
         $line->addChild($lbl);
 
         $lbl = $this->uiFactory->createLabel("0 / 0", uiLabel::TYPE_NORMAL, "Spectators");
         $lbl->setTextPrefix("🎥  ");
         $lbl->setAlign("center", "center2");
-        $lbl->setTextSize(1)->setSize(19.5, 4);
+        $lbl->setTextSize(1)->setSize($div, 4);
         $lbl->setAreaColor("0017")->setAreaFocusColor("0017")->setScriptEvents(true);
         $tooltip->addTooltip($lbl, "Spectators on server");
         $line->addChild($lbl);
@@ -109,18 +112,19 @@ class CurrentMapWidgetFactory extends WidgetFactory
 
         $lbl = $this->uiFactory->createLabel($ladderMin." - ".$ladderMax."k", uiLabel::TYPE_NORMAL);
         $lbl->setAlign("center", "center2");
-        $lbl->setTextSize(1)->setSize(19.5, 4);
+        $lbl->setTextSize(1)->setSize($div, 4);
         $lbl->setAreaColor("0017")->setAreaFocusColor("0017")->setScriptEvents(true);
         $tooltip->addTooltip($lbl, "Ladder limits");
         $line->addChild($lbl);
 
         /* third row */
-        $line2 = $this->uiFactory->createLayoutLine(-16, -10, [], 1.33);
+        $line2 = $this->uiFactory->createLayoutLine(0, -9.0, [], 0.5);
         $manialink->addChild($line2);
+        $div = ((60 - 1.5) / 4);
 
         $lbl = $this->uiFactory->createLabel("Recs", uiLabel::TYPE_NORMAL);
         $lbl->setAlign("center", "center2");
-        $lbl->setTextSize(1)->setSize(14, 4);
+        $lbl->setTextSize(1)->setSize($div, 4);
         $lbl->setAreaColor("0017")->setAreaFocusColor("0014")->setScriptEvents(true);
         $lbl->setAction($this->actionFactory->createManialinkAction(
             $manialink, [$this, "callbackShowRecs"], [], true)
@@ -130,7 +134,7 @@ class CurrentMapWidgetFactory extends WidgetFactory
 
         $lbl = $this->uiFactory->createLabel("Maps", uiLabel::TYPE_NORMAL);
         $lbl->setAlign("center", "center2");
-        $lbl->setTextSize(1)->setSize(14, 4);
+        $lbl->setTextSize(1)->setSize($div, 4);
         $lbl->setAreaColor("0017")->setAreaFocusColor("0014")->setScriptEvents(true);
         $lbl->setAction($this->actionFactory->createManialinkAction(
             $manialink, [$this, "callbackShowMapList"], [], true)
@@ -141,7 +145,7 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $lbl = $this->uiFactory->createLabel("", uiLabel::TYPE_NORMAL);
         $lbl->setTextPrefix("  ");
         $lbl->setAlign("center", "center2");
-        $lbl->setTextSize(1)->setSize(14, 4);
+        $lbl->setTextSize(1)->setSize($div, 4);
         $lbl->setAreaColor("0017")->setAreaFocusColor("0707")->setScriptEvents(true);
         $lbl->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackVoteYes"], [], true));
         $tooltip->addTooltip($lbl, "Vote up the map");
@@ -151,7 +155,7 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $lbl = $this->uiFactory->createLabel("", uiLabel::TYPE_NORMAL);
         $lbl->setTextPrefix("  ");
         $lbl->setAlign("center", "center2");
-        $lbl->setTextSize(1)->setSize(14, 4);
+        $lbl->setTextSize(1)->setSize($div, 4);
         $lbl->setAreaColor("0017")->setAreaFocusColor("7007")->setScriptEvents(true);
         $lbl->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackVoteNo"], [], true));
         $tooltip->addTooltip($lbl, "Vote down the map");
@@ -241,8 +245,6 @@ EOL
     {
         $this->chatCommandDataProvider->onPlayerChat($login, $login, "/players", true);
     }
-
-
 
 
     /** @param Maprating[] $ratings */
