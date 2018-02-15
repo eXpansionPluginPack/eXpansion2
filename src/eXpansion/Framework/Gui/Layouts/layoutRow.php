@@ -129,7 +129,6 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
         $frame->addClasses($this->frameClasses);
 
         $startY = 0;
-
         foreach ($this->elements as $idx => $element) {
             $element->setY($startY);
             $startY -= $element->getHeight() - $this->margin;
@@ -213,7 +212,7 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
     public function addChild(Renderable $element)
     {
         $this->elements[] = $element;
-        $this->updateSize();
+
     }
 
     public function getChildren()

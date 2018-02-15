@@ -62,8 +62,9 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
         $sizeY = 0;
         foreach ($this->elements as $idx => $element) {
             $this->width += $element->getWidth() + $this->margin;
-            if ($element->getY() + $element->getHeight() > $sizeY) {
-                $this->setHeight($element->getHeight());
+            if (($element->getY() + $element->getHeight()) > $sizeY) {
+                $sizeY = $element->getY() + $element->getHeight();
+                $this->setHeight($sizeY);
             }
         }
 
@@ -82,13 +83,10 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
         $frame->setAlign($this->hAlign, $this->vAlign);
         $frame->setPosition($this->startX, $this->startY);
         $frame->addClasses($this->frameClasses);
-
-
         $sizeY = 0;
         /** @var Control $oldElement */
         $oldElement = null;
         foreach ($this->elements as $idx => $element) {
-
 
             if ($idx === 0) {
                 $start = $this->getRelativeStartPosition($element);
@@ -121,8 +119,9 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
                 $element->setX($start);
             }
 
-            if ($element->getY() + $element->getHeight() > $sizeY) {
-                $this->setHeight($element->getHeight());
+            if (($element->getY() + $element->getHeight()) > $sizeY) {
+                $sizeY = $element->getY() + $element->getHeight();
+                $this->setHeight($element->getY() + $element->getHeight());
             }
             $frame->addChild($element);
             $oldElement = $element;
@@ -285,7 +284,9 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
     {
         $this->elements[] = $element;
         $this->width += $element->getWidth() + $this->margin;
-        $this->height += $element->getHeight();
+        if (($element->getY() + $element->getHeight()) > $this->getHeight()) {
+            $this->setHeight($element->getY() + $element->getHeight());
+        }
     }
 
     public function getChildren()
