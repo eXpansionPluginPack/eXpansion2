@@ -124,7 +124,7 @@ class uiInputMasked extends abstractUiElement implements Renderable, ScriptFeatu
     }
 
     /**
-     * @return float
+     * @return integer
      */
     public function getWidth()
     {

@@ -7,7 +7,6 @@ use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionFactory;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
-use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\GridWindowFactory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;

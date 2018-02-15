@@ -37,5 +37,5 @@ interface ItemFactoryInterface
      *
      * @return ItemInterface
      */
-    public function build($class, $id, $path, $label, $permission, $options =[]);
+    public function build($class, $id, $path, $label, $permission, $options = []);
 }

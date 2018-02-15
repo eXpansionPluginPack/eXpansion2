@@ -299,11 +299,11 @@ class ManiaExchange implements ListenerInterfaceExpApplication
                 $fileSystem->write($file, $result->getResponse());
             }
 
-             if (!$this->connection->checkMapForCurrentServerParams($titlepack.DIRECTORY_SEPARATOR.$filename)) {
-                 $this->chatNotification->sendMessage("expansion_mx.chat.fail");
+                if (!$this->connection->checkMapForCurrentServerParams($titlepack.DIRECTORY_SEPARATOR.$filename)) {
+                    $this->chatNotification->sendMessage("expansion_mx.chat.fail");
 
-                 return;
-             }
+                    return;
+                }
 
             $map = $this->connection->getMapInfo($titlepack.DIRECTORY_SEPARATOR.$filename);
             $this->connection->addMap($map->fileName);
@@ -377,7 +377,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
      */
     private function convertMap($map)
     {
-        $outMap = (array)$map;
+        $outMap = (array) $map;
         $outMap["mapUid"] = $map->uId;
 
         return $outMap;
@@ -387,7 +387,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
     /**
      * Remove special characters from map name
      *
-     * @param $string
+     * @param string $string
      * @return mixed
      */
     protected function cleanString($string)

@@ -190,7 +190,7 @@ class PlayerStorage implements ListenerInterfaceMpLegacyPlayer, ListenerInterfac
 
     public function onPostLoop()
     {
-       // do nothing
+        // do nothing
     }
 
     public function onEverySecond()

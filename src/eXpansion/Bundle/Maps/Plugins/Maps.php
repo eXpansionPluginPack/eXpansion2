@@ -141,7 +141,7 @@ class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMap
      */
     public function onExpansionNextMapChange($nextMap, $previousNextMap)
     {
-       // do nothing
+        // do nothing
     }
 
     /**
@@ -161,7 +161,7 @@ class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMap
      */
     public function onEndMap(Map $map)
     {
-      // do nothing
+        // do nothing
     }
 
 }

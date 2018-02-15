@@ -122,7 +122,7 @@ class uiTextbox extends abstractUiElement implements Renderable
     }
 
     /**
-     * @return float
+     * @return integer
      */
     public function getWidth()
     {

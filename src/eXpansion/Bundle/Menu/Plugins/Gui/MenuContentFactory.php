@@ -14,9 +14,7 @@ use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
 use eXpansion\Framework\Gui\Components\uiButton;
 use eXpansion\Framework\Gui\Components\uiLabel;
 use FML\Controls\Frame;
-use FML\Controls\Label;
 use FML\Controls\Quad;
-use FML\Script\ScriptLabel;
 
 
 /**
@@ -178,7 +176,7 @@ class MenuContentFactory extends WidgetFactory
      * Create tabs level menu.
      *
      * @param ManialinkInterface $manialink
-     * @param ParentItem $rootItem
+     * @param ItemInterface|null $rootItem
      * @param                    $openId
      */
     protected function createTabsMenu(ManialinkInterface $manialink, ParentItem $rootItem, $openId)
@@ -196,7 +194,7 @@ class MenuContentFactory extends WidgetFactory
      * @param Manialink $manialink
      * @param Frame $frame
      * @param ParentItem $parentItem
-     * @param            $displayLevel
+     * @param            integer $displayLevel
      */
     protected function createSubMenu(Manialink $manialink, Frame $frame, ParentItem $parentItem, $displayLevel)
     {

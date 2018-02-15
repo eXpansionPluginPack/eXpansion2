@@ -77,7 +77,7 @@ class NextMapVote extends AbstractVotePlugin implements ListenerInterfaceMpScrip
      */
     public function getCode(): string
     {
-       return 'Exp_NextMap';
+        return 'Exp_NextMap';
     }
 
     /**

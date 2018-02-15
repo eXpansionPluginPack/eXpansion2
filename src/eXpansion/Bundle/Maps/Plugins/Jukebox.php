@@ -143,7 +143,6 @@ class Jukebox implements ListenerInterfaceMpScriptPodium, ListenerInterfaceMpLeg
     /**
      * @param $login
      * @param $uid
-
      */
     public function add($login, $uid)
     {
@@ -187,7 +186,7 @@ class Jukebox implements ListenerInterfaceMpScriptPodium, ListenerInterfaceMpLeg
      */
     public function setStatus($status)
     {
-       // do nothing
+        // do nothing
     }
 
     /**

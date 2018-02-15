@@ -125,7 +125,7 @@ abstract class AbstractVotePlugin
         if (($time - $this->currentVote->getStartTime()) > $this->duration) {
             $totalVotes = $this->currentVote->getYes() + $this->currentVote->getNo() * 1.0;
 
-            if ($totalVotes >= 1 && ($this->currentVote->getYes()/$totalVotes) > $this->ratio) {
+            if ($totalVotes >= 1 && ($this->currentVote->getYes() / $totalVotes) > $this->ratio) {
                 $this->votePassed();
             } else {
                 $this->voteFailed();

@@ -8,7 +8,6 @@ use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
 use eXpansion\Framework\Gui\Builders\WidgetBackground;
-use eXpansion\Framework\Gui\Components\uiButton;
 use eXpansion\Framework\Gui\Components\uiLabel;
 use eXpansion\Framework\Gui\Ui\Factory;
 use FML\Controls\Frame;
@@ -172,6 +171,9 @@ EOL
 
     }
 
+    /**
+     * @param string $message
+     */
     public function setMessage($message)
     {
         $this->label->setTextId($message);

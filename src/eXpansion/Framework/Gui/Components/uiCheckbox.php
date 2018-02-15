@@ -67,7 +67,7 @@ class uiCheckbox extends abstractUiElement implements ScriptFeatureable
     public function render(\DOMDocument $domDocument)
     {
         $containerFrame = new Frame();
-        $containerFrame->setPosition($this->posX-1, $this->posY)
+        $containerFrame->setPosition($this->posX - 1, $this->posY)
             ->setZ($this->posZ)
             ->setScale($this->scale)
             ->addClasses(['uiContainer', 'uiCheckbox'])

@@ -172,7 +172,7 @@ class MapInfoService implements ListenerInterfaceExpApplication, ListenerInterfa
      */
     private function convertMap($map)
     {
-        $outMap = (array)$map;
+        $outMap = (array) $map;
         $outMap["mapUid"] = $map->uId;
 
         return $outMap;

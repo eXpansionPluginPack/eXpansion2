@@ -144,7 +144,7 @@ class WidgetBackground implements Renderable
     }
 
     /**
-     * @return mixed
+     * @return double
      */
     public function getWidth()
     {
@@ -163,7 +163,7 @@ class WidgetBackground implements Renderable
     }
 
     /**
-     * @return mixed
+     * @return double
      */
     public function getHeight()
     {
@@ -182,7 +182,7 @@ class WidgetBackground implements Renderable
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getAction()
     {
@@ -201,7 +201,7 @@ class WidgetBackground implements Renderable
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getId()
     {

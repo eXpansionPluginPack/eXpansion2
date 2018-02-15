@@ -114,7 +114,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
 
     /**
      * @param Control $element
-     * @return float|int
+     * @return double
      */
     private function getRelativeStartPosition($element)
     {
@@ -215,7 +215,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
     }
 
     /**
-     * @return mixed
+     * @return double
      */
     public function getY()
     {

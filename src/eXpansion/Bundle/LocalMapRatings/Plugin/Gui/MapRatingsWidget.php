@@ -83,8 +83,8 @@ class MapRatingsWidget extends WidgetFactory
             }
         }
 
-        $this->lblRatingsYes->setText('$0d0 $fff' . $yes);
-        $this->lblRatingsNo->setText('$d00 $fff' . $no);
+        $this->lblRatingsYes->setText('$0d0 $fff'.$yes);
+        $this->lblRatingsNo->setText('$d00 $fff'.$no);
     }
 
     /**

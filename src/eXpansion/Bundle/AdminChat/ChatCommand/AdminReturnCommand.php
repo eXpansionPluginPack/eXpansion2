@@ -32,7 +32,7 @@ class AdminReturnCommand extends AdminCommand
             );
             $logMessage = $this->chatNotification->getMessage($this->chatMessage,
                 ['%adminLevel%' => $group, '%admin%' => $nickName, '%return%' => $return], "en");
-            $this->logger->info("[". $login. "] " . TMString::trimStyles($logMessage));
+            $this->logger->info("[".$login."] ".TMString::trimStyles($logMessage));
 
         } catch (DedicatedException $e) {
             $this->logger->error("Error on admin command", ["exception" => $e]);
