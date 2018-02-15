@@ -5,14 +5,16 @@ namespace eXpansion\Bundle\CustomUi\Plugins;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMap;
 use Maniaplanet\DedicatedServer\Connection;
+use Maniaplanet\DedicatedServer\Structures\Map;
 
 /**
  * Class CustomUi
  *
  * @package eXpansion\Bundle\CustomUi\Plugins
  */
-class CustomUi implements StatusAwarePluginInterface
+class CustomUi implements StatusAwarePluginInterface, ListenerInterfaceMpScriptMap
 {
     /** @var Connection */
     protected $connection;
@@ -32,10 +34,10 @@ class CustomUi implements StatusAwarePluginInterface
     /**
      * CustomUi constructor.
      *
-     * @param Connection $connection
-     * @param Group $allPlayers
-     * @param string[] $uiProperties
-     * @param string $setPropertiesScriptEvent
+     * @param Connection      $connection
+     * @param Group           $allPlayers
+     * @param string[]        $uiProperties
+     * @param string          $setPropertiesScriptEvent
      * @param WidgetFactory[] $customWidgets
      */
     public function __construct(
@@ -59,11 +61,7 @@ class CustomUi implements StatusAwarePluginInterface
     public function setStatus($status)
     {
         if ($status) {
-            $xml = new \SimpleXMLElement('<ui_properties/>');
-            foreach ($this->uiProperties as $property => $propertyDetails) {
-                $this->configureUiProperty($xml->addChild($property), $propertyDetails);
-            }
-            $this->connection->triggerModeScriptEvent($this->setPropertiesScriptEvent, [$xml->asXML()]);
+            $this->setCustomUiProperties();
 
             if (empty($this->customWidgets)) {
                 return;
@@ -83,8 +81,20 @@ class CustomUi implements StatusAwarePluginInterface
     }
 
     /**
+     * @throws \Maniaplanet\DedicatedServer\InvalidArgumentException
+     */
+    protected function setCustomUiProperties()
+    {
+        $xml = new \SimpleXMLElement('<ui_properties/>');
+        foreach ($this->uiProperties as $property => $propertyDetails) {
+            $this->configureUiProperty($xml->addChild($property), $propertyDetails);
+        }
+        $this->connection->triggerModeScriptEvent($this->setPropertiesScriptEvent, [$xml->asXML()]);
+    }
+
+    /**
      * @param \SimpleXMLElement $element
-     * @param array $elementProperties
+     * @param array             $elementProperties
      */
     protected function configureUiProperty(\SimpleXMLElement $element, $elementProperties)
     {
@@ -95,5 +105,67 @@ class CustomUi implements StatusAwarePluginInterface
 
             $element->addAttribute($property, $value);
         }
+    }
+
+    /**
+     * Callback sent when the "StartMap" section start.
+     *
+     * @param int     $count Each time this section is played, this number is incremented by one
+     * @param int     $time Server time when the callback was sent
+     * @param boolean $restarted true if the map was restarted, false otherwise
+     * @param Map     $map Map started with.
+     *
+     * @return void
+     * @throws \Maniaplanet\DedicatedServer\InvalidArgumentException
+     */
+    public function onStartMapStart($count, $time, $restarted, Map $map)
+    {
+        //do nothing
+    }
+
+    /**
+     * Callback sent when the "StartMap" section end.
+     *
+     * @param int     $count Each time this section is played, this number is incremented by one
+     * @param int     $time Server time when the callback was sent
+     * @param boolean $restarted true if the map was restarted, false otherwise
+     * @param Map     $map Map started with.
+     *
+     * @return void
+     */
+    public function onStartMapEnd($count, $time, $restarted, Map $map)
+    {
+        // do nothing
+    }
+
+    /**
+     * Callback sent when the "EndMap" section start.
+     *
+     * @param int     $count Each time this section is played, this number is incremented by one
+     * @param int     $time Server time when the callback was sent
+     * @param boolean $restarted true if the map was restarted, false otherwise
+     * @param Map     $map Map started with.
+     *
+     * @return void
+     */
+    public function onEndMapStart($count, $time, $restarted, Map $map)
+    {
+        // do nothing
+    }
+
+    /**
+     * Callback sent when the "EndMap" section end.
+     *
+     * @param int     $count Each time this section is played, this number is incremented by one
+     * @param int     $time Server time when the callback was sent
+     * @param boolean $restarted true if the map was restarted, false otherwise
+     * @param Map     $map Map started with.
+     *
+     * @return void
+     * @throws \Maniaplanet\DedicatedServer\InvalidArgumentException
+     */
+    public function onEndMapEnd($count, $time, $restarted, Map $map)
+    {
+        $this->setCustomUiProperties();
     }
 }

@@ -250,13 +250,15 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
      * Add new children
      *
      * @api
-     * @deprecated
+     *
      * @param Renderable[] $children Child Controls to add
      *
      */
     public function addChildren(array $children)
     {
-
+        foreach ($children as $child) {
+            $this->addChild($child);
+        }
     }
 
     /**
@@ -267,7 +269,11 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
      */
     public function removeAllChildren()
     {
+        $this->width = 0;
+        $this->height = 0;
+        $this->elements = [];
 
+        return $this;
     }
 
     /**

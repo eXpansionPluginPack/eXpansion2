@@ -61,7 +61,7 @@ parameters:
         checkpoint_ranking: {visible: false, pos: "0. 84. 5."}
 
         # Scores table displayed in the middle of the screen
-        scorestable: {alt_visible: false, visible: true}
+        scorestable: {alt_visible: false, visible: false}
 
         # Number of players spectating us displayed at the bottom right of the screen
         viewers_count: {visible: true, pos: "157. -40. 5."}
@@ -81,10 +81,10 @@ services:
             $customWidgets:
                 - '@eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSpeedWidget'
                 - '@eXpansion\Bundle\CustomUi\Plugins\Gui\CustomCheckpointWidget'
-                # TODO : Custom scoreboard can't work until PR is merged in FML : https://github.com/steeffeen/FancyManiaLinks/pull/53
-#                - '@eXpansion\Bundle\CustomUi\Plugins\Gui\CustomScoreboardWidget'
+                - '@eXpansion\Bundle\CustomUi\Plugins\Gui\CustomScoreboardWidget'
         tags:
             - {name: 'expansion.plugin', data_provider: 'exp.custom_ui.compatibility.tm'}
+            - {name: 'expansion.plugin', data_provider: 'mp.script.map'}
 
     expansion.bundle.custom_ui.plugins.sm_custom_ui:
         class: eXpansion\Bundle\CustomUi\Plugins\CustomUi
