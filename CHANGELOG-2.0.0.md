@@ -38,6 +38,8 @@
 
 * Enhanced admin logging and added nicer error messages for missing dedicated and database connections.
 
+* Fix layoutLine to accept centered and left-aligned elements
+
 # 2.0.0.0-alpha1 (2018-01-20)
 
 

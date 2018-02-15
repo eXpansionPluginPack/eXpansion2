@@ -72,7 +72,7 @@ class uiInputMasked extends abstractUiElement implements Renderable, ScriptFeatu
             ->setTextFormat($this->textFormat)
             ->addDataAttribute('type', 'Password')
             ->setName($this->name)
-            ->setTextSize(2);
+            ->setTextSize(1.5);
 
         $button = new uiButton("", uiButton::TYPE_DECORATED);
         $button->setSize(4, 4)

@@ -251,7 +251,7 @@ class PlayersWindow extends GridWindowFactory
                 ->setAction($actions['guest'])
                 ->setBackgroundColor(UiButton::COLOR_DEFAULT),
         ];
-        $line = $this->uiFactory->createLayoutLine(10, 0, $elem, 2);
+        $line = $this->uiFactory->createLayoutLine(0, 0, $elem, 2);
         $row->addChild($line);
 
         $separator = $this->uiFactory->createLine(0, 0)->setLength(60)->setStroke(0.5);
@@ -279,7 +279,7 @@ class PlayersWindow extends GridWindowFactory
 
 
         ];
-        $line = $this->uiFactory->createLayoutLine(10, 0, $elem, 2);
+        $line = $this->uiFactory->createLayoutLine(0, 0, $elem, 2);
         $row->addChild($line);
     }
 

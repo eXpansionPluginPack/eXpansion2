@@ -15,8 +15,8 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryInterface;
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
 use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
+use FML\Controls\Frame;
 use FML\Controls\Quad;
-use FML\Types\Renderable;
 use Tests\eXpansion\Framework\Core\TestCore;
 
 class WindowTest extends TestCore
@@ -80,12 +80,14 @@ class WindowTest extends TestCore
      */
     public function testMethods()
     {
-        $mockRenderable = $this->createMock(Renderable::class);
+        $mockRenderable = $this->createMock(Frame::class);
+        $mockFrame = Frame::create()->setAlign("center", "center2")
+            ->setZ(1000)->setSize(10, 20);
 
         $this->window->addChild($mockRenderable);
-        $this->assertEquals([$mockRenderable], $this->window->getChildren());
+        $this->assertEquals([$mockFrame, $mockRenderable], $this->window->getChildren());
         $this->window->addChild($mockRenderable);
-        $this->assertEquals([$mockRenderable], $this->window->getChildren());
+        $this->assertEquals([$mockFrame, $mockRenderable], $this->window->getChildren());
 
         $this->window->removeAllChildren();
         $this->assertEmpty($this->window->getChildren());

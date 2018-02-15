@@ -105,7 +105,7 @@ class Variable
     {
         $varName = $this->getVariableName();
         $for = !empty($this->for) ? "for $this->for" : "";
-        return "declare $this->type $varName $for = $this->value;";
+        return "declare $this->type $varName $for = $this->type;";
     }
 
     /**

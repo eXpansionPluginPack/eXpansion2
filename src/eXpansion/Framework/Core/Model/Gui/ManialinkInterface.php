@@ -76,7 +76,7 @@ interface ManialinkInterface
      * Sets manialink data
      *
      * @param string $name
-     * @param mixed $data
+     * @param mixed  $data
      */
     public function setData($name, $data);
 
@@ -86,4 +86,5 @@ interface ManialinkInterface
      * @return mixed
      */
     public function destroy();
+
 }

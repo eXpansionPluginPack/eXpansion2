@@ -22,3 +22,4 @@ composer.phar
 /docker/data/*
 !/docker/data/.gitkeep
 docker-compose.yml
+/app/bootstrap.php.cache

@@ -100,7 +100,7 @@ services:
         arguments:
             $name:  'expansion_mx.gui.mxsearch.title'
             $sizeX: 210
-            $sizeY: 130
+            $sizeY: 123
             $posX:  null
             $posY:  null
             $dataCollectionFactory: '@expansion.gui.gridbuilder.datacollection.array'

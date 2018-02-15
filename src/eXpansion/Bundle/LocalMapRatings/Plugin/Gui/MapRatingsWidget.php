@@ -35,7 +35,8 @@ class MapRatingsWidget extends WidgetFactory
         $posY,
         WidgetFactoryContext $context,
         MapRatingsService $mapRatingsService
-    ) {
+    )
+    {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
 
         $this->mapRatingsService = $mapRatingsService;
@@ -82,15 +83,15 @@ class MapRatingsWidget extends WidgetFactory
             }
         }
 
-        $this->lblRatingsYes->setText('$0d0 $fff'.$yes);
-        $this->lblRatingsNo->setText('$d00 $fff'.$no);
+        $this->lblRatingsYes->setText('$0d0 $fff' . $yes);
+        $this->lblRatingsNo->setText('$d00 $fff' . $no);
     }
 
     /**
      * @param ManialinkInterface|Widget $manialink
-     * @param string                    $login
-     * @param array                     $entries
-     * @param array                     $args
+     * @param string $login
+     * @param array $entries
+     * @param array $args
      */
     public function callbackVoteYes(ManialinkInterface $manialink, $login, $entries, $args)
     {
@@ -100,9 +101,9 @@ class MapRatingsWidget extends WidgetFactory
 
     /**
      * @param ManialinkInterface|Widget $manialink
-     * @param string                    $login
-     * @param array                     $entries
-     * @param array                     $args
+     * @param string $login
+     * @param array $entries
+     * @param array $args
      */
     public function callbackVoteNo(ManialinkInterface $manialink, $login, $entries, $args)
     {

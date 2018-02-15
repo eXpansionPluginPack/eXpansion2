@@ -8,7 +8,6 @@ use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionFactory;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilder;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
-use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use FML\Controls\Frame;
 
 /**

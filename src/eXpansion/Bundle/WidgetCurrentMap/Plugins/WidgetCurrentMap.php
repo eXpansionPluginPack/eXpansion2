@@ -2,8 +2,9 @@
 
 namespace eXpansion\Bundle\WidgetCurrentMap\Plugins;
 
+use eXpansion\Bundle\LocalMapRatings\DataProviders\Listener\ListenerInterfaceExpMapRatings;
+use eXpansion\Bundle\LocalMapRatings\Model\Maprating;
 use eXpansion\Bundle\WidgetCurrentMap\Plugins\Gui\CurrentMapWidgetFactory;
-use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
@@ -12,7 +13,7 @@ use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
 
-class WidgetCurrentMap implements StatusAwarePluginInterface, ListenerInterfaceMpLegacyMap
+class WidgetCurrentMap implements StatusAwarePluginInterface, ListenerInterfaceMpLegacyMap, ListenerInterfaceExpMapRatings
 {
     /** @var Connection */
     protected $connection;
@@ -76,6 +77,32 @@ class WidgetCurrentMap implements StatusAwarePluginInterface, ListenerInterfaceM
      */
     public function onEndMap(Map $map)
     {
-        // TODO: Implement onEndMap() method.
+
+    }
+
+    /**
+     * Called when map ratings are loaded.
+     *
+     * @param Maprating[] $ratings
+     * @return void
+     */
+    public function onMapRatingsLoaded($ratings)
+    {
+        $this->widget->setMapRatings($ratings);
+        $this->widget->update($this->players);
+    }
+
+    /**
+     * Called when map ratings are changed.
+     *
+     * @param string      $login
+     * @param int         $score
+     * @param Maprating[] $ratings
+     * @return void
+     */
+    public function onMapRatingsChanged($login, $score, $ratings)
+    {
+        $this->widget->setMapRatings($ratings);
+        $this->widget->update($this->players);
     }
 }

@@ -19,7 +19,7 @@ use FML\Types\Renderable;
  * @package eXpansion\Framework\Core\Model\Gui;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-class FmlManialink extends Manialink
+class FmlManialink extends Manialink implements FmlManialinkInterface
 {
     /** @var Translations */
     protected $translationHelper;

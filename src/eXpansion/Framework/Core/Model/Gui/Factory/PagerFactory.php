@@ -86,7 +86,7 @@ class PagerFactory
         // Show current page.
 
         $input = $this->uiFactory->createInput('pager_gotopage', $currentPageNumber, 7);
-        $input->setAction($actionGotoPage)->setPosition(0, 1)->setHorizontalAlign("left");
+        $input->setAction($actionGotoPage)->setPosition(0, 1)->setHorizontalAlign("center");
 
 
         $label = $this->uiFactory->createLabel(" / $lastPageNumber");
@@ -107,6 +107,7 @@ class PagerFactory
             $button = $this->uiFactory->createButton("", uiButton::TYPE_DECORATED);
             $button
                 ->setSize($buttonSize, $buttonSize)
+                ->setZ(3)
                 ->setAction($actionNextPage);
 
         } else {

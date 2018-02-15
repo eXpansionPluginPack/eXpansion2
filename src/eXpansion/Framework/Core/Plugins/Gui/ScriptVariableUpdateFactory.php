@@ -46,7 +46,7 @@ class ScriptVariableUpdateFactory extends WidgetFactory implements ListenerInter
      * @param Group                $playerGroup
      * @param WidgetFactoryContext $context
      */
-    public function __construct($name, array  $variables, int $maxUpdateFrequency = 5, Group $playerGroup, WidgetFactoryContext $context)
+    public function __construct($name, array  $variables, int $maxUpdateFrequency = 1, Group $playerGroup, WidgetFactoryContext $context)
     {
         parent::__construct($name, 0, 0, 0, 0, $context);
         $this->playerGroup = $playerGroup;
@@ -61,9 +61,9 @@ class ScriptVariableUpdateFactory extends WidgetFactory implements ListenerInter
             );
         }
 
-        $uniqueId = uniqid('exp_');
+        $uniqueId = uniqid('exp_',true);
         $this->checkVariable = new Variable('check', 'Text', 'This', "\"$uniqueId\"");
-        $this->checkOldVariable = new Variable('check_old', 'Text', 'This', "\"$uniqueId\"");
+        $this->checkOldVariable = new Variable('check_old', 'Text', 'Page', "\"$uniqueId\"");
     }
 
     /**
@@ -76,7 +76,7 @@ class ScriptVariableUpdateFactory extends WidgetFactory implements ListenerInter
     {
         if ($this->variables[$variable]->getValue() != $newValue) {
             $this->variables[$variable]->setValue($newValue);
-            $uniqueId = '"' . uniqid('exp_') . '"';
+            $uniqueId = '"' . uniqid('exp_', true) . '"';
             $this->checkVariable->setValue($uniqueId);
 
             if (is_null($this->queuedForUpdate)) {
@@ -128,6 +128,7 @@ EOL;
     /**
      * Get initialization script.
      *
+     * @param bool $defaultValues
      * @return string
      */
     public function getScriptInitialization($defaultValues = false)

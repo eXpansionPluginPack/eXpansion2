@@ -76,6 +76,7 @@ class uiTextbox extends abstractUiElement implements Renderable
             ->setName($this->name)
             ->setScriptEvents(true)
             ->addClasses($this->_classes)
+            ->setTextSize(1.5)
             ->setDataAttributes($this->_dataAttributes);
 
         $frame->addChild($quad);

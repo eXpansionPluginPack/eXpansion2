@@ -15,11 +15,13 @@ use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\GridWindowFactory;
+use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\Gui\Components\uiButton;
 use eXpansion\Framework\Gui\Components\uiDropdown;
 use eXpansion\Framework\Gui\Components\uiLabel;
 use FML\Controls\Quad;
+use Psr\Log\LoggerInterface;
 
 class ManiaExchangeWindowFactory extends GridWindowFactory
 {
@@ -95,6 +97,14 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
      * @var GameDataStorage
      */
     private $gameDataStorage;
+    /**
+     * @var Console
+     */
+    private $console;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * ManiaExchangeWindowFactory constructor.
@@ -111,6 +121,8 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
      * @param ManiaExchange         $mxPlugin
      * @param Http                  $http
      * @param GameDataStorage       $gameDataStorage
+     * @param Console               $console
+     * @param LoggerInterface       $logger
      * @param                       $tracksearch
      * @param                       $order
      * @param                       $length
@@ -132,6 +144,8 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         ManiaExchange $mxPlugin,
         Http $http,
         GameDataStorage $gameDataStorage,
+        Console $console,
+        LoggerInterface $logger,
         $tracksearch,
         $order,
         $length,
@@ -147,16 +161,19 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $this->dataCollectionFactory = $dataCollectionFactory;
         $this->timeFormatter = $time;
         $this->mxPlugin = $mxPlugin;
-        $this->tracksearch = array_flip($tracksearch);
+        $this->http = $http;
+        $this->gameDataStorage = $gameDataStorage;
 
+        $this->tracksearch = array_flip($tracksearch);
         $this->order = array_flip($order);
         $this->length = array_flip($length);
         $this->mapStylesTm = array_flip($mapStylesTm);
         $this->mapStylesSm = array_flip($mapStylesSm);
         $this->difficulties = array_flip($difficulties);
         $this->operator = array_flip($operator);
-        $this->http = $http;
-        $this->gameDataStorage = $gameDataStorage;
+
+        $this->console = $console;
+        $this->logger = $logger;
     }
 
     /**
@@ -170,52 +187,52 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $manialink->addChild($tooltip);
 
         $this->modebox = $this->uiFactory->createDropdown("mode", $this->tracksearch, 0);
-        $this->modebox->setPosition($x, -6, 2);
+        $this->modebox->setPosition($x, -4, 2);
         $manialink->addChild($this->modebox);
 
         $label = $this->uiFactory->createLabel("Sort by", uiLabel::TYPE_HEADER);
         $label->setPosition($x, 0);
         $manialink->addChild($label);
 
-        $x += 32;
+        $x += 31;
         $this->orderbox = $this->uiFactory->createDropdown("order", $this->order, 0);
-        $this->orderbox->setPosition($x, -6, 2);
+        $this->orderbox->setPosition($x, -4, 2);
         $manialink->addChild($this->orderbox);
 
         $label = $this->uiFactory->createLabel("Order", uiLabel::TYPE_HEADER);
         $label->setPosition($x, 0);
         $manialink->addChild($label);
 
-        $x += 32;
+        $x += 31;
         $this->opbox = $this->uiFactory->createDropdown("operator", $this->operator, 0);
-        $this->opbox->setPosition($x, -6, 2);
+        $this->opbox->setPosition($x, -4, 2);
         $manialink->addChild($this->opbox);
 
         $label = $this->uiFactory->createLabel("Operator", uiLabel::TYPE_HEADER);
         $label->setPosition($x, 0);
         $manialink->addChild($label);
 
-        $x += 32;
+        $x += 31;
         $this->lengthBox = $this->uiFactory->createDropdown("length", $this->length, 0);
-        $this->lengthBox->setPosition($x, -6, 2);
+        $this->lengthBox->setPosition($x, -4, 2);
         $manialink->addChild($this->lengthBox);
 
         $label = $this->uiFactory->createLabel("Length", uiLabel::TYPE_HEADER);
         $label->setPosition($x, 0);
         $manialink->addChild($label);
 
-        $x += 32;
+        $x += 31;
         $this->stylebox = $this->uiFactory->createDropdown("style", $this->mapStylesTm, 0);
-        $this->stylebox->setPosition($x, -6, 2);
+        $this->stylebox->setPosition($x, -4, 2);
         $manialink->addChild($this->stylebox);
 
         $label = $this->uiFactory->createLabel("Style", uiLabel::TYPE_HEADER);
         $label->setPosition($x, 0);
         $manialink->addChild($label);
 
-        $x += 32;
+        $x += 31;
         $this->difficultiesBox = $this->uiFactory->createDropdown("difficulties", $this->difficulties, 0);
-        $this->difficultiesBox->setPosition($x, -6, 2);
+        $this->difficultiesBox->setPosition($x, -4, 2);
         $manialink->addChild($this->difficultiesBox);
 
         $label = $this->uiFactory->createLabel("Difficulty", uiLabel::TYPE_HEADER);
@@ -228,11 +245,11 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
             $idx = 1;
         }
         $this->sitebox = $this->uiFactory->createDropdown("site", ["Trackmania" => "tm", "Storm" => "sm"], $idx);
-        $this->sitebox->setPosition(0, -14, 2);
+        $this->sitebox->setPosition(0, -10, 2);
         $manialink->addChild($this->sitebox);
 
         $this->tpackBox = $this->uiFactory->createDropdown("tpack", $this->tpack, 0);
-        $this->tpackBox->setPosition(32, -14, 2);
+        $this->tpackBox->setPosition(31, -10, 2);
         $manialink->addChild($this->tpackBox);
 
         $mapname = $this->uiFactory->createInput("map");
@@ -242,18 +259,18 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
 
         $search = $this->uiFactory->createButton('🔍 Search', uiButton::TYPE_DECORATED);
         $search->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackSearch'],
-            ["ml" => $manialink]));
+            null, true));
 
         $all = $this->uiFactory->createConfirmButton('Install view', uiButton::TYPE_DEFAULT);
         $tooltip->addTooltip($all, "Install all maps from the view");
         $all->setBackgroundColor("f00");
-        $all->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackInstallAll'],
-            ["ml" => $manialink]));
+        $all->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackInstallAll'], null,
+            true));
 
         $spacer = Quad::create();
         $spacer->setSize(7, 3)->setOpacity(0);
 
-        $line = $this->uiFactory->createLayoutLine(64, -14, [$mapname, $author, $spacer, $search, $all], 2);
+        $line = $this->uiFactory->createLayoutLine(62, -10, [$mapname, $author, $search, $spacer, $all], 1);
         $manialink->addChild($line);
 
         $addButton = $this->uiFactory->createConfirmButton('Install', uiButton::TYPE_DEFAULT);
@@ -335,10 +352,10 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
 
         $gridBuilder->addActionColumn('add', 'expansion_mx.gui.mxsearch.column.add', 2, array($this, 'callbackAdd'),
             $addButton);
-        $this->setGridPosition(0, -24);
+        $this->setGridPosition(0, -18);
 
         $content = $manialink->getContentFrame();
-        $this->setGridSize($content->getWidth(), $content->getHeight() - 24);
+        $this->setGridSize($content->getWidth(), $content->getHeight() - 18);
         $manialink->setData('grid', $gridBuilder);
         $this->gridBuilder = $gridBuilder;
     }
@@ -391,7 +408,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
 
         if ($params->tpack) {
             $title = $params->tpack;
-            if ($params->tpack == "!server") {
+            if ($params->tpack === "!server") {
                 $title = explode("@", $this->gameDataStorage->getVersion()->titleId);
                 $title = $title[0];
             }
@@ -400,14 +417,20 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         if ($params->operator != -1) {
             $options .= "&lengthop=".$params->operator;
         }
+        $map = "";
+        if ($params->map) {
+            $map = "&trackname=".urlencode($params->map);
+        }
 
-        $args = "&mode=".$params->mode."&trackname=".urlencode($params->map)."&anyauthor=".urlencode($params->author).
+        $args = "&mode=".$params->mode.$map."&anyauthor=".urlencode($params->author).
             "&style=".$params->style."&priord=".$params->order."&length=".$params->length.
             "&limit=100&gv=1".$options;
 
         $query = 'https://'.$params->site.'.mania-exchange.com/tracksearch2/search?api=on'.$args;
 
+        $this->setBusy($manialink, "Searching, please wait...");
         $this->http->get($query, [$this, 'setMaps'], ['login' => $login, 'params' => $params, 'ml' => $manialink]);
+
 
     }
 
@@ -423,7 +446,8 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $this->gridBuilder->goToFirstPage($manialink);
 
         if ($result->hasError()) {
-            echo $result->getError();
+            $this->console->writeln('$d00Error: '.$result->getError().' while searching maps from MX, see logs for more details.');
+            $this->logger->error("error while searching maps from mx: ".$result->getError());
 
             return;
         }
@@ -448,7 +472,6 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         }
 
         $this->setData($manialink, $data);
-        $group = $this->groupFactory->createForPlayer($result->getAdditionalData()['login']);
-        $this->update($group);
+        $this->update($result->getAdditionalData()['login']);
     }
 }

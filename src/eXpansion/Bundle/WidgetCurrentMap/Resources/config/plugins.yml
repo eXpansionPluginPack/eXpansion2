@@ -6,13 +6,14 @@ services:
                 $players: '@expansion.framework.core.user_groups.all_players'
         tags:
           - {name: 'expansion.plugin', data_provider: 'mp.legacy.map'}
+          - {name: 'expansion.plugin', data_provider: 'exp.mapratings'}
 
     eXpansion\Bundle\WidgetCurrentMap\Plugins\Gui\CurrentMapWidgetFactory:
             class: eXpansion\Bundle\WidgetCurrentMap\Plugins\Gui\CurrentMapWidgetFactory
             autowire: true
             arguments:
                 $name:  "Current Map"
-                $posX: 158
-                $posY: 88
+                $posX: 99.5
+                $posY: 87
                 $sizeX: null
                 $sizeY: null
