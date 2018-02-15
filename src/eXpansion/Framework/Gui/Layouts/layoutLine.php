@@ -88,16 +88,35 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
         /** @var Control $oldElement */
         $oldElement = null;
         foreach ($this->elements as $idx => $element) {
+
+
             if ($idx === 0) {
                 $start = $this->getRelativeStartPosition($element);
             } else {
-                $start = $this->getStartPosition($oldElement) + $this->getRelativeWidth($oldElement) + $this->margin;
+                $start = $this->getStartPosition($oldElement) + $this->margin;
             }
 
-            if ($oldElement && $element->getHorizontalAlign() == "left" && $oldElement->getHorizontalAlign() == "center") {
-                $element->setX($start - ($oldElement->getWidth() / 2) + ($element->getWidth() / 2));
-            } elseif ($oldElement && $element->getHorizontalAlign() == "center" && $oldElement->getHorizontalAlign() == "left") {
-                $element->setX($start - ($oldElement->getWidth() / 2) + ($element->getWidth() / 2));
+            if ($oldElement) {
+
+                if ($oldElement->getHorizontalAlign() == "center" && $element->getHorizontalAlign() == "center") {
+                    $element->setX($start + $oldElement->getWidth() + ($element->getWidth() / 2));
+                } elseif ($oldElement->getHorizontalAlign() == "left" && $element->getHorizontalAlign() == "center") {
+                    $element->setX($start + $oldElement->getWidth() + ($element->getWidth() / 2));
+                } elseif ($oldElement->getHorizontalAlign() == "center" && $element->getHorizontalAlign() == "left") {
+                    $element->setX($start + $oldElement->getWidth());
+                } elseif ($oldElement->getHorizontalAlign() == "center" && $element->getHorizontalAlign() == "right") {
+                    $element->setX($start + $oldElement->getWidth() + $element->getWidth());
+                } elseif ($oldElement->getHorizontalAlign() == "right" && $element->getHorizontalAlign() == "right") {
+                    $element->setX($start + $element->getWidth());
+                } elseif ($oldElement->getHorizontalAlign() == "right" && $element->getHorizontalAlign() == "center") {
+                    $element->setX($start + ($element->getWidth() / 2));
+                } elseif ($oldElement->getHorizontalAlign() == "left" && $element->getHorizontalAlign() == "right") {
+                    $element->setX($start + $oldElement->getWidth() + $element->getWidth());
+                } elseif ($oldElement->getHorizontalAlign() == "right" && $element->getHorizontalAlign() == "left") {
+                    $element->setX($start);
+                } else {
+                    $element->setX($start + $oldElement->getWidth());
+                }
             } else {
                 $element->setX($start);
             }
@@ -127,7 +146,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
             case "center":
                 return 0.5 * $element->getWidth();
             case "right":
-                return -($element->getWidth() * 2);
+                return $element->getWidth();
             default:
                 return 0;
         }
@@ -144,7 +163,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
         }
         switch ($element->getHorizontalAlign()) {
             case "right":
-                return -$element->getWidth();
+                return $element->getWidth();
             case "center":
                 return $element->getWidth();
             case "left":
@@ -164,7 +183,12 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
             return 0;
         }
 
-        return $element->getX();
+        switch ($element->getHorizontalAlign()) {
+            case "center":
+                return $element->getX() - (0.5 * $element->getWidth());
+            default:
+                return $element->getX();
+        }
     }
 
     /**
