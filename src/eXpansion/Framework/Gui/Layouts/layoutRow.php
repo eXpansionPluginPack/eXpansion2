@@ -129,7 +129,6 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
         $frame->addClasses($this->frameClasses);
 
         $startY = 0;
-
         foreach ($this->elements as $idx => $element) {
             $element->setY($startY);
             $startY -= $element->getHeight() - $this->margin;
@@ -250,13 +249,15 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
      * Add new children
      *
      * @api
-     * @deprecated
+     *
      * @param Renderable[] $children Child Controls to add
      *
      */
     public function addChildren(array $children)
     {
-
+        foreach ($children as $child) {
+            $this->addChild($child);
+        }
     }
 
     /**
@@ -267,7 +268,11 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
      */
     public function removeAllChildren()
     {
+        $this->width = 0;
+        $this->height = 0;
+        $this->elements = [];
 
+        return $this;
     }
 
     /**
@@ -335,5 +340,13 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
         return $this;
     }
 
+    public function getHorizontalAlign()
+    {
+        return $this->hAlign;
+    }
 
+    public function getVerticalAlign()
+    {
+        return $this->vAlign;
+    }
 }

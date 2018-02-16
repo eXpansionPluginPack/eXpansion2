@@ -62,8 +62,9 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
         $sizeY = 0;
         foreach ($this->elements as $idx => $element) {
             $this->width += $element->getWidth() + $this->margin;
-            if ($element->getY() + $element->getHeight() > $sizeY) {
-                $this->setHeight($element->getHeight());
+            if ((abs($element->getY()) + $element->getHeight()) > $sizeY) {
+                $sizeY = abs($element->getY()) + $element->getHeight();
+                $this->setHeight($sizeY);
             }
         }
 
@@ -82,33 +83,53 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
         $frame->setAlign($this->hAlign, $this->vAlign);
         $frame->setPosition($this->startX, $this->startY);
         $frame->addClasses($this->frameClasses);
-
-
         $sizeY = 0;
+        $sizeX = 0;
         /** @var Control $oldElement */
         $oldElement = null;
         foreach ($this->elements as $idx => $element) {
+
             if ($idx === 0) {
                 $start = $this->getRelativeStartPosition($element);
             } else {
-                $start = $this->getStartPosition($oldElement) + $this->getRelativeWidth($oldElement) + $this->margin;
+                $start = $this->getStartPosition($oldElement) + $this->margin;
             }
 
-            if ($oldElement && $element->getHorizontalAlign() == "left" && $oldElement->getHorizontalAlign() == "center") {
-                $element->setX($start - ($oldElement->getWidth() / 2) + ($element->getWidth() / 2));
-            } elseif ($oldElement && $element->getHorizontalAlign() == "center" && $oldElement->getHorizontalAlign() == "left") {
-                $element->setX($start - ($oldElement->getWidth() / 2) + ($element->getWidth() / 2));
+            if ($oldElement) {
+
+                if ($oldElement->getHorizontalAlign() == "center" && $element->getHorizontalAlign() == "center") {
+                    $element->setX($start + $oldElement->getWidth() + ($element->getWidth() / 2));
+                } elseif ($oldElement->getHorizontalAlign() == "left" && $element->getHorizontalAlign() == "center") {
+                    $element->setX($start + $oldElement->getWidth() + ($element->getWidth() / 2));
+                } elseif ($oldElement->getHorizontalAlign() == "center" && $element->getHorizontalAlign() == "left") {
+                    $element->setX($start + $oldElement->getWidth());
+                } elseif ($oldElement->getHorizontalAlign() == "center" && $element->getHorizontalAlign() == "right") {
+                    $element->setX($start + $oldElement->getWidth() + $element->getWidth());
+                } elseif ($oldElement->getHorizontalAlign() == "right" && $element->getHorizontalAlign() == "right") {
+                    $element->setX($start + $element->getWidth());
+                } elseif ($oldElement->getHorizontalAlign() == "right" && $element->getHorizontalAlign() == "center") {
+                    $element->setX($start + ($element->getWidth() / 2));
+                } elseif ($oldElement->getHorizontalAlign() == "left" && $element->getHorizontalAlign() == "right") {
+                    $element->setX($start + $oldElement->getWidth() + $element->getWidth());
+                } elseif ($oldElement->getHorizontalAlign() == "right" && $element->getHorizontalAlign() == "left") {
+                    $element->setX($start);
+                } else {
+                    $element->setX($start + $oldElement->getWidth());
+                }
             } else {
                 $element->setX($start);
             }
 
-            if ($element->getY() + $element->getHeight() > $sizeY) {
-                $this->setHeight($element->getHeight());
+            if ((abs($element->getY()) + $element->getHeight()) > $sizeY) {
+                $sizeY = abs($element->getY()) + $element->getHeight();
+                $this->setHeight($sizeY);
             }
             $frame->addChild($element);
             $oldElement = $element;
+            $sizeX += $element->getWidth() + $this->margin;
         }
 
+        $this->setWidth($sizeX);
         return $frame->render($domDocument);
     }
 
@@ -127,7 +148,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
             case "center":
                 return 0.5 * $element->getWidth();
             case "right":
-                return -($element->getWidth() * 2);
+                return $element->getWidth();
             default:
                 return 0;
         }
@@ -144,7 +165,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
         }
         switch ($element->getHorizontalAlign()) {
             case "right":
-                return -$element->getWidth();
+                return $element->getWidth();
             case "center":
                 return $element->getWidth();
             case "left":
@@ -164,7 +185,12 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
             return 0;
         }
 
-        return $element->getX();
+        switch ($element->getHorizontalAlign()) {
+            case "center":
+                return $element->getX() - (0.5 * $element->getWidth());
+            default:
+                return $element->getX();
+        }
     }
 
     /**
@@ -261,7 +287,9 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
     {
         $this->elements[] = $element;
         $this->width += $element->getWidth() + $this->margin;
-        $this->height += $element->getHeight();
+        if ((abs($element->getY()) + $element->getHeight()) > $this->getHeight()) {
+            $this->setHeight(abs($element->getY()) + $element->getHeight());
+        }
     }
 
     public function getChildren()
