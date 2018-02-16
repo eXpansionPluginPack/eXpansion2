@@ -92,6 +92,7 @@ class CustomUi implements StatusAwarePluginInterface, ListenerInterfaceMpScriptM
             $this->configureUiProperty($xml->addChild($property), $propertyDetails);
         }
         $this->connection->triggerModeScriptEvent($this->setPropertiesScriptEvent, [$xml->asXML()]);
+        $this->connection->triggerModeScriptEvent("Trackmania.UI.SetProperty", ["scorestable", "visibility", "false"]);
     }
 
     /**
