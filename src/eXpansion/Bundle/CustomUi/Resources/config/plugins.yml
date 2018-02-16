@@ -85,6 +85,7 @@ services:
         tags:
             - {name: 'expansion.plugin', data_provider: 'exp.custom_ui.compatibility.tm'}
             - {name: 'expansion.plugin', data_provider: 'mp.script.map'}
+            - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
 
     expansion.bundle.custom_ui.plugins.sm_custom_ui:
         class: eXpansion\Bundle\CustomUi\Plugins\CustomUi

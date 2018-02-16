@@ -5,6 +5,8 @@ namespace eXpansion\Bundle\CustomUi\Plugins;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
+use eXpansion\Framework\Core\Storage\Data\Player;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMap;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map;
@@ -14,7 +16,7 @@ use Maniaplanet\DedicatedServer\Structures\Map;
  *
  * @package eXpansion\Bundle\CustomUi\Plugins
  */
-class CustomUi implements StatusAwarePluginInterface, ListenerInterfaceMpScriptMap
+class CustomUi implements StatusAwarePluginInterface, ListenerInterfaceMpScriptMap, ListenerInterfaceMpLegacyPlayer
 {
     /** @var Connection */
     protected $connection;
@@ -168,5 +170,44 @@ class CustomUi implements StatusAwarePluginInterface, ListenerInterfaceMpScriptM
     public function onEndMapEnd($count, $time, $restarted, Map $map)
     {
         // do nothing
+    }
+
+    /**
+     * @param Player $player
+     * @return void
+     */
+    public function onPlayerConnect(Player $player)
+    {
+        $this->setCustomUiProperties();
+    }
+
+    /**
+     * @param Player $player
+     * @param string $disconnectionReason
+     * @return void
+     */
+    public function onPlayerDisconnect(Player $player, $disconnectionReason)
+    {
+        // TODO: Implement onPlayerDisconnect() method.
+    }
+
+    /**
+     * @param Player $oldPlayer
+     * @param Player $player
+     * @return void
+     */
+    public function onPlayerInfoChanged(Player $oldPlayer, Player $player)
+    {
+        // TODO: Implement onPlayerInfoChanged() method.
+    }
+
+    /**
+     * @param Player $oldPlayer
+     * @param Player $player
+     * @return void
+     */
+    public function onPlayerAlliesChanged(Player $oldPlayer, Player $player)
+    {
+        // TODO: Implement onPlayerAlliesChanged() method.
     }
 }

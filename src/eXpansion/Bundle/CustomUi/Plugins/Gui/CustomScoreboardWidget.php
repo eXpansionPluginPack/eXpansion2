@@ -41,8 +41,6 @@ class CustomScoreboardWidget extends WidgetFactory
      */
     protected function createContent(ManialinkInterface $manialink)
     {
-
-
         parent::createContent($manialink);
 
         $manialink->getFmlManialink()->setLayer("ScoresTable");
