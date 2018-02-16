@@ -9,7 +9,7 @@ services:
         arguments:
           $name:  "Scoreboard"
           $posX: 0
-          $posY: 80
+          $posY: 0
           $sizeX: null
           $sizeY: null
 

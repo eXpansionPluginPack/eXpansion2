@@ -132,10 +132,11 @@ class CustomUi implements StatusAwarePluginInterface, ListenerInterfaceMpScriptM
      * @param Map     $map Map started with.
      *
      * @return void
+     * @throws \Maniaplanet\DedicatedServer\InvalidArgumentException
      */
     public function onStartMapEnd($count, $time, $restarted, Map $map)
     {
-        // do nothing
+        $this->setCustomUiProperties();
     }
 
     /**
@@ -166,6 +167,6 @@ class CustomUi implements StatusAwarePluginInterface, ListenerInterfaceMpScriptM
      */
     public function onEndMapEnd($count, $time, $restarted, Map $map)
     {
-        $this->setCustomUiProperties();
+        // do nothing
     }
 }
