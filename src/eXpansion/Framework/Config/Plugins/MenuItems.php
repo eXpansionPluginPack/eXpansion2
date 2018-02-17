@@ -41,13 +41,25 @@ class MenuItems implements ListenerMenuItemProviderInterface
     {
         $root->addChild(
             ParentItem::class,
-            'admin/config',
+            'admin',
+            'expansion_menu.admin.label',
+            null
+        );
+        $root->addChild(
+            ParentItem::class,
+            'admin/server',
+            'expansion_admin.menu.server',
+            null
+        );
+        $root->addChild(
+            ParentItem::class,
+            'admin/server/config',
             'expansion_config.menu.label',
             null
         );
 
         $configTree = $this->configManager->getConfigDefinitionTree();
-        $this->registerConfigItems($root, 'admin/config', $configTree->getArray());
+        $this->registerConfigItems($root, 'admin/server/config', $configTree->getArray());
     }
 
     /**
@@ -59,29 +71,30 @@ class MenuItems implements ListenerMenuItemProviderInterface
      */
     protected function registerConfigItems(ParentItem $root, $parentId, $configItems)
     {
-        $firstElement = reset($configItems);
-        if (is_array($firstElement)) {
-            foreach ($configItems as $configId => $configItem) {
-                $path = $parentId . '/' . $configId;
-                if (!$root->getChild($path)) {
-                    $root->addChild(
-                        ParentItem::class,
-                        $path,
-                        'expansion_config.menu.' . $configId,
-                        null
-                    );
-                }
+        foreach ($configItems as $configId => $configItem) {
+            $subItems = reset($configItem);
+            $path = $parentId . '/' . $configId;
+            $configPath = str_replace("admin/server/config/",'', $path);
+            $translationKey = 'expansion_config.menu.' . implode('.', explode('/', $configPath)) . '.label';
+
+            if (is_array($subItems)) {
+                $root->addChild(
+                    ParentItem::class,
+                    $path,
+                    $translationKey,
+                    null
+                );
 
                 $this->registerConfigItems($root, $path, $configItem);
+            } else {
+                $root->addChild(
+                    ChatCommandItem::class,
+                    $path,
+                    $translationKey,
+                    null,
+                    ['cmd' => '/admin config "' . $configPath . "'"]
+                );
             }
-        } else {
-            $root->addChild(
-                ChatCommandItem::class,
-                $parentId,
-                'expansion_config.menu.' . implode('.', explode('/', $parentId)),
-                null,
-                ['cmd' => '/admin config "' . $parentId . "'"]
-            );
         }
     }
 }

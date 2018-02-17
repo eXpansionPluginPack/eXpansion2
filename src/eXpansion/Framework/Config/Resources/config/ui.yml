@@ -4,7 +4,7 @@ services:
         autoconfigure: true
         public: true
 
-    eXpansion\Framework\Config\Services\:
-        resource: '../../Ui/*'
+    eXpansion\Framework\Config\Ui\Fields\:
+        resource: '../../Ui/Fields/*'
         tags:
-            - {name: "expansion.config.ui", priority: 0}
+            - {name: 'expansion.config.ui', data_provider: 'exp.menu.items'}

@@ -2,7 +2,7 @@
 
 namespace eXpansion\Framework\Config\DependencyInjection\Compiler;
 
-use eXpansion\Framework\Config\Services\ConfigManager;
+use eXpansion\Framework\Config\Services\ConfigManagerInterface;
 use eXpansion\Framework\Config\Services\ConfigUiManager;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait;
@@ -25,10 +25,10 @@ class ConfigPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has(ConfigManager::class)) {
+        if (!$container->has(ConfigManagerInterface::class)) {
             return;
         }
-        $definition = $container->getDefinition(ConfigManager::class);
+        $definition = $container->getDefinition(ConfigManagerInterface::class);
 
         // Find all config's
         $configs = $container->findTaggedServiceIds('expansion.config');

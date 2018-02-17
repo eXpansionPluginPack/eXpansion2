@@ -77,7 +77,7 @@ class ConfigManager implements ConfigManagerInterface
     /**
      * @inheritdoc
      */
-    public function set($path, $value) : bool
+    public function set($path, $value) : boolean
     {
         /** @var ConfigInterface $configDefinition */
         $configDefinition = $this->configTree->get($path);

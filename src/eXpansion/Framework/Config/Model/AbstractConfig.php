@@ -1,6 +1,7 @@
 <?php
 
 namespace eXpansion\Framework\Config\Model;
+
 use eXpansion\Framework\Config\Services\ConfigManager;
 
 /**
@@ -45,7 +46,7 @@ class AbstractConfig implements ConfigInterface
         string $scope,
         string $name,
         string $description,
-        mixed $defaultValue,
+        $defaultValue,
         ConfigManager $configManager
     ) {
         $this->path = $path;

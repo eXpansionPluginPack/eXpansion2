@@ -1,6 +1,6 @@
 <?php
 
-namespace eXpansion\Framework\Config\Ui;
+namespace eXpansion\Framework\Config\Ui\Fields;
 use eXpansion\Framework\Config\Model\ConfigInterface;
 use FML\Controls\Frame;
 

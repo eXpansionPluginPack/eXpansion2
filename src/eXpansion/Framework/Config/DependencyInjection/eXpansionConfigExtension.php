@@ -1,14 +1,4 @@
-<?php        $loader->load('data_providers.yml');
-        $loader->load('storage.yml');
-        $loader->load('user_groups.yml');
-        $loader->load('ml_scripts.yml');
-        $loader->load('gui.yml');
-        $loader->load('gui_grid.yml');
-        $loader->load('helpers.yml');
-        $loader->load('listeners.yml');
-
-        // Temporary for the prototype.
-        $loader->load('plugins.yml');
+<?php
 /**
  * Created by PhpStorm.
  * User: olive
@@ -38,5 +28,7 @@ class eXpansionConfigExtension extends Extension
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+        $loader->load('plugins.yml');
+        $loader->load('ui.yml');
     }
 }
