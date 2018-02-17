@@ -29,7 +29,7 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
     /**
      * @var float|int
      */
-    protected $margin = 1;
+    protected $margin = -1;
 
     /**
      * @var float|int
@@ -53,7 +53,7 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
      * @param int      $margin
      * @throws \Exception
      */
-    public function __construct($startX, $startY, $elements = [], $margin = 0)
+    public function __construct($startX = 0., $startY = 0., $elements = [], $margin = 0)
     {
         if (!is_array($elements)) {
             throw new \Exception('not an array');
@@ -348,5 +348,21 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
     public function getVerticalAlign()
     {
         return $this->vAlign;
+    }
+
+    /**
+     * @return float|int
+     */
+    public function getMargin()
+    {
+        return $this->margin;
+    }
+
+    /**
+     * @param float|int $margin
+     */
+    public function setMargin($margin)
+    {
+        $this->margin = (float)$margin;
     }
 }

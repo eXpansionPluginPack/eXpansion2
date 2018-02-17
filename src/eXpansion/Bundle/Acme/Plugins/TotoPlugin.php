@@ -44,9 +44,7 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
     public function setStatus($status)
     {
         if ($status) {
-            foreach ($this->playersGroup->getLogins() as $login) {
-//                $this->mlFactory->create($login);
-            }
+            $this->mlFactory->create($this->playersGroup);
         } else {
             $this->mlFactory->destroy($this->playersGroup);
         }
