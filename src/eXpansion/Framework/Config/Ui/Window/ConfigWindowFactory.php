@@ -7,6 +7,7 @@ use eXpansion\Framework\Config\Services\ConfigManager;
 use eXpansion\Framework\Config\Services\ConfigManagerInterface;
 use eXpansion\Framework\Config\Services\ConfigUiManager;
 use eXpansion\Framework\Core\Exceptions\PlayerException;
+use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WindowFactory;
@@ -30,6 +31,22 @@ class ConfigWindowFactory extends WindowFactory
     /** @var ConfigUiManager */
     protected $configUiManager;
 
+    /** @var ChatNotification */
+    protected $chatNotification;
+
+    /**
+     * ConfigWindowFactory constructor.
+     *
+     * @param                        $name
+     * @param                        $sizeX
+     * @param                        $sizeY
+     * @param null                   $posX
+     * @param null                   $posY
+     * @param WindowFactoryContext   $context
+     * @param ConfigManagerInterface $configManager
+     * @param ConfigUiManager        $configUiManager
+     * @param ChatNotification       $chatNotification
+     */
     public function __construct(
         $name,
         $sizeX,
@@ -38,29 +55,31 @@ class ConfigWindowFactory extends WindowFactory
         $posY = null,
         WindowFactoryContext $context,
         ConfigManagerInterface $configManager,
-        ConfigUiManager $configUiManager
+        ConfigUiManager $configUiManager,
+        ChatNotification $chatNotification
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
 
         $this->configManager = $configManager;
         $this->configUiManager = $configUiManager;
+        $this->chatNotification = $chatNotification;
     }
 
 
     /**
      * @inheritdoc
      */
-    protected function createContent(ManialinkInterface $manialink)
+    protected function updateContent(ManialinkInterface $manialink)
     {
-        parent::createContent($manialink);
+        parent::updateContent($manialink);
         /** @var Frame $contentFrame */
         $contentFrame = $manialink->getContentFrame();
-
-        $manialink->setData('current_path', $this->currentPath);
+        $contentFrame->removeAllChildren();
 
         // TODO should use scrollbars here as we can't use grid.
         // see how grid is built to fix this.
         $configs = $this->configManager->getConfigDefinitionTree()->get($this->currentPath);
+
         $elements = [];
         foreach ($configs as $config) {
             if (!is_object($config) || !($config instanceof ConfigInterface)) {
@@ -69,15 +88,19 @@ class ConfigWindowFactory extends WindowFactory
 
             $elements[] = $this->configUiManager->getUiHandler($config)->build($config, $this->sizeX - 8);
         }
-        $contentFrame->addChild($this->uiFactory->createLayoutLine(0, 0, $elements));
+        $contentFrame->addChild($this->uiFactory->createLayoutRow(0, 0, $elements));
 
         $saveButton = $this->uiFactory->createButton('expansion_config.save');
         $saveButton->setAction(
-            $this->actionFactory->createManialinkAction($manialink, [$this, 'saveCallback'], [], true)
+            $this->actionFactory->createManialinkAction(
+                $manialink,
+                [$this, 'saveCallback'],
+                ['path' => $this->currentPath]
+            )
         );
         $saveButton->setPosition(
-            $this->sizeX - $saveButton->getWidth() - 5,
-            $this->sizeY - $saveButton->getHeight() - 4
+            $this->sizeX - $saveButton->getWidth() - 8,
+            -$this->sizeY + $saveButton->getHeight() + 8
         );
         $contentFrame->addChild($saveButton);
     }
@@ -100,6 +123,20 @@ class ConfigWindowFactory extends WindowFactory
             }
         }
 
+        $this->setCurrentPath($args['path']);
         $this->update($manialink->getUserGroup());
+
+
+        $this->chatNotification->sendMessage('eXpansion.config.action.saved', $manialink->getUserGroup());
+    }
+
+    /**
+     * Set path to display in.
+     *
+     * @param string $currentPath
+     */
+    public function setCurrentPath(string $currentPath)
+    {
+        $this->currentPath = $currentPath;
     }
 }

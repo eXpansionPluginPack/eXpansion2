@@ -77,7 +77,7 @@ class ConfigManager implements ConfigManagerInterface
     /**
      * @inheritdoc
      */
-    public function set($path, $value) : boolean
+    public function set($path, $value) : bool
     {
         /** @var ConfigInterface $configDefinition */
         $configDefinition = $this->configTree->get($path);
@@ -110,6 +110,8 @@ class ConfigManager implements ConfigManagerInterface
                 'oldValue' => $oldValue
             ]
         );
+
+        return true;
     }
 
     /**
@@ -191,9 +193,9 @@ class ConfigManager implements ConfigManagerInterface
             );
 
             /** @var File $file */
-            $file = $this->filesystem->get("config-$filekey.json");
+            if ($this->filesystem->has("config-$filekey.json")) {
+                $file = $this->filesystem->get("config-$filekey.json");
 
-            if ($file->exists()) {
                 $values = json_decode($file->read(), true);
                 $config->setData($values);
             }
@@ -218,6 +220,7 @@ class ConfigManager implements ConfigManagerInterface
                 ['file' => "config-$filekey.json"]
             );
 
+            // TODO get only non default values.
             $encoded = json_encode($config->getArray(), JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
             $this->filesystem->put("config-$filekey.json", $encoded);
         }

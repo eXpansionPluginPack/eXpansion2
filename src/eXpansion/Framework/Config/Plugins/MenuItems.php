@@ -92,7 +92,7 @@ class MenuItems implements ListenerMenuItemProviderInterface
                     $path,
                     $translationKey,
                     null,
-                    ['cmd' => '/admin config "' . $configPath . "'"]
+                    ['cmd' => '/admin config "' . $configPath . '"']
                 );
             }
         }

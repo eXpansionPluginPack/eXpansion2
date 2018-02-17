@@ -50,7 +50,7 @@ interface ConfigInterface
      *
      * @return bool
      */
-    public function isHidden(): boolean;
+    public function isHidden(): bool;
 
     /**
      * Get default raw value.

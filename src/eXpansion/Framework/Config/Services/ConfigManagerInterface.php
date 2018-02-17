@@ -23,7 +23,7 @@ interface ConfigManagerInterface
      * @return bool
      * @throws UnhandledConfigurationException If the path is not valid, and such config doesen't exist.
      */
-    public function set($path, $value): boolean;
+    public function set($path, $value): bool;
 
 
     /**

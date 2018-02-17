@@ -51,6 +51,7 @@ class AbstractConfig implements ConfigInterface
     ) {
         $this->path = $path;
         $this->name = $name;
+        $this->scope = $scope;
         $this->description = $description;
         $this->defaultValue = $defaultValue;
         $this->configManager = $configManager;
@@ -92,7 +93,7 @@ class AbstractConfig implements ConfigInterface
     /**
      * @inheritdoc
      */
-    public function isHidden(): boolean
+    public function isHidden(): bool
     {
         return false;
     }

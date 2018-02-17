@@ -14,3 +14,18 @@ services:
 
     eXpansion\Framework\Config\Services\ConfigUiManager:
         class: 'eXpansion\Framework\Config\Services\ConfigUiManager'
+
+    eXpansion\Framework\Config\ChatCommand\Config:
+        class: 'eXpansion\Framework\Config\ChatCommand\Config'
+        arguments:
+            $command: "config"
+            $permission: "config"
+
+
+    eXpansion.core_config.plugins.chat_commands:
+        class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
+        arguments:
+            -
+                - '@eXpansion\Framework\Config\ChatCommand\Config'
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}

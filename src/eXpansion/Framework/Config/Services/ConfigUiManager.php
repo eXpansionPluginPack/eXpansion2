@@ -3,7 +3,7 @@
 namespace eXpansion\Framework\Config\Services;
 
 use eXpansion\Framework\Config\Model\ConfigInterface;
-use eXpansion\Framework\Config\Ui\UiInterface;
+use eXpansion\Framework\Config\Ui\Fields\UiInterface;
 
 /**
  * Class ConfigUiManager
