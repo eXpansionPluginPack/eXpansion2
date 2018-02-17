@@ -8,6 +8,7 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
+use eXpansion\Framework\Gui\Components\uiLabel;
 
 class BestRecordsWidgetFactory extends WidgetFactory
 {
@@ -120,7 +121,7 @@ class BestRecordsWidgetFactory extends WidgetFactory
      */
     private function createLabel($text, $color)
     {
-        return $this->uiFactory->createLabel($text, UiLabel::TYPE_NORMAL)->setTranslate(false)
+        return $this->uiFactory->createLabel($text, uiLabel::TYPE_NORMAL)->setTranslate(false)
             ->setAlign("left", "center2")->setTextSize(1)->setScriptEvents(true)
             ->setAreaColor($color)->setAreaFocusColor($color)->setTextColor("eff")->setTextPrefix(" ");
     }
