@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Config\Ui\Window;
 
+use eXpansion\Framework\Config\Exception\InvalidConfigException;
 use eXpansion\Framework\Config\Model\ConfigInterface;
 use eXpansion\Framework\Config\Services\ConfigManager;
 use eXpansion\Framework\Config\Services\ConfigManagerInterface;
@@ -115,6 +116,32 @@ class ConfigWindowFactory extends WindowFactory
     {
         $configs = $this->configManager->getConfigDefinitionTree();
 
+        $error = false;
+        // First check all.
+        foreach ($entries as $configPath => $configValue) {
+            $config = $configs->get($configPath);
+
+            if ($config instanceof ConfigInterface) {
+                try {
+                    $config->validate($configValue);
+                } catch (InvalidConfigException $invalidConfigException) {
+                    $this->chatNotification->sendMessage(
+                        $invalidConfigException->getTranslatableMessage(),
+                        $manialink->getUserGroup(),
+                        $invalidConfigException->getTranslationParameters()
+                    );
+
+                    $error = true;
+                }
+            }
+        }
+
+        if ($error) {
+            // Don't set values and dont refresh window.
+            return;
+        }
+
+        // Then save all if all is ok.
         foreach ($entries as $configPath => $configValue) {
             $config = $configs->get($configPath);
 

@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Config\Model;
 
+use eXpansion\Framework\Config\Exception\InvalidConfigException;
 use eXpansion\Framework\Config\Services\ConfigManager;
 
 /**
@@ -60,7 +61,7 @@ interface ConfigInterface
     public function getDefaultValue();
 
     /**
-     * Get raw value.
+     * Get Raw value that is used in the storage system.
      *
      * @return mixed
      */
@@ -74,4 +75,21 @@ interface ConfigInterface
      * @return boolean true if sucessfuly changed and false if not.
      */
     public function setRawValue($value);
+
+    /**
+     * Validates that value is usable for this config.
+     *
+     * @param $value
+     *
+     * @return void
+     * @throws InvalidConfigException
+     */
+    public function validate(&$value);
+
+    /**
+     * Get cleaned up value that can be used by application.
+     *
+     * @return mixed
+     */
+    public function get();
 }

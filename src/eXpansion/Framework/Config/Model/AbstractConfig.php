@@ -11,7 +11,7 @@ use eXpansion\Framework\Config\Services\ConfigManager;
  * @copyright 2018 eXpansion
  * @package eXpansion\Framework\Config\Model
  */
-class AbstractConfig implements ConfigInterface
+abstract class AbstractConfig implements ConfigInterface
 {
     /** @var string */
     protected $path;
@@ -114,11 +114,30 @@ class AbstractConfig implements ConfigInterface
         return $this->configManager->get($this->path);
     }
 
+
+    /**
+     * @inheritdoc
+     */
+    public function get()
+    {
+        return $this->getRawValue();
+    }
+
     /**
      * @inheritdoc
      */
     public function setRawValue($value)
     {
+        $this->validate($value);
+
         return $this->configManager->set($this->path, $value);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function validate(&$value)
+    {
+        return;
     }
 }
