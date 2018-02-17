@@ -90,7 +90,20 @@ class ConfigManager implements ConfigManagerInterface
 
         // Put new value.
         $configs = $this->getAllConfigs($configDefinition->getScope());
-        $configs->set($path, $value);
+
+        // If value is default value better not to store it.
+        if ($value == $configDefinition->getDefaultValue()) {
+            // This is a temporary work around as AssociativeArray don't support unsetting elements at the moment.
+            $cpath = implode('/', array_slice(explode('/', $path), 0,-1));
+            $data = $configs->get($cpath);
+            $lapth = implode('/', array_slice(explode('/', $path), -1));
+            if(isset($data[$lapth])) {
+                unset($data[$lapth]);
+                $configs->set($cpath, $data);
+            }
+        } else {
+            $configs->set($path, $value);
+        }
 
         // Dispatch and save changes.
         if ($this->disableDispatch || $oldValue === $value) {
@@ -220,7 +233,6 @@ class ConfigManager implements ConfigManagerInterface
                 ['file' => "config-$filekey.json"]
             );
 
-            // TODO get only non default values.
             $encoded = json_encode($config->getArray(), JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
             $this->filesystem->put("config-$filekey.json", $encoded);
         }
