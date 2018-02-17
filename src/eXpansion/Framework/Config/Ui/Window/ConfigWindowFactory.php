@@ -12,7 +12,12 @@ use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WindowFactory;
+use eXpansion\Framework\Gui\Components\uiButton;
+use eXpansion\Framework\Gui\Components\uiTooltip;
+use FML\Controls\Control;
 use FML\Controls\Frame;
+use FML\Controls\Quad;
+use FML\Controls\Quads\Quad_Icons64x64_1;
 
 /**
  * Class ConfigWindowFactory
@@ -77,34 +82,81 @@ class ConfigWindowFactory extends WindowFactory
         $contentFrame = $manialink->getContentFrame();
         $contentFrame->removeAllChildren();
 
-        // TODO should use scrollbars here as we can't use grid.
+        $tooltip = $this->uiFactory->createTooltip();
+        $manialink->addChild($tooltip);
+
+        $saveButton = $this->uiFactory->createConfirmButton('expansion_config.ui.save', uiButton::COLOR_SUCCESS);
+        $saveButton->setAction(
+                $this->actionFactory->createManialinkAction(
+                    $manialink,
+                    [$this, 'saveCallback'],
+                    ['path' => $this->currentPath]
+                )
+            )
+            ->setPosition(
+                $this->sizeX - $saveButton->getWidth() - 4,
+                -$this->sizeY + $saveButton->getHeight() + 4
+            )
+            ->setTranslate(true);
+
         // see how grid is built to fix this.
         $configs = $this->configManager->getConfigDefinitionTree()->get($this->currentPath);
 
-        $elements = [];
+        $elements = [(new Quad())->setHeight(4)];
         foreach ($configs as $config) {
             if (!is_object($config) || !($config instanceof ConfigInterface)) {
                 throw new PlayerException("{$this->currentPath} is not valid configuration path");
             }
 
-            $elements[] = $this->configUiManager->getUiHandler($config)->build($config, $this->sizeX - 8);
+            $elements[] = $this->buildConfig($config, $this->sizeX - 8, $tooltip);
         }
-        $contentFrame->addChild($this->uiFactory->createLayoutRow(0, 0, $elements));
 
-        $saveButton = $this->uiFactory->createButton('expansion_config.save');
-        $saveButton->setAction(
-            $this->actionFactory->createManialinkAction(
-                $manialink,
-                [$this, 'saveCallback'],
-                ['path' => $this->currentPath]
-            )
+        $contentFrame->addChild(
+            $this->uiFactory->createLayoutScrollable(
+                $this->uiFactory->createLayoutRow(0, 0, $elements),
+                $this->sizeX,
+                $this->sizeY - $saveButton->getHeight() - 4 - 4
+            )->setAxis(false, true)
         );
-        $saveButton->setPosition(
-            $this->sizeX - $saveButton->getWidth() - 8,
-            -$this->sizeY + $saveButton->getHeight() + 8
-        );
+
         $contentFrame->addChild($saveButton);
     }
+
+    /**
+     * Build display for config.
+     *
+     * @param ConfigInterface $config
+     * @param                 $sizeX
+     * @param uiTooltip       $tooltip
+     *
+     * @return \eXpansion\Framework\Gui\Layouts\layoutLine
+     */
+    protected function buildConfig(ConfigInterface $config, $sizeX, uiTooltip $tooltip)
+    {
+        $descriptionButton = new Quad_Icons64x64_1();
+        $descriptionButton->setSubStyle(Quad_Icons64x64_1::SUBSTYLE_TrackInfo)
+            ->setSize(4, 4);
+        $tooltip->addTooltip($descriptionButton, $config->getDescription());
+
+        $sizeX -= 4 + 6;
+
+        $rowLayout =  $this->uiFactory->createLayoutLine(
+            0,
+            0,
+            [
+                $this->uiFactory
+                    ->createLabel($config->getName())
+                    ->setWidth($sizeX * 0.35)
+                    ->setHorizontalAlign(Control::RIGHT),
+                $this->configUiManager->getUiHandler($config)->build($config, $sizeX * 0.65),
+                $descriptionButton
+            ],
+            2
+        );
+
+        return $rowLayout;
+    }
+
 
     /**
      * @param ManialinkInterface $manialink

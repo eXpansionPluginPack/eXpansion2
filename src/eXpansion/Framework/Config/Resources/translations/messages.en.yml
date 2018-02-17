@@ -1,6 +1,8 @@
 expansion_config:
   menu:
     label: "Controller configuration"
+  ui:
+    save: "Save settings"
 
   error:
     decimal:

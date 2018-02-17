@@ -1,8 +1,9 @@
 <?php
 
 namespace eXpansion\Framework\Config\Ui\Fields;
+
 use eXpansion\Framework\Config\Model\ConfigInterface;
-use FML\Controls\Frame;
+use FML\Types\Renderable;
 
 /**
  * Class UiInterface
@@ -18,9 +19,9 @@ interface UiInterface
      *
      * @param ConfigInterface $config
      *
-     * @return Frame
+     * @return Renderable
      */
-    public function build(ConfigInterface $config, $width) : Frame;
+    public function build(ConfigInterface $config, $width) : Renderable;
 
     /**
      * Check if Ui is compatible with the given config.

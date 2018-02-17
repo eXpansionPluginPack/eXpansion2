@@ -5,7 +5,7 @@ namespace eXpansion\Framework\Config\Ui\Fields;
 use eXpansion\Framework\Config\Model\AbstractConfig;
 use eXpansion\Framework\Config\Model\ConfigInterface;
 use eXpansion\Framework\Gui\Ui\Factory;
-use FML\Controls\Frame;
+use FML\Types\Renderable;
 
 /**
  * Class TextField
@@ -32,29 +32,12 @@ class TextField implements UiInterface
     /**
      * @inheritdoc
      */
-    public function build(ConfigInterface $config, $width): Frame
+    public function build(ConfigInterface $config, $width): Renderable
     {
-        $frame = new Frame();
-
-        $descriptionButton = $this->uiFactory->createButton("?");
-        $rowLayout =  $this->uiFactory->createLayoutLine(
-            0,
-            0,
-            [
-                $this->uiFactory->createLabel($config->getName(), ($width * 2) / 3),
-                $this->uiFactory->createInput($config->getPath(), ($width * 2) / 3)->setDefault($config->getRawValue()),
-                $descriptionButton,
-            ]
-        );
-
-        $frame->addChild($rowLayout);
-        $frame->setSize($width, $rowLayout->getHeight());
-
-        $tooltip = $this->uiFactory->createTooltip();
-        $frame->addChild($tooltip);
-
-        $tooltip->addTooltip($descriptionButton, $config->getDescription());
-        return $frame;
+        return $this
+            ->uiFactory
+            ->createInput($config->getPath(), $config->getRawValue())
+            ->setWidth($width);
     }
 
     /**
