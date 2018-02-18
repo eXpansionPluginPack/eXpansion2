@@ -2,7 +2,6 @@
 
 namespace eXpansion\Bundle\Acme\Plugins\Gui;
 
-use eXpansion\Bundle\Acme\Plugins\Test;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
@@ -12,7 +11,7 @@ use FML\Controls\Label;
 use FML\Script\Script;
 use FML\Script\ScriptLabel;
 
-class MemoryWidgetFactory extends WidgetFactory
+class MemoryWidget extends WidgetFactory
 {
     /** @var  Label */
     protected $memoryMessage;
@@ -28,11 +27,10 @@ class MemoryWidgetFactory extends WidgetFactory
         $sizeY,
         $posX,
         $posY,
-        WidgetFactoryContext $context,
-        Factory $uiFactory
+        WidgetFactoryContext $context
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
-        $this->uiFactory = $uiFactory;
+
     }
 
     /**

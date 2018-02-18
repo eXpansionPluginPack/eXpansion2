@@ -1,8 +1,8 @@
 <?php
 
-namespace eXpansion\Bundle\Acme\Plugins;
+namespace eXpansion\Bundle\DeveloperTools\Plugins;
 
-use eXpansion\Bundle\Acme\Plugins\Gui\MemoryWidgetFactory;
+use eXpansion\Bundle\DeveloperTools\Plugins\Gui\MemoryWidgetFactory;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\Helpers\Time;
@@ -14,7 +14,7 @@ use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterface
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
-class Test implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, StatusAwarePluginInterface
+class DevTools implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, StatusAwarePluginInterface
 {
 
     /** @var  string */

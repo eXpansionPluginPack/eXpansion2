@@ -1,6 +1,6 @@
 <?php
 
-namespace eXpansion\Bundle\Acme\ChatCommand;
+namespace eXpansion\Bundle\DeveloperTools\ChatCommand;
 
 use eXpansion\Bundle\Acme\Plugins\Test;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
@@ -30,6 +30,10 @@ class Connect extends AbstractAdminChatCommand
      * @var PlayerStorage
      */
     private $playerStorage;
+    /**
+     * @var DevTools
+     */
+    private $devToolsPlugin;
 
     /**
      * ScriptPanel constructor.
@@ -39,7 +43,7 @@ class Connect extends AbstractAdminChatCommand
      * @param array                $aliases
      * @param Connection           $connection
      * @param AdminGroups          $adminGroups
-     * @param Test                 $testPlugin
+     * @param DevTools             $devToolsPlugin
      * @param PlayerStorage        $playerStorage
      */
     public function __construct(
@@ -48,14 +52,15 @@ class Connect extends AbstractAdminChatCommand
         array $aliases = [],
         Connection $connection,
         AdminGroups $adminGroups,
-        Test $testPlugin,
+        DevTools $devToolsPlugin,
         PlayerStorage $playerStorage
     ) {
         parent::__construct($command, $permission, $aliases, $adminGroups);
 
         $this->connection = $connection;
-        $this->testPlugin = $testPlugin;
+
         $this->playerStorage = $playerStorage;
+        $this->devToolsPlugin = $devToolsPlugin;
     }
 
     public function configure()

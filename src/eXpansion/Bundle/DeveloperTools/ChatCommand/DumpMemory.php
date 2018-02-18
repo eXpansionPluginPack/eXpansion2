@@ -1,6 +1,6 @@
 <?php
 
-namespace eXpansion\Bundle\Acme\ChatCommand;
+namespace eXpansion\Bundle\DeveloperTools\ChatCommand;
 
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\AdminGroups\Model\AbstractAdminChatCommand;
