@@ -151,13 +151,16 @@ class GuiHandler implements
                 $size = strlen($mlData['ml']);
             }
 
-            $this->connection->sendDisplayManialinkPage(
-                $mlData['logins'],
-                $mlData['ml'],
-                0,
-                false,
-                true
-            );
+            $logins = array_filter($mlData['logins'], function($value) { return $value != '';});
+            if (!empty($logins)) {
+                $this->connection->sendDisplayManialinkPage(
+                    $mlData['logins'],
+                    $mlData['ml'],
+                    0,
+                    false,
+                    true
+                );
+            }
         }
 
         if ($size > 0) {
