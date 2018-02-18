@@ -4,6 +4,7 @@
 
 * Fixed issue #248 : Strange behaviour of translated uiButtons.
 * Fixed issue #255 : Fixed issue when asking permissions on guest admin groups crashing controller
+* Fixed issue #269 : eXpansion crashing with unknow player exception.
 
 ## Features 
 
