@@ -1,6 +1,6 @@
 <?php
 
-namespace eXpansion\Bundle\Acme\ChatCommand;
+namespace eXpansion\Bundle\DeveloperTools\ChatCommand;
 
 use eXpansion\Bundle\Admin\Plugins\Gui\ScriptSettingsWindowFactory;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;

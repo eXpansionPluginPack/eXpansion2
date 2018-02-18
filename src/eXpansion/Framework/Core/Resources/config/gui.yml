@@ -2,6 +2,7 @@ parameters:
     expansion.framework.core.model.gui.manialink.class: 'eXpansion\Framework\Core\Model\Gui\Manialink'
     expansion.framework.core.model.gui.window.class: 'eXpansion\Framework\Core\Model\Gui\Window'
     expansion.framework.core.model.gui.widget.class: 'eXpansion\Framework\Core\Model\Gui\Widget'
+    expansion.framework.core.model.gui.fml_manialink.class: 'eXpansion\Framework\Core\Model\Gui\FmlManialink'
     expansion.framework.core.model.gui.action.class: 'eXpansion\Framework\Core\Model\Gui\Action'
 
 services:
@@ -29,6 +30,10 @@ services:
         arguments:
             $className: "%expansion.framework.core.model.gui.window.class%"
 
+    eXpansion\Framework\Core\Model\Gui\FmlManialinkFactoryContext:
+           class: eXpansion\Framework\Core\Model\Gui\FmlManialinkFactoryContext
+           arguments:
+               $className: "%expansion.framework.core.model.gui.fml_manialink.class%"
     #
     # GUI Element factories
     #

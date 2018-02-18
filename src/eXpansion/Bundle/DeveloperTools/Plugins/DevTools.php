@@ -1,24 +1,19 @@
 <?php
 
-namespace eXpansion\Bundle\Acme\Plugins;
+namespace eXpansion\Bundle\DeveloperTools\Plugins;
 
-use eXpansion\Bundle\Acme\Plugins\Gui\MemoryWidgetFactory;
+use eXpansion\Bundle\DeveloperTools\Plugins\Gui\MemoryWidget;
+use eXpansion\Bundle\DeveloperTools\Plugins\Gui\MemoryWidgetFactory;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Console;
-use eXpansion\Framework\Core\Storage\PlayerStorage;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
 use Maniaplanet\DedicatedServer\Connection;
-use Maniaplanet\DedicatedServer\Structures\Map;
 
-class Test implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacyMap, ListenerInterfaceExpTimer, StatusAwarePluginInterface
+class DevTools implements ListenerInterfaceExpApplication, ListenerInterfaceExpTimer, StatusAwarePluginInterface
 {
-
-    /** @var  string */
-    static public $memoryMsg;
 
     public $connectQueue = 0;
 
@@ -38,51 +33,35 @@ class Test implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
     private $startMemValue = 0;
 
     /**
-     * @var MemoryWidgetFactory
+     * @var MemoryWidget
      */
-    private $mlFactory;
-    /**
-     * @var PlayerStorage
-     */
-    private $players;
+    private $memoryWidget;
     /**
      * @var Group
      */
-    private $playergroup;
+    private $allPlayersGroup;
+
 
     /**
      * Test constructor.
-     * @param PlayerStorage       $players
-     * @param Connection          $connection
-     * @param Console             $console
-     * @param Time                $time
-     * @param Group               $playergroup
-     * @param MemoryWidgetFactory $mlFactory
+     * @param Connection   $connection
+     * @param Console      $console
+     * @param Time         $time
+     * @param Group        $players
+     * @param MemoryWidget $memoryWidget
      */
     function __construct(
-        PlayerStorage $players,
         Connection $connection,
         Console $console,
         Time $time,
-        Group $playergroup,
-        MemoryWidgetFactory $mlFactory
+        Group $players,
+        MemoryWidget $memoryWidget
     ) {
         $this->connection = $connection;
         $this->console = $console;
         $this->time = $time;
-        $this->mlFactory = $mlFactory;
-        $this->players = $players;
-        $this->playergroup = $playergroup;
-    }
-
-    public function onBeginMap(Map $map)
-    {
-        $this->console->writeln('$0f0Begin Map: $fff'.$map->name);
-    }
-
-    public function onEndMap(Map $map)
-    {
-        $this->console->writeln('$0f0End Map: $fff'.$map->name);
+        $this->memoryWidget = $memoryWidget;
+        $this->allPlayersGroup = $players;
     }
 
     public function onPreLoop()
@@ -119,8 +98,8 @@ class Test implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
                 $msg .= ' $f00('.round($diff / 1024)."kb)";
             }
 
-            self::$memoryMsg = $msg;
-            //    $this->mlFactory->update($this->playergroup);
+            $this->memoryWidget->setMemoryMessage($msg);
+            $this->memoryWidget->update($this->allPlayersGroup);
             $this->console->writeln($msg);
         }
 
@@ -129,45 +108,20 @@ class Test implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
     }
 
     /**
-     * @param Map[]  $oldMaps
-     * @param string $currentMapUid
-     * @param string $nextMapUid
-     * @param bool   $isListModified
-     * @return mixed
-     */
-    public function onMapListModified($oldMaps, $currentMapUid, $nextMapUid, $isListModified)
-    {
-
-    }
-
-    /**
-     * @param $currentMap
-     * @param $previousMap
-     */
-    public function onExpansionMapChange($currentMap, $previousMap)
-    {
-
-    }
-
-    /**
-     * @param $nextMap
-     * @param $previousNextMap
-     */
-    public function onExpansionNextMapChange($nextMap, $previousNextMap)
-    {
-
-    }
-
-    /**
      * Set the status of the plugin
      *
      * @param boolean $status
      *
-     * @return null
+     * @return void
      */
     public function setStatus($status)
     {
-
+        if ($status) {
+            $this->startMemValue = memory_get_usage(false);
+            $this->memoryWidget->create($this->allPlayersGroup);
+        } else {
+            $this->memoryWidget->destroy($this->allPlayersGroup);
+        }
     }
 
     /**
@@ -188,8 +142,6 @@ class Test implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacy
     public function onApplicationReady()
     {
 
-        $this->startMemValue = memory_get_usage(false);
-        $this->mlFactory->create($this->playergroup);
     }
 
     /**

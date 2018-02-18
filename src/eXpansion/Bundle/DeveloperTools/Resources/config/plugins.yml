@@ -1,0 +1,22 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    eXpansion\Bundle\DeveloperTools\Plugins\DevTools:
+        class: eXpansion\Bundle\DeveloperTools\Plugins\DevTools
+        arguments:
+            $players: '@expansion.framework.core.user_groups.all_players'
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'exp.application'}
+            - {name: 'expansion.plugin', data_provider: 'exp.timer'}
+
+    eXpansion\Bundle\DeveloperTools\Plugins\Gui\MemoryWidget:
+            class: eXpansion\Bundle\DeveloperTools\Plugins\Gui\MemoryWidget
+            arguments:
+                $name:  "memory"
+                $posX: 80
+                $posY: -85
+                $sizeX: null
+                $sizeY: null

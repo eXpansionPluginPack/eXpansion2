@@ -1,12 +1,12 @@
 <?php
 
-namespace eXpansion\Bundle\Acme\ChatCommand;
+namespace eXpansion\Bundle\DeveloperTools\ChatCommand;
 
 use eXpansion\Bundle\Acme\Plugins\Test;
+use eXpansion\Bundle\DeveloperTools\Plugins\DevTools;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\AdminGroups\Model\AbstractAdminChatCommand;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
-use Maniaplanet\DedicatedServer\Connection;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 
@@ -18,18 +18,15 @@ use Symfony\Component\Console\Input\InputInterface;
  */
 class Connect extends AbstractAdminChatCommand
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
-    /**
-     * @var Test
-     */
-    private $testPlugin;
+
     /**
      * @var PlayerStorage
      */
     private $playerStorage;
+    /**
+     * @var DevTools
+     */
+    private $devToolsPlugin;
 
     /**
      * ScriptPanel constructor.
@@ -37,25 +34,23 @@ class Connect extends AbstractAdminChatCommand
      * @param                      $command
      * @param                      $permission
      * @param array                $aliases
-     * @param Connection           $connection
      * @param AdminGroups          $adminGroups
-     * @param Test                 $testPlugin
+     * @param DevTools             $devToolsPlugin
      * @param PlayerStorage        $playerStorage
      */
     public function __construct(
         $command,
         $permission,
         array $aliases = [],
-        Connection $connection,
+
         AdminGroups $adminGroups,
-        Test $testPlugin,
+        DevTools $devToolsPlugin,
         PlayerStorage $playerStorage
     ) {
         parent::__construct($command, $permission, $aliases, $adminGroups);
 
-        $this->connection = $connection;
-        $this->testPlugin = $testPlugin;
         $this->playerStorage = $playerStorage;
+        $this->devToolsPlugin = $devToolsPlugin;
     }
 
     public function configure()
@@ -74,7 +69,7 @@ class Connect extends AbstractAdminChatCommand
         $count = $input->getArgument("count");
         $online = count($this->playerStorage->getOnline());
         if ($online <= $count) {
-            $this->testPlugin->connectQueue = $count - $online;
+            $this->devToolsPlugin->connectQueue = $count - $online;
         }
     }
 }
