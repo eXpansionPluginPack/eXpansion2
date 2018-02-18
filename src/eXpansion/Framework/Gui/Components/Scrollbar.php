@@ -8,7 +8,7 @@ use FML\Controls\Quad;
 use FML\Script\Script;
 use FML\Types\Renderable;
 
-class uiScrollbar extends abstractUiElement implements Renderable
+class Scrollbar extends AbstractUiElement implements Renderable
 {
 
     const AXIS_X = "X";
@@ -30,10 +30,10 @@ class uiScrollbar extends abstractUiElement implements Renderable
     /**
      * uiScrollbar constructor.
      * @param string $axis
-     * @param float $posX
-     * @param float $posY
-     * @param $scrollbarSize
-     * @param float $length
+     * @param float  $posX
+     * @param float  $posY
+     * @param        $scrollbarSize
+     * @param float  $length
      */
     public function __construct($axis, $posX, $posY, $scrollbarSize, $length)
     {
@@ -168,7 +168,7 @@ class uiScrollbar extends abstractUiElement implements Renderable
      * Prepare the given Script for rendering by adding the needed Labels, etc.
      *
      * @param Script $script Script to prepare
-     * @return static
+     * @return void
      */
     public function prepare(Script $script)
     {

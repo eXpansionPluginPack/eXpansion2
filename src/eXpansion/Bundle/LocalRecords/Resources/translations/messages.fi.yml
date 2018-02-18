@@ -49,3 +49,19 @@ expansion_local_records:
       race_recs: "Edelliset Ennätykset"
       laps_recs: "Edelliset Kierrosennätykset"
 
+
+  config:
+    nb_records:
+      name: "Ennätysten määrä"
+      dsc: "Säättää kuinka monta ennätystä tallennetaan karttakohtaisesti."
+
+    notification_public_threshold:
+      name: "Yleisen viestin kynnysarvo"
+      dsc: "Määrittää kynnysarvon millon ennätys näytetään kaikille."
+
+  expansion_config:
+    menu:
+      eXpansion:
+        label: "eXpansion asetukset"
+        LocalRecords:
+          label: "Paikalliset Ennätykset"

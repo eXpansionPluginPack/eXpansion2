@@ -2,14 +2,10 @@
 
 namespace eXpansion\Framework\Core\Model\Gui\Factory;
 
-use eXpansion\Framework\Gui\Components\uiCheckbox;
-use eXpansion\Framework\Gui\Components\uiInput;
-use eXpansion\Framework\Gui\Components\uiLabel;
-use eXpansion\Framework\Gui\Components\uiTooltip;
+use eXpansion\Framework\Gui\Components\Label;
+use eXpansion\Framework\Gui\Components\Tooltip;
 use eXpansion\Framework\Gui\Ui\Factory;
-use FML\Controls\Control;
 use FML\Controls\Frame;
-use FML\Controls\Label;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
 
 /**
@@ -39,10 +35,10 @@ class TitleLineFactory
      *
      * @param float $totalWidth
      * @param array $columns
-     * @param int $index
+     * @param int   $index
      * @param float $height
-     * @param bool $autoNewLine
-     * @param int $maxLines
+     * @param bool  $autoNewLine
+     * @param int   $maxLines
      *
      * @return Frame
      *
@@ -87,15 +83,15 @@ class TitleLineFactory
     }
 
     /**
-     * @param float $totalCoef
-     * @param array $columnData
-     * @param float $postX
-     * @param float $height
-     * @param string $action
-     * @param uiTooltip $tooltip
-     * @return \eXpansion\Framework\Gui\Layouts\layoutLine
+     * @param float   $totalCoef
+     * @param array   $columnData
+     * @param float   $postX
+     * @param float   $height
+     * @param string  $action
+     * @param Tooltip $tooltip
+     * @return \eXpansion\Framework\Gui\Layouts\LayoutLine
      */
-    protected function createTitleColumn($totalCoef, $columnData, $postX, $height, $action, uiTooltip $tooltip)
+    protected function createTitleColumn($totalCoef, $columnData, $postX, $height, $action, Tooltip $tooltip)
     {
         $sort = AssociativeArray::getFromKey($columnData, 'sort', "");
         switch ($sort) {
@@ -110,10 +106,10 @@ class TitleLineFactory
                 break;
         }
 
-        $sortLabel = $this->uiFactory->createLabel($sortType, uiLabel::TYPE_HEADER);
+        $sortLabel = $this->uiFactory->createLabel($sortType, Label::TYPE_HEADER);
         $sortLabel->setSize(3, $height - 1);
 
-        $label = $this->uiFactory->createLabel($columnData['title'], uiLabel::TYPE_HEADER);
+        $label = $this->uiFactory->createLabel($columnData['title'], Label::TYPE_HEADER);
 
         $translate = AssociativeArray::getFromKey($columnData, 'translatable', false);
         if ($translate) {

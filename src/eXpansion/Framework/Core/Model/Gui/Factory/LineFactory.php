@@ -2,9 +2,9 @@
 
 namespace eXpansion\Framework\Core\Model\Gui\Factory;
 
-use eXpansion\Framework\Gui\Components\uiCheckbox;
-use eXpansion\Framework\Gui\Components\uiInput;
-use eXpansion\Framework\Gui\Components\uiTooltip;
+use eXpansion\Framework\Gui\Components\Checkbox;
+use eXpansion\Framework\Gui\Components\Input;
+use eXpansion\Framework\Gui\Components\Tooltip;
 use FML\Controls\Control;
 use FML\Controls\Frame;
 use FML\Controls\Label;
@@ -146,20 +146,20 @@ class LineFactory
 
     protected function createInputColumn($totalCoef, $columnData, $postX)
     {
-        /** @var uiTooltip $tooltip */
+        /** @var Tooltip $tooltip */
         $tooltip = $columnData['tooltip'];
         $value = $columnData['input'];
         $i = $columnData['index'];
         $type = gettype($value);
 
         if ($type == "boolean") {
-            $element = new uiCheckbox("", "entry_".$i."_boolean", true);
+            $element = new Checkbox("", "entry_".$i."_boolean", true);
             if ($value === false) {
-                $element = new uiCheckbox("", "entry_".$i."_boolean", false);
+                $element = new Checkbox("", "entry_".$i."_boolean", false);
             }
             $element->setPosition($postX + 0.5, 0);
         } else {
-            $element = new uiInput("entry_".$i."_".$type);
+            $element = new Input("entry_".$i."_".$type);
             $element->setDefault($value);
             $element->setPosition($postX, 0);
         }

@@ -8,7 +8,7 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
-use eXpansion\Framework\Gui\Components\uiLabel;
+use eXpansion\Framework\Gui\Components\Label;
 
 class BestRecordsWidgetFactory extends WidgetFactory
 {
@@ -17,19 +17,19 @@ class BestRecordsWidgetFactory extends WidgetFactory
     /** @var int */
     private $authorTime;
 
-    /** @var UiLabel */
+    /** @var Label */
     private $lblDediNick;
-    /** @var UiLabel */
+    /** @var Label */
     private $lblDediTime;
 
-    /** @var UiLabel */
+    /** @var Label */
     private $lblAuthorNick;
-    /** @var UiLabel */
+    /** @var Label */
     private $lblAuthorTime;
 
-    /** @var UiLabel */
+    /** @var Label */
     private $lblLocalNick;
-    /** @var UiLabel */
+    /** @var Label */
     private $lblLocalTime;
     /**
      * @var Time
@@ -121,7 +121,7 @@ class BestRecordsWidgetFactory extends WidgetFactory
      */
     private function createLabel($text, $color)
     {
-        return $this->uiFactory->createLabel($text, uiLabel::TYPE_NORMAL)->setTranslate(false)
+        return $this->uiFactory->createLabel($text, Label::TYPE_NORMAL)->setTranslate(false)
             ->setAlign("left", "center2")->setTextSize(1)->setScriptEvents(true)
             ->setAreaColor($color)->setAreaFocusColor($color)->setTextColor("eff")->setTextPrefix(" ");
     }

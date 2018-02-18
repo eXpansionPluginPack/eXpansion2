@@ -5,7 +5,7 @@ namespace eXpansion\Framework\Gui\Components;
 use FML\Script\Script;
 use FML\Script\ScriptLabel;
 
-class uiConfirmButton extends uiButton
+class ConfirmButton extends Button
 {
     public function __construct(string $text = "button", string $type = self::TYPE_DEFAULT)
     {

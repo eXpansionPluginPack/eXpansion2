@@ -11,7 +11,7 @@ use FML\Script\ScriptLabel;
 use FML\Types\Renderable;
 use FML\Types\ScriptFeatureable;
 
-class uiInputMasked extends abstractUiElement implements Renderable, ScriptFeatureable
+class InputMasked extends AbstractUiElement implements Renderable, ScriptFeatureable
 {
 
     const TYPE_DEFAULT = "Basic";
@@ -74,7 +74,7 @@ class uiInputMasked extends abstractUiElement implements Renderable, ScriptFeatu
             ->setName($this->name)
             ->setTextSize(1.5);
 
-        $button = new uiButton("", uiButton::TYPE_DECORATED);
+        $button = new Button("", Button::TYPE_DECORATED);
         $button->setSize(4, 4)
             ->addClass("uiMaskedToggle")
             ->setPosition($input->getWidth(), 0);
@@ -97,6 +97,7 @@ class uiInputMasked extends abstractUiElement implements Renderable, ScriptFeatu
 
     /**
      * @param string $name
+     * @return InputMasked
      */
     public function setName($name)
     {

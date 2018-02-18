@@ -8,7 +8,7 @@ use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
 use eXpansion\Framework\Gui\Builders\WidgetBackground;
-use eXpansion\Framework\Gui\Components\uiLabel;
+use eXpansion\Framework\Gui\Components\Label;
 use eXpansion\Framework\Gui\Ui\Factory;
 use FML\Controls\Frame;
 use FML\Controls\Quad;
@@ -19,7 +19,7 @@ class VoteWidgetFactory extends WidgetFactory
 
     const x = 90;
     const y = 20;
-    /** @var uiLabel */
+    /** @var Label */
     protected $label;
     /**
      * @var VoteService
@@ -64,7 +64,7 @@ class VoteWidgetFactory extends WidgetFactory
         $frame->setScale(0.8);
         $manialink->addChild($frame);
 
-        $label = $this->uiFactory->createLabel("", uiLabel::TYPE_HEADER);
+        $label = $this->uiFactory->createLabel("", Label::TYPE_HEADER);
         $label->setTextColor("fff")
             ->setPosition(self::x / 2, -1)
             ->setTextSize(4)
@@ -74,7 +74,7 @@ class VoteWidgetFactory extends WidgetFactory
         $frame->addChild($this->label);
 
         $btnPosition = -9;
-        $btn = $this->uiFactory->createButton(" F1", uiButton::TYPE_DEFAULT);
+        $btn = $this->uiFactory->createButton(" F1", UiButton::TYPE_DEFAULT);
         $btn->setSize(18, 6)->setPosition(1, $btnPosition)
             ->setId("ButtonYes")
             ->setBackgroundColor("0f09");
@@ -83,7 +83,7 @@ class VoteWidgetFactory extends WidgetFactory
         );
         $frame->addChild($btn);
 
-        $btn = $this->uiFactory->createButton(" F2", uiButton::TYPE_DEFAULT);
+        $btn = $this->uiFactory->createButton(" F2", UiButton::TYPE_DEFAULT);
         $btn->setSize(18, 6)->setPosition(self::x - 19, $btnPosition)
             ->setBackgroundColor("f009")
             ->setId("ButtonNo");

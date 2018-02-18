@@ -5,7 +5,7 @@ namespace eXpansion\Framework\Gui\Components;
 use FML\Controls\Quad;
 use FML\Script\Script;
 
-class uiLine extends abstractUiElement
+class Line extends AbstractUiElement
 {
     public $length = 0;
 
@@ -35,7 +35,7 @@ class uiLine extends abstractUiElement
     protected $rotate = 0;
 
     /**
-     * uiLine constructor.
+     * Line constructor.
      * @param float $x
      * @param float $y
      */
@@ -113,7 +113,7 @@ class uiLine extends abstractUiElement
 
     /**
      * @param float $stoke
-     * @return uiLine
+     * @return line
      */
     public function setStroke($stoke)
     {
@@ -132,7 +132,7 @@ class uiLine extends abstractUiElement
 
     /**
      * @param string $color
-     * @return uiLine
+     * @return line
      */
     public function setColor($color)
     {
@@ -151,7 +151,7 @@ class uiLine extends abstractUiElement
 
     /**
      * @param int $rotate
-     * @return uiLine
+     * @return line
      */
     public function setRotate($rotate)
     {
@@ -170,7 +170,7 @@ class uiLine extends abstractUiElement
 
     /**
      * @param int $length
-     * @return uiLine
+     * @return line
      */
     public function setLength($length)
     {

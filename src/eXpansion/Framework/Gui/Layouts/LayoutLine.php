@@ -10,7 +10,7 @@ use FML\Types\Container;
 use FML\Types\Renderable;
 use FML\Types\ScriptFeatureable;
 
-class layoutLine implements Renderable, ScriptFeatureable, Container
+class LayoutLine implements Renderable, ScriptFeatureable, Container
 {
     protected $frameClasses = [];
 
@@ -130,6 +130,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
         }
 
         $this->setWidth($sizeX);
+
         return $frame->render($domDocument);
     }
 
@@ -151,27 +152,6 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
                 return $element->getWidth();
             default:
                 return 0;
-        }
-    }
-
-    /**
-     * @param Control $element
-     * @return float|int
-     */
-    private function getRelativeWidth($element)
-    {
-        if (is_null($element)) {
-            return 0;
-        }
-        switch ($element->getHorizontalAlign()) {
-            case "right":
-                return $element->getWidth();
-            case "center":
-                return $element->getWidth();
-            case "left":
-                return $element->getWidth();
-            default :
-                return $element->getWidth();
         }
     }
 
@@ -212,7 +192,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
 
     /**
      * @param mixed $startX
-     * @return layoutLine
+     * @return LayoutLine
      */
     public function setX($startX)
     {
@@ -223,7 +203,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
 
     /**
      * @param mixed $startY
-     * @return layoutLine
+     * @return LayoutLine
      */
     public function setY($startY)
     {
@@ -414,7 +394,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
 
     /**
      * @param null|string $frameId
-     * @return layoutLine
+     * @return LayoutLine
      */
     public function setId($frameId)
     {
@@ -433,7 +413,7 @@ class layoutLine implements Renderable, ScriptFeatureable, Container
 
     /**
      * @param string $hAlign
-     * @return layoutLine
+     * @return LayoutLine
      */
     public function setHorizontalAlign(string $hAlign)
     {

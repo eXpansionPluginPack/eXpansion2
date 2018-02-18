@@ -3,27 +3,18 @@
 namespace eXpansion\Bundle\Admin\Plugins\Gui;
 
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyManialink;
-use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionFactory;
-use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilder;
-use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
-use eXpansion\Framework\Core\Model\UserGroups\Group;
-use eXpansion\Framework\Core\Plugins\Gui\GridWindowFactory;
 use eXpansion\Framework\Core\Plugins\Gui\WindowFactory;
 use eXpansion\Framework\Core\Services\Console;
-use eXpansion\Framework\Gui\Components\uiAnimation;
-use eXpansion\Framework\Gui\Components\uiButton;
-use eXpansion\Framework\Gui\Components\uiCheckbox;
-use eXpansion\Framework\Gui\Components\uiDropdown;
-use eXpansion\Framework\Gui\Components\uiInput;
-use eXpansion\Framework\Gui\Components\uiInputMasked;
-use eXpansion\Framework\Gui\Components\uiLabel;
-use eXpansion\Framework\Gui\Components\uiTextbox;
+use eXpansion\Framework\Gui\Components\Button;
+use eXpansion\Framework\Gui\Components\Checkbox;
+use eXpansion\Framework\Gui\Components\Input;
+use eXpansion\Framework\Gui\Components\InputMasked;
+use eXpansion\Framework\Gui\Components\Label;
+use eXpansion\Framework\Gui\Components\Textbox;
+use eXpansion\Framework\Gui\Components\Dropdown;
 use FML\Controls\Frame;
-use FML\Controls\Label;
-use FML\Controls\Quad;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\ServerOptions;
 
@@ -36,36 +27,36 @@ use Maniaplanet\DedicatedServer\Structures\ServerOptions;
  */
 class ServerSettingsWindowFactory extends WindowFactory
 {
-    /** @var  uiCheckbox */
+    /** @var  Checkbox */
     public $allowMapDownload;
-    /** @var  uiCheckbox */
+    /** @var  Checkbox */
     public $autoSaveReplays;
-    /** @var  uiCheckbox */
+    /** @var  Checkbox */
     public $autoSaveValidationReplays;
-    /** @var  uiCheckbox */
+    /** @var  Checkbox */
     public $disableHorns;
-    /** @var  uiCheckbox */
+    /** @var  Checkbox */
     public $disableServiceAnnounces;
-    /** @var  uiCheckbox */
+    /** @var  Checkbox */
     public $nextUseChangingValidationSeed;
 
-    /** @var  uiInput */
+    /** @var  Input */
     public $nextMaxPlayers;
-    /** @var  uiInput */
+    /** @var  Input */
     public $nextMaxSpectators;
-    /** @var  uiCheckbox */
+    /** @var  Checkbox */
     public $keepPlayerSlots;
-    /** @var  uiInput */
+    /** @var  Input */
     public $ladderServerLimitMax;
-    /** @var  uiInput */
+    /** @var  Input */
     public $ladderServerLimitMin;
-    /** @var  uiDropdown */
+    /** @var  Dropdown */
     public $nextLadderMode;
-    /** @var  uiDropdown */
+    /** @var  Dropdown */
     public $refereeMode;
-    /** @var  uiCheckbox */
+    /** @var  Checkbox */
     public $isP2PUpload;
-    /** @var  uiCheckbox */
+    /** @var  Checkbox */
     public $isP2PDownload;
 
     /** @var Console */
@@ -77,19 +68,19 @@ class ServerSettingsWindowFactory extends WindowFactory
     /** @var  AdminGroups */
     protected $adminGroupsHelper;
 
-    /** @var  uiInput */
+    /** @var  Input */
     protected $serverName;
 
-    /** @var  uiTextbox */
+    /** @var  Textbox */
     protected $comment;
 
-    /** @var  uiInputMasked */
+    /** @var  InputMasked */
     protected $password;
 
-    /** @var  uiInputMasked */
+    /** @var  InputMasked */
     protected $specpassword;
 
-    /** @var  uiInputMasked */
+    /** @var  InputMasked */
     protected $refpassword;
 
 
@@ -126,32 +117,32 @@ class ServerSettingsWindowFactory extends WindowFactory
         $firstColumn = $this->uiFactory->createLayoutRow(0, 0, [], 0);
         $secondColumn = $this->uiFactory->createLayoutRow(90, 0, [], 0);
 
-        $label = $this->uiFactory->createLabel("Name", uiLabel::TYPE_HEADER);
+        $label = $this->uiFactory->createLabel("Name", Label::TYPE_HEADER);
         $this->serverName = $this->uiFactory->createInput("name_string", "", 60);
         $firstColumn->addChild($this->uiFactory->createLayoutRow(0, 0, [$label, $this->serverName]));
 
-        $label = $this->uiFactory->createLabel("Comment", uiLabel::TYPE_HEADER);
+        $label = $this->uiFactory->createLabel("Comment", Label::TYPE_HEADER);
         $this->comment = $this->uiFactory->createTextbox("comment_string", "", 7, 60);
         $firstColumn->addChild($this->uiFactory->createLayoutRow(0, 0, [$label, $this->comment]));
 
-        $label = $this->uiFactory->createLabel("Password for Players", uiLabel::TYPE_HEADER);
+        $label = $this->uiFactory->createLabel("Password for Players", Label::TYPE_HEADER);
         $label->setWidth(60);
         $this->password = $this->uiFactory->createInputMasked("password_string", "", 60);
         $firstColumn->addChild($this->uiFactory->createLayoutRow(0, 0, [$label, $this->password]));
 
-        $label = $this->uiFactory->createLabel("Password for Spectators", uiLabel::TYPE_HEADER);
+        $label = $this->uiFactory->createLabel("Password for Spectators", Label::TYPE_HEADER);
         $label->setWidth(60);
         $this->specpassword = $this->uiFactory->createInputMasked("passwordForSpectator_string", "", 60);
         $firstColumn->addChild($this->uiFactory->createLayoutRow(0, 0, [$label, $this->specpassword]));
 
-        $label = $this->uiFactory->createLabel("Referee Mode", uiLabel::TYPE_HEADER);
+        $label = $this->uiFactory->createLabel("Referee Mode", Label::TYPE_HEADER);
         $label->setWidth(60);
         $this->refereeMode = $this->uiFactory->createDropdown("refereeMode_integer",
             ["Validate top 3" => "0", "Validate all" => "1"]);
         $this->refereeMode->setWidth(60);
         $firstColumn->addChild($this->uiFactory->createLayoutRow(0, 0, [$label, $this->refereeMode]));
 
-        $label = $this->uiFactory->createLabel("Password for Referee", uiLabel::TYPE_HEADER);
+        $label = $this->uiFactory->createLabel("Password for Referee", Label::TYPE_HEADER);
         $label->setWidth(60);
         $this->refpassword = $this->uiFactory->createInputMasked("refereePassword_string", "", 60);
         $firstColumn->addChild($this->uiFactory->createLayoutRow(0, 0, [$label, $this->refpassword]));
@@ -159,16 +150,16 @@ class ServerSettingsWindowFactory extends WindowFactory
         $frame->addChild($firstColumn);
 
 // @region second column
-        $label = $this->uiFactory->createLabel("Ladder Server", uiLabel::TYPE_HEADER);
+        $label = $this->uiFactory->createLabel("Ladder Server", Label::TYPE_HEADER);
         $label->setWidth(60);
         $this->nextLadderMode = $this->uiFactory->createDropdown("nextLadderMode_integer",
             ["Disable Ladder" => "0", "Use Ladder" => "1"]);
         $this->nextLadderMode->setWidth(60);
         $secondColumn->addChild($this->uiFactory->createLayoutRow(0, 0, [$label, $this->nextLadderMode]));
 
-        $label = $this->uiFactory->createLabel("Ladder Limits ", uiLabel::TYPE_HEADER);
+        $label = $this->uiFactory->createLabel("Ladder Limits ", Label::TYPE_HEADER);
         $label->setWidth(60);
-        $separator = $this->uiFactory->createLabel("   to ", uiLabel::TYPE_HEADER);
+        $separator = $this->uiFactory->createLabel("   to ", Label::TYPE_HEADER);
         $separator->setSize(10, 5);
         $this->ladderServerLimitMax = $this->uiFactory->createInput("ladderServerLimitMax_integer", "", 25);
         $this->ladderServerLimitMin = $this->uiFactory->createInput("ladderServerLimitMin_integer", "", 25);
@@ -178,12 +169,12 @@ class ServerSettingsWindowFactory extends WindowFactory
         $secondColumn->addChild($this->uiFactory->createLayoutRow(0, 0, [$label, $line]));
 
 
-        $label = $this->uiFactory->createLabel("Server Max Players", uiLabel::TYPE_HEADER);
+        $label = $this->uiFactory->createLabel("Server Max Players", Label::TYPE_HEADER);
         $label->setWidth(60);
         $this->nextMaxPlayers = $this->uiFactory->createInput("nextMaxPlayers_integer", "", 60);
         $secondColumn->addChild($this->uiFactory->createLayoutRow(0, 0, [$label, $this->nextMaxPlayers]));
 
-        $label = $this->uiFactory->createLabel("Server Max Spectators", uiLabel::TYPE_HEADER);
+        $label = $this->uiFactory->createLabel("Server Max Spectators", Label::TYPE_HEADER);
         $label->setWidth(60);
         $this->nextMaxSpectators = $this->uiFactory->createInput("nextMaxSpectators_integer", "", 60);
         $secondColumn->addChild($this->uiFactory->createLayoutRow(0, 0, [$label, $this->nextMaxSpectators]));
@@ -249,7 +240,7 @@ class ServerSettingsWindowFactory extends WindowFactory
         $frame->addChild($secondColumn);
         $frame->addChild($tooltip);
 
-        $apply = $this->uiFactory->createButton("Apply", uiButton::TYPE_DECORATED);
+        $apply = $this->uiFactory->createButton("Apply", Button::TYPE_DECORATED);
         $apply->setAction(
             $this->actionFactory->createManialinkAction(
                 $manialink,

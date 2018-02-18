@@ -2,17 +2,19 @@
 
 namespace eXpansion\Framework\Gui\Layouts;
 
-use eXpansion\Framework\Gui\Components\abstractUiElement;
-use eXpansion\Framework\Gui\Components\uiScrollbar;
+use eXpansion\Framework\Gui\Components\AbstractUiElement;
+use eXpansion\Framework\Gui\Components\Scrollbar;
 use FML\Controls\Frame;
 use FML\Controls\Quad;
+use FML\Elements\Format;
 use FML\Script\Features\ScriptFeature;
 use FML\Script\Script;
 use FML\Script\ScriptLabel;
+use FML\Types\Container;
 use FML\Types\Renderable;
 use FML\Types\ScriptFeatureable;
 
-class layoutScrollable extends abstractUiElement implements Renderable, ScriptFeatureable
+class LayoutScrollable extends AbstractUiElement implements Renderable, ScriptFeatureable, Container
 {
 
     protected $force = false;
@@ -27,11 +29,11 @@ class layoutScrollable extends abstractUiElement implements Renderable, ScriptFe
 
     /**
      * layoutScrollable constructor.
-     * @param $frame
-     * @param $sizeX
-     * @param $sizeY
+     * @param Container $frame
+     * @param           $sizeX
+     * @param           $sizeY
      */
-    public function __construct($frame, $sizeX, $sizeY)
+    public function __construct(Container $frame, $sizeX, $sizeY)
     {
         $this->parentFrame = $frame;
         $this->frame_posX = $frame->getX();
@@ -42,6 +44,8 @@ class layoutScrollable extends abstractUiElement implements Renderable, ScriptFe
     }
 
     /**
+     * Set the axis which supports scrolling
+     * default all axis enabled
      * @param bool $x
      * @param bool $y
      *
@@ -55,6 +59,11 @@ class layoutScrollable extends abstractUiElement implements Renderable, ScriptFe
         return $this;
     }
 
+    /**
+     * Forces container size.
+     * @param $x
+     * @param $y
+     */
     public function forceContainerSize($x, $y)
     {
         $this->force = true;
@@ -85,7 +94,7 @@ class layoutScrollable extends abstractUiElement implements Renderable, ScriptFe
         if ($this->scrollbarV) {
             $contentFrame->setSize($this->width - 5, $this->height);
             $this->offset = 5;
-            $container->addChild(new uiScrollbar(
+            $container->addChild(new Scrollbar(
                 "Y",
                 $this->getWidth(),
                 0,
@@ -96,7 +105,7 @@ class layoutScrollable extends abstractUiElement implements Renderable, ScriptFe
 
         if ($this->scrollbarH) {
             $contentFrame->setSize($this->width - 5, $this->height - 5);
-            $container->addChild(new uiScrollbar(
+            $container->addChild(new Scrollbar(
                 "X",
                 0,
                 -$this->getHeight(),
@@ -130,7 +139,7 @@ class layoutScrollable extends abstractUiElement implements Renderable, ScriptFe
      * Prepare the given Script for rendering by adding the needed Labels, etc.
      *
      * @param Script $script Script to prepare
-     * @return static
+     * @return void
      */
     public function prepare(Script $script)
     {
@@ -234,4 +243,110 @@ EOL;
 EOL;
     }
 
+    /**
+     * Get the children
+     *
+     * @api
+     * @return Renderable[]
+     */
+    public function getChildren()
+    {
+        return $this->parentFrame->getChildren();
+    }
+
+    /**
+     * Add a new child
+     *
+     * @api
+     * @param Renderable $child Child Control to add
+     * @return static
+     */
+    public function addChild(Renderable $child)
+    {
+        $this->parentFrame->addChild($child);
+
+        return $this;
+    }
+
+    /**
+     * Add a new child
+     *
+     * @api
+     * @param Renderable $child Child Control to add
+     * @return static
+     * @deprecated Use addChild()
+     * @see        Container::addChild()
+     */
+    public function add(Renderable $child)
+    {
+        // do nothing
+    }
+
+    /**
+     * Add new children
+     *
+     * @api
+     * @param Renderable[] $children Child Controls to add
+     * @return static
+     */
+    public function addChildren(array $children)
+    {
+        $this->parentFrame->addChildren($children);
+
+        return $this;
+    }
+
+    /**
+     * Remove all children
+     *
+     * @api
+     * @return static
+     */
+    public function removeAllChildren()
+    {
+        $this->parentFrame->removeAllChildren();
+
+        return $this;
+    }
+
+    /**
+     * Remove all children
+     *
+     * @api
+     * @return static
+     * @deprecated Use removeAllChildren()
+     * @see        Container::removeAllChildren()
+     */
+    public function removeChildren()
+    {
+        // do nothing
+    }
+
+    /**
+     * Get the Format
+     *
+     * @api
+     * @param bool $createIfEmpty If the format should be created if it doesn't exist yet
+     * @return Format
+     * @deprecated Use Style
+     * @see        Style
+     */
+    public function getFormat($createIfEmpty = true)
+    {
+        // do nothing
+    }
+
+    /**
+     * Set the Format
+     *
+     * @api
+     * @param Format $format New Format
+     * @return static
+     * @deprecated Use Style
+     * @see        Style
+     */
+    public function setFormat(Format $format = null)
+    {
+        // do nothing
+    }
 }

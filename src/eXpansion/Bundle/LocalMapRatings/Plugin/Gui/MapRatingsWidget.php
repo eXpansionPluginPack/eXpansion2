@@ -8,15 +8,15 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
-use eXpansion\Framework\Gui\Components\uiLabel;
+use eXpansion\Framework\Gui\Components\Label;
 
 class MapRatingsWidget extends WidgetFactory
 {
 
-    /** @var uiLabel */
+    /** @var Label */
     private $lblRatingsYes;
 
-    /** @var uiLabel */
+    /** @var Label */
     private $lblRatingsNo;
 
     /**
@@ -49,14 +49,14 @@ class MapRatingsWidget extends WidgetFactory
         $line = $this->uiFactory->createLayoutLine(0, 0, [], 2);
         $manialink->addChild($line);
 
-        $this->lblRatingsYes = $this->uiFactory->createLabel("", uiLabel::TYPE_TITLE);
+        $this->lblRatingsYes = $this->uiFactory->createLabel("", Label::TYPE_TITLE);
         $this->lblRatingsYes->setTextSize(2)
             ->setSize(7, 4)
             ->setAction($this->actionFactory->createManialinkAction($manialink,
                 [$this, "callbackVoteYes"], []));
         $line->addChild($this->lblRatingsYes);
 
-        $this->lblRatingsNo = $this->uiFactory->createLabel("", uiLabel::TYPE_TITLE);
+        $this->lblRatingsNo = $this->uiFactory->createLabel("", Label::TYPE_TITLE);
         $this->lblRatingsNo->setTextSize(2)
             ->setSize(7, 4)
             ->setAction($this->actionFactory->createManialinkAction($manialink,

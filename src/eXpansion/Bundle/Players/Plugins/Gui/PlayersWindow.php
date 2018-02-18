@@ -13,9 +13,9 @@ use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\GridWindowFactory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\ChatCommandDataProvider;
-use eXpansion\Framework\Gui\Components\uiButton;
-use eXpansion\Framework\Gui\Components\uiLabel;
-use eXpansion\Framework\Gui\Layouts\layoutRow;
+use eXpansion\Framework\Gui\Components\Button;
+use eXpansion\Framework\Gui\Components\Label;
+use eXpansion\Framework\Gui\Layouts\LayoutRow;
 use FML\Controls\Frame;
 use Maniaplanet\DedicatedServer\Connection;
 
@@ -178,7 +178,7 @@ class PlayersWindow extends GridWindowFactory
         $row = $this->uiFactory->createLayoutRow(0, 0, [], -2);
 
 
-        $element = $this->uiFactory->createLabel($player->getNickName(), uiLabel::TYPE_HEADER);
+        $element = $this->uiFactory->createLabel($player->getNickName(), Label::TYPE_HEADER);
         $element->setTextSize(5)->setSize($width, 10)->setAlign("center", "top")
             ->setPosition($width / 2, 0);
         $row->addChild($element);
@@ -228,7 +228,7 @@ class PlayersWindow extends GridWindowFactory
 
     /**
      * @param ManialinkInterface $manialink
-     * @param layoutRow          $row
+     * @param LayoutRow          $row
      */
     private function createAdminControls($manialink, $row)
     {
@@ -237,19 +237,19 @@ class PlayersWindow extends GridWindowFactory
 
         if ($this->getIgnoredStatus($login)) {
             $muteText = "expansion_players.gui.players.window.allow";
-            $color = uiButton::COLOR_SUCCESS;
+            $color = Button::COLOR_SUCCESS;
         } else {
             $muteText = "expansion_players.gui.players.window.mute";
-            $color = uiButton::COLOR_WARNING;
+            $color = Button::COLOR_WARNING;
         }
 
         $elem = [
-            $this->uiFactory->createConfirmButton($muteText, uiButton::TYPE_DEFAULT)
+            $this->uiFactory->createConfirmButton($muteText, Button::TYPE_DEFAULT)
                 ->setAction($actions['mute'])
                 ->setBackgroundColor($color),
-            $this->uiFactory->createConfirmButton("expansion_players.gui.players.window.guest", uiButton::TYPE_DEFAULT)
+            $this->uiFactory->createConfirmButton("expansion_players.gui.players.window.guest", Button::TYPE_DEFAULT)
                 ->setAction($actions['guest'])
-                ->setBackgroundColor(UiButton::COLOR_DEFAULT),
+                ->setBackgroundColor(Button::COLOR_DEFAULT),
         ];
         $line = $this->uiFactory->createLayoutLine(0, 0, $elem, 2);
         $row->addChild($line);
@@ -267,15 +267,15 @@ class PlayersWindow extends GridWindowFactory
 
 
         $elem = [
-            $this->uiFactory->createConfirmButton("expansion_players.gui.players.window.kick", uiButton::TYPE_DEFAULT)
+            $this->uiFactory->createConfirmButton("expansion_players.gui.players.window.kick", Button::TYPE_DEFAULT)
                 ->setAction($actions['kick'])
-                ->setBackgroundColor(UiButton::COLOR_DEFAULT),
-            $this->uiFactory->createConfirmButton("expansion_players.gui.players.window.ban", uiButton::TYPE_DEFAULT)
+                ->setBackgroundColor(Button::COLOR_DEFAULT),
+            $this->uiFactory->createConfirmButton("expansion_players.gui.players.window.ban", Button::TYPE_DEFAULT)
                 ->setAction($actions['ban'])
-                ->setBackgroundColor(UiButton::COLOR_DEFAULT),
-            $this->uiFactory->createConfirmButton("expansion_players.gui.players.window.black", uiButton::TYPE_DEFAULT)
+                ->setBackgroundColor(Button::COLOR_DEFAULT),
+            $this->uiFactory->createConfirmButton("expansion_players.gui.players.window.black", Button::TYPE_DEFAULT)
                 ->setAction($actions['black'])
-                ->setBackgroundColor(UiButton::COLOR_SECONDARY),
+                ->setBackgroundColor(Button::COLOR_SECONDARY),
 
 
         ];
@@ -292,7 +292,7 @@ class PlayersWindow extends GridWindowFactory
         $this->updateData($manialink);
 
         $selectButton = $this->uiFactory->createButton('expansion_players.gui.players.window.column.select',
-            uiButton::TYPE_DEFAULT)->setSize(10, 5)->setTranslate(true);
+            Button::TYPE_DEFAULT)->setSize(10, 5)->setTranslate(true);
 
         $gridBuilder = $this->gridBuilderFactory->create();
         $gridBuilder->setManialink($manialink)
