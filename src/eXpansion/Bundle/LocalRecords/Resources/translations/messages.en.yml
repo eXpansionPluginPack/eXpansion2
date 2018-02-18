@@ -54,3 +54,19 @@ expansion_local_records:
       race_recs: "Previous Race Records"
       laps_recs: "Previous Lap Records"
 
+
+  config:
+    nb_records:
+      name: "Number of Local Records"
+      dsc: "Number of records that's saved in the database for each map."
+
+    notification_public_threshold:
+      name: "Public notificaiton threshold"
+      dsc: "Records better then this threshold will be announced to all players."
+
+expansion_config:
+  menu:
+    eXpansion:
+      label: "eXpansion Configs"
+      LocalRecords:
+        label: "Local Records"

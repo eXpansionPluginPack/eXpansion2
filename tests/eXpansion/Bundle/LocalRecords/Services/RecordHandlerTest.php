@@ -6,6 +6,7 @@ use eXpansion\Bundle\LocalRecords\Model\Record;
 use eXpansion\Bundle\LocalRecords\Model\RecordQuery;
 use eXpansion\Bundle\LocalRecords\Model\RecordQueryBuilder;
 use eXpansion\Bundle\LocalRecords\Services\RecordHandler;
+use eXpansion\Framework\Config\Model\ConfigInterface;
 use eXpansion\Framework\PlayersBundle\Model\Player;
 use eXpansion\Framework\PlayersBundle\Storage\PlayerDb;
 
@@ -399,7 +400,10 @@ class RecordHandlerTest extends \PHPUnit_Framework_TestCase
      */
     protected function getRecordHandler($limit = 10, $order = RecordHandler::ORDER_ASC)
     {
-        return new RecordHandler($this->mockRecordQueryBuilder, $this->playerDbMock, $limit, $order);
+        $config = $this->getMockBuilder(ConfigInterface::class)->getMock();
+        $config->method('get')->willReturn($limit);
+
+        return new RecordHandler($this->mockRecordQueryBuilder, $this->playerDbMock, $config, $order);
     }
 
     /**

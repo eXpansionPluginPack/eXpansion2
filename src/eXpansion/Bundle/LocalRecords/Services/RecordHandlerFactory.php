@@ -3,6 +3,7 @@
 namespace eXpansion\Bundle\LocalRecords\Services;
 
 use eXpansion\Bundle\LocalRecords\Model\RecordQueryBuilder;
+use eXpansion\Framework\Config\Model\ConfigInterface;
 use eXpansion\Framework\PlayersBundle\Storage\PlayerDb;
 
 
@@ -23,7 +24,7 @@ class RecordHandlerFactory
     /** @var string */
     protected $ordering;
 
-    /** @var int */
+    /** @var ConfigInterface */
     protected $nbRecords;
 
     /** @var string */
@@ -35,14 +36,14 @@ class RecordHandlerFactory
      * @param RecordQueryBuilder $recordQueryBuilder
      * @param PlayerDb $playerDb
      * @param string $ordering
-     * @param int $nbRecords
+     * @param ConfigInterface $nbRecords
      * @param string $className
      */
     public function __construct(
         RecordQueryBuilder $recordQueryBuilder,
         PlayerDb $playerDb,
         $ordering,
-        $nbRecords,
+        ConfigInterface $nbRecords,
         $className = RecordHandler::class
     ) {
         $this->recordQueryBuilder = $recordQueryBuilder;

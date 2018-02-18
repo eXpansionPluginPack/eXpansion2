@@ -12,7 +12,6 @@ use FML\Types\ScriptFeatureable;
 
 class Tooltip extends AbstractUiElement implements ScriptFeatureable
 {
-
     protected $element;
 
     /**
