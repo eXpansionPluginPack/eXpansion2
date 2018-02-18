@@ -59,6 +59,9 @@ class ConfigManager implements ConfigManagerInterface
      * ConfigManager constructor.
      *
      * @param DispatcherInterface $dispatcher
+     * @param GameDataStorage     $gameDataStorage
+     * @param Filesystem          $filesystem
+     * @param LoggerInterface     $logger
      */
     public function __construct(
         DispatcherInterface $dispatcher,
@@ -108,7 +111,7 @@ class ConfigManager implements ConfigManagerInterface
         // Dispatch and save changes.
         if ($this->disableDispatch || $oldValue === $value) {
             $this->logger->debug(
-                'New conig was set, but no changes, save and dispatch are canceled!',
+                'New config was set, but no changes, save and dispatch are canceled!',
                 ['path' => $path]
             );
             return true;

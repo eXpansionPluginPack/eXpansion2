@@ -12,8 +12,8 @@ use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WindowFactory;
-use eXpansion\Framework\Gui\Components\uiButton;
-use eXpansion\Framework\Gui\Components\uiTooltip;
+use eXpansion\Framework\Gui\Components\Button;
+use eXpansion\Framework\Gui\Components\Tooltip;
 use FML\Controls\Control;
 use FML\Controls\Frame;
 use FML\Controls\Quad;
@@ -85,7 +85,7 @@ class ConfigWindowFactory extends WindowFactory
         $tooltip = $this->uiFactory->createTooltip();
         $manialink->addChild($tooltip);
 
-        $saveButton = $this->uiFactory->createConfirmButton('expansion_config.ui.save', uiButton::COLOR_SUCCESS);
+        $saveButton = $this->uiFactory->createConfirmButton('expansion_config.ui.save', Button::COLOR_SUCCESS);
         $saveButton->setAction(
                 $this->actionFactory->createManialinkAction(
                     $manialink,
@@ -127,11 +127,11 @@ class ConfigWindowFactory extends WindowFactory
      *
      * @param ConfigInterface $config
      * @param                 $sizeX
-     * @param uiTooltip       $tooltip
+     * @param Tooltip       $tooltip
      *
-     * @return \eXpansion\Framework\Gui\Layouts\layoutLine
+     * @return \eXpansion\Framework\Gui\Layouts\LayoutLine
      */
-    protected function buildConfig(ConfigInterface $config, $sizeX, uiTooltip $tooltip)
+    protected function buildConfig(ConfigInterface $config, $sizeX, Tooltip $tooltip)
     {
         $descriptionButton = new Quad_Icons64x64_1();
         $descriptionButton->setSubStyle(Quad_Icons64x64_1::SUBSTYLE_TrackInfo)
@@ -193,7 +193,7 @@ class ConfigWindowFactory extends WindowFactory
         }
 
         if ($error) {
-            // Don't set values and dont refresh window.
+            // Don't set values and don't refresh window.
             return;
         }
 

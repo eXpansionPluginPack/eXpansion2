@@ -12,7 +12,7 @@ parameters:
   expansion.gui.components.animation.class: 'eXpansion\Framework\Gui\Components\Animation'
   expansion.gui.layout.line.class: 'eXpansion\Framework\Gui\Layouts\LayoutLine'
   expansion.gui.layout.row.class: 'eXpansion\Framework\Gui\Layouts\LayoutRow'
-  expansion.gui.layout.scrollable.class: 'eXpansion\Framework\Gui\Layouts\LayoutScrollable'
+  expansion.gui.layout.scroll.class: 'eXpansion\Framework\Gui\Layouts\LayoutScrollable'
 
   expansion.gui.components.list:
     Button:   '%expansion.gui.components.button.class%'
@@ -28,7 +28,7 @@ parameters:
     Animation:  '%expansion.gui.components.animation.class%'
     LayoutLine:  '%expansion.gui.layout.line.class%'
     LayoutRow:  '%expansion.gui.layout.row.class%'
-    LayoutScrollable:  '%expansion.gui.layout.scrollable.class%'
+    LayoutScrollable:  '%expansion.gui.layout.scroll.class%'
 
 services:
   expansion.gui.component.factory:
