@@ -46,7 +46,9 @@ class eXpansionCoreExtension extends Extension
         $loader->load('listeners.yml');
         $loader->load('plugins.yml');
 
-        if ($container->getParameter('kernel.environment') == 'prod') {
+        if ($container->getParameter('kernel.environment') == 'dev') {
+            $loader->load('plugins_dev.yml');
+        } elseif ($container->getParameter('kernel.environment') == 'prod') {
             $loader->load('plugins_prod.yml');
         }
     }
