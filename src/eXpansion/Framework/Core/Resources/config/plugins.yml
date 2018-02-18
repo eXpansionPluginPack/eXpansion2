@@ -85,16 +85,3 @@ services:
             $pingInterval: 300 #Ping database every 5 minutes.
         tags:
             - {name: expansion.plugin, data_provider: exp.timer}
-
-    #
-    # Plugin to send analytics data to eXpansion master server.
-    #
-    eXpansion\Framework\Core\Plugins\Analytics:
-        class: 'eXpansion\Framework\Core\Plugins\Analytics'
-        arguments:
-            $url: 'http://server1.oliver-decramer.com/exp/input.php'
-            $pingInterval: 600
-            $retryInterval: 14400
-        tags:
-            - {name: expansion.plugin, data_provider: exp.timer}
-
