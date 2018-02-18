@@ -12,12 +12,12 @@ use eXpansion\Framework\Gui\Components\Dropdown;
 use eXpansion\Framework\Gui\Components\Input;
 use eXpansion\Framework\Gui\Components\InputMasked;
 use eXpansion\Framework\Gui\Components\Label;
-use eXpansion\Framework\Gui\Components\line;
+use eXpansion\Framework\Gui\Components\Line;
 use eXpansion\Framework\Gui\Components\Textbox;
 use eXpansion\Framework\Gui\Components\Tooltip;
 use eXpansion\Framework\Gui\Layouts\LayoutLine;
 use eXpansion\Framework\Gui\Layouts\LayoutRow;
-
+use eXpansion\Framework\Gui\Layouts\LayoutScrollable;
 /**
  * Class Factory
  *
@@ -32,14 +32,14 @@ use eXpansion\Framework\Gui\Layouts\LayoutRow;
  * @method Input createInput($name, $default = "", $width = 30)
  * @method InputMasked createInputMasked($name, $default = "", $width = 30)
  * @method Label createLabel($text = "", $type = Label::TYPE_NORMAL, $controlId = null)
- * @method line createLine($x, $y)
+ * @method Line createLine($x, $y)
  * @method Textbox createTextbox($name, $default = "", $lines = 1, $width = 30)
  * @method Tooltip createTooltip()
  * @method Animation createAnimation()
  *
  * @method LayoutLine createLayoutLine($startX, $startY, $elements = [], $margin = 0.);
  * @method LayoutRow createLayoutRow($startX, $startY, $elements = [], $margin = 0.);
- *
+ * @method LayoutScrollable createLayoutScrollable($frame, $sizeX, $sizeY);
  */
 class Factory
 {

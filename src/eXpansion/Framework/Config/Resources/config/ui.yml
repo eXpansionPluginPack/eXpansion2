@@ -1,0 +1,17 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    eXpansion\Framework\Config\Ui\Fields\:
+        resource: '../../Ui/Fields/*'
+        tags:
+            - {name: 'expansion.config.ui', data_provider: 'exp.menu.items'}
+
+    eXpansion\Framework\Config\Ui\Window\ConfigWindowFactory:
+        class: eXpansion\Framework\Config\Ui\Window\ConfigWindowFactory
+        arguments:
+            $name: "Configuration"
+            $sizeX : 128
+            $sizeY : 120

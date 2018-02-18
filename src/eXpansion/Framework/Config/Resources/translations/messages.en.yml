@@ -1,0 +1,13 @@
+expansion_config:
+  menu:
+    label: "Controller configuration"
+  ui:
+    save: "Save settings"
+
+  error:
+    decimal:
+      not_decimal: '{error}Value "%value%" is not a decimal value; Config "%path%" requires a decimal value.'
+      max: '{error}Max value for config %path% is %max%. You tried and set %value%.'
+      min: '{error}Min value for config %path% is %min%. You tried and set %value%.'
+    int:
+      not_int: '{error}Value "%value%" is not an integer value; Config "%path%" requires an integer value.'

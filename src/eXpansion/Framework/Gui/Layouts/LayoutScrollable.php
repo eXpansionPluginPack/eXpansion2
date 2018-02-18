@@ -46,11 +46,15 @@ class LayoutScrollable extends AbstractUiElement implements Renderable, ScriptFe
      * default all axis enabled
      * @param bool $x
      * @param bool $y
+     *
+     * @return $this
      */
     public function setAxis($x, $y)
     {
         $this->scrollbarH = $x;
         $this->scrollbarV = $y;
+
+        return $this;
     }
 
     /**

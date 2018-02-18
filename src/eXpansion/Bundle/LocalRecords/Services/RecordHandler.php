@@ -5,6 +5,7 @@ namespace eXpansion\Bundle\LocalRecords\Services;
 use eXpansion\Bundle\LocalRecords\Model\Map\RecordTableMap;
 use eXpansion\Bundle\LocalRecords\Model\Record;
 use eXpansion\Bundle\LocalRecords\Model\RecordQueryBuilder;
+use eXpansion\Framework\Config\Model\ConfigInterface;
 use eXpansion\Framework\PlayersBundle\Model\Map\PlayerTableMap;
 use eXpansion\Framework\PlayersBundle\Storage\PlayerDb;
 use Propel\Runtime\Propel;
@@ -41,7 +42,7 @@ class RecordHandler
     const COL_OLD_POS = 'old_position';
     const COL_RECORDS = 'records';
 
-    /** @var int */
+    /** @var ConfigInterface */
     protected $nbRecords;
 
     /** @var string */
@@ -73,13 +74,13 @@ class RecordHandler
      *
      * @param RecordQueryBuilder $recordQueryBuilder
      * @param PlayerDb           $playerDb
-     * @param int                $nbRecords
+     * @param ConfigInterface    $nbRecords
      * @param string             $ordering
      */
     public function __construct(
         RecordQueryBuilder $recordQueryBuilder,
         PlayerDb $playerDb,
-        $nbRecords,
+        ConfigInterface $nbRecords,
         $ordering = self::ORDER_ASC
     ) {
         $this->recordQueryBuilder = $recordQueryBuilder;
@@ -148,7 +149,7 @@ class RecordHandler
         $this->currentNbLaps = $nbLaps;
 
         $this->records = $this->recordQueryBuilder
-            ->getMapRecords($mapUid, $nbLaps, $this->getScoreOrdering(), $this->nbRecords);
+            ->getMapRecords($mapUid, $nbLaps, $this->getScoreOrdering(), $this->nbRecords->get());
 
         $position = 1;
         foreach ($this->records as $record) {
@@ -271,9 +272,9 @@ class RecordHandler
             $record->setCheckpoints($checkpoints);
 
             // Remove entries whose position is superior to the limit.
-            $this->records = array_slice($this->records, 0, $this->nbRecords);
+            $this->records = array_slice($this->records, 0, $this->nbRecords->get());
 
-            if ($newPosition <= $this->nbRecords) {
+            if ($newPosition <= $this->nbRecords->get()) {
                 if ($newPosition != $oldPosition || $firstTime) {
                     return [
                         self::COL_EVENT => self::EVENT_TYPE_BETTER_POS,
