@@ -7,12 +7,13 @@ services:
     eXpansion\Bundle\DeveloperTools\Plugins\DevTools:
         class: eXpansion\Bundle\DeveloperTools\Plugins\DevTools
         arguments:
-            $players: '@expansion.framework.core.user_groups.players'
+            $players: '@expansion.framework.core.user_groups.all_players'
         tags:
             - {name: 'expansion.plugin', data_provider: 'exp.application'}
+            - {name: 'expansion.plugin', data_provider: 'exp.timer'}
 
-    eXpansion\Bundle\DeveloperTools\Plugins\Gui\MemoryWidgetFactory:
-            class: 'eXpansion\Bundle\Acme\Plugins\Gui\MemoryWidgetFactory'
+    eXpansion\Bundle\DeveloperTools\Plugins\Gui\MemoryWidget:
+            class: eXpansion\Bundle\DeveloperTools\Plugins\Gui\MemoryWidget
             arguments:
                 $name:  "memory"
                 $posX: 80

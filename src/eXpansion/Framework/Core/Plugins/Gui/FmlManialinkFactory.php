@@ -5,6 +5,7 @@ namespace eXpansion\Framework\Core\Plugins\Gui;
 
 use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryContext;
+use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Gui\Ui\Factory;
 use FML\Controls\Control;
 
@@ -44,7 +45,24 @@ class FmlManialinkFactory extends ManialinkFactory
         // Hack for FML to use default MP alignements.
         Control::clearDefaultAlign();
         $this->uiFactory = $context->getUiFactory();
+        $this->translationsHelper = $context->getTranslationsHelper();
     }
 
+    protected function createManialink(Group $group)
+    {
+        $className = $this->className;
+        $manialink = new $className(
+            $this,
+            $group,
+            $this->translationsHelper,
+            $this->name,
+            $this->sizeX,
+            $this->sizeY,
+            $this->posX,
+            $this->posY
+        );
+
+        return $manialink;
+    }
 
 }

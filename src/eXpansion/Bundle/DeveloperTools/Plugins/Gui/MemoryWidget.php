@@ -1,17 +1,15 @@
 <?php
 
-namespace eXpansion\Bundle\Acme\Plugins\Gui;
+namespace eXpansion\Bundle\DeveloperTools\Plugins\Gui;
 
+use eXpansion\Framework\Core\Model\Gui\FmlManialinkFactoryContext;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
-use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
-use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
+use eXpansion\Framework\Core\Plugins\Gui\FmlManialinkFactory;
 use eXpansion\Framework\Gui\Ui\Factory;
 use FML\Controls\Label;
-use FML\Script\Script;
-use FML\Script\ScriptLabel;
 
-class MemoryWidget extends WidgetFactory
+class MemoryWidget extends FmlManialinkFactory
 {
     /** @var  Label */
     protected $memoryMessage;
@@ -19,15 +17,13 @@ class MemoryWidget extends WidgetFactory
     /** @var Factory */
     protected $uiFactory;
 
-    public static $exp_hash;
-
     public function __construct(
         $name,
         $sizeX,
         $sizeY,
         $posX,
         $posY,
-        WidgetFactoryContext $context
+        FmlManialinkFactoryContext $context
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
 
@@ -43,28 +39,16 @@ class MemoryWidget extends WidgetFactory
         $this->memoryMessage->setTextPrefix('$s')->setTextSize(3)->setSize(60, 5)
             ->setScale(0.7);
         $manialink->addChild($this->memoryMessage);
+        $manialink->getFmlManialink()->setScript(null);
 
-        self::$exp_hash = uniqid("exp");
     }
 
-    protected function updateContent(ManialinkInterface $manialink)
+    /**
+     * @param string $message
+     */
+    public function setMemoryMessage($message)
     {
-
-        $this->memoryMessage->setText(Test::$memoryMsg);
-        $message = "Time now:".date("h:i:s");
-
-        $hash = self::$exp_hash;
-
-        $script = new Script();
-        $script->addCustomScriptLabel(ScriptLabel::OnInit,
-            '
-           declare Text '.$hash.' for LocalUser = Text;
-           '.$hash.' = "'.$message.'";
-           declare Text '.$hash.'_check for LocalUser = "";
-           '.$hash.'_check = "$now";
-           '
-        );
-        $manialink->getFmlManialink()->setScript($script);
+        $this->memoryMessage->setText($message);
     }
 
 }
