@@ -48,5 +48,9 @@ class eXpansionCoreExtension extends Extension
 
         // Temporary for the prototype.
         $loader->load('plugins.yml');
+
+        if ($container->getParameter('kernel.environment') == 'dev') {
+            $loader->load('plugins_dev.yml');
+        }
     }
 }

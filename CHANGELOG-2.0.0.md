@@ -8,6 +8,7 @@
 ## Features 
 
 * Feature #262 : Added support to ping eXpansion Analytics.
+* Feature #266 : Add warning that displayes every 5 minutes about dev mode.
 
 # 2.0.0.0-alpha2 (2018-02-03)
 
