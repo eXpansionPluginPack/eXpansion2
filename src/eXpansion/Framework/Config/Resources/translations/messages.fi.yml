@@ -1,0 +1,13 @@
+expansion_config:
+  menu:
+    label: "Kontrollerin asetukset"
+  ui:
+    save: "Tallenna asetukset"
+
+  error:
+    decimal:
+      not_decimal: '{error}Arvo "%value%" ei ole desimaaliluku; Asetus "%path%" vaatii desimaaliluvun.'
+      max: '{error}Suurin sallittu arvo asetukselle %path% on %max%. Yritit asettaa arvon %value%.'
+      min: '{error}Pienin sallittu arvo asetukselle %path% on %min%. Yritit asettaa arvon %value%.'
+    int:
+      not_int: '{error}Arvo "%value%" ei ole kokonaisluku; Asetus "%path%" vaatii kokonaisluvun.'
