@@ -136,7 +136,8 @@ class ConfigWindowFactory extends WindowFactory
         $descriptionButton = new Quad_Icons64x64_1();
         $descriptionButton->setSubStyle(Quad_Icons64x64_1::SUBSTYLE_TrackInfo)
             ->setSize(4, 4);
-        $tooltip->addTooltip($descriptionButton, $config->getDescription());
+        // Temporary to get en, tooltip don't support translations.
+        $tooltip->addTooltip($descriptionButton, $this->chatNotification->getMessage($config->getDescription()));
 
         $sizeX -= 4 + 6;
 
@@ -147,7 +148,10 @@ class ConfigWindowFactory extends WindowFactory
                 $this->uiFactory
                     ->createLabel($config->getName())
                     ->setWidth($sizeX * 0.35)
-                    ->setHorizontalAlign(Control::RIGHT),
+                    ->setHorizontalAlign(Control::RIGHT)
+                    ->setTranslate(true)
+                    ->setTextId($config->getName())
+                    ->setText(null),
                 $this->configUiManager->getUiHandler($config)->build($config, $sizeX * 0.65),
                 $descriptionButton
             ],
