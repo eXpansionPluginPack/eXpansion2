@@ -44,11 +44,15 @@ class layoutScrollable extends abstractUiElement implements Renderable, ScriptFe
     /**
      * @param bool $x
      * @param bool $y
+     *
+     * @return $this
      */
     public function setAxis($x, $y)
     {
         $this->scrollbarH = $x;
         $this->scrollbarV = $y;
+
+        return $this;
     }
 
     public function forceContainerSize($x, $y)

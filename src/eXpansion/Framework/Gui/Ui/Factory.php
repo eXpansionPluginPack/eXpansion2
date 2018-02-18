@@ -18,6 +18,7 @@ use eXpansion\Framework\Gui\Layouts\layoutLine;
 use eXpansion\Framework\Gui\Layouts\layoutRow;
 
 use eXpansion\Framework\Core\Exceptions\UnknownMethodException;
+use eXpansion\Framework\Gui\Layouts\layoutScrollable;
 use FML\Controls\Frame;
 
 /**
@@ -41,6 +42,7 @@ use FML\Controls\Frame;
  *
  * @method layoutLine createLayoutLine($startX, $startY, $elements = [], $margin = 0.);
  * @method layoutRow createLayoutRow($startX, $startY, $elements = [], $margin = 0.);
+ * @method layoutScrollable createLayoutScrollable($frame, $sizeX, $sizeY);
  *
  */
 class Factory

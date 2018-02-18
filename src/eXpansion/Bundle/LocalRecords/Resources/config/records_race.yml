@@ -11,7 +11,7 @@ services:
         class: eXpansion\Bundle\LocalRecords\Services\RecordHandlerFactory
         arguments:
             $ordering: ASC
-            $nbRecords: '%eXpansion.local_records.nb_records%'
+            $nbRecords: '@eXpansion.local_records.config.nb_records'
 
     # Plugins to save race records in all TM gamemodes.
     expansion.local_records.plugins.race_records:
@@ -44,6 +44,6 @@ services:
         class: eXpansion\Bundle\LocalRecords\Plugins\ChatNotification
         arguments:
             $translationPrefix: 'expansion_local_records.chat.race'
-            $positionForPublicMessage: 20
+            $positionForPublicMessage: '@eXpansion.local_records.config.notification_public_threshold'
         tags:
             - {name: 'expansion.plugin', data_provider: 'expansion.local_records.race'}

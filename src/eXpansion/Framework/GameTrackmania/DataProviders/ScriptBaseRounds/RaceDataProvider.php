@@ -9,7 +9,7 @@ use Maniaplanet\DedicatedServer\Structures\Map;
 /**
  * Class RaceDataProvider
  *
- * @author    de Cramer Oliver<oldec@smile.fr>
+ * @author    de Cramer Oliver<oliverde8@gmail.com>
  * @copyright 2017 Smile
  * @package eXpansion\Framework\GameTrackmania\DataProviders\ScriptBaseRounds
  */

@@ -1,14 +1,21 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: olive
+ * Date: 12/03/2017
+ * Time: 10:04
+ */
 
-namespace eXpansion\Bundle\LocalRecords\DependencyInjection;
+namespace eXpansion\Framework\Config\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader;
 
-class LocalRecordsExtension extends Extension
+class eXpansionConfigExtension extends Extension
 {
+
     /**
      * Loads a specific configuration.
      *
@@ -21,11 +28,7 @@ class LocalRecordsExtension extends Extension
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
-        $loader->load('chat_commands.yml');
-        $loader->load('commands.yml');
-        $loader->load('gui.yml');
-        $loader->load('records_race.yml');
-        $loader->load('records_lap.yml');
-        $loader->load('configs.yml');
+        $loader->load('plugins.yml');
+        $loader->load('ui.yml');
     }
 }

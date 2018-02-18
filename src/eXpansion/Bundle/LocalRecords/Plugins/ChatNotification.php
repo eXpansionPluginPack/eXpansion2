@@ -4,6 +4,7 @@ namespace eXpansion\Bundle\LocalRecords\Plugins;
 
 use eXpansion\Bundle\LocalRecords\DataProviders\Listener\RecordsDataListener;
 use eXpansion\Bundle\LocalRecords\Model\Record;
+use eXpansion\Framework\Config\Model\ConfigInterface;
 use eXpansion\Framework\Core\Helpers\ChatNotification as ChatNotificationHelper;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Helpers\TMString;
@@ -30,7 +31,7 @@ class ChatNotification implements RecordsDataListener
     /** @var string */
     protected $translationPrefix;
 
-    /** @var int */
+    /** @var ConfigInterface */
     protected $positionForPublicMessage;
 
     /**
@@ -47,7 +48,7 @@ class ChatNotification implements RecordsDataListener
         Time $timeFormater,
         PlayerStorage $playerStorage,
         $translationPrefix,
-        $positionForPublicMessage
+        ConfigInterface $positionForPublicMessage
     ) {
         $this->chatNotification = $chatNotification;
         $this->timeFormater = $timeFormater;
@@ -133,7 +134,7 @@ class ChatNotification implements RecordsDataListener
 
         // Check to who to send.
         $to = null;
-        if ($position > $this->positionForPublicMessage) {
+        if ($position > $this->positionForPublicMessage->get()) {
             $to = $record->getPlayer()->getLogin();
         }
 
@@ -182,7 +183,7 @@ class ChatNotification implements RecordsDataListener
     {
         // Check to who to send.
         $to = null;
-        if ($position > $this->positionForPublicMessage) {
+        if ($position > $this->positionForPublicMessage->get()) {
             $to = $record->getPlayer()->getLogin();
         }
 

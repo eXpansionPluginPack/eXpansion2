@@ -1,0 +1,30 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    eXpansion.local_records.config.nb_records:
+        class: eXpansion\Framework\Config\Model\IntegerConfig
+        arguments:
+            $path: "eXpansion/LocalRecords/NbRecords"
+            $name: "expansion_local_records.config.nb_records.name"
+            $scope: "global"
+            $description: "expansion_local_records.config.nb_records.dsc"
+            $defaultValue: 100
+            $minValue: 10
+            $maxValue: 10000
+        tags:
+            - {name: expansion.config}
+
+    eXpansion.local_records.config.notification_public_threshold:
+        class: eXpansion\Framework\Config\Model\IntegerConfig
+        arguments:
+            $path: "eXpansion/LocalRecords/NotificationPublicThreshold"
+            $name: "expansion_local_records.config.notification_public_threshold.name"
+            $scope: "global"
+            $description: "expansion_local_records.config.notification_public_threshold.dsc" #TODO add translation and all
+            $defaultValue: 20
+            $maxValue: 100
+            $minValue: 0
+        tags:
+            - {name: expansion.config}
