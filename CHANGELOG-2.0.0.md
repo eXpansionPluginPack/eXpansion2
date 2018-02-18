@@ -3,7 +3,8 @@
 ## Features
 
 * Added ingame configuration system. 
-
+* Added DeveloperTools bundle
+ 
 # 2.0.0.0-alpha2 (2018-02-03)
 
 ## Bug Fixes
