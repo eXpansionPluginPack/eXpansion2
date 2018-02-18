@@ -8,7 +8,7 @@ use FML\Controls\TextEdit;
 use FML\Script\Script;
 use FML\Types\Renderable;
 
-class uiTextbox extends abstractUiElement implements Renderable
+class Textbox extends AbstractUiElement implements Renderable
 {
 
     /**
@@ -69,7 +69,7 @@ class uiTextbox extends abstractUiElement implements Renderable
             ->setPosition(1, -1)
             ->setDefault($this->default)
             ->setAlign("left", "top")
-            ->addClass("uiInput")
+            ->addClass("UiInput")
             ->setAreaColor("0005")
             ->setAreaFocusColor('000a')
             ->setTextFormat('Basic')

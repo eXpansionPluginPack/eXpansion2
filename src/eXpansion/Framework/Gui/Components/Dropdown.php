@@ -2,16 +2,16 @@
 
 namespace eXpansion\Framework\Gui\Components;
 
-use eXpansion\Framework\Gui\Layouts\layoutRow;
+use eXpansion\Framework\Gui\Layouts\LayoutRow;
 use FML\Controls\Entry;
 use FML\Controls\Frame;
-use FML\Controls\Label;
+use FML\Controls\Label as FMLLabel;
 use FML\Script\Features\ScriptFeature;
 use FML\Script\Script;
 use FML\Script\ScriptLabel;
 use FML\Types\ScriptFeatureable;
 
-class uiDropdown extends abstractUiElement implements ScriptFeatureable
+class Dropdown extends AbstractuiElement implements ScriptFeatureable
 {
     /** @var int */
     protected $selectedIndex;
@@ -51,7 +51,7 @@ class uiDropdown extends abstractUiElement implements ScriptFeatureable
      * Prepare the given Script for rendering by adding the needed Labels, etc.
      *
      * @param Script $script Script to prepare
-     * @return static
+     * @return void
      */
     public function prepare(Script $script)
     {
@@ -161,6 +161,7 @@ EOD;
      * <label pos="0 -10" z-index="0" size="25 5" text="option 3" data-value="sad" data-index="2" focusareacolor1="000" focusareacolor2="222" scriptevents="1" class="uiElement"/>
      * </frame>
      * </frame>
+     * @throws \Exception
      */
     public function render(\DOMDocument $domDocument)
     {
@@ -174,13 +175,15 @@ EOD;
             $frame->setId($this->id);
         }
 
-        $labelMark = new uiLabel("⏷");
-        $labelMark->setAlign("left", "center");
-        $labelMark->setPosition(0, -($this->height / 2));
-        $labelMark->setSize(5, 5)->setX($this->width - 5);
-        $labelMark->setScriptEvents(true)->addClass("uiSelectElement");
+        $labelMark = new Label("⏷");
+        $labelMark->setAlign("right", "center");
+        $labelMark->setPosition($this->width -0.5, -($this->height / 2));
+        $labelMark->setTextColor("fff");
+        $labelMark->setZ(2);
+        $labelMark->setSize(5, 4);
+        $labelMark->setScriptEvents(false)->addClass("uiSelectElement");
 
-        $baseLabel = new Label();
+        $baseLabel = new FMLLabel();
         $baseLabel->setAreaColor("000")->setAreaFocusColor("333")
             ->setScriptEvents(true)->addClass("uiSelectElement")
             ->setSize($this->width, $this->height)
@@ -199,7 +202,7 @@ EOD;
         $entry->setPosition(900, 900)
             ->setName($this->name);
 
-        $frameOptions = new layoutRow(0, -($this->height + ($this->height / 2)));
+        $frameOptions = new LayoutRow(0, -($this->height + ($this->height / 2)));
         $frameOptions->addClass('uiDropdownSelect');
 
         $idx = 0;
@@ -262,6 +265,7 @@ EOD;
         foreach ($this->options as $idx => $data) {
             if ($value == $data) {
                 $this->setSelectedIndex($x);
+
                 return;
             }
             $x++;

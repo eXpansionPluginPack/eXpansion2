@@ -2,7 +2,7 @@
 
 namespace eXpansion\Framework\Core\Model\Gui\Factory;
 
-use eXpansion\Framework\Gui\Components\uiButton;
+use eXpansion\Framework\Gui\Components\Button;
 use eXpansion\Framework\Gui\Ui\Factory as uiFactory;
 use FML\Controls\Frame;
 use FML\Controls\Quad;
@@ -60,7 +60,7 @@ class PagerFactory
 
         // Show previous buttons
         if ($currentPageNumber > 2) {
-            $button = $this->uiFactory->createButton("", uiButton::TYPE_DECORATED);
+            $button = $this->uiFactory->createButton("", Button::TYPE_DECORATED);
             $button
                 ->setSize($buttonSize, $buttonSize)
                 ->setAction($actionFirstPage);
@@ -72,7 +72,7 @@ class PagerFactory
         $pagerLine->addChild($button);
 
         if ($currentPageNumber > 1) {
-            $button = $this->uiFactory->createButton("", uiButton::TYPE_DECORATED);
+            $button = $this->uiFactory->createButton("", Button::TYPE_DECORATED);
             $button
                 ->setSize($buttonSize, $buttonSize)
                 ->setAction($actionPreviousPage);
@@ -104,7 +104,7 @@ class PagerFactory
         }
 
         if ($currentPageNumber < $lastPageNumber) {
-            $button = $this->uiFactory->createButton("", uiButton::TYPE_DECORATED);
+            $button = $this->uiFactory->createButton("", Button::TYPE_DECORATED);
             $button
                 ->setSize($buttonSize, $buttonSize)
                 ->setZ(3)
@@ -116,7 +116,7 @@ class PagerFactory
         $pagerLine->addChild($button);
 
         if ($currentPageNumber < $lastPageNumber - 1) {
-            $button = $this->uiFactory->createButton("", uiButton::TYPE_DECORATED);
+            $button = $this->uiFactory->createButton("", Button::TYPE_DECORATED);
             $button
                 ->setSize($buttonSize, $buttonSize)
                 ->setAction($actionLastPage);

@@ -4,9 +4,9 @@ namespace eXpansion\Framework\Gui\Components;
 
 use DOMDocument;
 use DOMElement;
-use FML\Controls\Label;
+use FML\Controls\Label as FMLLabel;
 
-class uiLabel extends Label
+class Label extends FMLLabel
 {
 
     const TYPE_NORMAL = "normal";
@@ -14,9 +14,9 @@ class uiLabel extends Label
     const TYPE_HEADER = "header";
 
     /**
-     * uiLabel constructor.
-     * @param string $text
-     * @param string $type
+     * Label constructor.
+     * @param string      $text
+     * @param string      $type
      * @param string|null $controlId
      */
     public function __construct($text = "", $type = self::TYPE_NORMAL, $controlId = null)
@@ -71,6 +71,7 @@ class uiLabel extends Label
 
     /**
      * @param boolean $translate
+     * @return Label
      */
     public function setTranslate($translate)
     {

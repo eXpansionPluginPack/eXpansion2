@@ -2,23 +2,21 @@
 
 namespace eXpansion\Framework\Gui\Ui;
 
-use eXpansion\Framework\Core\Model\Gui\Factory\BackGroundFactory;
-use eXpansion\Framework\Gui\Components\uiAnimation;
-use eXpansion\Framework\Gui\Components\uiButton;
-use eXpansion\Framework\Gui\Components\uiCheckbox;
-use eXpansion\Framework\Gui\Components\uiConfirmButton;
-use eXpansion\Framework\Gui\Components\uiDropdown;
-use eXpansion\Framework\Gui\Components\uiInput;
-use eXpansion\Framework\Gui\Components\uiInputMasked;
-use eXpansion\Framework\Gui\Components\uiLabel;
-use eXpansion\Framework\Gui\Components\uiLine;
-use eXpansion\Framework\Gui\Components\uiTextbox;
-use eXpansion\Framework\Gui\Components\uiTooltip;
-use eXpansion\Framework\Gui\Layouts\layoutLine;
-use eXpansion\Framework\Gui\Layouts\layoutRow;
-
 use eXpansion\Framework\Core\Exceptions\UnknownMethodException;
-use FML\Controls\Frame;
+use eXpansion\Framework\Core\Model\Gui\Factory\BackGroundFactory;
+use eXpansion\Framework\Gui\Components\Animation;
+use eXpansion\Framework\Gui\Components\Button;
+use eXpansion\Framework\Gui\Components\Checkbox;
+use eXpansion\Framework\Gui\Components\ConfirmButton;
+use eXpansion\Framework\Gui\Components\Dropdown;
+use eXpansion\Framework\Gui\Components\Input;
+use eXpansion\Framework\Gui\Components\InputMasked;
+use eXpansion\Framework\Gui\Components\Label;
+use eXpansion\Framework\Gui\Components\line;
+use eXpansion\Framework\Gui\Components\Textbox;
+use eXpansion\Framework\Gui\Components\Tooltip;
+use eXpansion\Framework\Gui\Layouts\LayoutLine;
+use eXpansion\Framework\Gui\Layouts\LayoutRow;
 
 /**
  * Class Factory
@@ -27,20 +25,20 @@ use FML\Controls\Frame;
  * @copyright 2017 eXpansion
  * @package eXpansion\Framework\Gui\Ui
  *
- * @method uiButton createButton($text, $type = UiButton::TYPE_DEFAULT)
- * @method uiConfirmButton createConfirmButton($text, $type = UiButton::TYPE_DEFAULT)
- * @method uiCheckbox createCheckbox($text, $name, $checked = false, $disabled = false)
- * @method uiDropdown createDropdown($name, $options, $selectedIndex = -1, $isOpened = false)
- * @method uiInput createInput($name, $default = "", $width = 30)
- * @method uiInputMasked createInputMasked($name, $default = "", $width = 30)
- * @method uiLabel createLabel($text = "", $type = uiLabel::TYPE_NORMAL, $controlId = null)
- * @method uiLine createLine($x, $y)
- * @method uiTextbox createTextbox($name, $default = "", $lines = 1, $width = 30)
- * @method uiTooltip createTooltip()
- * @method uiAnimation createAnimation()
+ * @method Button createButton($text, $type = Button::TYPE_DEFAULT)
+ * @method ConfirmButton createConfirmButton($text, $type = Button::TYPE_DEFAULT)
+ * @method Checkbox createCheckbox($text, $name, $checked = false, $disabled = false)
+ * @method Dropdown createDropdown($name, $options, $selectedIndex = -1, $isOpened = false)
+ * @method Input createInput($name, $default = "", $width = 30)
+ * @method InputMasked createInputMasked($name, $default = "", $width = 30)
+ * @method Label createLabel($text = "", $type = Label::TYPE_NORMAL, $controlId = null)
+ * @method line createLine($x, $y)
+ * @method Textbox createTextbox($name, $default = "", $lines = 1, $width = 30)
+ * @method Tooltip createTooltip()
+ * @method Animation createAnimation()
  *
- * @method layoutLine createLayoutLine($startX, $startY, $elements = [], $margin = 0.);
- * @method layoutRow createLayoutRow($startX, $startY, $elements = [], $margin = 0.);
+ * @method LayoutLine createLayoutLine($startX, $startY, $elements = [], $margin = 0.);
+ * @method LayoutRow createLayoutRow($startX, $startY, $elements = [], $margin = 0.);
  *
  */
 class Factory

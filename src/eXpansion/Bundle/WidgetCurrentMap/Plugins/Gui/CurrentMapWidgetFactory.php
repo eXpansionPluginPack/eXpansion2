@@ -10,16 +10,16 @@ use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\ChatCommandDataProvider;
-use eXpansion\Framework\Gui\Components\uiLabel;
+use eXpansion\Framework\Gui\Components\Label;
 use FML\Script\ScriptLabel;
 
 class CurrentMapWidgetFactory extends WidgetFactory
 {
 
-    /** @var UiLabel */
+    /** @var Label */
     public $lblNo;
 
-    /** @var UiLabel */
+    /** @var Label */
     public $lblYes;
     /**
      * @var GameDataStorage
@@ -77,7 +77,7 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $manialink->addChild($tooltip);
 
         /* first row */
-        $lbl = $this->uiFactory->createLabel("unknown map", uiLabel::TYPE_NORMAL, "MapName");
+        $lbl = $this->uiFactory->createLabel("unknown map", Label::TYPE_NORMAL, "MapName");
         $lbl->setAlign("center", "center2")->setPosition(30, 0);
         $lbl->setTextSize(1)->setSize(60, 4);
         $lbl->setAreaColor("0017")->setAreaFocusColor("0017")->setScriptEvents(true);
@@ -89,7 +89,7 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $manialink->addChild($line);
         $div = ((60 - 1) / 3);
 
-        $lbl = $this->uiFactory->createLabel("0 / 0", uiLabel::TYPE_NORMAL, "Players");
+        $lbl = $this->uiFactory->createLabel("0 / 0", Label::TYPE_NORMAL, "Players");
         $lbl->setTextPrefix("👥  ");
         $lbl->setAlign("center", "center2");
         $lbl->setTextSize(1)->setSize($div, 4);
@@ -99,7 +99,7 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $tooltip->addTooltip($lbl, "Players on server");
         $line->addChild($lbl);
 
-        $lbl = $this->uiFactory->createLabel("0 / 0", uiLabel::TYPE_NORMAL, "Spectators");
+        $lbl = $this->uiFactory->createLabel("0 / 0", Label::TYPE_NORMAL, "Spectators");
         $lbl->setTextPrefix("🎥  ");
         $lbl->setAlign("center", "center2");
         $lbl->setTextSize(1)->setSize($div, 4);
@@ -110,7 +110,7 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $ladderMin = $this->gameDataStorage->getServerOptions()->ladderServerLimitMin / 1000;
         $ladderMax = $this->gameDataStorage->getServerOptions()->ladderServerLimitMax / 1000;
 
-        $lbl = $this->uiFactory->createLabel($ladderMin." - ".$ladderMax."k", uiLabel::TYPE_NORMAL);
+        $lbl = $this->uiFactory->createLabel($ladderMin." - ".$ladderMax."k", Label::TYPE_NORMAL);
         $lbl->setAlign("center", "center2");
         $lbl->setTextSize(1)->setSize($div, 4);
         $lbl->setAreaColor("0017")->setAreaFocusColor("0017")->setScriptEvents(true);
@@ -122,7 +122,7 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $manialink->addChild($line2);
         $div = ((60 - 1.5) / 4);
 
-        $lbl = $this->uiFactory->createLabel("Recs", uiLabel::TYPE_NORMAL);
+        $lbl = $this->uiFactory->createLabel("Recs", Label::TYPE_NORMAL);
         $lbl->setAlign("center", "center2");
         $lbl->setTextSize(1)->setSize($div, 4);
         $lbl->setAreaColor("0017")->setAreaFocusColor("0014")->setScriptEvents(true);
@@ -132,7 +132,7 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $tooltip->addTooltip($lbl, "Show Local Records");
         $line2->addChild($lbl);
 
-        $lbl = $this->uiFactory->createLabel("Maps", uiLabel::TYPE_NORMAL);
+        $lbl = $this->uiFactory->createLabel("Maps", Label::TYPE_NORMAL);
         $lbl->setAlign("center", "center2");
         $lbl->setTextSize(1)->setSize($div, 4);
         $lbl->setAreaColor("0017")->setAreaFocusColor("0014")->setScriptEvents(true);
@@ -142,7 +142,7 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $tooltip->addTooltip($lbl, "Show Map List");
         $line2->addChild($lbl);
 
-        $lbl = $this->uiFactory->createLabel("", uiLabel::TYPE_NORMAL);
+        $lbl = $this->uiFactory->createLabel("", Label::TYPE_NORMAL);
         $lbl->setTextPrefix("  ");
         $lbl->setAlign("center", "center2");
         $lbl->setTextSize(1)->setSize($div, 4);
@@ -152,7 +152,7 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $this->lblYes = $lbl;
         $line2->addChild($this->lblYes);
 
-        $lbl = $this->uiFactory->createLabel("", uiLabel::TYPE_NORMAL);
+        $lbl = $this->uiFactory->createLabel("", Label::TYPE_NORMAL);
         $lbl->setTextPrefix("  ");
         $lbl->setAlign("center", "center2");
         $lbl->setTextSize(1)->setSize($div, 4);

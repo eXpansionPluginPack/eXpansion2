@@ -10,28 +10,28 @@ use FML\Script\Features\ScriptFeature;
 use FML\Script\Script;
 use FML\Types\ScriptFeatureable;
 
-class uiTooltip extends abstractUiElement implements ScriptFeatureable
+class Tooltip extends AbstractUiElement implements ScriptFeatureable
 {
 
     protected $element;
 
     /**
-     * @param abstractUiElement|Control $control
+     * @param AbstractUiElement|Control $control
      * @param string                    $text
      */
     public function addTooltip($control, $text)
     {
         if ($control instanceof Control) {
             $control->addDataAttribute("tooltip", $text);
-            $control->addClass("tooltip");
+            $control->addClass("uiTooltip");
             $control->setScriptEvents(true);
 
             return;
         }
 
-        if ($control instanceof abstractUiElement) {
+        if ($control instanceof AbstractUiElement) {
             $control->addDataAttribute("tooltip", $text);
-            $control->addClass("tooltip");
+            $control->addClass("uiTooltip");
 
             return;
         }
@@ -95,7 +95,7 @@ class uiTooltip extends abstractUiElement implements ScriptFeatureable
        ***FML_MouseOver***      
        ***
        if (Event.Control != Null) {
-			if (Event.Control.HasClass("tooltip") )  {
+			if (Event.Control.HasClass("uiTooltip") )  {
                 declare tooltipLabel = (exp_tooltip.Controls[0] as CMlLabel);
                 declare text = Event.Control.DataAttributeGet("tooltip");
                 declare sizeX = tooltipLabel.ComputeWidth(text);			 			    						       
@@ -115,7 +115,7 @@ class uiTooltip extends abstractUiElement implements ScriptFeatureable
        ***FML_MouseOut***      
        ***
        if (Event.Control != Null) {
-			if (Event.Control.HasClass("tooltip") )  {
+			if (Event.Control.HasClass("uiTooltip") )  {
                 exp_tooltip_move = False;
                 exp_tooltip_delay = 0;  
                 exp_tooltip_toggle = True;                         

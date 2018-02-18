@@ -4,21 +4,9 @@ namespace eXpansion\Bundle\Acme\Plugins\Gui;
 
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
-use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Core\Plugins\Gui\WindowFactory as BaseWindowFactory;
-use eXpansion\Framework\Gui\Components\uiAnimation;
-use eXpansion\Framework\Gui\Components\uiButton;
-use eXpansion\Framework\Gui\Components\uiCheckbox;
-use eXpansion\Framework\Gui\Components\uiDropdown;
-use eXpansion\Framework\Gui\Components\uiInput;
-use eXpansion\Framework\Gui\Components\uiLabel;
-use eXpansion\Framework\Gui\Components\uiTextbox;
-use eXpansion\Framework\Gui\Components\uiTooltip;
-use eXpansion\Framework\Gui\Layouts\layoutLine;
-use eXpansion\Framework\Gui\Layouts\layoutRow;
-use eXpansion\Framework\Gui\Layouts\layoutScrollable;
-use FML\Controls\Label;
-use FML\Controls\Quad;
+use eXpansion\Framework\Gui\Components\Label;
+use eXpansion\Framework\Gui\Components\Dropdown;
 use FML\Script\ScriptLabel;
 
 class WindowFactory extends BaseWindowFactory
@@ -31,7 +19,7 @@ class WindowFactory extends BaseWindowFactory
     {
         parent::createContent($manialink);
 
-        $lbl = $this->uiFactory->createLabel("update me", uiLabel::TYPE_HEADER, "exp2_text");
+        $lbl = $this->uiFactory->createLabel("update me", Label::TYPE_HEADER, "exp2_text");
         $manialink->addChild($lbl);
 
         $hash = MemoryWidgetFactory::$exp_hash;

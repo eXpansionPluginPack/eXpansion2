@@ -12,7 +12,7 @@ use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\GridWindowFactory;
-use eXpansion\Framework\Gui\Components\uiButton;
+use eXpansion\Framework\Gui\Components\Button;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
 
@@ -99,7 +99,7 @@ class JukeboxWindowFactory extends GridWindowFactory
     {
         $this->setData($manialink, $this->updateMaps());
 
-        $queueButton = $this->uiFactory->createButton('drop', uiButton::TYPE_DEFAULT);
+        $queueButton = $this->uiFactory->createButton('drop', Button::TYPE_DEFAULT);
         $queueButton->setTextColor("000")->setSize(12, 5)->setTranslate(true);
 
         $gridBuilder = $this->gridBuilderFactory->create();
@@ -177,7 +177,7 @@ class JukeboxWindowFactory extends GridWindowFactory
         parent::createContent($manialink);
         $line = $this->uiFactory->createLayoutLine(0, 0, [], 2);
 
-        $dropButton = $this->uiFactory->createButton("expansion_maps.gui.button.drop", uiButton::TYPE_DECORATED);
+        $dropButton = $this->uiFactory->createButton("expansion_maps.gui.button.drop", Button::TYPE_DECORATED);
         $dropButton->setTranslate(true);
         $dropButton->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackDrop'], null));
         $line->addChild($dropButton);

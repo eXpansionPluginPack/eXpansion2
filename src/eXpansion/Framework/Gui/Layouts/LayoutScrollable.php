@@ -2,8 +2,8 @@
 
 namespace eXpansion\Framework\Gui\Layouts;
 
-use eXpansion\Framework\Gui\Components\abstractUiElement;
-use eXpansion\Framework\Gui\Components\uiScrollbar;
+use eXpansion\Framework\Gui\Components\AbstractUiElement;
+use eXpansion\Framework\Gui\Components\Scrollbar;
 use FML\Controls\Frame;
 use FML\Controls\Quad;
 use FML\Script\Features\ScriptFeature;
@@ -12,7 +12,7 @@ use FML\Script\ScriptLabel;
 use FML\Types\Renderable;
 use FML\Types\ScriptFeatureable;
 
-class layoutScrollable extends abstractUiElement implements Renderable, ScriptFeatureable
+class LayoutScrollable extends AbstractUiElement implements Renderable, ScriptFeatureable
 {
 
     protected $force = false;
@@ -27,7 +27,7 @@ class layoutScrollable extends abstractUiElement implements Renderable, ScriptFe
 
     /**
      * layoutScrollable constructor.
-     * @param $frame
+     * @param Frame $frame
      * @param $sizeX
      * @param $sizeY
      */
@@ -42,6 +42,8 @@ class layoutScrollable extends abstractUiElement implements Renderable, ScriptFe
     }
 
     /**
+     * Set the axis which supports scrolling
+     * default all axis enabled
      * @param bool $x
      * @param bool $y
      */
@@ -51,6 +53,11 @@ class layoutScrollable extends abstractUiElement implements Renderable, ScriptFe
         $this->scrollbarV = $y;
     }
 
+    /**
+     * Forces container size.
+     * @param $x
+     * @param $y
+     */
     public function forceContainerSize($x, $y)
     {
         $this->force = true;
@@ -81,7 +88,7 @@ class layoutScrollable extends abstractUiElement implements Renderable, ScriptFe
         if ($this->scrollbarV) {
             $contentFrame->setSize($this->width - 5, $this->height);
             $this->offset = 5;
-            $container->addChild(new uiScrollbar(
+            $container->addChild(new Scrollbar(
                 "Y",
                 $this->getWidth(),
                 0,
@@ -92,7 +99,7 @@ class layoutScrollable extends abstractUiElement implements Renderable, ScriptFe
 
         if ($this->scrollbarH) {
             $contentFrame->setSize($this->width - 5, $this->height - 5);
-            $container->addChild(new uiScrollbar(
+            $container->addChild(new Scrollbar(
                 "X",
                 0,
                 -$this->getHeight(),
@@ -126,7 +133,7 @@ class layoutScrollable extends abstractUiElement implements Renderable, ScriptFe
      * Prepare the given Script for rendering by adding the needed Labels, etc.
      *
      * @param Script $script Script to prepare
-     * @return static
+     * @return void
      */
     public function prepare(Script $script)
     {

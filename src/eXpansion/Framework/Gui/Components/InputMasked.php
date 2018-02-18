@@ -11,7 +11,7 @@ use FML\Script\ScriptLabel;
 use FML\Types\Renderable;
 use FML\Types\ScriptFeatureable;
 
-class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
+class InputMasked extends AbstractuiElement implements Renderable, ScriptFeatureable
 {
 
     const TYPE_DEFAULT = "Basic";
@@ -26,17 +26,9 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
      */
     protected $default;
 
-    /** @var null|string */
-    protected $action = null;
+    protected $textFormat = "Password";
 
-    protected $textFormat = "Basic";
-
-    /** @var null|string */
-    protected $id = null;
-
-    protected $horizontalAlign = "left";
-
-    public function __construct($name, $default = "", $width = 30, $textFormat = "Basic")
+    public function __construct($name, $default = "", $width = 30, $textFormat = "Password")
     {
         $this->name = $name;
         $this->default = $default;
@@ -55,42 +47,42 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
     {
         $frame = new Frame();
         $frame->setPosition($this->posX, $this->posY)
-            ->addClasses(["uiContainer", "uiInput"]);
+            ->setSize($this->width, $this->height)
+            ->addClasses(["uiContainer", "uiInputMasked"]);
 
         $quad = new Quad();
         $quad->setSize($this->width * 2, $this->height * 2)
             ->setScale(0.5)
             ->setPosition($this->width / 2, -$this->height / 2)
             ->setStyles('Bgs1', 'BgColorContour')
-            ->setAlign("center", "center2")
+            ->setAlign("center", "center")
             ->setBackgroundColor('FFFA')
-            ->addClass("uiInput")
+            ->addClass("uiInputMasked")
             ->setScriptEvents(true)
             ->setDataAttributes($this->_dataAttributes)->addClasses($this->_classes);
 
         $input = new Entry();
-        $posX = 0;
-        if ($this->horizontalAlign == "center") {
-            $posX = $this->width / 2;
-        }
-        $input->setSize($this->width, $this->height)
-            ->setPosition($posX, -($this->height / 2))
+        $input->setSize($this->width - 4, $this->height)
+            ->setPosition(0, -$this->height / 2)
             ->setDefault($this->default)
             ->setSelectText(true)
-            ->setAlign($this->horizontalAlign, "center")
+            ->setAlign("left", "center2")
             ->setAreaColor("0005")
             ->setAreaFocusColor('000a')
             ->setTextFormat($this->textFormat)
+            ->addDataAttribute('type', 'Password')
             ->setName($this->name)
-            ->setTextSize(1.5)
-            ->setScriptEvents(true)
-            ->setId($this->id);
-        if ($this->action !== null) {
-            $input->addDataAttribute("action", $this->action);
-        }
+            ->setTextSize(1.5);
 
+        $button = new Button("", Button::TYPE_DECORATED);
+        $button->setSize(4, 4)
+            ->addClass("uiMaskedToggle")
+            ->setPosition($input->getWidth(), 0);
+
+        $frame->addChild($button);
         $frame->addChild($quad);
         $frame->addChild($input);
+
 
         return $frame->render($domDocument);
     }
@@ -105,6 +97,7 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
 
     /**
      * @param string $name
+     * @return InputMasked
      */
     public function setName($name)
     {
@@ -151,7 +144,7 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
 
     public function getHeight()
     {
-        return $this->height + 1;
+        return $this->height + 2;
     }
 
     /**
@@ -162,9 +155,6 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
     public function prepare(Script $script)
     {
         $script->addCustomScriptLabel(ScriptLabel::MouseClick, $this->getScriptMouseClick());
-        if ($this->action !== null) {
-            $script->addCustomScriptLabel(ScriptLabel::EntrySubmit, $this->getScriptEntrySubmit());
-        }
     }
 
     /**
@@ -199,73 +189,23 @@ class uiInput extends abstractUiElement implements Renderable, ScriptFeatureable
     protected function getScriptMouseClick()
     {
         return <<<EOL
-             if (Event.Control.HasClass("uiInput") ) {              
+             if (Event.Control.HasClass("uiInputMasked") ) {              
                  declare CMlFrame frame <=> Event.Control.Parent;
-                 (frame.Controls[1] as CMlEntry).StartEdition();               
-            }					
+                 (frame.Controls[2] as CMlEntry).StartEdition();               
+            }	
+             if (Event.Control.HasClass("uiMaskedToggle") ) {              
+                 declare CMlFrame frame <=> Event.Control.Parent.Parent;
+                 declare CMlEntry input <=> (frame.Controls[2] as CMlEntry);
+                 if (input.DataAttributeGet("type") == "Basic") {
+                   input.DataAttributeSet("type", "Password");
+                   input.TextFormat = CMlEntry::ETextFormat::Password;
+                 } else {
+                   input.DataAttributeSet("type", "Basic");
+                   input.TextFormat = CMlEntry::ETextFormat::Basic;
+                 }               
+            }	
+            				
 EOL;
 
-    }
-
-    protected function getScriptEntrySubmit()
-    {
-        return <<<EOL
-             if (Event.Control.DataAttributeExists("action") ) {              
-                TriggerPageAction(Event.Control.DataAttributeGet("action"));            
-            }					
-EOL;
-
-    }
-
-
-    /**
-     * @return null|string
-     */
-    public function getAction()
-    {
-        return $this->action;
-    }
-
-    /**
-     * @param null|string $action
-     * @return $this
-     */
-    public function setAction($action)
-    {
-        $this->action = $action;
-
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param null|string $id
-     */
-    public function setId(string $id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHorizontalAlign(): string
-    {
-        return $this->horizontalAlign;
-    }
-
-    /**
-     * @param string $horizontalAlign
-     */
-    public function setHorizontalAlign(string $horizontalAlign)
-    {
-        $this->horizontalAlign = $horizontalAlign;
     }
 }

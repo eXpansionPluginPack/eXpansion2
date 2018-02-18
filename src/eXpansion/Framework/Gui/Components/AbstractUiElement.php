@@ -5,23 +5,45 @@ namespace eXpansion\Framework\Gui\Components;
 use FML\Script\Features\ScriptFeature;
 use FML\Types\Renderable;
 
-abstract class abstractUiElement extends ScriptFeature implements Renderable
+abstract class AbstractUiElement extends ScriptFeature implements Renderable
 {
     protected $_classes = [];
     protected $_dataAttributes = [];
+    /**
+     * @var int
+     */
     protected $posX = 0;
+    /**
+     * @var int
+     */
     protected $posY = 0;
+    /**
+     * @var int
+     */
     protected $posZ = 0;
 
+    /**
+     * @var int
+     */
     protected $width = 1;
+    /**
+     * @var int
+     */
     protected $height = 1;
+    /**
+     * @var string
+     */
     protected $horizontalAlign = "left";
+    /**
+     * @var string
+     */
     protected $verticalAlign = "top";
 
     /**
      * @param int $posX
      * @param int $posY
      * @param int $posZ
+     * @return AbstractUiElement
      */
     public function setPosition($posX = 0, $posY = 0, $posZ = 0)
     {
@@ -33,6 +55,10 @@ abstract class abstractUiElement extends ScriptFeature implements Renderable
 
     }
 
+    /**
+     * @param $X
+     * @return $this
+     */
     public function setX($X)
     {
         $this->posX = $X;
@@ -40,6 +66,10 @@ abstract class abstractUiElement extends ScriptFeature implements Renderable
         return $this;
     }
 
+    /**
+     * @param $Y
+     * @return $this
+     */
     public function setY($Y)
     {
         $this->posY = $Y;
@@ -47,6 +77,10 @@ abstract class abstractUiElement extends ScriptFeature implements Renderable
         return $this;
     }
 
+    /**
+     * @param $Z
+     * @return $this
+     */
     public function setZ($Z)
     {
         $this->posZ = $Z;
@@ -96,6 +130,7 @@ abstract class abstractUiElement extends ScriptFeature implements Renderable
 
     /**
      * @param mixed $width
+     * @return static
      */
     public function setWidth($width)
     {
@@ -106,7 +141,7 @@ abstract class abstractUiElement extends ScriptFeature implements Renderable
 
     /**
      * @param mixed $height
-     * @return abstractUiElement
+     * @return static
      */
     public function setHeight($height)
     {
@@ -123,6 +158,11 @@ abstract class abstractUiElement extends ScriptFeature implements Renderable
         return $this->height;
     }
 
+    /**
+     * @param $x
+     * @param $y
+     * @return $this
+     */
     public function setSize($x, $y)
     {
         $this->width = $x;
@@ -131,6 +171,11 @@ abstract class abstractUiElement extends ScriptFeature implements Renderable
         return $this;
     }
 
+    /**
+     * @param $name
+     * @param $value
+     * @return $this
+     */
     public function addDataAttribute($name, $value)
     {
         $this->_dataAttributes[$name] = $value;
@@ -138,6 +183,10 @@ abstract class abstractUiElement extends ScriptFeature implements Renderable
         return $this;
     }
 
+    /**
+     * @param $name
+     * @return $this
+     */
     public function addClass($name)
     {
         $this->_classes[] = $name;
@@ -155,6 +204,7 @@ abstract class abstractUiElement extends ScriptFeature implements Renderable
 
     /**
      * @param string $horizontalAlign
+     * @return static
      */
     public function setHorizontalAlign(string $horizontalAlign)
     {
@@ -173,6 +223,7 @@ abstract class abstractUiElement extends ScriptFeature implements Renderable
 
     /**
      * @param string $verticalAlign
+     * @return static
      */
     public function setVerticalAlign(string $verticalAlign)
     {

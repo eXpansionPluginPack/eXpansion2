@@ -3,16 +3,12 @@
 namespace eXpansion\Framework\Gui\Components;
 
 use FML\Controls\Control;
-use FML\Controls\Frame;
-use FML\Controls\Label;
 use FML\Controls\Quad;
 use FML\Script\Features\ScriptFeature;
 use FML\Script\Script;
-use FML\Script\ScriptInclude;
-use FML\Types\Container;
 use FML\Types\ScriptFeatureable;
 
-class uiAnimation extends abstractUiElement implements ScriptFeatureable
+class Animation extends AbstractUiElement implements ScriptFeatureable
 {
     const Linear = "Linear";
 
@@ -61,9 +57,11 @@ class uiAnimation extends abstractUiElement implements ScriptFeatureable
     const BounceInOut = "BounceInOut";
 
     protected $element;
+    private $doAnimation = true;
+
 
     /**
-     * uiAnimation constructor.
+     * Animation constructor.
      */
     public function __construct()
     {
@@ -105,6 +103,10 @@ class uiAnimation extends abstractUiElement implements ScriptFeatureable
 
     public function getFunctions()
     {
+        $bool = "False";
+        if ($this->doAnimation) {
+            $bool = "True";
+        }
 
         return /** @lang textmate */
             <<<EOL
@@ -225,7 +227,7 @@ class uiAnimation extends abstractUiElement implements ScriptFeatureable
 
        ***FML_OnInit***
        ***
-            declare Boolean doAnimation = True;
+            declare Boolean doAnimation = $bool;
 	
 	        if (doAnimation) {
                 Page.GetClassChildren ("uiAnimation", Page.MainFrame, True);
@@ -242,7 +244,6 @@ class uiAnimation extends abstractUiElement implements ScriptFeatureable
 EOL;
 
     }
-
 
     /**
      * Get the Script Features
@@ -266,5 +267,24 @@ EOL;
         $quad->setVisible(false);
 
         return $quad->render($domDocument);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDoAnimation(): bool
+    {
+        return $this->doAnimation;
+    }
+
+    /**
+     * @param bool $doAnimation
+     * @return Animation
+     */
+    public function setDoAnimation(bool $doAnimation): Animation
+    {
+        $this->doAnimation = $doAnimation;
+
+        return $this;
     }
 }

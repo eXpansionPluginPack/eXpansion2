@@ -12,7 +12,7 @@ use eXpansion\Framework\Core\Model\Gui\Factory\WindowFrameFactoryInterface;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
 use eXpansion\Framework\Core\Model\Gui\Window;
-use eXpansion\Framework\Gui\Components\uiButton;
+use eXpansion\Framework\Gui\Components\Button;
 use eXpansion\Framework\Gui\Ui\Factory;
 use FML\Controls\Frame;
 use FML\Controls\Quad;
@@ -84,7 +84,7 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
      * @param        $name
      * @param float  $sizeX
      * @param float  $sizeY
-     * @return uiButton|\FML\Controls\Control
+     * @return Button|\FML\Controls\Control
      */
     public function build(
         Window $manialink,
@@ -114,8 +114,8 @@ class WindowFrameFactory extends OriginalWindowFrameFactory implements WindowFra
         $mainFrame->addChild($tabsFrame);
         $mainFrame->addChild($frame);
 
-        $closeButton = $this->uiFactory->createButton('Close', uiButton::TYPE_DECORATED);
-        $closeButton->setBorderColor(uiButton::COLOR_WARNING)->setFocusColor(uiButton::COLOR_WARNING);
+        $closeButton = $this->uiFactory->createButton('Close', Button::TYPE_DECORATED);
+        $closeButton->setBorderColor(Button::COLOR_WARNING)->setFocusColor(Button::COLOR_WARNING);
         $closeButton->setPosition(160 - ($closeButton->getWidth() / 2), -90 - $mainFrame->getY());
         $closeButton->setId("uiCloseButton");
         $frame->addChild($closeButton);

@@ -9,8 +9,8 @@
 namespace Tests\eXpansion\Framework\Gui\Ui;
 
 use eXpansion\Framework\Core\Exceptions\UnknownMethodException;
-use eXpansion\Framework\Gui\Components\uiButton;
-use eXpansion\Framework\Gui\Components\uiLabel;
+use eXpansion\Framework\Gui\Components\Button;
+use eXpansion\Framework\Gui\Components\Label;
 use eXpansion\Framework\Gui\Ui\Factory;
 use FML\Script\Features\ScriptFeature;
 use FML\Script\Script;
@@ -35,7 +35,7 @@ class FactoryTest extends TestCore
     {
         $tests = [
             ['m' => 'createButton', 'p' => ['text']],
-            ['m' => 'createButton', 'p' => ['text', uiButton::TYPE_DECORATED]],
+            ['m' => 'createButton', 'p' => ['text', Button::TYPE_DECORATED]],
             ['m' => 'createCheckbox', 'p' => ['text', 'YOYO']],
             ['m' => 'createCheckbox', 'p' => ['text', 'YOYO', true]],
             ['m' => 'createDropdown', 'p' => ['text', ['YOYO']]],
@@ -44,9 +44,9 @@ class FactoryTest extends TestCore
             ['m' => 'createInput', 'p' => ['text']],
             ['m' => 'createInput', 'p' => ['text', 'yoyo']],
             ['m' => 'createLabel', 'p' => ['text']],
-            ['m' => 'createLabel', 'p' => ['text', uiLabel::TYPE_HEADER]],
-            ['m' => 'createLabel', 'p' => ['text', uiLabel::TYPE_NORMAL]],
-            ['m' => 'createLabel', 'p' => ['text', uiLabel::TYPE_TITLE]],
+            ['m' => 'createLabel', 'p' => ['text', Label::TYPE_HEADER]],
+            ['m' => 'createLabel', 'p' => ['text', Label::TYPE_NORMAL]],
+            ['m' => 'createLabel', 'p' => ['text', Label::TYPE_TITLE]],
             ['m' => 'createLine', 'p' => [10, 10]],
             ['m' => 'createTextbox', 'p' => ['text']],
             ['m' => 'createTextbox', 'p' => ['text', 'yoyo']],

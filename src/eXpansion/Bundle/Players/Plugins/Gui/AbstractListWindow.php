@@ -11,7 +11,7 @@ use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\GridWindowFactory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\ChatCommandDataProvider;
-use eXpansion\Framework\Gui\Components\uiButton;
+use eXpansion\Framework\Gui\Components\Button;
 use Maniaplanet\DedicatedServer\Connection;
 
 abstract class AbstractListWindow extends GridWindowFactory
@@ -102,7 +102,7 @@ abstract class AbstractListWindow extends GridWindowFactory
     ) {
 
         $selectButton = $this->uiFactory->createButton('expansion_players.gui.list.window.column.remove',
-            uiButton::TYPE_DEFAULT)->setSize(10, 5)->setTranslate(true);
+            Button::TYPE_DEFAULT)->setSize(10, 5)->setTranslate(true);
 
         $gridBuilder = $this->gridBuilderFactory->create();
         $gridBuilder->setManialink($manialink)

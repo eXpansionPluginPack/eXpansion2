@@ -12,7 +12,7 @@ use FML\Types\Container;
 use FML\Types\Renderable;
 use FML\Types\ScriptFeatureable;
 
-class uiButton extends abstractUiElement implements ScriptFeatureable, Container
+class Button extends AbstractUiElement implements ScriptFeatureable, Container
 {
     const TYPE_DECORATED = "decorated";
     const TYPE_DEFAULT = "default";
@@ -21,7 +21,7 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
     const COLOR_WARNING = "d00";
     const COLOR_PRIMARY = "3af";
     const COLOR_SECONDARY = "000";
-    /** @var  uiLabel */
+    /** @var  Label */
     protected $buttonLabel;
     protected $type;
     protected $textColor = "fff";
@@ -42,7 +42,7 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
         $this->text = $text;
         $this->type = $type;
         $this->setSize(18, 5);
-        $this->buttonLabel = new uiLabel("", uiLabel::TYPE_TITLE);
+        $this->buttonLabel = new Label("", Label::TYPE_TITLE);
         $this->buttonLabel->addClass('uiButtonElement');
     }
 
@@ -53,7 +53,7 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
      * @param \DOMDocument $domDocument DOMDocument for which the XML element should be rendered
      * @return \DOMElement
      *
-     * <frame pos="64 -35" class="uiContainer uiButton">
+     * <frame pos="64 -35" class="uiContainer UiButton">
      * <label size="26 9" data-color="fff" text="Cancel" class="button noAnim"  textprefix=" " opacity="1" halign="center" valign="center" focusareacolor1="0000" focusareacolor2="d00" scriptevents="1" translate="0" textsize="2"/>
      * <quad size="26 9" style="Bgs1" colorize="d00" substyle="BgColorContour" class="button" halign="center" valign="center" pos="0 0"/>
      * </frame>
@@ -89,7 +89,6 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
             ->setAreaColor($this->backColor)
             ->setAreaFocusColor($this->focusColor)
             ->setTextColor($this->textColor)
-
             ->setAlign("center", "center2");
 
         if ($this->translate) {
@@ -116,7 +115,7 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
 
     /**
      * @param string $text
-     * @return uiButton
+     * @return Button
      */
     public function setText($text)
     {
@@ -149,7 +148,7 @@ class uiButton extends abstractUiElement implements ScriptFeatureable, Container
 
     protected function getScriptMouseClick()
     {
-        return /** language=textmate  prefix=#RequireContext\n */
+        return /** @lang textmate */
             <<<'EOD'
             if (Event.Control.HasClass("uiButtonElement") ) {            
                 TriggerButtonClick(Event.Control);                             
@@ -159,7 +158,8 @@ EOD;
 
     protected function getScriptFunction()
     {
-        return /** language=textmate  prefix=#RequireContext\n */
+        return
+            /** @lang textmate */
             <<<'EOD'
        
             Void TriggerButtonClick(CMlControl Control) {                
@@ -190,7 +190,7 @@ EOD;
 
     /**
      * @param string $type
-     * @return uiButton
+     * @return Button
      */
     public function setType($type)
     {
@@ -209,7 +209,7 @@ EOD;
 
     /**
      * @param string $textColor
-     * @return uiButton
+     * @return Button
      */
     public function setTextColor($textColor)
     {
@@ -228,7 +228,7 @@ EOD;
 
     /**
      * @param string $backColor
-     * @return uiButton
+     * @return Button
      */
     public function setBackgroundColor($backColor)
     {
@@ -247,7 +247,7 @@ EOD;
 
     /**
      * @param string $borderColor
-     * @return uiButton
+     * @return Button
      */
     public function setBorderColor($borderColor)
     {
@@ -266,7 +266,7 @@ EOD;
 
     /**
      * @param null $action
-     * @return uiButton
+     * @return Button
      */
     public function setAction($action)
     {
@@ -285,7 +285,7 @@ EOD;
 
     /**
      * @param string $focusColor
-     * @return uiButton
+     * @return Button
      */
     public function setFocusColor($focusColor)
     {
@@ -304,7 +304,7 @@ EOD;
 
     /**
      * @param float $scale
-     * @return uiButton
+     * @return Button
      */
     public function setScale($scale)
     {
@@ -324,7 +324,7 @@ EOD;
 
     /**
      * @param bool $translate
-     * @return uiButton
+     * @return Button
      */
     public function setTranslate($translate = true)
     {
@@ -451,7 +451,7 @@ EOD;
 
     /**
      * @param null $id
-     * @return uiButton
+     * @return Button
      */
     public function setId($id)
     {

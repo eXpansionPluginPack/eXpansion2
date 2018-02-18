@@ -10,7 +10,7 @@ use FML\Script\Script;
 use FML\Script\ScriptLabel;
 use FML\Types\ScriptFeatureable;
 
-class uiCheckbox extends abstractUiElement implements ScriptFeatureable
+class Checkbox extends AbstractuiElement implements ScriptFeatureable
 {
     protected $scale = 1;
     /**
@@ -79,7 +79,7 @@ class uiCheckbox extends abstractUiElement implements ScriptFeatureable
         $entry->setPosition(900, 900)
             ->setName($this->name);
 
-        $checkedBackground = new uiLabel('⬜');
+        $checkedBackground = new Label('⬜');
         $checkedBackground->setTextSize(3.5)
             ->setAlign('center', 'center2')
             ->setSize(4, 4)
@@ -91,7 +91,7 @@ class uiCheckbox extends abstractUiElement implements ScriptFeatureable
         $checkedLabel = clone $checkedBackground;
         $checkedLabel->setText('✔')->setPosition(2.5, -1.75)->setScale(0);
 
-        $label = new uiLabel();
+        $label = new Label();
         $label->setTranslate(false)
             ->setAlign("left", "center2")
             ->setPosition(5, -2.5)
@@ -126,7 +126,7 @@ class uiCheckbox extends abstractUiElement implements ScriptFeatureable
 
     /**
      * @param string $name
-     * @return uiCheckbox
+     * @return Checkbox
      */
     public function setName($name)
     {
