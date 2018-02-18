@@ -42,7 +42,7 @@ class AppKernel extends Kernel
         $bundles[] = new \eXpansion\Bundle\LocalMapRatings\LocalMapRatingsBundle();
 
         $bundles[] = new \eXpansion\Bundle\WidgetCurrentMap\WidgetCurrentMapBundle();
-//        $bundles[] = new \eXpansion\Bundle\WidgetBestRecords\WidgetBestRecordsBundle();
+        $bundles[] = new \eXpansion\Bundle\WidgetBestRecords\WidgetBestRecordsBundle();
         $bundles[] = new \eXpansion\Bundle\WidgetBestCheckpoints\WidgetBestCheckpointsBundle();
 
 
