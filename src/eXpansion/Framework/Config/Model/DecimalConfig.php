@@ -4,6 +4,7 @@
 namespace eXpansion\Framework\Config\Model;
 use eXpansion\Framework\Config\Exception\InvalidConfigException;
 use eXpansion\Framework\Config\Services\ConfigManager;
+use eXpansion\Framework\Config\Services\ConfigManagerInterface;
 
 
 /**
@@ -30,7 +31,7 @@ class DecimalConfig extends AbstractConfig
      * @param float         $maxValue
      * @param float         $minValue
      * @param mixed         $defaultValue
-     * @param ConfigManager $configManager
+     * @param ConfigManagerInterface $configManager
      */
     public function __construct(
         string $path,
@@ -40,7 +41,7 @@ class DecimalConfig extends AbstractConfig
         float $maxValue = PHP_INT_MAX,
         float $minValue = -PHP_INT_MAX,
         $defaultValue,
-        ConfigManager $configManager
+        ConfigManagerInterface $configManager
     ) {
         parent::__construct($path, $scope, $name, $description, $defaultValue, $configManager);
 

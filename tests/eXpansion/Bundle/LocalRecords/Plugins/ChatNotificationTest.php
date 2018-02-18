@@ -4,6 +4,9 @@ namespace Tests\eXpansion\Bundle\LocalRecords\Plugins;
 
 use eXpansion\Bundle\LocalRecords\Model\Record;
 use eXpansion\Bundle\LocalRecords\Plugins\ChatNotification;
+use eXpansion\Framework\Config\Model\ConfigInterface;
+use eXpansion\Framework\Config\Model\IntegerConfig;
+use eXpansion\Framework\Config\Services\ConfigManagerInterface;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\PlayersBundle\Model\Player;
@@ -366,12 +369,15 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
      */
     protected function getChatNotification()
     {
+        $config = $this->getMockBuilder(ConfigInterface::class)->getMock();
+        $config->method('get')->willReturn(10);
+
         return new ChatNotification(
             $this->chatNotificationHelper,
             $this->timeFormatter,
             $this->playerStorage,
             'prefix',
-            10
+            $config
         );
     }
 

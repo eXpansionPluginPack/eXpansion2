@@ -3,6 +3,7 @@
 namespace eXpansion\Framework\Config\Model;
 
 use eXpansion\Framework\Config\Services\ConfigManager;
+use eXpansion\Framework\Config\Services\ConfigManagerInterface;
 
 /**
  * Class AbstractConfig
@@ -39,7 +40,7 @@ abstract class AbstractConfig implements ConfigInterface
      * @param string $scope
      * @param string $description
      * @param mixed $defaultValue
-     * @param ConfigManager $configManager
+     * @param ConfigManagerInterface $configManager
      */
     public function __construct(
         string $path,
@@ -47,7 +48,7 @@ abstract class AbstractConfig implements ConfigInterface
         string $name,
         string $description,
         $defaultValue,
-        ConfigManager $configManager
+        ConfigManagerInterface $configManager
     ) {
         $this->path = $path;
         $this->name = $name;
