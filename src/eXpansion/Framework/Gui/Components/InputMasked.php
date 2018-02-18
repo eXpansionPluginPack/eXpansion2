@@ -11,7 +11,7 @@ use FML\Script\ScriptLabel;
 use FML\Types\Renderable;
 use FML\Types\ScriptFeatureable;
 
-class InputMasked extends AbstractuiElement implements Renderable, ScriptFeatureable
+class InputMasked extends AbstractUiElement implements Renderable, ScriptFeatureable
 {
 
     const TYPE_DEFAULT = "Basic";

@@ -16,7 +16,6 @@ use FML\Script\Features\ScriptFeature;
 use FML\Script\Script;
 use FML\Types\Renderable;
 use Tests\eXpansion\Framework\Core\TestCore;
-use Tests\eXpansion\Framework\Core\TestHelpers\ContainerDataTrait;
 
 class FactoryTest extends TestCore
 {
@@ -25,7 +24,7 @@ class FactoryTest extends TestCore
 
     protected function setUp()
     {
-        parent::setUp(); 
+        parent::setUp();
 
         $this->factory = $this->container->get('expansion.gui.component.factory');
     }
@@ -80,8 +79,7 @@ class FactoryTest extends TestCore
         $this->assertInstanceOf(Renderable::class, $element);
         $this->assertInstanceOf(\DOMElement::class, $element->render($doc));
 
-        if ($element instanceof ScriptFeature)
-        {
+        if ($element instanceof ScriptFeature) {
             $element->prepare(new Script());
         }
     }

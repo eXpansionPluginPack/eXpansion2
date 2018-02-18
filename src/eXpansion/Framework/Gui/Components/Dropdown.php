@@ -11,7 +11,7 @@ use FML\Script\Script;
 use FML\Script\ScriptLabel;
 use FML\Types\ScriptFeatureable;
 
-class Dropdown extends AbstractuiElement implements ScriptFeatureable
+class Dropdown extends AbstractUiElement implements ScriptFeatureable
 {
     /** @var int */
     protected $selectedIndex;

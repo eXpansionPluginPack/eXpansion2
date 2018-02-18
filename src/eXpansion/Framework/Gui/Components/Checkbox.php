@@ -10,7 +10,7 @@ use FML\Script\Script;
 use FML\Script\ScriptLabel;
 use FML\Types\ScriptFeatureable;
 
-class Checkbox extends AbstractuiElement implements ScriptFeatureable
+class Checkbox extends AbstractUiElement implements ScriptFeatureable
 {
     protected $scale = 1;
     /**
