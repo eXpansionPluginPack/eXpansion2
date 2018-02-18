@@ -26,5 +26,6 @@ class LocalRecordsExtension extends Extension
         $loader->load('gui.yml');
         $loader->load('records_race.yml');
         $loader->load('records_lap.yml');
+        $loader->load('configs.yml');
     }
 }
