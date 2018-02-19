@@ -45,6 +45,7 @@ class eXpansionCoreExtension extends Extension
         $loader->load('gui_grid.yml');
         $loader->load('helpers.yml');
         $loader->load('listeners.yml');
+        $loader->load('configs.yml');
 
         // Temporary for the prototype.
         $loader->load('plugins.yml');

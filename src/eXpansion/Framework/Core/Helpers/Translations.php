@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Core\Helpers;
 
+use eXpansion\Framework\Config\Services\ConfigManagerInterface;
 use Symfony\Component\Translation\Translator;
 
 
@@ -26,24 +27,26 @@ class Translations
      * Translations constructor.
      *
      * @param array $supportedLocales
-     * @param       $colorCodes
-     * @param       $glyphIcons
-     * @param       $translator
+     * @param ConfigManagerInterface $configManager
+     * @param $colorCodesConfigPath
+     * @param $glympIconsConfigPath
+     * @param Translator $translator
      */
     public function __construct(
         array $supportedLocales,
-        $colorCodes,
-        $glyphIcons,
+        ConfigManagerInterface $configManager,
+        $colorCodesConfigPath,
+        $glympIconsConfigPath,
         Translator $translator
     ) {
         $this->translator = $translator;
         $this->supportedLocales = $supportedLocales;
 
-        foreach ($colorCodes as $code => $colorCode) {
-            $this->replacementPatterns["{".$code."}"] = '$z$s'.$colorCode;
+        foreach ($configManager->getConfigDefinitionTree()->get($colorCodesConfigPath) as $code => $colorCode) {
+            $this->replacementPatterns["{".$code."}"] = $colorCode;
         }
 
-        foreach ($glyphIcons as $name => $icon) {
+        foreach ($configManager->getConfigDefinitionTree()->get($glympIconsConfigPath) as $name => $icon) {
             $this->replacementPatterns["|".$name."|"] = $icon;
         }
     }

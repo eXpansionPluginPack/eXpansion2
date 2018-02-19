@@ -1,0 +1,220 @@
+parameters:
+  expansion.core.config.path.color_codes: 'eXpansion/look_feel/color_codes/'
+  expansion.core.config.path.glymp_icons: 'eXpansion/look_feel/glymp_icons/'
+
+services:
+    _defaults:
+        autowire: true
+
+    #
+    # default set of colors
+    #
+    expansion.core.config.color_code.default:
+        class: eXpansion\Framework\Config\Model\ChatColorCodeConfig
+        arguments:
+            $path: "%expansion.core.config.path.color_codes%default"
+            $scope: "key"
+            $name: "expansion_core.config.color_codes.default"
+            $description: ""
+            $defaultValue: "$dee"
+
+    expansion.core.config.color_code.muted:
+        class: eXpansion\Framework\Config\Model\ChatColorCodeConfig
+        arguments:
+            $path: "%expansion.core.config.path.color_codes%muted"
+            $scope: "key"
+            $name: "expansion_core.config.color_codes.muted"
+            $description: ""
+            $defaultValue: "$999"
+
+    expansion.core.config.color_code.info:
+        class: eXpansion\Framework\Config\Model\ChatColorCodeConfig
+        arguments:
+            $path: "%expansion.core.config.path.color_codes%info"
+            $scope: "key"
+            $name: "expansion_core.config.color_codes.info"
+            $description: ""
+            $defaultValue: "$add"
+
+    expansion.core.config.color_code.success:
+        class: eXpansion\Framework\Config\Model\ChatColorCodeConfig
+        arguments:
+            $path: "%expansion.core.config.path.color_codes%success"
+            $scope: "key"
+            $name: "expansion_core.config.color_codes.success"
+            $description: ""
+            $defaultValue: "$ada"
+
+    expansion.core.config.color_code.warning:
+        class: eXpansion\Framework\Config\Model\ChatColorCodeConfig
+        arguments:
+            $path: "%expansion.core.config.path.color_codes%warning"
+            $scope: "key"
+            $name: "expansion_core.config.color_codes.warning"
+            $description: ""
+            $defaultValue: "$dda"
+
+    expansion.core.config.color_code.danger:
+        class: eXpansion\Framework\Config\Model\ChatColorCodeConfig
+        arguments:
+            $path: "%expansion.core.config.path.color_codes%danger"
+            $scope: "key"
+            $name: "expansion_core.config.color_codes.danger"
+            $description: ""
+            $defaultValue: "$daa"
+
+    expansion.core.config.color_code.error:
+        class: eXpansion\Framework\Config\Model\ChatColorCodeConfig
+        arguments:
+            $path: "%expansion.core.config.path.color_codes%error"
+            $scope: "key"
+            $name: "expansion_core.config.color_codes.error"
+            $description: ""
+            $defaultValue: "$d77"
+
+    expansion.core.config.color_code.variable:
+        class: eXpansion\Framework\Config\Model\ChatColorCodeConfig
+        arguments:
+            $path: "%expansion.core.config.path.color_codes%variable"
+            $scope: "key"
+            $name: "expansion_core.config.color_codes.variable"
+            $description: ""
+            $defaultValue: "$fff"
+
+    #
+    # ui defaults
+    #
+    expansion.core.config.color_code.primary:
+        class: eXpansion\Framework\Config\Model\ChatColorCodeConfig
+        arguments:
+            $path: "%expansion.core.config.path.color_codes%primary"
+            $scope: "key"
+            $name: "expansion_core.config.color_codes.primary"
+            $description: ""
+            $defaultValue: "$3af"
+
+    expansion.core.config.color_code.secondary:
+        class: eXpansion\Framework\Config\Model\ChatColorCodeConfig
+        arguments:
+            $path: "%expansion.core.config.path.color_codes%secondary"
+            $scope: "key"
+            $name: "expansion_core.config.color_codes.secondary"
+            $description: ""
+            $defaultValue: "$fff"
+
+    expansion.core.config.color_code.highlight:
+        class: eXpansion\Framework\Config\Model\ChatColorCodeConfig
+        arguments:
+            $path: "%expansion.core.config.path.color_codes%highlight"
+            $scope: "key"
+            $name: "expansion_core.config.color_codes.highlight"
+            $description: ""
+            $defaultValue: "$fff"
+
+    #
+    # admin set of colors
+    #
+    expansion.core.config.color_code.admin_info:
+        class: eXpansion\Framework\Config\Model\ChatColorCodeConfig
+        arguments:
+            $path: "%expansion.core.config.path.color_codes%admin_info"
+            $scope: "key"
+            $name: "expansion_core.config.color_codes.admin_info"
+            $description: ""
+            $defaultValue: "$fff"
+
+    #
+    # special colors
+    #
+    expansion.core.config.color_code.separator:
+        class: eXpansion\Framework\Config\Model\ChatColorCodeConfig
+        arguments:
+            $path: "%expansion.core.config.path.color_codes%separator"
+            $scope: "key"
+            $name: "expansion_core.config.color_codes.separator"
+            $description: ""
+            $defaultValue: "$3af"
+
+    expansion.core.config.color_code.test:
+        class: eXpansion\Framework\Config\Model\ChatColorCodeConfig
+        arguments:
+            $path: "%expansion.core.config.path.color_codes%test"
+            $scope: "key"
+            $name: "expansion_core.config.color_codes.test"
+            $description: ""
+            $defaultValue: "$f00"
+
+    #
+    # Glymph Icons
+    #
+    expansion.core.config.glyph_icon.test:
+        class: eXpansion\Framework\Config\Model\TextConfig
+        arguments:
+            $path: "%expansion.core.config.path.glymp_icons%test"
+            $scope: "key"
+            $name: "expansion_core.config.glymp_icons.test"
+            $description: ""
+            $defaultValue: '✔'
+
+    expansion.core.config.glyph_icon.success:
+        class: eXpansion\Framework\Config\Model\TextConfig
+        arguments:
+            $path: "%expansion.core.config.path.glymp_icons%success"
+            $scope: "key"
+            $name: "expansion_core.config.glymp_icons.success"
+            $description: ""
+            $defaultValue: '$0d0✔'
+
+    expansion.core.config.glyph_icon.fail:
+        class: eXpansion\Framework\Config\Model\TextConfig
+        arguments:
+            $path: "%expansion.core.config.path.glymp_icons%fail"
+            $scope: "key"
+            $name: "expansion_core.config.glymp_icons.fail"
+            $description: ""
+            $defaultValue: '$b32✘'
+
+    expansion.core.config.glyph_icon.server:
+        class: eXpansion\Framework\Config\Model\TextConfig
+        arguments:
+            $path: "%expansion.core.config.path.glymp_icons%server"
+            $scope: "key"
+            $name: "expansion_core.config.glymp_icons.server"
+            $description: ""
+            $defaultValue: '$afd'
+
+    expansion.core.config.glyph_icon.info:
+        class: eXpansion\Framework\Config\Model\TextConfig
+        arguments:
+            $path: "%expansion.core.config.path.glymp_icons%info"
+            $scope: "key"
+            $name: "expansion_core.config.glymp_icons.info"
+            $description: ""
+            $defaultValue: '$fff'
+
+    expansion.core.config.glyph_icon.warning:
+        class: eXpansion\Framework\Config\Model\TextConfig
+        arguments:
+            $path: "%expansion.core.config.path.glymp_icons%warning"
+            $scope: "key"
+            $name: "expansion_core.config.glymp_icons.warning"
+            $description: ""
+            $defaultValue: ''
+
+    expansion.core.config.glyph_icon.error:
+        class: eXpansion\Framework\Config\Model\TextConfig
+        arguments:
+            $path: "%expansion.core.config.path.glymp_icons%error"
+            $scope: "key"
+            $name: "expansion_core.config.glymp_icons.error"
+            $description: ""
+            $defaultValue: '$d77'
+
+    expansion.core.config.glyph_icon.admin:
+        class: eXpansion\Framework\Config\Model\TextConfig
+        arguments:
+            $path: "%expansion.core.config.path.glymp_icons%admin"
+            $scope: "key"
+            $name: "expansion_core.config.glymp_icons.admin"
+            $description: ""
+            $defaultValue: '$fff'
