@@ -8,9 +8,9 @@ namespace eXpansion\Framework\Config\Model;
  * Class TextConfig
  *
  * @package eXpansion\Framework\Config\Model;
- * @author  oliver de Cramer <oliverde8@gmail.com>
+ * @author Reaby
  */
-class TextConfig extends AbstractConfig
+class PasswordConfig extends AbstractConfig
 {
     /** @return string */
     public function getRawValue()

@@ -32,23 +32,23 @@ class Label extends FMLLabel
         switch ($type) {
             case self::TYPE_NORMAL:
                 $this->setTextSize(1)
-                    ->setHeight(5)
+                    ->setHeight(3)
                     ->setTextFont('BiryaniDemiBold');
                 break;
             case self::TYPE_TITLE:
                 $this->setTextSize(1)
-                    ->setHeight(5)
+                    ->setHeight(3)
                     ->setTextFont('RajdhaniMono');
 
                 break;
             case self::TYPE_HEADER:
                 $this->setTextSize(1)
-                    ->setHeight(5)
+                    ->setHeight(3)
                     ->setTextFont('BiryaniDemiBold');
                 break;
             default:
                 $this->setTextSize(1)
-                    ->setHeight(5);
+                    ->setHeight(3);
                 break;
         }
     }

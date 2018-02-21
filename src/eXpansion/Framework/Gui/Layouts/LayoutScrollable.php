@@ -83,8 +83,8 @@ class LayoutScrollable extends AbstractUiElement implements Renderable, ScriptFe
         $container->setPosition($this->frame_posX, $this->frame_posY);
 
         $quad = new Quad();
-        $quad->setStyles('Bgs1', 'BgColorContour')
-            ->setSize($this->getWidth(), $this->getHeight());
+        // $quad->setStyles('Bgs1', 'BgColorContour')
+        //  ->setSize($this->getWidth(), $this->getHeight());
 
         $contentFrame = new Frame();
         $contentFrame->addChild($this->parentFrame);

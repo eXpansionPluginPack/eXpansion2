@@ -72,7 +72,7 @@ interface ConfigInterface
      *
      * @param mixed $value
      *
-     * @return boolean true if sucessfuly changed and false if not.
+     * @return boolean true if successfully changed and false if not.
      */
     public function setRawValue($value);
 

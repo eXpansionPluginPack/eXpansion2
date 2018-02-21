@@ -4,7 +4,6 @@ namespace eXpansion\Framework\Config\Ui\Window;
 
 use eXpansion\Framework\Config\Exception\InvalidConfigException;
 use eXpansion\Framework\Config\Model\ConfigInterface;
-use eXpansion\Framework\Config\Services\ConfigManager;
 use eXpansion\Framework\Config\Services\ConfigManagerInterface;
 use eXpansion\Framework\Config\Services\ConfigUiManager;
 use eXpansion\Framework\Core\Exceptions\PlayerException;
@@ -13,11 +12,11 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WindowFactory;
 use eXpansion\Framework\Gui\Components\Button;
+use eXpansion\Framework\Gui\Components\Label;
 use eXpansion\Framework\Gui\Components\Tooltip;
 use FML\Controls\Control;
 use FML\Controls\Frame;
 use FML\Controls\Quad;
-use FML\Controls\Quads\Quad_Icons64x64_1;
 
 /**
  * Class ConfigWindowFactory
@@ -87,12 +86,12 @@ class ConfigWindowFactory extends WindowFactory
 
         $saveButton = $this->uiFactory->createConfirmButton('expansion_config.ui.save', Button::COLOR_SUCCESS);
         $saveButton->setAction(
-                $this->actionFactory->createManialinkAction(
-                    $manialink,
-                    [$this, 'saveCallback'],
-                    ['path' => $this->currentPath]
-                )
+            $this->actionFactory->createManialinkAction(
+                $manialink,
+                [$this, 'saveCallback'],
+                ['path' => $this->currentPath]
             )
+        )
             ->setPosition(
                 $this->sizeX - $saveButton->getWidth() - 4,
                 -$this->sizeY + $saveButton->getHeight() + 4
@@ -113,7 +112,7 @@ class ConfigWindowFactory extends WindowFactory
 
         $contentFrame->addChild(
             $this->uiFactory->createLayoutScrollable(
-                $this->uiFactory->createLayoutRow(0, 0, $elements),
+                $this->uiFactory->createLayoutRow(0, 0, $elements, 4),
                 $this->sizeX,
                 $this->sizeY - $saveButton->getHeight() - 4 - 4
             )->setAxis(false, true)
@@ -127,46 +126,58 @@ class ConfigWindowFactory extends WindowFactory
      *
      * @param ConfigInterface $config
      * @param                 $sizeX
-     * @param Tooltip       $tooltip
+     * @param Tooltip         $tooltip
      *
-     * @return \eXpansion\Framework\Gui\Layouts\LayoutLine
+     * @return \eXpansion\Framework\Gui\Layouts\LayoutRow
      */
     protected function buildConfig(ConfigInterface $config, $sizeX, Tooltip $tooltip)
     {
-        $descriptionButton = new Quad_Icons64x64_1();
-        $descriptionButton->setSubStyle(Quad_Icons64x64_1::SUBSTYLE_TrackInfo)
-            ->setSize(4, 4);
+        // $descriptionButton = new Quad_Icons64x64_1();
+        // $descriptionButton->setSubStyle(Quad_Icons64x64_1::SUBSTYLE_TrackInfo)
         // Temporary to get en, tooltip don't support translations.
-        $tooltip->addTooltip($descriptionButton, $this->chatNotification->getMessage($config->getDescription()));
+        // $tooltip->addTooltip($descriptionButton, $this->chatNotification->getMessage($config->getDescription()));
 
-        $sizeX -= 4 + 6;
+        // $sizeX -= 20;
 
-        $rowLayout =  $this->uiFactory->createLayoutLine(
-            0,
-            0,
-            [
+        $rowLayout = $this->uiFactory->createLayoutRow(2, 0, [], 0);
+
+        $rowLayout->addChild(
+            $name = $this->uiFactory
+                ->createLabel($config->getName(), Label::TYPE_TITLE)
+                ->setWidth($sizeX)
+                ->setHorizontalAlign(Control::LEFT)
+                ->setTranslate(true)
+                ->setTextId($config->getName())
+                ->setText(null));
+
+        if ($config->getDescription()) {
+            $rowLayout->addChild(
                 $this->uiFactory
-                    ->createLabel($config->getName())
-                    ->setWidth($sizeX * 0.35)
-                    ->setHorizontalAlign(Control::RIGHT)
+                    ->createLabel("", Label::TYPE_NORMAL)
+                    ->setWidth($sizeX)
+                    ->setHorizontalAlign(Control::LEFT)
                     ->setTranslate(true)
-                    ->setTextId($config->getName())
-                    ->setText(null),
-                $this->configUiManager->getUiHandler($config)->build($config, $sizeX * 0.65),
-                $descriptionButton
-            ],
-            2
-        );
+                    ->setTextId($config->getDescription())
+                    ->setText(null)
+                    ->setTextPrefix("  ")
+                    ->setMaxLines(3)
+                    ->setLineSpacing(1)
+            );
+        }
 
+        $rowLayout->addChild(
+            $this->configUiManager->getUiHandler($config)->build($config, $sizeX * 0.37));
+
+        
         return $rowLayout;
     }
 
 
     /**
      * @param ManialinkInterface $manialink
-     * @param $login
-     * @param $entries
-     * @param $args
+     * @param                    $login
+     * @param                    $entries
+     * @param                    $args
      */
     public function saveCallback(ManialinkInterface $manialink, $login, $entries, $args)
     {

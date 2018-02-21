@@ -6,18 +6,20 @@ namespace eXpansion\Bundle\MxKarma\Plugins;
 use eXpansion\Bundle\MxKarma\DataProviders\Listeners\ListenerInterfaceMxKarma;
 use eXpansion\Bundle\MxKarma\Entity\MxRating;
 use eXpansion\Bundle\MxKarma\Entity\MxVote;
+use eXpansion\Bundle\MxKarma\Services\MxKarmaService;
+use eXpansion\Framework\Config\Model\ConfigInterface;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Application\Dispatcher;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
+use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMap;
 use Maniaplanet\DedicatedServer\Structures\Map;
-use Symfony\Component\Yaml\Yaml;
-use eXpansion\Bundle\MxKarma\Plugins\Connection as MxConnection;
+
 
 class MxKarma implements StatusAwarePluginInterface,
     ListenerInterfaceMpScriptMap,
@@ -51,7 +53,7 @@ class MxKarma implements StatusAwarePluginInterface,
     protected $chatNotification;
 
     /**
-     * @var MxConnection
+     * @var MxKarmaService
      */
     private $mxKarma;
 
@@ -64,29 +66,56 @@ class MxKarma implements StatusAwarePluginInterface,
      * @var PlayerStorage
      */
     private $playerStorage;
+    /**
+     * @var ConfigInterface
+     */
+    private $apikey;
+    /**
+     * @var ConfigInterface
+     */
+    private $serverLogin;
+    /**
+     * @var GameDataStorage
+     */
+    private $gameDataStorage;
+    /**
+     * @var ConfigInterface
+     */
+    private $enabled;
 
     /**
      * MxKarma constructor.
-     * @param Connection $mxKarma
-     * @param Console $console
+     * @param ConfigInterface  $enabled
+     * @param ConfigInterface  $apikey
+     * @param ConfigInterface  $serverLogin
+     * @param MxKarmaService   $mxKarma
+     * @param Console          $console
      * @param ChatNotification $chatNotification
-     * @param Dispatcher $dispatcher
-     * @param PlayerStorage $playerStorage
+     * @param Dispatcher       $dispatcher
+     * @param PlayerStorage    $playerStorage
+     * @param GameDataStorage  $gameDataStorage
      */
     public function __construct(
-        MxConnection $mxKarma,
+        ConfigInterface $enabled,
+        ConfigInterface $apikey,
+        ConfigInterface $serverLogin,
+        MxKarmaService $mxKarma,
         Console $console,
         ChatNotification $chatNotification,
         Dispatcher $dispatcher,
-        PlayerStorage $playerStorage
+        PlayerStorage $playerStorage,
+        GameDataStorage $gameDataStorage
     ) {
 
-        $this->config = (object)Yaml::parse(file_get_contents('./app/config/plugins/mxkarma.yml'))['parameters'];
         $this->console = $console;
         $this->dispatcher = $dispatcher;
         $this->chatNotification = $chatNotification;
         $this->mxKarma = $mxKarma;
         $this->playerStorage = $playerStorage;
+        $this->apikey = $apikey;
+        $this->serverLogin = $serverLogin;
+        $this->gameDataStorage = $gameDataStorage;
+        $this->enabled = $enabled;
     }
 
     /**
@@ -118,14 +147,14 @@ class MxKarma implements StatusAwarePluginInterface,
      */
     public function setStatus($status)
     {
-       // do nothing
+
     }
 
     /**
      * Called when a player chats.
      *
      * @param Player $player
-     * @param $text
+     * @param        $text
      *
      * @return void
      */
@@ -167,7 +196,7 @@ class MxKarma implements StatusAwarePluginInterface,
     public function onApplicationReady()
     {
         $this->startTime = time();
-        $this->mxKarma->connect($this->config->serverlogin, $this->config->apikey);
+        $this->connect();
 
     }
 
@@ -200,6 +229,22 @@ class MxKarma implements StatusAwarePluginInterface,
         $this->changedVotes = [];
         $this->votes = $mxRating->getVotes();
 
+        $total = $mxRating->getVoteAverage();
+
+        $yes = 0;
+        $no = 0;
+        if ($mxRating->getVoteAverage() > 0) {
+            $yes = round(($mxRating->getVoteAverage() / 100) * $mxRating->getVoteCount());
+
+            $no = round(((100 - $mxRating->getVoteAverage()) / 100) * $mxRating->getVoteCount());
+        }
+
+        print_r($mxRating);
+
+
+        $this->chatNotification->sendMessage('expansion_mxkarma.chat.votesloaded', null,
+            ["%total%" => round($total, 2), "%positive%" => $yes, "%negative%" => $no]);
+
     }
 
     /**
@@ -208,7 +253,7 @@ class MxKarma implements StatusAwarePluginInterface,
      */
     public function onMxKarmaVoteSave($updatedVotes)
     {
-       // do nothing
+        // do nothing
     }
 
     public function onMxKarmaDisconnect()
@@ -219,25 +264,28 @@ class MxKarma implements StatusAwarePluginInterface,
     /**
      * Callback sent when the "StartMap" section start.
      *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time Server time when the callback was sent
+     * @param int     $count Each time this section is played, this number is incremented by one
+     * @param int     $time Server time when the callback was sent
      * @param boolean $restarted true if the map was restarted, false otherwise
-     * @param Map $map Map started with.
+     * @param Map     $map Map started with.
      *
      * @return void
      */
     public function onStartMapStart($count, $time, $restarted, Map $map)
     {
-       // do nothing
+        if ($this->mxKarma->isConnected() == false) {
+            $this->console->writeln("> MxKarma is at disconnected state, trying to establish connection.");
+            $this->connect();
+        }
     }
 
     /**
      * Callback sent when the "StartMap" section end.
      *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time Server time when the callback was sent
+     * @param int     $count Each time this section is played, this number is incremented by one
+     * @param int     $time Server time when the callback was sent
      * @param boolean $restarted true if the map was restarted, false otherwise
-     * @param Map $map Map started with.
+     * @param Map     $map Map started with.
      *
      * @return void
      */
@@ -250,25 +298,25 @@ class MxKarma implements StatusAwarePluginInterface,
     /**
      * Callback sent when the "EndMap" section start.
      *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time Server time when the callback was sent
+     * @param int     $count Each time this section is played, this number is incremented by one
+     * @param int     $time Server time when the callback was sent
      * @param boolean $restarted true if the map was restarted, false otherwise
-     * @param Map $map Map started with.
+     * @param Map     $map Map started with.
      *
      * @return void
      */
     public function onEndMapStart($count, $time, $restarted, Map $map)
     {
-    // do nothing
+        // do nothing
     }
 
     /**
      * Callback sent when the "EndMap" section end.
      *
-     * @param int $count Each time this section is played, this number is incremented by one
-     * @param int $time Server time when the callback was sent
+     * @param int     $count Each time this section is played, this number is incremented by one
+     * @param int     $time Server time when the callback was sent
      * @param boolean $restarted true if the map was restarted, false otherwise
-     * @param Map $map Map started with.
+     * @param Map     $map Map started with.
      *
      * @return void
      */
@@ -284,5 +332,31 @@ class MxKarma implements StatusAwarePluginInterface,
             $this->mxKarma->saveVotes($map, (time() - $this->startTime), $votes);
         }
     }
+
+    protected function connect()
+    {
+        if ($this->enabled->get()) {
+            if (empty($this->apikey->get())) {
+                $this->console->writeln('> MxKarma: api key not set, $f00can\'t connect.');
+
+                return;
+            }
+
+            if (empty($this->serverLogin->get())) {
+                $this->console->writeln('> MxKarma: server login not set, $f00can\'t connect.');
+
+                return;
+            }
+
+            if ($this->gameDataStorage->getSystemInfo()->serverLogin !== $this->serverLogin->get()) {
+                $this->console->writeln("> MxKarma: server login doesn't match configured server login.");
+
+                return;
+            }
+
+            $this->mxKarma->connect($this->serverLogin->get(), $this->apikey->get());
+        }
+    }
+
 
 }

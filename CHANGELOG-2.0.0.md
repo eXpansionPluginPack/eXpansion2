@@ -4,7 +4,10 @@
 
 * Added ingame configuration system. 
 * Added DeveloperTools bundle
- 
+* Fixed issue #277 - sorting numeric values
+* Add configs for various types, booleans, textfields, password
+* Add MxKarma 
+
 # 2.0.0.0-alpha2 (2018-02-03)
 
 ## Bug Fixes
