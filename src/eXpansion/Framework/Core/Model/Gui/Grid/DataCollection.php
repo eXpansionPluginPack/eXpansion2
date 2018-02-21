@@ -34,7 +34,7 @@ class DataCollection implements DataCollectionInterface
     /**
      * DataCollection constructor.
      *
-     * @param array $data
+     * @param array           $data
      * @param FilterInterface $filter
      */
     public function __construct($data, FilterInterface $filter)
@@ -61,7 +61,7 @@ class DataCollection implements DataCollectionInterface
     /**
      * Read data on a certain line
      *
-     * @param mixed $lineData
+     * @param mixed  $lineData
      * @param string $key
      *
      * @return string
@@ -87,7 +87,7 @@ class DataCollection implements DataCollectionInterface
     /**
      * Set filters & sorting to apply to the data.
      *
-     * @param array $filters List of filters with the fallowing format :
+     * @param array  $filters List of filters with the fallowing format :
      *                          ['key_to_filter'=> ['type_of_filter' , 'wordl"]]
      *                          For the possible types of filters check FilterInstance constants.
      *                          Example to find a map or author containing the keyword "hello"
@@ -164,12 +164,18 @@ class DataCollection implements DataCollectionInterface
             if (!is_null($this->sort)) {
                 $sort = $this->sort;
                 uasort($this->filteredData, function ($a, $b) use ($sort) {
-                    $comp = (strcmp($a[$sort[0]], $b[$sort[0]]));
+                    if (is_numeric($a[$sort[0]])) {
+                        $comp = ($a[$sort[0]] < $b[$sort[0]]) ? 1 : -1;
+                    } else {
+                        $comp = (strcmp($a[$sort[0]], $b[$sort[0]]));
+                    }
+
                     if ($sort[1] == "DESC") {
                         return -1 * $comp;
                     } else {
                         return $comp;
                     }
+
                 });
             }
         }
