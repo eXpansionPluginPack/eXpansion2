@@ -248,7 +248,7 @@ class MxKarmaService
         $params = array("sessionKey" => $this->sessionKey);
         $postData = array(
             "gamemode" => $this->getGameMode(),
-            "titleid" => $this->gameDataStorage->getTitle(),
+            "titleid" => $this->gameDataStorage->getVersion()->titleId,
             "mapuid" => $map->uId,
             "mapname" => $map->name,
             "mapauthor" => $map->author,
