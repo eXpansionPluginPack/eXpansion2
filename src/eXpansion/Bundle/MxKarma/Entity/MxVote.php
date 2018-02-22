@@ -15,6 +15,7 @@ class MxVote
     public function __construct($obj)
     {
         $this->login = $obj->login;
+        $this->nickname = $obj->nickname;
         $this->vote = (int)$obj->vote;
     }
 }

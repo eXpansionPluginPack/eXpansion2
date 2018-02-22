@@ -239,9 +239,6 @@ class MxKarma implements StatusAwarePluginInterface,
             $no = round(((100 - $mxRating->getVoteAverage()) / 100) * $mxRating->getVoteCount());
         }
 
-        print_r($mxRating);
-
-
         $this->chatNotification->sendMessage('expansion_mxkarma.chat.votesloaded', null,
             ["%total%" => round($total, 2), "%positive%" => $yes, "%negative%" => $no]);
 

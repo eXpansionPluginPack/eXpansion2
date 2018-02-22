@@ -218,11 +218,12 @@ class MxKarmaService
         $params = array("sessionKey" => $this->sessionKey);
         $postData = [
             "gamemode" => $this->getGameMode(),
-            "titleid" => $this->gameDataStorage->getTitle(),
+            "titleid" => $this->gameDataStorage->getVersion()->titleId,
             "mapuid" => $this->mapStorage->getCurrentMap()->uId,
             "getvotesonly" => $getVotesOnly,
             "playerlogins" => $players,
         ];
+
         $this->http->post(
             $this->buildUrl("getMapRating", $params),
             json_encode($postData),
@@ -246,6 +247,7 @@ class MxKarmaService
         }
 
         $params = array("sessionKey" => $this->sessionKey);
+
         $postData = array(
             "gamemode" => $this->getGameMode(),
             "titleid" => $this->gameDataStorage->getVersion()->titleId,
@@ -256,7 +258,6 @@ class MxKarmaService
             "maptime" => $time,
             "votes" => $votes,
         );
-
 
         $this->console->writeln('> MxKarma attempting to save votes...');
         $this->http->post(
@@ -305,7 +306,7 @@ class MxKarmaService
         $data = $this->getObject($result->getResponse());
 
         if ($data === null) {
-          return null;
+            return null;
         }
         try {
             $this->ratings = new MXRating();
@@ -445,6 +446,7 @@ class MxKarmaService
     private function buildUrl($method, $params)
     {
         $url = $this->address.$method;
+
         return $url."?".http_build_query($params);
     }
 
