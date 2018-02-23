@@ -16,12 +16,18 @@ use Tests\eXpansion\Framework\Core\TestCore;
 
 class DataCollectionTest extends TestCore
 {
+    /**
+     * Test that the data collection factories return proper objects.
+     */
     public function testFactories()
     {
         $this->assertInstanceOf(DataCollectionInterface::class, $this->getObjectDataCollectionFactory()->create([]));
         $this->assertInstanceOf(DataCollectionInterface::class, $this->getArrayDataCollectionFactory()->create([]));
     }
 
+    /**
+     * Test that fetching data from the data collections is possible.
+     */
     public function testGetData()
     {
         $data = $this->getData(12);
@@ -34,6 +40,9 @@ class DataCollectionTest extends TestCore
         $this->assertEmpty($dataCollection->getData(4));
     }
 
+    /**
+     * Test switching to last page.
+     */
     public function testLastPage()
     {
         $data = $this->getData(10);
@@ -57,6 +66,9 @@ class DataCollectionTest extends TestCore
         $this->assertEquals(3, $dataCollection->getLastPageNumber());
     }
 
+    /**
+     * Test applying filters
+     */
     public function testFilters()
     {
         $data = $this->getData(10);
@@ -69,6 +81,9 @@ class DataCollectionTest extends TestCore
         return $dataCollection;
     }
 
+    /**
+     * Test reseting filters.
+     */
     public function testFilterReset()
     {
         $dataCollection = $this->testFilters();
@@ -77,12 +92,45 @@ class DataCollectionTest extends TestCore
         $this->assertEquals([['data' => 2]], $dataCollection->getData(1));
     }
 
+    /**
+     * Test reseting filters.
+     */
     public function testReset()
     {
         $dataCollection = $this->testFilters();
         $dataCollection->reset();
 
         $this->assertCount(10, $dataCollection->getData(1));
+    }
+
+    /**
+     * Test that sorting of strings works well.
+     */
+    public function testSortingOfStringValues()
+    {
+        $data = [['data' => 'daaa'], ['data' => 'abc'], ['data' => 'aaa'], ['data' => 'ccc']];
+        $dataCollection = $this->getArrayDataCollectionFactory()->create($data);
+
+        $dataCollection->setFiltersAndSort([], 'data', 'ASC');
+        $this->assertEquals(
+            [['data' => 'aaa'], ['data' => 'abc'], ['data' => 'ccc'], ['data' => 'daaa']],
+            $dataCollection->getData(1)
+        );
+    }
+
+    /**
+     * Test that sorting of integer values works well
+     */
+    public function testSortingOfIntegeralues()
+    {
+        $data = [['data' => '12'], ['data' => 5], ['data' => '4'], ['data' => 1]];
+        $dataCollection = $this->getArrayDataCollectionFactory()->create($data);
+
+        $dataCollection->setFiltersAndSort([], 'data', 'DESC');
+        $this->assertEquals(
+            [['data' => '12'], ['data' => 5], ['data' => '4'], ['data' => 1]],
+            $dataCollection->getData(1)
+        );
     }
 
     protected function getData($size = 20)
