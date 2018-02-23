@@ -165,7 +165,7 @@ class DataCollection implements DataCollectionInterface
                 $sort = $this->sort;
                 uasort($this->filteredData, function ($a, $b) use ($sort) {
                     if (is_numeric($a[$sort[0]])) {
-                        $comp = ($a[$sort[0]] < $b[$sort[0]]) ? 1 : -1;
+                        $comp = ($a[$sort[0]] < $b[$sort[0]]) ? -1 : 1;
                     } else {
                         $comp = (strcmp($a[$sort[0]], $b[$sort[0]]));
                     }
