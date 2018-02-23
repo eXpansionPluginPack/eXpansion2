@@ -111,7 +111,7 @@ class DataCollectionTest extends TestCore
         $data = [['data' => 'daaa'], ['data' => 'abc'], ['data' => 'aaa'], ['data' => 'ccc']];
         $dataCollection = $this->getArrayDataCollectionFactory()->create($data);
 
-        $dataCollection->setFiltersAndSort([], 'data', '');
+        $dataCollection->setFiltersAndSort([], 'data', 'ASC');
         $this->assertEquals(
             [['data' => 'aaa'], ['data' => 'abc'], ['data' => 'ccc'], ['data' => 'daaa']],
             $dataCollection->getData(1)
@@ -126,9 +126,9 @@ class DataCollectionTest extends TestCore
         $data = [['data' => '12'], ['data' => 5], ['data' => '4'], ['data' => 1]];
         $dataCollection = $this->getArrayDataCollectionFactory()->create($data);
 
-        $dataCollection->setFiltersAndSort([], 'data', '');
+        $dataCollection->setFiltersAndSort([], 'data', 'DESC');
         $this->assertEquals(
-            [['data' => 1], ['data' => '4'], ['data' => 5], ['data' => '12']],
+            [['data' => '12'], ['data' => 5], ['data' => '4'], ['data' => 1]],
             $dataCollection->getData(1)
         );
     }
