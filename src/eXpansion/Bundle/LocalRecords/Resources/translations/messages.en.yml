@@ -64,6 +64,15 @@ expansion_local_records:
       name: "Public notificaiton threshold"
       dsc: "Records better then this threshold will be announced to all players."
 
+    color_codes:
+      record: "Record default color"
+      record_top: "Record TOP color"
+      record_rank: "Record rank information color"
+
+    glymp_icons:
+      time: "Time icon"
+      record: "Record icon"
+
 expansion_config:
   menu:
     eXpansion:
