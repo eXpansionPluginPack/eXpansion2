@@ -4,8 +4,10 @@ namespace eXpansion\Framework\Core\Services;
 
 use eXpansion\Framework\Core\Helpers\ColorConversion;
 use eXpansion\Framework\Core\Services\Application\Dispatcher;
+use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Class Console to print in the console.
@@ -50,6 +52,9 @@ class Console
     /** @var OutputInterface */
     protected $consoleOutput;
 
+    /** @var SymfonyStyle */
+    protected $sfStyleOutput;
+
     /** @var boolean Color console enabled */
     protected $colorEnabled;
     /**
@@ -78,6 +83,8 @@ class Console
     {
         $this->consoleOutput = $consoleOutput;
         $this->dispatcher = $dispatcher;
+
+        $this->sfStyleOutput = new SymfonyStyle(new StringInput(''), $consoleOutput);
     }
 
     /**
@@ -224,5 +231,18 @@ class Console
         }
 
         return $this->consoleOutput;
+    }
+
+    /**
+     * Get symfony style output.
+     *
+     * @return SymfonyStyle
+     */
+    public function getSfStyleOutput(): SymfonyStyle
+    {
+        if (is_null($this->sfStyleOutput)) {
+            $this->sfStyleOutput = new SymfonyStyle(new StringInput(''), new NullOutput());
+        }
+        return $this->sfStyleOutput;
     }
 }

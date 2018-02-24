@@ -96,6 +96,12 @@ class AdminGroupsTest extends TestAdminGroups
         $this->expectException(UnknownGroupException::class);
         $this->assertFalse($helper->hasGroupPermission('invalid_group', 'wrong_permission'));
     }
+    
+    public function testGuestUserGroupPermission()
+    {
+        $helper = $this->getAdminGroupHelper();
+        $this->assertFalse($helper->hasGroupPermission('admin:guest', 'p1'));
+    }
 
     public function testHasGroupPermissionsException()
     {
