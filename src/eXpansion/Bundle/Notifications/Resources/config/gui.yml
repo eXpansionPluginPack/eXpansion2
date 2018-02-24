@@ -1,0 +1,23 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    eXpansion\Bundle\Notifications\Plugins\Gui\NotificationWidget:
+        class: eXpansion\Bundle\Notifications\Plugins\Gui\NotificationWidget
+        arguments:
+          $name:  "Notifications"
+          $posX: 0
+          $posY: 0
+          $sizeX: null
+          $sizeY: null
+
+    eXpansion\Bundle\Notifications\Plugins\Gui\NotificationUpdater:
+        class: eXpansion\Bundle\Notifications\Plugins\Gui\NotificationUpdater
+        arguments:
+          $name:  "Notification Updater"
+          $playerGroup : "@expansion.framework.core.user_groups.all_players"
+          $variables:
+            - {name: "notification", type: "Text[Text]", default: "Text[Text]"}
+

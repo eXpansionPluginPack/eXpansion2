@@ -144,7 +144,7 @@ EOL;
         $scriptContent .= $this->checkOldVariable->getScriptDeclaration() . "\n";
         if ($defaultValues) {
             $scriptContent .= $this->checkVariable->getScriptValueSet() . "\n";
-            $scriptContent .= $this->checkOldVariable->getVariableName() . ' = "";';
+            $scriptContent .= $this->checkOldVariable->getScriptValueSet() . "\n";
         }
 
         return $scriptContent;
