@@ -83,8 +83,7 @@ class LayoutScrollable extends AbstractUiElement implements Renderable, ScriptFe
         $container->setPosition($this->frame_posX, $this->frame_posY);
 
         $quad = new Quad();
-        // $quad->setStyles('Bgs1', 'BgColorContour')
-        //  ->setSize($this->getWidth(), $this->getHeight());
+        // this quad is used to placeholder, if you need to add later "frame"  to the view.
 
         $contentFrame = new Frame();
         $contentFrame->addChild($this->parentFrame);
@@ -174,15 +173,13 @@ EOL;
             if (Event.Control != Null && Event.Control.HasClass("uiScrollbar") )  {
                 if (Event.Control.DataAttributeGet("axis") == "X") {
                     exp_scroll_activeX = True;
-                    log(Now ^ "X");
                 } else {
                     exp_scroll_activeY = True;																
                 }
                 exp_scroll_frame = Event.Control.Parent;
                 exp_scroll_pos = <MouseX, MouseY> - Event.Control.RelativePosition_V3 ;
                 exp_scroll_content = (exp_scroll_frame.Parent.Controls[1] as CMlFrame); // gets the bounding frame				
-                exp_scroll_content_size = exp_scroll_content.Controls[0].Size;
-                log(exp_scroll_content_size);
+                exp_scroll_content_size = exp_scroll_content.Controls[0].Size;             
             }
 EOL;
     }
