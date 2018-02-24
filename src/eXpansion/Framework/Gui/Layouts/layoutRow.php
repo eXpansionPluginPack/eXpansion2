@@ -10,7 +10,7 @@ use FML\Types\Container;
 use FML\Types\Renderable;
 use FML\Types\ScriptFeatureable;
 
-class layoutRow implements Renderable, ScriptFeatureable, Container
+class LayoutRow implements Renderable, ScriptFeatureable, Container
 {
 
     protected $frameClasses = [];
@@ -29,7 +29,7 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
     /**
      * @var float|int
      */
-    protected $margin = 1;
+    protected $margin = 0;
 
     /**
      * @var float|int
@@ -65,12 +65,15 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
         $this->updateSize();
     }
 
+    /**
+     * Update the size of the layout according to all the elements in it.
+     */
     protected function updateSize()
     {
         $sizeX = 0;
         $sizeY = 0;
         foreach ($this->elements as $idx => $element) {
-            $sizeY += $element->getY() + $element->getHeight() + $this->margin;
+            $sizeY += $element->getHeight() + $this->margin;
 
             if (abs($element->getX()) + $element->getWidth() > $sizeX) {
                 $sizeX = abs($element->getX()) + $element->getWidth();
@@ -80,9 +83,11 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
     }
 
     /**
+     * Set position.
+     *
      * @param double $x
      * @param double $y
-     * @return layoutRow
+     * @return LayoutRow
      */
     public function setPosition($x, $y)
     {
@@ -94,7 +99,7 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
 
     /**
      * @param mixed $startX
-     * @return layoutRow
+     * @return LayoutRow
      */
     public function setX($startX)
     {
@@ -105,7 +110,7 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
 
     /**
      * @param mixed $startY
-     * @return layoutRow
+     * @return LayoutRow
      */
     public function setY($startY)
     {
@@ -127,6 +132,7 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
         $frame->setAlign($this->hAlign, $this->vAlign);
         $frame->setPosition($this->startX, $this->startY);
         $frame->addClasses($this->frameClasses);
+        $frame->setSize($this->getWidth(), $this->getHeight());
 
         $startY = 0;
 
@@ -190,7 +196,7 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
 
     /**
      * @param float $width
-     * @return layoutRow
+     * @return LayoutRow
      */
     public function setWidth($width)
     {
@@ -224,7 +230,7 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
 
     /**
      * @param string $class
-     * @return layoutRow
+     * @return LayoutRow
      */
     public function addClass($class)
     {
@@ -267,7 +273,11 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
      */
     public function removeAllChildren()
     {
+        $this->width = 0;
+        $this->height = 0;
+        $this->elements = [];
 
+        return $this;
     }
 
     /**
@@ -311,7 +321,7 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
     /**
      * @param float $sizeX
      * @param float $sizeY
-     * @return layoutRow
+     * @return LayoutRow
      */
     private function setSize($sizeX, $sizeY)
     {
@@ -325,7 +335,7 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
     /**
      * @param string $hAling
      * @param string $vAlign
-     * @return layoutRow
+     * @return LayoutRow
      */
     public function setAlign($hAling = "left", $vAlign = "top")
     {
@@ -335,5 +345,13 @@ class layoutRow implements Renderable, ScriptFeatureable, Container
         return $this;
     }
 
+    public function getHorizontalAlign()
+    {
+        return $this->hAlign;
+    }
 
+    public function getVerticalAlign()
+    {
+        return $this->vAlign;
+    }
 }
