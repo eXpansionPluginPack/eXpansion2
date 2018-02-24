@@ -8,14 +8,45 @@
 
 namespace Tests\eXpansion\Framework\Core\Helpers;
 
+use eXpansion\Framework\Config\Services\ConfigManager;
+use eXpansion\Framework\Config\Services\ConfigManagerInterface;
 use eXpansion\Framework\Core\Helpers\Translations;
+use oliverde8\AssociativeArraySimplified\AssociativeArray;
 use Tests\eXpansion\Framework\Core\TestCore;
 
 class TranslationsTest extends TestCore
 {
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockConfig;
+
+    /** @var Translations */
+    protected $translationHelper;
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->mockConfig = $this->getMockBuilder(ConfigManagerInterface::class)->getMock();
+        $this->mockConfig->method('getConfigDefinitionTree')->willReturn(
+            new AssociativeArray([
+                'path' => ['color' => ['test' => '$fff'], 'icon' => ['test' => 'ICON']]
+            ])
+        );
+
+        $this->translationHelper = new Translations(
+            ['en', 'fr'],
+            $this->mockConfig,
+            'path/color',
+            'path/icon',
+            $this->container->get('translator')
+        );
+    }
+
+
     public function testGetTranslation()
     {
-        $translationHelper = $this->getTranslationHelper();
+        $translationHelper = $this->translationHelper;
+
 
         $tranlationEn = $translationHelper->getTranslation('expansion_core.test', ['%test%' => 'TOTO'], 'en');
         $tranlationFr = $translationHelper->getTranslation('expansion_core.test', ['%test%' => 'TOTO'], 'fr');
@@ -23,49 +54,38 @@ class TranslationsTest extends TestCore
 
         $this->assertEquals("This is a test translation : TOTO", $tranlationEn);
         $this->assertEquals("Ceci est une trad de test : TOTO", $tranlationFr);
-        // And default should be in english.
         $this->assertEquals("This is a test translation : TOTO", $tranlationUn);
+    }
 
-        // test color
-        $colorCodes = $this->container->getParameter('expansion.config.core_chat_color_codes');
-        $testColor = $colorCodes['test'];
 
-        $glyphCodes = $this->container->getParameter('expansion.config.core_chat_glyph_icons');
-        $testGlyph = $glyphCodes['test'];
+    public function testColorCodes()
+    {
+        $translationHelper = $this->translationHelper;
+
 
         $colorEn = $translationHelper->getTranslation('expansion_core.test_color', ['%test%' => 'TOTO'], 'en');
-        $this->assertEquals('$z$s'.$testColor.'This is a test translation : TOTO', $colorEn);
+        $this->assertEquals('$fffThis is a test translation : TOTO', $colorEn);
 
         $glyphEn = $translationHelper->getTranslation('expansion_core.test_glyph', ['%test%' => 'TOTO'], 'en');
-        $this->assertEquals($testGlyph.'This is a test translation : TOTO', $glyphEn);
+        $this->assertEquals('ICONThis is a test translation : TOTO', $glyphEn);
 
         $colorglyphEn = $translationHelper->getTranslation('expansion_core.test_color_glyph', ['%test%' => 'TOTO'],
             'en');
-        $this->assertEquals('$z$s'.$testColor.$testGlyph.'This is a test translation : TOTO', $colorglyphEn);
-
+        $this->assertEquals('$fffICONThis is a test translation : TOTO', $colorglyphEn);
     }
 
     public function testGetTranslations()
     {
-        $translationHelper = $this->getTranslationHelper();
+        $translationHelper = $this->translationHelper;
 
         $tranlationEn = $translationHelper->getTranslations('expansion_core.test', ['%test%' => 'TOTO']);
-        $this->assertArraySubset(
+        $this->assertEquals(
             [
-                0 => ['Lang' => 'fr', 'Text' => "Ceci est une trad de test : TOTO"],
-                2 => ['Lang' => 'fi', 'Text' => "Tämä on testikäännös : TOTO"],
-                4 => ['Lang' => 'en', 'Text' => "This is a test translation : TOTO"],
+                0 => ['Lang' => 'en', 'Text' => "This is a test translation : TOTO"],
+                1 => ['Lang' => 'fr', 'Text' => "Ceci est une trad de test : TOTO"],
             ],
             $tranlationEn
         );
-    }
-
-    /**
-     * @return Translations
-     */
-    protected function getTranslationHelper()
-    {
-            return $this->container->get(Translations::class);
     }
 
 }

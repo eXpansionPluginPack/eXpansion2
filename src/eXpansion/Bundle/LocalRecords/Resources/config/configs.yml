@@ -28,3 +28,58 @@ services:
             $minValue: 0
         tags:
             - {name: expansion.config}
+
+    eXpansion.local_records.config.color_codes.record:
+        class: eXpansion\Framework\Config\Model\ChatColorCodeConfig
+        arguments:
+            $path: "%expansion.core.config.path.color_codes%/record"
+            $scope: "key"
+            $name: "expansion_local_records.config.color_codes.record"
+            $description: ""
+            $defaultValue: "$0f3"
+        tags:
+            - {name: expansion.config}
+
+    eXpansion.local_records.config.color_codes.record_top:
+        class: eXpansion\Framework\Config\Model\ChatColorCodeConfig
+        arguments:
+            $path: "%expansion.core.config.path.color_codes%/record_top"
+            $scope: "key"
+            $name: "expansion_local_records.config.color_codes.record_top"
+            $description: ""
+            $defaultValue: "$0d3"
+        tags:
+            - {name: expansion.config}
+
+    eXpansion.local_records.config.color_codes.record_rank:
+        class: eXpansion\Framework\Config\Model\ChatColorCodeConfig
+        arguments:
+            $path: "%expansion.core.config.path.color_codes%/record_rank"
+            $scope: "key"
+            $name: "expansion_local_records.config.color_codes.record_rank"
+            $description: ""
+            $defaultValue: "$afa"
+        tags:
+            - {name: expansion.config}
+
+    eXpansion.local_records.config.glyph_icon.time:
+        class: eXpansion\Framework\Config\Model\TextConfig
+        arguments:
+            $path: "%expansion.core.config.path.glymp_icons%/time"
+            $scope: "key"
+            $name: "expansion_local_records.config.glymp_icons.time"
+            $description: ""
+            $defaultValue: ''
+        tags:
+            - {name: expansion.config}
+
+    eXpansion.local_records.config.glyph_icon.record:
+        class: eXpansion\Framework\Config\Model\TextConfig
+        arguments:
+            $path: "%expansion.core.config.path.glymp_icons%/record"
+            $scope: "key"
+            $name: "expansion_local_records.config.glymp_icons.record"
+            $description: ""
+            $defaultValue: ''
+        tags:
+            - {name: expansion.config}

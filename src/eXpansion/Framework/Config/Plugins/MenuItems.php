@@ -91,7 +91,7 @@ class MenuItems implements ListenerMenuItemProviderInterface
                     ChatCommandItem::class,
                     $path,
                     $translationKey,
-                    null,
+                    'admin_config', // Default config on each element.
                     ['cmd' => '/admin config "' . $configPath . '"']
                 );
             }
