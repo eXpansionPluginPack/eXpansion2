@@ -33,10 +33,10 @@ class Dropdown extends AbstractUiElement implements ScriptFeatureable
      *
      * Options ["display name" => "value"], both needs to be string
      *
-     * @param string $name
-     * @param array  $options
-     * @param int    $selectedIndex
-     * @param bool   $isOpened
+     * @param string $name entry name for return value
+     * @param array  $options Options ["display name" => "value"], both needs to be string
+     * @param int    $selectedIndex -1 for none
+     * @param bool   $isOpened is the box opened by default
      */
     public function __construct($name, $options, $selectedIndex = -1, $isOpened = false)
     {
@@ -177,7 +177,7 @@ EOD;
 
         $labelMark = new Label("⏷");
         $labelMark->setAlign("right", "center");
-        $labelMark->setPosition($this->width -0.5, -($this->height / 2));
+        $labelMark->setPosition($this->width - 0.5, -($this->height / 2));
         $labelMark->setTextColor("fff");
         $labelMark->setZ(2);
         $labelMark->setSize(5, 4);

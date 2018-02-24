@@ -49,7 +49,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
     protected function createContent(ManialinkInterface $manialink)
     {
         $elementCount = 0;
-        $rows = $this->uiFactory->createLayoutRow(0, 0, [], -0.5);
+        $rows = $this->uiFactory->createLayoutRow(0, 0, [], 0.5);
         $cpVariable = $this->updaterWidgetFactory->getVariable('LocalRecordCheckpoints')->getVariableName();
 
         for ($i = 0; $i < self::rowCount; $i++) {

@@ -22,7 +22,7 @@ services:
             $path: "eXpansion/LocalRecords/NotificationPublicThreshold"
             $name: "expansion_local_records.config.notification_public_threshold.name"
             $scope: "global"
-            $description: "expansion_local_records.config.notification_public_threshold.dsc" #TODO add translation and all
+            $description: "expansion_local_records.config.notification_public_threshold.dsc"
             $defaultValue: 20
             $maxValue: 100
             $minValue: 0

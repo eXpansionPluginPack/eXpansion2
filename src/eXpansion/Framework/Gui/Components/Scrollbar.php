@@ -43,10 +43,10 @@ class Scrollbar extends AbstractUiElement implements Renderable
         $this->length = $length;
         if ($this->axis == "X") {
             $this->setWidth($length);
-            $this->setHeight(5.);
+            $this->setHeight(4.);
         } else {
             $this->setHeight($length);
-            $this->setWidth(5.);
+            $this->setWidth(4.);
         }
         $this->scrollbarSize = $scrollbarSize;
     }
@@ -75,8 +75,8 @@ class Scrollbar extends AbstractUiElement implements Renderable
             ->addClass('uiScrollbarControl');
 
         $scrollbar = new Quad();
-        $scrollbar->setPosition(5, 0)
-            ->setSize($this->scrollbarSize, 5)
+        $scrollbar->setPosition(4, 0)
+            ->setSize($this->scrollbarSize, 4)
             ->setBackgroundColor('fffa')
             ->setFocusBackgroundColor("ffff")
             ->addClass('uiScrollbar')
@@ -86,7 +86,7 @@ class Scrollbar extends AbstractUiElement implements Renderable
 
         $leftLabel = new Label();
         $leftLabel->setPosition(0, 0)
-            ->setSize(5, 5)
+            ->setSize(4, 4)
             ->setText("⏴")
             ->setScriptEvents(true)
             ->setAreaColor('aaa')
@@ -95,7 +95,7 @@ class Scrollbar extends AbstractUiElement implements Renderable
 
         $rightLabel = new Label();
         $rightLabel->setPosition($this->length, 0)
-            ->setSize(5, 5)
+            ->setSize(4, 4)
             ->setText("⏵")
             ->setScriptEvents(true)
             ->setAreaColor('aaa')
@@ -103,7 +103,7 @@ class Scrollbar extends AbstractUiElement implements Renderable
             ->setAlign("right", "bottom");
 
         $background = new Quad();
-        $background->setSize($this->length, 5)
+        $background->setSize($this->length, 4)
             ->setAlign("left", "bottom")
             ->setBackgroundColor("000a");
 
@@ -124,8 +124,8 @@ class Scrollbar extends AbstractUiElement implements Renderable
 
 
         $scrollbar = new Quad();
-        $scrollbar->setPosition(0, -5)
-            ->setSize(5, $this->scrollbarSize)
+        $scrollbar->setPosition(0, -4)
+            ->setSize(4, $this->scrollbarSize)
             ->setBackgroundColor('fffa')
             ->setFocusBackgroundColor('ffff')
             ->addClass('uiScrollbar')
@@ -135,7 +135,7 @@ class Scrollbar extends AbstractUiElement implements Renderable
 
         $topLabel = new Label();
         $topLabel->setPosition(0, 0)
-            ->setSize(5, 5)
+            ->setSize(4, 4)
             ->setText("⏶")
             ->setScriptEvents(true)
             ->setAreaColor('aaa')
@@ -144,7 +144,7 @@ class Scrollbar extends AbstractUiElement implements Renderable
 
         $bottomLabel = new Label();
         $bottomLabel->setPosition(0, -$this->length)
-            ->setSize(5, 5)
+            ->setSize(4, 4)
             ->setText("⏷")
             ->setScriptEvents(true)
             ->setAreaColor('aaa')
@@ -152,7 +152,7 @@ class Scrollbar extends AbstractUiElement implements Renderable
             ->setAlign("right", "bottom");
 
         $background = new Quad();
-        $background->setSize(5, $this->length)
+        $background->setSize(4, $this->length)
             ->setAlign("right", "top")
             ->setBackgroundColor("000a");
 

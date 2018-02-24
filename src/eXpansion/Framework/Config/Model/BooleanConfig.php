@@ -10,27 +10,26 @@ use eXpansion\Framework\Config\Exception\InvalidConfigException;
  * Class Integer
  *
  * @package eXpansion\Framework\Config\Model;
- * @author  oliver de Cramer <oliverde8@gmail.com>
+ * @author  reaby
  */
-class IntegerConfig extends DecimalConfig
+class BooleanConfig extends AbstractConfig
 {
     /**
      * @inheritdoc
      */
     public function validate(&$value)
     {
-        if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+        if (filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === null) {
             throw new InvalidConfigException(
-                "Non Integer value set for configuration {$this->path}.",
+                "Non boolean value set for configuration {$this->path}.",
                 0,
                 null,
-                'expansion_config.error.int.not_int',
+                'expansion_config.error.bool.not_bool',
                 ['%path%' => $this->path, '%value%' => $value]
             );
         }
 
-        parent::validate($value);
-        $value = (int)$value;
+        $value = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 
 }

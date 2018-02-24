@@ -1,0 +1,37 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    expansion.mx_karma.config.enable:
+        class: eXpansion\Framework\Config\Model\BooleanConfig
+        arguments:
+            $path: "eXpansion/MxKarma/Enabled"
+            $name: "expansion_mxkarma.config.enabled.name"
+            $description: "expansion_mxkarma.config.enabled.desc"
+            $scope: "server"
+            $defaultValue: false
+        tags:
+            - {name: expansion.config}
+
+    expansion.mx_karma.config.apikey:
+        class: eXpansion\Framework\Config\Model\PasswordConfig
+        arguments:
+            $path: "eXpansion/MxKarma/ApiKey"
+            $name: "expansion_mxkarma.config.apikey.name"
+            $description: "expansion_mxkarma.config.apikey.desc"
+            $scope: "server"
+            $defaultValue: ""
+        tags:
+            - {name: expansion.config}
+
+    expansion.mx_karma.config.server_login:
+        class: eXpansion\Framework\Config\Model\TextConfig
+        arguments:
+            $path: "eXpansion/MxKarma/ServerLogin"
+            $name: "expansion_mxkarma.config.server_login.name"
+            $description: "expansion_mxkarma.config.server_login.desc"
+            $scope: "server"
+            $defaultValue: ""
+        tags:
+            - {name: expansion.config}

@@ -18,6 +18,7 @@ use eXpansion\Framework\Gui\Components\Tooltip;
 use eXpansion\Framework\Gui\Layouts\LayoutLine;
 use eXpansion\Framework\Gui\Layouts\LayoutRow;
 use eXpansion\Framework\Gui\Layouts\LayoutScrollable;
+
 /**
  * Class Factory
  *

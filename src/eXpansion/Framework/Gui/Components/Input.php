@@ -151,7 +151,7 @@ class Input extends AbstractUiElement implements Renderable, ScriptFeatureable
 
     public function getHeight()
     {
-        return $this->height + 1;
+        return $this->height;
     }
 
     /**
