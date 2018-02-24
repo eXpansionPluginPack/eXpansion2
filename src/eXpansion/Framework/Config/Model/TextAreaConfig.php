@@ -13,9 +13,4 @@ namespace eXpansion\Framework\Config\Model;
 class TextAreaConfig extends TextConfig
 {
 
-    /** @return string */
-    public function getRawValue()
-    {
-        return parent::getRawValue();
-    }
 }

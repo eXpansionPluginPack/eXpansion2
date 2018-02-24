@@ -32,11 +32,4 @@ class BooleanConfig extends AbstractConfig
         $value = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 
-    /**
-     * @return boolean
-     */
-    public function getRawValue()
-    {
-        return parent::getRawValue();
-    }
 }

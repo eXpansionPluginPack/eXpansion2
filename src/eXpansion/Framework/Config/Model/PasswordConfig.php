@@ -12,9 +12,5 @@ namespace eXpansion\Framework\Config\Model;
  */
 class PasswordConfig extends AbstractConfig
 {
-    /** @return string */
-    public function getRawValue()
-    {
-        return parent::getRawValue();
-    }
+
 }

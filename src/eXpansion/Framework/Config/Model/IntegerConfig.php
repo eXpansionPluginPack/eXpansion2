@@ -33,9 +33,4 @@ class IntegerConfig extends DecimalConfig
         $value = (int)$value;
     }
 
-    /** @return integer */
-    public function getRawValue()
-    {
-        return parent::getRawValue();
-    }
 }

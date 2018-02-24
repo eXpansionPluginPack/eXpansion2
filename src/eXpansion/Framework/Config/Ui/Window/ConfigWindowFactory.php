@@ -112,7 +112,7 @@ class ConfigWindowFactory extends WindowFactory
 
         $contentFrame->addChild(
             $this->uiFactory->createLayoutScrollable(
-                $this->uiFactory->createLayoutRow(0, 0, $elements, 4),
+                $this->uiFactory->createLayoutRow(0, 0, $elements, 6),
                 $this->sizeX,
                 $this->sizeY - $saveButton->getHeight() - 4 - 4
             )->setAxis(false, true)
@@ -132,14 +132,7 @@ class ConfigWindowFactory extends WindowFactory
      */
     protected function buildConfig(ConfigInterface $config, $sizeX, Tooltip $tooltip)
     {
-        // $descriptionButton = new Quad_Icons64x64_1();
-        // $descriptionButton->setSubStyle(Quad_Icons64x64_1::SUBSTYLE_TrackInfo)
-        // Temporary to get en, tooltip don't support translations.
-        // $tooltip->addTooltip($descriptionButton, $this->chatNotification->getMessage($config->getDescription()));
-
-        // $sizeX -= 20;
-
-        $rowLayout = $this->uiFactory->createLayoutRow(2, 0, [], 0);
+        $rowLayout = $this->uiFactory->createLayoutRow(2, 0, [], 1);
 
         $rowLayout->addChild(
             $name = $this->uiFactory
@@ -168,7 +161,7 @@ class ConfigWindowFactory extends WindowFactory
         $rowLayout->addChild(
             $this->configUiManager->getUiHandler($config)->build($config, $sizeX * 0.37));
 
-        
+
         return $rowLayout;
     }
 

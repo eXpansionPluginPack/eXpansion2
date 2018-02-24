@@ -88,11 +88,4 @@ class DecimalConfig extends AbstractConfig
         }
     }
 
-    /** @return float */
-    public function getRawValue()
-    {
-        return parent::getRawValue();
-    }
-
-
 }

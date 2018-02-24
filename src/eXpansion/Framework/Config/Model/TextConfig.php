@@ -12,9 +12,5 @@ namespace eXpansion\Framework\Config\Model;
  */
 class TextConfig extends AbstractConfig
 {
-    /** @return string */
-    public function getRawValue()
-    {
-        return parent::getRawValue();
-    }
+
 }
