@@ -3,7 +3,7 @@
 namespace eXpansion\Framework\Core\Helpers;
 
 use eXpansion\Framework\Config\Services\ConfigManagerInterface;
-use Symfony\Component\Translation\Translator;
+use Symfony\Component\Translation\TranslatorInterface;
 
 
 /**
@@ -14,7 +14,7 @@ use Symfony\Component\Translation\Translator;
  */
 class Translations
 {
-    /** @var Translator */
+    /** @var TranslatorInterface */
     protected $translator;
 
     /** @var string[] List of supported locales. */
@@ -30,14 +30,14 @@ class Translations
      * @param ConfigManagerInterface $configManager
      * @param $colorCodesConfigPath
      * @param $glympIconsConfigPath
-     * @param Translator $translator
+     * @param TranslatorInterface $translator
      */
     public function __construct(
         array $supportedLocales,
         ConfigManagerInterface $configManager,
         $colorCodesConfigPath,
         $glympIconsConfigPath,
-        Translator $translator
+        TranslatorInterface $translator
     ) {
         $this->translator = $translator;
         $this->supportedLocales = $supportedLocales;

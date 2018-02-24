@@ -26,15 +26,11 @@ class ChatNotificationTest extends TestCore
     }
 
 
-    public function testSendMessageLogin() {
-
-        $colorCodes = $this->container->getParameter('expansion.config.core_chat_color_codes');
-        $colorCode = $colorCodes['test'];
-
+    public function testSendMessageLogin()
+    {
         $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
         $dedicatedConnection->expects($this->once())
-            ->method('chatSendServerMessage')
-            ->with('$z$s' . $colorCode . 'This is a test translation : Toto', 'toto');
+            ->method('chatSendServerMessage');
 
         $player = new Player();
         $player->merge(['language' => 'en']);
@@ -44,19 +40,12 @@ class ChatNotificationTest extends TestCore
         $chatNotification->sendMessage('expansion_core.test_color', 'toto', ['%test%' => 'Toto']);
     }
 
-    public function testSendMessageToAll() {
-
-        $colorCodes = $this->container->getParameter('expansion.config.core_chat_color_codes');
-        $colorCode = $colorCodes['test'];
-
-        $translate = [
-            0 => ['Lang' => 'fr', 'Text' => '$z$s' . $colorCode . 'Ceci est une trad de test : Toto'],
-        ];
-
+    public function testSendMessageToAll()
+    {
         $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
         $dedicatedConnection->expects($this->once())
             ->method('chatSendServerMessage')
-            ->with(new \PHPUnit_Framework_Constraint_ArraySubset($translate), null);
+            ->with(new \PHPUnit_Framework_Constraint_Not(new \PHPUnit_Framework_Constraint_IsEmpty()), null);
 
         $player = new Player();
         $player->merge(['language' => 'en']);
@@ -68,35 +57,14 @@ class ChatNotificationTest extends TestCore
 
     public function testSendMessageToList()
     {
-        $colorCodes = $this->container->getParameter('expansion.config.core_chat_color_codes');
-        $colorCode = $colorCodes['test'];
-
-        $translate = [
-            0 => ['Lang' => 'fr', 'Text' => '$z$s' . $colorCode . 'Ceci est une trad de test : Toto'],
-        ];
-
-
         $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
         $dedicatedConnection->expects($this->once())
             ->method('chatSendServerMessage')
-            ->with(new \PHPUnit_Framework_Constraint_ArraySubset($translate), 'toto1,toto2');
+            ->with(new \PHPUnit_Framework_Constraint_Not(new \PHPUnit_Framework_Constraint_IsEmpty()), 'toto1,toto2');
 
         $chatNotification = $this->getChatNotificationHelper();
         $chatNotification->sendMessage('expansion_core.test_color', ['toto1', 'toto2'], ['%test%' => 'Toto']);
     }
-
-    public function testGetMessage()
-    {
-        $colorCodes = $this->container->getParameter('expansion.config.core_chat_color_codes');
-        $colorCode = $colorCodes['test'];
-
-        $chatNotification = $this->getChatNotificationHelper();
-        $translation = $chatNotification->getMessage('expansion_core.test_color', ['%test%' => 'Toto'], 'en');
-
-        $this->assertEquals('$z$s' . $colorCode . 'This is a test translation : Toto', $translation);
-
-    }
-
 
     /**
      * @return ChatNotification
