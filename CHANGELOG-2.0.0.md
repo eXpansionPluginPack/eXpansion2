@@ -1,5 +1,4 @@
-# 2.0.0.x
-
+# 2.0.0.0-alpha3 (2018-02-24)
 ## Bug Fixes
 
 * Fixed issue #248 : Strange behaviour of translated uiButtons.
