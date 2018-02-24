@@ -13,3 +13,9 @@ expansion_mxkarma:
           name: 'Server Login'
           desc: 'Server login for the api key'
 
+
+expansion_config:
+  menu:
+    eXpansion:
+      MxKarma:
+        label: "Mania-exchange Karma"
