@@ -98,9 +98,7 @@ class GameCurrencyService
         $currencyEntry->setMessage($message);
         $currencyEntry->setDatetime(new \DateTime());
         try {
-            $this->console->write("Creating bill for ".$login."...");
             $currencyEntry->save();
-            $this->console->write('$0f0 Success.', true);
 
             return $currencyEntry;
 

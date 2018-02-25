@@ -2,3 +2,12 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+
+    eXpansion\Framework\GameCurrencyBundle\Plugins\GameCurrencyPlugin:
+        class: eXpansion\Framework\GameCurrencyBundle\Plugins\GameCurrencyPlugin
+        tags:
+            - {name: expansion.plugin, data_provider: mp.legacy.bill}
+
+    eXpansion\Framework\GameCurrencyBundle\Services\GameCurrencyService:
+        class: eXpansion\Framework\GameCurrencyBundle\Services\GameCurrencyService
+

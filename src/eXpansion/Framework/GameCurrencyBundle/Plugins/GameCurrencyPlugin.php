@@ -11,6 +11,7 @@ namespace eXpansion\Framework\GameCurrencyBundle\Plugins;
 
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\GameCurrencyBundle\Structures\CurrencyEntry;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyBill;
 use Maniaplanet\DedicatedServer\Connection;
@@ -36,18 +37,28 @@ class GameCurrencyPlugin implements StatusAwarePluginInterface, ListenerInterfac
      * @var CurrencyEntry[]
      */
     protected $entries = [];
+    /**
+     * @var GameDataStorage
+     */
+    private $gameDataStorage;
 
     /**
      * GameCurrency constructor.
      * @param Connection      $connection
      * @param Console         $console
      * @param LoggerInterface $logger
+     * @param GameDataStorage $gameDataStorage
      */
-    public function __construct(Connection $connection, Console $console, LoggerInterface $logger)
-    {
+    public function __construct(
+        Connection $connection,
+        Console $console,
+        LoggerInterface $logger,
+        GameDataStorage $gameDataStorage
+    ) {
         $this->connection = $connection;
         $this->logger = $logger;
         $this->console = $console;
+        $this->gameDataStorage = $gameDataStorage;
     }
 
 
@@ -63,17 +74,18 @@ class GameCurrencyPlugin implements StatusAwarePluginInterface, ListenerInterfac
             $entryBill->setTransactionid($bill->transactionId);
             try {
                 $entryBill->setStatus($bill->state)->save();
+                $this->console->writeln('Status for bill '.$billId.' is now: $fff'.$bill->stateName);
             } catch (\Exception $e) {
                 $this->logger->error("Error while saving bill", ["exception" => $e]);
             }
             if ($bill->state == Bill::STATE_PAYED) {
+                call_user_func($this->entries[$billId]->getSuccessCallback());
                 unset($this->entries[$billId]);
             }
-            call_user_func($this->entries[$billId]->getSuccessCallback());
 
             if ($bill->state == Bill::STATE_ERROR) {
-                unset($this->entries[$billId]);
                 call_user_func($this->entries[$billId]->getFailureCallback());
+                unset($this->entries[$billId]);
             }
         }
     }
@@ -99,10 +111,20 @@ class GameCurrencyPlugin implements StatusAwarePluginInterface, ListenerInterfac
 
         try {
             $bill = $entry->getBill();
-            $this->console->write("Trying to send a bill to ".$bill->getSenderlogin()."with ".$bill->getAmount()."p amount.. ");
 
-            $billId = $this->connection->sendBill($bill->getSenderlogin(), $bill->getAmount(),
-                $bill->getReceiverlogin(), $bill->getMessage());
+
+            if ($entry->getBill()->getSenderlogin() == $this->gameDataStorage->getSystemInfo()->serverLogin) {
+                $this->console->write("Trying create a pay ".$bill->getAmount()."p to ".$bill->getReceiverlogin());
+                $billId = $this->connection->pay(
+                    $bill->getReceiverlogin(),
+                    $bill->getAmount(),
+                    $bill->getMessage());
+            } else {
+                $this->console->write("Trying to send a bill to ".$bill->getSenderlogin()." with ".$bill->getAmount()."p amount.. ");
+                $billId = $this->connection->sendBill($bill->getSenderlogin(), $bill->getAmount(),
+                    $bill->getReceiverlogin(), $bill->getMessage());
+            }
+
 
             $entry->getBill()->setBillid($billId)->save();
             $this->entries[$billId] = $entry;
