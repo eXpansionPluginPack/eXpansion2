@@ -9,7 +9,6 @@
 namespace eXpansion\Framework\GameCurrencyBundle\Plugins;
 
 
-use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\GameCurrencyBundle\Structures\CurrencyEntry;
@@ -18,7 +17,7 @@ use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Bill;
 use Psr\Log\LoggerInterface;
 
-class GameCurrencyPlugin implements StatusAwarePluginInterface, ListenerInterfaceMpLegacyBill
+class GameCurrencyPlugin implements ListenerInterfaceMpLegacyBill
 {
     /**
      * @var Connection
@@ -88,18 +87,6 @@ class GameCurrencyPlugin implements StatusAwarePluginInterface, ListenerInterfac
                 unset($this->entries[$billId]);
             }
         }
-    }
-
-    /**
-     * Set the status of the plugin
-     *
-     * @param boolean $status
-     *
-     * @return null
-     */
-    public function setStatus($status)
-    {
-        // TODO: Implement setStatus() method.
     }
 
     /**

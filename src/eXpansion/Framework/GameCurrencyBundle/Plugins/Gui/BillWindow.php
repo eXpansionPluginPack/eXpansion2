@@ -118,13 +118,15 @@ class BillWindow extends WindowFactory
             $this->closeManialink($manialink);
         }
 
-        $this->currencyService->sendBill($bill, function () use ($manialink) {
-            $this->closeManialink($manialink);
-
-        }, function () use ($manialink) {
-            $this->closeManialink($manialink);
-        });
-
+        $this->currencyService->sendBill(
+            $bill,
+            function () use ($manialink) {
+                $this->closeManialink($manialink);
+            },
+            function () use ($manialink) {
+                $this->closeManialink($manialink);
+            }
+        );
     }
 
     /** @param ManialinkInterface|Window $manialink */
