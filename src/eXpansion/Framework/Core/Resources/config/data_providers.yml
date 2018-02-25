@@ -48,3 +48,22 @@ services:
             - {name: 'expansion.dataprovider', provider: "exp.console", interface: eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpConsole}
             - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
             - {name: 'expansion.dataprovider.listener', event_name: expansion.console.message, method: onConsoleMessage}
+
+    expansion.bundle.core.data_providers.tm:
+        class: eXpansion\Framework\Core\DataProviders\EmptyDataProvider
+        tags:
+            - {name: expansion.dataprovider, provider: "exp.tm", interface: eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface}
+            - {name: expansion.dataprovider.compatibility, title: 'TM'}
+
+    expansion.bundle.core.data_providers.sm:
+        class: eXpansion\Framework\Core\DataProviders\EmptyDataProvider
+        tags:
+            - {name: expansion.dataprovider, provider: "exp.sm", interface: eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface}
+            - {name: expansion.dataprovider.compatibility, title: 'SM'}
+
+
+    expansion.bundle.core.data_providers.all:
+          class: eXpansion\Framework\Core\DataProviders\EmptyDataProvider
+          tags:
+              - {name: expansion.dataprovider, provider: "exp.all", interface: eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface}
+              - {name: expansion.dataprovider.compatibility, title: 'ALL'}

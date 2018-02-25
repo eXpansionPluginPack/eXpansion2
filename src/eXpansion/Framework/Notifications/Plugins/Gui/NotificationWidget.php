@@ -1,6 +1,6 @@
 <?php
 
-namespace eXpansion\Bundle\Notifications\Plugins\Gui;
+namespace eXpansion\Framework\Notifications\Plugins\Gui;
 
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
@@ -140,7 +140,7 @@ EOL
 
              {$this->updaterWidgetFactory->getScriptOnChange('
              if (notification.count > 0) {
-                 ShowToast(notification["title"],notification["message"], TextLib::ToInteger(notification["duration"]));
+                 ShowToast(notification["title"], notification["message"], TextLib::ToInteger(notification["duration"]));
                  }
              ')}
              
@@ -175,18 +175,18 @@ EOL
     {
         $frame = Frame::create()->setScale(0.75)->setPosition(-159, 80 - (21 * $idx))->addClass("uiToast");
         $closeButton = Label::create();
-        $closeButton->setPosition(74, -4)->setSize(5, 5)->setText("✖")->setAreaColor("0000")->setAreaFocusColor("f00a")
+        $closeButton->setPosition(74, -4)->setSize(4, 4)->setText("✖")->setAreaColor("0000")->setAreaFocusColor("f00a")
             ->setAlign("center", "center2")->addClass("toastClose")->setScriptEvents(true)->setOpacity(0.5);
         $frame->addChild($closeButton);
 
 
-        $title = Label::create()->setPosition(2, -2)->setSize(70, 5)->setTextSize(3)
+        $title = Label::create()->setPosition(2, -2)->setSize(70, 5)->setTextSize(2)
             ->setTextColor("fff")->setText("n/a")->setOpacity(0);
         $frame->addChild($title);
 
 
         $message = Label::create()->setPosition(2, -8)->setSize(70,
-            15)->setTextSize(3)->setMaxLines(3)->setOpacity(0.5)->setTextColor("fff")->setText("n/a");
+            15)->setTextSize(2)->setMaxLines(3)->setOpacity(0.5)->setTextColor("fff")->setText("n/a");
         $frame->addChild($message);
 
         $quad = Quad::create();

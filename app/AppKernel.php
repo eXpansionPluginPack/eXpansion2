@@ -47,7 +47,7 @@ class AppKernel extends Kernel
 
 
         $bundles[] = new \eXpansion\Bundle\VoteManager\VoteManagerBundle();
-        $bundles[] = new \eXpansion\Bundle\Notifications\NotificationsBundle();
+
 
 
 //        $bundles[] = new \eXpansion\Bundle\MxKarma\MxKarmaBundle();
@@ -86,6 +86,7 @@ class AppKernel extends Kernel
             new \eXpansion\Framework\Gui\eXpansionGuiBundle(),
             new \eXpansion\Framework\PlayersBundle\eXpansionFrameworkPlayersBundle(),
             new \eXpansion\Framework\Config\eXpansionConfig(),
+            new \eXpansion\Framework\Notifications\eXpansionNotificationsBundle(),
         ];
 
         // Also add debug help bundles.

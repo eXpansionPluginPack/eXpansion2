@@ -4,8 +4,8 @@ services:
         autoconfigure: true
         public: true
 
-    eXpansion\Bundle\Notifications\Plugins\Gui\NotificationWidget:
-        class: eXpansion\Bundle\Notifications\Plugins\Gui\NotificationWidget
+    eXpansion\Framework\Notifications\Plugins\Gui\NotificationWidget:
+        class: eXpansion\Framework\Notifications\Plugins\Gui\NotificationWidget
         arguments:
           $name:  "Notifications"
           $posX: 0
@@ -13,8 +13,8 @@ services:
           $sizeX: null
           $sizeY: null
 
-    eXpansion\Bundle\Notifications\Plugins\Gui\NotificationUpdater:
-        class: eXpansion\Bundle\Notifications\Plugins\Gui\NotificationUpdater
+    eXpansion\Framework\Notifications\Plugins\Gui\NotificationUpdater:
+        class: eXpansion\Framework\Notifications\Plugins\Gui\NotificationUpdater
         arguments:
           $name:  "Notification Updater"
           $playerGroup : "@expansion.framework.core.user_groups.all_players"

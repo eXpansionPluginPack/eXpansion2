@@ -12,7 +12,7 @@ use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
  *
  * @package eXpansion\Framework\CustomUi\Plugins
  */
-class Notifications implements StatusAwarePluginInterface
+class NotificationsPlugin implements StatusAwarePluginInterface
 {
 
     /**@var Group */
@@ -52,11 +52,7 @@ class Notifications implements StatusAwarePluginInterface
     public function setStatus($status)
     {
         $this->notificationWidget->create($this->allPlayers);
-
-        $this->notificationUpdater->setNotification("info", "Hey hey hey hey, testing", "This is a test", 2500, $this->allPlayers);
         $this->notificationUpdater->create($this->allPlayers);
-
-
     }
 
 }

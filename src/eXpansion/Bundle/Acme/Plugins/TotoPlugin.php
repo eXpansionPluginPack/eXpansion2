@@ -7,13 +7,16 @@ use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplicat
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Storage\Data\Player;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
+use eXpansion\Framework\Notifications\Services\Notifications;
 
 /**
  * TotoPlugin is a test plugin to be removed.
  *
  * @package eXpansion\Framework\Core\Plugins
  */
-class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginInterface
+class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginInterface, ListenerInterfaceMpLegacyPlayer
 {
     /** @var Console */
     protected $console;
@@ -23,15 +26,25 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
 
     /** @var Group */
     protected $playersGroup;
+    /**
+     * @var Notifications
+     */
+    private $notifications;
 
+    /**
+     * TotoPlugin constructor.
+     * @param Group         $players
+     * @param Console       $console
+     * @param Notifications $notifications
+     */
     function __construct(
         Group $players,
         Console $console,
-        WindowFactory $mlFactory
+        Notifications $notifications
     ) {
         $this->console = $console;
-        $this->mlFactory = $mlFactory;
         $this->playersGroup = $players;
+        $this->notifications = $notifications;
     }
 
     /**
@@ -43,13 +56,7 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
      */
     public function setStatus($status)
     {
-        if ($status) {
-            foreach ($this->playersGroup->getLogins() as $login) {
-//                $this->mlFactory->create($login);
-            }
-        } else {
-            $this->mlFactory->destroy($this->playersGroup);
-        }
+
     }
 
     /**
@@ -69,7 +76,7 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
      */
     public function onApplicationReady()
     {
-        // $this->mlFactory->create($this->playersGroup);
+        $this->notifications->notice("eXpansion2 Started Successfully!");
     }
 
     /**
@@ -80,5 +87,44 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
     public function onApplicationStop()
     {
         // do nothing
+    }
+
+    /**
+     * @param Player $player
+     * @return void
+     */
+    public function onPlayerConnect(Player $player)
+    {
+        $this->notifications->info($player->getNickName().'$z$s'." Joins.");
+    }
+
+    /**
+     * @param Player $player
+     * @param string $disconnectionReason
+     * @return void
+     */
+    public function onPlayerDisconnect(Player $player, $disconnectionReason)
+    {
+        $this->notifications->info($player->getNickName().'$z$s'." Leaves.");
+    }
+
+    /**
+     * @param Player $oldPlayer
+     * @param Player $player
+     * @return void
+     */
+    public function onPlayerInfoChanged(Player $oldPlayer, Player $player)
+    {
+        // TODO: Implement onPlayerInfoChanged() method.
+    }
+
+    /**
+     * @param Player $oldPlayer
+     * @param Player $player
+     * @return void
+     */
+    public function onPlayerAlliesChanged(Player $oldPlayer, Player $player)
+    {
+        // TODO: Implement onPlayerAlliesChanged() method.
     }
 }

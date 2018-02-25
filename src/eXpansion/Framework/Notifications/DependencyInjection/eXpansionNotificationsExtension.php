@@ -7,7 +7,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader;
 
-class NotificationsExtension extends Extension
+class eXpansionNotificationsExtension extends Extension
 {
 
     /**
