@@ -1,6 +1,6 @@
 <?php
 
-namespace eXpansion\Bundle\Notifications\DependencyInjection;
+namespace eXpansion\Framework\Notifications\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;

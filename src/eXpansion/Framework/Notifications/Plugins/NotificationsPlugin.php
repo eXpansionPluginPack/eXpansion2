@@ -1,16 +1,16 @@
 <?php
 
-namespace eXpansion\Bundle\Notifications\Plugins;
+namespace eXpansion\Framework\Notifications\Plugins;
 
-use eXpansion\Bundle\Notifications\Plugins\Gui\NotificationUpdater;
-use eXpansion\Bundle\Notifications\Plugins\Gui\NotificationWidget;
+use eXpansion\Framework\Notifications\Plugins\Gui\NotificationUpdater;
+use eXpansion\Framework\Notifications\Plugins\Gui\NotificationWidget;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 
 /**
  * Class CustomUi
  *
- * @package eXpansion\Bundle\CustomUi\Plugins
+ * @package eXpansion\Framework\CustomUi\Plugins
  */
 class Notifications implements StatusAwarePluginInterface
 {

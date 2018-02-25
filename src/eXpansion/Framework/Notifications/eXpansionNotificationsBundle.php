@@ -1,6 +1,6 @@
 <?php
 
-namespace eXpansion\Bundle\Notifications;
+namespace eXpansion\Framework\Notifications;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
