@@ -709,7 +709,7 @@ abstract class RecordQuery extends ModelCriteria
      *
      * @return $this|ChildRecordQuery The current query, for fluid interface
      */
-    public function joinPlayer($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinPlayer($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Player');
@@ -744,7 +744,7 @@ abstract class RecordQuery extends ModelCriteria
      *
      * @return \eXpansion\Framework\PlayersBundle\Model\PlayerQuery A secondary query class using the current class as primary query
      */
-    public function usePlayerQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function usePlayerQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinPlayer($relationAlias, $joinType)

@@ -1,6 +1,6 @@
 <?php
 
-namespace eXpansion\Bundle\LocalMapRatings\Model\Map;
+namespace eXpansion\Framework\PlayersBundle\Model\Map;
 
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -11,12 +11,12 @@ use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
-use eXpansion\Bundle\LocalMapRatings\Model\Maprating;
-use eXpansion\Bundle\LocalMapRatings\Model\MapratingQuery;
+use eXpansion\Framework\PlayersBundle\Model\Gamecurrency;
+use eXpansion\Framework\PlayersBundle\Model\GamecurrencyQuery;
 
 
 /**
- * This class defines the structure of the 'maprating' table.
+ * This class defines the structure of the 'gamecurrency' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use eXpansion\Bundle\LocalMapRatings\Model\MapratingQuery;
  * (i.e. if it's a text column type).
  *
  */
-class MapratingTableMap extends TableMap
+class GamecurrencyTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class MapratingTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'src\eXpansion\Bundle\LocalMapRatings.Model.Map.MapratingTableMap';
+    const CLASS_NAME = 'eXpansion.Framework.PlayersBundle.Model.Map.GamecurrencyTableMap';
 
     /**
      * The default database name for this class
@@ -44,22 +44,22 @@ class MapratingTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'maprating';
+    const TABLE_NAME = 'gamecurrency';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\eXpansion\\Bundle\\LocalMapRatings\\Model\\Maprating';
+    const OM_CLASS = '\\eXpansion\\Framework\\PlayersBundle\\Model\\Gamecurrency';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'src\eXpansion\Bundle\LocalMapRatings.Model.Maprating';
+    const CLASS_DEFAULT = 'eXpansion.Framework.PlayersBundle.Model.Gamecurrency';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 9;
 
     /**
      * The number of lazy-loaded columns
@@ -69,37 +69,52 @@ class MapratingTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 9;
 
     /**
      * the column name for the id field
      */
-    const COL_ID = 'maprating.id';
+    const COL_ID = 'gamecurrency.id';
 
     /**
-     * the column name for the login field
+     * the column name for the senderLogin field
      */
-    const COL_LOGIN = 'maprating.login';
+    const COL_SENDERLOGIN = 'gamecurrency.senderLogin';
 
     /**
-     * the column name for the mapUid field
+     * the column name for the receiverLogin field
      */
-    const COL_MAPUID = 'maprating.mapUid';
+    const COL_RECEIVERLOGIN = 'gamecurrency.receiverLogin';
 
     /**
-     * the column name for the score field
+     * the column name for the transactionId field
      */
-    const COL_SCORE = 'maprating.score';
+    const COL_TRANSACTIONID = 'gamecurrency.transactionId';
 
     /**
-     * the column name for the created_at field
+     * the column name for the billId field
      */
-    const COL_CREATED_AT = 'maprating.created_at';
+    const COL_BILLID = 'gamecurrency.billId';
 
     /**
-     * the column name for the updated_at field
+     * the column name for the amount field
      */
-    const COL_UPDATED_AT = 'maprating.updated_at';
+    const COL_AMOUNT = 'gamecurrency.amount';
+
+    /**
+     * the column name for the message field
+     */
+    const COL_MESSAGE = 'gamecurrency.message';
+
+    /**
+     * the column name for the status field
+     */
+    const COL_STATUS = 'gamecurrency.status';
+
+    /**
+     * the column name for the datetime field
+     */
+    const COL_DATETIME = 'gamecurrency.datetime';
 
     /**
      * The default string format for model objects of the related table
@@ -113,11 +128,11 @@ class MapratingTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Login', 'Mapuid', 'Score', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'login', 'mapuid', 'score', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(MapratingTableMap::COL_ID, MapratingTableMap::COL_LOGIN, MapratingTableMap::COL_MAPUID, MapratingTableMap::COL_SCORE, MapratingTableMap::COL_CREATED_AT, MapratingTableMap::COL_UPDATED_AT, ),
-        self::TYPE_FIELDNAME     => array('id', 'login', 'mapUid', 'score', 'created_at', 'updated_at', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('Id', 'Senderlogin', 'Receiverlogin', 'Transactionid', 'Billid', 'Amount', 'Message', 'Status', 'Datetime', ),
+        self::TYPE_CAMELNAME     => array('id', 'senderlogin', 'receiverlogin', 'transactionid', 'billid', 'amount', 'message', 'status', 'datetime', ),
+        self::TYPE_COLNAME       => array(GamecurrencyTableMap::COL_ID, GamecurrencyTableMap::COL_SENDERLOGIN, GamecurrencyTableMap::COL_RECEIVERLOGIN, GamecurrencyTableMap::COL_TRANSACTIONID, GamecurrencyTableMap::COL_BILLID, GamecurrencyTableMap::COL_AMOUNT, GamecurrencyTableMap::COL_MESSAGE, GamecurrencyTableMap::COL_STATUS, GamecurrencyTableMap::COL_DATETIME, ),
+        self::TYPE_FIELDNAME     => array('id', 'senderLogin', 'receiverLogin', 'transactionId', 'billId', 'amount', 'message', 'status', 'datetime', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -127,11 +142,11 @@ class MapratingTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Login' => 1, 'Mapuid' => 2, 'Score' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'login' => 1, 'mapuid' => 2, 'score' => 3, 'createdAt' => 4, 'updatedAt' => 5, ),
-        self::TYPE_COLNAME       => array(MapratingTableMap::COL_ID => 0, MapratingTableMap::COL_LOGIN => 1, MapratingTableMap::COL_MAPUID => 2, MapratingTableMap::COL_SCORE => 3, MapratingTableMap::COL_CREATED_AT => 4, MapratingTableMap::COL_UPDATED_AT => 5, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'login' => 1, 'mapUid' => 2, 'score' => 3, 'created_at' => 4, 'updated_at' => 5, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Senderlogin' => 1, 'Receiverlogin' => 2, 'Transactionid' => 3, 'Billid' => 4, 'Amount' => 5, 'Message' => 6, 'Status' => 7, 'Datetime' => 8, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'senderlogin' => 1, 'receiverlogin' => 2, 'transactionid' => 3, 'billid' => 4, 'amount' => 5, 'message' => 6, 'status' => 7, 'datetime' => 8, ),
+        self::TYPE_COLNAME       => array(GamecurrencyTableMap::COL_ID => 0, GamecurrencyTableMap::COL_SENDERLOGIN => 1, GamecurrencyTableMap::COL_RECEIVERLOGIN => 2, GamecurrencyTableMap::COL_TRANSACTIONID => 3, GamecurrencyTableMap::COL_BILLID => 4, GamecurrencyTableMap::COL_AMOUNT => 5, GamecurrencyTableMap::COL_MESSAGE => 6, GamecurrencyTableMap::COL_STATUS => 7, GamecurrencyTableMap::COL_DATETIME => 8, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'senderLogin' => 1, 'receiverLogin' => 2, 'transactionId' => 3, 'billId' => 4, 'amount' => 5, 'message' => 6, 'status' => 7, 'datetime' => 8, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -144,20 +159,23 @@ class MapratingTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('maprating');
-        $this->setPhpName('Maprating');
+        $this->setName('gamecurrency');
+        $this->setPhpName('Gamecurrency');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\eXpansion\\Bundle\\LocalMapRatings\\Model\\Maprating');
-        $this->setPackage('src\eXpansion\Bundle\LocalMapRatings.Model');
+        $this->setClassName('\\eXpansion\\Framework\\PlayersBundle\\Model\\Gamecurrency');
+        $this->setPackage('eXpansion.Framework.PlayersBundle.Model');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('login', 'Login', 'VARCHAR', true, 255, null);
-        $this->getColumn('login')->setPrimaryString(true);
-        $this->addColumn('mapUid', 'Mapuid', 'VARCHAR', true, 50, null);
-        $this->addColumn('score', 'Score', 'INTEGER', true, null, null);
-        $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('senderLogin', 'Senderlogin', 'VARCHAR', false, 255, null);
+        $this->getColumn('senderLogin')->setPrimaryString(true);
+        $this->addColumn('receiverLogin', 'Receiverlogin', 'VARCHAR', false, 255, null);
+        $this->addColumn('transactionId', 'Transactionid', 'INTEGER', false, null, null);
+        $this->addColumn('billId', 'Billid', 'INTEGER', false, null, null);
+        $this->addColumn('amount', 'Amount', 'INTEGER', false, null, null);
+        $this->addColumn('message', 'Message', 'VARCHAR', false, 255, null);
+        $this->addColumn('status', 'Status', 'INTEGER', false, null, null);
+        $this->addColumn('datetime', 'Datetime', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -166,19 +184,6 @@ class MapratingTableMap extends TableMap
     public function buildRelations()
     {
     } // buildRelations()
-
-    /**
-     *
-     * Gets the list of behaviors registered for this table
-     *
-     * @return array Associative array (name => parameters) of behaviors
-     */
-    public function getBehaviors()
-    {
-        return array(
-            'timestampable' => array('create_column' => 'created_at', 'update_column' => 'updated_at', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
-        );
-    } // getBehaviors()
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -237,7 +242,7 @@ class MapratingTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? MapratingTableMap::CLASS_DEFAULT : MapratingTableMap::OM_CLASS;
+        return $withPrefix ? GamecurrencyTableMap::CLASS_DEFAULT : GamecurrencyTableMap::OM_CLASS;
     }
 
     /**
@@ -251,22 +256,22 @@ class MapratingTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Maprating object, last column rank)
+     * @return array           (Gamecurrency object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = MapratingTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = MapratingTableMap::getInstanceFromPool($key))) {
+        $key = GamecurrencyTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = GamecurrencyTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + MapratingTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + GamecurrencyTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = MapratingTableMap::OM_CLASS;
-            /** @var Maprating $obj */
+            $cls = GamecurrencyTableMap::OM_CLASS;
+            /** @var Gamecurrency $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            MapratingTableMap::addInstanceToPool($obj, $key);
+            GamecurrencyTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -289,18 +294,18 @@ class MapratingTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = MapratingTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = MapratingTableMap::getInstanceFromPool($key))) {
+            $key = GamecurrencyTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = GamecurrencyTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Maprating $obj */
+                /** @var Gamecurrency $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                MapratingTableMap::addInstanceToPool($obj, $key);
+                GamecurrencyTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -321,19 +326,25 @@ class MapratingTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(MapratingTableMap::COL_ID);
-            $criteria->addSelectColumn(MapratingTableMap::COL_LOGIN);
-            $criteria->addSelectColumn(MapratingTableMap::COL_MAPUID);
-            $criteria->addSelectColumn(MapratingTableMap::COL_SCORE);
-            $criteria->addSelectColumn(MapratingTableMap::COL_CREATED_AT);
-            $criteria->addSelectColumn(MapratingTableMap::COL_UPDATED_AT);
+            $criteria->addSelectColumn(GamecurrencyTableMap::COL_ID);
+            $criteria->addSelectColumn(GamecurrencyTableMap::COL_SENDERLOGIN);
+            $criteria->addSelectColumn(GamecurrencyTableMap::COL_RECEIVERLOGIN);
+            $criteria->addSelectColumn(GamecurrencyTableMap::COL_TRANSACTIONID);
+            $criteria->addSelectColumn(GamecurrencyTableMap::COL_BILLID);
+            $criteria->addSelectColumn(GamecurrencyTableMap::COL_AMOUNT);
+            $criteria->addSelectColumn(GamecurrencyTableMap::COL_MESSAGE);
+            $criteria->addSelectColumn(GamecurrencyTableMap::COL_STATUS);
+            $criteria->addSelectColumn(GamecurrencyTableMap::COL_DATETIME);
         } else {
             $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.login');
-            $criteria->addSelectColumn($alias . '.mapUid');
-            $criteria->addSelectColumn($alias . '.score');
-            $criteria->addSelectColumn($alias . '.created_at');
-            $criteria->addSelectColumn($alias . '.updated_at');
+            $criteria->addSelectColumn($alias . '.senderLogin');
+            $criteria->addSelectColumn($alias . '.receiverLogin');
+            $criteria->addSelectColumn($alias . '.transactionId');
+            $criteria->addSelectColumn($alias . '.billId');
+            $criteria->addSelectColumn($alias . '.amount');
+            $criteria->addSelectColumn($alias . '.message');
+            $criteria->addSelectColumn($alias . '.status');
+            $criteria->addSelectColumn($alias . '.datetime');
         }
     }
 
@@ -346,7 +357,7 @@ class MapratingTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(MapratingTableMap::DATABASE_NAME)->getTable(MapratingTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(GamecurrencyTableMap::DATABASE_NAME)->getTable(GamecurrencyTableMap::TABLE_NAME);
     }
 
     /**
@@ -354,16 +365,16 @@ class MapratingTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(MapratingTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(MapratingTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new MapratingTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(GamecurrencyTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(GamecurrencyTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new GamecurrencyTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a Maprating or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a Gamecurrency or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Maprating object or primary key or array of primary keys
+     * @param mixed               $values Criteria or Gamecurrency object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -374,27 +385,27 @@ class MapratingTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(MapratingTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(GamecurrencyTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \eXpansion\Bundle\LocalMapRatings\Model\Maprating) { // it's a model object
+        } elseif ($values instanceof \eXpansion\Framework\PlayersBundle\Model\Gamecurrency) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(MapratingTableMap::DATABASE_NAME);
-            $criteria->add(MapratingTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(GamecurrencyTableMap::DATABASE_NAME);
+            $criteria->add(GamecurrencyTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = MapratingQuery::create()->mergeWith($criteria);
+        $query = GamecurrencyQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            MapratingTableMap::clearInstancePool();
+            GamecurrencyTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                MapratingTableMap::removeInstanceFromPool($singleval);
+                GamecurrencyTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -402,20 +413,20 @@ class MapratingTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the maprating table.
+     * Deletes all rows from the gamecurrency table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return MapratingQuery::create()->doDeleteAll($con);
+        return GamecurrencyQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a Maprating or Criteria object.
+     * Performs an INSERT on the database, given a Gamecurrency or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Maprating object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or Gamecurrency object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -424,22 +435,22 @@ class MapratingTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(MapratingTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(GamecurrencyTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from Maprating object
+            $criteria = $criteria->buildCriteria(); // build Criteria from Gamecurrency object
         }
 
-        if ($criteria->containsKey(MapratingTableMap::COL_ID) && $criteria->keyContainsValue(MapratingTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.MapratingTableMap::COL_ID.')');
+        if ($criteria->containsKey(GamecurrencyTableMap::COL_ID) && $criteria->keyContainsValue(GamecurrencyTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.GamecurrencyTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = MapratingQuery::create()->mergeWith($criteria);
+        $query = GamecurrencyQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -448,7 +459,7 @@ class MapratingTableMap extends TableMap
         });
     }
 
-} // MapratingTableMap
+} // GamecurrencyTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-MapratingTableMap::buildTableMap();
+GamecurrencyTableMap::buildTableMap();

@@ -317,7 +317,7 @@ class MxmapTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addForeignKey('trackUID', 'Trackuid', 'VARCHAR', 'map', 'mapUid', true, 32, null);
+        $this->addForeignKey('trackUID', 'Trackuid', 'VARCHAR', 'map', 'mapUid', true, 50, null);
         $this->addColumn('gbxMapName', 'Gbxmapname', 'VARCHAR', false, 150, null);
         $this->addColumn('trackID', 'Trackid', 'INTEGER', false, null, null);
         $this->addColumn('userID', 'Userid', 'INTEGER', false, null, null);

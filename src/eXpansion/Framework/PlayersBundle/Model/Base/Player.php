@@ -863,10 +863,9 @@ abstract class Player implements ActiveRecordInterface
 
             if ($this->recordsScheduledForDeletion !== null) {
                 if (!$this->recordsScheduledForDeletion->isEmpty()) {
-                    foreach ($this->recordsScheduledForDeletion as $record) {
-                        // need to save related object because we set the relation to null
-                        $record->save($con);
-                    }
+                    \eXpansion\Bundle\LocalRecords\Model\RecordQuery::create()
+                        ->filterByPrimaryKeys($this->recordsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
                     $this->recordsScheduledForDeletion = null;
                 }
             }
@@ -1656,7 +1655,7 @@ abstract class Player implements ActiveRecordInterface
                 $this->recordsScheduledForDeletion = clone $this->collRecords;
                 $this->recordsScheduledForDeletion->clear();
             }
-            $this->recordsScheduledForDeletion[]= $record;
+            $this->recordsScheduledForDeletion[]= clone $record;
             $record->setPlayer(null);
         }
 

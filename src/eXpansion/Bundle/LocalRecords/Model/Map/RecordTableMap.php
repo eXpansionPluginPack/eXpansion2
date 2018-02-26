@@ -172,13 +172,13 @@ class RecordTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('mapUid', 'Mapuid', 'VARCHAR', false, 255, null);
+        $this->addColumn('mapUid', 'Mapuid', 'VARCHAR', false, 50, null);
         $this->addColumn('nbLaps', 'Nblaps', 'INTEGER', false, null, null);
         $this->addColumn('score', 'Score', 'INTEGER', false, null, null);
         $this->addColumn('nbFinish', 'Nbfinish', 'INTEGER', false, null, null);
         $this->addColumn('avgScore', 'Avgscore', 'INTEGER', false, null, null);
         $this->addColumn('checkpoints', 'Checkpoints', 'LONGVARCHAR', false, null, null);
-        $this->addForeignKey('player_id', 'PlayerId', 'INTEGER', 'player', 'id', false, null, null);
+        $this->addForeignKey('player_id', 'PlayerId', 'INTEGER', 'player', 'id', true, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     } // initialize()

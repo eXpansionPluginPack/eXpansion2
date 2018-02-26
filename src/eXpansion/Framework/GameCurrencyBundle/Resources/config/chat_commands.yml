@@ -1,0 +1,18 @@
+services:
+    _defaults:
+        autowire: true
+
+    expansion.core.gamecurrencybundle.chat_commands:
+          class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
+          arguments:
+              -
+                - '@eXpansion\Framework\GameCurrencyBundle\ChatCommand\SendPlanets'
+          tags:
+              - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}
+
+    eXpansion\Framework\GameCurrencyBundle\ChatCommand\SendPlanets:
+        class: eXpansion\Framework\GameCurrencyBundle\ChatCommand\SendPlanets
+        arguments:
+            $command: "pay"
+            $permission: 'planets'
+            $aliases: []
