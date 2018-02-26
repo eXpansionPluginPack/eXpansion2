@@ -11,3 +11,5 @@ expansion_config:
       min: '{error}Min value for config %path% is %min%. You tried and set %value%.'
     int:
       not_int: '{error}Value "%value%" is not an integer value; Config "%path%" requires an integer value.'
+    bool:
+      not_bool: '{error}Value "%value%" is not an boolean value; Config "%path%" requires a boolean value.'

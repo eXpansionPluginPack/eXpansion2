@@ -2,8 +2,8 @@
 
 
 namespace eXpansion\Framework\Config\Model;
+
 use eXpansion\Framework\Config\Exception\InvalidConfigException;
-use eXpansion\Framework\Config\Services\ConfigManager;
 use eXpansion\Framework\Config\Services\ConfigManagerInterface;
 
 
@@ -24,13 +24,13 @@ class DecimalConfig extends AbstractConfig
     /**
      * DecimalConfig constructor.
      *
-     * @param string        $path
-     * @param string        $scope
-     * @param string        $name
-     * @param string        $description
-     * @param float         $maxValue
-     * @param float         $minValue
-     * @param mixed         $defaultValue
+     * @param string                 $path
+     * @param string                 $scope
+     * @param string                 $name
+     * @param string                 $description
+     * @param float                  $maxValue
+     * @param float                  $minValue
+     * @param float|int              $defaultValue
      * @param ConfigManagerInterface $configManager
      */
     public function __construct(
@@ -87,4 +87,5 @@ class DecimalConfig extends AbstractConfig
             );
         }
     }
+
 }

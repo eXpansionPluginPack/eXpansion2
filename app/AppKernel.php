@@ -47,10 +47,7 @@ class AppKernel extends Kernel
 
 
         $bundles[] = new \eXpansion\Bundle\VoteManager\VoteManagerBundle();
-
-
-
-//        $bundles[] = new \eXpansion\Bundle\MxKarma\MxKarmaBundle();
+        $bundles[] = new \eXpansion\Bundle\MxKarma\MxKarmaBundle();
 
 
         /* Register test bundles. */

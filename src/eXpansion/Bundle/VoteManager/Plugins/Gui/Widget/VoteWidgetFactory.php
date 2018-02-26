@@ -8,6 +8,7 @@ use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
 use eXpansion\Framework\Gui\Builders\WidgetBackground;
+use eXpansion\Framework\Gui\Components\Button;
 use eXpansion\Framework\Gui\Components\Label;
 use eXpansion\Framework\Gui\Ui\Factory;
 use FML\Controls\Frame;
@@ -74,7 +75,7 @@ class VoteWidgetFactory extends WidgetFactory
         $frame->addChild($this->label);
 
         $btnPosition = -9;
-        $btn = $this->uiFactory->createButton(" F1", UiButton::TYPE_DEFAULT);
+        $btn = $this->uiFactory->createButton(" F1", Button::TYPE_DEFAULT);
         $btn->setSize(18, 6)->setPosition(1, $btnPosition)
             ->setId("ButtonYes")
             ->setBackgroundColor("0f09");
@@ -83,7 +84,7 @@ class VoteWidgetFactory extends WidgetFactory
         );
         $frame->addChild($btn);
 
-        $btn = $this->uiFactory->createButton(" F2", UiButton::TYPE_DEFAULT);
+        $btn = $this->uiFactory->createButton(" F2", Button::TYPE_DEFAULT);
         $btn->setSize(18, 6)->setPosition(self::x - 19, $btnPosition)
             ->setBackgroundColor("f009")
             ->setId("ButtonNo");

@@ -28,7 +28,7 @@ class Button extends AbstractUiElement implements ScriptFeatureable, Container
     protected $backColor = self::COLOR_DEFAULT;
     protected $focusColor = "aaa";
     protected $borderColor = "fff";
-    protected $translate = false;
+    protected $translate = true;
 
     protected $action = null;
     protected $text = "button";
@@ -44,6 +44,11 @@ class Button extends AbstractUiElement implements ScriptFeatureable, Container
         $this->setSize(18, 5);
         $this->buttonLabel = new Label("", Label::TYPE_TITLE);
         $this->buttonLabel->addClass('uiButtonElement');
+        $this->buttonLabel->setTranslate($this->translate);
+
+        $this->setHorizontalAlign("center");
+        $this->setVerticalAlign("center");
+        $this->setText($text);
     }
 
 
@@ -83,7 +88,6 @@ class Button extends AbstractUiElement implements ScriptFeatureable, Container
         }
 
         $this->buttonLabel->setSize($this->width, $this->height)
-            ->setText($this->getText())
             ->setTextSize(1)
             ->setScriptEvents(true)
             ->setAreaColor($this->backColor)
@@ -91,9 +95,6 @@ class Button extends AbstractUiElement implements ScriptFeatureable, Container
             ->setTextColor($this->textColor)
             ->setAlign("center", "center2");
 
-        if ($this->translate) {
-            $this->buttonLabel->setTextId($this->getText());
-        }
 
         $this->buttonLabel->setDataAttributes($this->_dataAttributes);
         $this->buttonLabel->addClasses($this->_classes);
@@ -120,6 +121,11 @@ class Button extends AbstractUiElement implements ScriptFeatureable, Container
     public function setText($text)
     {
         $this->text = $text;
+        if ($this->translate) {
+            $this->buttonLabel->setTextId($this->getText());
+        } else {
+            $this->buttonLabel->setText($this->getText());
+        }
 
         return $this;
     }
@@ -328,13 +334,8 @@ EOD;
      */
     public function setTranslate($translate = true)
     {
-        if ($translate) {
-            $this->buttonLabel->setTextId($this->getText());
-        } else {
-            $this->buttonLabel->setText($this->getText());
-        }
-
         $this->buttonLabel->setTranslate($translate);
+        $this->setText($this->getText());
 
         return $this;
     }

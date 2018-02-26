@@ -29,7 +29,7 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
     /**
      * @var float|int
      */
-    protected $margin = 1;
+    protected $margin = 0;
 
     /**
      * @var float|int
@@ -70,12 +70,13 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
         $sizeX = 0;
         $sizeY = 0;
         foreach ($this->elements as $idx => $element) {
-            $sizeY += $element->getY() + $element->getHeight() + $this->margin;
+            $sizeY += abs($element->getY()) + $element->getHeight();
 
             if (abs($element->getX()) + $element->getWidth() > $sizeX) {
                 $sizeX = abs($element->getX()) + $element->getWidth();
             }
         }
+
         $this->setSize($sizeX, $sizeY);
     }
 
@@ -129,10 +130,14 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
         $frame->addClasses($this->frameClasses);
 
         $startY = 0;
+        $oldElement = false;
         foreach ($this->elements as $idx => $element) {
+            if ($oldElement) {
+                $startY = $oldElement->getY() - $oldElement->getHeight() - $this->margin;
+            }
             $element->setY($startY);
-            $startY -= $element->getHeight() - $this->margin;
             $frame->addChild($element);
+            $oldElement = $element;
         }
 
         return $frame->render($domDocument);

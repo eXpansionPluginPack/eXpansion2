@@ -7,24 +7,24 @@ use FML\Script\Script;
 
 class Line extends AbstractUiElement
 {
-    public $length = 0;
+    protected $length = 0;
 
     /**
      * @var float
      */
-    protected $x;
+    protected $x = 0;
     /**
      * @var float
      */
-    protected $y;
+    protected $y = 0;
     /**
      * @var float
      */
-    protected $tx;
+    protected $tx = 0;
     /**
      * @var float
      */
-    protected $ty;
+    protected $ty = 0;
 
     protected $color = "fffa";
 
@@ -81,7 +81,9 @@ class Line extends AbstractUiElement
         } else {
             $quad->setWidth($this->length)->setHeight($this->stoke);
             $quad->setRotation($this->rotate);
+            $this->setWidth($this->length)->setHeight($this->stoke);
         }
+
 
         return $quad->render($domDocument);
     }
@@ -178,5 +180,4 @@ class Line extends AbstractUiElement
 
         return $this;
     }
-
 }

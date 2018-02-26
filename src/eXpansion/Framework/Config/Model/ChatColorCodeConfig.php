@@ -1,8 +1,6 @@
 <?php
 
-
 namespace eXpansion\Framework\Config\Model;
-
 
 /**
  * Class TextConfig
@@ -10,13 +8,13 @@ namespace eXpansion\Framework\Config\Model;
  * @package eXpansion\Framework\Config\Model;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-class TextConfig extends AbstractConfig
+class ChatColorCodeConfig extends TextConfig
 {
     /**
      * @inheritdoc
      */
-    public function __toString() : string
+    public function get()
     {
-        return $this->get();
+        return '$z$s' . parent::get();
     }
 }

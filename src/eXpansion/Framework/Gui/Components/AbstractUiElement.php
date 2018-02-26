@@ -43,7 +43,7 @@ abstract class AbstractUiElement extends ScriptFeature implements Renderable
      * @param int $posX
      * @param int $posY
      * @param int $posZ
-     * @return AbstractUiElement
+     * @return $this
      */
     public function setPosition($posX = 0, $posY = 0, $posZ = 0)
     {

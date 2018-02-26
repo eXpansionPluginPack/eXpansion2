@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace eXpansion\Bundle\MxKarma\Plugins;
+namespace eXpansion\Bundle\MxKarma\Services;
 
 use eXpansion\Bundle\MxKarma\Entity\MxRating;
 use eXpansion\Bundle\MxKarma\Entity\MxVote;
@@ -30,14 +30,13 @@ use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\Core\Storage\MapStorage;
 use Maniaplanet\DedicatedServer\Structures\GameInfos;
 use Maniaplanet\DedicatedServer\Structures\Map;
-use oliverde8\AsynchronousJobs\Job\CallbackCurl;
 
 /**
  * Description of Connection
  *
  * @author Reaby
  */
-class Connection
+class MxKarmaService
 {
 
     const EVENT_CONNECT = "expansion.mxkarma.connect";
@@ -53,8 +52,6 @@ class Connection
     private $sessionKey = null;
 
     private $sessionSeed = null;
-
-    private $apiKey = "";
 
     /** @var MxRating */
     private $ratings = null;
@@ -77,15 +74,23 @@ class Connection
 
     /** @var Http */
     private $http;
+    /**
+     * @var string
+     */
+    private $apiKey;
+    /**
+     * @var string
+     */
+    private $serverLogin;
 
     /**
      * Connection constructor.
      *
-     * @param Dispatcher $dispatcher
-     * @param Http $http
+     * @param Dispatcher      $dispatcher
+     * @param Http            $http
      * @param GameDataStorage $gameDataStorage
-     * @param MapStorage $mapStorage
-     * @param Console $console
+     * @param MapStorage      $mapStorage
+     * @param Console         $console
      */
     public function __construct(
         Dispatcher $dispatcher,
@@ -106,17 +111,32 @@ class Connection
      * connect to MX karma
      *
      * @param string $serverLogin
-     * @param string $apiKey
+     * @param string $apikey
+     * @return  void
      */
-    public function connect($serverLogin, $apiKey)
+    public function connect($serverLogin, $apikey)
     {
-        $this->apiKey = $apiKey;
+        $this->apiKey = $apikey;
+        $this->serverLogin = $serverLogin;
 
-        $params = array(
+        if (empty($this->apiKey)) {
+            $this->console->writeln('MxKarma error: You need to define a api key');
+
+            return;
+        }
+
+        if (empty($this->serverLogin)) {
+            $this->console->writeln('MxKarma error: You need to define server login');
+
+            return;
+        }
+
+        $params = [
             "serverLogin" => $serverLogin,
             "applicationIdentifier" => "eXpansion v ".AbstractApplication::EXPANSION_VERSION,
             "testMode" => "false",
-        );
+        ];
+
         $this->console->writeln('> MxKarma attempting to connect...');
         $this->http->get(
             $this->buildUrl(
@@ -132,7 +152,7 @@ class Connection
     {
 
         if ($result->hasError()) {
-            $this->console->writeln('> MxKarma connection $f00 failure: '.$result->getError());
+            $this->console->writeln('> MxKarma connection failure: $f00'.$result->getError());
             $this->disconnect();
 
             return;
@@ -163,7 +183,8 @@ class Connection
     {
 
         if ($result->hasError()) {
-            $this->console->writeln('> MxKarma connection $f00 failure: '.$result->getError());
+            $this->console->writeln('> MxKarma activation failure: $f00'.$result->getError());
+
             return;
         }
 
@@ -183,12 +204,12 @@ class Connection
     /**
      * loads votes from server
      * @param array $players
-     * @param bool $getVotesOnly
+     * @param bool  $getVotesOnly
      */
     public function loadVotes($players = array(), $getVotesOnly = false)
     {
         if (!$this->connected) {
-            $this->console->writeln('> MxKarma trying to load votes when not connected!');
+            $this->console->writeln('> MxKarma trying to load votes when not connected: $ff0aborting!');
 
             return;
         }
@@ -197,11 +218,12 @@ class Connection
         $params = array("sessionKey" => $this->sessionKey);
         $postData = [
             "gamemode" => $this->getGameMode(),
-            "titleid" => $this->gameDataStorage->getTitle(),
+            "titleid" => $this->gameDataStorage->getVersion()->titleId,
             "mapuid" => $this->mapStorage->getCurrentMap()->uId,
             "getvotesonly" => $getVotesOnly,
             "playerlogins" => $players,
         ];
+
         $this->http->post(
             $this->buildUrl("getMapRating", $params),
             json_encode($postData),
@@ -212,22 +234,23 @@ class Connection
     }
 
     /**
-     * @param Map $map
-     * @param int $time time in seconds from BeginMap to EndMap
+     * @param Map      $map
+     * @param int      $time time in seconds from BeginMap to EndMap
      * @param MxVote[] $votes
      */
     public function saveVotes(Map $map, $time, $votes)
     {
         if (!$this->connected) {
-            $this->console->writeln('> MxKarma not connected.');
+            $this->console->writeln('> MxKarma not connected, aborting save votes');
 
             return;
         }
 
         $params = array("sessionKey" => $this->sessionKey);
+
         $postData = array(
             "gamemode" => $this->getGameMode(),
-            "titleid" => $this->gameDataStorage->getTitle(),
+            "titleid" => $this->gameDataStorage->getVersion()->titleId,
             "mapuid" => $map->uId,
             "mapname" => $map->name,
             "mapauthor" => $map->author,
@@ -235,7 +258,6 @@ class Connection
             "maptime" => $time,
             "votes" => $votes,
         );
-
 
         $this->console->writeln('> MxKarma attempting to save votes...');
         $this->http->post(
@@ -254,7 +276,7 @@ class Connection
     {
 
         if ($result->hasError()) {
-            $this->console->writeln('> MxKarma save votes $f00 failure: '.$result->getError());
+            $this->console->writeln('> MxKarma save votes failure: $f00'.$result->getError());
 
             return;
         }
@@ -276,7 +298,7 @@ class Connection
     {
 
         if ($result->hasError()) {
-            $this->console->writeln('> MxKarma load votes $f00 failure: '.$result->getError());
+            $this->console->writeln('> MxKarma load votes failure: $f00'.$result->getError());
 
             return null;
         }
@@ -286,14 +308,18 @@ class Connection
         if ($data === null) {
             return null;
         }
+        try {
+            $this->ratings = new MXRating();
+            $this->ratings->append($data);
 
-        $this->ratings = new MXRating();
-        $this->ratings->append($data);
+            $this->console->writeln('> MxKarma load $0f0success!');
+            $this->dispatcher->dispatch(self::EVENT_VOTELOAD, ["ratings" => $this->ratings]);
 
-        $this->console->writeln('> MxKarma load $0f0success!');
-        $this->dispatcher->dispatch(self::EVENT_VOTELOAD, ["ratings" => $this->ratings]);
+            return $this->ratings;
+        } catch (\Exception $ex) {
+            return null;
+        }
 
-        return $this->ratings;
     }
 
     /**
@@ -333,7 +359,8 @@ class Connection
      */
     public function getObject($data)
     {
-        $obj = (object) json_decode($data);
+        $obj = (object)json_decode($data);
+
         if ($obj->success === false) {
             $this->handleErrors($obj);
 
@@ -353,17 +380,21 @@ class Connection
                 $this->console->writeln('> MxKarma $fffinternal server error');
                 break;
             case 2:
-                $this->console->writeln('> MxKarma $fffSession key is invalid (not activated, experied or got disabled).');
+                $this->console->writeln('> MxKarma $fffSession key is invalid (not activated, expired or got disabled).');
                 break;
-            case 4:
+            case 3:
                 $this->console->writeln('> MxKarma $fffSome parameters are not provided.');
                 break;
-            case 5:
+            case 4:
                 $this->console->writeln('> MxKarma $fffAPI key not found or suspended.');
                 $this->disconnect();
                 break;
-            case 6:
+            case 5:
                 $this->console->writeln('> MxKarma $fffServer not found or suspended.');
+                $this->disconnect();
+                break;
+            case 6:
+                $this->console->writeln('> MxKarma $fffServer is banned.');
                 $this->disconnect();
                 break;
             case 7:
@@ -408,7 +439,7 @@ class Connection
 
     /**
      * @param string $method
-     * @param array $params
+     * @param array  $params
      *
      * @return string
      */
@@ -427,7 +458,6 @@ class Connection
         return $this->connected;
     }
 
-
     /**
      *
      */
@@ -437,6 +467,5 @@ class Connection
         $this->console->writeln('> MxKarma $f00disconnected!');
         $this->dispatcher->dispatch(self::EVENT_DISCONNECT, []);
     }
-
 
 }
