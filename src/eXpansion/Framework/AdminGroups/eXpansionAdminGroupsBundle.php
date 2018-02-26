@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\AdminGroups;
 
+use eXpansion\Framework\Config\eXpansionConfig;
 use eXpansion\Framework\Core\eXpansionCore;
 use /** @noinspection PhpUndefinedClassInspection */
     Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -27,7 +28,8 @@ class eXpansionAdminGroupsBundle extends Bundle implements BundleDependencyInter
     public function getBundleDependencies()
     {
         return [
-            eXpansionCore::class
+            eXpansionCore::class,
+            eXpansionConfig::class,
         ];
     }
 }

@@ -2,6 +2,9 @@
 
 namespace eXpansion\Framework\AdminGroups\Services;
 
+use eXpansion\Framework\Config\Model\ConfigInterface;
+use eXpansion\Framework\Config\Services\ConfigManagerInterface;
+
 /**
  * Class AdminGroupConfiguration
  *
@@ -10,22 +13,23 @@ namespace eXpansion\Framework\AdminGroups\Services;
  */
 class AdminGroupConfiguration
 {
+    /** @var ConfigInterface[][] */
     protected $config;
-
-    protected $loginGroups = [];
 
     /**
      * AdminGroupConfiguration constructor.
-     * @param $config
+     *
+     * @param ConfigManagerInterface $configManager
+     * @param string $path
      */
-    public function __construct($config)
+    public function __construct(ConfigManagerInterface $configManager, $path)
     {
-        $this->config = $config;
-
-        foreach ($this->config as $groupName => $groupData) {
-            if (!empty($groupData['logins'])) {
-                foreach ($groupData['logins'] as $login) {
-                    $this->loginGroups[$login] = $groupName;
+        foreach ($configManager->getConfigDefinitionTree()->get($path) as $groupName => $data) {
+            foreach ($data as $key => $config) {
+                if (strpos($key, 'perm_') == 3) {
+                    $this->config[$groupName]['permissions'][str_replace('perm_', '', $key)] = $config;
+                } else {
+                    $this->config[$groupName]['permissions'][$key] = $config;
                 }
             }
         }
@@ -54,7 +58,7 @@ class AdminGroupConfiguration
             return null;
         }
 
-        return $this->config[$groupName]['logins'];
+        return $this->config[$groupName]['logins']->getRawValue();
     }
 
     /**
@@ -70,7 +74,7 @@ class AdminGroupConfiguration
             return [];
         }
 
-        return $this->config[$groupName]['permissions'];
+        return $this->config[$groupName]['permissions']->getRawValue();
     }
 
     /**
@@ -85,7 +89,7 @@ class AdminGroupConfiguration
             return "";
         }
 
-        return $this->config[$groupName]['label'];
+        return $this->config[$groupName]['label']->get();
     }
 
 
@@ -96,7 +100,13 @@ class AdminGroupConfiguration
      */
     public function getLoginGroupName($login)
     {
-        return isset($this->loginGroups[$login]) ? $this->loginGroups[$login] : null;
+        foreach ($this->config as $groupName => $group) {
+            if (in_array($login, $group['logins']->get())) {
+                return $groupName;
+            }
+        }
+
+        return null;
     }
 
     /**
