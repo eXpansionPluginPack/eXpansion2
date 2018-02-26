@@ -217,7 +217,7 @@ class MapTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('mapUid', 'Mapuid', 'VARCHAR', false, 32, null);
+        $this->addColumn('mapUid', 'Mapuid', 'VARCHAR', false, 50, null);
         $this->addColumn('name', 'Name', 'VARCHAR', false, 150, null);
         $this->addColumn('fileName', 'Filename', 'VARCHAR', false, 100, null);
         $this->addColumn('author', 'Author', 'VARCHAR', false, 50, null);

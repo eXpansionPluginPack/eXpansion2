@@ -1,6 +1,6 @@
 <?php
 
-namespace eXpansion\Bundle\LocalMapRatings\Model\Base;
+namespace eXpansion\Framework\GameCurrencyBundle\Model\Base;
 
 use \DateTime;
 use \Exception;
@@ -17,23 +17,22 @@ use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
 use Propel\Runtime\Util\PropelDateTime;
-use eXpansion\Bundle\LocalMapRatings\Model\Maprating as ChildMaprating;
-use eXpansion\Bundle\LocalMapRatings\Model\MapratingQuery as ChildMapratingQuery;
-use eXpansion\Bundle\LocalMapRatings\Model\Map\MapratingTableMap;
+use eXpansion\Framework\GameCurrencyBundle\Model\GamecurrencyQuery as ChildGamecurrencyQuery;
+use eXpansion\Framework\GameCurrencyBundle\Model\Map\GamecurrencyTableMap;
 
 /**
- * Base class that represents a row from the 'maprating' table.
+ * Base class that represents a row from the 'gamecurrency' table.
  *
  *
  *
- * @package    propel.generator.src\eXpansion\Bundle\LocalMapRatings.Model.Base
+ * @package    propel.generator.src\eXpansion\Framework\GameCurrencyBundle.Model.Base
  */
-abstract class Maprating implements ActiveRecordInterface
+abstract class Gamecurrency implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\eXpansion\\Bundle\\LocalMapRatings\\Model\\Map\\MapratingTableMap';
+    const TABLE_MAP = '\\eXpansion\\Framework\\GameCurrencyBundle\\Model\\Map\\GamecurrencyTableMap';
 
 
     /**
@@ -70,39 +69,60 @@ abstract class Maprating implements ActiveRecordInterface
     protected $id;
 
     /**
-     * The value for the login field.
+     * The value for the senderlogin field.
      *
      * @var        string
      */
-    protected $login;
+    protected $senderlogin;
 
     /**
-     * The value for the mapuid field.
+     * The value for the receiverlogin field.
      *
      * @var        string
      */
-    protected $mapuid;
+    protected $receiverlogin;
 
     /**
-     * The value for the score field.
+     * The value for the transactionid field.
      *
      * @var        int
      */
-    protected $score;
+    protected $transactionid;
 
     /**
-     * The value for the created_at field.
+     * The value for the billid field.
+     *
+     * @var        int
+     */
+    protected $billid;
+
+    /**
+     * The value for the amount field.
+     *
+     * @var        int
+     */
+    protected $amount;
+
+    /**
+     * The value for the message field.
+     *
+     * @var        string
+     */
+    protected $message;
+
+    /**
+     * The value for the status field.
+     *
+     * @var        int
+     */
+    protected $status;
+
+    /**
+     * The value for the datetime field.
      *
      * @var        DateTime
      */
-    protected $created_at;
-
-    /**
-     * The value for the updated_at field.
-     *
-     * @var        DateTime
-     */
-    protected $updated_at;
+    protected $datetime;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -113,7 +133,7 @@ abstract class Maprating implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
-     * Initializes internal state of eXpansion\Bundle\LocalMapRatings\Model\Base\Maprating object.
+     * Initializes internal state of eXpansion\Framework\GameCurrencyBundle\Model\Base\Gamecurrency object.
      */
     public function __construct()
     {
@@ -208,9 +228,9 @@ abstract class Maprating implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>Maprating</code> instance.  If
-     * <code>obj</code> is an instance of <code>Maprating</code>, delegates to
-     * <code>equals(Maprating)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>Gamecurrency</code> instance.  If
+     * <code>obj</code> is an instance of <code>Gamecurrency</code>, delegates to
+     * <code>equals(Gamecurrency)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -276,7 +296,7 @@ abstract class Maprating implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|Maprating The current object, for fluid interface
+     * @return $this|Gamecurrency The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -348,37 +368,77 @@ abstract class Maprating implements ActiveRecordInterface
     }
 
     /**
-     * Get the [login] column value.
+     * Get the [senderlogin] column value.
      *
      * @return string
      */
-    public function getLogin()
+    public function getSenderlogin()
     {
-        return $this->login;
+        return $this->senderlogin;
     }
 
     /**
-     * Get the [mapuid] column value.
+     * Get the [receiverlogin] column value.
      *
      * @return string
      */
-    public function getMapuid()
+    public function getReceiverlogin()
     {
-        return $this->mapuid;
+        return $this->receiverlogin;
     }
 
     /**
-     * Get the [score] column value.
+     * Get the [transactionid] column value.
      *
      * @return int
      */
-    public function getScore()
+    public function getTransactionid()
     {
-        return $this->score;
+        return $this->transactionid;
     }
 
     /**
-     * Get the [optionally formatted] temporal [created_at] column value.
+     * Get the [billid] column value.
+     *
+     * @return int
+     */
+    public function getBillid()
+    {
+        return $this->billid;
+    }
+
+    /**
+     * Get the [amount] column value.
+     *
+     * @return int
+     */
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    /**
+     * Get the [message] column value.
+     *
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
+     * Get the [status] column value.
+     *
+     * @return int
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [datetime] column value.
      *
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
@@ -388,32 +448,12 @@ abstract class Maprating implements ActiveRecordInterface
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getCreatedAt($format = NULL)
+    public function getDatetime($format = NULL)
     {
         if ($format === null) {
-            return $this->created_at;
+            return $this->datetime;
         } else {
-            return $this->created_at instanceof \DateTimeInterface ? $this->created_at->format($format) : null;
-        }
-    }
-
-    /**
-     * Get the [optionally formatted] temporal [updated_at] column value.
-     *
-     *
-     * @param      string $format The date/time format string (either date()-style or strftime()-style).
-     *                            If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     */
-    public function getUpdatedAt($format = NULL)
-    {
-        if ($format === null) {
-            return $this->updated_at;
-        } else {
-            return $this->updated_at instanceof \DateTimeInterface ? $this->updated_at->format($format) : null;
+            return $this->datetime instanceof \DateTimeInterface ? $this->datetime->format($format) : null;
         }
     }
 
@@ -421,7 +461,7 @@ abstract class Maprating implements ActiveRecordInterface
      * Set the value of [id] column.
      *
      * @param int $v new value
-     * @return $this|\eXpansion\Bundle\LocalMapRatings\Model\Maprating The current object (for fluent API support)
+     * @return $this|\eXpansion\Framework\GameCurrencyBundle\Model\Gamecurrency The current object (for fluent API support)
      */
     public function setId($v)
     {
@@ -431,111 +471,171 @@ abstract class Maprating implements ActiveRecordInterface
 
         if ($this->id !== $v) {
             $this->id = $v;
-            $this->modifiedColumns[MapratingTableMap::COL_ID] = true;
+            $this->modifiedColumns[GamecurrencyTableMap::COL_ID] = true;
         }
 
         return $this;
     } // setId()
 
     /**
-     * Set the value of [login] column.
+     * Set the value of [senderlogin] column.
      *
      * @param string $v new value
-     * @return $this|\eXpansion\Bundle\LocalMapRatings\Model\Maprating The current object (for fluent API support)
+     * @return $this|\eXpansion\Framework\GameCurrencyBundle\Model\Gamecurrency The current object (for fluent API support)
      */
-    public function setLogin($v)
+    public function setSenderlogin($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->login !== $v) {
-            $this->login = $v;
-            $this->modifiedColumns[MapratingTableMap::COL_LOGIN] = true;
+        if ($this->senderlogin !== $v) {
+            $this->senderlogin = $v;
+            $this->modifiedColumns[GamecurrencyTableMap::COL_SENDERLOGIN] = true;
         }
 
         return $this;
-    } // setLogin()
+    } // setSenderlogin()
 
     /**
-     * Set the value of [mapuid] column.
+     * Set the value of [receiverlogin] column.
      *
      * @param string $v new value
-     * @return $this|\eXpansion\Bundle\LocalMapRatings\Model\Maprating The current object (for fluent API support)
+     * @return $this|\eXpansion\Framework\GameCurrencyBundle\Model\Gamecurrency The current object (for fluent API support)
      */
-    public function setMapuid($v)
+    public function setReceiverlogin($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->mapuid !== $v) {
-            $this->mapuid = $v;
-            $this->modifiedColumns[MapratingTableMap::COL_MAPUID] = true;
+        if ($this->receiverlogin !== $v) {
+            $this->receiverlogin = $v;
+            $this->modifiedColumns[GamecurrencyTableMap::COL_RECEIVERLOGIN] = true;
         }
 
         return $this;
-    } // setMapuid()
+    } // setReceiverlogin()
 
     /**
-     * Set the value of [score] column.
+     * Set the value of [transactionid] column.
      *
      * @param int $v new value
-     * @return $this|\eXpansion\Bundle\LocalMapRatings\Model\Maprating The current object (for fluent API support)
+     * @return $this|\eXpansion\Framework\GameCurrencyBundle\Model\Gamecurrency The current object (for fluent API support)
      */
-    public function setScore($v)
+    public function setTransactionid($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->score !== $v) {
-            $this->score = $v;
-            $this->modifiedColumns[MapratingTableMap::COL_SCORE] = true;
+        if ($this->transactionid !== $v) {
+            $this->transactionid = $v;
+            $this->modifiedColumns[GamecurrencyTableMap::COL_TRANSACTIONID] = true;
         }
 
         return $this;
-    } // setScore()
+    } // setTransactionid()
 
     /**
-     * Sets the value of [created_at] column to a normalized version of the date/time value specified.
+     * Set the value of [billid] column.
+     *
+     * @param int $v new value
+     * @return $this|\eXpansion\Framework\GameCurrencyBundle\Model\Gamecurrency The current object (for fluent API support)
+     */
+    public function setBillid($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->billid !== $v) {
+            $this->billid = $v;
+            $this->modifiedColumns[GamecurrencyTableMap::COL_BILLID] = true;
+        }
+
+        return $this;
+    } // setBillid()
+
+    /**
+     * Set the value of [amount] column.
+     *
+     * @param int $v new value
+     * @return $this|\eXpansion\Framework\GameCurrencyBundle\Model\Gamecurrency The current object (for fluent API support)
+     */
+    public function setAmount($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->amount !== $v) {
+            $this->amount = $v;
+            $this->modifiedColumns[GamecurrencyTableMap::COL_AMOUNT] = true;
+        }
+
+        return $this;
+    } // setAmount()
+
+    /**
+     * Set the value of [message] column.
+     *
+     * @param string $v new value
+     * @return $this|\eXpansion\Framework\GameCurrencyBundle\Model\Gamecurrency The current object (for fluent API support)
+     */
+    public function setMessage($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->message !== $v) {
+            $this->message = $v;
+            $this->modifiedColumns[GamecurrencyTableMap::COL_MESSAGE] = true;
+        }
+
+        return $this;
+    } // setMessage()
+
+    /**
+     * Set the value of [status] column.
+     *
+     * @param int $v new value
+     * @return $this|\eXpansion\Framework\GameCurrencyBundle\Model\Gamecurrency The current object (for fluent API support)
+     */
+    public function setStatus($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->status !== $v) {
+            $this->status = $v;
+            $this->modifiedColumns[GamecurrencyTableMap::COL_STATUS] = true;
+        }
+
+        return $this;
+    } // setStatus()
+
+    /**
+     * Sets the value of [datetime] column to a normalized version of the date/time value specified.
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
-     * @return $this|\eXpansion\Bundle\LocalMapRatings\Model\Maprating The current object (for fluent API support)
+     * @return $this|\eXpansion\Framework\GameCurrencyBundle\Model\Gamecurrency The current object (for fluent API support)
      */
-    public function setCreatedAt($v)
+    public function setDatetime($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->created_at !== null || $dt !== null) {
-            if ($this->created_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->created_at->format("Y-m-d H:i:s.u")) {
-                $this->created_at = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[MapratingTableMap::COL_CREATED_AT] = true;
+        if ($this->datetime !== null || $dt !== null) {
+            if ($this->datetime === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->datetime->format("Y-m-d H:i:s.u")) {
+                $this->datetime = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[GamecurrencyTableMap::COL_DATETIME] = true;
             }
         } // if either are not null
 
         return $this;
-    } // setCreatedAt()
-
-    /**
-     * Sets the value of [updated_at] column to a normalized version of the date/time value specified.
-     *
-     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\eXpansion\Bundle\LocalMapRatings\Model\Maprating The current object (for fluent API support)
-     */
-    public function setUpdatedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->updated_at !== null || $dt !== null) {
-            if ($this->updated_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->updated_at->format("Y-m-d H:i:s.u")) {
-                $this->updated_at = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[MapratingTableMap::COL_UPDATED_AT] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setUpdatedAt()
+    } // setDatetime()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -573,29 +673,35 @@ abstract class Maprating implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : MapratingTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : GamecurrencyTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : MapratingTableMap::translateFieldName('Login', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->login = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : GamecurrencyTableMap::translateFieldName('Senderlogin', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->senderlogin = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : MapratingTableMap::translateFieldName('Mapuid', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->mapuid = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : GamecurrencyTableMap::translateFieldName('Receiverlogin', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->receiverlogin = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : MapratingTableMap::translateFieldName('Score', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->score = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : GamecurrencyTableMap::translateFieldName('Transactionid', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->transactionid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : MapratingTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : GamecurrencyTableMap::translateFieldName('Billid', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->billid = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : GamecurrencyTableMap::translateFieldName('Amount', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->amount = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : GamecurrencyTableMap::translateFieldName('Message', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->message = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : GamecurrencyTableMap::translateFieldName('Status', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->status = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : GamecurrencyTableMap::translateFieldName('Datetime', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
-            $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : MapratingTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->updated_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+            $this->datetime = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -604,10 +710,10 @@ abstract class Maprating implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 6; // 6 = MapratingTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 9; // 9 = GamecurrencyTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\eXpansion\\Bundle\\LocalMapRatings\\Model\\Maprating'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\eXpansion\\Framework\\GameCurrencyBundle\\Model\\Gamecurrency'), 0, $e);
         }
     }
 
@@ -649,13 +755,13 @@ abstract class Maprating implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(MapratingTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(GamecurrencyTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildMapratingQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildGamecurrencyQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -674,8 +780,8 @@ abstract class Maprating implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see Maprating::setDeleted()
-     * @see Maprating::isDeleted()
+     * @see Gamecurrency::setDeleted()
+     * @see Gamecurrency::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -684,11 +790,11 @@ abstract class Maprating implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(MapratingTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(GamecurrencyTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildMapratingQuery::create()
+            $deleteQuery = ChildGamecurrencyQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -719,7 +825,7 @@ abstract class Maprating implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(MapratingTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(GamecurrencyTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -727,20 +833,8 @@ abstract class Maprating implements ActiveRecordInterface
             $isInsert = $this->isNew();
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
-                // timestampable behavior
-
-                if (!$this->isColumnModified(MapratingTableMap::COL_CREATED_AT)) {
-                    $this->setCreatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
-                }
-                if (!$this->isColumnModified(MapratingTableMap::COL_UPDATED_AT)) {
-                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
-                }
             } else {
                 $ret = $ret && $this->preUpdate($con);
-                // timestampable behavior
-                if ($this->isModified() && !$this->isColumnModified(MapratingTableMap::COL_UPDATED_AT)) {
-                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
-                }
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -750,7 +844,7 @@ abstract class Maprating implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                MapratingTableMap::addInstanceToPool($this);
+                GamecurrencyTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -807,33 +901,42 @@ abstract class Maprating implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[MapratingTableMap::COL_ID] = true;
+        $this->modifiedColumns[GamecurrencyTableMap::COL_ID] = true;
         if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . MapratingTableMap::COL_ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . GamecurrencyTableMap::COL_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(MapratingTableMap::COL_ID)) {
+        if ($this->isColumnModified(GamecurrencyTableMap::COL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'id';
         }
-        if ($this->isColumnModified(MapratingTableMap::COL_LOGIN)) {
-            $modifiedColumns[':p' . $index++]  = 'login';
+        if ($this->isColumnModified(GamecurrencyTableMap::COL_SENDERLOGIN)) {
+            $modifiedColumns[':p' . $index++]  = 'senderLogin';
         }
-        if ($this->isColumnModified(MapratingTableMap::COL_MAPUID)) {
-            $modifiedColumns[':p' . $index++]  = 'mapUid';
+        if ($this->isColumnModified(GamecurrencyTableMap::COL_RECEIVERLOGIN)) {
+            $modifiedColumns[':p' . $index++]  = 'receiverLogin';
         }
-        if ($this->isColumnModified(MapratingTableMap::COL_SCORE)) {
-            $modifiedColumns[':p' . $index++]  = 'score';
+        if ($this->isColumnModified(GamecurrencyTableMap::COL_TRANSACTIONID)) {
+            $modifiedColumns[':p' . $index++]  = 'transactionId';
         }
-        if ($this->isColumnModified(MapratingTableMap::COL_CREATED_AT)) {
-            $modifiedColumns[':p' . $index++]  = 'created_at';
+        if ($this->isColumnModified(GamecurrencyTableMap::COL_BILLID)) {
+            $modifiedColumns[':p' . $index++]  = 'billId';
         }
-        if ($this->isColumnModified(MapratingTableMap::COL_UPDATED_AT)) {
-            $modifiedColumns[':p' . $index++]  = 'updated_at';
+        if ($this->isColumnModified(GamecurrencyTableMap::COL_AMOUNT)) {
+            $modifiedColumns[':p' . $index++]  = 'amount';
+        }
+        if ($this->isColumnModified(GamecurrencyTableMap::COL_MESSAGE)) {
+            $modifiedColumns[':p' . $index++]  = 'message';
+        }
+        if ($this->isColumnModified(GamecurrencyTableMap::COL_STATUS)) {
+            $modifiedColumns[':p' . $index++]  = 'status';
+        }
+        if ($this->isColumnModified(GamecurrencyTableMap::COL_DATETIME)) {
+            $modifiedColumns[':p' . $index++]  = 'datetime';
         }
 
         $sql = sprintf(
-            'INSERT INTO maprating (%s) VALUES (%s)',
+            'INSERT INTO gamecurrency (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -845,20 +948,29 @@ abstract class Maprating implements ActiveRecordInterface
                     case 'id':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'login':
-                        $stmt->bindValue($identifier, $this->login, PDO::PARAM_STR);
+                    case 'senderLogin':
+                        $stmt->bindValue($identifier, $this->senderlogin, PDO::PARAM_STR);
                         break;
-                    case 'mapUid':
-                        $stmt->bindValue($identifier, $this->mapuid, PDO::PARAM_STR);
+                    case 'receiverLogin':
+                        $stmt->bindValue($identifier, $this->receiverlogin, PDO::PARAM_STR);
                         break;
-                    case 'score':
-                        $stmt->bindValue($identifier, $this->score, PDO::PARAM_INT);
+                    case 'transactionId':
+                        $stmt->bindValue($identifier, $this->transactionid, PDO::PARAM_INT);
                         break;
-                    case 'created_at':
-                        $stmt->bindValue($identifier, $this->created_at ? $this->created_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                    case 'billId':
+                        $stmt->bindValue($identifier, $this->billid, PDO::PARAM_INT);
                         break;
-                    case 'updated_at':
-                        $stmt->bindValue($identifier, $this->updated_at ? $this->updated_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                    case 'amount':
+                        $stmt->bindValue($identifier, $this->amount, PDO::PARAM_INT);
+                        break;
+                    case 'message':
+                        $stmt->bindValue($identifier, $this->message, PDO::PARAM_STR);
+                        break;
+                    case 'status':
+                        $stmt->bindValue($identifier, $this->status, PDO::PARAM_INT);
+                        break;
+                    case 'datetime':
+                        $stmt->bindValue($identifier, $this->datetime ? $this->datetime->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -906,7 +1018,7 @@ abstract class Maprating implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = MapratingTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = GamecurrencyTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -926,19 +1038,28 @@ abstract class Maprating implements ActiveRecordInterface
                 return $this->getId();
                 break;
             case 1:
-                return $this->getLogin();
+                return $this->getSenderlogin();
                 break;
             case 2:
-                return $this->getMapuid();
+                return $this->getReceiverlogin();
                 break;
             case 3:
-                return $this->getScore();
+                return $this->getTransactionid();
                 break;
             case 4:
-                return $this->getCreatedAt();
+                return $this->getBillid();
                 break;
             case 5:
-                return $this->getUpdatedAt();
+                return $this->getAmount();
+                break;
+            case 6:
+                return $this->getMessage();
+                break;
+            case 7:
+                return $this->getStatus();
+                break;
+            case 8:
+                return $this->getDatetime();
                 break;
             default:
                 return null;
@@ -963,25 +1084,24 @@ abstract class Maprating implements ActiveRecordInterface
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
     {
 
-        if (isset($alreadyDumpedObjects['Maprating'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['Gamecurrency'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Maprating'][$this->hashCode()] = true;
-        $keys = MapratingTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['Gamecurrency'][$this->hashCode()] = true;
+        $keys = GamecurrencyTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getLogin(),
-            $keys[2] => $this->getMapuid(),
-            $keys[3] => $this->getScore(),
-            $keys[4] => $this->getCreatedAt(),
-            $keys[5] => $this->getUpdatedAt(),
+            $keys[1] => $this->getSenderlogin(),
+            $keys[2] => $this->getReceiverlogin(),
+            $keys[3] => $this->getTransactionid(),
+            $keys[4] => $this->getBillid(),
+            $keys[5] => $this->getAmount(),
+            $keys[6] => $this->getMessage(),
+            $keys[7] => $this->getStatus(),
+            $keys[8] => $this->getDatetime(),
         );
-        if ($result[$keys[4]] instanceof \DateTime) {
-            $result[$keys[4]] = $result[$keys[4]]->format('c');
-        }
-
-        if ($result[$keys[5]] instanceof \DateTime) {
-            $result[$keys[5]] = $result[$keys[5]]->format('c');
+        if ($result[$keys[8]] instanceof \DateTime) {
+            $result[$keys[8]] = $result[$keys[8]]->format('c');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1002,11 +1122,11 @@ abstract class Maprating implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\eXpansion\Bundle\LocalMapRatings\Model\Maprating
+     * @return $this|\eXpansion\Framework\GameCurrencyBundle\Model\Gamecurrency
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = MapratingTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = GamecurrencyTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -1017,7 +1137,7 @@ abstract class Maprating implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\eXpansion\Bundle\LocalMapRatings\Model\Maprating
+     * @return $this|\eXpansion\Framework\GameCurrencyBundle\Model\Gamecurrency
      */
     public function setByPosition($pos, $value)
     {
@@ -1026,19 +1146,28 @@ abstract class Maprating implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setLogin($value);
+                $this->setSenderlogin($value);
                 break;
             case 2:
-                $this->setMapuid($value);
+                $this->setReceiverlogin($value);
                 break;
             case 3:
-                $this->setScore($value);
+                $this->setTransactionid($value);
                 break;
             case 4:
-                $this->setCreatedAt($value);
+                $this->setBillid($value);
                 break;
             case 5:
-                $this->setUpdatedAt($value);
+                $this->setAmount($value);
+                break;
+            case 6:
+                $this->setMessage($value);
+                break;
+            case 7:
+                $this->setStatus($value);
+                break;
+            case 8:
+                $this->setDatetime($value);
                 break;
         } // switch()
 
@@ -1064,25 +1193,34 @@ abstract class Maprating implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = MapratingTableMap::getFieldNames($keyType);
+        $keys = GamecurrencyTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setLogin($arr[$keys[1]]);
+            $this->setSenderlogin($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setMapuid($arr[$keys[2]]);
+            $this->setReceiverlogin($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setScore($arr[$keys[3]]);
+            $this->setTransactionid($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setCreatedAt($arr[$keys[4]]);
+            $this->setBillid($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setUpdatedAt($arr[$keys[5]]);
+            $this->setAmount($arr[$keys[5]]);
+        }
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setMessage($arr[$keys[6]]);
+        }
+        if (array_key_exists($keys[7], $arr)) {
+            $this->setStatus($arr[$keys[7]]);
+        }
+        if (array_key_exists($keys[8], $arr)) {
+            $this->setDatetime($arr[$keys[8]]);
         }
     }
 
@@ -1103,7 +1241,7 @@ abstract class Maprating implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\eXpansion\Bundle\LocalMapRatings\Model\Maprating The current object, for fluid interface
+     * @return $this|\eXpansion\Framework\GameCurrencyBundle\Model\Gamecurrency The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -1123,25 +1261,34 @@ abstract class Maprating implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(MapratingTableMap::DATABASE_NAME);
+        $criteria = new Criteria(GamecurrencyTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(MapratingTableMap::COL_ID)) {
-            $criteria->add(MapratingTableMap::COL_ID, $this->id);
+        if ($this->isColumnModified(GamecurrencyTableMap::COL_ID)) {
+            $criteria->add(GamecurrencyTableMap::COL_ID, $this->id);
         }
-        if ($this->isColumnModified(MapratingTableMap::COL_LOGIN)) {
-            $criteria->add(MapratingTableMap::COL_LOGIN, $this->login);
+        if ($this->isColumnModified(GamecurrencyTableMap::COL_SENDERLOGIN)) {
+            $criteria->add(GamecurrencyTableMap::COL_SENDERLOGIN, $this->senderlogin);
         }
-        if ($this->isColumnModified(MapratingTableMap::COL_MAPUID)) {
-            $criteria->add(MapratingTableMap::COL_MAPUID, $this->mapuid);
+        if ($this->isColumnModified(GamecurrencyTableMap::COL_RECEIVERLOGIN)) {
+            $criteria->add(GamecurrencyTableMap::COL_RECEIVERLOGIN, $this->receiverlogin);
         }
-        if ($this->isColumnModified(MapratingTableMap::COL_SCORE)) {
-            $criteria->add(MapratingTableMap::COL_SCORE, $this->score);
+        if ($this->isColumnModified(GamecurrencyTableMap::COL_TRANSACTIONID)) {
+            $criteria->add(GamecurrencyTableMap::COL_TRANSACTIONID, $this->transactionid);
         }
-        if ($this->isColumnModified(MapratingTableMap::COL_CREATED_AT)) {
-            $criteria->add(MapratingTableMap::COL_CREATED_AT, $this->created_at);
+        if ($this->isColumnModified(GamecurrencyTableMap::COL_BILLID)) {
+            $criteria->add(GamecurrencyTableMap::COL_BILLID, $this->billid);
         }
-        if ($this->isColumnModified(MapratingTableMap::COL_UPDATED_AT)) {
-            $criteria->add(MapratingTableMap::COL_UPDATED_AT, $this->updated_at);
+        if ($this->isColumnModified(GamecurrencyTableMap::COL_AMOUNT)) {
+            $criteria->add(GamecurrencyTableMap::COL_AMOUNT, $this->amount);
+        }
+        if ($this->isColumnModified(GamecurrencyTableMap::COL_MESSAGE)) {
+            $criteria->add(GamecurrencyTableMap::COL_MESSAGE, $this->message);
+        }
+        if ($this->isColumnModified(GamecurrencyTableMap::COL_STATUS)) {
+            $criteria->add(GamecurrencyTableMap::COL_STATUS, $this->status);
+        }
+        if ($this->isColumnModified(GamecurrencyTableMap::COL_DATETIME)) {
+            $criteria->add(GamecurrencyTableMap::COL_DATETIME, $this->datetime);
         }
 
         return $criteria;
@@ -1159,8 +1306,8 @@ abstract class Maprating implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildMapratingQuery::create();
-        $criteria->add(MapratingTableMap::COL_ID, $this->id);
+        $criteria = ChildGamecurrencyQuery::create();
+        $criteria->add(GamecurrencyTableMap::COL_ID, $this->id);
 
         return $criteria;
     }
@@ -1222,18 +1369,21 @@ abstract class Maprating implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \eXpansion\Bundle\LocalMapRatings\Model\Maprating (or compatible) type.
+     * @param      object $copyObj An object of \eXpansion\Framework\GameCurrencyBundle\Model\Gamecurrency (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setLogin($this->getLogin());
-        $copyObj->setMapuid($this->getMapuid());
-        $copyObj->setScore($this->getScore());
-        $copyObj->setCreatedAt($this->getCreatedAt());
-        $copyObj->setUpdatedAt($this->getUpdatedAt());
+        $copyObj->setSenderlogin($this->getSenderlogin());
+        $copyObj->setReceiverlogin($this->getReceiverlogin());
+        $copyObj->setTransactionid($this->getTransactionid());
+        $copyObj->setBillid($this->getBillid());
+        $copyObj->setAmount($this->getAmount());
+        $copyObj->setMessage($this->getMessage());
+        $copyObj->setStatus($this->getStatus());
+        $copyObj->setDatetime($this->getDatetime());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1249,7 +1399,7 @@ abstract class Maprating implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \eXpansion\Bundle\LocalMapRatings\Model\Maprating Clone of current object.
+     * @return \eXpansion\Framework\GameCurrencyBundle\Model\Gamecurrency Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1270,11 +1420,14 @@ abstract class Maprating implements ActiveRecordInterface
     public function clear()
     {
         $this->id = null;
-        $this->login = null;
-        $this->mapuid = null;
-        $this->score = null;
-        $this->created_at = null;
-        $this->updated_at = null;
+        $this->senderlogin = null;
+        $this->receiverlogin = null;
+        $this->transactionid = null;
+        $this->billid = null;
+        $this->amount = null;
+        $this->message = null;
+        $this->status = null;
+        $this->datetime = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -1300,25 +1453,11 @@ abstract class Maprating implements ActiveRecordInterface
     /**
      * Return the string representation of this object
      *
-     * @return string The value of the 'login' column
+     * @return string The value of the 'senderLogin' column
      */
     public function __toString()
     {
-        return (string) $this->getLogin();
-    }
-
-    // timestampable behavior
-
-    /**
-     * Mark the current object so that the update date doesn't get updated during next save
-     *
-     * @return     $this|ChildMaprating The current object (for fluent API support)
-     */
-    public function keepUpdateDateUnchanged()
-    {
-        $this->modifiedColumns[MapratingTableMap::COL_UPDATED_AT] = true;
-
-        return $this;
+        return (string) $this->getSenderlogin();
     }
 
     /**
