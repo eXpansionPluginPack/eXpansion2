@@ -87,7 +87,7 @@ class GameCurrencyService
      * @param $amount
      * @param $receiver
      * @param $message
-     * @return bool|Gamecurrency
+     * @return Gamecurrency|bool
      */
     public function createBill($login, $amount, $receiver, $message)
     {

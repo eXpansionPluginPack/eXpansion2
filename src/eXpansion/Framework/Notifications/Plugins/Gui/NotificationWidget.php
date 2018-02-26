@@ -81,7 +81,7 @@ class NotificationWidget extends WidgetFactory
                 }
                 
                 if (_Instant) {
-                    Frames.remove(Frame);
+                    Frames.remove(_Frame);
                 }
             }
             
