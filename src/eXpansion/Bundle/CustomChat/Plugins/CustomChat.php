@@ -102,12 +102,14 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
                     $text, $urls)) {
                     foreach ($urls[0] as $k => $url) {
                         if ($urls[1][$k] != '$l[') {
+                            $url = str_replace('$l', '', $url);
+                            $text = str_replace('$l', '', $text);
+
                             if (strlen($url) >= 33) {
-                                $url = str_replace('$l', '', $url);
-                                $text = str_replace('$l', '', $text);
                                 $short = substr($url, 0, 30)."...";
                                 $text = str_replace($url, '$l['.$url.']'.$short.'$l', $text);
-
+                            } else {
+                                $text = str_replace($url, '$l'.$url.'$l', $text);
                             }
                         }
 
@@ -134,7 +136,7 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
                     $diff = array_diff($group, $matchLogin);
 
                     if ($matchFound) {
-                        $this->sendChat($player, $text, '$ff0$o', $matchLogin);
+                        $this->sendChat($player, $text, '$f90', $matchLogin);
                         $this->notifications->notice($text, [], "Chat Notification", 0, $matchLogin);
                         if (count($diff) > 0) {
                             $this->sendChat($player, $text, '$ff0', $group);
