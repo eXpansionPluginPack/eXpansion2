@@ -3,6 +3,7 @@
 namespace eXpansion\Framework\Core\Plugins\Gui;
 
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpUserGroup;
 use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryContext;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Script\Variable;
@@ -18,7 +19,7 @@ use FML\Script\ScriptLabel;
  * @copyright 2018 eXpansion
  * @package eXpansion\Framework\Core\Plugins\Gui
  */
-class ScriptVariableUpdateFactory extends WidgetFactory implements ListenerInterfaceExpTimer
+class ScriptVariableUpdateFactory extends WidgetFactory implements ListenerInterfaceExpTimer, ListenerInterfaceExpUserGroup
 {
     /** @var Variable[] */
     protected $variables = [];
@@ -32,10 +33,8 @@ class ScriptVariableUpdateFactory extends WidgetFactory implements ListenerInter
     /** @var Variable */
     protected $checkOldVariable;
 
-    /** @var Group */
-    protected $playerGroup;
-
-    protected $queuedForUpdate = null;
+    /** @var mixed[][] */
+    protected $queuedForUpdate = [];
 
     /**
      * ScriptVariableUpdateFactory constructor.
@@ -46,10 +45,9 @@ class ScriptVariableUpdateFactory extends WidgetFactory implements ListenerInter
      * @param Group                $playerGroup
      * @param WidgetFactoryContext $context
      */
-    public function __construct($name, array  $variables, int $maxUpdateFrequency = 1, Group $playerGroup, WidgetFactoryContext $context)
+    public function __construct($name, array  $variables, int $maxUpdateFrequency = 1, WidgetFactoryContext $context)
     {
         parent::__construct($name, 0, 0, 0, 0, $context);
-        $this->playerGroup = $playerGroup;
         $this->maxUpdateFrequency = $maxUpdateFrequency;
 
         foreach ($variables as $variable) {
@@ -69,21 +67,26 @@ class ScriptVariableUpdateFactory extends WidgetFactory implements ListenerInter
     /**
      * Update script value.
      *
-     * @param $variable
-     * @param $newValue
+     * @param Group  $group
+     * @param string $variableCode
+     * @param string $newValue
      */
-    public function updateValue($variable, $newValue)
+    public function updateValue($group, $variableCode, $newValue)
     {
-        if ($this->variables[$variable]->getValue() != $newValue) {
-            $this->variables[$variable]->setValue($newValue);
-            $uniqueId = '"' . uniqid('exp_', true) . '"';
-            $this->checkVariable->setValue($uniqueId);
+        $variable = clone $this->getVariable($variableCode);
+        $variable->setValue($newValue);
 
-            if (is_null($this->queuedForUpdate)) {
-                $this->queuedForUpdate = time();
-            }
+        if (!isset($this->queuedForUpdate[$group->getName()])) {
+            $this->queuedForUpdate[$group->getName()]['time'] = time();
         }
 
+        $checkVariable = clone $this->checkVariable;
+        $uniqueId = uniqid('exp_',true);
+        $checkVariable->setValue($uniqueId);
+
+        $this->queuedForUpdate[$group->getName()]['group'] = $group;
+        $this->queuedForUpdate[$group->getName()]['variables'][$variableCode] = $variable;
+        $this->queuedForUpdate[$group->getName()]['check'] = $checkVariable;
     }
 
     /**
@@ -173,30 +176,6 @@ EOL;
     /**
      * @inheritdoc
      */
-    public function create($group = null)
-    {
-        return parent::create($this->playerGroup);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function update($group = null)
-    {
-        parent::update($this->playerGroup);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function destroy(Group $group = null)
-    {
-        parent::destroy($this->playerGroup);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function onPreLoop()
     {
         // Nothing
@@ -215,10 +194,53 @@ EOL;
      */
     public function onEverySecond()
     {
-        if (!is_null($this->queuedForUpdate)) {
-            if (time() - $this->queuedForUpdate > $this->maxUpdateFrequency) {
-                $this->update($this->playerGroup);
+        if (!empty($this->queuedForUpdate)) {
+            foreach ($this->queuedForUpdate as $groupName => $updateData) {
+                if (time() - $updateData['time'] > $this->maxUpdateFrequency) {
+                    $variables = $this->variables;
+                    $checkVariable = $this->checkVariable;
+
+                    // Update variables temporarily with player data.
+                    $this->variables = [];
+                    foreach ($updateData['variables'] as $variableCode => $variable) {
+                        $this->variables[$variableCode] = $variable;
+                    }
+                    $this->checkVariable = $updateData['check'];
+                    $this->update($updateData['group']);
+
+                    // Put back original data.
+                    $this->variables = $variables;
+                    $this->checkVariable = $checkVariable;
+
+                    unset($this->queuedForUpdate[$groupName]);
+                }
             }
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function onExpansionGroupAddUser(Group $group, $loginAdded)
+    {
+        // This will be handled by the gui handler.
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function onExpansionGroupRemoveUser(Group $group, $loginRemoved)
+    {
+        // This will be handled by the gui handler.
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function onExpansionGroupDestroy(Group $group, $lastLogin)
+    {
+        if (isset($this->queuedForUpdate[$group->getName()])) {
+            unset($this->queuedForUpdate[$group->getName()]);
         }
     }
 }

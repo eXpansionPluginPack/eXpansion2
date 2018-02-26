@@ -96,7 +96,6 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
         } else {
             $this->updater->setLocalRecord([]);
         }
-        $this->updater->update($this->allPlayers);
     }
 
     /**
@@ -109,7 +108,6 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
     public function onLocalRecordsFirstRecord(Record $record, $records, $position)
     {
         $this->updater->setLocalRecord($record->getCheckpoints());
-        $this->updater->update($this->allPlayers);
     }
 
     /**
@@ -137,7 +135,6 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
     {
         if ($position == 1) {
             $this->updater->setLocalRecord($record->getCheckpoints());
-            $this->updater->update($this->allPlayers);
         }
     }
 
@@ -153,7 +150,6 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
     {
         if ($position == 1) {
             $this->updater->setLocalRecord($record->getCheckpoints());
-            $this->updater->update($this->allPlayers);
         }
     }
 
