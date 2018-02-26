@@ -1,0 +1,17 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    eXpansion\Framework\Notifications\Plugins\NotificationsPlugin:
+        class: eXpansion\Framework\Notifications\Plugins\NotificationsPlugin
+        arguments:
+            $allPlayers: "@expansion.framework.core.user_groups.all_players"
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'exp.all'}
+
+    eXpansion\Framework\Notifications\Services\Notifications:
+        class: eXpansion\Framework\Notifications\Services\Notifications
+        arguments:
+            $group: "@expansion.framework.core.user_groups.all_players"

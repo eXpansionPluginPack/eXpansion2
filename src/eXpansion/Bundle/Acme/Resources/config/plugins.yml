@@ -13,6 +13,7 @@ services:
             $players: '@expansion.framework.core.user_groups.players'
         tags:
             - {name: 'expansion.plugin', data_provider: 'exp.application'}
+            - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
 
     eXpansion\Bundle\Acme\Plugins\SmTest:
         class:  eXpansion\Bundle\Acme\Plugins\SmTest

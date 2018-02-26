@@ -2,6 +2,7 @@
 
 namespace eXpansion\Bundle\DeveloperTools\Plugins\Gui;
 
+use eXpansion\Bundle\Notifications\Plugins\Gui\NotificationUpdater;
 use eXpansion\Framework\Core\Model\Gui\FmlManialinkFactoryContext;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;

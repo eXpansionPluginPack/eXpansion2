@@ -84,6 +84,7 @@ class AppKernel extends Kernel
             new \eXpansion\Framework\Gui\eXpansionGuiBundle(),
             new \eXpansion\Framework\PlayersBundle\eXpansionFrameworkPlayersBundle(),
             new \eXpansion\Framework\Config\eXpansionConfig(),
+            new \eXpansion\Framework\Notifications\eXpansionNotificationsBundle(),
         ];
 
         // Also add debug help bundles.

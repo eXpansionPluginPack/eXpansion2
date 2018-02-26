@@ -1,0 +1,5 @@
+expansion_acme:
+    notification:
+        start: "|admin| eXpansion2 käynnistettiin onnistuneesti."
+        join: "|info| %player% liittyi peliin."
+        leave: "|info| %player% lähti pelistä."

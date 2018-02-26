@@ -114,5 +114,19 @@ class ChatNotification implements ChatNotificationInterface
         return $this->translations->getTranslation($messageId, $parameters, $locale);
     }
 
+    /**
+     * Return messageId with arguments as a string
+     * Usage: used for retrieving partials for chat messages
+     *  * defaults to English locale, without parameters
+     *
+     * @param string $messageId
+     * @param array  $parameters
+     * @param string $locale
+     * @return string[]
+     */
+    public function getMessages($messageId, $parameters = [])
+    {
+        return $this->translations->getTranslations($messageId, $parameters);
+    }
 
 }
