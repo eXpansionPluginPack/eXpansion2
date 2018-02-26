@@ -140,7 +140,7 @@ class PlayersWindow extends GridWindowFactory
                     )
                 );
 
-            $row = $this->uiFactory->createLayoutLine(125, 0,
+            $row = $this->uiFactory->createLayoutLine(100, 0,
                 [$guestList, $ignoreList, $banList, $blackList], 2);
             $manialink->addChild($row);
 
@@ -175,7 +175,7 @@ class PlayersWindow extends GridWindowFactory
         $frame = $manialink->getData('playerFrame');
         $frame->removeAllChildren();
 
-        $row = $this->uiFactory->createLayoutRow(0, 0, [], -2);
+        $row = $this->uiFactory->createLayoutRow(0, 0, [], 2);
 
 
         $element = $this->uiFactory->createLabel($player->getNickName(), Label::TYPE_HEADER);
