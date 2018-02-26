@@ -1300,11 +1300,11 @@ abstract class Maprating implements ActiveRecordInterface
     /**
      * Return the string representation of this object
      *
-     * @return string
+     * @return string The value of the 'login' column
      */
     public function __toString()
     {
-        return (string) $this->exportTo(MapratingTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->getLogin();
     }
 
     // timestampable behavior

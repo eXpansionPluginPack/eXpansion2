@@ -47,10 +47,7 @@ class AppKernel extends Kernel
 
 
         $bundles[] = new \eXpansion\Bundle\VoteManager\VoteManagerBundle();
-
-
-
-//        $bundles[] = new \eXpansion\Bundle\MxKarma\MxKarmaBundle();
+        $bundles[] = new \eXpansion\Bundle\MxKarma\MxKarmaBundle();
 
 
         /* Register test bundles. */
@@ -82,6 +79,7 @@ class AppKernel extends Kernel
             new \eXpansion\Framework\GameManiaplanet\eXpansionGameManiaplanetBundle(),
             new \eXpansion\Framework\GameTrackmania\eXpansionGameTrackmaniaBundle(),
             new \eXpansion\Framework\GameShootmania\eXpansionGameShootmaniaBundle(),
+            new \eXpansion\Framework\GameCurrencyBundle\eXpansionGameCurrencyBundle(),
             new \eXpansion\Framework\AdminGroups\eXpansionAdminGroupsBundle(),
             new \eXpansion\Framework\Gui\eXpansionGuiBundle(),
             new \eXpansion\Framework\PlayersBundle\eXpansionFrameworkPlayersBundle(),

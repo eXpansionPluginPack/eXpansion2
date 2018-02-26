@@ -1,0 +1,12 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    eXpansion\Framework\GameCurrencyBundle\Plugins\Gui\BillWindow:
+        class: eXpansion\Framework\GameCurrencyBundle\Plugins\Gui\BillWindow
+        arguments:
+            $name: "Send Planets"
+            $sizeX : 120
+            $sizeY : 60

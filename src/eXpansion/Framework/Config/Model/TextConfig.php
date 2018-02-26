@@ -12,5 +12,11 @@ namespace eXpansion\Framework\Config\Model;
  */
 class TextConfig extends AbstractConfig
 {
-
+    /**
+     * @inheritdoc
+     */
+    public function __toString() : string
+    {
+        return $this->get();
+    }
 }

@@ -134,6 +134,7 @@ class InputMasked extends AbstractUiElement implements Renderable, ScriptFeature
 
     /**
      * @param float $width
+     * @return InputMasked
      */
     public function setWidth($width)
     {
@@ -144,7 +145,7 @@ class InputMasked extends AbstractUiElement implements Renderable, ScriptFeature
 
     public function getHeight()
     {
-        return $this->height + 2;
+        return $this->height;
     }
 
     /**

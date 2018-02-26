@@ -2,8 +2,8 @@
 
 
 namespace eXpansion\Framework\Config\Model;
+
 use eXpansion\Framework\Config\Exception\InvalidConfigException;
-use eXpansion\Framework\Config\Services\ConfigManager;
 
 
 /**
@@ -32,4 +32,5 @@ class IntegerConfig extends DecimalConfig
         parent::validate($value);
         $value = (int)$value;
     }
+
 }

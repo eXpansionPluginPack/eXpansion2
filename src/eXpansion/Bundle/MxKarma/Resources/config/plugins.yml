@@ -2,10 +2,12 @@ services:
     _defaults:
         autowire: true
 
-    eXpansion\Bundle\MxKarma\Plugins\:
-        resource: '../../Plugins/*'
-
     eXpansion\Bundle\MxKarma\Plugins\MxKarma:
+        class: \eXpansion\Bundle\MxKarma\Plugins\MxKarma
+        arguments:
+            $enabled: '@expansion.mx_karma.config.enable'
+            $apikey: '@expansion.mx_karma.config.apikey'
+            $serverLogin: '@expansion.mx_karma.config.server_login'
         tags:
             - {name: 'expansion.plugin', data_provider: 'exp.application'}
             - {name: 'expansion.plugin', data_provider: 'mp.script.map'}

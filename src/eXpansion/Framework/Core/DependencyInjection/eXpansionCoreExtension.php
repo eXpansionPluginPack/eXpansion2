@@ -26,14 +26,6 @@ class eXpansionCoreExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
-
-        foreach ($config['parameters'] as $paramName => $value) {
-            $container->setParameter("expansion.config.$paramName", $value);
-        }
-
-
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('commands.yml');
         $loader->load('services.yml');
@@ -45,8 +37,15 @@ class eXpansionCoreExtension extends Extension
         $loader->load('gui_grid.yml');
         $loader->load('helpers.yml');
         $loader->load('listeners.yml');
+        $loader->load('configs.yml');
 
         // Temporary for the prototype.
         $loader->load('plugins.yml');
+
+        if ($container->getParameter('kernel.environment') == 'dev') {
+            $loader->load('plugins_dev.yml');
+        } elseif ($container->getParameter('kernel.environment') == 'prod') {
+            $loader->load('plugins_prod.yml');
+        }
     }
 }

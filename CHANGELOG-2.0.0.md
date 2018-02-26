@@ -4,7 +4,23 @@
 
 * Added ingame configuration system. 
 * Added DeveloperTools bundle
- 
+* Fixed issue #277 - sorting numeric values
+* Add configs for various types, booleans, textfields, password
+* Add MxKarma 
+
+# 2.0.0.0-alpha3 (2018-02-24)
+
+## Bug Fixes
+
+* Fixed issue #248 : Strange behaviour of translated uiButtons.
+* Fixed issue #255 : Fixed issue when asking permissions on guest admin groups crashing controller
+* Fixed issue #269 : eXpansion crashing with unknow player exception.
+
+## Features 
+
+* Feature #262 : Added support to ping eXpansion Analytics.
+* Feature #266 : Add warning that displayes every 5 minutes about dev mode.
+
 # 2.0.0.0-alpha2 (2018-02-03)
 
 ## Bug Fixes

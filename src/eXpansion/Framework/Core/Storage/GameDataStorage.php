@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Core\Storage;
 
+use eXpansion\Framework\Core\Helpers\Countries;
 use Maniaplanet\DedicatedServer\Structures\GameInfos;
 use Maniaplanet\DedicatedServer\Structures\ServerOptions;
 use Maniaplanet\DedicatedServer\Structures\SystemInfos;
@@ -26,6 +27,9 @@ class GameDataStorage
      * Constant used for unknown titles.
      */
     const TITLE_UNKNOWN = 'unknown';
+
+    /** @var Countries */
+    protected $countriesHelper;
 
     /** @var  SystemInfos */
     protected $systemInfo;
@@ -55,15 +59,30 @@ class GameDataStorage
      */
     protected $titles;
 
+    /** @var string */
+    protected $serverCleanPhpVersion;
+
+    /** @var string */
+    protected $serverMajorPhpVersion;
+
     /**
      * GameDataStorage constructor.
      *
+     * @param Countries $countries
      * @param array $gameModeCodes
+     * @param array $titles
      */
-    public function __construct(array $gameModeCodes, array $titles)
+    public function __construct(Countries $countries, array $gameModeCodes, array $titles)
     {
         $this->gameModeCodes = new AssociativeArray($gameModeCodes);
         $this->titles = new AssociativeArray($titles);
+
+        $version = explode('-', phpversion());
+        $this->serverCleanPhpVersion = $version[0];
+        $this->serverMajorPhpVersion = implode(
+            '.',
+            array_slice(explode('.', $this->serverCleanPhpVersion),0,2)
+        );
     }
 
 
@@ -167,7 +186,6 @@ class GameDataStorage
      */
     public function setSystemInfo(Systeminfos $systemInfo)
     {
-
         $this->systemInfo = $systemInfo;
     }
 
@@ -193,5 +211,49 @@ class GameDataStorage
     public function setMapFolder(string $mapFolder)
     {
         $this->mapFolder = $mapFolder;
+    }
+
+    /**
+     * Get the country the server is on.
+     *
+     * @return string
+     */
+    public function getServerCountry()
+    {
+        return 'Other';
+    }
+
+    /**
+     * Get Operating system.
+     *
+     * @return string
+     */
+    public function getServerOs()
+    {
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            return "Windows";
+        } else {
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'MAC') {
+                return "Mac";
+            } else {
+                return "Linux";
+            }
+        }
+    }
+
+    /**
+     * Get clean php version without build information.
+     */
+    public function getServerCleanPhpVersion()
+    {
+        return $this->serverCleanPhpVersion;
+    }
+
+    /**
+     * Get the major php version numbers. 7.0 for exemple.
+     */
+    public function getServerMajorPhpVersion()
+    {
+        return $this->serverMajorPhpVersion;
     }
 }

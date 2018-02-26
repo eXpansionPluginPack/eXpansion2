@@ -7,7 +7,12 @@ services:
     eXpansion\Framework\Config\Ui\Fields\:
         resource: '../../Ui/Fields/*'
         tags:
-            - {name: 'expansion.config.ui', data_provider: 'exp.menu.items'}
+            - {name: 'expansion.config.ui'}
+
+    eXpansion\Framework\Config\Ui\Fields\TextField:
+        class: eXpansion\Framework\Config\Ui\Fields\TextField
+        tags:
+            - {name: 'expansion.config.ui', priority: -1}
 
     eXpansion\Framework\Config\Ui\Window\ConfigWindowFactory:
         class: eXpansion\Framework\Config\Ui\Window\ConfigWindowFactory
