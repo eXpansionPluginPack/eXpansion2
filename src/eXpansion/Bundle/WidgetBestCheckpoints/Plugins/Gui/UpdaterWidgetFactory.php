@@ -14,7 +14,7 @@ class UpdaterWidgetFactory extends ScriptVariableUpdateFactory
     public function __construct(
         $name,
         array $variables,
-        int $maxUpdateFrequency = 1,
+        float $maxUpdateFrequency = 0.5,
         WidgetFactoryContext $context,
         Group $playerGroup
     ) {

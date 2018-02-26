@@ -63,7 +63,12 @@ class GuiHandler implements
     /**
      * GuiHandler constructor.
      *
-     * @param Connection $connection
+     * @param Connection      $connection
+     * @param LoggerInterface $logger
+     * @param Console         $console
+     * @param ActionFactory   $actionFactory
+     * @param int             $charLimit
+     * @throws \Maniaplanet\DedicatedServer\InvalidArgumentException
      */
     public function __construct(
         Connection $connection,
@@ -137,6 +142,7 @@ class GuiHandler implements
 
     /**
      * Display & hide all manialinks.
+     * @throws \Maniaplanet\DedicatedServer\InvalidArgumentException
      */
     protected function displayManialinks()
     {

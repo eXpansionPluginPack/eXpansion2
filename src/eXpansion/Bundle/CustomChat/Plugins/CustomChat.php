@@ -10,6 +10,7 @@ use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
+use eXpansion\Framework\Notifications\Services\Notifications;
 use Maniaplanet\DedicatedServer\Connection;
 use Psr\Log\LoggerInterface;
 
@@ -39,15 +40,20 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      * @var LoggerInterface
      */
     private $logger;
+    /**
+     * @var Notifications
+     */
+    private $notifications;
 
     /**
      * CustomChat constructor.
-     * @param Connection $connection
-     * @param Console $console
-     * @param AdminGroups $adminGroups
+     * @param Connection       $connection
+     * @param Console          $console
+     * @param AdminGroups      $adminGroups
      * @param ChatNotification $chatNotification
-     * @param PlayerStorage $playerStorage
-     * @param LoggerInterface $logger
+     * @param PlayerStorage    $playerStorage
+     * @param Notifications    $notifications
+     * @param LoggerInterface  $logger
      */
     function __construct(
         Connection $connection,
@@ -55,6 +61,7 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
         AdminGroups $adminGroups,
         ChatNotification $chatNotification,
         PlayerStorage $playerStorage,
+        Notifications $notifications,
         LoggerInterface $logger
     ) {
         $this->connection = $connection;
@@ -63,6 +70,7 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
         $this->chatNotification = $chatNotification;
         $this->playerStorage = $playerStorage;
         $this->logger = $logger;
+        $this->notifications = $notifications;
     }
 
     /**
@@ -89,6 +97,24 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
                 $matchFound = false;
                 $matchLogin = [];
 
+                //match urls and shorten them to fit in chat.
+                if (preg_match_all('/(\$l\[?){0,1}(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6})\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)(\]?)/',
+                    $text, $urls)) {
+                    foreach ($urls[0] as $k => $url) {
+                        if ($urls[1][$k] != '$l[') {
+                            if (strlen($url) >= 33) {
+                                $url = str_replace('$l', '', $url);
+                                $text = str_replace('$l', '', $text);
+                                $short = substr($url, 0, 30)."...";
+                                $text = str_replace($url, '$l['.$url.']'.$short.'$l', $text);
+
+                            }
+                        }
+
+                    }
+
+                }
+
                 if (preg_match_all("/(\s|\G)(\@(?P<login>[\w-\._]+)[\s]{0,1})/", $text, $matches)) {
                     $group = [];
 
@@ -109,7 +135,7 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
 
                     if ($matchFound) {
                         $this->sendChat($player, $text, '$ff0$o', $matchLogin);
-
+                        $this->notifications->notice($text, [], "Chat Notification", 0, $matchLogin);
                         if (count($diff) > 0) {
                             $this->sendChat($player, $text, '$ff0', $group);
                         }
@@ -136,10 +162,10 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
     }
 
     /**
-     * @param Player $player
+     * @param Player        $player
      * @param        string $text
      * @param        string $color
-     * @param null $group
+     * @param null          $group
      */
     private function sendChat(Player $player, $text, $color, $group = null)
     {

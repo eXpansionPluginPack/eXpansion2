@@ -19,20 +19,18 @@ class NotificationUpdater extends ScriptVariableUpdateFactory
      * NotificationUpdater constructor.
      * @param                      $name
      * @param array                $variables
-     * @param int                  $maxUpdateFrequency
-     * @param Group                $playerGroup
+     * @param float                $maxUpdateFrequency
      * @param WidgetFactoryContext $context
      * @param ChatNotification     $chatNotification
      */
     public function __construct(
         $name,
         array $variables,
-        int $maxUpdateFrequency = 1,
-        Group $playerGroup,
+        float $maxUpdateFrequency = 0.250,
         WidgetFactoryContext $context,
         ChatNotification $chatNotification
     ) {
-        parent::__construct($name, $variables, $maxUpdateFrequency, $playerGroup, $context);
+        parent::__construct($name, $variables, $maxUpdateFrequency, $context);
         $this->chatNotification = $chatNotification;
     }
 
@@ -47,7 +45,7 @@ class NotificationUpdater extends ScriptVariableUpdateFactory
      * @param int    $timeout timeout in milliseconds
      * @param Group  $group
      */
-    public function setNotification($prefix, $title, $message, $params, $timeout, $group)
+    public function setNotification($prefix, $title, $message, $params, int $timeout, $group)
     {
 
         $toast = [
@@ -57,8 +55,8 @@ class NotificationUpdater extends ScriptVariableUpdateFactory
         ];
 
 
-        $this->updateValue('notification', Builder::getArray($toast, true));
-        $this->update($group);
+        $this->updateValue($group, 'notification', Builder::getArray($toast, true));
+
     }
 
 

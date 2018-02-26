@@ -4,7 +4,6 @@ namespace eXpansion\Framework\Core\Plugins\Gui;
 
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpUserGroup;
-use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryContext;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Script\Variable;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
@@ -27,7 +26,7 @@ class ScriptVariableUpdateFactory extends WidgetFactory implements ListenerInter
     /** @var Variable */
     protected $checkVariable;
 
-    /** @var int */
+    /** @var float */
     protected $maxUpdateFrequency;
 
     /** @var Variable */
@@ -41,12 +40,15 @@ class ScriptVariableUpdateFactory extends WidgetFactory implements ListenerInter
      *
      * @param                      $name
      * @param array                $variables
-     * @param int                  $maxUpdateFrequency
-     * @param Group                $playerGroup
+     * @param float                $maxUpdateFrequency
      * @param WidgetFactoryContext $context
      */
-    public function __construct($name, array  $variables, int $maxUpdateFrequency = 1, WidgetFactoryContext $context)
-    {
+    public function __construct(
+        $name,
+        array $variables,
+        float $maxUpdateFrequency = 0.250,
+        WidgetFactoryContext $context
+    ) {
         parent::__construct($name, 0, 0, 0, 0, $context);
         $this->maxUpdateFrequency = $maxUpdateFrequency;
 
@@ -59,7 +61,7 @@ class ScriptVariableUpdateFactory extends WidgetFactory implements ListenerInter
             );
         }
 
-        $uniqueId = uniqid('exp_',true);
+        $uniqueId = uniqid('exp_', true);
         $this->checkVariable = new Variable('check', 'Text', 'This', "\"$uniqueId\"");
         $this->checkOldVariable = new Variable('check_old', 'Text', 'Page', "\"$uniqueId\"");
     }
@@ -77,13 +79,12 @@ class ScriptVariableUpdateFactory extends WidgetFactory implements ListenerInter
         $variable->setValue($newValue);
 
         if (!isset($this->queuedForUpdate[$group->getName()])) {
-            $this->queuedForUpdate[$group->getName()]['time'] = time();
+            $this->queuedForUpdate[$group->getName()]['time'] = microtime(true);
         }
 
         $checkVariable = clone $this->checkVariable;
-        $uniqueId = uniqid('exp_',true);
-        $checkVariable->setValue($uniqueId);
-
+        $uniqueId = uniqid('exp_', true);
+        $checkVariable->setValue("\".$uniqueId\"");
         $this->queuedForUpdate[$group->getName()]['group'] = $group;
         $this->queuedForUpdate[$group->getName()]['variables'][$variableCode] = $variable;
         $this->queuedForUpdate[$group->getName()]['check'] = $checkVariable;
@@ -138,16 +139,16 @@ EOL;
     {
         $scriptContent = '';
         foreach ($this->variables as $variable) {
-            $scriptContent .= $variable->getScriptDeclaration() . "\n";
+            $scriptContent .= $variable->getScriptDeclaration()."\n";
             if ($defaultValues) {
-                $scriptContent .= $variable->getScriptValueSet() . "\n";
+                $scriptContent .= $variable->getScriptValueSet()."\n";
             }
         }
-        $scriptContent .= $this->checkVariable->getScriptDeclaration() . "\n";
-        $scriptContent .= $this->checkOldVariable->getScriptDeclaration() . "\n";
+        $scriptContent .= $this->checkVariable->getScriptDeclaration()."\n";
+        $scriptContent .= $this->checkOldVariable->getScriptDeclaration()."\n";
         if ($defaultValues) {
-            $scriptContent .= $this->checkVariable->getScriptValueSet() . "\n";
-            $scriptContent .= $this->checkOldVariable->getScriptValueSet() . "\n";
+            $scriptContent .= $this->checkVariable->getScriptValueSet()."\n";
+            $scriptContent .= $this->checkOldVariable->getScriptValueSet()."\n";
         }
 
         return $scriptContent;
@@ -178,7 +179,29 @@ EOL;
      */
     public function onPreLoop()
     {
-        // Nothing
+        if (!empty($this->queuedForUpdate)) {
+            foreach ($this->queuedForUpdate as $groupName => $updateData) {
+                if (microtime(true) - $updateData['time'] >= $this->maxUpdateFrequency) {
+                    // Save original data.
+                    $variables = $this->variables;
+                    $checkVariable = $this->checkVariable;
+
+                    // Update variables temporarily with player data.
+                    $this->variables = [];
+                    foreach ($updateData['variables'] as $variableCode => $variable) {
+                        $this->variables[$variableCode] = $variable;
+                    }
+                    $this->checkVariable = $updateData['check'];
+                    $this->create($updateData['group']);
+
+                    // Put back original data.
+                    $this->variables = $variables;
+                    $this->checkVariable = $checkVariable;
+
+                    unset($this->queuedForUpdate[$groupName]);
+                }
+            }
+        }
     }
 
     /**
@@ -194,28 +217,7 @@ EOL;
      */
     public function onEverySecond()
     {
-        if (!empty($this->queuedForUpdate)) {
-            foreach ($this->queuedForUpdate as $groupName => $updateData) {
-                if (time() - $updateData['time'] > $this->maxUpdateFrequency) {
-                    $variables = $this->variables;
-                    $checkVariable = $this->checkVariable;
 
-                    // Update variables temporarily with player data.
-                    $this->variables = [];
-                    foreach ($updateData['variables'] as $variableCode => $variable) {
-                        $this->variables[$variableCode] = $variable;
-                    }
-                    $this->checkVariable = $updateData['check'];
-                    $this->update($updateData['group']);
-
-                    // Put back original data.
-                    $this->variables = $variables;
-                    $this->checkVariable = $checkVariable;
-
-                    unset($this->queuedForUpdate[$groupName]);
-                }
-            }
-        }
     }
 
     /**

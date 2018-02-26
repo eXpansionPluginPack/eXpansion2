@@ -197,7 +197,7 @@ EOL
 
 
         $message = Label::create()->setPosition(2, -8)->setSize(70,
-            15)->setTextSize(2)->setMaxLines(3)->setOpacity(0.5)->setTextColor("fff")->setText("n/a");
+            15)->setTextSize(2)->setMaxLines(4)->setOpacity(0.5)->setTextColor("fff")->setText("n/a");
         $frame->addChild($message);
 
         $quad = Quad::create();

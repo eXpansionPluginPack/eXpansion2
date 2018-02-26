@@ -270,9 +270,11 @@ class MxKarma implements StatusAwarePluginInterface,
      */
     public function onStartMapStart($count, $time, $restarted, Map $map)
     {
-        if ($this->mxKarma->isConnected() == false) {
-            $this->console->writeln("> MxKarma is at disconnected state, trying to establish connection.");
-            $this->connect();
+        if ($this->enabled->get()) {
+            if ($this->mxKarma->isConnected() == false) {
+                $this->console->writeln("> MxKarma is at disconnected state, trying to establish connection.");
+                $this->connect();
+            }
         }
     }
 
