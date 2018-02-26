@@ -19,5 +19,5 @@ services:
           $name:  "Notification Updater"
           $playerGroup : "@expansion.framework.core.user_groups.all_players"
           $variables:
-            - {name: "notification", type: "Text[Text]", default: "Text[Text]"}
+            - {name: "notification", type: "Text[Text][Text]", default: "Text[Text][Text]"}
 

@@ -76,7 +76,7 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
      */
     public function onApplicationReady()
     {
-        $this->notifications->notice("eXpansion2 Started Successfully!");
+        $this->notifications->info("expansion_acme.notification.start");
     }
 
     /**
@@ -95,7 +95,7 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
      */
     public function onPlayerConnect(Player $player)
     {
-        $this->notifications->info($player->getNickName().'$z$s'." Joins.");
+        $this->notifications->info("expansion_acme.notification.join", ["%player%" => $player->getNickName()]);
     }
 
     /**
@@ -105,7 +105,7 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
      */
     public function onPlayerDisconnect(Player $player, $disconnectionReason)
     {
-        $this->notifications->info($player->getNickName().'$z$s'." Leaves.");
+        $this->notifications->info("expansion_acme.notification.leave", ["%player%" => $player->getNickName()]);
     }
 
     /**

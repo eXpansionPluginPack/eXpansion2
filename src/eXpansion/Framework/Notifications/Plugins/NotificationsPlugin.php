@@ -2,10 +2,10 @@
 
 namespace eXpansion\Framework\Notifications\Plugins;
 
-use eXpansion\Framework\Notifications\Plugins\Gui\NotificationUpdater;
-use eXpansion\Framework\Notifications\Plugins\Gui\NotificationWidget;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
+use eXpansion\Framework\Notifications\Plugins\Gui\NotificationUpdater;
+use eXpansion\Framework\Notifications\Plugins\Gui\NotificationWidget;
 
 /**
  * Class CustomUi
@@ -51,8 +51,10 @@ class NotificationsPlugin implements StatusAwarePluginInterface
      */
     public function setStatus($status)
     {
-        $this->notificationWidget->create($this->allPlayers);
-        $this->notificationUpdater->create($this->allPlayers);
+        if ($status) {
+            $this->notificationWidget->create($this->allPlayers);
+            $this->notificationUpdater->create($this->allPlayers);
+        }
     }
 
 }

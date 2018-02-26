@@ -55,61 +55,75 @@ class NotificationWidget extends WidgetFactory
         $manialink->getFmlManialink()->getScript()->addScriptFunction("", /** @lang text */
             <<<EOL
 
-Void HideToast(CMlFrame Frame, Boolean Instant) {
-	declare CMlFrame[] Frames for This;
-	
-	foreach(Element in Frame.Controls) {
-		if (Instant) {
-			if (Element is CMlLabel) {
-				(Element as CMlLabel).Opacity = 0.;
-			}
-			
-			if (Element is CMlQuad) {
-				(Element as CMlQuad).Opacity = 0.;
-			}	
-		} else {
-			AnimMgr.Add(Element, "<elem opacity=\"0\" />", 500, CAnimManager::EAnimManagerEasing::QuadOut);
-		}
-	}
-	
-	if (Instant) {
-		Frames.remove(Frame);
-	}
-}
-
-Void ShowToast(Text Title, Text Message, Integer Duration) {
-	declare CMlFrame[] Frames for This;
-	declare CMlFrame Exp_Window <=> (Page.GetFirstChild("Window") as CMlFrame);
-	
-	if (Frames.count >= 4) {
-		HideToast(Frames[0], True);
-	}
-	Page.GetClassChildren("uiToast", Exp_Window, True);
-	
-	
-	foreach (Read in Page.GetClassChildren_Result) {
-		
-		declare Frame = (Read as CMlFrame);
-		
-		// stop at first available toast
-		if ( (Frame.Controls[0] as CMlLabel).Opacity == 0.) {		
-		Frame.Show();
-		Frames.add(Frame);
-		(Frame.Controls[0] as CMlLabel).Opacity = 0.1;	
-		(Frame.Controls[1] as CMlLabel).Value = Title;
-		(Frame.Controls[2] as CMlLabel).Value = Message;
-		
-			foreach(Element in Frame.Controls) {
-					AnimMgr.Add(Element, "<elem opacity=\"1\" />", 500, CAnimManager::EAnimManagerEasing::QuadIn);
-					if (Duration > 0) {
-						AnimMgr.Add(Element, "<elem opacity=\"0\" />", (Now + Duration), 500, CAnimManager::EAnimManagerEasing::QuadOut);
-					}
-			}
-						
-			return;
-		}
-	}
-}
+            Text getMessage(Text[Text] Message) {     
+                
+                log(LocalUser.Language);       
+                if (Message.existskey(LocalUser.Language)) {
+                       return Message[LocalUser.Language];           
+                }
+                
+                return Message["en"];
+            }
+            
+            Void HideToast(CMlFrame Frame, Boolean Instant) {
+                declare CMlFrame[] Frames for This;
+                
+                foreach(Element in Frame.Controls) {
+                    if (Instant) {
+                        if (Element is CMlLabel) {
+                            (Element as CMlLabel).Opacity = 0.;
+                        }
+                        
+                        if (Element is CMlQuad) {
+                            (Element as CMlQuad).Opacity = 0.;
+                        }	
+                    } else {
+                        AnimMgr.Add(Element, "<elem opacity=\"0\" />", 500, CAnimManager::EAnimManagerEasing::QuadOut);
+                    }
+                }
+                
+                if (Instant) {
+                    Frames.remove(Frame);
+                }
+            }
+            
+            Void ShowToast(Text[Text][Text] _Notification) {
+    
+                declare CMlFrame[] Frames for This;
+                declare CMlFrame Exp_Window <=> (Page.GetFirstChild("Window") as CMlFrame);
+                
+                if (Frames.count >= 4) {
+                    HideToast(Frames[0], True);
+                }
+                Page.GetClassChildren("uiToast", Exp_Window, True);
+                
+                
+                foreach (Read in Page.GetClassChildren_Result) {
+                    
+                    declare Frame = (Read as CMlFrame);
+                    
+                    // stop at first available toast
+                    if ( (Frame.Controls[0] as CMlLabel).Opacity < 0.1) {
+                    Frame.Show();
+                    Frames.add(Frame);
+                    (Frame.Controls[0] as CMlLabel).Opacity = 0.1;
+                    declare Prefix = _Notification["params"]["prefix"];
+                    
+                    (Frame.Controls[1] as CMlLabel).Value = Prefix ^ getMessage(_Notification["title"]);
+                    (Frame.Controls[2] as CMlLabel).Value = getMessage(_Notification["message"]);
+                    declare Integer Duration =  TextLib::ToInteger(_Notification["params"]["duration"]);
+                   
+                        foreach(Element in Frame.Controls) {
+                                AnimMgr.Add(Element, "<elem opacity=\"1\" />", 500, CAnimManager::EAnimManagerEasing::QuadIn);
+                                if (Duration > 0) {
+                                    AnimMgr.Add(Element, "<elem opacity=\"0\" />", (Now + Duration), 500, CAnimManager::EAnimManagerEasing::QuadOut);
+                                }
+                        }
+                                    
+                        return;
+                    }
+                }
+            }
 
 EOL
         );
@@ -140,7 +154,7 @@ EOL
 
              {$this->updaterWidgetFactory->getScriptOnChange('
              if (notification.count > 0) {
-                 ShowToast(notification["title"], notification["message"], TextLib::ToInteger(notification["duration"]));
+                 ShowToast(notification);
                  }
              ')}
              
