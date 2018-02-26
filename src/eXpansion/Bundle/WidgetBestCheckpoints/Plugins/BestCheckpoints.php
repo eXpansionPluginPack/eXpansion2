@@ -92,7 +92,6 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
     public function onLocalRecordsLoaded($records)
     {
         if (count($records) > 0) {
-            echo "load\n";
             $this->updater->setLocalRecord($records[0]->getCheckpoints());
         } else {
             $this->updater->setLocalRecord([]);

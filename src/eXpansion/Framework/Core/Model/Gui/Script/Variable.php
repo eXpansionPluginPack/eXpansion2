@@ -20,27 +20,39 @@ class Variable
     /** @var string */
     protected $for = '';
 
-    /** @var bool  */
+    /** @var bool */
     protected $isUnique = false;
 
     /** @var mixed */
     protected $value;
 
     /**
+     * @var string
+     */
+    protected $initialValue = '';
+
+    /**
      * Variable constructor.
      *
-     * @param string $variableName
-     * @param string $type
+     * @param string      $variableName
+     * @param string      $type
      * @param null|string $for
-     * @param bool $isUnique
+     * @param string      $value
+     * @param bool        $isUnique
      */
-    public function __construct(string $variableName, string $type, string $for = '', string $value, bool $isUnique = false)
-    {
+    public function __construct(
+        string $variableName,
+        string $type,
+        string $for = '',
+        string $value,
+        bool $isUnique = false
+    ) {
         $this->variableName = $variableName;
         $this->type = $type;
         $this->for = $for;
         $this->isUnique = $isUnique;
         $this->value = $value;
+        $this->initialValue = $value;
     }
 
     /**
@@ -50,7 +62,7 @@ class Variable
     {
         $varName = $this->variableName;
         if ($this->isUnique()) {
-            $varName = spl_object_hash($this) . "_" . $varName;
+            $varName = spl_object_hash($this)."_".$varName;
         }
 
         return $varName;
@@ -105,6 +117,7 @@ class Variable
     {
         $varName = $this->getVariableName();
         $for = !empty($this->for) ? "for $this->for" : "";
+
         return "declare $this->type $varName $for = $this->type;";
     }
 
@@ -116,6 +129,17 @@ class Variable
     public function getScriptValueSet()
     {
         $varName = $this->getVariableName();
+
         return "$varName = $this->value;";
     }
+
+    /**
+     *  Get initial value of the variable.
+     */
+    public function getInitialValue()
+    {
+        return $this->initialValue;
+    }
+
+
 }

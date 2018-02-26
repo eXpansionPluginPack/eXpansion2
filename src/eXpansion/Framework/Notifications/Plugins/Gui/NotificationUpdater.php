@@ -3,6 +3,7 @@
 namespace eXpansion\Framework\Notifications\Plugins\Gui;
 
 use eXpansion\Framework\Core\Helpers\ChatNotification;
+use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\Gui\ScriptVariableUpdateFactory;
@@ -33,7 +34,6 @@ class NotificationUpdater extends ScriptVariableUpdateFactory
         parent::__construct($name, $variables, $maxUpdateFrequency, $context);
         $this->chatNotification = $chatNotification;
     }
-
 
     /**
      * Update

@@ -127,7 +127,7 @@ EOL
         );
 
         $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::OnInit, <<<EOL
-                                
+                    {$this->updaterWidgetFactory->getScriptInitialization(false)}               
                     declare CMlFrame[] Frames for This;
                     Frames.clear();
                     Page.GetClassChildren("uiToast", (Page.GetFirstChild("Window") as CMlFrame), True);
@@ -144,7 +144,7 @@ EOL
                             }
                         }
                     }
-                    {$this->updaterWidgetFactory->getScriptInitialization(true)}
+                 
 EOL
         );
         $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::Loop, <<<EOL

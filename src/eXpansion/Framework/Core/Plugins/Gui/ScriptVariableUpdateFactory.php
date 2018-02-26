@@ -8,6 +8,7 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Script\Variable;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
+use FML\Script\Builder;
 use FML\Script\Script;
 use FML\Script\ScriptLabel;
 
@@ -34,6 +35,10 @@ class ScriptVariableUpdateFactory extends WidgetFactory implements ListenerInter
 
     /** @var mixed[][] */
     protected $queuedForUpdate = [];
+
+    /** @var Variable */
+    protected $checkWindow;
+
 
     /**
      * ScriptVariableUpdateFactory constructor.
@@ -64,6 +69,7 @@ class ScriptVariableUpdateFactory extends WidgetFactory implements ListenerInter
         $uniqueId = uniqid('exp_', true);
         $this->checkVariable = new Variable('check', 'Text', 'This', "\"$uniqueId\"");
         $this->checkOldVariable = new Variable('check_old', 'Text', 'Page', "\"$uniqueId\"");
+        $this->checkWindow = new Variable('check_window', 'Text', 'This', Builder::escapeText(md5(get_called_class())));
     }
 
     /**
@@ -84,7 +90,9 @@ class ScriptVariableUpdateFactory extends WidgetFactory implements ListenerInter
 
         $checkVariable = clone $this->checkVariable;
         $uniqueId = uniqid('exp_', true);
-        $checkVariable->setValue("\".$uniqueId\"");
+        $checkVariable->setValue("\"$uniqueId\"");
+
+        $this->checkWindow->setValue(Builder::escapeText(get_called_class()));
         $this->queuedForUpdate[$group->getName()]['group'] = $group;
         $this->queuedForUpdate[$group->getName()]['variables'][$variableCode] = $variable;
         $this->queuedForUpdate[$group->getName()]['check'] = $checkVariable;
@@ -122,9 +130,11 @@ class ScriptVariableUpdateFactory extends WidgetFactory implements ListenerInter
     public function getScriptOnChange($toExecute)
     {
         return <<<EOL
-            if ({$this->checkVariable->getVariableName()} != {$this->checkOldVariable->getVariableName()}) {
-                {$this->checkOldVariable->getVariableName()} = {$this->checkVariable->getVariableName()};
-                $toExecute
+            if ( {$this->checkVariable->getVariableName()} != {$this->checkOldVariable->getVariableName()}) {
+                  {$this->checkOldVariable->getVariableName()} = {$this->checkVariable->getVariableName()};
+                  if ( check_original == {$this->checkWindow->getVariableName()} ) {        
+                        $toExecute
+                  }
             }
 EOL;
     }
@@ -144,11 +154,16 @@ EOL;
                 $scriptContent .= $variable->getScriptValueSet()."\n";
             }
         }
+
         $scriptContent .= $this->checkVariable->getScriptDeclaration()."\n";
         $scriptContent .= $this->checkOldVariable->getScriptDeclaration()."\n";
+        $scriptContent .= $this->checkWindow->getScriptDeclaration()."\n";
+        $scriptContent .= "declare check_original = ".$this->checkWindow->getInitialValue().";\n";
+
         if ($defaultValues) {
             $scriptContent .= $this->checkVariable->getScriptValueSet()."\n";
             $scriptContent .= $this->checkOldVariable->getScriptValueSet()."\n";
+            $scriptContent .= $this->checkWindow->getScriptValueSet()."\n";
         }
 
         return $scriptContent;
@@ -163,6 +178,11 @@ EOL;
         parent::updateContent($manialink);
         $manialink->getFmlManialink()->removeAllChildren();
 
+        // sets timeout for displaying the manialink page
+        $manialink->setTimeout(2000);
+
+        // create hash.
+        $this->checkWindow->setValue(Builder::escapeText(md5(get_called_class())));
         // Get script with new values.
         $scriptContent = $this->getScriptInitialization(true);
 
@@ -185,6 +205,7 @@ EOL;
                     // Save original data.
                     $variables = $this->variables;
                     $checkVariable = $this->checkVariable;
+                    $checkWindow = $this->checkWindow;
 
                     // Update variables temporarily with player data.
                     $this->variables = [];
@@ -192,11 +213,13 @@ EOL;
                         $this->variables[$variableCode] = $variable;
                     }
                     $this->checkVariable = $updateData['check'];
+
                     $this->create($updateData['group']);
 
                     // Put back original data.
                     $this->variables = $variables;
                     $this->checkVariable = $checkVariable;
+                    $this->checkWindow = $checkWindow;
 
                     unset($this->queuedForUpdate[$groupName]);
                 }

@@ -4,13 +4,13 @@ namespace eXpansion\Framework\Core\Plugins;
 
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpUserGroup;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryInterface;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use Maniaplanet\DedicatedServer\Connection;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
 use Psr\Log\LoggerInterface;
@@ -156,12 +156,14 @@ class GuiHandler implements
                 $size = strlen($mlData['ml']);
             }
 
-            $logins = array_filter($mlData['logins'], function($value) { return $value != '';});
+            $logins = array_filter($mlData['logins'], function ($value) {
+                return $value != '';
+            });
             if (!empty($logins)) {
                 $this->connection->sendDisplayManialinkPage(
                     $mlData['logins'],
                     $mlData['ml'],
-                    0,
+                    $mlData['timeout'],
                     false,
                     true
                 );
@@ -206,7 +208,7 @@ class GuiHandler implements
 
                 $this->displayeds[$groupName][$factoryId] = $manialink;
                 if (!empty($logins)) {
-                    yield ['logins' => $logins, 'ml' => $manialink->getXml()];
+                    yield ['logins' => $logins, 'ml' => $manialink->getXml(), "timeout" => $manialink->getTimeout()];
                 }
             }
         }
@@ -222,7 +224,7 @@ class GuiHandler implements
 
             if ($lastManialink) {
                 $xml = $manialink->getXml();
-                yield ['logins' => $logins, 'ml' => $xml];
+                yield ['logins' => $logins, 'ml' => $xml, "timeout" => $manialink->getTimeout()];
             }
         }
 
@@ -235,7 +237,7 @@ class GuiHandler implements
                 $logins = array_diff($logins, $this->disconnectedLogins);
 
                 if (!empty($logins)) {
-                    yield ['logins' => $logins, 'ml' => '<manialink id="'.$id.'" />'];
+                    yield ['logins' => $logins, 'ml' => '<manialink id="'.$id.'" />', "timeout" => 0];
                 }
             }
         }
@@ -253,7 +255,7 @@ class GuiHandler implements
 
             if ($lastManialink) {
                 // Manialink is not destroyed just not shown at a particular user that left the group.
-                yield ['logins' => $logins, 'ml' => '<manialink id="'.$lastManialink->getId().'" />'];
+                yield ['logins' => $logins, 'ml' => '<manialink id="'.$lastManialink->getId().'" />', "timeout" => 0];
             }
         }
     }

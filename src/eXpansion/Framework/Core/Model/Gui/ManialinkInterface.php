@@ -22,6 +22,19 @@ interface ManialinkInterface
     public function getManialinkFactory(): ManialinkFactoryInterface;
 
     /**
+     * Get timeout of the manialink
+     * @return int
+     */
+    public function getTimeout(): int;
+
+    /** Set timeout for manialink
+     *
+     * @param int $timeout
+     * @return ManialinkInterface
+     */
+    public function setTimeout(int $timeout);
+
+    /**
      *
      * @return Group
      */
