@@ -3,6 +3,7 @@
 namespace eXpansion\Framework\Config\Ui\Fields;
 
 use eXpansion\Framework\Config\Model\ConfigInterface;
+use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use FML\Types\Renderable;
 
 /**
@@ -21,7 +22,7 @@ interface UiInterface
      *
      * @return Renderable
      */
-    public function build(ConfigInterface $config, $width) : Renderable;
+    public function build(ConfigInterface $config, $width, ManialinkInterface $manialink) : Renderable;
 
     /**
      * Check if Ui is compatible with the given config.

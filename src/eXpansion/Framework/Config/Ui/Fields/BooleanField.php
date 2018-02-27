@@ -4,6 +4,7 @@ namespace eXpansion\Framework\Config\Ui\Fields;
 
 use eXpansion\Framework\Config\Model\BooleanConfig;
 use eXpansion\Framework\Config\Model\ConfigInterface;
+use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Gui\Ui\Factory;
 use FML\Types\Renderable;
 
@@ -32,7 +33,7 @@ class BooleanField implements UiInterface
     /**
      * @inheritdoc
      */
-    public function build(ConfigInterface $config, $width): Renderable
+    public function build(ConfigInterface $config, $width, ManialinkInterface $manialink): Renderable
     {
 
         if ($config->get()) {
