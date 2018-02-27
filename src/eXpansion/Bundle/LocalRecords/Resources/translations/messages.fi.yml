@@ -48,20 +48,23 @@ expansion_local_records:
     prev:
       race_recs: "Edelliset Ennätykset"
       laps_recs: "Edelliset Kierrosennätykset"
-
-
   config:
     nb_records:
-      name: "Ennätysten määrä"
-      dsc: "Säättää kuinka monta ennätystä tallennetaan karttakohtaisesti."
-
+      name: "Number of Local Records"
+      dsc: "Number of records that's saved in the database for each map."
     notification_public_threshold:
-      name: "Yleisen viestin kynnysarvo"
-      dsc: "Määrittää kynnysarvon millon ennätys näytetään kaikille."
-
-  expansion_config:
-    menu:
-      eXpansion:
-        label: "eXpansion asetukset"
-        LocalRecords:
-          label: "Paikalliset Ennätykset"
+      name: "Public notificaiton threshold"
+      dsc: "Records better then this threshold will be announced to all players."
+    color_codes:
+      record: "Record default color"
+      record_top: "Record TOP color"
+      record_rank: "Record rank information color"
+    glymp_icons:
+      time: "Time icon"
+      record: "Record icon"
+expansion_config:
+  menu:
+    eXpansion:
+      label: "eXpansion Configs"
+      LocalRecords:
+        label: "Paikalliset ennätykset"
