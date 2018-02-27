@@ -32,9 +32,14 @@ class DedimaniaService
     /**
      * @param DedimaniaRecord[] $dedimaniaRecords
      */
-    public function setDedimaniaRecords(array $dedimaniaRecords)
+    public function setDedimaniaRecords($dedimaniaRecords)
     {
-        $this->dedimaniaRecords = $dedimaniaRecords;
+        if (empty($dedimaniaRecords)) {
+            $this->dedimaniaRecords = [];
+        } else {
+            $this->dedimaniaRecords = $dedimaniaRecords;
+        }
+
     }
 
     /**

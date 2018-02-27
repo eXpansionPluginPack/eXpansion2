@@ -14,6 +14,7 @@ use eXpansion\Bundle\Dedimania\Services\DedimaniaService;
 use eXpansion\Bundle\Dedimania\Structures\DedimaniaRecord;
 use eXpansion\Framework\Config\Model\ConfigInterface;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
+use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Application\AbstractApplication;
 use eXpansion\Framework\Core\Services\Console;
@@ -21,6 +22,7 @@ use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\Core\Storage\MapStorage;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
+use eXpansion\Framework\Notifications\Services\Notifications;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map;
 use Maniaplanet\DedicatedServer\Structures\Player;
@@ -82,6 +84,14 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
      * @var PlayerStorage
      */
     private $playerStorage;
+    /**
+     * @var Notifications
+     */
+    private $notifications;
+    /**
+     * @var Time
+     */
+    private $time;
 
 
     /**
@@ -96,6 +106,8 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
      * @param GameDataStorage  $gameDataStorage
      * @param MapStorage       $mapStorage
      * @param PlayerStorage    $playerStorage
+     * @param Notifications    $notifications
+     * @param Time             $time
      */
     public function __construct(
         $titles,
@@ -107,7 +119,9 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
         Connection $connection,
         GameDataStorage $gameDataStorage,
         MapStorage $mapStorage,
-        PlayerStorage $playerStorage
+        PlayerStorage $playerStorage,
+        Notifications $notifications,
+        Time $time
     ) {
         require_once(dirname(__DIR__).DIRECTORY_SEPARATOR."Classes".DIRECTORY_SEPARATOR."Webaccess.php");
         $this->webaccess = new \Webaccess($console);
@@ -121,6 +135,8 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
         $this->gameDataStorage = $gameDataStorage;
         $this->mapStorage = $mapStorage;
         $this->playerStorage = $playerStorage;
+        $this->notifications = $notifications;
+        $this->time = $time;
     }
 
     /**
@@ -310,7 +326,21 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
 
         $this->sendRequest($request->getXml(), function ($response) {
             $this->dedimaniaService->setServerMaxRank($response['ServerMaxRank']);
-            $this->dedimaniaService->setDedimaniaRecords(DedimaniaRecord::fromArrayOfArray($response['Records']));
+            /** @var DedimaniaRecord[] $recs */
+            $recs = DedimaniaRecord::fromArrayOfArray($response['Records']);
+            $this->dedimaniaService->setDedimaniaRecords($recs);
+
+            if (!empty($recs) && count($recs) > 0) {
+                $time = $this->time->timeToText($recs[0]->best, true);
+                $this->notifications->info(
+                    "Found ".count($recs)." records!\n#1 ".$recs[0]->nickName.'$z('.$recs[0]->login.'), time:'.$time,
+                    [], "Dedimania", 10500);
+            } else {
+                $this->notifications->info(
+                    "Found 0 records",
+                    [], "Dedimania", 10500);
+            }
+
         });
 
     }
