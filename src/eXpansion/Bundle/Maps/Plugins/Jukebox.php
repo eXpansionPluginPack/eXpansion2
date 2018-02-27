@@ -5,6 +5,7 @@ namespace eXpansion\Bundle\Maps\Plugins;
 use eXpansion\Bundle\Maps\Plugins\Gui\JukeboxWindowFactory;
 use eXpansion\Bundle\Maps\Services\JukeboxService;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Storage\MapStorage;
@@ -20,9 +21,9 @@ class Jukebox implements ListenerInterfaceMpScriptPodium, ListenerInterfaceMpLeg
      */
     private $jukeboxService;
     /**
-     * @var Connection
+     * @var Factory
      */
-    private $connetion;
+    private $factory;
     /**
      * @var ChatNotification
      */
@@ -46,7 +47,8 @@ class Jukebox implements ListenerInterfaceMpScriptPodium, ListenerInterfaceMpLeg
 
     /**
      * Jukebox constructor.
-     * @param Connection $connection
+     *
+     * @param Factory $factory
      * @param ChatNotification $chatNotification
      * @param JukeboxService $jukeboxService
      * @param AdminGroups $adminGroups
@@ -55,7 +57,7 @@ class Jukebox implements ListenerInterfaceMpScriptPodium, ListenerInterfaceMpLeg
      * @param JukeboxWindowFactory $jukeboxWindowFactory
      */
     public function __construct(
-        Connection $connection,
+        Factory $factory,
         ChatNotification $chatNotification,
         JukeboxService $jukeboxService,
         AdminGroups $adminGroups,
@@ -65,7 +67,7 @@ class Jukebox implements ListenerInterfaceMpScriptPodium, ListenerInterfaceMpLeg
     ) {
 
         $this->jukeboxService = $jukeboxService;
-        $this->connetion = $connection;
+        $this->factory = $factory;
         $this->chatNotification = $chatNotification;
         $this->adminGroups = $adminGroups;
         $this->playerStorage = $playerStorage;
@@ -209,7 +211,7 @@ class Jukebox implements ListenerInterfaceMpScriptPodium, ListenerInterfaceMpLeg
         $jbmap = $this->jukeboxService->getFirst();
         if ($jbmap) {
             try {
-                $this->connetion->chooseNextMap($jbmap->getMap()->fileName);
+                $this->factory->getConnection()->chooseNextMap($jbmap->getMap()->fileName);
                 $this->jukeboxService->removeMap($jbmap->getMap(), null, true);
             } catch (\Exception $e) {
                 $this->jukeboxService->removeMap($jbmap->getMap(), null, true);

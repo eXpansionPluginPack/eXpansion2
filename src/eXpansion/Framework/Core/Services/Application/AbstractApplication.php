@@ -4,6 +4,7 @@
 namespace eXpansion\Framework\Core\Services\Application;
 
 use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use Maniaplanet\DedicatedServer\Connection;
 use Propel\Runtime\Connection\Exception\ConnectionException;
 use Propel\Runtime\Propel;
@@ -20,8 +21,8 @@ abstract class AbstractApplication implements RunInterface
 
     const EXPANSION_VERSION = "dev";
 
-    /** @var Connection */
-    protected $connection;
+    /** @var Factory */
+    protected $factory;
 
     /** @var DispatcherInterface */
     protected $dispatcher;
@@ -37,20 +38,20 @@ abstract class AbstractApplication implements RunInterface
     private $logger;
 
     /**
-     * Application constructor.
+     * AbstractApplication constructor.
      *
      * @param DispatcherInterface $dispatcher
-     * @param Connection $connection
+     * @param Factory $factory
      * @param Console $output
      * @param LoggerInterface $logger
      */
     public function __construct(
         DispatcherInterface $dispatcher,
-        Connection $connection,
+        Factory $factory,
         Console $output,
         LoggerInterface $logger
     ) {
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->dispatcher = $dispatcher;
         $this->console = $output;
         $this->logger = $logger;
@@ -67,7 +68,7 @@ abstract class AbstractApplication implements RunInterface
     {
         $this->console->init($console, $this->dispatcher);
         $this->dispatcher->dispatch(self::EVENT_BEFORE_INIT, []);
-        $this->dispatcher->init($this->connection);
+        $this->dispatcher->init($this->factory->getConnection());
         $this->dispatcher->dispatch(self::EVENT_AFTER_INIT, []);
 
         return $this;
@@ -80,6 +81,8 @@ abstract class AbstractApplication implements RunInterface
      */
     public function run()
     {
+        $this->factory->createConnection();
+
         // Time each cycle needs to take in microseconds. Wrunning 60 cycles per seconds to have optimal response time.
         $cycleTime = (1 / 60) * 1000000;
 
@@ -93,13 +96,13 @@ abstract class AbstractApplication implements RunInterface
         $lastGcTime = time();
 
         $this->console->writeln("Running preflight checks...");
-        $this->connection->enableCallbacks(true);
+        $this->factory->getConnection()->enableCallbacks(true);
 
         // need to send this for scripts to start callback handling
         try {
-            $this->connection->triggerModeScriptEvent("XmlRpc.EnableCallbacks", ["True"]);
+            $this->factory->getConnection()->triggerModeScriptEvent("XmlRpc.EnableCallbacks", ["True"]);
         } catch (\Exception $exception) {
-            $this->connection->saveMatchSettings('MatchSettings/eXpansion-mode-fail-'.date(DATE_ISO8601).'.txt');
+            $this->factory->getConnection()->saveMatchSettings('MatchSettings/eXpansion-mode-fail-'.date(DATE_ISO8601).'.txt');
             throw $exception;
         }
 

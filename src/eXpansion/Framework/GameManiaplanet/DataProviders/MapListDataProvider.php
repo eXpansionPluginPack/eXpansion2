@@ -3,6 +3,8 @@
 namespace eXpansion\Framework\GameManiaplanet\DataProviders;
 
 use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
+use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\MapStorage;
 use League\Flysystem\Exception;
 use Maniaplanet\DedicatedServer\Connection;
@@ -14,7 +16,7 @@ use Maniaplanet\DedicatedServer\Xmlrpc\NextMapException;
  *
  * @package eXpansion\Framework\Core\DataProviders
  */
-class MapListDataProvider extends AbstractDataProvider
+class MapListDataProvider extends AbstractDataProvider implements StatusAwarePluginInterface
 {
     /** Size of batch to get maps from the storage. */
     const BATCH_SIZE = 500;
@@ -25,33 +27,41 @@ class MapListDataProvider extends AbstractDataProvider
     protected $mapStorage;
 
     /**
-     * @var Connection
+     * @var Factory
      */
-    protected $connection;
+    protected $factory;
 
     /**
-     * PlayerDataProvider constructor.
+     * MapListDataProvider constructor.
      *
      * @param MapStorage $mapStorage
-     * @param Connection $connection
+     * @param Factory $factory
      */
-    public function __construct(MapStorage $mapStorage, Connection $connection)
+    public function __construct(MapStorage $mapStorage, Factory $factory)
     {
         $this->mapStorage = $mapStorage;
-        $this->connection = $connection;
+        $this->factory = $factory;
+    }
 
-        $this->updateMapList();
-
-        $currentMap = $this->connection->getCurrentMapInfo();
-        if ($currentMap) {
-            $this->mapStorage->setCurrentMap($currentMap);
-            try {
-                $this->mapStorage->setNextMap($this->connection->getNextMapInfo());
-            } catch (NextMapException $ex) {
-                $this->mapStorage->setNextMap($currentMap);
+    /**
+     * @inheritdoc
+     */
+    public function setStatus($status)
+    {
+        if ($status) {
+            $this->updateMapList();
+            $currentMap = $this->factory->getConnection()->getCurrentMapInfo();
+            if ($currentMap) {
+                $this->mapStorage->setCurrentMap($currentMap);
+                try {
+                    $this->mapStorage->setNextMap($this->factory->getConnection()->getNextMapInfo());
+                } catch (NextMapException $ex) {
+                    $this->mapStorage->setNextMap($currentMap);
+                }
             }
         }
     }
+
 
     /**
      * Update the list of maps in the storage.
@@ -62,7 +72,7 @@ class MapListDataProvider extends AbstractDataProvider
 
         do {
             try {
-                $maps = $this->connection->getMapList(self::BATCH_SIZE, $start);
+                $maps = $this->factory->getConnection()->getMapList(self::BATCH_SIZE, $start);
             } catch (IndexOutOfBoundException $e) {
                 // This is normal error when we we are trying to find all maps and we are out of bounds.
                 return;

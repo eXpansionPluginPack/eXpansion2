@@ -13,9 +13,6 @@ use Maniaplanet\DedicatedServer\Connection;
 
 class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
 {
-    /** @var Connection */
-    protected $connection;
-
     /** @var Console */
     protected $console;
 
@@ -31,19 +28,16 @@ class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
     /**
      * JoinLeaveMessages constructor.
      *
-     * @param Connection       $connection
      * @param Console          $console
      * @param ChatNotification $chatNotification
      * @param AdminGroups      $adminGroups
      */
     public function __construct(
-        Connection $connection,
         Console $console,
         ChatNotification $chatNotification,
         AdminGroups $adminGroups,
         Countries $countries
     ) {
-        $this->connection = $connection;
         $this->console = $console;
         $this->chatNotification = $chatNotification;
         $this->adminGroups = $adminGroups;
@@ -71,9 +65,6 @@ class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
                 "%path%" => $this->countries->parseCountryFromPath($player->getPath()),
                 "%ladder%" => $player->getLadderScore(),
             ]);
-
-
-
     }
 
     /**

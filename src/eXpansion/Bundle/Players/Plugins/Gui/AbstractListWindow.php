@@ -9,6 +9,7 @@ use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\GridWindowFactory;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\ChatCommandDataProvider;
 use eXpansion\Framework\Gui\Components\Button;
@@ -25,9 +26,9 @@ abstract class AbstractListWindow extends GridWindowFactory
      */
     protected $chatCommandDataProvider;
     /**
-     * @var Connection
+     * @var Factory
      */
-    protected $connection;
+    protected $factory;
     /**
      * @var AdminGroups
      */
@@ -65,7 +66,7 @@ abstract class AbstractListWindow extends GridWindowFactory
         DataCollectionFactory $dataCollectionFactory,
         GridBuilderFactory $gridBuilderFactory,
         ChatCommandDataProvider $chatCommandDataProvider,
-        Connection $connection,
+        Factory $factory,
         AdminGroups $adminGroups,
         ChatNotification $chatNotification
 
@@ -76,7 +77,7 @@ abstract class AbstractListWindow extends GridWindowFactory
         $this->dataCollectionFactory = $dataCollectionFactory;
         $this->gridBuilderFactory = $gridBuilderFactory;
         $this->chatCommandDataProvider = $chatCommandDataProvider;
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->adminGroups = $adminGroups;
         $this->chatNotification = $chatNotification;
     }

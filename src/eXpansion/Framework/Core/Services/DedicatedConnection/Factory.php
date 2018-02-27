@@ -19,6 +19,9 @@ use Psr\Log\LoggerInterface;
  */
 class Factory
 {
+    /** @var Connection */
+    protected $connection;
+
     /** @var string The name/ip of the host */
     protected $host;
 
@@ -62,25 +65,37 @@ class Factory
      * Connect to the dedicated server.
      *
      * @return Connection
-     *
-     * @throws TransportException When can't connect.
      */
     public function createConnection()
     {
-        try {
-            return Connection::factory(
-                $this->host,
-                $this->port,
-                $this->timeout,
-                $this->user,
-                $this->password
-            );
-        } catch (TransportException $ex) {
-            echo "Looks like your Dedicated server is either offline or has wrong config settings.\n";
-            echo "Error message: ".$ex->getMessage();
-            $this->logger->error("Unable to open connection for Dedicated server", ["exception" => $ex]);
+        if (!is_null($this->connection)) {
+            try {
+                $this->connection = Connection::factory(
+                    $this->host,
+                    $this->port,
+                    $this->timeout,
+                    $this->user,
+                    $this->password
+                );
+            } catch (TransportException $ex) {
+                echo "Looks like your Dedicated server is either offline or has wrong config settings.\n";
+                echo "Error message: " . $ex->getMessage();
+                $this->logger->error("Unable to open connection for Dedicated server", ["exception" => $ex]);
 
-            throw $ex;
+                throw $ex;
+            }
         }
+
+        return $this->connection;
+    }
+
+    /**
+     * Get connection to the dedicated.
+     *
+     * @return Connection
+     */
+    public function getConnection()
+    {
+        return $this->connection;
     }
 }

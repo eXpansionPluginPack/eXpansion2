@@ -7,6 +7,7 @@ use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
@@ -17,8 +18,8 @@ use Psr\Log\LoggerInterface;
 
 class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacyChat
 {
-    /** @var Connection */
-    protected $connection;
+    /** @var Factory */
+    protected $factory;
 
     /** @var Console */
     protected $console;
@@ -47,7 +48,7 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
 
     /**
      * CustomChat constructor.
-     * @param Connection       $connection
+     * @param Factory       $factory
      * @param Console          $console
      * @param AdminGroups      $adminGroups
      * @param ChatNotification $chatNotification
@@ -56,7 +57,7 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      * @param LoggerInterface  $logger
      */
     function __construct(
-        Connection $connection,
+        Factory $factory,
         Console $console,
         AdminGroups $adminGroups,
         ChatNotification $chatNotification,
@@ -64,7 +65,7 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
         Notifications $notifications,
         LoggerInterface $logger
     ) {
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->console = $console;
         $this->adminGroups = $adminGroups;
         $this->chatNotification = $chatNotification;
@@ -202,7 +203,7 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
         }
 
         try {
-            $this->connection->chatSendServerMessage(
+            $this->factory->getConnection()->chatSendServerMessage(
                 $prefix.'$fff$<'.$nick.'$>$z$s'.$postfix.$separator.' '.$color.$text, $group
             );
         } catch (\Exception $e) {
@@ -241,7 +242,7 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
     public function onApplicationReady()
     {
         try {
-            $this->connection->chatEnableManualRouting();
+            $this->factory->getConnection()->chatEnableManualRouting();
         } catch (\Exception $e) {
             $this->console->writeln('Error while enabling custom chat: $f00'.$e->getMessage());
             $this->logger->error("Error enabling custom chat", ['exception' => $e]);

@@ -3,6 +3,7 @@
 namespace eXpansion\Bundle\VoteManager\Plugins\Votes;
 
 use eXpansion\Framework\Core\Helpers\ChatNotification;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptPodium;
 use Maniaplanet\DedicatedServer\Connection;
@@ -16,8 +17,8 @@ use Maniaplanet\DedicatedServer\Connection;
  */
 class NextMapVote extends AbstractVotePlugin implements ListenerInterfaceMpScriptPodium
 {
-    /** @var Connection */
-    protected $connection;
+    /** @var Factory */
+    protected $factory;
 
     /** @var ChatNotification */
     protected $chatNotification;
@@ -26,21 +27,21 @@ class NextMapVote extends AbstractVotePlugin implements ListenerInterfaceMpScrip
      * NextMapVote constructor.
      *
      * @param PlayerStorage $playerStorage
-     * @param Connection $connection
+     * @param Factory $factory
      * @param ChatNotification $chatNotification
      * @param int $duration
      * @param float $ratio
      */
     public function __construct(
         PlayerStorage $playerStorage,
-        Connection $connection,
+        Factory $factory,
         ChatNotification $chatNotification,
         int $duration,
         float $ratio
     ) {
         parent::__construct($playerStorage, $duration, $ratio);
 
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->chatNotification = $chatNotification;
     }
 
@@ -58,7 +59,7 @@ class NextMapVote extends AbstractVotePlugin implements ListenerInterfaceMpScrip
      */
     protected function executeVotePassed()
     {
-        $this->connection->nextMap(false);
+        $this->factory->getConnection()->nextMap(false);
         $this->chatNotification->sendMessage("|info| Vote passed. Skipping map!");
     }
 

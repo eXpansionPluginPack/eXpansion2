@@ -5,6 +5,7 @@ namespace eXpansion\Framework\GameManiaplanet\DataProviders;
 
 use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
 use eXpansion\Framework\Core\Model\CompatibilityCheckDataProviderInterface;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map;
 use Maniaplanet\DedicatedServer\Xmlrpc\FaultException;
@@ -19,8 +20,8 @@ use Psr\Log\LoggerInterface;
  */
 class ScriptApiVersionSetterDataProvider extends AbstractDataProvider implements CompatibilityCheckDataProviderInterface
 {
-    /** @var Connection */
-    protected $connection;
+    /** @var Factory */
+    protected $factory;
 
     /** @var LoggerInterface */
     protected $logger;
@@ -31,13 +32,13 @@ class ScriptApiVersionSetterDataProvider extends AbstractDataProvider implements
     /**
      * ScriptApiVersionSetterDataProvider constructor.
      *
-     * @param Connection      $connection
+     * @param Factory $factory
      * @param LoggerInterface $logger
-     * @param string          $apiVersion
+     * @param string $apiVersion
      */
-    public function __construct(Connection $connection, LoggerInterface $logger, string $apiVersion = '2.4.0')
+    public function __construct(Factory $factory, LoggerInterface $logger, string $apiVersion = '2.4.0')
     {
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->logger = $logger;
         $this->apiVersion = $apiVersion;
     }
@@ -49,7 +50,7 @@ class ScriptApiVersionSetterDataProvider extends AbstractDataProvider implements
     public function isCompatible(Map $map): bool
     {
         try {
-            $this->connection->triggerModeScriptEvent("XmlRpc.SetApiVersion", [$this->apiVersion]);
+            $this->factory->getConnection()->triggerModeScriptEvent("XmlRpc.SetApiVersion", [$this->apiVersion]);
             return true;
         } catch (FaultException $e) {
             $this->logger->warning(

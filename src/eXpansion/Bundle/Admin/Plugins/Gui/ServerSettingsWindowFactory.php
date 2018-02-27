@@ -7,6 +7,7 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WindowFactory;
 use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Gui\Components\Button;
 use eXpansion\Framework\Gui\Components\Checkbox;
 use eXpansion\Framework\Gui\Components\Input;
@@ -62,8 +63,8 @@ class ServerSettingsWindowFactory extends WindowFactory
     /** @var Console */
     protected $console;
 
-    /** @var Connection */
-    protected $connection;
+    /** @var Factory */
+    protected $factory;
 
     /** @var  AdminGroups */
     protected $adminGroupsHelper;
@@ -83,7 +84,19 @@ class ServerSettingsWindowFactory extends WindowFactory
     /** @var  InputMasked */
     protected $refpassword;
 
-
+    /**
+     * ServerSettingsWindowFactory constructor.
+     *
+     * @param $name
+     * @param $sizeX
+     * @param $sizeY
+     * @param $posX
+     * @param $posY
+     * @param WindowFactoryContext $context
+     * @param AdminGroups $adminGroupsHelper
+     * @param Factory $factory
+     * @param Console $console
+     */
     public function __construct(
         $name,
         $sizeX,
@@ -92,13 +105,13 @@ class ServerSettingsWindowFactory extends WindowFactory
         $posY,
         WindowFactoryContext $context,
         AdminGroups $adminGroupsHelper,
-        Connection $connection,
+        Factory $factory,
         Console $console
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
         $this->adminGroupsHelper = $adminGroupsHelper;
         $this->currentMenuView = Frame::create();
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->console = $console;
     }
 
@@ -108,7 +121,7 @@ class ServerSettingsWindowFactory extends WindowFactory
     protected function createContent(ManialinkInterface $manialink)
     {
 
-        $options = $this->connection->getServerOptions();
+        $options = $this->factory->getConnection()->getServerOptions();
         $manialink->setData("options", $options);
 
         $tooltip = $this->uiFactory->createTooltip();
@@ -269,14 +282,14 @@ class ServerSettingsWindowFactory extends WindowFactory
             $options->{$array[0]} = $value;
         }
         try {
-            $this->connection->setServerOptions($options);
-            $this->connection->chatSendServerMessage("Done.");
+            $this->factory->getConnection()->setServerOptions($options);
+            // TODO should use chat notification.
+            $this->factory->getConnection()->chatSendServerMessage("Done.");
             $this->closeManialink($manialink);
 
         } catch (\Exception $ex) {
             $this->console->write('$f00Error while setting server options: $fff'.$ex->getMessage());
         }
-
     }
 
 
@@ -304,9 +317,5 @@ class ServerSettingsWindowFactory extends WindowFactory
         $this->keepPlayerSlots->setChecked($options->keepPlayerSlots);
         $this->isP2PDownload->setChecked($options->isP2PDownload);
         $this->isP2PUpload->setChecked($options->isP2PUpload);
-
-
     }
-
-
 }
