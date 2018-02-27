@@ -594,7 +594,7 @@ class WebaccessUrl
                     }
                 }
 
-                echo "\nData:\n\n".$query['QueryDatas']."\n";
+                // echo "\nData:\n\n".$query['QueryDatas']."\n";  // for debug purposes, don't remove!
 
                 if ($query['IsXmlrpc'] === true) {
                     if ($_web_access_post_xmlrpc) {

@@ -1,0 +1,18 @@
+services:
+    _defaults:
+        autowire: true
+
+    expansion.bundle.dedimania.plugins.chat_commands:
+        class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
+        arguments:
+            -
+              - '@eXpansion\Bundle\Dedimania\ChatCommands\DediRecs'
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}
+
+    eXpansion\Bundle\Dedimania\ChatCommands\DediRecs:
+        class: eXpansion\Bundle\Dedimania\ChatCommands\DediRecs
+        arguments:
+            $command: 'dedirecs'
+            $aliases: []
+
