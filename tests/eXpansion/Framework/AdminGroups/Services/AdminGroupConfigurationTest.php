@@ -29,17 +29,17 @@ class AdminGroupConfigurationTest extends TestAdminGroups
         $config = $this->getAdminGroupConfiguration();
 
         $this->assertEquals(
-            $config['master_admin']['logins'],
+            $config['master_admin']['logins']->getRawValue(),
             $configService->getGroupLogins('master_admin')
         );
 
         $this->assertEquals(
-            $config['admin']['logins'],
+            $config['admin']['logins']->getRawValue(),
             $configService->getGroupLogins('admin')
         );
 
         $this->assertEquals(
-            $config['operator']['logins'],
+            $config['operator']['logins']->getRawValue(),
             $configService->getGroupLogins('operator')
         );
 
@@ -54,12 +54,12 @@ class AdminGroupConfigurationTest extends TestAdminGroups
         $config = $this->getAdminGroupConfiguration();
 
         $this->assertEquals(
-            $config['admin']['permissions'],
+            ['p10', 'p11'],
             $configService->getGroupPermissions('admin')
         );
 
         $this->assertEquals(
-            $config['operator']['permissions'],
+            ['p20', 'p21'],
             $configService->getGroupPermissions('operator')
         );
 

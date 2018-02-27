@@ -28,8 +28,8 @@ class GroupsPluginTest extends TestAdminGroups
         /** @var GroupsPlugin $plugin */
         $plugin = new GroupsPlugin(
             $this->getAdminGroupConfigurationService(),
-            $this->container->get(Factory::class),
-            $this->container->get(PlayerStorage::class)
+            $this->userGroupFactory,
+            $this->getMockBuilder(PlayerStorage::class)->disableOriginalConstructor()->getMock()
         );
 
         $userGroupFactory = $this->getUserGroupFactory();
@@ -72,7 +72,11 @@ class GroupsPluginTest extends TestAdminGroups
     public function testDummyMethods()
     {
         /** @var GroupsPlugin $plugin */
-        $plugin = $this->container->get(GroupsPlugin::class);
+        $plugin = new GroupsPlugin(
+            $this->getAdminGroupConfigurationService(),
+            $this->userGroupFactory,
+            $this->getMockBuilder(PlayerStorage::class)->disableOriginalConstructor()->getMock()
+        );
 
         $playerM = new Player();
 
@@ -86,7 +90,6 @@ class GroupsPluginTest extends TestAdminGroups
      */
     protected function getUserGroupFactory()
     {
-        /** @var Factory $group */
-        return $this->container->get(Factory::class);
+        return $this->userGroupFactory;
     }
 }
