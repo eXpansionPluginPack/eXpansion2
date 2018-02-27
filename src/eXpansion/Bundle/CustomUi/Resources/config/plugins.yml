@@ -84,7 +84,7 @@ services:
                 # TODO : Custom scoreboard can't work until PR is merged in FML : https://github.com/steeffeen/FancyManiaLinks/pull/53
 #                - '@eXpansion\Bundle\CustomUi\Plugins\Gui\CustomScoreboardWidget'
         tags:
-            - {name: 'expansion.plugin', data_provider: 'exp.custom_ui.compatibility.tm'}
+            - {name: 'expansion.plugin', data_provider: 'exp.tm'}
 
     expansion.bundle.custom_ui.plugins.sm_custom_ui:
         class: eXpansion\Bundle\CustomUi\Plugins\CustomUi
@@ -95,4 +95,4 @@ services:
             $customWidgets:
                 - '@eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSmSpeedWidget'
         tags:
-            - {name: 'expansion.plugin', data_provider: 'exp.custom_ui.compatibility.sm'}
+            - {name: 'expansion.plugin', data_provider: 'exp.sm'}

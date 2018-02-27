@@ -1,0 +1,14 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    eXpansion\Bundle\Dedimania\Plugins\Dedimania:
+      class: eXpansion\Bundle\Dedimania\Plugins\Dedimania
+      arguments:
+          $enabled: "@expansion.dedimania.config.enable"
+          $apikey: "@expansion.dedimania.config.apikey"
+          $serverLogin: "@expansion.dedimania.config.serverlogin"
+      tags:
+          - {name: 'expansion.plugin', data_provider: 'exp.tm'}
