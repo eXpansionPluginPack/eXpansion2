@@ -9,13 +9,14 @@
 namespace eXpansion\Bundle\Dedimania\Services;
 
 
+use eXpansion\Bundle\Dedimania\Classes\Request;
 use eXpansion\Bundle\Dedimania\Plugins\DedimaniaConnection;
 use eXpansion\Framework\Core\Helpers\Http;
 use eXpansion\Framework\Core\Services\Application\AbstractApplication;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Player;
-use Maniaplanet\DedicatedServer\Xmlrpc\Request;
+
 
 class DedimaniaService
 {
@@ -92,15 +93,15 @@ class DedimaniaService
             "Packmask" => $packMask,
             "ServerVersion" => $this->gameDataStorage->getVersion()->version,
             "ServerBuild" => $this->gameDataStorage->getVersion()->build,
-            "Tool" => "eXpansion2",
+            "Tool" => "eXpansion",
             "Version" => AbstractApplication::EXPANSION_VERSION,
             "ServerIp" => $this->gameDataStorage->getSystemInfo()->publishedIp,
         ];
 
-        $request = Request::encode('dedimania.openSession', $params);
+        $request = new Request('dedimania.OpenSession', [$params]);
 
-        $this->dedimaniaConnection->sendRequest($request, function ($response) {
-
+        $this->dedimaniaConnection->sendRequest($request->getXml(), function ($response) {
+            print_r($response);
         });
 
     }

@@ -98,21 +98,26 @@ class DedimaniaConnection implements ListenerInterfaceExpTimer
      */
     final public function sendRequest($request, $callback)
     {
-
+        $this->console->writeln("sending request");
         $this->webaccess->request(
             self::dedimaniaUrl,
             [[$this, "process"], $callback],
             $request,
             true,
             600,
+            3,
             5,
-            5,
-            "eXpansion2 server controller"
+            'eXpansion server controller',
+            'application/x-www-form-urlencoded; charset=UTF-8'
         );
     }
 
     final public function process($response, $callback)
     {
+        print_r($response);
+
+
+
         try {
 
             if (is_array($response) && array_key_exists('Message', $response)) {
@@ -134,7 +139,6 @@ class DedimaniaConnection implements ListenerInterfaceExpTimer
                 $array = $message[1];
                 unset($array[count($array) - 1]); // remove trailing errors and info
 
-
                 if (array_key_exists("faultString", $array[0])) {
                     $this->console->writeln('Dedimania fault:$f00 '.$array[0]['faultString']);
 
@@ -142,18 +146,18 @@ class DedimaniaConnection implements ListenerInterfaceExpTimer
                 }
 
                 if (!empty($array[0][0]['Error'])) {
-                    $this->console('Dedimania error:$f00 '.$array[0][0]['Error']);
+                    $this->console->writeln('Dedimania error:$f00 '.$array[0][0]['Error']);
 
                     return;
                 }
 
-                call_user_func_array($callback, array($array));
+                call_user_func_array($callback, [$array]);
 
                 return;
             } else {
                 $this->console->writeln('Dedimania Error: $f00Can\'t find Message from Dedimania reply');
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->console->writeln('Dedimania Error: $f00Connection to dedimania server failed.'.$e->getMessage());
         }
 

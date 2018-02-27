@@ -12,3 +12,8 @@ services:
           $serverLogin: "@expansion.dedimania.config.serverlogin"
       tags:
           - {name: 'expansion.plugin', data_provider: 'exp.tm'}
+
+    eXpansion\Bundle\Dedimania\Plugins\DedimaniaConnection:
+      class: eXpansion\Bundle\Dedimania\Plugins\DedimaniaConnection
+      tags:
+          - {name: 'expansion.plugin', data_provider: 'exp.timer'}

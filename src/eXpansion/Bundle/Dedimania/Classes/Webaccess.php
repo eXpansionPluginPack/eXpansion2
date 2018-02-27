@@ -151,7 +151,7 @@ class Webaccess
             $server = $host.':'.$port;
             // create object is needed
             if (!isset($this->_WebaccessList[$server]) || $this->_WebaccessList[$server] === null) {
-                $this->_WebaccessList[$server] = new WebaccessUrl(
+                $this->_WebaccessList[$server] = new \WebaccessUrl(
                     $this,
                     $host,
                     $port,
@@ -162,6 +162,7 @@ class Webaccess
                     $mimeType,
                     $this->console
                 );
+
             }
 
             // increase the default timeout for sync/wait request
@@ -187,7 +188,7 @@ class Webaccess
         }
 
         return false;
-    }
+    }  // request
 
     public function retry($url)
     {
@@ -201,7 +202,7 @@ class Webaccess
                 $this->_WebaccessList[$server]->retry();
             }
         }
-    }
+    }  // retry
 
     public function select(&$read, &$write, &$except, $tv_sec, $tv_usec = 0)
     {
@@ -219,6 +220,9 @@ class Webaccess
 
         $read = $this->_getWebaccessReadSockets($read);
         $write = $this->_getWebaccessWriteSockets($write);
+        // $except = $this->_getWebaccessReadSockets($except);
+        //print_r($except);
+
         if (count($read) + count($write) + count($except) == 0) {
             // sleep the asked timeout...
             if ($timeout > 1000) {
@@ -241,13 +245,13 @@ class Webaccess
             return false;
         }
 
-        $this->_manageWebaccessSockets($read, $write);
+        $this->_manageWebaccessSockets($read, $write, $except);
 
         // workaround for stream_select bug with amd64, replace $nb with sum of arrays
         return count($read) + count($write) + count($except);
-    }
+    }  // select
 
-    private function _manageWebaccessSockets(&$receive, &$send)
+    private function _manageWebaccessSockets(&$receive, &$send, &$except)
     {
         // send pending datas on all webaccess sockets
         if (is_array($send) && count($send) > 0) {
@@ -255,8 +259,7 @@ class Webaccess
                 $i = $this->_findWebaccessSocket($socket);
                 if ($i !== false) {
                     if (isset($this->_WebaccessList[$i]->_spool[0]['State']) &&
-                        $this->_WebaccessList[$i]->_spool[0]['State'] == 'OPEN'
-                    ) {
+                        $this->_WebaccessList[$i]->_spool[0]['State'] == 'OPEN') {
                         $this->_WebaccessList[$i]->_open();
                     } else {
                         $this->_WebaccessList[$i]->_send();
@@ -276,7 +279,7 @@ class Webaccess
                 }
             }
         }
-    }
+    }  // _manageWebaccessSockets
 
     private function _findWebaccessSocket($socket)
     {
@@ -309,7 +312,7 @@ class Webaccess
                     $wau->_spool[0]['State'] == 'BAD' ||
                     $wau->_spool[0]['State'] == 'SEND')
             ) {
-                //
+
                 if (($wau->_state == 'CLOSED' || $wau->_state == 'BAD') && !$wau->_socket) {
                     $wau->_open();
                 }
@@ -339,7 +342,7 @@ class Webaccess
     }
 }
 
-// usefull datas to handle received headers
+// useful datas to handle received headers
 $_wa_header_separator = array('cookie' => ';', 'set-cookie' => ';');
 $_wa_header_multi = array('set-cookie' => true);
 
@@ -402,6 +405,18 @@ class WebaccessUrl
      */
     private $console;
 
+    // $_state values :
+    //    'OPENED' : socket is opened
+    //    'CLOSED' : socket is closed (asked, completed, or closed by server)
+    //    'BAD' :    socket is closed, bad/error or beginning state
+
+    // $query['State'] values :  (note: $query is added in $_spool, so $this->_spool[0] is the first $query to handle)
+    //    'BAD' :
+    //    'OPEN' :    should prepare request datas then send them
+    //    'SEND' :    request datas are prepared, send them
+    //    'RECEIVE' : request datas are sent, receive reply datas
+    //    'DONE' :    request completed
+
     //-----------------------------
     // Methods
     //-----------------------------
@@ -461,6 +476,9 @@ class WebaccessUrl
         $this->_bad_timeout = 0;
         $this->_read_time = 0;
         $this->console = $console;
+
+        $this->console->writeln("at request");
+
     }
 
     // put connection in BAD state
@@ -490,7 +508,7 @@ class WebaccessUrl
             }
         } else {
             if (isset($this->_spool[0]['State'])) {
-                $this->_spool[0]['State'] = 'CLOSED';
+                $this->_spool[0]['State'] = 'OPEN';
             }
             $this->_state = 'CLOSED';
         }
@@ -515,8 +533,9 @@ class WebaccessUrl
     {
         global $_web_access_compress_reply;
         global $_web_access_post_xmlrpc;
-        //    global $_web_access_retry_timeout;
+        global $_web_access_retry_timeout;
         global $_web_access_retry_timeout_max;
+
         $query['State'] = 'BAD';
         $query['HDatas'] = '';
         $query['Datas'] = '';
@@ -529,11 +548,11 @@ class WebaccessUrl
         $query['Times'] = array(
             'open' => array(-1.0, -1.0),
             'send' => array(-1.0, -1.0),
-            'receive' => array(-1.00, -1.0, 0),
+            'receive' => array(-1.0, -1.0, 0),
         );
 
 
-        // if asynch, in error, and maximal timeout, then forget the request and return false.
+        // if async, in error, and maximal timeout, then forget the request and return false.
         if (($query['Callback'] != null) && ($this->_state == 'BAD')) {
             if ($this->_bad_timeout > $_web_access_retry_timeout_max) {
                 $this->console->writeln($this->_webaccess_str.'$f00Request refused for consecutive errors $555('.$this->_bad_timeout
@@ -575,9 +594,14 @@ class WebaccessUrl
                     }
                 }
 
+                echo "\nData:\n\n".$query['QueryDatas']."\n";
+
                 if ($query['IsXmlrpc'] === true) {
                     if ($_web_access_post_xmlrpc) {
                         $msg .= "Content-type: application/x-www-form-urlencoded; charset=UTF-8\r\n";
+
+                        echo "\n=========================== Data =================================\n\n".$query['Datas']."\n";
+
                         $query['QueryDatas'] = "xmlrpc=".urlsafe_base64_encode($query['QueryDatas']);
                     } else {
                         $msg .= "Content-type: text/xml; charset=UTF-8\r\n";
@@ -604,6 +628,8 @@ class WebaccessUrl
 
                 $query['State'] = 'OPEN';
                 $query['Retries'] = 0;
+
+                print_r($msg);
 
                 // add the query in spool
                 $this->_spool[] = &$query;
@@ -654,8 +680,8 @@ class WebaccessUrl
                     $this->_open();
                 }
             }
-        } else {
 
+        } else {
 
             $this->console->writeln($this->_webaccess_str.'Bad callback function:$fff '.$query['Callback']);
 
@@ -713,7 +739,7 @@ class WebaccessUrl
         }
         $time = time();
 
-        // if asynch, in error, then return false until timeout or if >max)
+        // if async, in error, then return false until timeout or if >max)
         if (!$this->_wait && $this->_state == 'BAD' &&
             (($this->_bad_timeout > $_web_access_retry_timeout_max) ||
                 (($time - $this->_bad_time) < $this->_bad_timeout))) {
@@ -749,42 +775,38 @@ class WebaccessUrl
                     ($this->_spool[0]['State'] == 'OPEN' ||
                         $this->_spool[0]['State'] == 'SEND' ||
                         $this->_spool[0]['State'] == 'RECEIVE')) {
-                    //echo 'State=' . $this->_spool[0]['State'] . " (" . count($this->_spool) . ")\n";
+                    echo 'State='.$this->_spool[0]['State']." (".count($this->_spool).")\n";
                     if (!$this->_socket || $this->_state != 'OPENED') {
                         $this->_open_socket($opentimeout);
                     }
-                }
 
-                if ($this->_spool[0]['State'] == 'OPEN') {
-                    $time = microtime(true);
-                    $this->_spool[0]['Times']['send'][0] = $time;
-                    $this->_send($waittimeout);
-                } elseif ($this->_spool[0]['State'] == 'SEND') {
-                    $this->_send($waittimeout);
-                } elseif ($this->_spool[0]['State'] == 'RECEIVE') {
-                    $this->_receive($waittimeout * 4);
-                }
+                    if ($this->_spool[0]['State'] == 'OPEN') {
+                        $time = microtime(true);
+                        $this->_spool[0]['Times']['send'][0] = $time;
+                        $this->_send($waittimeout);
+                    } elseif ($this->_spool[0]['State'] == 'SEND') {
+                        $this->_send($waittimeout);
+                    } elseif ($this->_spool[0]['State'] == 'RECEIVE') {
+                        $this->_receive($waittimeout * 4);
+                    }
 
-                // if timeout then error
-                if (($difftime = round(microtime(true) - $this->_read_time)) > $waittimeout) {
-                    $this->_bad(
-                        "Request timeout, in _open ({$difftime} > {$waittimeout}s) state="
-                        .$this->_spool[0]['State']
-                    );
+                    // if timeout then error
+                    if (($difftime = round(microtime(true) - $this->_read_time)) > $waittimeout) {
+                        $this->_bad("Request timeout, in _open ({$difftime} > {$waittimeout}s) state=".$this->_spool[0]['State']
+                        );
 
-                    return false;
+                        return false;
+                    }
                 }
-            }
-            if ($this->_socket) {
-                @stream_set_timeout($this->_socket, 0, 2000);
+                if ($this->_socket) {
+                    @stream_set_timeout($this->_socket, 0, 2000);
+                }
             } // else just do a send on the current
             elseif (isset($this->_spool[0]['State']) && $this->_spool[0]['State'] == 'OPEN') {
                 @stream_set_timeout($this->_socket, 0, 2000);  // timeout 2 ms
                 $this->_send($waittimeout);
             }
         }
-
-        return true;
     }  // _open
 
     public function _send($waittimeout = 20)
@@ -792,6 +814,7 @@ class WebaccessUrl
         if (!isset($this->_spool[0]['State'])) {
             return;
         }
+
         $errno = '';
         $errstr = '';
 
@@ -963,7 +986,7 @@ class WebaccessUrl
         } while ($this->_wait && $state === false && $this->_socket && !@feof($this->_socket));
 
         if (!isset($this->_spool[0]['State']) || $this->_spool[0]['State'] != 'RECEIVE') {
-            // in case of (probably keepalive) connection closed by server
+            // in case of (probably keep-alive) connection closed by server
             if ($this->_socket && @feof($this->_socket)) {
                 $this->_state = 'CLOSED';
                 @fclose($this->_socket);
@@ -985,9 +1008,7 @@ class WebaccessUrl
             // if not 0 sized then show error message
             if (strlen($this->_response) > 0) {
                 $this->_bad(
-                    'Error: closed with incomplete read: re-open socket and re-send! ('.strlen(
-                        $this->_response
-                    ).')'
+                    'Error: closed with incomplete read: re-open socket and re-send! ('.strlen($this->_response).')'
                 );
             } else {
                 $this->_bad(
@@ -1011,7 +1032,7 @@ class WebaccessUrl
         // reply is complete :)
         if ($state === true) {
             $this->_bad_timeout = 0; // reset error timeout
-            $time = microtime(true);
+            //  $time = microtime(true);  // @todo see if this is needed ?
             $this->_spool[0]['Times']['receive'][1] = $time - $this->_spool[0]['Times']['receive'][0];
             $this->_spool[0]['State'] = 'DONE';
 
@@ -1048,6 +1069,7 @@ class WebaccessUrl
             if (isset($callbackinfo[0]) && is_callable($callbackinfo[0])) {
                 $callback_func = $callbackinfo[0];
                 $callbackinfo[0] = $this->_spool[0]['Response'];
+                $this->console->writeln("callback!");
                 call_user_func_array($callback_func, $callbackinfo);
             }
         }
@@ -1132,7 +1154,7 @@ class WebaccessUrl
             }
         } else {
             $headers = &$this->_spool[0]['Headers'];
-            //echo "Previous Headers! (" . strlen($datas[0]) . ")\n"; // for debugging purposes, don't remove
+            echo "Previous Headers! (".strlen($datas[0]).")\n"; // for debugging purposes, don't remove
         }
 
 
@@ -1236,6 +1258,8 @@ class WebaccessUrl
             return null;
         }
 
+        echo 'mess_size1='.strlen($message)."\n";
+
         // if Content-Encoding: gzip  or  Content-Encoding: deflate
         if (isset($headers['content-encoding'][0])) {
             if ($headers['content-encoding'][0] == 'gzip') {
@@ -1260,6 +1284,9 @@ class WebaccessUrl
             if ($this->_compress_request == 'accept') {
                 $this->_compress_request = false;
             }
+            $this->console->writeln($this->_webaccess_str.'send: '.($this->_compress_request === false ? 'no compression' : $this->_compress_request)
+                .', receive: '.(isset($headers['content-encoding'][0]) ? $headers['content-encoding'][0] : 'no compression'));
+
         }
 
         // get cookies values
@@ -1290,6 +1317,7 @@ class WebaccessUrl
 
         // if the server reply ask to close, then close
         if (!isset($headers['connection'][0]) || $headers['connection'][0] == 'close') {
+            $this->console->writeln($this->_webaccess_str.'server ask to close connection');
             $this->_spool[0]['Close'] = true;
         }
 
@@ -1312,7 +1340,7 @@ class WebaccessUrl
 
         // store complete reply message for the request
         $this->_spool[0]['Response'] = array(
-            'Code' => 0 + $headers['Command'][1],
+            'Code' => intval($headers['Command'][1]),
             'Reason' => $headers['Command'][2],
             'Headers' => $headers,
             'Message' => $message,
@@ -1341,7 +1369,8 @@ class WebaccessUrl
                 );
             $this->console->writeln($msg);
         } catch (Exception $e) {
-            // do nothing
+            echo $e->getMessage();
+
         }
     }
 }
