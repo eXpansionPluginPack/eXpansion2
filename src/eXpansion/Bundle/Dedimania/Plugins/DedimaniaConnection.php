@@ -98,7 +98,6 @@ class DedimaniaConnection implements ListenerInterfaceExpTimer
      */
     final public function sendRequest($request, $callback)
     {
-        $this->console->writeln("sending request");
         $this->webaccess->request(
             self::dedimaniaUrl,
             [[$this, "process"], $callback],
@@ -114,9 +113,6 @@ class DedimaniaConnection implements ListenerInterfaceExpTimer
 
     final public function process($response, $callback)
     {
-        print_r($response);
-
-
 
         try {
 
@@ -124,8 +120,6 @@ class DedimaniaConnection implements ListenerInterfaceExpTimer
 
                 $message = Request::decode($response['Message']);
                 $errors = end($message[1]);
-
-                print_r($errors);
 
                 if (count($errors) > 0 && array_key_exists('methods', $errors[0])) {
                     foreach ($errors[0]['methods'] as $error) {
@@ -151,7 +145,7 @@ class DedimaniaConnection implements ListenerInterfaceExpTimer
                     return;
                 }
 
-                call_user_func_array($callback, [$array]);
+                call_user_func_array($callback, [$array[0][0]]);
 
                 return;
             } else {
@@ -160,9 +154,22 @@ class DedimaniaConnection implements ListenerInterfaceExpTimer
         } catch (\Exception $e) {
             $this->console->writeln('Dedimania Error: $f00Connection to dedimania server failed.'.$e->getMessage());
         }
-
-
     }
 
+    /**
+     * @return null|string
+     */
+    public function getSessionId(): string
+    {
+        return $this->sessionId;
+    }
+
+    /**
+     * @param null|string $sessionId
+     */
+    public function setSessionId(string $sessionId)
+    {
+        $this->sessionId = $sessionId;
+    }
 
 }

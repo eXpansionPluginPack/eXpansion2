@@ -629,7 +629,7 @@ class WebaccessUrl
                 $query['State'] = 'OPEN';
                 $query['Retries'] = 0;
 
-                print_r($msg);
+                // print_r($msg); for debugging purposes - don't remove
 
                 // add the query in spool
                 $this->_spool[] = &$query;
@@ -1069,7 +1069,6 @@ class WebaccessUrl
             if (isset($callbackinfo[0]) && is_callable($callbackinfo[0])) {
                 $callback_func = $callbackinfo[0];
                 $callbackinfo[0] = $this->_spool[0]['Response'];
-                $this->console->writeln("callback!");
                 call_user_func_array($callback_func, $callbackinfo);
             }
         }
@@ -1154,7 +1153,7 @@ class WebaccessUrl
             }
         } else {
             $headers = &$this->_spool[0]['Headers'];
-            echo "Previous Headers! (".strlen($datas[0]).")\n"; // for debugging purposes, don't remove
+          //  echo "Previous Headers! (".strlen($datas[0]).")\n"; // for debugging purposes, don't remove
         }
 
 

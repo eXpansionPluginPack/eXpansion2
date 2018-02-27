@@ -61,11 +61,8 @@ class Dedimania implements StatusAwarePluginInterface
      */
     public function setStatus($status)
     {
-        var_dump($this->enabled->get());
-
         if ($status && $this->enabled->get()) {
             try {
-
                 $this->dedimaniaService->openSession($this->serverLogin->get(), $this->apikey->get());
             } catch (\Exception $e) {
                 echo $e->getMessage();
