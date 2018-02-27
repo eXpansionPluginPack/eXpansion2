@@ -98,7 +98,8 @@ class ManialinkFactory implements ManialinkFactoryInterface
      * Creates a new manialink.
      *
      * @param string|array|Group $group
-     * @return array|Group|string
+     *
+     * @return Group
      */
     public function create($group)
     {
@@ -153,7 +154,6 @@ class ManialinkFactory implements ManialinkFactoryInterface
             }
             $this->updateContent($ml);
             $this->guiHandler->addToDisplay($ml, $this);
-
         }
     }
 

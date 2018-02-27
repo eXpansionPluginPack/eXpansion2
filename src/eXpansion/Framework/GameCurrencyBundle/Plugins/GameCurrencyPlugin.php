@@ -83,7 +83,7 @@ class GameCurrencyPlugin implements ListenerInterfaceMpLegacyBill
             }
 
             if ($bill->state == Bill::STATE_ERROR) {
-                call_user_func($this->entries[$billId]->getFailureCallback());
+                call_user_func_array($this->entries[$billId]->getFailureCallback(), [$bill->stateName]);
                 unset($this->entries[$billId]);
             }
         }

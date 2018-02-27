@@ -17,7 +17,9 @@ services:
         class: eXpansion\Framework\Notifications\Plugins\Gui\NotificationUpdater
         arguments:
           $name:  "Notification Updater"
-          $playerGroup : "@expansion.framework.core.user_groups.all_players"
           $variables:
             - {name: "notification", type: "Text[Text][Text]", default: "Text[Text][Text]"}
+        tags:
+            - {name: expansion.plugin, data_provider: exp.timer}
+            - {name: expansion.plugin, data_provider: expansion.user_group}
 

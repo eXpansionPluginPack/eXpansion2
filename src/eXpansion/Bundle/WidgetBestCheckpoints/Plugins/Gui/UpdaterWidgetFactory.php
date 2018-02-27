@@ -14,7 +14,7 @@ class UpdaterWidgetFactory extends ScriptVariableUpdateFactory
     public function __construct(
         $name,
         array $variables,
-        int $maxUpdateFrequency = 1,
+        float $maxUpdateFrequency = 0.5,
         WidgetFactoryContext $context,
         Group $playerGroup
     ) {
@@ -30,9 +30,9 @@ class UpdaterWidgetFactory extends ScriptVariableUpdateFactory
     public function setLocalRecord($checkpoints)
     {
         if (count($checkpoints) > 0) {
-            $this->updateValue($this->playerGroup ,'LocalRecordCheckpoints', Builder::getArray($checkpoints, true));
+            $this->updateValue($this->playerGroup, 'LocalRecordCheckpoints', Builder::getArray($checkpoints, true));
         } else {
-            $this->updateValue($this->playerGroup ,'LocalRecordCheckpoints', "Integer[Integer]");
+            $this->updateValue($this->playerGroup, 'LocalRecordCheckpoints', "Integer[Integer]");
         }
     }
 }

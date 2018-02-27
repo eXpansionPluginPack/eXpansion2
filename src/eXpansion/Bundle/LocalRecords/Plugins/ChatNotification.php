@@ -41,7 +41,7 @@ class ChatNotification implements RecordsDataListener
      * @param Time                   $timeFormater
      * @param PlayerStorage          $playerStorage
      * @param string                 $translationPrefix
-     * @param int                    $positionForPublicMessage
+     * @param ConfigInterface        $positionForPublicMessage
      */
     public function __construct(
         ChatNotificationHelper $chatNotification,
@@ -93,6 +93,7 @@ class ChatNotification implements RecordsDataListener
      * @param Record   $record
      * @param Record[] $records
      * @param int      $position
+     * @throws \Propel\Runtime\Exception\PropelException
      */
     public function onLocalRecordsFirstRecord(Record $record, $records, $position)
     {
@@ -123,6 +124,7 @@ class ChatNotification implements RecordsDataListener
      * @param int      $oldPosition
      *
      * @return void
+     * @throws \Propel\Runtime\Exception\PropelException
      */
     public function onLocalRecordsBetterPosition(Record $record, Record $oldRecord, $records, $position, $oldPosition)
     {
@@ -178,6 +180,7 @@ class ChatNotification implements RecordsDataListener
      * @param          $position
      *
      * @return void
+     * @throws \Propel\Runtime\Exception\PropelException
      */
     public function onLocalRecordsSamePosition(Record $record, Record $oldRecord, $records, $position)
     {
@@ -212,6 +215,11 @@ class ChatNotification implements RecordsDataListener
         );
     }
 
+    /**
+     * @param Record $record
+     * @param Record $oldRecord
+     * @return string
+     */
     protected function getSecuredBy(Record $record, Record $oldRecord)
     {
         if ($oldRecord->getScore()) {
@@ -231,6 +239,10 @@ class ChatNotification implements RecordsDataListener
         return $this->timeFormater->timeToText(0);
     }
 
+    /**
+     * @param Record $record
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
     protected function messageFirstPlaceNew(Record $record)
     {
         $this->sendMessage(
@@ -246,13 +258,14 @@ class ChatNotification implements RecordsDataListener
 
     /**
      * @param string      $message
-     * @param null|string $recipe
+     * @param null|string $recipient
+     * @param             $params
      */
-    protected function sendMessage($message, $recipe, $params)
+    protected function sendMessage($message, $recipient, $params)
     {
         $this->chatNotification->sendMessage(
             $this->translationPrefix.'.'.$message,
-            $recipe,
+            $recipient,
             $params
         );
     }

@@ -55,21 +55,19 @@ class NotificationWidget extends WidgetFactory
         $manialink->getFmlManialink()->getScript()->addScriptFunction("", /** @lang text */
             <<<EOL
 
-            Text getMessage(Text[Text] Message) {     
-                
-                log(LocalUser.Language);       
-                if (Message.existskey(LocalUser.Language)) {
-                       return Message[LocalUser.Language];           
+            Text getMessage(Text[Text] _Message) {
+                if (_Message.existskey(LocalUser.Language)) {
+                       return _Message[LocalUser.Language];           
                 }
                 
-                return Message["en"];
+                return _Message["en"];
             }
             
-            Void HideToast(CMlFrame Frame, Boolean Instant) {
+            Void HideToast(CMlFrame _Frame, Boolean _Instant) {
                 declare CMlFrame[] Frames for This;
                 
-                foreach(Element in Frame.Controls) {
-                    if (Instant) {
+                foreach(Element in _Frame.Controls) {
+                    if (_Instant) {
                         if (Element is CMlLabel) {
                             (Element as CMlLabel).Opacity = 0.;
                         }
@@ -82,8 +80,8 @@ class NotificationWidget extends WidgetFactory
                     }
                 }
                 
-                if (Instant) {
-                    Frames.remove(Frame);
+                if (_Instant) {
+                    Frames.remove(_Frame);
                 }
             }
             
@@ -129,8 +127,7 @@ EOL
         );
 
         $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::OnInit, <<<EOL
-                
-                
+                    {$this->updaterWidgetFactory->getScriptInitialization(false)}               
                     declare CMlFrame[] Frames for This;
                     Frames.clear();
                     Page.GetClassChildren("uiToast", (Page.GetFirstChild("Window") as CMlFrame), True);
@@ -147,14 +144,14 @@ EOL
                             }
                         }
                     }
-                    {$this->updaterWidgetFactory->getScriptInitialization(true)}
+                 
 EOL
         );
         $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::Loop, <<<EOL
 
              {$this->updaterWidgetFactory->getScriptOnChange('
-             if (notification.count > 0) {
-                 ShowToast(notification);
+                 if (notification.count > 0) {
+                      ShowToast(notification);
                  }
              ')}
              
@@ -174,9 +171,9 @@ EOL
         );
 
         $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::MouseClick, <<<EOL
-         if (Event.Control.HasClass("toastClose")) {
-			HideToast(Event.Control.Parent, False);
-		}
+            if (Event.Control.HasClass("toastClose")) {
+			    HideToast(Event.Control.Parent, False);
+		    }
         
 EOL
         );
@@ -200,7 +197,7 @@ EOL
 
 
         $message = Label::create()->setPosition(2, -8)->setSize(70,
-            15)->setTextSize(2)->setMaxLines(3)->setOpacity(0.5)->setTextColor("fff")->setText("n/a");
+            15)->setTextSize(2)->setMaxLines(4)->setOpacity(0.5)->setTextColor("fff")->setText("n/a");
         $frame->addChild($message);
 
         $quad = Quad::create();

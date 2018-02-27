@@ -15,6 +15,7 @@ use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WindowFactory;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\GameCurrencyBundle\Services\GameCurrencyService;
+use eXpansion\Framework\Notifications\Services\Notifications;
 
 class BillWindow extends WindowFactory
 {
@@ -28,6 +29,10 @@ class BillWindow extends WindowFactory
     private $gameDataStorage;
     private $recipient = "";
     private $amount = "";
+    /**
+     * @var Notifications
+     */
+    private $notifications;
 
 
     /**
@@ -40,6 +45,7 @@ class BillWindow extends WindowFactory
      * @param WindowFactoryContext $context
      * @param GameCurrencyService  $currencyService
      * @param GameDataStorage      $gameDataStorage
+     * @param Notifications        $notifications
      */
     public function __construct(
         $name,
@@ -49,11 +55,13 @@ class BillWindow extends WindowFactory
         $posY = null,
         WindowFactoryContext $context,
         GameCurrencyService $currencyService,
-        GameDataStorage $gameDataStorage
+        GameDataStorage $gameDataStorage,
+        Notifications $notifications
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
         $this->currencyService = $currencyService;
         $this->gameDataStorage = $gameDataStorage;
+        $this->notifications = $notifications;
     }
 
     public function setDetails($login, $amount)
@@ -100,10 +108,12 @@ class BillWindow extends WindowFactory
     public function callbackSend($manialink, $login, $entries, $args)
     {
         if (!is_numeric($entries['amount'])) {
-            $this->setBusy($manialink, "Amount is not integer.");
+            $this->notifications->error("Amount is not integer", [], "Error", 10500, $manialink->getUserGroup());
 
             return;
         }
+
+
         $serverLogin = $this->gameDataStorage->getSystemInfo()->serverLogin;
         $bill = $this->currencyService->createBill(
             $serverLogin,
@@ -115,15 +125,21 @@ class BillWindow extends WindowFactory
         $this->setBusy($manialink, "Processing...");
 
         if ($bill == false) {
+            $this->notifications->error("Error while processing planets transaction", [], "Error", 10500,
+                $manialink->getUserGroup());
             $this->closeManialink($manialink);
         }
 
         $this->currencyService->sendBill(
             $bill,
-            function () use ($manialink) {
+            function () use ($manialink, $bill) {
+                $this->notifications->info("Successfully payed ".$bill->getAmount()."p to ".$bill->getReceiverlogin(),
+                    [], "Success", 3500, $manialink->getUserGroup());
                 $this->closeManialink($manialink);
             },
-            function () use ($manialink) {
+            function ($status) use ($manialink) {
+                $this->notifications->error("Server said: ".$status,
+                    [], "Error", 10500, $manialink->getUserGroup());
                 $this->closeManialink($manialink);
             }
         );

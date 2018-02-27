@@ -2,11 +2,11 @@
 
 namespace eXpansion\Framework\Core\Plugins\UserGroups;
 
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpUserGroup;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
 use eXpansion\Framework\Core\Storage\Data\Player;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 
 /**
  * Class Factory handles non persistent user groups.
@@ -28,7 +28,7 @@ class Factory implements ListenerInterfaceExpUserGroup, ListenerInterfaceMpLegac
     /**
      * IndividualUserGroups constructor.
      *
-     * @param string $class
+     * @param string              $class
      * @param DispatcherInterface $dispatcher
      */
     public function __construct($class, DispatcherInterface $dispatcher)
@@ -38,9 +38,9 @@ class Factory implements ListenerInterfaceExpUserGroup, ListenerInterfaceMpLegac
     }
 
     /**
-     * Get the individual group of a player.
+     * Get the individual group of a single player.
      *
-     * @param $login
+     * @param string $login
      *
      * @return Group
      */
@@ -59,9 +59,9 @@ class Factory implements ListenerInterfaceExpUserGroup, ListenerInterfaceMpLegac
     }
 
     /**
-     * Create a group for
+     * Create a group for array of logins.
      *
-     * @param string[]
+     * @param string[] $logins
      *
      * @return Group
      */
@@ -111,7 +111,7 @@ class Factory implements ListenerInterfaceExpUserGroup, ListenerInterfaceMpLegac
      * When a group is destyoed delete object.
      *
      * @param Group $group
-     * @param $lastLogin
+     * @param       $lastLogin
      */
     public function onExpansionGroupDestroy(Group $group, $lastLogin)
     {
