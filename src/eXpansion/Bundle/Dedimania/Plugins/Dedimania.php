@@ -381,7 +381,7 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
 
     protected function getMapInfo()
     {
-        $map = $this->mapStorage->getCurrentMap();
+        $map = $this->connection->getCurrentMapInfo();
 
         return [
             "UId" => $map->uId,
