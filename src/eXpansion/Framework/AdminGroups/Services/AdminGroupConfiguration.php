@@ -26,10 +26,10 @@ class AdminGroupConfiguration
     {
         foreach ($configManager->getConfigDefinitionTree()->get($path) as $groupName => $data) {
             foreach ($data as $key => $config) {
-                if (strpos($key, 'perm_') == 3) {
+                if (strpos($key, 'perm_') === 0) {
                     $this->config[$groupName]['permissions'][str_replace('perm_', '', $key)] = $config;
                 } else {
-                    $this->config[$groupName]['permissions'][$key] = $config;
+                    $this->config[$groupName][$key] = $config;
                 }
             }
         }
@@ -74,7 +74,7 @@ class AdminGroupConfiguration
             return [];
         }
 
-        return $this->config[$groupName]['permissions']->getRawValue();
+        return array_keys($this->config[$groupName]['permissions']);
     }
 
     /**
@@ -101,7 +101,7 @@ class AdminGroupConfiguration
     public function getLoginGroupName($login)
     {
         foreach ($this->config as $groupName => $group) {
-            if (in_array($login, $group['logins']->get())) {
+            if (in_array($login, $group['logins']->getRawValue())) {
                 return $groupName;
             }
         }
