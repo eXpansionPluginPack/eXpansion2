@@ -10,7 +10,7 @@ use FML\Types\Container;
 use FML\Types\Renderable;
 use FML\Types\ScriptFeatureable;
 
-class LayoutRow implements Renderable, ScriptFeatureable, Container
+class layoutRow implements Renderable, ScriptFeatureable, Container
 {
 
     protected $frameClasses = [];
@@ -59,7 +59,8 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
             throw new \Exception('not an array');
         }
 
-        $this->margin = $margin;
+        // @TODO Temporary fix to have margin work in negative. This was fixed in master.
+        $this->margin = abs($margin);
         $this->elements = $elements;
         $this->setPosition($startX, $startY);
         $this->updateSize();
