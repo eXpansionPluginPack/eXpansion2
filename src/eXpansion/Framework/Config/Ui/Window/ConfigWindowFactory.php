@@ -70,6 +70,15 @@ class ConfigWindowFactory extends WindowFactory
         $this->chatNotification = $chatNotification;
     }
 
+    /**
+     * @inheritdoc
+     */
+    protected function createContent(ManialinkInterface $manialink)
+    {
+        parent::createContent($manialink);
+        $manialink->setData('current_path', $this->currentPath);
+    }
+
 
     /**
      * @inheritdoc
@@ -77,12 +86,11 @@ class ConfigWindowFactory extends WindowFactory
     protected function updateContent(ManialinkInterface $manialink)
     {
         parent::updateContent($manialink);
+        $this->currentPath = $manialink->getData('current_path');
+
         /** @var Frame $contentFrame */
         $contentFrame = $manialink->getContentFrame();
         $contentFrame->removeAllChildren();
-
-        $tooltip = $this->uiFactory->createTooltip();
-        $manialink->addChild($tooltip);
 
         $saveButton = $this->uiFactory->createConfirmButton('expansion_config.ui.save', Button::COLOR_SUCCESS);
         $saveButton->setAction(
@@ -107,7 +115,7 @@ class ConfigWindowFactory extends WindowFactory
                 throw new PlayerException("{$this->currentPath} is not valid configuration path");
             }
 
-            $elements[] = $this->buildConfig($config, $this->sizeX - 8, $tooltip);
+            $elements[] = $this->buildConfig($config, $this->sizeX - 8, $manialink);
         }
 
         $contentFrame->addChild(
@@ -124,13 +132,13 @@ class ConfigWindowFactory extends WindowFactory
     /**
      * Build display for config.
      *
-     * @param ConfigInterface $config
-     * @param                 $sizeX
-     * @param Tooltip         $tooltip
+     * @param ConfigInterface    $config
+     * @param float              $sizeX
+     * @param ManialinkInterface $manialink
      *
      * @return \eXpansion\Framework\Gui\Layouts\LayoutRow
      */
-    protected function buildConfig(ConfigInterface $config, $sizeX, Tooltip $tooltip)
+    protected function buildConfig(ConfigInterface $config, $sizeX, ManialinkInterface $manialink)
     {
         $rowLayout = $this->uiFactory->createLayoutRow(2, 0, [], 1);
 
@@ -159,7 +167,8 @@ class ConfigWindowFactory extends WindowFactory
         }
 
         $rowLayout->addChild(
-            $this->configUiManager->getUiHandler($config)->build($config, $sizeX * 0.37));
+            $this->configUiManager->getUiHandler($config)->build($config, $sizeX * 0.37, $manialink)
+        );
 
 
         return $rowLayout;
