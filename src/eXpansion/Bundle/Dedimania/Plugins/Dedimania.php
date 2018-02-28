@@ -21,9 +21,11 @@ use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Application\AbstractApplication;
 use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Storage\Data\Player as DedicatedPlayer;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\Core\Storage\MapStorage;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMap;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMatch;
 use eXpansion\Framework\GameManiaplanet\ScriptMethods\GetScores;
@@ -35,7 +37,7 @@ use Maniaplanet\DedicatedServer\Structures\Player;
 use Maniaplanet\DedicatedServer\Xmlrpc\Request as XmlRpcRequest;
 
 
-class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer, ListenerInterfaceMpScriptMap, ListenerInterfaceMpScriptMatch, ListenerInterfaceRaceData
+class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer, ListenerInterfaceMpScriptMap, ListenerInterfaceMpScriptMatch, ListenerInterfaceRaceData, ListenerInterfaceMpLegacyPlayer
 {
     const dedimaniaUrl = "http://dedimania.net:8081/Dedimania";
 
@@ -364,11 +366,16 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
         ];
 
         $request = new Request('dedimania.GetChallengeRecords', $params);
+        $that = $this;
 
         $this->sendRequest($request, function ($response) {
+
             $this->dedimaniaService->setServerMaxRank($response['ServerMaxRank']);
             /** @var DedimaniaRecord[] $recs */
             $recs = DedimaniaRecord::fromArrayOfArray($response['Records']);
+            if (isset($response['Records']['Login'])) {
+                $recs = [0 => $recs];
+            }
             $this->dedimaniaService->setDedimaniaRecords($recs);
 
             if (!empty($recs) && count($recs) > 0) {
@@ -406,10 +413,11 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
 
     }
 
-    public function connectPlayer($login)
+    /**
+     * @param DedicatedPlayer $player
+     */
+    public function connectPlayer(DedicatedPlayer $player)
     {
-        $player = $this->playerStorage->getPlayerInfo($login);
-
         $params = [
             $this->sessionId,
             $player->getLogin(),
@@ -424,6 +432,24 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
         });
     }
 
+    /**
+     * @param DedicatedPlayer $player
+     */
+    public function disconnectPlayer(DedicatedPlayer $player)
+    {
+        $params = [
+            $this->sessionId,
+            $player->getLogin(),
+            $player->getNickName(),
+            $player->getPath(),
+            $player->isSpectator(),
+        ];
+
+        $request = new Request('dedimania.PlayerConnect', $params);
+        $this->sendRequest($request, function ($response) use ($player) {
+            $this->dedimaniaService->disconnectPlayer($player->getLogin());
+        });
+    }
 
     public function connectAllPlayers()
     {
@@ -875,4 +901,46 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
     }
 
 
+    /**
+     * @param DedicatedPlayer $player
+     * @return void
+     */
+    public function onPlayerConnect(DedicatedPlayer $player)
+    {
+        $this->connectPlayer($player);
+    }
+
+    /**
+     * @param DedicatedPlayer $player
+     * @param string          $disconnectionReason
+     * @return void
+     */
+    public function onPlayerDisconnect(DedicatedPlayer $player, $disconnectionReason)
+    {
+        $this->disconnectPlayer($player);
+    }
+
+    /**
+     * @param DedicatedPlayer $oldPlayer
+     * @param DedicatedPlayer $player
+     * @return void
+     */
+    public function onPlayerInfoChanged(
+        DedicatedPlayer $oldPlayer,
+        DedicatedPlayer $player
+    ) {
+        //
+    }
+
+    /**
+     * @param DedicatedPlayer $oldPlayer
+     * @param DedicatedPlayer $player
+     * @return void
+     */
+    public function onPlayerAlliesChanged(
+        DedicatedPlayer $oldPlayer,
+        DedicatedPlayer $player
+    ) {
+        //
+    }
 }
