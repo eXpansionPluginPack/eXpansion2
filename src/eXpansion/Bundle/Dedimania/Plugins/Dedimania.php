@@ -8,7 +8,6 @@
 
 namespace eXpansion\Bundle\Dedimania\Plugins;
 
-
 use eXpansion\Bundle\Dedimania\Classes\IXR_Base64;
 use eXpansion\Bundle\Dedimania\Classes\Request;
 use eXpansion\Bundle\Dedimania\Services\DedimaniaService;
@@ -16,6 +15,7 @@ use eXpansion\Bundle\Dedimania\Structures\DedimaniaPlayer;
 use eXpansion\Bundle\Dedimania\Structures\DedimaniaRecord;
 use eXpansion\Framework\Config\Model\ConfigInterface;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
+use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\FileSystem;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
@@ -109,6 +109,9 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
      */
     private $fileSystem;
 
+    /** @var ChatNotification */
+    private $chatNotification;
+
 
     /**
      * Dedimania constructor.
@@ -126,6 +129,7 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
      * @param Time             $time
      * @param GetScores        $getScores
      * @param FileSystem       $fileSystem
+     * @param ChatNotification $chatNotification
      */
     public function __construct(
         $titles,
@@ -141,7 +145,8 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
         Notifications $notifications,
         Time $time,
         GetScores $getScores,
-        FileSystem $fileSystem
+        FileSystem $fileSystem,
+        ChatNotification $chatNotification
     ) {
         require_once(dirname(__DIR__).DIRECTORY_SEPARATOR."Classes".DIRECTORY_SEPARATOR."Webaccess.php");
         $this->webaccess = new \Webaccess($console);
@@ -159,6 +164,7 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
         $this->time = $time;
         $this->getScores = $getScores;
         $this->fileSystem = $fileSystem;
+        $this->chatNotification = $chatNotification;
     }
 
     /**
@@ -366,7 +372,6 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
         ];
 
         $request = new Request('dedimania.GetChallengeRecords', $params);
-        $that = $this;
 
         $this->sendRequest($request, function ($response) {
 
@@ -380,13 +385,11 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
 
             if (!empty($recs) && count($recs) > 0) {
                 $time = $this->time->timeToText($recs[0]->best, true);
-                $this->notifications->info(
-                    "Found ".count($recs)." records!\n#1 ".$recs[0]->nickName.'$z('.$recs[0]->login.'), time:'.$time,
-                    [], "Dedimania", 10500);
+                $this->chatNotification->sendMessage(
+                    "Found ".count($recs)." dedimania records!\n#1 ".$recs[0]->nickName.'$z('.$recs[0]->login.'), time:'.$time);
             } else {
-                $this->notifications->info(
-                    "Found 0 records",
-                    [], "Dedimania", 10500);
+                $this->chatNotification->sendMessage(
+                    "Found 0 dedimania records");
             }
 
         });
@@ -504,11 +507,13 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
 
                     $times = [];
                     foreach ($scores['players'] as $player) {
-                        $times[] = [
-                            "Login" => $player['login'],
-                            "Best" => $player['bestracetime'],
-                            "Checks" => implode(",", $player['bestracecheckpoints']),
-                        ];
+                        if (count($player['bestracecheckpoints']) > 0) {
+                            $times[] = [
+                                "Login" => $player['login'],
+                                "Best" => $player['bestracetime'],
+                                "Checks" => implode(",", $player['bestracecheckpoints']),
+                            ];
+                        }
                     }
 
                     $params = [
@@ -712,10 +717,8 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
             }
             $this->console->write("new dedimania record".$rank);
             $player = $this->playerStorage->getPlayerInfo($login);
-            $this->notifications->info("Updated '.$rank.'. dedimania record ".$this->time->timeToText($raceTime). " for " . $player->getNickname(), [], "Dedimania");
-        } else {
-            $this->console->writeln("no new record");
-
+            $this->chatNotification->sendMessage("|record| Updated $rank. dedimania record ".$this->time->timeToText($raceTime,
+                    true)." for ".$player->getNickname());
         }
     }
 

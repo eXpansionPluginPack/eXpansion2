@@ -12,6 +12,7 @@ namespace eXpansion\Bundle\Dedimania\Services;
 use eXpansion\Bundle\Dedimania\Structures\DedimaniaPlayer;
 use eXpansion\Bundle\Dedimania\Structures\DedimaniaRecord;
 use eXpansion\Framework\Core\Services\Application\Dispatcher;
+use eXpansion\Framework\Core\Storage\PlayerStorage;
 
 class DedimaniaService
 {
@@ -37,13 +38,20 @@ class DedimaniaService
     private $VReplay = "";
     private $GReplay = "";
 
+    /** @var PlayerStorage */
+    private $playerStorage;
+
     /**
      * DedimaniaService constructor.
-     * @param Dispatcher $dispatcher
+     * @param Dispatcher    $dispatcher
+     * @param PlayerStorage $playerStorage
      */
-    public function __construct(Dispatcher $dispatcher)
-    {
+    public function __construct(
+        Dispatcher $dispatcher,
+        PlayerStorage $playerStorage
+    ) {
         $this->dispatcher = $dispatcher;
+        $this->playerStorage = $playerStorage;
     }
 
     /**
@@ -85,14 +93,23 @@ class DedimaniaService
         $tempRecords = $this->recordsByLogin;
         $tempPositions = $this->ranksByLogin;
 
-        $record = isset($this->recordsByLogin[$login]) ? $this->recordsByLogin[$login] : new DedimaniaRecord($login);
-        $tempRecords[$login] = $record;
+        if (isset($this->recordsByLogin[$login])) {
+            $record = $this->recordsByLogin[$login];
+        } else {
+            $record = new DedimaniaRecord($login);
+            $pla = $this->playerStorage->getPlayerInfo($login);
+            $record->nickName = $pla->getNickName();
+        }
+        echo $record->nickName. "\n";
+
+        $tempRecords[$login] = clone $record;
         $oldRecord = clone $record;
+
+        print_r($record);
 
         // if better time
 
         if ($score < $oldRecord->best || $oldRecord->best == -1) {
-
             $record->best = $score;
             $record->checks = implode(",", $checkpoints);
             $tempRecords[$login] = $record;
@@ -100,11 +117,11 @@ class DedimaniaService
             // sort and update new rank
             uasort($tempRecords, [$this, "compare"]);
 
-            if (!isset($this->players[$record->login])) {
+            if (!isset($this->players[$login])) {
                 return -1;
             }
 
-            $player = $this->players[$record->login];
+            $player = $this->players[$login];
 
             // recalculate ranks for records
             $rank = 1;
