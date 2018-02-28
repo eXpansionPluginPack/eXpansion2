@@ -123,7 +123,7 @@ class DedimaniaService
 
             $tempRecords = array_slice($tempRecords, 0, 100, true);
             $tempPositions = array_slice($tempPositions, 0, 100, true);
-            
+
             if ($newRecord) {
                 $this->recordsByLogin = $tempRecords;
                 $this->ranksByLogin = $tempPositions;

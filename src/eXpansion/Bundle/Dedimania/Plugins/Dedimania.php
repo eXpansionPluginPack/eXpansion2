@@ -471,6 +471,11 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
                 $request->add('dedimania.PlayerConnect', $params);
             }
         }
+        
+        // no players to connect
+        if ($request === null) {
+            return;
+        }
 
         $this->sendRequest($request, function ($response) {
 
