@@ -3,6 +3,7 @@
 
 namespace Tests\eXpansion\Framework\GameManiaplanet\DataProviders;
 
+use eXpansion\Framework\Core\Services\Application;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\GameManiaplanet\DataProviders\PlayerDataProvider;
 use eXpansion\Framework\Core\Storage\Data\Player;
@@ -18,6 +19,8 @@ class PlayerDataProviderTest extends TestCore
 
     protected $player;
 
+    protected $mockPlayerStorage;
+
     protected function setUp()
     {
         parent::setUp();
@@ -25,7 +28,7 @@ class PlayerDataProviderTest extends TestCore
         $this->player = new PlayerInfo();
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $connectionMock */
-        $connectionMock = $this->container->get('expansion.service.dedicated_connection');
+        $connectionMock = $this->mockConnection;
         $connectionMock->method('getPlayerList')
             ->withAnyParameters()
             ->willReturn([$this->player]);
@@ -47,8 +50,13 @@ class PlayerDataProviderTest extends TestCore
             ->withConsecutive([$player]);
 
         /** @var PlayerDataProvider $dataProvider */
-        $dataProvider = $this->container->get('expansion.framework.core.data_providers.player_data_provider');
+        $dataProvider = new PlayerDataProvider(
+            $playerStorage,
+            $this->mockConnectionFactory,
+            $this->getMockBuilder(Application::class)->disableOriginalConstructor()->getMock()
+        );
         $dataProvider->registerPlugin('p1', $plugin);
+        $dataProvider->setStatus(true);
     }
 
     public function testOnPlayerConnect()
