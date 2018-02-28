@@ -12,17 +12,15 @@ use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Services\Application\Dispatcher;
 use eXpansion\Framework\Core\Services\Console;
 use Maniaplanet\DedicatedServer\Connection;
+use Tests\eXpansion\Framework\Core\TestCore;
 use Tests\eXpansion\Framework\Core\TestHelpers\PlayerDataTrait;
 
-class VoteServiceTest extends \PHPUnit_Framework_TestCase
+class VoteServiceTest extends TestCore
 {
     use PlayerDataTrait;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $mockConsole;
-
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $mockConnection;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $mockChatNotification;
@@ -44,9 +42,6 @@ class VoteServiceTest extends \PHPUnit_Framework_TestCase
         $this->mockConsole = $this->getMockBuilder(Console::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockConnection = $this->getMockBuilder(Connection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->mockChatNotification = $this->getMockBuilder(ChatNotification::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -62,7 +57,7 @@ class VoteServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->voteService = new VoteService(
             $this->mockConsole,
-            $this->mockConnection,
+            $this->mockConnectionFactory,
             $this->mockChatNotification,
             $this->mockDispatcher,
             [$this->mockVotePlugin]
