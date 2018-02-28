@@ -100,7 +100,7 @@ $_web_access_keepalive_max = 2000;
 // then stop automatic retry, and next request calls will return false.
 // When stopped, a retry() or synchronous request will force a retry.
 $_web_access_retry_timeout = 20;
-$_web_access_retry_timeout_max = 5 * 60;
+$_web_access_retry_timeout_max = 60;
 
 
 // use text/html with xmlrpc= , instead of of pure text/xml request (false, true)
@@ -739,7 +739,7 @@ class WebaccessUrl
         }
         $time = time();
 
-        // if async, in error, then return false until timeout or if >max)
+        // if async, in error, then return false until timeout or if > max)
         if (!$this->_wait && $this->_state == 'BAD' &&
             (($this->_bad_timeout > $_web_access_retry_timeout_max) ||
                 (($time - $this->_bad_time) < $this->_bad_timeout))) {
@@ -1032,7 +1032,7 @@ class WebaccessUrl
         // reply is complete :)
         if ($state === true) {
             $this->_bad_timeout = 0; // reset error timeout
-            //  $time = microtime(true);  // @todo see if this is needed ?
+            $time = microtime(true);  // @todo see if this is needed ?
             $this->_spool[0]['Times']['receive'][1] = $time - $this->_spool[0]['Times']['receive'][0];
             $this->_spool[0]['State'] = 'DONE';
 

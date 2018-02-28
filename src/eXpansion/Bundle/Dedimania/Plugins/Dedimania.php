@@ -9,11 +9,14 @@
 namespace eXpansion\Bundle\Dedimania\Plugins;
 
 
+use eXpansion\Bundle\Dedimania\Classes\IXR_Base64;
 use eXpansion\Bundle\Dedimania\Classes\Request;
 use eXpansion\Bundle\Dedimania\Services\DedimaniaService;
+use eXpansion\Bundle\Dedimania\Structures\DedimaniaPlayer;
 use eXpansion\Bundle\Dedimania\Structures\DedimaniaRecord;
 use eXpansion\Framework\Config\Model\ConfigInterface;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
+use eXpansion\Framework\Core\Helpers\FileSystem;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Application\AbstractApplication;
@@ -21,7 +24,10 @@ use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\Core\Storage\MapStorage;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMap;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMatch;
+use eXpansion\Framework\GameManiaplanet\ScriptMethods\GetScores;
+use eXpansion\Framework\GameTrackmania\DataProviders\Listener\ListenerInterfaceRaceData;
 use eXpansion\Framework\Notifications\Services\Notifications;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map;
@@ -29,7 +35,7 @@ use Maniaplanet\DedicatedServer\Structures\Player;
 use Maniaplanet\DedicatedServer\Xmlrpc\Request as XmlRpcRequest;
 
 
-class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer, ListenerInterfaceMpLegacyMap
+class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer, ListenerInterfaceMpScriptMap, ListenerInterfaceMpScriptMatch, ListenerInterfaceRaceData
 {
     const dedimaniaUrl = "http://dedimania.net:8081/Dedimania";
 
@@ -92,6 +98,14 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
      * @var Time
      */
     private $time;
+    /**
+     * @var GetScores
+     */
+    private $getScores;
+    /**
+     * @var FileSystem
+     */
+    private $fileSystem;
 
 
     /**
@@ -108,6 +122,8 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
      * @param PlayerStorage    $playerStorage
      * @param Notifications    $notifications
      * @param Time             $time
+     * @param GetScores        $getScores
+     * @param FileSystem       $fileSystem
      */
     public function __construct(
         $titles,
@@ -121,7 +137,9 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
         MapStorage $mapStorage,
         PlayerStorage $playerStorage,
         Notifications $notifications,
-        Time $time
+        Time $time,
+        GetScores $getScores,
+        FileSystem $fileSystem
     ) {
         require_once(dirname(__DIR__).DIRECTORY_SEPARATOR."Classes".DIRECTORY_SEPARATOR."Webaccess.php");
         $this->webaccess = new \Webaccess($console);
@@ -137,6 +155,8 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
         $this->playerStorage = $playerStorage;
         $this->notifications = $notifications;
         $this->time = $time;
+        $this->getScores = $getScores;
+        $this->fileSystem = $fileSystem;
     }
 
     /**
@@ -193,7 +213,6 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
                 $this->lastUpdate = time();
                 $this->console->writeln("Dedimania: sent connection keep-alive!");
                 $this->updateServerPlayers();
-                $this->console->writeln("$0f0Dedimania: Should now update players for current map");
             }
         } catch (\Exception $e) {
             $this->console->writeln("Dedimania: periodic keep-alive failed: ".$e->getMessage());
@@ -204,15 +223,15 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
     /**
      * Send a request to Dedimania
      *
-     * @param string   $request
+     * @param Request  $request
      * @param callable $callback
      */
-    final public function sendRequest($request, $callback)
+    final public function sendRequest(Request $request, $callback)
     {
         $this->webaccess->request(
             self::dedimaniaUrl,
             [[$this, "process"], $callback],
-            $request,
+            $request->getXml(),
             true,
             600,
             3,
@@ -229,7 +248,20 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
 
             if (is_array($response) && array_key_exists('Message', $response)) {
 
-                $message = XmlRpcRequest::decode($response['Message']);
+                $message = [];
+                try {
+                    if (isset($response['Message'])) {
+                        $message = XmlRpcRequest::decode($response['Message']);
+                    } else {
+                        $this->console->writeln("Dedimania: Error received non-xmlrpc string. See dump below:");
+                        $this->console->writeln(Console::error.$response);
+                    }
+                } catch (\Exception $ex) {
+                    $this->console->writeln("Dedimania: Error received non-xmlrpc string. See dump below:");
+                    $this->console->writeln(Console::error.$response['Message']);
+
+                    return;
+                }
                 $errors = end($message[1]);
 
                 if (count($errors) > 0 && array_key_exists('methods', $errors[0])) {
@@ -256,14 +288,22 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
                     return;
                 }
 
-                call_user_func_array($callback, [$array[0][0]]);
+                if (sizeof($array) == 1) {
+                    call_user_func_array($callback, [$array[0][0]]);
+                } elseif (sizeof($array) > 1) {
+                    $out = [];
+                    foreach ($array as $key => $value) {
+                        $out[] = $value[0];
+                    }
+                    call_user_func_array($callback, [$out]);
+                }
 
                 return;
             } else {
                 $this->console->writeln('Dedimania Error: $f00Can\'t find Message from Dedimania reply');
             }
         } catch (\Exception $e) {
-            $this->console->writeln('Dedimania Error: $f00Connection to dedimania server failed.'.$e->getMessage());
+            $this->console->writeln('Dedimania Error: $f00Connection to dedimania server failed.'.$e->getMessage()." trace:".$e->getTraceAsString());
         }
     }
 
@@ -302,9 +342,10 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
 
         $request = new Request('dedimania.OpenSession', [$params]);
 
-        $this->sendRequest($request->getXml(), function ($response) {
+        $this->sendRequest($request, function ($response) {
             $this->sessionId = $response['SessionId'];
             $this->getRecords();
+            $this->connectAllPlayers();
         });
     }
 
@@ -324,7 +365,7 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
 
         $request = new Request('dedimania.GetChallengeRecords', $params);
 
-        $this->sendRequest($request->getXml(), function ($response) {
+        $this->sendRequest($request, function ($response) {
             $this->dedimaniaService->setServerMaxRank($response['ServerMaxRank']);
             /** @var DedimaniaRecord[] $recs */
             $recs = DedimaniaRecord::fromArrayOfArray($response['Records']);
@@ -359,15 +400,139 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
         ];
         $request = new Request('dedimania.UpdateServerPlayers', $params);
 
-        $this->sendRequest($request->getXml(), function ($response) {
+        $this->sendRequest($request, function ($response) {
             // do nothing
         });
 
     }
 
+    public function connectPlayer($login)
+    {
+        $player = $this->playerStorage->getPlayerInfo($login);
+
+        $params = [
+            $this->sessionId,
+            $player->getLogin(),
+            $player->getNickName(),
+            $player->getPath(),
+            $player->isSpectator(),
+        ];
+
+        $request = new Request('dedimania.PlayerConnect', $params);
+        $this->sendRequest($request, function ($response) {
+            $this->dedimaniaService->connectPlayer(DedimaniaPlayer::fromArray($response));
+        });
+    }
+
+
+    public function connectAllPlayers()
+    {
+        $players = $this->playerStorage->getOnline();
+
+        /** @var Request $request */
+        $request = null;
+        foreach ($players as $x => $player) {
+            $params = [
+                $this->sessionId,
+                $player->getLogin(),
+                $player->getNickName(),
+                $player->getPath(),
+                $player->isSpectator(),
+            ];
+            if ($request === null) {
+                $request = new Request('dedimania.PlayerConnect', $params);
+            } else {
+                $request->add('dedimania.PlayerConnect', $params);
+            }
+        }
+
+        $this->sendRequest($request, function ($response) {
+
+            if (array_key_exists("Login", $response)) {
+                $response = [0 => $response];
+            }
+            $this->dedimaniaService->setPlayers(DedimaniaPlayer::fromArrayOfArray($response));
+        });
+    }
+
+    /*
+     */
+
+    public function setRecords()
+    {
+        $that = $this;
+        $this->getScores->get(function ($scores) use ($that) {
+            if (count($scores['players']) > 0 && isset($scores['players'][0]['login'])) {
+
+                $player = new Player();
+                $player->login = $scores['players'][0]['login'];
+                try {
+                    $replay = new IXR_Base64($this->connection->getValidationReplay($player));
+                    $that->dedimaniaService->setVReplay($replay);
+                    $VReplayChecks = $scores['players'][0]['bestracecheckpoints'];
+
+                    $times = [];
+                    foreach ($scores['players'] as $player) {
+                        $times[] = [
+                            "Login" => $player['login'],
+                            "Best" => $player['bestracetime'],
+                            "Checks" => implode(",", $player['bestracecheckpoints']),
+                        ];
+                    }
+
+                    $params = [
+                        $this->sessionId,
+                        $this->getMapInfo(),
+                        $this->getGameMode(),
+                        $times,
+                        $this->getReplays($VReplayChecks),
+                    ];
+
+                    $request = new Request("dedimania.SetChallengeTimes", $params);
+
+                    $that->sendRequest($request, function ($response) {
+                        $this->console->writeln('Dedimania: $0f0records saved.');
+                    });
+                } catch (\Exception $e) {
+                    $this->console->writeln('Dedimania: Can\'t send times, $f00'.$e->getMessage());
+                }
+            }
+
+        });
+
+    }
 
 //endregion
 //#region protected helper functions
+
+    protected function getReplays($bestCheckpoints)
+    {
+        return [
+            "VReplay" => $this->dedimaniaService->getVReplay(),
+            "VReplayChecks" => implode(",", $bestCheckpoints),
+            "Top1GReplay" => $this->dedimaniaService->getGReplay(),
+        ];
+
+    }
+
+
+    protected function setGReplay($login)
+    {
+        $player = new Player();
+        $player->login = $login;
+        try {
+            $this->connection->saveBestGhostsReplay($player, "exp2_temp_replay");
+            $replay = new IXR_Base64(
+                $this->fileSystem->getUserData()->readAndDelete(
+                    "Replays".DIRECTORY_SEPARATOR."exp2_temp_replay.Replay.Gbx")
+            );
+            $this->dedimaniaService->setGReplay($replay);
+        } catch (\Exception $e) {
+            $this->console->writeln('Dedimania: $f00Error while fetching GhostsReplay');
+        }
+
+
+    }
 
     protected function getVotesInfo()
     {
@@ -448,25 +613,266 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
     }
 
 //#endregion
+//#region Dedicated server callbacks
 
     /**
-     * @param Map $map
+     * Callback sent when the "StartMap" section start.
+     *
+     * @param int     $count Each time this section is played, this number is incremented by one
+     * @param int     $time Server time when the callback was sent
+     * @param boolean $restarted true if the map was restarted, false otherwise
+     * @param Map     $map Map started with.
      *
      * @return void
      */
-    public function onBeginMap(Map $map)
+    public function onStartMapStart($count, $time, $restarted, Map $map)
     {
-        $this->lastUpdate = time();
-        $this->getRecords();
+        if (!$restarted) {
+            $this->lastUpdate = time();
+            $this->getRecords();
+        }
     }
 
     /**
-     * @param Map $map
+     * Callback sent when the "EndMap" section start.
+     *
+     * @param int     $count Each time this section is played, this number is incremented by one
+     * @param int     $time Server time when the callback was sent
+     * @param boolean $restarted true if the map was restarted, false otherwise
+     * @param Map     $map Map started with.
      *
      * @return void
      */
-    public function onEndMap(Map $map)
+    public function onEndMapStart($count, $time, $restarted, Map $map)
+    {
+        if (!$restarted) {
+
+            $this->setRecords();
+
+        }
+    }
+
+    /**
+     * @param string $login Login of the player that crossed the CP point
+     * @param int    $time Server time when the event occured,
+     * @param int    $raceTime Total race time in milliseconds
+     * @param int    $stuntsScore Stunts score
+     * @param int    $cpInRace Number of checkpoints crossed since the beginning of the race
+     * @param int[]  $curCps Checkpoints times since the beginning of the race
+     * @param string $blockId Id of the checkpoint block
+     * @param string $speed Speed of the player in km/h
+     * @param string $distance Distance traveled by the player
+     */
+    public function onPlayerEndRace(
+        $login,
+        $time,
+        $raceTime,
+        $stuntsScore,
+        $cpInRace,
+        $curCps,
+        $blockId,
+        $speed,
+        $distance
+    ) {
+        $rank = $this->dedimaniaService->processRecord($login, $raceTime, $curCps);
+        if ($rank > 0) {
+            if ($rank === 1) {
+                $this->setGReplay($login);
+            }
+            $this->console->write("new dedimania record".$rank);
+        } else {
+            $this->console->writeln("no new record");
+
+        }
+    }
+
+    /**
+     * Callback sent when the "StartMap" section end.
+     *
+     * @param int     $count Each time this section is played, this number is incremented by one
+     * @param int     $time Server time when the callback was sent
+     * @param boolean $restarted true if the map was restarted, false otherwise
+     * @param Map     $map Map started with.
+     *
+     * @return void
+     */
+    public function onStartMapEnd($count, $time, $restarted, Map $map)
     {
 
     }
+
+    /**
+     * Callback sent when the "EndMatch" section start.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onEndMatchStart($count, $time)
+    {
+        // do nothing
+    }
+
+
+    /**
+     * Callback sent when the "EndMap" section end.
+     *
+     * @param int     $count Each time this section is played, this number is incremented by one
+     * @param int     $time Server time when the callback was sent
+     * @param boolean $restarted true if the map was restarted, false otherwise
+     * @param Map     $map Map started with.
+     *
+     * @return void
+     */
+    public function onEndMapEnd($count, $time, $restarted, Map $map)
+    {
+        // do nothing
+    }
+
+    /**
+     * Callback sent when the "StartMatch" section start.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onStartMatchStart($count, $time)
+    {
+        // do nothing
+    }
+
+    /**
+     * Callback sent when the "StartMatch" section end.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onStartMatchEnd($count, $time)
+    {
+        // do nothing
+    }
+
+
+    /**
+     * Callback sent when the "EndMatch" section end.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onEndMatchEnd($count, $time)
+    {
+        // do nothing
+    }
+
+    /**
+     * Callback sent when the "StartTurn" section start.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onStartTurnStart($count, $time)
+    {
+        //
+    }
+
+    /**
+     * Callback sent when the "StartTurn" section end.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onStartTurnEnd($count, $time)
+    {
+        //
+    }
+
+    /**
+     * Callback sent when the "EndMatch" section start.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onEndTurnStart($count, $time)
+    {
+        //
+    }
+
+    /**
+     * Callback sent when the "EndMatch" section end.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onEndTurnEnd($count, $time)
+    {
+        //
+    }
+
+    /**
+     * Callback sent when the "StartRound" section start.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onStartRoundStart($count, $time)
+    {
+        //
+    }
+
+    /**
+     * Callback sent when the "StartRound" section end.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onStartRoundEnd($count, $time)
+    {
+        //
+    }
+
+    /**
+     * Callback sent when the "EndMatch" section start.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onEndRoundStart($count, $time)
+    {
+        //
+    }
+
+    /**
+     * Callback sent when the "EndMatch" section end.
+     *
+     * @param int $count Each time this section is played, this number is incremented by one
+     * @param int $time Server time when the callback was sent
+     *
+     * @return void
+     */
+    public function onEndRoundEnd($count, $time)
+    {
+        //
+    }
+
+
 }

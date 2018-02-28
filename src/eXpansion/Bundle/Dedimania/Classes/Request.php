@@ -121,7 +121,7 @@ class IXR_Value
         if (is_object($this->data) && is_a($this->data, 'IXR_Date')) {
             return 'date';
         }
-        if (is_object($this->data) && is_a($this->data, 'IXR_Base64')) {
+        if (is_object($this->data) && is_a($this->data, 'eXpansion\Bundle\Dedimania\Classes\IXR_Base64')) {
             return 'base64';
         }
         // If it is a normal PHP object convert it into a struct

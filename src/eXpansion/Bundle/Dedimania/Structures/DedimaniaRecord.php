@@ -28,6 +28,10 @@ class DedimaniaRecord extends AbstractStructure
     /** @var int */
     public $vote = -1;
 
+    public function __construct($login = "")
+    {
+        $this->login = $login;
+    }
 
     public function getCheckpoints()
     {
