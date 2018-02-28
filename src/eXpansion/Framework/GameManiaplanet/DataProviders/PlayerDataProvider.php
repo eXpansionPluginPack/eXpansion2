@@ -3,7 +3,9 @@
 namespace eXpansion\Framework\GameManiaplanet\DataProviders;
 
 use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
+use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Application;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\PlayerInfo;
@@ -13,33 +15,44 @@ use Maniaplanet\DedicatedServer\Structures\PlayerInfo;
  *
  * @package eXpansion\Framework\Core\DataProviders
  */
-class PlayerDataProvider extends AbstractDataProvider
+class PlayerDataProvider extends AbstractDataProvider implements StatusAwarePluginInterface
 {
     /** @var PlayerStorage */
     protected $playerStorage;
 
-    /** @var Connection */
-    protected $connection;
+    /** @var Factory */
+    protected $factory;
 
     /** @var Application */
     protected $application;
 
     /**
      * PlayerDataProvider constructor.
+     *
      * @param PlayerStorage $playerStorage
-     * @param Connection $connection
+     * @param Factory $factory
      * @param Application $application
      */
-    public function __construct(PlayerStorage $playerStorage, Connection $connection, Application $application)
+    public function __construct(PlayerStorage $playerStorage, Factory $factory, Application $application)
     {
         $this->playerStorage = $playerStorage;
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->application = $application;
 
-        // Initialize data with existing players.
-        $infos = $this->connection->getPlayerList(-1, 0);
-        foreach ($infos as $info) {
-            $this->onPlayerConnect($info->login, false, false);
+
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setStatus($status)
+    {
+        if ($status) {
+            // Initialize data with existing players.
+            $infos = $this->factory->getConnection()->getPlayerList(-1, 0);
+            foreach ($infos as $info) {
+                $this->onPlayerConnect($info->login, false, false);
+            }
         }
     }
 

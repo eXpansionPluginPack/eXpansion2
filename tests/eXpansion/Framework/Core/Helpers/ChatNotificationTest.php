@@ -9,32 +9,55 @@
 namespace Tests\eXpansion\Framework\Core\Helpers;
 
 use eXpansion\Framework\Core\Helpers\ChatNotification;
-use eXpansion\Framework\Core\Services\Application\Dispatcher;
-use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
-use Symfony\Component\Console\Output\NullOutput;
+use Psr\Log\NullLogger;
 use Tests\eXpansion\Framework\Core\TestCore;
 
 class ChatNotificationTest extends TestCore
 {
+    /** @var ChatNotification */
+    protected $chatNotification;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockPlayerStorage;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockTranslations;
+
     protected function setUp()
     {
         parent::setUp();
 
-        $this->container->get(Console::class)->init(new NullOutput(), $this->container->get(Dispatcher::class));
+        $this->mockPlayerStorage = $this->getMockBuilder(PlayerStorage::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->mockPlayerStorage->method('getPlayerInfo')->willReturn(new Player());
+
+        $this->mockTranslations = $this->getMockBuilder(Translations::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->mockTranslations->method('getTranslations')->willReturn([['Text' => "Test"]]);
+
+        $this->chatNotification = new ChatNotification(
+            $this->mockConnectionFactory,
+            $this->mockTranslations,
+            $this->mockPlayerStorage,
+            $this->mockConsole,
+            new NullLogger()
+        );
     }
 
 
     public function testSendMessageLogin()
     {
-        $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
+        $dedicatedConnection = $this->mockConnection;
         $dedicatedConnection->expects($this->once())
             ->method('chatSendServerMessage');
 
         $player = new Player();
         $player->merge(['language' => 'en']);
-        $this->container->set(PlayerStorage::class, $this->getMockPlayerStorage($player));
 
         $chatNotification = $this->getChatNotificationHelper();
         $chatNotification->sendMessage('expansion_core.test_color', 'toto', ['%test%' => 'Toto']);
@@ -42,14 +65,13 @@ class ChatNotificationTest extends TestCore
 
     public function testSendMessageToAll()
     {
-        $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
+        $dedicatedConnection = $this->mockConnection;
         $dedicatedConnection->expects($this->once())
             ->method('chatSendServerMessage')
             ->with(new \PHPUnit_Framework_Constraint_Not(new \PHPUnit_Framework_Constraint_IsEmpty()), null);
 
         $player = new Player();
         $player->merge(['language' => 'en']);
-        $this->container->set(PlayerStorage::class, $this->getMockPlayerStorage($player));
 
         $chatNotification = $this->getChatNotificationHelper();
         $chatNotification->sendMessage('expansion_core.test_color', null, ['%test%' => 'Toto']);
@@ -57,7 +79,7 @@ class ChatNotificationTest extends TestCore
 
     public function testSendMessageToList()
     {
-        $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
+        $dedicatedConnection = $this->mockConnection;
         $dedicatedConnection->expects($this->once())
             ->method('chatSendServerMessage')
             ->with(new \PHPUnit_Framework_Constraint_Not(new \PHPUnit_Framework_Constraint_IsEmpty()), 'toto1,toto2');
@@ -71,6 +93,6 @@ class ChatNotificationTest extends TestCore
      */
     protected function getChatNotificationHelper()
     {
-        return $this->container->get(ChatNotification::class);
+        return $this->chatNotification;
     }
 }

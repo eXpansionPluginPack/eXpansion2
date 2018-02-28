@@ -3,15 +3,32 @@
 
 namespace Tests\eXpansion\Framework\Core\Storage;
 
+use eXpansion\Framework\Core\Storage\Data\PlayerFactory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Structures\PlayerDetailedInfo;
 use Maniaplanet\DedicatedServer\Structures\PlayerInfo;
+use Psr\Log\LoggerInterface;
 use Tests\eXpansion\Framework\Core\TestCore;
 use Tests\eXpansion\Framework\Core\TestHelpers\PlayerDataTrait;
 
 class PlayerStorageTest extends TestCore
 {
     use PlayerDataTrait;
+
+    protected $playerStorage;
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->playerStorage = new PlayerStorage(
+            $this->mockConnectionFactory,
+            $this->container->get(PlayerFactory::class),
+            $this->container->get('logger'),
+            $this->mockConsole
+        );
+    }
+
 
     public function testGetPlayerInfo()
     {
@@ -24,8 +41,7 @@ class PlayerStorageTest extends TestCore
         $playerD->nickName = '$ffftest';
 
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $connectionMock */
-        $connectionMock = $this->container->get('expansion.service.dedicated_connection');
+        $connectionMock = $this->mockConnection;
         $connectionMock->method('getPlayerInfo')
             ->withConsecutive(['test'])
             ->willReturn($playerI);
@@ -33,7 +49,7 @@ class PlayerStorageTest extends TestCore
             ->withConsecutive(['test'])
             ->willReturn($playerD);
 
-        $player = $this->getPlayerStorage()->getPlayerInfo('test');
+        $player = $this->playerStorage->getPlayerInfo('test');
 
         $this->assertEquals('test', $player->getLogin());
         $this->assertEquals('$ffftest', $player->getNickName());
@@ -46,14 +62,14 @@ class PlayerStorageTest extends TestCore
         $player1 = $this->getPlayer('test-1', false);
         $player2 = $this->getPlayer('test-2', false);
 
-        $this->getPlayerStorage()->onPlayerConnect($player1);
-        $this->getPlayerStorage()->onPlayerConnect($player2);
+        $this->playerStorage->onPlayerConnect($player1);
+        $this->playerStorage->onPlayerConnect($player2);
 
-        $players = $this->getPlayerStorage()->getPlayers();
+        $players = $this->playerStorage->getPlayers();
         $this->assertArrayHasKey('test-1', $players);
         $this->assertArrayHasKey('test-2', $players);
 
-        $players = $this->getPlayerStorage()->getOnline();
+        $players = $this->playerStorage->getOnline();
         $this->assertArrayHasKey('test-1', $players);
         $this->assertArrayHasKey('test-2', $players);
     }
@@ -63,18 +79,18 @@ class PlayerStorageTest extends TestCore
         $this->testOnPlayerConnect();
         $player1 = $this->getPlayer('test-2', false);
 
-        $this->getPlayerStorage()->onPlayerDisconnect($player1, '');
+        $this->playerStorage->onPlayerDisconnect($player1, '');
 
-        $toRemove = $this->getPlayerStorage()->getPlayersToRemove();
+        $toRemove = $this->playerStorage->getPlayersToRemove();
         $this->assertSame(['test-2'], $toRemove);
 
-        $this->getPlayerStorage()->onPreLoop();
+        $this->playerStorage->onPreLoop();
 
-        $players = $this->getPlayerStorage()->getPlayers();
+        $players = $this->playerStorage->getPlayers();
         $this->assertArrayHasKey('test-1', $players);
         $this->assertArrayNotHasKey('test-2', $players);
 
-        $players = $this->getPlayerStorage()->getOnline();
+        $players = $this->playerStorage->getOnline();
         $this->assertArrayHasKey('test-1', $players);
         $this->assertArrayNotHasKey('test-2', $players);
     }
@@ -82,20 +98,20 @@ class PlayerStorageTest extends TestCore
     public function testOnPlayerInfoChanged()
     {
         $this->testOnPlayerConnect();
-        $playerOld = $this->getPlayerStorage()->getPlayerInfo('test-2');
+        $playerOld = $this->playerStorage->getPlayerInfo('test-2');
         $player2 = $this->getPlayer('test-2', true);
 
-        $this->getPlayerStorage()->onPlayerInfoChanged($playerOld, $player2);
+        $this->playerStorage->onPlayerInfoChanged($playerOld, $player2);
 
-        $players = $this->getPlayerStorage()->getPlayers();
+        $players = $this->playerStorage->getPlayers();
         $this->assertArrayHasKey('test-1', $players);
         $this->assertArrayNotHasKey('test-2', $players);
 
-        $players = $this->getPlayerStorage()->getSpectators();
+        $players = $this->playerStorage->getSpectators();
         $this->assertArrayNotHasKey('test-1', $players);
         $this->assertArrayHasKey('test-2', $players);
 
-        $players = $this->getPlayerStorage()->getOnline();
+        $players = $this->playerStorage->getOnline();
         $this->assertArrayHasKey('test-1', $players);
         $this->assertArrayHasKey('test-2', $players);
     }
@@ -103,20 +119,11 @@ class PlayerStorageTest extends TestCore
     public function testOnplayerAlliesChanged()
     {
         $this->testOnPlayerConnect();
-        $playerOld = $this->getPlayerStorage()->getPlayerInfo('test-2');
+        $playerOld = $this->playerStorage->getPlayerInfo('test-2');
         $player2 = $this->getPlayer('test-2', true);
 
-        $this->getPlayerStorage()->onPlayerAlliesChanged($playerOld, $player2);
+        $this->playerStorage->onPlayerAlliesChanged($playerOld, $player2);
 
-        $this->assertEquals($player2, $this->getPlayerStorage()->getPlayerInfo('test-2'));
-    }
-
-    /**
-     *
-     * @return PlayerStorage
-     */
-    protected function getPlayerStorage()
-    {
-        return $this->container->get(PlayerStorage::class);
+        $this->assertEquals($player2, $this->playerStorage->getPlayerInfo('test-2'));
     }
 }

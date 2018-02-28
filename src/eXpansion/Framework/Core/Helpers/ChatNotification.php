@@ -5,6 +5,7 @@ namespace eXpansion\Framework\Core\Helpers;
 use eXpansion\Framework\Core\Model\Helpers\ChatNotificationInterface;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\InvalidArgumentException;
@@ -19,8 +20,8 @@ use Psr\Log\LoggerInterface;
  */
 class ChatNotification implements ChatNotificationInterface
 {
-    /** @var  Connection */
-    protected $connection;
+    /** @var  Factory */
+    protected $factory;
 
     /** @var Translations */
     protected $translations;
@@ -38,20 +39,20 @@ class ChatNotification implements ChatNotificationInterface
     /**
      * ChatNotification constructor.
      *
-     * @param Connection      $connection
-     * @param Translations    $translations
-     * @param PlayerStorage   $playerStorage
-     * @param Console         $console
+     * @param Factory $connectionFactory
+     * @param Translations $translations
+     * @param PlayerStorage $playerStorage
+     * @param Console $console
      * @param LoggerInterface $logger
      */
     public function __construct(
-        Connection $connection,
+        Factory $connectionFactory,
         Translations $translations,
         PlayerStorage $playerStorage,
         Console $console,
         LoggerInterface $logger
     ) {
-        $this->connection = $connection;
+        $this->factory = $connectionFactory;
         $this->translations = $translations;
         $this->playerStorage = $playerStorage;
         $this->console = $console;
@@ -90,7 +91,7 @@ class ChatNotification implements ChatNotificationInterface
         }
 
         try {
-            $this->connection->chatSendServerMessage($message, $to);
+            $this->factory->getConnection()->chatSendServerMessage($message, $to);
         } catch (UnknownPlayerException $e) {
             $this->logger->info("can't send chat message: $message", ["to" => $to, "exception" => $e]);
             // Nothing to do, it happens.
@@ -121,7 +122,7 @@ class ChatNotification implements ChatNotificationInterface
      *
      * @param string $messageId
      * @param array  $parameters
-     * @param string $locale
+     *
      * @return string[]
      */
     public function getMessages($messageId, $parameters = [])

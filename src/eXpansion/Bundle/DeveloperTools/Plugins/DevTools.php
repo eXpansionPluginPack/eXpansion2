@@ -10,6 +10,7 @@ use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use Maniaplanet\DedicatedServer\Connection;
 
 class DevTools implements ListenerInterfaceExpApplication, ListenerInterfaceExpTimer, StatusAwarePluginInterface
@@ -17,8 +18,8 @@ class DevTools implements ListenerInterfaceExpApplication, ListenerInterfaceExpT
 
     public $connectQueue = 0;
 
-    /** @var Connection */
-    protected $connection;
+    /** @var Factory */
+    protected $factory;
 
     /** @var Console */
     protected $console;
@@ -44,20 +45,20 @@ class DevTools implements ListenerInterfaceExpApplication, ListenerInterfaceExpT
 
     /**
      * Test constructor.
-     * @param Connection   $connection
+     * @param Factory   $factory
      * @param Console      $console
      * @param Time         $time
      * @param Group        $players
      * @param MemoryWidget $memoryWidget
      */
     function __construct(
-        Connection $connection,
+        Factory $factory,
         Console $console,
         Time $time,
         Group $players,
         MemoryWidget $memoryWidget
     ) {
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->console = $console;
         $this->time = $time;
         $this->memoryWidget = $memoryWidget;
@@ -67,7 +68,7 @@ class DevTools implements ListenerInterfaceExpApplication, ListenerInterfaceExpT
     public function onPreLoop()
     {
         if ($this->connectQueue > 0) {
-            $this->connection->connectFakePlayer();
+            $this->factory->getConnection()->connectFakePlayer();
             $this->connectQueue--;
         }
     }

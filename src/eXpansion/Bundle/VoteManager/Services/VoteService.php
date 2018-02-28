@@ -7,6 +7,7 @@ use eXpansion\Bundle\VoteManager\Structures\Vote;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Services\Application\Dispatcher;
 use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use Maniaplanet\DedicatedServer\Connection;
 
@@ -15,8 +16,8 @@ class VoteService
     /** @var Console */
     protected $console;
 
-    /** @var Connection */
-    protected $connection;
+    /** @var Factory */
+    protected $factory;
 
     /** @var ChatNotification */
     protected $chatNotification;
@@ -34,22 +35,23 @@ class VoteService
     protected $currentVote = null;
 
     /**
-     * VoteManager constructor.
+     * VoteService constructor.
+     *
      * @param Console $console
-     * @param Connection $connection
+     * @param Factory $factory
      * @param ChatNotification $chatNotification
      * @param Dispatcher $dispatcher
-     * @param AbstractVotePlugin[] $voteFactories
+     * @param $voteFactories
      */
     public function __construct(
         Console $console,
-        Connection $connection,
+        Factory $factory,
         ChatNotification $chatNotification,
         Dispatcher $dispatcher,
         $voteFactories
     ) {
         $this->console = $console;
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->dispatcher = $dispatcher;
         $this->chatNotification = $chatNotification;
 
@@ -185,7 +187,7 @@ class VoteService
 
         $this->currentVote = $this->votePlugins[$typeCode];
         $this->currentVote->start($player, $params);
-        $this->connection->cancelVote();
+        $this->factory->getConnection()->cancelVote();
 
         $this->dispatcher->dispatch(
             "votemanager.votenew",

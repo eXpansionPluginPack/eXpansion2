@@ -46,7 +46,7 @@ class Application extends AbstractApplication {
     {
         $this->dispatcher->dispatch(self::EVENT_PRE_LOOP, []);
 
-        $calls = $this->connection->executeCallbacks();
+        $calls = $this->factory->getConnection()->executeCallbacks();
         if (!empty($calls)) {
             foreach ($calls as $call) {
                 $method = preg_replace('/^[[:alpha:]]+\./', '', $call[0]); // remove trailing "Whatever."
@@ -56,7 +56,7 @@ class Application extends AbstractApplication {
             }
         }
 
-        $this->connection->executeMulticall();
+        $this->factory->getConnection()->executeMulticall();
         $this->dispatcher->dispatch(self::EVENT_POST_LOOP, []);
     }
 }

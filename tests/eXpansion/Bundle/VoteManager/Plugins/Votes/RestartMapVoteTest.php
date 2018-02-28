@@ -51,6 +51,7 @@ class RestartMapVoteTest extends \PHPUnit_Framework_TestCase
         $this->mockJukebox = $this->getMockBuilder(JukeboxService::class)
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->mockMapStorage = $this->getMockBuilder(MapStorage::class)
             ->disableOriginalConstructor()
             ->getMock();

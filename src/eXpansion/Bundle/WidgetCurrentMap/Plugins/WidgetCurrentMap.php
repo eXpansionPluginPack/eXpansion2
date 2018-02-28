@@ -7,6 +7,7 @@ use eXpansion\Bundle\LocalMapRatings\Model\Maprating;
 use eXpansion\Bundle\WidgetCurrentMap\Plugins\Gui\CurrentMapWidgetFactory;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
 use Maniaplanet\DedicatedServer\Connection;
@@ -15,8 +16,6 @@ use Maniaplanet\DedicatedServer\Structures\Map;
 
 class WidgetCurrentMap implements StatusAwarePluginInterface, ListenerInterfaceMpLegacyMap, ListenerInterfaceExpMapRatings
 {
-    /** @var Connection */
-    protected $connection;
     /**
      * @var PlayerStorage
      */
@@ -39,12 +38,10 @@ class WidgetCurrentMap implements StatusAwarePluginInterface, ListenerInterfaceM
      * @param Group                   $players
      */
     public function __construct(
-        Connection $connection,
         PlayerStorage $playerStorage,
         CurrentMapWidgetFactory $widget,
         Group $players
     ) {
-        $this->connection = $connection;
         $this->playerStorage = $playerStorage;
         $this->widget = $widget;
         $this->players = $players;

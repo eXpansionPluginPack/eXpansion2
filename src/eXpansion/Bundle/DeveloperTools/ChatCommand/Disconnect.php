@@ -5,6 +5,7 @@ namespace eXpansion\Bundle\DeveloperTools\ChatCommand;
 use eXpansion\Bundle\Admin\Plugins\Gui\ScriptSettingsWindowFactory;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\AdminGroups\Model\AbstractAdminChatCommand;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use Maniaplanet\DedicatedServer\Connection;
 use Symfony\Component\Console\Input\InputInterface;
 
@@ -17,29 +18,29 @@ use Symfony\Component\Console\Input\InputInterface;
 class Disconnect extends AbstractAdminChatCommand
 {
     /**
-     * @var Connection
+     * @var Factory
      */
-    private $connection;
+    private $factory;
 
     /**
-     * ScriptPanel constructor.
+     * Disconnect constructor.
      *
-     * @param                      $command
-     * @param                      $permission
+     * @param $command
+     * @param $permission
      * @param array $aliases
-     * @param Connection $connection
+     * @param Factory $factory
      * @param AdminGroups $adminGroups
      */
     public function __construct(
         $command,
         $permission,
         array $aliases = [],
-        Connection $connection,
+        Factory $factory,
         AdminGroups $adminGroups
     ) {
         parent::__construct($command, $permission, $aliases, $adminGroups);
 
-        $this->connection = $connection;
+        $this->factory = $factory;
     }
 
     /**
@@ -47,6 +48,6 @@ class Disconnect extends AbstractAdminChatCommand
      */
     public function execute($login, InputInterface $input)
     {
-        $this->connection->disconnectFakePlayer("*");
+        $this->factory->getConnection()->disconnectFakePlayer("*");
     }
 }

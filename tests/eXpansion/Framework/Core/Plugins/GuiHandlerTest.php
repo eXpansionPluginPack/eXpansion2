@@ -27,9 +27,6 @@ class GuiHandlerTest extends TestCore
     use PlayerDataTrait;
 
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
-    protected $mockDedicatedConnection;
-
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
     protected $mockLogger;
 
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
@@ -46,9 +43,7 @@ class GuiHandlerTest extends TestCore
 
     protected function setUp()
     {
-        $this->mockDedicatedConnection = $this->getMockBuilder(Connection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        parent::setUp();
 
         $this->mockLogger = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
@@ -66,13 +61,11 @@ class GuiHandlerTest extends TestCore
         $this->mockMlFactory->method("getId")->willReturn("abc");
 
         $this->guiHandler = new GuiHandler(
-            $this->mockDedicatedConnection,
+            $this->mockConnectionFactory,
             $this->mockLogger,
             $this->mockConsoleHelper,
             $this->mockActionFactory
         );
-
-        parent::setUp(); 
     }
 
     public function testSendManialink()
@@ -80,7 +73,7 @@ class GuiHandlerTest extends TestCore
         $logins = ['test1', 'test2'];
         $manialink = $this->getManialink($logins, $this->mockMlFactory);
 
-        $this->mockDedicatedConnection->expects($this->once())
+        $this->mockConnection->expects($this->once())
             ->method('sendDisplayManialinkPage')
             ->with($logins, $manialink->getXml());
 
@@ -96,7 +89,7 @@ class GuiHandlerTest extends TestCore
         $logins = ['test1', 'test2'];
         $manialink = $this->getManialink($logins, $this->mockMlFactory);
 
-        $this->mockDedicatedConnection->expects($this->once())
+        $this->mockConnection->expects($this->once())
             ->method('sendDisplayManialinkPage')
             ->with($logins, '<manialink id="' . $manialink->getId() . '" />');
 
@@ -112,7 +105,7 @@ class GuiHandlerTest extends TestCore
         $logins = ['test1', 'test2'];
         $manialink = $this->getManialink($logins, $this->mockMlFactory);
 
-        $this->mockDedicatedConnection->expects($this->once())
+        $this->mockConnection->expects($this->once())
             ->method('sendDisplayManialinkPage')
             ->with($logins, $manialink->getXml());
 
@@ -131,7 +124,7 @@ class GuiHandlerTest extends TestCore
         $logins = ['test1', 'test2'];
         $manialink = $this->getManialink($logins, $this->mockMlFactory);
 
-        $this->mockDedicatedConnection->expects($this->exactly(2))
+        $this->mockConnection->expects($this->exactly(2))
             ->method('sendDisplayManialinkPage')
             ->withConsecutive([$logins, $manialink->getXml()], [$logins, '<manialink id="' . $manialink->getId() . '" />']);
 
@@ -149,7 +142,7 @@ class GuiHandlerTest extends TestCore
         $logins = ['test1', 'test2'];
         $manialink = $this->getManialink($logins, $this->mockMlFactory);
         
-        $this->mockDedicatedConnection->expects($this->exactly(2))
+        $this->mockConnection->expects($this->exactly(2))
             ->method('sendDisplayManialinkPage')
             ->withConsecutive([$logins, $manialink->getXml()], [['test3'], $manialink->getXml()]);
 
@@ -167,7 +160,7 @@ class GuiHandlerTest extends TestCore
         $logins = ['test1', 'test2'];
         $manialink = $this->getManialink($logins, $this->mockMlFactory);
 
-        $this->mockDedicatedConnection->expects($this->exactly(2))
+        $this->mockConnection->expects($this->exactly(2))
             ->method('sendDisplayManialinkPage')
             ->withConsecutive([$logins, $manialink->getXml()], [['test3', 'test4', 'test5'], $manialink->getXml()]);
 
@@ -187,7 +180,7 @@ class GuiHandlerTest extends TestCore
         $logins = ['test1', 'test2'];
         $manialink = $this->getManialink($logins, $this->mockMlFactory);
 
-        $this->mockDedicatedConnection->expects($this->exactly(2))
+        $this->mockConnection->expects($this->exactly(2))
             ->method('sendDisplayManialinkPage')
             ->withConsecutive([$logins, $manialink->getXml()], [['test1'], '<manialink id="' . $manialink->getId() . '" />']);
 
@@ -205,7 +198,7 @@ class GuiHandlerTest extends TestCore
         $logins = ['test1', 'test2', 'test3', 'test4'];
         $manialink = $this->getManialink($logins, $this->mockMlFactory);
 
-        $this->mockDedicatedConnection->expects($this->exactly(2))
+        $this->mockConnection->expects($this->exactly(2))
             ->method('sendDisplayManialinkPage')
             ->withConsecutive(
                 [$logins, $manialink->getXml()],
@@ -227,7 +220,7 @@ class GuiHandlerTest extends TestCore
         $logins = ['test1', 'test2'];
         $manialink = $this->getManialink($logins, $this->mockMlFactory);
 
-        $this->mockDedicatedConnection->expects($this->once())
+        $this->mockConnection->expects($this->once())
             ->method('sendDisplayManialinkPage')
             ->with($logins, $manialink->getXml());
 
@@ -246,7 +239,7 @@ class GuiHandlerTest extends TestCore
         $logins = ['test1', 'test2'];
         $manialink = $this->getManialink($logins, $this->mockMlFactory);
 
-        $this->mockDedicatedConnection->expects($this->once())
+        $this->mockConnection->expects($this->once())
             ->method('sendDisplayManialinkPage')
             ->withConsecutive([$logins, $manialink->getXml()]);
 
@@ -262,10 +255,10 @@ class GuiHandlerTest extends TestCore
 
     public function testExtreme()
     {
-        $this->mockDedicatedConnection->expects($this->exactly(2))
+        $this->mockConnection->expects($this->exactly(2))
             ->method('sendDisplayManialinkPage')
             ->withAnyParameters();
-        $this->mockDedicatedConnection->expects($this->exactly(2))
+        $this->mockConnection->expects($this->exactly(2))
             ->method('executeMulticall')
             ->withAnyParameters();
         $logins = ['test1', 'test2'];
@@ -287,10 +280,10 @@ class GuiHandlerTest extends TestCore
 
     public function testError()
     {
-        $this->mockDedicatedConnection->expects($this->exactly(2))
+        $this->mockConnection->expects($this->exactly(2))
             ->method('sendDisplayManialinkPage')
             ->withAnyParameters();
-        $this->mockDedicatedConnection->method('executeMulticall')
+        $this->mockConnection->method('executeMulticall')
             ->will($this->throwException(new \Exception));
         $logins = ['test1', 'test2'];
 
@@ -319,7 +312,7 @@ class GuiHandlerTest extends TestCore
         $logins = ['test1', 'test2'];
         $manialink = $this->getManialink($logins, $this->mockMlFactory);
 
-        $this->mockDedicatedConnection->expects($this->exactly(3))
+        $this->mockConnection->expects($this->exactly(3))
             ->method('sendDisplayManialinkPage')
             ->withConsecutive(
                 [$logins, $manialink->getXml()],
@@ -349,7 +342,7 @@ class GuiHandlerTest extends TestCore
         $logins = ['test1', 'test2'];
         $manialink = $this->getManialink($logins, $this->mockMlFactory);
 
-        $this->mockDedicatedConnection->expects($this->exactly(2))
+        $this->mockConnection->expects($this->exactly(2))
             ->method('sendDisplayManialinkPage')
             ->withConsecutive(
                 [$logins, $manialink->getXml()],

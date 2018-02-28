@@ -10,6 +10,7 @@ namespace eXpansion\Framework\GameCurrencyBundle\Plugins;
 
 
 use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\GameCurrencyBundle\Structures\CurrencyEntry;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyBill;
@@ -20,9 +21,9 @@ use Psr\Log\LoggerInterface;
 class GameCurrencyPlugin implements ListenerInterfaceMpLegacyBill
 {
     /**
-     * @var Connection
+     * @var Factory
      */
-    private $connection;
+    private $factory;
     /**
      * @var LoggerInterface
      */
@@ -43,18 +44,18 @@ class GameCurrencyPlugin implements ListenerInterfaceMpLegacyBill
 
     /**
      * GameCurrency constructor.
-     * @param Connection      $connection
+     * @param Factory      $factory
      * @param Console         $console
      * @param LoggerInterface $logger
      * @param GameDataStorage $gameDataStorage
      */
     public function __construct(
-        Connection $connection,
+        Factory $factory,
         Console $console,
         LoggerInterface $logger,
         GameDataStorage $gameDataStorage
     ) {
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->logger = $logger;
         $this->console = $console;
         $this->gameDataStorage = $gameDataStorage;
@@ -102,13 +103,13 @@ class GameCurrencyPlugin implements ListenerInterfaceMpLegacyBill
 
             if ($entry->getBill()->getSenderlogin() == $this->gameDataStorage->getSystemInfo()->serverLogin) {
                 $this->console->write("Trying create a pay ".$bill->getAmount()."p to ".$bill->getReceiverlogin());
-                $billId = $this->connection->pay(
+                $billId = $this->factory->getConnection()->pay(
                     $bill->getReceiverlogin(),
                     $bill->getAmount(),
                     $bill->getMessage());
             } else {
                 $this->console->write("Trying to send a bill to ".$bill->getSenderlogin()." with ".$bill->getAmount()."p amount.. ");
-                $billId = $this->connection->sendBill($bill->getSenderlogin(), $bill->getAmount(),
+                $billId = $this->factory->getConnection()->sendBill($bill->getSenderlogin(), $bill->getAmount(),
                     $bill->getReceiverlogin(), $bill->getMessage());
             }
 

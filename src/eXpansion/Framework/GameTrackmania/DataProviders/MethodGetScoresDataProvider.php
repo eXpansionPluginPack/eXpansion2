@@ -5,6 +5,7 @@ namespace eXpansion\Framework\GameTrackmania\DataProviders;
 use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
 use eXpansion\Framework\Core\ScriptMethods\AbstractScriptMethod;
 use eXpansion\Framework\Core\DataProviders\MethodScriptDataProviderInterface;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use Maniaplanet\DedicatedServer\Connection;
 
 
@@ -17,17 +18,17 @@ use Maniaplanet\DedicatedServer\Connection;
  */
 class MethodGetScoresDataProvider extends AbstractDataProvider implements MethodScriptDataProviderInterface
 {
-    /** @var Connection */
-    protected $connection;
+    /** @var Factory */
+    protected $factory;
 
     /**
-     * MethodGetStoresDataProvider constructor.
+     * MethodGetScoresDataProvider constructor.
      *
-     * @param Connection $connection
+     * @param Factory $factory
      */
-    public function __construct(Connection $connection)
+    public function __construct(Factory $factory)
     {
-        $this->connection = $connection;
+        $this->factory = $factory;
     }
 
     /**
@@ -48,10 +49,11 @@ class MethodGetScoresDataProvider extends AbstractDataProvider implements Method
      * Request call to fetch scores.
      *
      * @return void
+     * @throws
      */
     public function request()
     {
-        $this->connection->triggerModeScriptEvent("Trackmania.GetScores", ["responseid" => (string) time()]);
+        $this->factory->getConnection()->triggerModeScriptEvent("Trackmania.GetScores", ["responseid" => (string) time()]);
     }
 
     /**

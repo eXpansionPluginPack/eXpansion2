@@ -6,6 +6,7 @@ use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\AdminGroups\Model\AbstractAdminChatCommand;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\Time;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Xmlrpc\Exception as DedicatedException;
@@ -19,8 +20,8 @@ use Psr\Log\LoggerInterface;
  */
 abstract class AbstractConnectionCommand extends AbstractAdminChatCommand
 {
-    /** @var Connection */
-    protected $connection;
+    /** @var Factory */
+    protected $factory;
 
     /** @var ChatNotification */
     protected $chatNotification;
@@ -42,11 +43,12 @@ abstract class AbstractConnectionCommand extends AbstractAdminChatCommand
 
     /**
      * AbstractConnectionCommand constructor.
+     *
      * @param $command
-     * @param string $permission
+     * @param $permission
      * @param array $aliases
      * @param AdminGroups $adminGroupsHelper
-     * @param Connection $connection
+     * @param Factory $factory
      * @param ChatNotification $chatNotification
      * @param PlayerStorage $playerStorage
      * @param LoggerInterface $logger
@@ -57,7 +59,7 @@ abstract class AbstractConnectionCommand extends AbstractAdminChatCommand
         $permission,
         array $aliases = [],
         AdminGroups $adminGroupsHelper,
-        Connection $connection,
+        Factory $factory,
         ChatNotification $chatNotification,
         PlayerStorage $playerStorage,
         LoggerInterface $logger,
@@ -65,7 +67,7 @@ abstract class AbstractConnectionCommand extends AbstractAdminChatCommand
     ) {
         parent::__construct($command, $permission, $aliases, $adminGroupsHelper);
 
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->chatNotification = $chatNotification;
         $this->playerStorage = $playerStorage;
         $this->logger = $logger;
@@ -107,5 +109,4 @@ abstract class AbstractConnectionCommand extends AbstractAdminChatCommand
     {
         return $this->isPublic;
     }
-
 }
