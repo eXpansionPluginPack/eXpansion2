@@ -23,7 +23,7 @@ class AdminReturnCommand extends AdminCommand
         $nickName = $this->playerStorage->getPlayerInfo($login)->getNickName();
         $group = $this->getGroupLabel($login);
         try {
-            $return = $this->connection->{$this->functionName}();
+            $return = $this->factory->getConnection()->{$this->functionName}();
 
             $this->chatNotification->sendMessage(
                 $this->chatMessage,

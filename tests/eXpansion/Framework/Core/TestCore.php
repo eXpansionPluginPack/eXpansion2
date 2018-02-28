@@ -2,6 +2,7 @@
 
 namespace Tests\eXpansion\Framework\Core;
 
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\GameManiaplanet\DataProviders\ChatDataProvider;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
 use eXpansion\Framework\Core\Helpers\ChatOutput;
@@ -16,6 +17,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class TestCore extends KernelTestCase
 {
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockConnection;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockConnectionFactory;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockConsole;
+
     /** @var ContainerInterface */
     protected $container;
 
@@ -39,18 +49,19 @@ class TestCore extends KernelTestCase
         $this->container = $kernel->getContainer();
 
 
-        $dedicatedConnectionMock = $this->getMockBuilder('Maniaplanet\DedicatedServer\Connection')
+        $this->mockConnection = $this->getMockBuilder('Maniaplanet\DedicatedServer\Connection')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->container->set('expansion.service.dedicated_connection', $dedicatedConnectionMock);
 
-        $consoleMock = $this->getMockBuilder(Console::class)
+        $this->mockConnectionFactory = $this->getMockBuilder(Factory::class)->disableOriginalConstructor()->getMock();
+        $this->mockConnectionFactory->method('getConnection')->willReturn($this->mockConnection);
+
+        $this->mockConsole = $this->getMockBuilder(Console::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->container->set(Console::class, $consoleMock);
-!
+
         $outputMock = $this->getMockBuilder(OutputInterface::class)->getMock();
-        $consoleMock->method('getConsoleOutput')->willReturn($outputMock);
+        $this->mockConsole->method('getConsoleOutput')->willReturn($outputMock);
 
         $this->consoleApplication = new Application($kernel);
     }
