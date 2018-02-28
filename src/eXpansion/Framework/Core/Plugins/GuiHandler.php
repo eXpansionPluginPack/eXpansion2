@@ -65,12 +65,11 @@ class GuiHandler implements
     /**
      * GuiHandler constructor.
      *
-     * @param Connection      $connection
+     * @param Factory $factory
      * @param LoggerInterface $logger
-     * @param Console         $console
-     * @param ActionFactory   $actionFactory
-     * @param int             $charLimit
-     * @throws \Maniaplanet\DedicatedServer\InvalidArgumentException
+     * @param Console $console
+     * @param ActionFactory $actionFactory
+     * @param int $charLimit
      */
     public function __construct(
         Factory $factory,
@@ -80,14 +79,15 @@ class GuiHandler implements
         $charLimit = 262144
     ) {
         $this->factory = $factory;
-
-
         $this->logger = $logger;
         $this->console = $console;
         $this->actionFactory = $actionFactory;
         $this->charLimit = $charLimit;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function setStatus($status)
     {
         if ($status) {
@@ -167,6 +167,7 @@ class GuiHandler implements
             $logins = array_filter($mlData['logins'], function ($value) {
                 return $value != '';
             });
+
             if (!empty($logins)) {
                 $this->factory->getConnection()->sendDisplayManialinkPage(
                     $mlData['logins'],
