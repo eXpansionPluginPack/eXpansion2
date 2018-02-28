@@ -471,7 +471,7 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
                 $request->add('dedimania.PlayerConnect', $params);
             }
         }
-        
+
         // no players to connect
         if ($request === null) {
             return;
@@ -711,6 +711,8 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
                 $this->setGReplay($login);
             }
             $this->console->write("new dedimania record".$rank);
+            $player = $this->playerStorage->getPlayerInfo($login);
+            $this->notifications->info("Updated '.$rank.'. dedimania record ".$this->time->timeToText($raceTime). " for " . $player->getNickname(), [], "Dedimania");
         } else {
             $this->console->writeln("no new record");
 
