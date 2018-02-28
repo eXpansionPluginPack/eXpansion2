@@ -32,7 +32,7 @@ class ChatOutput implements OutputInterface
      */
     public function __construct(Factory $factory, ChatNotificationInterface $chatNotification)
     {
-        $this->fa = $factory;
+        $this->factory = $factory;
         $this->chatNotification = $chatNotification;
     }
 
@@ -67,7 +67,7 @@ class ChatOutput implements OutputInterface
      */
     public function writeln($messages, $options = 0)
     {
-        $this->factory->createConnection()->chatSendServerMessage(strip_tags($messages), $this->login);
+        $this->factory->getConnection()->chatSendServerMessage(strip_tags($messages), $this->login);
     }
 
     /**

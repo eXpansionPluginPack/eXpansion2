@@ -32,6 +32,8 @@ class TestCore extends KernelTestCase
     /** @var  Application */
     protected $consoleApplication;
 
+    protected $chatOutput;
+
     /**
      * @inheritdoc
      */
@@ -48,7 +50,6 @@ class TestCore extends KernelTestCase
 
         $this->container = $kernel->getContainer();
 
-
         $this->mockConnection = $this->getMockBuilder('Maniaplanet\DedicatedServer\Connection')
             ->disableOriginalConstructor()
             ->getMock();
@@ -64,7 +65,7 @@ class TestCore extends KernelTestCase
         $this->mockConsole->method('getConsoleOutput')->willReturn($outputMock);
 
         $this->consoleApplication = new Application($kernel);
-    }
+        }
 
     protected function getMockPlayerStorage($player)
     {
@@ -75,13 +76,5 @@ class TestCore extends KernelTestCase
             ->willReturn($player);
 
         return $playerStorage;
-    }
-
-    /**
-     * @return ChatOutput|object
-     */
-    protected function getChatOutputHelper()
-    {
-        return $this->container->get(ChatOutput::class);
     }
 }
