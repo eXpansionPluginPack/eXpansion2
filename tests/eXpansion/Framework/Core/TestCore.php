@@ -32,7 +32,6 @@ class TestCore extends KernelTestCase
     /** @var  Application */
     protected $consoleApplication;
 
-    protected $chatOutput;
 
     /**
      * @inheritdoc
@@ -65,7 +64,7 @@ class TestCore extends KernelTestCase
         $this->mockConsole->method('getConsoleOutput')->willReturn($outputMock);
 
         $this->consoleApplication = new Application($kernel);
-        }
+    }
 
     protected function getMockPlayerStorage($player)
     {
