@@ -26,7 +26,7 @@ class ApplicationTest extends TestCore
     {
         $outPutMock = $this->createMock(ConsoleOutputInterface::class);
 
-        $this->mockConsole->expects($this->once())->method('init')->withConsecutive([$outPutMock]);
+        $this->mockConsole->expects($this->atLeastOnce())->method('init')->withConsecutive([$outPutMock]);
         $this->mockConsole->expects($this->atLeastOnce())->method('writeln');
 
         $this->mockDispatcher->expects($this->once())->method('init');
