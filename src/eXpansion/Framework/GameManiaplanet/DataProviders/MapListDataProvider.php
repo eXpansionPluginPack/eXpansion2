@@ -104,6 +104,8 @@ class MapListDataProvider extends AbstractDataProvider
         try {
             $currentMap = $this->connection->getCurrentMapInfo();  // sync better
         } catch (\Exception $e) {
+            echo $e->getMessage(). "\n";
+
             $currentMap = null;
         }
 
@@ -120,6 +122,7 @@ class MapListDataProvider extends AbstractDataProvider
         try {
             $nextMap = $this->connection->getNextMapInfo();  // sync better
         } catch (\Exception $e) {
+            echo $e->getMessage(). "\n";
             $nextMap = null;
         }
         // next map can be false if map by index is not found..

@@ -583,12 +583,14 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
     {
         list($login, $GReplay) = $this->dedimaniaService->getGReplay();
 
-        if ($top1Login != $login) {
-            $this->console->getSfStyleOutput()->warning('Fetched Ghost Replay for Dedimania differs from top 1 holders login.');
-            $this->console->writeln("Trying to fetch the right new one.");
-            $this->setGReplay($top1Login);
-            $replay = $this->dedimaniaService->getGReplay();
-            $GReplay = $replay[1];
+        if ($GReplay != "") {
+            if ($top1Login != $login) {
+                $this->console->getSfStyleOutput()->warning('Fetched Ghost Replay for Dedimania differs from top 1 holders login.');
+                $this->console->writeln("Trying to fetch the right new one.");
+                $this->setGReplay($top1Login);
+                $replay = $this->dedimaniaService->getGReplay();
+                $GReplay = $replay[1];
+            }
         }
 
         return [
