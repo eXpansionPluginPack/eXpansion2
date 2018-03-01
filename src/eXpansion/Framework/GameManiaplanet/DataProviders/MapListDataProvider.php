@@ -4,7 +4,6 @@ namespace eXpansion\Framework\GameManiaplanet\DataProviders;
 
 use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
 use eXpansion\Framework\Core\Storage\MapStorage;
-use League\Flysystem\Exception;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Xmlrpc\IndexOutOfBoundException;
 use Maniaplanet\DedicatedServer\Xmlrpc\NextMapException;
@@ -102,7 +101,12 @@ class MapListDataProvider extends AbstractDataProvider
             $this->dispatch(__FUNCTION__, [$oldMaps, $curMapIndex, $nextMapIndex, $isListModified]);
         }
 
-        $currentMap = $this->mapStorage->getMapByIndex($curMapIndex);
+        try {
+            $currentMap = $this->connection->getCurrentMapInfo();  // sync better
+        } catch (\Exception $e) {
+            $currentMap = null;
+        }
+
         // current map can be false if map by index is not found..
         if ($currentMap) {
             if ($this->mapStorage->getCurrentMap()->uId != $currentMap->uId) {
@@ -113,7 +117,11 @@ class MapListDataProvider extends AbstractDataProvider
             }
         }
 
-        $nextMap = $this->mapStorage->getMapByIndex($nextMapIndex);
+        try {
+            $nextMap = $this->connection->getNextMapInfo();  // sync better
+        } catch (\Exception $e) {
+            $nextMap = null;
+        }
         // next map can be false if map by index is not found..
         if ($nextMap) {
             if ($this->mapStorage->getNextMap()->uId != $nextMap->uId) {

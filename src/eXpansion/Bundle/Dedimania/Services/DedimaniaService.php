@@ -9,6 +9,7 @@
 namespace eXpansion\Bundle\Dedimania\Services;
 
 
+use eXpansion\Bundle\Dedimania\Classes\IXR_Base64;
 use eXpansion\Bundle\Dedimania\Structures\DedimaniaPlayer;
 use eXpansion\Bundle\Dedimania\Structures\DedimaniaRecord;
 use eXpansion\Framework\Core\Services\Application\Dispatcher;
@@ -41,6 +42,11 @@ class DedimaniaService
     /** @var PlayerStorage */
     private $playerStorage;
 
+    /** @var string */
+    private $GReplayOwner;
+
+    private $disabled = false;
+
     /**
      * DedimaniaService constructor.
      * @param Dispatcher    $dispatcher
@@ -67,6 +73,7 @@ class DedimaniaService
      */
     public function setDedimaniaRecords($dedimaniaRecords)
     {
+        $this->setDisabled(false);
         $this->recordsByLogin = [];
         $this->ranksByLogin = [];
 
@@ -76,6 +83,15 @@ class DedimaniaService
         }
 
         $this->dispatcher->dispatch('expansion.dedimania.records.loaded', [$this->dedimaniaRecords]);
+    }
+
+    public function getRecord($login)
+    {
+        if (isset($this->recordsByLogin[$login])) {
+            return $this->recordsByLogin[$login];
+        }
+
+        return null;
     }
 
 
@@ -90,6 +106,10 @@ class DedimaniaService
      */
     public function processRecord($login, $score, $checkpoints)
     {
+        if ($this->disabled !== false) {
+            return -1;
+        }
+
         $tempRecords = $this->recordsByLogin;
         $tempPositions = $this->ranksByLogin;
 
@@ -100,15 +120,11 @@ class DedimaniaService
             $pla = $this->playerStorage->getPlayerInfo($login);
             $record->nickName = $pla->getNickName();
         }
-        echo $record->nickName. "\n";
 
         $tempRecords[$login] = clone $record;
         $oldRecord = clone $record;
 
-        print_r($record);
-
         // if better time
-
         if ($score < $oldRecord->best || $oldRecord->best == -1) {
             $record->best = $score;
             $record->checks = implode(",", $checkpoints);
@@ -245,19 +261,37 @@ class DedimaniaService
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function getGReplay()
     {
-        return $this->GReplay;
+        return [$this->GReplayOwner, $this->GReplay];
     }
 
     /**
-     * @param string $GReplay
+     * @param string     $login
+     * @param IXR_Base64 $GReplay
      */
-    public function setGReplay($GReplay)
+    public function setGReplay($login, $GReplay)
     {
+        $this->GReplayOwner = $login;
         $this->GReplay = $GReplay;
+    }
+
+    /**
+     * @return string|false
+     */
+    public function isDisabled()
+    {
+        return $this->disabled;
+    }
+
+    /**
+     * @param string|false $disabled
+     */
+    public function setDisabled($disabled)
+    {
+        $this->disabled = $disabled;
     }
 
 

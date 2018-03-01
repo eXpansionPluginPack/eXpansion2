@@ -18,6 +18,7 @@ use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\FileSystem;
 use eXpansion\Framework\Core\Helpers\Time;
+use eXpansion\Framework\Core\Helpers\TMString;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Application\AbstractApplication;
 use eXpansion\Framework\Core\Services\Console;
@@ -363,6 +364,24 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
             return;
         }
 
+        $map = $this->mapStorage->getCurrentMap();
+
+        if ($map->authorTime < 6200) {
+            $status = "Times under 6.2s are refused!";
+            $this->console->writeln("Dedimania: Disabling records for this map. ".$status);
+            $this->dedimaniaService->setDisabled($status);
+
+            return;
+        }
+
+        if ($map->nbCheckpoints < 1) {
+            $status = "Checkpoints needs to be more than 1!";
+            $this->console->writeln("Dedimania: Disabling records for this map. ".$status);
+            $this->dedimaniaService->setDisabled($status);
+
+            return;
+        }
+
         $params = [
             $this->sessionId,
             $this->getMapInfo(),
@@ -383,13 +402,23 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
             }
             $this->dedimaniaService->setDedimaniaRecords($recs);
 
+            // @todo remove when dedimania records has better frontend
             if (!empty($recs) && count($recs) > 0) {
                 $time = $this->time->timeToText($recs[0]->best, true);
                 $this->chatNotification->sendMessage(
-                    "Found ".count($recs)." dedimania records!\n#1 ".$recs[0]->nickName.'$z('.$recs[0]->login.'), time:'.$time);
+                    "|record|{record} Dedimania {variable}1.{record} record {variable}|time| ".$time." {record}by{variable} ".TMString::trimLinks($recs[0]->nickName).'{record}({variable}'.$recs[0]->login.'{record})');
+
+                foreach ($this->playerStorage->getOnline() as $login => $player) {
+                    $rec = $this->dedimaniaService->getRecord($login);
+                    if ($rec) {
+                        $this->chatNotification->sendMessage(
+                            "|record|{record} Your current {variable}".$rec->rank.". {record}dedimania record |time| ".$time,
+                            $login);
+                    }
+                }
             } else {
                 $this->chatNotification->sendMessage(
-                    "Found 0 dedimania records");
+                    "|record|{record} No dedimania records, go drive one!");
             }
 
         });
@@ -494,6 +523,10 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
 
     public function setRecords()
     {
+        if ($this->dedimaniaService->isDisabled() !== false) {
+            return;
+        }
+
         $that = $this;
         $this->getScores->get(function ($scores) use ($that) {
             if (count($scores['players']) > 0 && isset($scores['players'][0]['login'])) {
@@ -521,7 +554,7 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
                         $this->getMapInfo(),
                         $this->getGameMode(),
                         $times,
-                        $this->getReplays($VReplayChecks),
+                        $this->getReplays($scores['players'][0]['login'], $VReplayChecks),
                     ];
 
                     $request = new Request("dedimania.SetChallengeTimes", $params);
@@ -541,19 +574,39 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
 //endregion
 //#region protected helper functions
 
-    protected function getReplays($bestCheckpoints)
+    /**
+     * @param string $top1Login
+     * @param array  $bestCheckpoints
+     * @return array
+     */
+    protected function getReplays($top1Login, $bestCheckpoints)
     {
+        list($login, $GReplay) = $this->dedimaniaService->getGReplay();
+
+        if ($top1Login != $login) {
+            $this->console->getSfStyleOutput()->warning('Fetched Ghost Replay for Dedimania differs from top 1 holders login.');
+            $this->console->writeln("Trying to fetch the right new one.");
+            $this->setGReplay($top1Login);
+            $replay = $this->dedimaniaService->getGReplay();
+            $GReplay = $replay[1];
+        }
+
         return [
             "VReplay" => $this->dedimaniaService->getVReplay(),
             "VReplayChecks" => implode(",", $bestCheckpoints),
-            "Top1GReplay" => $this->dedimaniaService->getGReplay(),
+            "Top1GReplay" => $GReplay,
         ];
-
     }
 
-
+    /**
+     * Sets new Ghost replay for the map
+     * @param $login
+     */
     protected function setGReplay($login)
     {
+        $tempReplay = new IXR_Base64("");
+        $this->dedimaniaService->setGReplay("", $tempReplay);
+
         $player = new Player();
         $player->login = $login;
         try {
@@ -562,11 +615,10 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
                 $this->fileSystem->getUserData()->readAndDelete(
                     "Replays".DIRECTORY_SEPARATOR."exp2_temp_replay.Replay.Gbx")
             );
-            $this->dedimaniaService->setGReplay($replay);
+            $this->dedimaniaService->setGReplay($login, $replay);
         } catch (\Exception $e) {
             $this->console->writeln('Dedimania: $f00Error while fetching GhostsReplay');
         }
-
 
     }
 
@@ -682,9 +734,7 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
     public function onEndMapStart($count, $time, $restarted, Map $map)
     {
         if (!$restarted) {
-
             $this->setRecords();
-
         }
     }
 
@@ -715,10 +765,9 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
             if ($rank === 1) {
                 $this->setGReplay($login);
             }
-            $this->console->write("new dedimania record".$rank);
             $player = $this->playerStorage->getPlayerInfo($login);
-            $this->chatNotification->sendMessage("|record| Updated $rank. dedimania record ".$this->time->timeToText($raceTime,
-                    true)." for ".$player->getNickname());
+            $this->chatNotification->sendMessage("|record| {variable}$rank. {record}Dedimania Record {variable}|time| ".$this->time->timeToText($raceTime,
+                    true)." {record}driven by {variable}".TMString::trimStyles($player->getNickname())); // @todo remove this when the local records handler works nicely also for dedimania
         }
     }
 
