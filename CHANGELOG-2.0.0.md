@@ -1,3 +1,9 @@
+# 2.0.0.x 
+
+## Bug Fixes
+* Addded list of title mappings. Local records now work on ESL. 
+* Fixed layout row when fixes was applied from master.
+
 # 2.0.0.0-alpha3 (2018-02-24)
 ## Bug Fixes
 
