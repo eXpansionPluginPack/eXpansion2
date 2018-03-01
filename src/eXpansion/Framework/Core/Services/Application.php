@@ -21,11 +21,12 @@ class Application extends AbstractApplication {
      *
      * @param OutputInterface $console
      *
-     * @return $this
+     * @return $this|mixed
+     * @throws \Maniaplanet\DedicatedServer\Xmlrpc\TransportException
      */
     public function init(OutputInterface $console)
     {
-        parent::init($console);
+        $this->console->init($console, $this->dispatcher);
 
         $this->console->writeln('$fff            8b        d8$fff              $0d0   ad888888b, ');
         $this->console->writeln('$fff             Y8,    ,8P $fff              $0d0  d8"     "88 ');
@@ -38,7 +39,7 @@ class Application extends AbstractApplication {
         $this->console->writeln('$fff                        $fff  88          $0d0                ');
         $this->console->writeln('$777  eXpansion v.2.0.0.0   $fff  88          $0d0               ');
 
-        return $this;
+        return parent::init($console);
     }
 
 

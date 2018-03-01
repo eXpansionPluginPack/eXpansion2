@@ -62,15 +62,18 @@ abstract class AbstractApplication implements RunInterface
      *
      * @param OutputInterface $console
      *
-     * @return $this
+     * @return $this|mixed
+     * @throws \Maniaplanet\DedicatedServer\Xmlrpc\TransportException
      */
     public function init(OutputInterface $console)
     {
         $this->console->init($console, $this->dispatcher);
         $this->dispatcher->dispatch(self::EVENT_BEFORE_INIT, []);
-        $this->dispatcher->init($this->factory->getConnection());
-        $this->dispatcher->dispatch(self::EVENT_AFTER_INIT, []);
 
+        $this->factory->createConnection();
+        $this->dispatcher->init($this->factory->getConnection());
+
+        $this->dispatcher->dispatch(self::EVENT_AFTER_INIT, []);
         return $this;
     }
 
@@ -81,8 +84,6 @@ abstract class AbstractApplication implements RunInterface
      */
     public function run()
     {
-        $this->factory->createConnection();
-
         // Time each cycle needs to take in microseconds. Wrunning 60 cycles per seconds to have optimal response time.
         $cycleTime = (1 / 60) * 1000000;
 
