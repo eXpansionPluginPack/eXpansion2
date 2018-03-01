@@ -52,7 +52,7 @@ class BaseStorageUpdateListener
     /**
      *
      */
-    public function onManiaplanetGameExpansionBeforeInit()
+    public function onManiaplanetGameExpansionAfterInit()
     {
         $gameInfos = $this->factory->getConnection()->getCurrentGameInfo();
         $serverOptions = $this->factory->getConnection()->getServerOptions();
@@ -62,7 +62,8 @@ class BaseStorageUpdateListener
         $this->gameDataStorage->setSystemInfo($this->factory->getConnection()->getSystemInfo());
         $this->gameDataStorage->setGameInfos(clone $gameInfos);
         $this->gameDataStorage->setVersion($this->factory->getConnection()->getVersion());
-        $this->gameDataStorage->setMapFolder($this->factory->getConnection()->getMapsDirectory());    }
+        $this->gameDataStorage->setMapFolder($this->factory->getConnection()->getMapsDirectory());
+    }
 
     /**
      * Called on the begining of a new map.
