@@ -4,6 +4,7 @@ namespace eXpansion\Framework\Core\Storage;
 
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\Data\PlayerFactory;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
@@ -21,8 +22,8 @@ use Psr\Log\LoggerInterface;
  */
 class PlayerStorage implements ListenerInterfaceMpLegacyPlayer, ListenerInterfaceExpTimer
 {
-    /** @var  Connection */
-    protected $connection;
+    /** @var  Factory */
+    protected $factory;
 
     /** @var PlayerFactory */
     protected $playerFactory;
@@ -50,18 +51,18 @@ class PlayerStorage implements ListenerInterfaceMpLegacyPlayer, ListenerInterfac
     /**
      * PlayerDataProvider constructor.
      *
-     * @param Connection      $connection
+     * @param Factory         $factory
      * @param PlayerFactory   $playerFactory
      * @param LoggerInterface $logger
      * @param Console         $console
      */
     public function __construct(
-        Connection $connection,
+        Factory $factory,
         PlayerFactory $playerFactory,
         LoggerInterface $logger,
         Console $console
     ) {
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->playerFactory = $playerFactory;
         $this->logger = $logger;
         $this->console = $console;
@@ -86,8 +87,8 @@ class PlayerStorage implements ListenerInterfaceMpLegacyPlayer, ListenerInterfac
 
             try {
                 //fetch additional informations
-                $playerInformation = $this->connection->getPlayerInfo($login);
-                $playerDetails = $this->connection->getDetailedPlayerInfo($login);
+                $playerInformation = $this->factory->getConnection()->getPlayerInfo($login);
+                $playerDetails = $this->factory->getConnection()->getDetailedPlayerInfo($login);
             } catch (InvalidArgumentException $e) {
                 $this->logger->error("Login unknown: $login", ["exception" => $e]);
                 $this->console->writeln('$f00Login Unknown: '.$login.' dedicated server said: $fff'.$e->getMessage());

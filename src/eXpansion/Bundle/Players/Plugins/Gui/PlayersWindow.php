@@ -11,6 +11,7 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\GridWindowFactory;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\ChatCommandDataProvider;
 use eXpansion\Framework\Gui\Components\Button;
@@ -30,9 +31,9 @@ class PlayersWindow extends GridWindowFactory
      */
     private $chatCommandDataProvider;
     /**
-     * @var Connection
+     * @var Factory
      */
-    private $connection;
+    private $factory;
     /**
      * @var AdminGroups
      */
@@ -70,7 +71,7 @@ class PlayersWindow extends GridWindowFactory
         DataCollectionFactory $dataCollectionFactory,
         GridBuilderFactory $gridBuilderFactory,
         ChatCommandDataProvider $chatCommandDataProvider,
-        Connection $connection,
+        Factory $factory,
         AdminGroups $adminGroups,
         Countries $countries
     ) {
@@ -80,7 +81,7 @@ class PlayersWindow extends GridWindowFactory
         $this->dataCollectionFactory = $dataCollectionFactory;
         $this->gridBuilderFactory = $gridBuilderFactory;
         $this->chatCommandDataProvider = $chatCommandDataProvider;
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->adminGroups = $adminGroups;
         $this->countries = $countries;
     }
@@ -465,7 +466,7 @@ class PlayersWindow extends GridWindowFactory
     private function getIgnoredStatus($login)
     {
         try {
-            $ignoreList = $this->connection->getIgnoreList();
+            $ignoreList = $this->factory->getConnection()->getIgnoreList();
             foreach ($ignoreList as $player) {
                 if ($player->login === $login) {
                     return true;

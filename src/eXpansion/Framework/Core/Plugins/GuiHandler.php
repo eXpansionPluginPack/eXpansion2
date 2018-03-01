@@ -9,6 +9,7 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use Maniaplanet\DedicatedServer\Connection;
@@ -25,10 +26,11 @@ class GuiHandler implements
     ListenerInterfaceExpTimer,
     ListenerInterfaceExpUserGroup,
     ListenerInterfaceMpLegacyPlayer,
+    StatusAwarePluginInterface,
     GuiHandlerInterface
 {
-    /** @var Connection */
-    protected $connection;
+    /** @var Factory */
+    protected $factory;
 
     /** @var LoggerInterface */
     protected $logger;
@@ -63,28 +65,34 @@ class GuiHandler implements
     /**
      * GuiHandler constructor.
      *
-     * @param Connection      $connection
+     * @param Factory $factory
      * @param LoggerInterface $logger
-     * @param Console         $console
-     * @param ActionFactory   $actionFactory
-     * @param int             $charLimit
-     * @throws \Maniaplanet\DedicatedServer\InvalidArgumentException
+     * @param Console $console
+     * @param ActionFactory $actionFactory
+     * @param int $charLimit
      */
     public function __construct(
-        Connection $connection,
+        Factory $factory,
         LoggerInterface $logger,
         Console $console,
         ActionFactory $actionFactory,
         $charLimit = 262144
     ) {
-        $this->connection = $connection;
-
-        $this->connection->sendHideManialinkPage(null);
-
+        $this->factory = $factory;
         $this->logger = $logger;
         $this->console = $console;
         $this->actionFactory = $actionFactory;
         $this->charLimit = $charLimit;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setStatus($status)
+    {
+        if ($status) {
+            $this->factory->getConnection()->sendHideManialinkPage(null);
+        }
     }
 
 
@@ -159,8 +167,9 @@ class GuiHandler implements
             $logins = array_filter($mlData['logins'], function ($value) {
                 return $value != '';
             });
+
             if (!empty($logins)) {
-                $this->connection->sendDisplayManialinkPage(
+                $this->factory->getConnection()->sendDisplayManialinkPage(
                     $mlData['logins'],
                     $mlData['ml'],
                     $mlData['timeout'],
@@ -188,7 +197,7 @@ class GuiHandler implements
     protected function executeMultiCall()
     {
         try {
-            $this->connection->executeMulticall();
+            $this->factory->getConnection()->executeMulticall();
         } catch (\Exception $e) {
             $this->logger->error("Couldn't deliver all manialinks : ".$e->getMessage(), ['exception' => $e]);
             $this->console->writeln('$F00ERROR - Couldn\'t deliver all manialinks : '.$e->getMessage());

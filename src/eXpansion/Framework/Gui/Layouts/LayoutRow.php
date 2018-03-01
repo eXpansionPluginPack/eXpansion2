@@ -65,12 +65,15 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
         $this->updateSize();
     }
 
+    /**
+     * Update the size of the layout according to all the elements in it.
+     */
     protected function updateSize()
     {
         $sizeX = 0;
         $sizeY = 0;
         foreach ($this->elements as $idx => $element) {
-            $sizeY += abs($element->getY()) + $element->getHeight();
+            $sizeY += $element->getHeight() + $this->margin;
 
             if (abs($element->getX()) + $element->getWidth() > $sizeX) {
                 $sizeX = abs($element->getX()) + $element->getWidth();
@@ -81,6 +84,8 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
     }
 
     /**
+     * Set position.
+     *
      * @param double $x
      * @param double $y
      * @return LayoutRow
@@ -128,16 +133,14 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
         $frame->setAlign($this->hAlign, $this->vAlign);
         $frame->setPosition($this->startX, $this->startY);
         $frame->addClasses($this->frameClasses);
+        $frame->setSize($this->getWidth(), $this->getHeight());
 
         $startY = 0;
-        $oldElement = false;
+
         foreach ($this->elements as $idx => $element) {
-            if ($oldElement) {
-                $startY = $oldElement->getY() - $oldElement->getHeight() - $this->margin;
-            }
             $element->setY($startY);
+            $startY -= $element->getHeight() - $this->margin;
             $frame->addChild($element);
-            $oldElement = $element;
         }
 
         return $frame->render($domDocument);

@@ -17,14 +17,12 @@ use Maniaplanet\DedicatedServer\Connection;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputInterface;
+use Tests\eXpansion\Framework\Core\TestCore;
 use Tests\eXpansion\Framework\Core\TestHelpers\PlayerDataTrait;
 
-class AdminCommandTest extends \PHPUnit_Framework_TestCase
+class AdminCommandTest extends TestCore
 {
     use PlayerDataTrait;
-
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $connectionMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $chatNotificationMock;
@@ -43,9 +41,7 @@ class AdminCommandTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->connectionMock = $this->getMockBuilder(Connection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        parent::setUp();
 
         $this->chatNotificationMock = $this->getMockBuilder(ChatNotification::class)
             ->disableOriginalConstructor()
@@ -63,7 +59,7 @@ class AdminCommandTest extends \PHPUnit_Framework_TestCase
             [],
             'nextMap',
             $this->getMockBuilder(AdminGroups::class)->disableOriginalConstructor()->getMock(),
-            $this->connectionMock,
+            $this->mockConnectionFactory,
             $this->chatNotificationMock,
             $this->playerStorageMock,
             $this->getMockBuilder(LoggerInterface::class)->disableOriginalConstructor()->getMock(),
@@ -88,7 +84,7 @@ class AdminCommandTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->connectionMock->expects($this->once())->method('nextMap')->with();
+        $this->mockConnection->expects($this->once())->method('nextMap')->with();
 
         $this->chatNotificationMock->expects($this->once())->method('sendMessage')
             ->with('expansion_admin_chat.nextmap.msg', null, ['%adminLevel%' => 'Admin', '%admin%' => '$ffftest']);

@@ -5,6 +5,7 @@ namespace eXpansion\Bundle\CustomUi\Plugins;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use Maniaplanet\DedicatedServer\Connection;
 
 /**
@@ -14,8 +15,8 @@ use Maniaplanet\DedicatedServer\Connection;
  */
 class CustomUi implements StatusAwarePluginInterface
 {
-    /** @var Connection */
-    protected $connection;
+    /** @var Factory */
+    protected $factory;
 
     /**@var Group */
     protected $allPlayers;
@@ -32,20 +33,20 @@ class CustomUi implements StatusAwarePluginInterface
     /**
      * CustomUi constructor.
      *
-     * @param Connection $connection
+     * @param Factory $factory
      * @param Group $allPlayers
-     * @param string[] $uiProperties
+     * @param array $uiProperties
      * @param string $setPropertiesScriptEvent
-     * @param WidgetFactory[] $customWidgets
+     * @param array $customWidgets
      */
     public function __construct(
-        Connection $connection,
+        Factory $factory,
         Group $allPlayers,
         array $uiProperties,
         string $setPropertiesScriptEvent,
         array $customWidgets
     ) {
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->allPlayers = $allPlayers;
         $this->uiProperties = $uiProperties;
         $this->setPropertiesScriptEvent = $setPropertiesScriptEvent;
@@ -63,7 +64,7 @@ class CustomUi implements StatusAwarePluginInterface
             foreach ($this->uiProperties as $property => $propertyDetails) {
                 $this->configureUiProperty($xml->addChild($property), $propertyDetails);
             }
-            $this->connection->triggerModeScriptEvent($this->setPropertiesScriptEvent, [$xml->asXML()]);
+            $this->factory->getConnection()->triggerModeScriptEvent($this->setPropertiesScriptEvent, [$xml->asXML()]);
 
             if (empty($this->customWidgets)) {
                 return;

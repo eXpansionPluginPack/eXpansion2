@@ -8,6 +8,7 @@ use eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\BestCheckpointsWidgetFact
 use eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\UpdaterWidgetFactory;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
 use Maniaplanet\DedicatedServer\Connection;
@@ -16,8 +17,6 @@ use Maniaplanet\DedicatedServer\Structures\Map;
 
 class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener, ListenerInterfaceMpLegacyMap
 {
-    /** @var Connection */
-    protected $connection;
     /**
      * @var PlayerStorage
      */
@@ -41,24 +40,22 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
 
 
     /**
-     * Debug constructor.
+     * BestCheckpoints constructor.
      *
-     * @param Connection                   $connection
-     * @param PlayerStorage                $playerStorage
-     * @param BestCheckPointsWidgetFactory $widget
-     * @param UpdaterWidgetFactory         $updater
-     * @param Group                        $players
-     * @param Group                        $allPlayers
+     * @param Factory $factory
+     * @param PlayerStorage $playerStorage
+     * @param BestCheckpointsWidgetFactory $widget
+     * @param UpdaterWidgetFactory $updater
+     * @param Group $players
+     * @param Group $allPlayers
      */
     public function __construct(
-        Connection $connection,
         PlayerStorage $playerStorage,
         BestCheckPointsWidgetFactory $widget,
         UpdaterWidgetFactory $updater,
         Group $players,
         Group $allPlayers
     ) {
-        $this->connection = $connection;
         $this->playerStorage = $playerStorage;
         $this->widget = $widget;
         $this->players = $players;

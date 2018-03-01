@@ -26,10 +26,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DelDummyRecordsCommand extends ContainerAwareCommand
 {
     /**
-     * @var Connection
-     */
-    private $connection;
-    /**
      * @var MapStorage
      */
     private $mapStorage;
@@ -53,7 +49,6 @@ class DelDummyRecordsCommand extends ContainerAwareCommand
     /**
      * ScriptPanel constructor.
      *
-     * @param Connection         $connection
      * @param MapStorage         $mapStorage
      * @param PlayerQueryBuilder $playerQueryBuilder
      * @param RecordQueryBuilder $recordQueryBuilder
@@ -61,7 +56,6 @@ class DelDummyRecordsCommand extends ContainerAwareCommand
      * @param Console            $console
      */
     public function __construct(
-        Connection $connection,
         MapStorage $mapStorage,
         PlayerQueryBuilder $playerQueryBuilder,
         RecordQueryBuilder $recordQueryBuilder,
@@ -74,7 +68,6 @@ class DelDummyRecordsCommand extends ContainerAwareCommand
         $this->recordQueryBuilder = $recordQueryBuilder;
         $this->mapQuery = $mapQuery;
         $this->console = $console;
-        $this->connection = $connection;
     }
 
     /**

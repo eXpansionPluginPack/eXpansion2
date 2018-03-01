@@ -7,6 +7,7 @@ use eXpansion\Bundle\LocalRecords\Model\Record;
 use eXpansion\Bundle\WidgetBestRecords\Plugins\Gui\BestRecordsWidgetFactory;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
 use Maniaplanet\DedicatedServer\Connection;
@@ -15,8 +16,8 @@ use Maniaplanet\DedicatedServer\Structures\Map;
 
 class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, ListenerInterfaceMpLegacyMap
 {
-    /** @var Connection */
-    protected $connection;
+    /** @var Factory */
+    protected $factory;
     /**
      * @var PlayerStorage
      */
@@ -46,13 +47,13 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, Li
      * @param Group                    $allPlayers
      */
     public function __construct(
-        Connection $connection,
+        Factory $factory,
         PlayerStorage $playerStorage,
         BestRecordsWidgetFactory $widget,
         Group $players,
         Group $allPlayers
     ) {
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->playerStorage = $playerStorage;
         $this->widget = $widget;
         $this->players = $players;
@@ -69,7 +70,7 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, Li
     public function setStatus($status)
     {
         if ($status) {
-            $map = $this->connection->getCurrentMapInfo();
+            $map = $this->factory->getConnection()->getCurrentMapInfo();
             $this->widget->setAuthorTime($map->author, $map->goldTime);
             $this->widget->create($this->allPlayers);
         } else {

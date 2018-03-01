@@ -16,6 +16,7 @@ use eXpansion\Framework\Core\Helpers\Http;
 use eXpansion\Framework\Core\Helpers\Structures\HttpResult;
 use eXpansion\Framework\Core\Helpers\TMString;
 use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map as DedicatedMap;
@@ -31,9 +32,9 @@ class ManiaExchange implements ListenerInterfaceExpApplication
     private $downloadProgressing = false;
 
     /**
-     * @var Connection
+     * @var Factory
      */
-    private $connection;
+    private $factory;
     /**
      * @var ChatNotification
      */
@@ -79,18 +80,19 @@ class ManiaExchange implements ListenerInterfaceExpApplication
 
     /**
      * ManiaExchange constructor.
-     * @param Connection       $connection
+     *
+     * @param Factory $factory
      * @param ChatNotification $chatNotification
-     * @param Http             $http
-     * @param AdminGroups      $adminGroups
-     * @param GameDataStorage  $gameDataStorage
-     * @param Console          $console
-     * @param LoggerInterface  $logger
-     * @param JukeboxService   $jukebox
-     * @param FileSystem       $fileSystem
+     * @param Http $http
+     * @param AdminGroups $adminGroups
+     * @param GameDataStorage $gameDataStorage
+     * @param Console $console
+     * @param LoggerInterface $logger
+     * @param JukeboxService $jukebox
+     * @param FileSystem $fileSystem
      */
     public function __construct(
-        Connection $connection,
+        Factory $factory,
         ChatNotification $chatNotification,
         Http $http,
         AdminGroups $adminGroups,
@@ -100,7 +102,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
         JukeboxService $jukebox,
         FileSystem $fileSystem
     ) {
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->chatNotification = $chatNotification;
         $this->http = $http;
         $this->adminGroups = $adminGroups;
@@ -120,7 +122,8 @@ class ManiaExchange implements ListenerInterfaceExpApplication
         }
 
         $this->addQueue = $maps;
-        $this->connection->chatSendServerMessage("Starting download. Maps in queue: ".count($this->addQueue));
+        // TODO replace with chat notification.
+        $this->factory->getConnection()->chatSendServerMessage("Starting download. Maps in queue: ".count($this->addQueue));
         $map = array_shift($this->addQueue);
         $this->addMap($login, $map['mxid'], $map['mxsite']);
     }
@@ -299,14 +302,14 @@ class ManiaExchange implements ListenerInterfaceExpApplication
                 $fileSystem->write($file, $result->getResponse());
             }
 
-                if (!$this->connection->checkMapForCurrentServerParams($titlepack.DIRECTORY_SEPARATOR.$filename)) {
+                if (!$this->factory->getConnection()->checkMapForCurrentServerParams($titlepack.DIRECTORY_SEPARATOR.$filename)) {
                     $this->chatNotification->sendMessage("expansion_mx.chat.fail");
 
                     return;
                 }
 
-            $map = $this->connection->getMapInfo($titlepack.DIRECTORY_SEPARATOR.$filename);
-            $this->connection->addMap($map->fileName);
+            $map = $this->factory->getConnection()->getMapInfo($titlepack.DIRECTORY_SEPARATOR.$filename);
+            $this->factory->getConnection()->addMap($map->fileName);
 
             $this->jukebox->addMap($map, $data['login']);
             $this->chatNotification->sendMessage(
@@ -332,7 +335,8 @@ class ManiaExchange implements ListenerInterfaceExpApplication
 
         if (count($this->addQueue) > 0) {
             $map = array_shift($this->addQueue);
-            $this->connection->chatSendServerMessage("Processing queue. Maps in queue: ".count($this->addQueue));
+            // TODO use chat notification.
+            $this->factory->getConnection()->chatSendServerMessage("Processing queue. Maps in queue: ".count($this->addQueue));
             $this->addMap($data['login'], $map['mxid'], $map['mxsite']);
         }
     }
@@ -357,8 +361,6 @@ class ManiaExchange implements ListenerInterfaceExpApplication
 
         $mxquery = new MxmapQuery();
         $mxMap = $mxquery->findOneByTrackuid($map->uId);
-
-        print_r($mxInfo->toArray());
 
         if ($mxMap) {
             $mxMap->fromArray($mxInfo->toArray(), TableMap::TYPE_FIELDNAME);

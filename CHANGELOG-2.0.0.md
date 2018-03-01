@@ -1,15 +1,17 @@
 # 2.0.0.x 
 
-## Features
+## Fixes
+* #119 : Fixed all symfony commands requiring connection to the dedicated server. 
 
+## Features
 * Added ingame configuration system. 
 * Added DeveloperTools bundle
 * Fixed issue #277 - sorting numeric values
 * Add configs for various types, booleans, textfields, password
 * Add MxKarma 
+* #118 : eXpansion will attempt multiple connections to dedicated before crashing. 
 
 # 2.0.0.0-alpha3 (2018-02-24)
-
 ## Bug Fixes
 
 * Fixed issue #248 : Strange behaviour of translated uiButtons.
@@ -47,3 +49,4 @@
 # 2.0.0.0-alpha1 (2018-01-20)
 
 **It starts again!**
+

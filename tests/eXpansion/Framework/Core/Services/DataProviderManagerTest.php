@@ -25,6 +25,10 @@ class DataProviderManagerTest extends TestCore
 {
     use PlayerDataTrait;
 
+    protected $mockGameDataStorage;
+
+    protected $dataProviderManager;
+
     protected function setUp()
     {
         parent::setUp();
@@ -32,28 +36,23 @@ class DataProviderManagerTest extends TestCore
         $gameInfos = new GameInfos();
         $gameInfos->scriptName = 'TimeAttack.script.txt';
 
-        $gameDataStorageMock = $this->getMockBuilder(GameDataStorage::class)->disableOriginalConstructor()->getMock();
-        $gameDataStorageMock->method('getTitle')->willReturn('TM');
-        $gameDataStorageMock->method('getGameModeCode')->willReturn('script');
-        $gameDataStorageMock->method('getGameInfos')->willReturn($gameInfos);
-        $gameDataStorageMock->method('getVersion')->willReturn(new Version());
+        $this->mockGameDataStorage = $this->getMockBuilder(GameDataStorage::class)->disableOriginalConstructor()->getMock();
+        $this->mockGameDataStorage->method('getTitle')->willReturn('TM');
+        $this->mockGameDataStorage->method('getGameModeCode')->willReturn('script');
+        $this->mockGameDataStorage->method('getGameInfos')->willReturn($gameInfos);
+        $this->mockGameDataStorage->method('getVersion')->willReturn(new Version());
 
-        $this->container->set(GameDataStorage::class, $gameDataStorageMock);
-
-        $this->container->set(
-            DataProviderManager::class,
-            new DataProviderManager(
-                $this->container,
-                $gameDataStorageMock,
-                $this->container->get(Console::class)
-            )
+        $this->dataProviderManager = new DataProviderManager(
+            $this->container,
+            $this->mockGameDataStorage,
+            $this->container->get(Console::class)
         );
     }
 
 
     protected function prepareProviders()
     {
-        $dataProviderManager = $this->getDataProviderManager();
+        $dataProviderManager = $this->dataProviderManager;
 
         $mockProvider = $this->createMock(ChatDataProvider::class);
         $this->container->set('dp1-1', $mockProvider);
@@ -84,7 +83,7 @@ class DataProviderManagerTest extends TestCore
 
     public function testPreferenceDataProvider()
     {
-        $dataProviderManager = $this->getDataProviderManager();
+        $dataProviderManager = $this->dataProviderManager;
         $this->prepareProviders();
         $map = new Map();
 
@@ -115,7 +114,7 @@ class DataProviderManagerTest extends TestCore
     public function testRegisterPlugin()
     {
         $this->prepareProviders();
-        $dataProviderManager = $this->getDataProviderManager();
+        $dataProviderManager = $this->dataProviderManager;
         $player = $this->getPlayer('test1', false);
         $map = new Map();
 
@@ -135,7 +134,7 @@ class DataProviderManagerTest extends TestCore
     public function testRegisterWrongPlugin()
     {
         $this->prepareProviders();
-        $dataProviderManager = $this->getDataProviderManager();
+        $dataProviderManager = $this->dataProviderManager;
 
         $pluginMock = $this->createMock(ListenerInterfaceMpLegacyPlayer::class);
         $this->container->set('p1', $pluginMock);
@@ -148,9 +147,9 @@ class DataProviderManagerTest extends TestCore
     public function testDispatch()
     {
         $this->prepareProviders();
-        $dataProviderManager = $this->getDataProviderManager();
+        $dataProviderManager = $this->dataProviderManager;
 
-        $connectionMock = $this->container->get('expansion.service.dedicated_connection');
+        $connectionMock = $this->mockConnection;
         /** @var \PHPUnit_Framework_MockObject_MockObject $connectionMock */
         $connectionMock->method('getPlayerList')
             ->withAnyParameters()
@@ -190,14 +189,5 @@ class DataProviderManagerTest extends TestCore
             'gamemode' => $mode,
             'script' => $script,
         ];
-    }
-
-    /**
-     *
-     * @return DataProviderManager
-     */
-    protected function getDataProviderManager()
-    {
-        return $this->container->get(DataProviderManager::class);
     }
 }

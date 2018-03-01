@@ -12,11 +12,11 @@ use eXpansion\Framework\Core\Helpers\ChatOutput;
 use eXpansion\Framework\Core\Model\Helpers\ChatNotificationInterface;
 use Tests\eXpansion\Framework\Core\TestCore;
 
-class ChatOutputTest extends TestCore
+class ChatOutputTest extends ChatNotificationTest
 {
     public function testGetChatNotification()
     {
-        $chatOutput = $this->getChatOutputHelper();
+        $chatOutput = new ChatOutput($this->mockConnectionFactory, $this->chatNotification);
 
         $this->assertInstanceOf(ChatNotificationInterface::class, $chatOutput->getChatNotification());
     }
@@ -24,12 +24,12 @@ class ChatOutputTest extends TestCore
     public function testWrite()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject $dedicatedConnection */
-        $dedicatedConnection = $this->container->get('expansion.service.dedicated_connection');
+        $dedicatedConnection = $this->mockConnection;
         $dedicatedConnection->expects($this->exactly(2))
             ->method('chatSendServerMessage')
             ->with("Test message stripped", 'toto');
 
-        $chatOutput = $this->getChatOutputHelper();
+        $chatOutput = new ChatOutput($this->mockConnectionFactory, $this->chatNotification);
         $chatOutput->setLogin('toto');
         $chatOutput->write('Test message <p>stripped</p>');
         $chatOutput->writeln('Test message <p>stripped</p>');
@@ -37,7 +37,7 @@ class ChatOutputTest extends TestCore
 
     public function testMockMethods()
     {
-        $chatOutput = $this->getChatOutputHelper();
+        $chatOutput = new ChatOutput($this->mockConnectionFactory, $this->chatNotification);
 
         $chatOutput->setVerbosity(0);
         $chatOutput->getVerbosity();
