@@ -106,7 +106,7 @@ class DedimaniaService
      */
     public function processRecord($login, $score, $checkpoints)
     {
-        if ($this->disabled !== false) {
+        if ($this->disabled) {
             return -1;
         }
 

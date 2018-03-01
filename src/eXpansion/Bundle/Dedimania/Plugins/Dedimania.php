@@ -272,14 +272,21 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
                     return;
                 }
                 $errors = end($message[1]);
+                $err = false;
+
 
                 if (count($errors) > 0 && array_key_exists('methods', $errors[0])) {
+                    $err = false;
                     foreach ($errors[0]['methods'] as $error) {
                         if (!empty($error['errors'])) {
                             $this->console->writeln('Dedimania error on method: $fff'.$error['methodName']);
                             $this->console->writeln('$f00'.$error['errors']);
+                            $err = true;
                         }
                     }
+                }
+                if ($err) {
+                    return;
                 }
 
                 $array = $message[1];
@@ -366,19 +373,18 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
 
         $map = $this->mapStorage->getCurrentMap();
 
+        $this->dedimaniaService->setDisabled(true);
+        $this->dedimaniaService->setDedimaniaRecords([]);
+
         if ($map->authorTime < 6200) {
             $status = "Times under 6.2s are refused!";
             $this->console->writeln("Dedimania: Disabling records for this map. ".$status);
-            $this->dedimaniaService->setDisabled($status);
-
             return;
         }
 
         if ($map->nbCheckpoints < 1) {
             $status = "Checkpoints needs to be more than 1!";
             $this->console->writeln("Dedimania: Disabling records for this map. ".$status);
-            $this->dedimaniaService->setDisabled($status);
-
             return;
         }
 
@@ -397,9 +403,12 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
             $this->dedimaniaService->setServerMaxRank($response['ServerMaxRank']);
             /** @var DedimaniaRecord[] $recs */
             $recs = DedimaniaRecord::fromArrayOfArray($response['Records']);
+
             if (isset($response['Records']['Login'])) {
-                $recs = [0 => $recs];
+                $recs = [];
+                $recs[] = $response['Records'];
             }
+
             $this->dedimaniaService->setDedimaniaRecords($recs);
 
             // @todo remove when dedimania records has better frontend
@@ -523,7 +532,8 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
 
     public function setRecords()
     {
-        if ($this->dedimaniaService->isDisabled() !== false) {
+        if ($this->dedimaniaService->isDisabled()) {
+
             return;
         }
 
@@ -762,7 +772,9 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
         $speed,
         $distance
     ) {
+
         $rank = $this->dedimaniaService->processRecord($login, $raceTime, $curCps);
+
         if ($rank > 0) {
             if ($rank === 1) {
                 $this->setGReplay($login);
