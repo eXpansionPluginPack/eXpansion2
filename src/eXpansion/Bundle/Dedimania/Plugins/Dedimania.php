@@ -22,6 +22,7 @@ use eXpansion\Framework\Core\Helpers\TMString;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Application\AbstractApplication;
 use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\Data\Player as DedicatedPlayer;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\Core\Storage\MapStorage;
@@ -122,7 +123,7 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
      * @param ConfigInterface  $serverLogin
      * @param DedimaniaService $dedimaniaService
      * @param Console          $console
-     * @param Connection       $connection
+     * @param Factory          $connectionFactory
      * @param GameDataStorage  $gameDataStorage
      * @param MapStorage       $mapStorage
      * @param PlayerStorage    $playerStorage
@@ -139,7 +140,7 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
         ConfigInterface $serverLogin,
         DedimaniaService $dedimaniaService,
         Console $console,
-        Connection $connection,
+        Factory $connectionFactory,
         GameDataStorage $gameDataStorage,
         MapStorage $mapStorage,
         PlayerStorage $playerStorage,
@@ -157,7 +158,7 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
         $this->apikey = $apikey;
         $this->serverLogin = $serverLogin;
         $this->titles = $titles;
-        $this->connection = $connection;
+        $this->connection = $connectionFactory->getConnection();
         $this->gameDataStorage = $gameDataStorage;
         $this->mapStorage = $mapStorage;
         $this->playerStorage = $playerStorage;
