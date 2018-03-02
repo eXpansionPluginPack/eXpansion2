@@ -147,10 +147,11 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, De
      * @param Record   $record
      * @param Record   $oldRecord
      * @param Record[] $records
+     * @throws \Propel\Runtime\Exception\PropelException
      */
     public function onLocalRecordsSameScore(Record $record, Record $oldRecord, $records)
     {
-
+        $this->updateAuthorPB($record->getPlayer()->getLogin(), $record->getScore());
     }
 
     /**
@@ -324,7 +325,7 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, De
      */
     public function onStartMatchStart($count, $time)
     {
-        $this->PBWidget->reset();
+
         $map = $this->mapStorage->getCurrentMap();
         $this->PBWidget->setAuthorTime($map->authorTime);
     }
@@ -365,7 +366,7 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, De
      */
     public function onEndMatchEnd($count, $time)
     {
-        //
+        $this->PBWidget->reset();
     }
 
     /**

@@ -137,8 +137,8 @@ class BillWindow extends WindowFactory
                     [], "Success", 3500, $manialink->getUserGroup());
                 $this->closeManialink($manialink);
             },
-            function ($status) use ($manialink) {
-                $this->notifications->error("Server said: ".$status,
+            function ($error) use ($manialink) {
+                $this->notifications->error("Server said: ".$error,
                     [], "Error", 10500, $manialink->getUserGroup());
                 $this->closeManialink($manialink);
             }
