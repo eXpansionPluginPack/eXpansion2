@@ -8,6 +8,7 @@
 
 namespace eXpansion\Framework\Core\Services\DedicatedConnection;
 
+use eXpansion\Framework\Core\Services\Application\DispatcherInterface as Dispatcher;
 use eXpansion\Framework\Core\Services\Console;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Xmlrpc\TransportException;
@@ -43,16 +44,22 @@ class Factory
 
     /** @var Console */
     protected $console;
+    /**
+     * @var Dispatcher
+     */
+    private $dispatcher;
 
     /**
      * Factory constructor.
      *
-     * @param string $host
-     * @param int $port
-     * @param int $timeout
-     * @param string $user
-     * @param string $password
+     * @param string          $host
+     * @param int             $port
+     * @param int             $timeout
+     * @param string          $user
+     * @param string          $password
      * @param LoggerInterface $logger
+     * @param Console         $console
+     * @param Dispatcher      $dispatcher
      */
     public function __construct(
         $host,
@@ -61,7 +68,8 @@ class Factory
         $user,
         $password,
         LoggerInterface $logger,
-        Console $console
+        Console $console,
+        Dispatcher $dispatcher
     ) {
         $this->host = $host;
         $this->port = $port;
@@ -70,6 +78,7 @@ class Factory
         $this->password = $password;
         $this->logger = $logger;
         $this->console = $console;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -84,18 +93,18 @@ class Factory
     {
 
         if (is_null($this->connection)) {
-            $lastExcelption = $this->attemptConnection($maxAttempts);
+            $lastException = $this->attemptConnection($maxAttempts);
 
-            if (!is_null($lastExcelption)) {
+            if (!is_null($lastException)) {
                 $this->console->getSfStyleOutput()->error(
                     [
                         "Looks like your Dedicated server is either offline or has wrong config settings",
-                        "Error message: " . $lastExcelption->getMessage()
+                        "Error message: ".$lastException->getMessage(),
                     ]
                 );
-                $this->logger->error("Unable to open connection for Dedicated server", ["exception" => $lastExcelption]);
+                $this->logger->error("Unable to open connection for Dedicated server", ["exception" => $lastException]);
 
-                throw $lastExcelption;
+                throw $lastException;
             }
         }
 
@@ -110,13 +119,13 @@ class Factory
     protected function attemptConnection($maxAttempts)
     {
         $attempts = 0;
-        $lastExcelption = null;
+        $lastException = null;
 
         do {
 
-            if (!is_null($lastExcelption)) {
+            if (!is_null($lastException)) {
                 // Not first error.
-                $lastExcelption = null;
+                $lastException = null;
 
                 $this->console->getSfStyleOutput()->block(
                     "Will attempt to re-connect to dedicated server in 30seconds"
@@ -134,29 +143,31 @@ class Factory
                     $this->user,
                     $this->password
                 );
+                $this->console->writeln('Dedicated server at '.$this->host.':'.$this->port.' $0f0Connected!');
+                $this->dispatcher->dispatch("expansion.connected", null);
 
             } catch (\Exception $e) {
-                $lastExcelption = $e;
+                $lastException = $e;
                 $attempts++;
-                $remainingAttemps = $maxAttempts - $attempts;
+                $remainingAttempts = $maxAttempts - $attempts;
 
                 $this->console->getSfStyleOutput()->error(
                     [
-                        "Cound't connect to the dedicated server !",
-                        "Attempt : $attempts, Remaining attemps : $remainingAttemps ",
+                        "Could not connect to the dedicated server !",
+                        "Attempt : $attempts, Remaining attempts : $remainingAttempts ",
                         $e->getMessage(),
                     ]
                 );
             }
-        } while($attempts < $maxAttempts && !is_null($lastExcelption));
+        } while ($attempts < $maxAttempts && !is_null($lastException));
 
-        return $lastExcelption;
+        return $lastException;
     }
 
     /**
      * Get connection to the dedicated.
      *
-     * @return Connection
+     * @return null|Connection
      */
     public function getConnection()
     {

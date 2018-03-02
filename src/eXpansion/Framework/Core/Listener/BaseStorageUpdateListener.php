@@ -7,6 +7,7 @@ use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
 use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\Core\Storage\MapStorage;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Class BaseStorageUpdateListener
@@ -15,7 +16,7 @@ use eXpansion\Framework\Core\Storage\MapStorage;
  * @copyright 2017 eXpansion
  * @package eXpansion\Framework\Core\Listner
  */
-class BaseStorageUpdateListener
+class BaseStorageUpdateListener implements EventSubscriberInterface
 {
     /** @var Factory */
     protected $factory;
@@ -32,9 +33,9 @@ class BaseStorageUpdateListener
     /**
      * BaseStorageUpdateListener constructor.
      *
-     * @param Factory $factory
-     * @param GameDataStorage $gameDataStorage
-     * @param MapStorage $mapStorage
+     * @param Factory             $factory
+     * @param GameDataStorage     $gameDataStorage
+     * @param MapStorage          $mapStorage
      * @param DispatcherInterface $dispatcher
      */
     public function __construct(
@@ -52,7 +53,7 @@ class BaseStorageUpdateListener
     /**
      *
      */
-    public function onManiaplanetGameExpansionAfterInit()
+    public function onExpansionConnected()
     {
         $gameInfos = $this->factory->getConnection()->getCurrentGameInfo();
         $serverOptions = $this->factory->getConnection()->getServerOptions();
@@ -87,5 +88,31 @@ class BaseStorageUpdateListener
             $this->gameDataStorage->setGameInfos(clone $newGameInfos);
             // TODO dispatch custom event to let it know?
         }
+    }
+
+    /**
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * The array keys are event names and the value can be:
+     *
+     *  * The method name to call (priority defaults to 0)
+     *  * An array composed of the method name to call and the priority
+     *  * An array of arrays composed of the method names to call and respective
+     *    priorities, or 0 if unset
+     *
+     * For instance:
+     *
+     *  * array('eventName' => 'methodName')
+     *  * array('eventName' => array('methodName', $priority))
+     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
+     *
+     * @return array The event names to listen to
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            'expansion.connected' => 'onExpansionConnected',
+            'BeginMap' => 'onManiaplanetGameBeginMap',
+        ];
     }
 }
