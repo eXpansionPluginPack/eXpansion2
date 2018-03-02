@@ -64,4 +64,5 @@ services:
           - {name: 'expansion.plugin', data_provider: 'exp.timer'}
           - {name: 'expansion.plugin', data_provider: 'mp.script.match'}
           - {name: 'expansion.plugin', data_provider: 'mp.script.map'}
+          - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
           - {name: 'expansion.plugin', data_provider: 'tm.script.race'}

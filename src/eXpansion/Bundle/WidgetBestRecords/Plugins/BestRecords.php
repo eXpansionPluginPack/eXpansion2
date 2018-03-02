@@ -140,7 +140,7 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, De
     {
         $this->widget->setLocalRecord($record);
         $this->widget->update($this->allPlayers);
-        $this->PBWidget->setPB($record->getPlayer()->getLogin(), $record->getScore());
+        $this->updateAuthorPB($record->getPlayer()->getLogin(), $record->getScore());
     }
 
     /**
@@ -171,7 +171,7 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, De
             $this->widget->setLocalRecord($record);
             $this->widget->update($this->allPlayers);
         }
-        $this->PBWidget->setPB($record->getPlayer()->getLogin(), $record->getScore());
+        $this->updateAuthorPB($record->getPlayer()->getLogin(), $record->getScore());
     }
 
     /**
@@ -189,7 +189,7 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, De
             $this->widget->setLocalRecord($record);
             $this->widget->update($this->allPlayers);
         }
-        $this->PBWidget->setPB($record->getPlayer()->getLogin(), $record->getScore());
+        $this->updateAuthorPB($record->getPlayer()->getLogin(), $record->getScore());
 
     }
 

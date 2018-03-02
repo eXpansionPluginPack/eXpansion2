@@ -22,9 +22,11 @@ class PBWidget extends FmlManialinkFactory
 
     /** @var Label */
     private $lblPBTime;
-    /** @var */
+
+    /** @var Label */
     private $lblAuthorTime;
 
+    /** @var int[] */
     private $timesByLogin = [];
 
     /***
@@ -78,7 +80,7 @@ class PBWidget extends FmlManialinkFactory
         $this->lblAuthorTime = $this->createLabel("-:--:---", "0023")->setSize(14.85, 4);
         $line->addChild($this->lblAuthorTime);
 
-        $this->lblPB = $this->createLabel("PB", "0017")->setSize(14.85, 4);
+        $this->lblPB = $this->createLabel("PersonalBest", "0017")->setSize(14.85, 4);
         $line->addChild($this->lblPB);
 
         $this->lblPBTime = $this->createLabel("-:--:---", "0023")->setSize(14.85, 4);

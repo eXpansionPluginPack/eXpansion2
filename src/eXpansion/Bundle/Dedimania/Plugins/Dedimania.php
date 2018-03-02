@@ -465,8 +465,17 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
         ];
 
         $request = new Request('dedimania.PlayerConnect', $params);
-        $this->sendRequest($request, function ($response) {
-            $this->dedimaniaService->connectPlayer(DedimaniaPlayer::fromArray($response));
+        $this->sendRequest($request, function ($response) use ($player) {
+            $dediplayer = DedimaniaPlayer::fromArray($response);
+
+            if ($dediplayer->banned) {
+                $this->chatNotification->sendMessage("|error|{error} Player {variable}".$player->getLogin()."{error} is banned from dedimania.");
+                return;
+            }
+            
+            $this->dedimaniaService->connectPlayer($dediplayer);
+
+
         });
     }
 
