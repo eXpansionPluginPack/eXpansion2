@@ -51,7 +51,7 @@ abstract class AbstractListWindow extends GridWindowFactory
      * @param DataCollectionFactory   $dataCollectionFactory
      * @param GridBuilderFactory      $gridBuilderFactory
      * @param ChatCommandDataProvider $chatCommandDataProvider
-     * @param Connection              $connection
+     * @param Factory                 $factory
      * @param AdminGroups             $adminGroups
      * @param ChatNotification        $chatNotification
      */

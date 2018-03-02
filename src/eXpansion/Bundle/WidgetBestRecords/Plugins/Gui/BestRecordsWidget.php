@@ -161,7 +161,7 @@ class BestRecordsWidget extends FmlManialinkFactory
     {
         if ($record instanceof DedimaniaRecord) {
             try {
-                $this->lblDediNick->setText(TMString::trimControls($record->nickName));
+                $this->lblDediNick->setText(TMString::trimStyles($record->nickName));
                 $this->lblDediTime->setText($this->time->timeToText($record->best, true));
             } catch (\Exception $e) {
                 $this->lblDediNick->setText("");

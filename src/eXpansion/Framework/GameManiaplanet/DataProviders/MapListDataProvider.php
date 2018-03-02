@@ -6,7 +6,6 @@ use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\MapStorage;
-use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Xmlrpc\IndexOutOfBoundException;
 use Maniaplanet\DedicatedServer\Xmlrpc\NextMapException;
 
@@ -28,18 +27,18 @@ class MapListDataProvider extends AbstractDataProvider implements StatusAwarePlu
     /**
      * @var Factory
      */
-    protected $connection;
+    protected $factory;
 
     /**
      * MapListDataProvider constructor.
      *
      * @param MapStorage $mapStorage
-     * @param Factory $factory
+     * @param Factory    $factory
      */
     public function __construct(MapStorage $mapStorage, Factory $factory)
     {
         $this->mapStorage = $mapStorage;
-        $this->connection = $factory->getConnection();
+        $this->factory = $factory;
     }
 
     /**
@@ -49,11 +48,11 @@ class MapListDataProvider extends AbstractDataProvider implements StatusAwarePlu
     {
         if ($status) {
             $this->updateMapList();
-            $currentMap = $this->connection->getCurrentMapInfo();
+            $currentMap = $this->factory->getConnection()->getCurrentMapInfo();
             if ($currentMap) {
                 $this->mapStorage->setCurrentMap($currentMap);
                 try {
-                    $this->mapStorage->setNextMap($this->connection->getNextMapInfo());
+                    $this->mapStorage->setNextMap($this->factory->getConnection()->getNextMapInfo());
                 } catch (NextMapException $ex) {
                     $this->mapStorage->setNextMap($currentMap);
                 }
@@ -71,7 +70,7 @@ class MapListDataProvider extends AbstractDataProvider implements StatusAwarePlu
 
         do {
             try {
-                $maps = $this->connection->getMapList(self::BATCH_SIZE, $start);
+                $maps = $this->factory->getConnection()->getMapList(self::BATCH_SIZE, $start);
             } catch (IndexOutOfBoundException $e) {
                 // This is normal error when we we are trying to find all maps and we are out of bounds.
                 return;
@@ -112,11 +111,10 @@ class MapListDataProvider extends AbstractDataProvider implements StatusAwarePlu
         }
 
         try {
-            $currentMap = $this->connection->getCurrentMapInfo();  // sync better
+            $currentMap = $this->factory->getConnection()->getCurrentMapInfo();  // sync better
         } catch (\Exception $e) {
-            echo $e->getMessage(). "\n";
-
-            $currentMap = null;
+            // fallback to use map storage
+            $currentMap = $this->mapStorage->getMapByIndex($curMapIndex);
         }
 
         // current map can be false if map by index is not found..
@@ -130,10 +128,11 @@ class MapListDataProvider extends AbstractDataProvider implements StatusAwarePlu
         }
 
         try {
-            $nextMap = $this->connection->getNextMapInfo();  // sync better
+            $nextMap = $this->factory->getConnection()->getNextMapInfo();  // sync better
         } catch (\Exception $e) {
-            echo $e->getMessage(). "\n";
-            $nextMap = null;
+            // fallback to use map storage
+            $nextMap = $this->mapStorage->getMapByIndex($nextMapIndex);
+
         }
         // next map can be false if map by index is not found..
         if ($nextMap) {

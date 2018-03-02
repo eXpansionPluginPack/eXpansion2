@@ -114,6 +114,9 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
     /** @var ChatNotification */
     private $chatNotification;
 
+    /** @var Factory */
+    private $factory;
+
 
     /**
      * Dedimania constructor.
@@ -158,7 +161,7 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
         $this->apikey = $apikey;
         $this->serverLogin = $serverLogin;
         $this->titles = $titles;
-        $this->connection = $connectionFactory->getConnection();
+        $this->factory = $connectionFactory;
         $this->gameDataStorage = $gameDataStorage;
         $this->mapStorage = $mapStorage;
         $this->playerStorage = $playerStorage;
@@ -338,7 +341,7 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
         $server = new Player();
         $server->login = $this->gameDataStorage->getSystemInfo()->serverLogin;
 
-        $info = $this->connection->getDetailedPlayerInfo($server);
+        $info = $this->factory->getConnection()->getDetailedPlayerInfo($server);
 
         $packMask = $this->getPackMask($this->gameDataStorage->getVersion()->titleId);
         if (!$packMask) {
@@ -470,6 +473,7 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
 
             if ($dediplayer->banned) {
                 $this->chatNotification->sendMessage("|error|{error} Player {variable}".$player->getLogin()."{error} is banned from dedimania.");
+
                 return;
             }
 
@@ -550,7 +554,7 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
                 $player = new Player();
                 $player->login = $scores['players'][0]['login'];
                 try {
-                    $replay = new IXR_Base64($this->connection->getValidationReplay($player));
+                    $replay = new IXR_Base64($this->factory->getConnection()->getValidationReplay($player));
                     $that->dedimaniaService->setVReplay($replay);
                     $VReplayChecks = $scores['players'][0]['bestracecheckpoints'];
 
@@ -628,7 +632,7 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
         $player = new Player();
         $player->login = $login;
         try {
-            $this->connection->saveBestGhostsReplay($player, "exp2_temp_replay");
+            $this->factory->getConnection()->saveBestGhostsReplay($player, "exp2_temp_replay");
             $replay = new IXR_Base64(
                 $this->fileSystem->getUserData()->readAndDelete(
                     "Replays".DIRECTORY_SEPARATOR."exp2_temp_replay.Replay.Gbx")
@@ -652,7 +656,7 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
 
     protected function getMapInfo()
     {
-        $map = $this->connection->getCurrentMapInfo();
+        $map = $this->factory->getConnection()->getCurrentMapInfo();
 
         return [
             "UId" => $map->uId,
