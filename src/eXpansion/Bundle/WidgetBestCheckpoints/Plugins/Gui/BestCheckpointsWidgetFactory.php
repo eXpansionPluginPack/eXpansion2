@@ -50,7 +50,8 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
     {
         $elementCount = 0;
         $rows = $this->uiFactory->createLayoutRow(0, 0, [], 0.5);
-        $cpVariable = $this->updaterWidgetFactory->getVariable('LocalRecordCheckpoints')->getVariableName();
+        $localVariable = $this->updaterWidgetFactory->getVariable('LocalRecordCheckpoints')->getVariableName();
+        $dediVariable = $this->updaterWidgetFactory->getVariable('DedimaniaCheckpoints')->getVariableName();
 
         for ($i = 0; $i < self::rowCount; $i++) {
             $elements = [];
@@ -59,6 +60,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                     $dropdown = $this->uiFactory->createDropdown("select", [
                         "Live 1" => "1",
                         "Local 1" => "2",
+                        "Dedi 1" => "3",
                     ],
                         0,
                         false);
@@ -129,7 +131,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
 
 
             Void UpdateCp(Integer _Index, Integer _Score, Boolean _Animate) {
-                 declare Integer ElementCount for Page = $elementCount;
+                declare Integer ElementCount for Page = $elementCount;
                 if (_Index > ElementCount) {
                     return;
                 }
@@ -153,8 +155,15 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                         }                 
                     }
                     case 1: {                      
-                        if ($cpVariable.existskey(_Index)) {
-                            Compare = {$cpVariable}[_Index];                            
+                        if ($localVariable.existskey(_Index)) {
+                            Compare = {$localVariable}[_Index];                            
+                        } else {
+                            Compare = 99999999;
+                        }                       
+                    } 
+                    case 2: {                      
+                        if ($dediVariable.existskey(_Index)) {
+                            Compare = {$dediVariable}[_Index];                            
                         } else {
                             Compare = 99999999;
                         }                       
@@ -291,7 +300,7 @@ EOL
                                                                                                                                                                                                                                                                                                                                                                
                                                     
                         } else {                          
-                            if (GUIPlayer == RaceEvent.Player && $cpVariable.count > 0 && 
+                            if (GUIPlayer == RaceEvent.Player && $localVariable.count > 0 && 
                             MapBestTime != 99999999) {                                                                                          
                                 if (RaceEvent.IsEndLap && RaceEvent.IsEndRace == False) {                                        
                                     MyCheckpoints = Integer[Integer]; 
@@ -312,7 +321,12 @@ EOL
                                     }
                                 }
                                 case 1: {
-                                   if ($cpVariable.count > 0) {
+                                   if ($localVariable.count > 0) {
+                                        UpdateCp(RaceEvent.CheckpointInLap, RaceEvent.LapTime, True);
+                                   }                                
+                                }
+                                case 2: {
+                                   if ($dediVariable.count > 0) {
                                         UpdateCp(RaceEvent.CheckpointInLap, RaceEvent.LapTime, True);
                                    }                                
                                 }                            

@@ -2,7 +2,8 @@
 
 namespace eXpansion\Bundle\Dedimania\DataProviders;
 
-use eXpansion\Bundle\LocalRecords\Services\RecordHandler;
+use eXpansion\Bundle\Dedimania\Structures\DedimaniaPlayer;
+use eXpansion\Bundle\Dedimania\Structures\DedimaniaRecord;
 use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
 
 /**
@@ -13,6 +14,7 @@ use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
  */
 class DedimaniaDataProvider extends AbstractDataProvider
 {
+    /** @param DedimaniaRecord[] $records */
     public function onDedimaniaRecordsLoaded($records)
     {
         $this->dispatch('onDedimaniaRecordsLoaded', [$records]);
@@ -23,13 +25,24 @@ class DedimaniaDataProvider extends AbstractDataProvider
         $this->dispatch(
             'onDedimaniaRecordsUpdate',
             [
-                $params['record'],
-                $params['record_old'],
-                $params['records'],
-                $params['position'],
-                $params['position_old'],
+                $params[0],
+                $params[1],
+                $params[2],
+                $params[3],
+                $params[4],
             ]
         );
     }
+
+    public function onDedimaniaPlayerConnect(DedimaniaPlayer $player)
+    {
+        $this->dispatch('onDedimaniaPlayerConnect', [$player]);
+    }
+
+    public function onDedimaniaPlayerDisconnect(DedimaniaPlayer $player)
+    {
+        $this->dispatch('onDedimaniaPlayerDisconnect', [$player]);
+    }
+
 
 }

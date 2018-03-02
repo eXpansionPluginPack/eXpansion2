@@ -76,13 +76,14 @@ class DedimaniaService
         $this->setDisabled(false);
         $this->recordsByLogin = [];
         $this->ranksByLogin = [];
-
+        $records = [];
         foreach ($dedimaniaRecords as $record) {
             $this->recordsByLogin[$record->login] = $record;
             $this->ranksByLogin[$record->login] = intval($record->rank);
+            $records[] = $record;
         }
 
-        $this->dispatcher->dispatch('expansion.dedimania.records.loaded', [$this->dedimaniaRecords]);
+        $this->dispatcher->dispatch('expansion.dedimania.records.load', [$records]);
     }
 
     public function getRecord($login)
@@ -159,11 +160,13 @@ class DedimaniaService
 
             if ($newRecord) {
                 $this->recordsByLogin = $tempRecords;
+                $outRecords = usort($tempRecords, [$this,'compare']);
+
                 $this->ranksByLogin = $tempPositions;
                 $params = [
                     $newRecord,
                     $oldRecord,
-                    $tempRecords,
+                    $outRecords,
                     $newRecord->rank,
                     $oldRecord->rank,
                 ];
@@ -239,6 +242,7 @@ class DedimaniaService
     public function disconnectPlayer($login)
     {
         if (isset($this->players[$login])) {
+            $this->dispatcher->dispatch("expansion.dedimania.player.disconnect", [clone $this->players[$login]]);
             unset($this->players[$login]);
         }
     }

@@ -2,22 +2,23 @@
 
 namespace eXpansion\Bundle\Dedimania\DataProviders\Listener;
 
+use eXpansion\Bundle\Dedimania\Structures\DedimaniaPlayer;
 use eXpansion\Bundle\Dedimania\Structures\DedimaniaRecord;
 
 /**
- * Interface RecordsDataListener
+ * Interface DedimaniaDataListener
  *
  * @package eXpansion\Bundle\Dedimania\DataProviders\Listener;
  * @author  reaby
  */
-interface RecordsDataListener
+interface DedimaniaDataListener
 {
     /**
-     * Called when local records are loaded.
+     * Called when dedimania records are loaded.
      *
      * @param DedimaniaRecord[] $records
      */
-    public function onLocalRecordsLoaded($records);
+    public function onDedimaniaRecordsLoaded($records);
 
     /**
      * @param DedimaniaRecord   $record
@@ -34,5 +35,19 @@ interface RecordsDataListener
         $position,
         $oldPosition
     );
+
+
+    /**
+     * @param DedimaniaPlayer $player
+     * @return void
+     */
+    public function onDedimaniaPlayerConnect(DedimaniaPlayer $player);
+
+    /**
+     * @param DedimaniaPlayer $player
+     * @return void
+     */
+    public function onDedimaniaPlayerDisconnect(DedimaniaPlayer $player);
+
 
 }

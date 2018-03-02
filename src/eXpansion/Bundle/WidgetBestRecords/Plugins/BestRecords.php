@@ -2,6 +2,9 @@
 
 namespace eXpansion\Bundle\WidgetBestRecords\Plugins;
 
+use eXpansion\Bundle\Dedimania\DataProviders\Listener\DedimaniaDataListener;
+use eXpansion\Bundle\Dedimania\Structures\DedimaniaPlayer;
+use eXpansion\Bundle\Dedimania\Structures\DedimaniaRecord;
 use eXpansion\Bundle\LocalRecords\DataProviders\Listener\RecordsDataListener;
 use eXpansion\Bundle\LocalRecords\Model\Record;
 use eXpansion\Bundle\WidgetBestRecords\Plugins\Gui\BestRecordsWidgetFactory;
@@ -14,7 +17,7 @@ use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
 
-class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, ListenerInterfaceMpLegacyMap
+class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, DedimaniaDataListener, ListenerInterfaceMpLegacyMap
 {
     /** @var Factory */
     protected $factory;
@@ -170,5 +173,63 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, Li
     public function onEndMap(Map $map)
     {
 
+    }
+
+    /**
+     * Called when dedimania records are loaded.
+     *
+     * @param DedimaniaRecord[] $records
+     */
+    public function onDedimaniaRecordsLoaded($records)
+    {
+        print_r($records);
+
+        if (count($records) > 0) {
+
+
+            $this->widget->setDedimaniaRecord($records[0]);
+        } else {
+            $this->widget->setDedimaniaRecord(null);
+        }
+        $this->widget->update($this->allPlayers);
+    }
+
+    /**
+     * @param DedimaniaRecord   $record
+     * @param DedimaniaRecord   $oldRecord
+     * @param DedimaniaRecord[] $records
+     * @param  int              $position
+     * @param  int              $oldPosition
+     * @return void
+     */
+    public function onDedimaniaRecordsUpdate(
+        DedimaniaRecord $record,
+        DedimaniaRecord $oldRecord,
+        $records,
+        $position,
+        $oldPosition
+    ) {
+        if ($position == 1) {
+            $this->widget->setDedimaniaRecord($record);
+            $this->widget->update($this->allPlayers);
+        }
+    }
+
+    /**
+     * @param DedimaniaPlayer $player
+     * @return void
+     */
+    public function onDedimaniaPlayerConnect(DedimaniaPlayer $player)
+    {
+        // TODO: Implement onDedimaniaPlayerConnect() method.
+    }
+
+    /**
+     * @param DedimaniaPlayer $player
+     * @return void
+     */
+    public function onDedimaniaPlayerDisconnect(DedimaniaPlayer $player)
+    {
+        // TODO: Implement onDedimaniaPlayerDisconnect() method.
     }
 }

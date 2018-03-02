@@ -35,4 +35,14 @@ class UpdaterWidgetFactory extends ScriptVariableUpdateFactory
             $this->updateValue($this->playerGroup, 'LocalRecordCheckpoints', "Integer[Integer]");
         }
     }
+
+    public function setDedimaniaRecord($checkpoints)
+    {
+        if (count($checkpoints) > 0) {
+            $this->updateValue($this->playerGroup, 'DedimaniaCheckpoints', Builder::getArray($checkpoints, true));
+        } else {
+            $this->updateValue($this->playerGroup, 'DedimaniaCheckpoints', "Integer[Integer]");
+        }
+    }
+
 }

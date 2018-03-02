@@ -7,6 +7,7 @@ services:
                 $allPlayers: '@expansion.framework.core.user_groups.all_players'
         tags:
           - {name: 'expansion.plugin', data_provider: 'expansion.local_records.race'}
+          - {name: 'expansion.plugin', data_provider: 'expansion.dedimania'}
           - {name: 'expansion.plugin', data_provider: 'mp.legacy.map'}
 
     eXpansion\Bundle\WidgetBestRecords\Plugins\Gui\BestRecordsWidgetFactory:

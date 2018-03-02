@@ -2,8 +2,11 @@
 
 namespace eXpansion\Bundle\WidgetBestRecords\Plugins\Gui;
 
+use eXpansion\Bundle\Dedimania\Plugins\Dedimania;
+use eXpansion\Bundle\Dedimania\Structures\DedimaniaRecord;
 use eXpansion\Bundle\LocalRecords\Model\Record;
 use eXpansion\Framework\Core\Helpers\Time;
+use eXpansion\Framework\Core\Helpers\TMString;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
@@ -137,11 +140,33 @@ class BestRecordsWidgetFactory extends WidgetFactory
                 $this->lblLocalNick->setText($record->getPlayer()->getNicknameStripped());
                 $this->lblLocalTime->setText($this->time->timeToText($record->getScore(), true));
             } catch (\Exception $e) {
-
+                $this->lblLocalNick->setText("");
+                $this->lblLocalTime->setText("-:--.---");
             }
         } else {
             $this->lblLocalNick->setText("");
             $this->lblLocalTime->setText("-:--.---");
+        }
+    }
+
+    /**
+     * @param DedimaniaRecord|null $record
+     */
+    public function setDedimaniaRecord($record)
+    {
+        if ($record instanceof DedimaniaRecord) {
+            print_r($record);
+
+            try {
+                $this->lblDediNick->setText(TMString::trimControls($record->nickName));
+                $this->lblDediTime->setText($this->time->timeToText($record->best, true));
+            } catch (\Exception $e) {
+                $this->lblDediNick->setText("");
+                $this->lblDediTime->setText("-:--.---");
+            }
+        } else {
+            $this->lblDediNick->setText("");
+            $this->lblDediTime->setText("-:--.---");
         }
     }
 

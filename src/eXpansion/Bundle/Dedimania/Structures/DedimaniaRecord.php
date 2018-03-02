@@ -35,7 +35,13 @@ class DedimaniaRecord extends AbstractStructure
 
     public function getCheckpoints()
     {
-        return explode(",", $this->checks);
+        $checks = explode(",", $this->checks);
+        $out = [];
+        foreach ($checks as $check) {
+            $out[] = intval($check);
+        }
+
+        return $out;
     }
 
 }
