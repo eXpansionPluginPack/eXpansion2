@@ -52,7 +52,6 @@ class PBWidget extends FmlManialinkFactory
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
         $this->time = $time;
-
     }
 
     /**
@@ -69,7 +68,7 @@ class PBWidget extends FmlManialinkFactory
     protected function createContent(ManialinkInterface $manialink)
     {
         parent::createContent($manialink);
-        $manialink->setData("authorTime", 0);
+
         $manialink->getFmlManialink()->setScript(null);
 
         $line = $this->uiFactory->createLayoutLine(0, 0, [], 0.5);
@@ -106,7 +105,6 @@ class PBWidget extends FmlManialinkFactory
      */
     protected function updateContent(ManialinkInterface $manialink)
     {
-        parent::updateContent($manialink);
         if ($this->authorTime) {
             $this->lblAuthorTime->setText($this->time->timeToText($this->authorTime, true));
         } else {
@@ -115,8 +113,9 @@ class PBWidget extends FmlManialinkFactory
 
         $recipient = $manialink->getUserGroup()->getLogins();
 
-        if (count($recipient) == 1) {
+        if (count($recipient) > 0) {
             $login = $recipient[0];
+
             if (isset($this->timesByLogin[$login])) {
                 $this->lblPBTime->setText($this->time->timeToText($this->timesByLogin[$login], true));
             } else {
@@ -125,6 +124,7 @@ class PBWidget extends FmlManialinkFactory
         } else {
             $this->lblPBTime->setText("-:--:---");
         }
+
     }
 
     /**
