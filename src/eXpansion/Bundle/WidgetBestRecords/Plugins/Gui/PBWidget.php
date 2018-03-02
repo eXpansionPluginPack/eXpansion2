@@ -119,6 +119,8 @@ class PBWidget extends FmlManialinkFactory
             $login = $recipient[0];
             if (isset($this->timesByLogin[$login])) {
                 $this->lblPBTime->setText($this->time->timeToText($this->timesByLogin[$login], true));
+            } else {
+                $this->lblPBTime->setText("-:--:---");
             }
         } else {
             $this->lblPBTime->setText("-:--:---");
@@ -137,7 +139,6 @@ class PBWidget extends FmlManialinkFactory
     public function reset()
     {
         $this->timesByLogin = [];
-
     }
 
 }

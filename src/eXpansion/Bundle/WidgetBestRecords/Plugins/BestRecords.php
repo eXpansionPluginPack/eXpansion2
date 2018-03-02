@@ -15,10 +15,8 @@ use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\MapStorage;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptMatch;
-use Maniaplanet\DedicatedServer\Structures\Map;
 
 class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, DedimaniaDataListener, ListenerInterfaceMpScriptMatch, ListenerInterfaceMpLegacyPlayer
 {
@@ -341,7 +339,7 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, De
      */
     public function onStartMatchEnd($count, $time)
     {
-        // TODO: Implement onStartMatchEnd() method.
+        //
     }
 
     /**
@@ -354,7 +352,7 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, De
      */
     public function onEndMatchStart($count, $time)
     {
-        // TODO: Implement onEndMatchStart() method.
+        //
     }
 
     /**
@@ -367,7 +365,7 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, De
      */
     public function onEndMatchEnd($count, $time)
     {
-        // TODO: Implement onEndMatchEnd() method.
+        //
     }
 
     /**
@@ -380,7 +378,7 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, De
      */
     public function onStartTurnStart($count, $time)
     {
-        // TODO: Implement onStartTurnStart() method.
+        //
     }
 
     /**
@@ -393,7 +391,7 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, De
      */
     public function onStartTurnEnd($count, $time)
     {
-        // TODO: Implement onStartTurnEnd() method.
+        //
     }
 
     /**
@@ -406,7 +404,7 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, De
      */
     public function onEndTurnStart($count, $time)
     {
-        // TODO: Implement onEndTurnStart() method.
+        //
     }
 
     /**
@@ -419,7 +417,7 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, De
      */
     public function onEndTurnEnd($count, $time)
     {
-        // TODO: Implement onEndTurnEnd() method.
+        //
     }
 
     /**
@@ -432,7 +430,7 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, De
      */
     public function onStartRoundStart($count, $time)
     {
-        // TODO: Implement onStartRoundStart() method.
+        //
     }
 
     /**
@@ -445,7 +443,7 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, De
      */
     public function onStartRoundEnd($count, $time)
     {
-        // TODO: Implement onStartRoundEnd() method.
+        //
     }
 
     /**
@@ -458,7 +456,7 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, De
      */
     public function onEndRoundStart($count, $time)
     {
-        // TODO: Implement onEndRoundStart() method.
+        //
     }
 
     /**
@@ -471,6 +469,6 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, De
      */
     public function onEndRoundEnd($count, $time)
     {
-        // TODO: Implement onEndRoundEnd() method.
+        //
     }
 }

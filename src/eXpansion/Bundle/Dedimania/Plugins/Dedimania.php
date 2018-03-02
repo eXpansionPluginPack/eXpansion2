@@ -472,7 +472,7 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
                 $this->chatNotification->sendMessage("|error|{error} Player {variable}".$player->getLogin()."{error} is banned from dedimania.");
                 return;
             }
-            
+
             $this->dedimaniaService->connectPlayer($dediplayer);
 
 
