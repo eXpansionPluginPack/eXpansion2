@@ -182,11 +182,7 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, De
      */
     public function onDedimaniaRecordsLoaded($records)
     {
-        print_r($records);
-
         if (count($records) > 0) {
-
-
             $this->widget->setDedimaniaRecord($records[0]);
         } else {
             $this->widget->setDedimaniaRecord(null);
