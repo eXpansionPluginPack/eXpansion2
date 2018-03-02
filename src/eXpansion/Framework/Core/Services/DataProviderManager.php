@@ -209,7 +209,9 @@ class DataProviderManager
             throw new UncompatibleException("Plugin $pluginId isn't compatible with $provider. Should be instance of $interface");
         }
 
-        $this->console->getConsoleOutput()->writeln("\t<info>- $provider : $providerId</info>");
+        if ($this->container->getParameter('kernel.environment') == 'dev') {
+            $this->console->getConsoleOutput()->writeln("\t<info>- $provider</info>");
+        }
     }
 
     /**

@@ -212,9 +212,10 @@ class PluginManager
         if ($pluginService instanceof StatusAwarePluginInterface && !isset($this->enabledPlugins[$plugin->getPluginId()])) {
             $notify = true;
         }
-
-        $this->console->getConsoleOutput()
-            ->writeln("<info>Plugin <comment>'{$plugin->getPluginId()}'</comment> is enabled with providers :</info>");
+        if ($this->container->getParameter('kernel.environment') == 'dev') {
+            $this->console->getConsoleOutput()
+                ->writeln("<info>Plugin <comment>'{$plugin->getPluginId()}'</comment> data providers:</info>");
+        }
         foreach ($plugin->getDataProviders() as $provider) {
             $this->dataProviderManager->registerPlugin($provider, $plugin->getPluginId(), $title, $mode, $script, $map);
         }
