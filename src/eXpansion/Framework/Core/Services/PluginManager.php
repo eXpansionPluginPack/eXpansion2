@@ -63,6 +63,7 @@ class PluginManager
     /**
      * Initialize.
      *
+     * @param Map $map
      * @throws \eXpansion\Framework\Core\Exceptions\DataProvider\UncompatibleException
      */
     public function init(Map $map)
@@ -74,7 +75,6 @@ class PluginManager
      * Do a reset to plugins/
      *
      * @param Map $map
-     *
      * @throws \eXpansion\Framework\Core\Exceptions\DataProvider\UncompatibleException
      */
     public function reset(Map $map)

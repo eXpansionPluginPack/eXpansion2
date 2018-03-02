@@ -8,10 +8,10 @@
 
 namespace eXpansion\Framework\Core\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class eXpansionCoreExtension extends Extension
 {
@@ -19,7 +19,7 @@ class eXpansionCoreExtension extends Extension
     /**
      * Loads a specific configuration.
      *
-     * @param array $configs An array of configuration values
+     * @param array            $configs An array of configuration values
      * @param ContainerBuilder $container A ContainerBuilder instance
      *
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
@@ -27,6 +27,7 @@ class eXpansionCoreExtension extends Extension
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('listeners.yml');
         $loader->load('commands.yml');
         $loader->load('services.yml');
         $loader->load('data_providers.yml');
@@ -36,7 +37,6 @@ class eXpansionCoreExtension extends Extension
         $loader->load('gui.yml');
         $loader->load('gui_grid.yml');
         $loader->load('helpers.yml');
-        $loader->load('listeners.yml');
         $loader->load('configs.yml');
 
         // Temporary for the prototype.
