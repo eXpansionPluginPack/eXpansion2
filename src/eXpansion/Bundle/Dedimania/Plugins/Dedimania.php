@@ -414,23 +414,17 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
 
             // @todo remove when dedimania records has better frontend
             if (!empty($recs) && count($recs) > 0) {
-                $time = $this->time->timeToText($recs[0]->best, true);
-                $this->chatNotification->sendMessage(
-                    "|record|{record} Dedimania {variable}1.{record} record {variable}|time| ".$time." {record}by{variable} ".TMString::trimLinks($recs[0]->nickName).'{record}({variable}'.$recs[0]->login.'{record})');
 
                 foreach ($this->playerStorage->getOnline() as $login => $player) {
                     $rec = $this->dedimaniaService->getRecord($login);
                     if ($rec) {
+                        $time = $this->time->timeToText($rec->best, true);
                         $this->chatNotification->sendMessage(
-                            "|record|{record} Your current {variable}".$rec->rank.". {record}dedimania record |time| ".$time,
+                            "|record|{record} Your current {variable}".$rec->rank.". {record}dedimania record {variable}|time| ".$time,
                             $login);
                     }
                 }
-            } else {
-                $this->chatNotification->sendMessage(
-                    "|record|{record} No dedimania records, go drive one!");
             }
-
         });
 
     }
