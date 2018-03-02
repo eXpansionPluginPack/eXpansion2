@@ -17,7 +17,7 @@ services:
             $command: "pay"
             $permission: 'planets'
             $aliases: []
-            
+
     eXpansion\Framework\GameCurrencyBundle\ChatCommand\Donate:
         class: eXpansion\Framework\GameCurrencyBundle\ChatCommand\Donate
         arguments:
