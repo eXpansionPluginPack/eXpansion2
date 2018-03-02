@@ -113,9 +113,6 @@ class PBWidget extends FmlManialinkFactory
 
         $recipient = $manialink->getUserGroup()->getLogins();
 
-        print_r($recipient);
-        print_r($this->timesByLogin);
-
         if (count($recipient) == 1) {
             $login = $recipient[0];
             if (isset($this->timesByLogin[$login])) {
@@ -133,14 +130,12 @@ class PBWidget extends FmlManialinkFactory
     public function setPB($login, $time)
     {
         $this->timesByLogin[$login] = $time;
-        print_r($this->timesByLogin);
-
     }
 
     public function reset()
     {
         $this->timesByLogin = [];
-        echo "reset\n";
+
     }
 
 }

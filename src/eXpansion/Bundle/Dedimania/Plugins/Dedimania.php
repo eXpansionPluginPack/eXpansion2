@@ -380,12 +380,14 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
         if ($map->authorTime < 6200) {
             $status = "Times under 6.2s are refused!";
             $this->console->writeln("Dedimania: Disabling records for this map. ".$status);
+
             return;
         }
 
         if ($map->nbCheckpoints < 1) {
             $status = "Checkpoints needs to be more than 1!";
             $this->console->writeln("Dedimania: Disabling records for this map. ".$status);
+
             return;
         }
 
@@ -768,15 +770,17 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
         $distance
     ) {
 
-        $rank = $this->dedimaniaService->processRecord($login, $raceTime, $curCps);
-
-        if ($rank > 0) {
-            if ($rank === 1) {
-                $this->setGReplay($login);
+        $record = $this->dedimaniaService->processRecord($login, $raceTime, $curCps);
+        if ($record instanceof DedimaniaRecord) {
+            $rank = $record->rank;
+            if ($rank > 0) {
+                if ($rank === 1) {
+                    $this->setGReplay($login);
+                }
+                $player = $this->playerStorage->getPlayerInfo($login);
+                $this->chatNotification->sendMessage("|record| {variable}$rank. {record}Dedimania Record {variable}|time| ".$this->time->timeToText($raceTime,
+                        true)." {record}driven by {variable}".TMString::trimStyles($player->getNickname())); // @todo remove this when the local records handler works nicely also for dedimania
             }
-            $player = $this->playerStorage->getPlayerInfo($login);
-            $this->chatNotification->sendMessage("|record| {variable}$rank. {record}Dedimania Record {variable}|time| ".$this->time->timeToText($raceTime,
-                    true)." {record}driven by {variable}".TMString::trimStyles($player->getNickname())); // @todo remove this when the local records handler works nicely also for dedimania
         }
     }
 

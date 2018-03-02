@@ -467,7 +467,6 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $data = [];
         foreach ($json['results'] as $idx => $mxInfo) {
             $map = new MxInfo($mxInfo);
-            print_r($map);
 
             $data[] = [
                 "index" => $idx + 1,
