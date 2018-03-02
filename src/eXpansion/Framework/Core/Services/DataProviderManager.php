@@ -51,10 +51,16 @@ class DataProviderManager
      * DataProviderManager constructor.
      *
      * @param ContainerInterface $container
-     * @param GameDataStorage $gameDataStorage
-     * @param Console $console
+     * @param GameDataStorage    $gameDataStorage
+     * @param Console            $console
+     * @param string             $env
      */
-    public function __construct(ContainerInterface $container, GameDataStorage $gameDataStorage, Console $console)
+    public function __construct(
+        ContainerInterface $container,
+        GameDataStorage $gameDataStorage,
+        Console $console,
+        $env
+    )
     {
         $this->container = $container;
         $this->gameDataStorage = $gameDataStorage;

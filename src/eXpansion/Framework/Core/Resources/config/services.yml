@@ -44,9 +44,13 @@ services:
 
     eXpansion\Framework\Core\Services\PluginManager:
         class: "%expansion.service.plugin_manager.class%"
+        arguments:
+            $env: "%kernel.environment%"
 
     eXpansion\Framework\Core\Services\DataProviderManager:
         class: "%expansion.service.data_provider_manager.class%"
+        arguments:
+            $env: "%kernel.environment%"
 
     eXpansion\Framework\Core\Services\Console:
         class: "%expansion.service.console.class%"

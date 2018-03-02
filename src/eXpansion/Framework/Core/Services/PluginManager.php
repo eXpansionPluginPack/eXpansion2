@@ -37,27 +37,33 @@ class PluginManager
     /** @var Console */
     protected $console;
 
+    /** @var string */
+    private $env;
+
     /**
      * PluginManager constructor.
      *
-     * @param ContainerInterface $container
+     * @param ContainerInterface       $container
      * @param PluginDescriptionFactory $pluginDescriptionFactory
-     * @param DataProviderManager $dataProviderManager
-     * @param GameDataStorage $gameDataStorage
-     * @param Console $console
+     * @param DataProviderManager      $dataProviderManager
+     * @param GameDataStorage          $gameDataStorage
+     * @param Console                  $console
+     * @param                          $env
      */
     public function __construct(
         ContainerInterface $container,
         PluginDescriptionFactory $pluginDescriptionFactory,
         DataProviderManager $dataProviderManager,
         GameDataStorage $gameDataStorage,
-        Console $console
+        Console $console,
+        $env
     ) {
         $this->container = $container;
         $this->pluginDescriptionFactory = $pluginDescriptionFactory;
         $this->dataProviderManager = $dataProviderManager;
         $this->gameDataStorage = $gameDataStorage;
         $this->console = $console;
+        $this->env = $env;
     }
 
     /**
@@ -212,7 +218,7 @@ class PluginManager
         if ($pluginService instanceof StatusAwarePluginInterface && !isset($this->enabledPlugins[$plugin->getPluginId()])) {
             $notify = true;
         }
-        if ($this->container->getParameter('kernel.environment') == 'dev') {
+        if ($this->env == 'dev') {
             $this->console->getConsoleOutput()
                 ->writeln("<info>Plugin <comment>'{$plugin->getPluginId()}'</comment> data providers:</info>");
         }
