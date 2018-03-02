@@ -28,7 +28,7 @@ class MapListDataProvider extends AbstractDataProvider implements StatusAwarePlu
     /**
      * @var Factory
      */
-    protected $factory;
+    protected $connection;
 
     /**
      * MapListDataProvider constructor.
@@ -39,7 +39,7 @@ class MapListDataProvider extends AbstractDataProvider implements StatusAwarePlu
     public function __construct(MapStorage $mapStorage, Factory $factory)
     {
         $this->mapStorage = $mapStorage;
-        $this->factory = $factory;
+        $this->connection = $factory->getConnection();
     }
 
     /**
@@ -49,11 +49,11 @@ class MapListDataProvider extends AbstractDataProvider implements StatusAwarePlu
     {
         if ($status) {
             $this->updateMapList();
-            $currentMap = $this->factory->getConnection()->getCurrentMapInfo();
+            $currentMap = $this->connection->getCurrentMapInfo();
             if ($currentMap) {
                 $this->mapStorage->setCurrentMap($currentMap);
                 try {
-                    $this->mapStorage->setNextMap($this->factory->getConnection()->getNextMapInfo());
+                    $this->mapStorage->setNextMap($this->connection->getNextMapInfo());
                 } catch (NextMapException $ex) {
                     $this->mapStorage->setNextMap($currentMap);
                 }
@@ -71,7 +71,7 @@ class MapListDataProvider extends AbstractDataProvider implements StatusAwarePlu
 
         do {
             try {
-                $maps = $this->factory->getConnection()->getMapList(self::BATCH_SIZE, $start);
+                $maps = $this->connection->getMapList(self::BATCH_SIZE, $start);
             } catch (IndexOutOfBoundException $e) {
                 // This is normal error when we we are trying to find all maps and we are out of bounds.
                 return;
