@@ -155,8 +155,6 @@ class BestRecordsWidgetFactory extends WidgetFactory
     public function setDedimaniaRecord($record)
     {
         if ($record instanceof DedimaniaRecord) {
-            print_r($record);
-
             try {
                 $this->lblDediNick->setText(TMString::trimControls($record->nickName));
                 $this->lblDediTime->setText($this->time->timeToText($record->best, true));
