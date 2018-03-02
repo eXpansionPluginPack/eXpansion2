@@ -3,6 +3,7 @@
 
 namespace eXpansion\Framework\Core\Services\Application;
 
+use eXpansion\Framework\Core\Listener\BaseStorageUpdateListener;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use Maniaplanet\DedicatedServer\Connection;
@@ -71,6 +72,7 @@ abstract class AbstractApplication implements RunInterface
         $this->dispatcher->dispatch(self::EVENT_BEFORE_INIT, []);
 
         $this->factory->createConnection();
+
         $this->dispatcher->init($this->factory->getConnection());
 
         $this->dispatcher->dispatch(self::EVENT_AFTER_INIT, []);

@@ -3,10 +3,7 @@
 namespace eXpansion\Framework\Core\Services;
 
 use eXpansion\Framework\Core\Model\Event\DedicatedEvent;
-use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
 use eXpansion\Framework\Core\Services\Application\EventProcessorInterface;
-use eXpansion\Framework\Core\Storage\GameDataStorage;
-use Maniaplanet\DedicatedServer\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -37,12 +34,12 @@ class SymfonyEventAdapter implements EventProcessorInterface
      * Dispatch event as it needs to be.
      *
      * @param string $eventName Name of the event.
-     * @param array $params Parameters
+     * @param array  $params Parameters
      */
     public function dispatch($eventName, $params)
     {
         $event = new DedicatedEvent();
         $event->setParameters($params);
-        $this->symfonyEventDispatcher->dispatch("maniaplanet.game.".$eventName, $event);
+        $this->symfonyEventDispatcher->dispatch($eventName, $event);
     }
 }
