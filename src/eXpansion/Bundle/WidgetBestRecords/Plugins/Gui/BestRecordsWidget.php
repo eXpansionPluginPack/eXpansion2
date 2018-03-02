@@ -2,18 +2,18 @@
 
 namespace eXpansion\Bundle\WidgetBestRecords\Plugins\Gui;
 
-use eXpansion\Bundle\Dedimania\Plugins\Dedimania;
 use eXpansion\Bundle\Dedimania\Structures\DedimaniaRecord;
 use eXpansion\Bundle\LocalRecords\Model\Record;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Helpers\TMString;
+use eXpansion\Framework\Core\Model\Gui\FmlManialinkFactoryContext;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
-use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
-use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
+use eXpansion\Framework\Core\Plugins\Gui\FmlManialinkFactory;
+use eXpansion\Framework\GameManiaplanet\DataProviders\ChatCommandDataProvider;
 use eXpansion\Framework\Gui\Components\Label;
 
-class BestRecordsWidgetFactory extends WidgetFactory
+class BestRecordsWidget extends FmlManialinkFactory
 {
     /** @var string */
     private $authorName;
@@ -38,18 +38,23 @@ class BestRecordsWidgetFactory extends WidgetFactory
      * @var Time
      */
     private $time;
+    /**
+     * @var ChatCommandDataProvider
+     */
+    private $chatCommandDataProvider;
 
 
     /***
      * MenuFactory constructor.
      *
-     * @param                      $name
-     * @param                      $sizeX
-     * @param                      $sizeY
-     * @param null                 $posX
-     * @param null                 $posY
-     * @param WidgetFactoryContext $context
-     * @param Time                 $time
+     * @param                            $name
+     * @param                            $sizeX
+     * @param                            $sizeY
+     * @param null                       $posX
+     * @param null                       $posY
+     * @param FmlManialinkFactoryContext $context
+     * @param ChatCommandDataProvider    $chatCommandDataProvider
+     * @param Time                       $time
      */
     public function __construct(
         $name,
@@ -57,22 +62,16 @@ class BestRecordsWidgetFactory extends WidgetFactory
         $sizeY,
         $posX,
         $posY,
-        WidgetFactoryContext $context,
+        FmlManialinkFactoryContext $context,
+        ChatCommandDataProvider $chatCommandDataProvider,
         Time $time
 
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
         $this->time = $time;
+        $this->chatCommandDataProvider = $chatCommandDataProvider;
     }
 
-    /**
-     * @param int $authorTime
-     */
-    public function setAuthorTime($author, int $authorTime)
-    {
-        $this->authorName = $author;
-        $this->authorTime = $authorTime;
-    }
 
     /**
      * @param Widget|ManialinkInterface $manialink
@@ -80,18 +79,7 @@ class BestRecordsWidgetFactory extends WidgetFactory
     protected function createContent(ManialinkInterface $manialink)
     {
         parent::createContent($manialink);
-
-        $line = $this->uiFactory->createLayoutLine(0, 0, [], 0.5);
-        $lbl = $this->createLabel("Author", "0017")->setSize(15, 4);
-        $line->addChild($lbl);
-
-        $this->lblAuthorNick = $this->createLabel("n/a", "0023")->setSize(33, 4);
-        $line->addChild($this->lblAuthorNick);
-
-        $this->lblAuthorTime = $this->createLabel("-:--:---", "0015")->setSize(12, 4);
-
-        $line->addChild($this->lblAuthorTime);
-        $manialink->addChild($line);
+        $manialink->getFmlManialink()->setScript(null);
 
         $line2 = $this->uiFactory->createLayoutLine(0, -4.45, [], 0.5);
 
@@ -121,6 +109,7 @@ class BestRecordsWidgetFactory extends WidgetFactory
     /**
      * @param string $text
      * @param string $color
+     * @return Label
      */
     private function createLabel($text, $color)
     {
@@ -150,6 +139,22 @@ class BestRecordsWidgetFactory extends WidgetFactory
     }
 
     /**
+     * @param int|null $time
+     */
+    public function setPB($time)
+    {
+        if ($time) {
+            try {
+                $this->lblPBTime->setText($this->time->timeToText($time, true));
+            } catch (\Exception $e) {
+                $this->lblPBTime->setText("-:--.---");
+            }
+        } else {
+            $this->lblPBTime->setText("-:--.---");
+        }
+    }
+
+    /**
      * @param DedimaniaRecord|null $record
      */
     public function setDedimaniaRecord($record)
@@ -167,12 +172,4 @@ class BestRecordsWidgetFactory extends WidgetFactory
             $this->lblDediTime->setText("-:--.---");
         }
     }
-
-    protected function updateContent(ManialinkInterface $manialink)
-    {
-        $this->lblAuthorTime->setText($this->time->timeToText($this->authorTime, true));
-        $this->lblAuthorNick->setText($this->authorName);
-    }
-
-
 }

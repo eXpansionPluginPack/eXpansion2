@@ -103,12 +103,14 @@ class DedimaniaService
      * @param int    $score
      * @param int[]  $checkpoints
      *
-     * @return int rank, -1 for fail
+     * @return DedimaniaRecord|false
      */
     public function processRecord($login, $score, $checkpoints)
     {
-        if ($this->disabled) {
-            return -1;
+        if ($this->isDisabled()) {
+            echo "disabled state.\n";
+
+            return false;
         }
 
         $tempRecords = $this->recordsByLogin;
@@ -135,7 +137,9 @@ class DedimaniaService
             uasort($tempRecords, [$this, "compare"]);
 
             if (!isset($this->players[$login])) {
-                return -1;
+                echo "player $login not connected\n";
+
+                return false;
             }
 
             $player = $this->players[$login];
@@ -160,7 +164,7 @@ class DedimaniaService
 
             if ($newRecord) {
                 $this->recordsByLogin = $tempRecords;
-                $outRecords = usort($tempRecords, [$this,'compare']);
+                $outRecords = usort($tempRecords, [$this, 'compare']);
 
                 $this->ranksByLogin = $tempPositions;
                 $params = [
@@ -173,11 +177,11 @@ class DedimaniaService
 
                 $this->dispatcher->dispatch("expansion.dedimania.records.update", [$params]);
 
-                return $newRecord->rank;
+                return $newRecord;
             }
         }
 
-        return -1;
+        return false;
     }
 
     /**

@@ -8,13 +8,24 @@ services:
         tags:
           - {name: 'expansion.plugin', data_provider: 'expansion.local_records.race'}
           - {name: 'expansion.plugin', data_provider: 'expansion.dedimania'}
-          - {name: 'expansion.plugin', data_provider: 'mp.legacy.map'}
+          - {name: 'expansion.plugin', data_provider: 'mp.script.match'}
+          - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
 
-    eXpansion\Bundle\WidgetBestRecords\Plugins\Gui\BestRecordsWidgetFactory:
-            class: eXpansion\Bundle\WidgetBestRecords\Plugins\Gui\BestRecordsWidgetFactory
+    eXpansion\Bundle\WidgetBestRecords\Plugins\Gui\BestRecordsWidget:
+            class: eXpansion\Bundle\WidgetBestRecords\Plugins\Gui\BestRecordsWidget
             autowire: true
             arguments:
                 $name:  "BestRecords"
+                $posX: -159
+                $posY: 87
+                $sizeX: null
+                $sizeY: null
+
+    eXpansion\Bundle\WidgetBestRecords\Plugins\Gui\PBWidget:
+            class: eXpansion\Bundle\WidgetBestRecords\Plugins\Gui\PBWidget
+            autowire: true
+            arguments:
+                $name:  "Personal best"
                 $posX: -159
                 $posY: 87
                 $sizeX: null
