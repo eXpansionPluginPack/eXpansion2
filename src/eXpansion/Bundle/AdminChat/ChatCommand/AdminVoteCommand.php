@@ -78,7 +78,7 @@ class AdminVoteCommand extends AdminCommand
     {
         parent::execute($login, $input);
         $player = $this->playerStorage->getPlayerInfo($login);
-        $this->dispatcher->dispatch("votemanager.votecancelled", [$player, null, null]);
+        $this->dispatcher->dispatch("votemanager.vote.cancelled", [$player, null, null]);
 
         $level = $this->adminGroupsHelper->getLoginGroupLabel($login);
         $admin = $player->getNickName();

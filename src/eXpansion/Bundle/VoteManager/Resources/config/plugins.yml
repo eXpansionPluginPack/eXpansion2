@@ -52,13 +52,14 @@ services:
 
     eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\UpdateVoteWidgetFactory:
             class: eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\UpdateVoteWidgetFactory
-            autowire: true
             arguments:
                 $name:  "UpdateVote"
-                $posX: 0
-                $posY: 0
-                $sizeX: null
-                $sizeY: null
+                $all_players: '@expansion.framework.core.user_groups.all_players'
+                $variables:
+                    - {name: "VoteUpdater", type: "Integer[Text]", default: '["yes" => 0, "no" => 0]'}
+            tags:
+                - {name: expansion.plugin, data_provider: exp.timer}
+                - {name: expansion.plugin, data_provider: expansion.user_group}
 
     eXpansion\Bundle\VoteManager\Plugins\MenuItems:
             class: eXpansion\Bundle\VoteManager\Plugins\MenuItems

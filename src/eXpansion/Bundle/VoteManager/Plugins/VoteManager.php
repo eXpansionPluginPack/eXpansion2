@@ -2,21 +2,15 @@
 
 namespace eXpansion\Bundle\VoteManager\Plugins;
 
-use eXpansion\Bundle\Maps\Services\JukeboxService;
 use eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\UpdateVoteWidgetFactory;
 use eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\VoteWidgetFactory;
 use eXpansion\Bundle\VoteManager\Plugins\Votes\AbstractVotePlugin;
 use eXpansion\Bundle\VoteManager\Services\VoteService;
 use eXpansion\Bundle\VoteManager\Structures\Vote;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
-use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
-use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
-use eXpansion\Framework\Core\Storage\MapStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyVote;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptPodium;
-use Maniaplanet\DedicatedServer\Connection;
 
 class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExpTimer
 {
@@ -46,10 +40,10 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
     /**
      * VoteManager constructor.
      *
-     * @param VoteWidgetFactory $voteWidgetFactory
+     * @param VoteWidgetFactory       $voteWidgetFactory
      * @param UpdateVoteWidgetFactory $updateVoteWidgetFactory
-     * @param Group $players
-     * @param VoteService $voteService
+     * @param Group                   $players
+     * @param VoteService             $voteService
      */
     public function __construct(
         VoteWidgetFactory $voteWidgetFactory,
@@ -77,7 +71,6 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
         if ($cmdValue instanceof Vote) {
             $this->updateVoteWidgetFactory->create($this->players);
             $this->voteWidgetFactory->create($this->players);
-            $this->voteWidgetFactory->setMessage($this->voteService->getCurrentVote()->getQuestion());
         } else {
             $this->voteService->startVote($player, $cmdName, ['value' => $cmdValue]);
         }
@@ -139,7 +132,6 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
     {
         if ($this->voteService->getCurrentVote() instanceof AbstractVotePlugin) {
             $this->voteService->update();
-            $this->updateVoteWidgetFactory->update($this->players);
         }
     }
 
@@ -153,5 +145,30 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
         // Nothing
     }
 
+    /**
+     * When vote Fails
+     * @param Player $player
+     * @param Vote   $vote
+     * @return void
+     */
+    public function onVoteYes(Player $player, $vote)
+    {
+        if ($this->voteService->getCurrentVote() instanceof AbstractVotePlugin) {
+            $this->updateVoteWidgetFactory->updateVote($vote);
+        }
+    }
+
+    /**
+     * When vote Fails
+     * @param Player $player
+     * @param Vote   $vote
+     * @return void
+     */
+    public function onVoteNo(Player $player, $vote)
+    {
+        if ($this->voteService->getCurrentVote() instanceof AbstractVotePlugin) {
+            $this->updateVoteWidgetFactory->updateVote($vote);
+        }
+    }
 }
 

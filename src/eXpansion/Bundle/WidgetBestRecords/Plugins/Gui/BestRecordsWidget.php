@@ -90,6 +90,7 @@ class BestRecordsWidget extends FmlManialinkFactory
         $line2->addChild($this->lblLocalNick);
 
         $this->lblLocalTime = $this->createLabel("-:--:---", "0015")->setSize(12, 4);
+        $this->lblLocalTime->setAlign("center", "center2");
         $line2->addChild($this->lblLocalTime);
         $manialink->addChild($line2);
 
@@ -102,6 +103,7 @@ class BestRecordsWidget extends FmlManialinkFactory
         $line3->addChild($this->lblDediNick);
 
         $this->lblDediTime = $this->createLabel("-:--:---", "0015")->setSize(12, 4);
+        $this->lblDediTime->setAlign("center", "center2");
         $line3->addChild($this->lblDediTime);
         $manialink->addChild($line3);
     }
