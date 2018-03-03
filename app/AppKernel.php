@@ -33,6 +33,8 @@ class AppKernel extends Kernel
 
         /* Register eXpansion Plugins */
         $bundles[] = new \eXpansion\Bundle\LocalRecords\LocalRecordsBundle();
+        $bundles[] = new \eXpansion\Bundle\Dedimania\DedimaniaBundle();
+
         $bundles[] = new \eXpansion\Bundle\Maps\MapsBundle();
         $bundles[] = new \eXpansion\Bundle\Players\PlayersBundle();
         $bundles[] = new \eXpansion\Bundle\JoinLeaveMessages\JoinLeaveMessagesBundle();

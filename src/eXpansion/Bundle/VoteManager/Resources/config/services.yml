@@ -15,7 +15,9 @@ services:
           tags:
             - {name: 'expansion.dataprovider', provider: "exp.plugin.votemanager", interface: eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyVote}
             - {name: 'expansion.dataprovider.compatibility', title: 'ALL'}
-            - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.votenew', method: onVoteNew}
-            - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.votecancelled', method: onVoteCancelled}
-            - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.votepassed', method: onVotePassed}
-            - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.votefailed', method: onVoteFailed}
+            - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.vote.new', method: onVoteNew}
+            - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.vote.cancelled', method: onVoteCancelled}
+            - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.vote.passed', method: onVotePassed}
+            - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.vote.failed', method: onVoteFailed}
+            - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.vote.yes', method: onVoteYes}
+            - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.vote.no', method: onVoteNo}

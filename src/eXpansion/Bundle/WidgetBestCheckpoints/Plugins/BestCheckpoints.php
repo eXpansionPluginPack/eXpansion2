@@ -2,6 +2,9 @@
 
 namespace eXpansion\Bundle\WidgetBestCheckpoints\Plugins;
 
+use eXpansion\Bundle\Dedimania\DataProviders\Listener\DedimaniaDataListener;
+use eXpansion\Bundle\Dedimania\Structures\DedimaniaPlayer;
+use eXpansion\Bundle\Dedimania\Structures\DedimaniaRecord;
 use eXpansion\Bundle\LocalRecords\DataProviders\Listener\RecordsDataListener;
 use eXpansion\Bundle\LocalRecords\Model\Record;
 use eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\BestCheckpointsWidgetFactory;
@@ -11,11 +14,10 @@ use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
-use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
 
-class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener, ListenerInterfaceMpLegacyMap
+class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener, DedimaniaDataListener, ListenerInterfaceMpLegacyMap
 {
     /**
      * @var PlayerStorage
@@ -42,12 +44,12 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
     /**
      * BestCheckpoints constructor.
      *
-     * @param Factory $factory
-     * @param PlayerStorage $playerStorage
+     * @param Factory                      $factory
+     * @param PlayerStorage                $playerStorage
      * @param BestCheckpointsWidgetFactory $widget
-     * @param UpdaterWidgetFactory $updater
-     * @param Group $players
-     * @param Group $allPlayers
+     * @param UpdaterWidgetFactory         $updater
+     * @param Group                        $players
+     * @param Group                        $allPlayers
      */
     public function __construct(
         PlayerStorage $playerStorage,
@@ -170,4 +172,58 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
     {
         $this->updater->setLocalRecord([]);
     }
+
+    /**
+     * Called when dedimania records are loaded.
+     *
+     * @param DedimaniaRecord[] $records
+     */
+    public function onDedimaniaRecordsLoaded($records)
+    {
+        if (count($records) > 1) {
+            $this->updater->setDedimaniaRecord($records[0]->getCheckpoints());
+        } else {
+            $this->updater->setDedimaniaRecord([]);
+        }
+    }
+
+    /**
+     * @param DedimaniaRecord   $record
+     * @param DedimaniaRecord   $oldRecord
+     * @param DedimaniaRecord[] $records
+     * @param  int              $position
+     * @param  int              $oldPosition
+     * @return void
+     */
+    public function onDedimaniaRecordsUpdate(
+        DedimaniaRecord $record,
+        DedimaniaRecord $oldRecord,
+        $records,
+        $position,
+        $oldPosition
+    ) {
+        if ($position == 1) {
+            $this->updater->setDedimaniaRecord($record->getCheckpoints());
+        }
+    }
+
+    /**
+     * @param DedimaniaPlayer $player
+     * @return void
+     */
+    public function onDedimaniaPlayerConnect(DedimaniaPlayer $player)
+    {
+        // do nothing
+    }
+
+    /**
+     * @param DedimaniaPlayer $player
+     * @return void
+     */
+    public function onDedimaniaPlayerDisconnect(DedimaniaPlayer $player)
+    {
+        // do nothing
+    }
+
+
 }

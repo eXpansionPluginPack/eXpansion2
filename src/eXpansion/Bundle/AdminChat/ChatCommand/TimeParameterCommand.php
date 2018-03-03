@@ -72,7 +72,7 @@ class TimeParameterCommand extends AbstractConnectionCommand
         $parameter = $this->timeHelper->textToTime($input->getArgument('parameter'));
         $group = $this->getGroupLabel($login);
         try {
-            $this->connection->{$this->functionName}($parameter);
+            $this->factory->getConnection()->{$this->functionName}($parameter);
             $this->chatNotification->sendMessage(
                 $this->chatMessage,
                 $this->isPublic ? null : $login,

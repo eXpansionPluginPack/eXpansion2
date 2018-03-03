@@ -13,6 +13,7 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WindowFactory;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\GameCurrencyBundle\Services\GameCurrencyService;
 use eXpansion\Framework\Notifications\Services\Notifications;
@@ -33,6 +34,10 @@ class BillWindow extends WindowFactory
      * @var Notifications
      */
     private $notifications;
+    /**
+     * @var Factory
+     */
+    private $factory;
 
 
     /**
@@ -46,6 +51,7 @@ class BillWindow extends WindowFactory
      * @param GameCurrencyService  $currencyService
      * @param GameDataStorage      $gameDataStorage
      * @param Notifications        $notifications
+     * @param Factory              $factory
      */
     public function __construct(
         $name,
@@ -56,12 +62,14 @@ class BillWindow extends WindowFactory
         WindowFactoryContext $context,
         GameCurrencyService $currencyService,
         GameDataStorage $gameDataStorage,
-        Notifications $notifications
+        Notifications $notifications,
+        Factory $factory
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
         $this->currencyService = $currencyService;
         $this->gameDataStorage = $gameDataStorage;
         $this->notifications = $notifications;
+        $this->factory = $factory;
     }
 
     public function setDetails($login, $amount)
@@ -73,12 +81,17 @@ class BillWindow extends WindowFactory
     protected function createContent(ManialinkInterface $manialink)
     {
 
+        $planets = $this->factory->getConnection()->getServerPlanets();
+
         $column1 = $this->uiFactory->createLayoutRow(0, 0, [], 1);
         $column1->addChildren([
             $this->uiFactory->createLabel("Recipient"),
             $this->uiFactory->createInput("login")->setDefault($this->recipient),
             $this->uiFactory->createLabel("Amount"),
             $this->uiFactory->createInput("amount")->setDefault($this->amount),
+            $this->uiFactory->createLabel("Balance"),
+            $this->uiFactory->createLabel($planets." planets"),
+
         ]);
 
 
@@ -137,8 +150,8 @@ class BillWindow extends WindowFactory
                     [], "Success", 3500, $manialink->getUserGroup());
                 $this->closeManialink($manialink);
             },
-            function ($status) use ($manialink) {
-                $this->notifications->error("Server said: ".$status,
+            function ($error) use ($manialink) {
+                $this->notifications->error("Server said: ".$error,
                     [], "Error", 10500, $manialink->getUserGroup());
                 $this->closeManialink($manialink);
             }

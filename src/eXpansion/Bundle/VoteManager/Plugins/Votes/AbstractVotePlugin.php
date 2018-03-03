@@ -3,6 +3,7 @@
 namespace eXpansion\Bundle\VoteManager\Plugins\Votes;
 
 use eXpansion\Bundle\VoteManager\Structures\Vote;
+use eXpansion\Framework\Core\Services\Application\Dispatcher;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 
@@ -26,19 +27,29 @@ abstract class AbstractVotePlugin
 
     /** @var Vote|null */
     protected $currentVote = null;
+    /**
+     * @var Dispatcher
+     */
+    private $dispatcher;
 
     /**
      * AbstractVotePlugin constructor.
      *
+     * @param Dispatcher    $dispatcher
      * @param PlayerStorage $playerStorage
-     * @param int $duration
-     * @param float $ratio
+     * @param int           $duration
+     * @param float         $ratio
      */
-    public function __construct(PlayerStorage $playerStorage, int $duration, float $ratio)
+    public function __construct(
+        Dispatcher $dispatcher,
+        PlayerStorage $playerStorage,
+        int $duration,
+        float $ratio)
     {
         $this->playerStorage = $playerStorage;
         $this->duration = $duration;
         $this->ratio = $ratio;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -70,7 +81,9 @@ abstract class AbstractVotePlugin
     public function castYes($login)
     {
         if ($this->currentVote) {
+            $player = $this->playerStorage->getPlayerInfo($login);
             $this->currentVote->castYes($login);
+            $this->dispatcher->dispatch("votemanager.vote.yes", [$player, $this->currentVote]);
         }
     }
 
@@ -82,7 +95,9 @@ abstract class AbstractVotePlugin
     public function castNo($login)
     {
         if ($this->currentVote) {
+            $player = $this->playerStorage->getPlayerInfo($login);
             $this->currentVote->castNo($login);
+            $this->dispatcher->dispatch("votemanager.vote.no", [$player, $this->currentVote]);
         }
     }
 

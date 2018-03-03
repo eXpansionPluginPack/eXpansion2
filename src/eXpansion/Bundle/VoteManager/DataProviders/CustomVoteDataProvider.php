@@ -28,4 +28,15 @@ class CustomVoteDataProvider extends AbstractDataProvider
         $this->dispatch(__FUNCTION__, [$player, $cmdName, $cmdValue]);
     }
 
+    public function onVoteYes(Player $player, $vote)
+    {
+        $this->dispatch(__FUNCTION__, [$player, $vote]);
+    }
+
+    public function onVoteNo(Player $player, $vote)
+    {
+        $this->dispatch(__FUNCTION__, [$player, $vote]);
+    }
+
+
 }

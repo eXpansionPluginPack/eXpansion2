@@ -32,10 +32,9 @@ services:
     eXpansion\Framework\Core\Services\Application\Dispatcher:
         class: eXpansion\Framework\Core\Services\Application\Dispatcher
         calls:
-            - [addEventProcesseor, ['@eXpansion\Framework\Core\Services\SymfonyEventAdapter']]
+            - [addEventProcessor, ['@eXpansion\Framework\Core\Services\SymfonyEventAdapter']]
 
     eXpansion\Framework\Core\Services\Application\DispatcherInterface: '@eXpansion\Framework\Core\Services\Application\Dispatcher'
-
 
     eXpansion\Framework\Core\Services\SymfonyEventAdapter:
         class: eXpansion\Framework\Core\Services\SymfonyEventAdapter
@@ -45,9 +44,13 @@ services:
 
     eXpansion\Framework\Core\Services\PluginManager:
         class: "%expansion.service.plugin_manager.class%"
+        arguments:
+            $env: "%kernel.environment%"
 
     eXpansion\Framework\Core\Services\DataProviderManager:
         class: "%expansion.service.data_provider_manager.class%"
+        arguments:
+            $env: "%kernel.environment%"
 
     eXpansion\Framework\Core\Services\Console:
         class: "%expansion.service.console.class%"

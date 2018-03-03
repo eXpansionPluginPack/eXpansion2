@@ -15,7 +15,7 @@ use Maniaplanet\DedicatedServer\Structures\Map;
  */
 class Dispatcher implements DispatcherInterface
 {
-    /** @var DataProviderManager  */
+    /** @var DataProviderManager */
     protected $dataProviderManager;
 
     /** @var PluginManager */
@@ -24,14 +24,14 @@ class Dispatcher implements DispatcherInterface
     /** @var EventProcessorInterface[] */
     protected $eventProcessors = [];
 
-    /** @var bool  */
+    /** @var bool */
     protected $isInitialized = false;
 
     /**
      * Dispatcher constructor.
      *
      * @param DataProviderManager $dataProviderManager
-     * @param PluginManager $pluginManager
+     * @param PluginManager       $pluginManager
      */
     public function __construct(DataProviderManager $dataProviderManager, PluginManager $pluginManager)
     {
@@ -75,7 +75,7 @@ class Dispatcher implements DispatcherInterface
      *
      * @param EventProcessorInterface $eventProcessor
      */
-    public function addEventProcesseor(EventProcessorInterface $eventProcessor)
+    public function addEventProcessor(EventProcessorInterface $eventProcessor)
     {
         $this->eventProcessors[] = $eventProcessor;
     }

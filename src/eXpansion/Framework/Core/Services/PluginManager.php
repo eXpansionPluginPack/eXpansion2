@@ -37,32 +37,39 @@ class PluginManager
     /** @var Console */
     protected $console;
 
+    /** @var string */
+    private $env;
+
     /**
      * PluginManager constructor.
      *
-     * @param ContainerInterface $container
+     * @param ContainerInterface       $container
      * @param PluginDescriptionFactory $pluginDescriptionFactory
-     * @param DataProviderManager $dataProviderManager
-     * @param GameDataStorage $gameDataStorage
-     * @param Console $console
+     * @param DataProviderManager      $dataProviderManager
+     * @param GameDataStorage          $gameDataStorage
+     * @param Console                  $console
+     * @param                          $env
      */
     public function __construct(
         ContainerInterface $container,
         PluginDescriptionFactory $pluginDescriptionFactory,
         DataProviderManager $dataProviderManager,
         GameDataStorage $gameDataStorage,
-        Console $console
+        Console $console,
+        $env
     ) {
         $this->container = $container;
         $this->pluginDescriptionFactory = $pluginDescriptionFactory;
         $this->dataProviderManager = $dataProviderManager;
         $this->gameDataStorage = $gameDataStorage;
         $this->console = $console;
+        $this->env = $env;
     }
 
     /**
      * Initialize.
      *
+     * @param Map $map
      * @throws \eXpansion\Framework\Core\Exceptions\DataProvider\UncompatibleException
      */
     public function init(Map $map)
@@ -74,7 +81,6 @@ class PluginManager
      * Do a reset to plugins/
      *
      * @param Map $map
-     *
      * @throws \eXpansion\Framework\Core\Exceptions\DataProvider\UncompatibleException
      */
     public function reset(Map $map)
@@ -212,9 +218,10 @@ class PluginManager
         if ($pluginService instanceof StatusAwarePluginInterface && !isset($this->enabledPlugins[$plugin->getPluginId()])) {
             $notify = true;
         }
-
-        $this->console->getConsoleOutput()
-            ->writeln("<info>Plugin <comment>'{$plugin->getPluginId()}'</comment> is enabled with providers :</info>");
+        if ($this->env == 'dev') {
+            $this->console->getConsoleOutput()
+                ->writeln("<info>Plugin <comment>'{$plugin->getPluginId()}'</comment> data providers:</info>");
+        }
         foreach ($plugin->getDataProviders() as $provider) {
             $this->dataProviderManager->registerPlugin($provider, $plugin->getPluginId(), $title, $mode, $script, $map);
         }

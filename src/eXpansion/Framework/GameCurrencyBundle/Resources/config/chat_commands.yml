@@ -7,6 +7,7 @@ services:
           arguments:
               -
                 - '@eXpansion\Framework\GameCurrencyBundle\ChatCommand\SendPlanets'
+                - '@eXpansion\Framework\GameCurrencyBundle\ChatCommand\Donate'
           tags:
               - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}
 
@@ -15,4 +16,10 @@ services:
         arguments:
             $command: "pay"
             $permission: 'planets'
+            $aliases: []
+
+    eXpansion\Framework\GameCurrencyBundle\ChatCommand\Donate:
+        class: eXpansion\Framework\GameCurrencyBundle\ChatCommand\Donate
+        arguments:
+            $command: "donate"
             $aliases: []

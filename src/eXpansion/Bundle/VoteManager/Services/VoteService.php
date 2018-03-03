@@ -9,7 +9,6 @@ use eXpansion\Framework\Core\Services\Application\Dispatcher;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\Data\Player;
-use Maniaplanet\DedicatedServer\Connection;
 
 class VoteService
 {
@@ -37,11 +36,11 @@ class VoteService
     /**
      * VoteService constructor.
      *
-     * @param Console $console
-     * @param Factory $factory
-     * @param ChatNotification $chatNotification
-     * @param Dispatcher $dispatcher
-     * @param $voteFactories
+     * @param Console              $console
+     * @param Factory              $factory
+     * @param ChatNotification     $chatNotification
+     * @param Dispatcher           $dispatcher
+     * @param AbstractVotePlugin[] $voteFactories
      */
     public function __construct(
         Console $console,
@@ -106,19 +105,19 @@ class VoteService
 
             switch ($vote->getStatus()) {
                 case Vote::STATUS_CANCEL:
-                    $this->dispatcher->dispatch("votemanager.votecancelled",
+                    $this->dispatcher->dispatch("votemanager.vote.cancelled",
                         [$vote->getPlayer(), $vote->getType(), $vote]);
                     $this->currentVote = null;
                     $this->reset();
                     break;
                 case Vote::STATUS_FAILED:
-                    $this->dispatcher->dispatch("votemanager.votefailed",
+                    $this->dispatcher->dispatch("votemanager.vote.failed",
                         [$vote->getPlayer(), $vote->getType(), $vote]);
                     $this->currentVote = null;
                     $this->reset();
                     break;
                 case Vote::STATUS_PASSED:
-                    $this->dispatcher->dispatch("votemanager.votepassed",
+                    $this->dispatcher->dispatch("votemanager.vote.passed",
                         [$vote->getPlayer(), $vote->getType(), $vote]);
                     $this->currentVote = null;
                     $this->reset();
@@ -173,6 +172,7 @@ class VoteService
     {
         if ($this->getCurrentVote() !== null) {
             $this->chatNotification->sendMessage("expansion_votemanager.error.in_progress");
+
             return;
         }
 
@@ -190,7 +190,7 @@ class VoteService
         $this->factory->getConnection()->cancelVote();
 
         $this->dispatcher->dispatch(
-            "votemanager.votenew",
+            "votemanager.vote.new",
             [$player, $this->currentVote->getCode(), $this->currentVote->getCurrentVote()]
         );
     }

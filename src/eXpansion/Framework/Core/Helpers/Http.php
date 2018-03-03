@@ -31,23 +31,6 @@ class Http
     }
 
     /**
-     * Make a http query.
-     *
-     * @param string $url
-     * @param callable $callback
-     * @param null|mixed $additionalData If you need to pass additional metadata.
-     *                                   You will get this back in the callback.
-     * @param array $options curl options array
-     */
-    public function call($url, $callback, $additionalData = null, $options = [])
-    {
-        $curlJob = $this->factory->createCurlJob($url, $callback, $additionalData, $options);
-
-        // Start job execution.
-        $this->factory->startJob($curlJob);
-    }
-
-    /**
      * Make a get http query.
      *
      * @param string $url address
@@ -66,8 +49,10 @@ class Http
 
         $options = $options + $defaultOptions;
         $additionalData['callback'] = $callback;
+        $curlJob = $this->factory->createCurlJob($url,  [$this, 'process'], $additionalData, $options);
 
-        $this->call($url, [$this, 'process'], $additionalData, $options);
+        // Start job execution.
+        $this->factory->startJob($curlJob);
     }
 
     /**

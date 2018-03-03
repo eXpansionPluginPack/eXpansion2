@@ -20,6 +20,7 @@ use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\Gui\Components\Button;
 use eXpansion\Framework\Gui\Components\Dropdown;
 use eXpansion\Framework\Gui\Components\Label;
+use eXpansion\Framework\Notifications\Services\Notifications;
 use FML\Controls\Quad;
 use Psr\Log\LoggerInterface;
 
@@ -105,6 +106,10 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
      * @var LoggerInterface
      */
     private $logger;
+    /**
+     * @var Notifications
+     */
+    private $notifications;
 
     /**
      * ManiaExchangeWindowFactory constructor.
@@ -130,6 +135,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
      * @param                       $mapStylesSm
      * @param                       $difficulties
      * @param                       $operator
+     * @param Notifications         $notifications
      */
     public function __construct(
         $name,
@@ -152,7 +158,8 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $mapStylesTm,
         $mapStylesSm,
         $difficulties,
-        $operator
+        $operator,
+        Notifications $notifications
 
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
@@ -174,6 +181,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
 
         $this->console = $console;
         $this->logger = $logger;
+        $this->notifications = $notifications;
     }
 
     /**
@@ -394,7 +402,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
      */
     public function callbackSearch(ManialinkInterface $manialink, $login, $params, $arguments)
     {
-        $params = (object) $params;
+        $params = (object)$params;
 
         $this->modebox->setSelectedByValue($params->mode);
         $this->orderbox->setSelectedByValue($params->order);
@@ -442,12 +450,15 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
     {
         $manialink = $result->getAdditionalData()['ml'];
         $params = $result->getAdditionalData()['params'];
+        $login = $result->getAdditionalData()['login'];
 
         $this->gridBuilder->goToFirstPage($manialink);
 
         if ($result->hasError()) {
             $this->console->writeln('$d00Error: '.$result->getError().' while searching maps from MX, see logs for more details.');
             $this->logger->error("error while searching maps from mx: ".$result->getError());
+            $this->notifications->error('$d00'.$result->getError(), [], "Mania-Exchange Error",
+                10500, $login);
 
             return;
         }
@@ -456,6 +467,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $data = [];
         foreach ($json['results'] as $idx => $mxInfo) {
             $map = new MxInfo($mxInfo);
+
             $data[] = [
                 "index" => $idx + 1,
                 "name" => TMString::trimControls($map->gbxMapName),
@@ -472,6 +484,6 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         }
 
         $this->setData($manialink, $data);
-        $this->update($result->getAdditionalData()['login']);
+        $this->update($login);
     }
 }

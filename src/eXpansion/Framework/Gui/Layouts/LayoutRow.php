@@ -29,7 +29,7 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
     /**
      * @var float|int
      */
-    protected $margin = 0;
+    protected $margin = 1;
 
     /**
      * @var float|int
@@ -65,9 +65,6 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
         $this->updateSize();
     }
 
-    /**
-     * Update the size of the layout according to all the elements in it.
-     */
     protected function updateSize()
     {
         $sizeX = 0;
@@ -79,16 +76,13 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
                 $sizeX = abs($element->getX()) + $element->getWidth();
             }
         }
-
         $this->setSize($sizeX, $sizeY);
     }
 
     /**
-     * Set position.
-     *
      * @param double $x
      * @param double $y
-     * @return LayoutRow
+     * @return layoutRow
      */
     public function setPosition($x, $y)
     {
@@ -100,7 +94,7 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
 
     /**
      * @param mixed $startX
-     * @return LayoutRow
+     * @return layoutRow
      */
     public function setX($startX)
     {
@@ -111,7 +105,7 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
 
     /**
      * @param mixed $startY
-     * @return LayoutRow
+     * @return layoutRow
      */
     public function setY($startY)
     {
@@ -133,14 +127,18 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
         $frame->setAlign($this->hAlign, $this->vAlign);
         $frame->setPosition($this->startX, $this->startY);
         $frame->addClasses($this->frameClasses);
-        $frame->setSize($this->getWidth(), $this->getHeight());
 
         $startY = 0;
+        $oldElement = false;
 
         foreach ($this->elements as $idx => $element) {
+            if ($oldElement) {
+                $startY = $oldElement->getY() - $oldElement->getHeight() - $this->margin;
+            }
+
             $element->setY($startY);
-            $startY -= $element->getHeight() - $this->margin;
             $frame->addChild($element);
+            $oldElement = $element;
         }
 
         return $frame->render($domDocument);
@@ -197,7 +195,7 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
 
     /**
      * @param float $width
-     * @return LayoutRow
+     * @return layoutRow
      */
     public function setWidth($width)
     {
@@ -231,7 +229,7 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
 
     /**
      * @param string $class
-     * @return LayoutRow
+     * @return layoutRow
      */
     public function addClass($class)
     {
@@ -324,7 +322,7 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
     /**
      * @param float $sizeX
      * @param float $sizeY
-     * @return LayoutRow
+     * @return layoutRow
      */
     private function setSize($sizeX, $sizeY)
     {
@@ -338,7 +336,7 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
     /**
      * @param string $hAling
      * @param string $vAlign
-     * @return LayoutRow
+     * @return layoutRow
      */
     public function setAlign($hAling = "left", $vAlign = "top")
     {

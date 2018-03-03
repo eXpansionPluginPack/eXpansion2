@@ -3,6 +3,7 @@
 namespace eXpansion\Bundle\VoteManager\Plugins\Votes;
 
 use eXpansion\Framework\Core\Helpers\ChatNotification;
+use eXpansion\Framework\Core\Services\Application\Dispatcher;
 use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpScriptPodium;
@@ -26,20 +27,22 @@ class NextMapVote extends AbstractVotePlugin implements ListenerInterfaceMpScrip
     /**
      * NextMapVote constructor.
      *
-     * @param PlayerStorage $playerStorage
-     * @param Factory $factory
+     * @param Dispatcher       $dispatcher
+     * @param PlayerStorage    $playerStorage
+     * @param Factory          $factory
      * @param ChatNotification $chatNotification
-     * @param int $duration
-     * @param float $ratio
+     * @param int              $duration
+     * @param float            $ratio
      */
     public function __construct(
+        Dispatcher $dispatcher,
         PlayerStorage $playerStorage,
         Factory $factory,
         ChatNotification $chatNotification,
         int $duration,
         float $ratio
     ) {
-        parent::__construct($playerStorage, $duration, $ratio);
+        parent::__construct($dispatcher, $playerStorage, $duration, $ratio);
 
         $this->factory = $factory;
         $this->chatNotification = $chatNotification;

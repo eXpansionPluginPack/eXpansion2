@@ -1,0 +1,37 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    expansion.dedimania.config.enable:
+        class: eXpansion\Framework\Config\Model\BooleanConfig
+        arguments:
+            $path: "eXpansion/Dedimania/Enabled"
+            $name: "expansion_dedimania.config.enabled.name"
+            $description: "expansion_dedimania.config.enabled.desc"
+            $scope: "server"
+            $defaultValue: false
+        tags:
+            - {name: expansion.config}
+
+    expansion.dedimania.config.serverlogin:
+        class: eXpansion\Framework\Config\Model\TextConfig
+        arguments:
+            $path: "eXpansion/Dedimania/ServerLogin"
+            $name: "expansion_dedimania.config.serverlogin.name"
+            $scope: "server"
+            $description: "expansion_dedimania.config.serverlogin.desc"
+            $defaultValue: ""
+        tags:
+            - {name: expansion.config}
+
+    expansion.dedimania.config.apikey:
+        class: eXpansion\Framework\Config\Model\PasswordConfig
+        arguments:
+            $path: "eXpansion/Dedimania/Apikey"
+            $name: "expansion_dedimania.config.apikey.name"
+            $scope: "server"
+            $description: "expansion_dedimania.config.apikey.desc"
+            $defaultValue: ""
+        tags:
+            - {name: expansion.config}

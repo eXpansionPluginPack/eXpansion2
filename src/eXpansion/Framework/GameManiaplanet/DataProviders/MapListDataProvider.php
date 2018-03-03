@@ -6,8 +6,6 @@ use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\MapStorage;
-use League\Flysystem\Exception;
-use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Xmlrpc\IndexOutOfBoundException;
 use Maniaplanet\DedicatedServer\Xmlrpc\NextMapException;
 
@@ -35,7 +33,7 @@ class MapListDataProvider extends AbstractDataProvider implements StatusAwarePlu
      * MapListDataProvider constructor.
      *
      * @param MapStorage $mapStorage
-     * @param Factory $factory
+     * @param Factory    $factory
      */
     public function __construct(MapStorage $mapStorage, Factory $factory)
     {
@@ -112,7 +110,13 @@ class MapListDataProvider extends AbstractDataProvider implements StatusAwarePlu
             $this->dispatch(__FUNCTION__, [$oldMaps, $curMapIndex, $nextMapIndex, $isListModified]);
         }
 
-        $currentMap = $this->mapStorage->getMapByIndex($curMapIndex);
+        try {
+            $currentMap = $this->factory->getConnection()->getCurrentMapInfo();  // sync better
+        } catch (\Exception $e) {
+            // fallback to use map storage
+            $currentMap = $this->mapStorage->getMapByIndex($curMapIndex);
+        }
+
         // current map can be false if map by index is not found..
         if ($currentMap) {
             if ($this->mapStorage->getCurrentMap()->uId != $currentMap->uId) {
@@ -123,7 +127,13 @@ class MapListDataProvider extends AbstractDataProvider implements StatusAwarePlu
             }
         }
 
-        $nextMap = $this->mapStorage->getMapByIndex($nextMapIndex);
+        try {
+            $nextMap = $this->factory->getConnection()->getNextMapInfo();  // sync better
+        } catch (\Exception $e) {
+            // fallback to use map storage
+            $nextMap = $this->mapStorage->getMapByIndex($nextMapIndex);
+
+        }
         // next map can be false if map by index is not found..
         if ($nextMap) {
             if ($this->mapStorage->getNextMap()->uId != $nextMap->uId) {

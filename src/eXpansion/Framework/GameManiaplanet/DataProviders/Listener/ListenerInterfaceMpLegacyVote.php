@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\GameManiaplanet\DataProviders\Listener;
 
+use eXpansion\Bundle\VoteManager\Structures\Vote;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\GameManiaplanet\DataProviders\VoteDataProvider;
 
@@ -54,6 +55,22 @@ interface ListenerInterfaceMpLegacyVote
      * @return void
      */
     public function onVoteFailed(Player $player, $cmdName, $cmdValue);
+
+    /**
+     * When vote Fails
+     * @param Player $player
+     * @param Vote   $vote
+     * @return void
+     */
+    public function onVoteYes(Player $player, $vote);
+
+    /**
+     * When vote Fails
+     * @param Player $player
+     * @param Vote   $vote
+     * @return void
+     */
+    public function onVoteNo(Player $player, $vote);
 
 
 }
