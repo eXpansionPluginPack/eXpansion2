@@ -5,12 +5,13 @@
 * Fixed : Typo in addEventProcessor method of the application dispatcher.
 
 ## Features
-* Added ingame configuration system. 
-* Added DeveloperTools bundle
-* Fixed issue #277 - sorting numeric values
-* Add configs for various types, booleans, textfields, password
-* Add MxKarma 
-* #118 : eXpansion will attempt multiple connections to dedicated before crashing. 
+* Feature Added ingame configuration system. 
+* Feature Added DeveloperTools bundle
+* Feature Fixed issue #277 - sorting numeric values
+* Feature Add configs for various types, booleans, textfields, password
+* Feature Add MxKarma 
+* Feature #118 : eXpansion will attempt multiple connections to dedicated before crashing. 
+* Feature : Improved performance of Vote Gui using script update.
 
 # 2.0.0.0-alpha3 (2018-02-24)
 ## Bug Fixes
