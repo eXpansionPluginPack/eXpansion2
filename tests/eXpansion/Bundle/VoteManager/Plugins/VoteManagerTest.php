@@ -87,10 +87,6 @@ class VoteManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->mockVoteWidgetFactory
             ->expects($this->once())
-            ->method('setMessage')
-            ->with('My question of test');
-        $this->mockVoteWidgetFactory
-            ->expects($this->once())
             ->method('create')
             ->with($this->mockPlayers)
             ->willReturn(null);
@@ -168,7 +164,7 @@ class VoteManagerTest extends \PHPUnit_Framework_TestCase
             ->with($this->mockPlayers)
             ->willReturn(null);
         $this->mockUpdateVoteWidgetFactory
-            ->expects($this->once())
+            ->expects($this->never())
             ->method('update')
             ->with($this->mockPlayers)
             ->willReturn(null);
