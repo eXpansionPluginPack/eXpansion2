@@ -17,6 +17,7 @@ use Maniaplanet\DedicatedServer\Structures\Map;
 use Maniaplanet\DedicatedServer\Structures\PlayerDetailedInfo;
 use Maniaplanet\DedicatedServer\Structures\PlayerInfo;
 use Maniaplanet\DedicatedServer\Structures\Version;
+use Psr\Log\LoggerInterface;
 use Tests\eXpansion\Framework\Core\TestCore;
 use Tests\eXpansion\Framework\Core\TestHelpers\PlayerDataTrait;
 
@@ -45,7 +46,8 @@ class DataProviderManagerTest extends TestCore
         $this->dataProviderManager = new DataProviderManager(
             $this->container,
             $this->mockGameDataStorage,
-            $this->container->get(Console::class)
+            $this->container->get(Console::class),
+            $this->getMockBuilder(LoggerInterface::class)->getMock()
         );
     }
 

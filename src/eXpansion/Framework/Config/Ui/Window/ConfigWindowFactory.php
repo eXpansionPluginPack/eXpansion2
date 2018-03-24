@@ -112,7 +112,7 @@ class ConfigWindowFactory extends WindowFactory
 
         $contentFrame->addChild(
             $this->uiFactory->createLayoutScrollable(
-                $this->uiFactory->createLayoutRow(0, 0, $elements, 6),
+                $this->uiFactory->createLayoutRow(0, 0, $elements, 2),
                 $this->sizeX,
                 $this->sizeY - $saveButton->getHeight() - 4 - 4
             )->setAxis(false, true)

@@ -32,7 +32,6 @@ class WidgetCurrentMap implements StatusAwarePluginInterface, ListenerInterfaceM
     /**
      * Debug constructor.
      *
-     * @param Connection              $connection
      * @param PlayerStorage           $playerStorage
      * @param CurrentMapWidgetFactory $widget
      * @param Group                   $players

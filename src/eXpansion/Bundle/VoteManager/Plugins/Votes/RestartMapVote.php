@@ -4,6 +4,7 @@ namespace eXpansion\Bundle\VoteManager\Plugins\Votes;
 
 use eXpansion\Bundle\Maps\Services\JukeboxService;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
+use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\MapStorage;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
@@ -42,6 +43,7 @@ class RestartMapVote extends AbstractVotePlugin implements ListenerInterfaceMpSc
      * @param float            $ratio
      */
     public function __construct(
+        DispatcherInterface $dispatcher,
         PlayerStorage $playerStorage,
         JukeboxService $jukebox,
         MapStorage $mapStorage,
@@ -49,7 +51,7 @@ class RestartMapVote extends AbstractVotePlugin implements ListenerInterfaceMpSc
         int $duration,
         float $ratio
     ) {
-        parent::__construct($playerStorage, $duration, $ratio);
+        parent::__construct($dispatcher, $playerStorage, $duration, $ratio);
 
         $this->jukebox = $jukebox;
         $this->mapStorage = $mapStorage;

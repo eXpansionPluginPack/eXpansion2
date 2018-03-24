@@ -12,7 +12,6 @@ services:
             - {name: 'expansion.plugin', data_provider: 'mp.legacy.vote'}
             - {name: 'expansion.plugin', data_provider: 'exp.plugin.votemanager'}
             - {name: 'expansion.plugin', data_provider: 'exp.timer'}
-            - {name: 'expansion.plugin', data_provider: 'exp.plugin.votemanager'}
 
     eXpansion\Bundle\VoteManager\Plugins\Votes\:
         resource: '../../Plugins/Votes/*'
@@ -54,11 +53,14 @@ services:
             class: eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\UpdateVoteWidgetFactory
             autowire: true
             arguments:
-                $name:  "UpdateVote"
-                $posX: 0
-                $posY: 0
-                $sizeX: null
-                $sizeY: null
+                $name:  "Vote"
+                $allPlayers: '@expansion.framework.core.user_groups.all_players'
+                $variables:
+                    - {name: "VoteUpdater", type: "Integer[Text]", default: '["yes" => 0, "no" => 0]'}
+            tags:
+                - {name: expansion.plugin, data_provider: exp.timer}
+                - {name: expansion.plugin, data_provider: expansion.user_group}
+
 
     eXpansion\Bundle\VoteManager\Plugins\MenuItems:
             class: eXpansion\Bundle\VoteManager\Plugins\MenuItems
