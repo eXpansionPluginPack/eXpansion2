@@ -53,7 +53,7 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
      * @param int      $margin
      * @throws \Exception
      */
-    public function __construct($startX, $startY, $elements = [], $margin = 0)
+    public function __construct($startX, $startY, $elements = [], $margin = 1)
     {
         if (!is_array($elements)) {
             throw new \Exception('not an array');
@@ -139,7 +139,7 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
 
         foreach ($this->elements as $idx => $element) {
             $element->setY($startY);
-            $startY -= $element->getHeight() - $this->margin;
+            $startY -= $element->getHeight() + $this->margin;
             $frame->addChild($element);
         }
 
