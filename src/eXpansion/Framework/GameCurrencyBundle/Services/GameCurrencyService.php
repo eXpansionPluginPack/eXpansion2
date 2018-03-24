@@ -60,12 +60,12 @@ class GameCurrencyService
      * Send bill to login
      * Server needs to have in-game currency for sending a bill.
      *
-     * @param Gamecurrency $bill
-     * @param callable     $onSuccess
-     * @param callable     $onFailure
+     * @param mixed    $bill
+     * @param callable $onSuccess
+     * @param callable $onFailure
      * @return void
      */
-    public function sendBill(Gamecurrency $bill, callable $onSuccess, callable $onFailure)
+    public function sendBill($bill, callable $onSuccess, callable $onFailure)
     {
         // return if the bill is not defined by creating one.
         if ($bill === false) {
