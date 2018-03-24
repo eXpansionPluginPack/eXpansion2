@@ -12,6 +12,7 @@
 * Feature Add MxKarma 
 * Feature #118 : eXpansion will attempt multiple connections to dedicated before crashing. 
 * Feature : Improved performance of Vote Gui using script update.
+* Feature : Console output for enabled/disabled plugins is lighter and easier to read. Additional info is in logs.
 
 # 2.0.0.0-alpha3 (2018-02-24)
 ## Bug Fixes

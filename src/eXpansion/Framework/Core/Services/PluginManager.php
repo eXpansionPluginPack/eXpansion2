@@ -116,24 +116,30 @@ class PluginManager
 
         /* Enable plugins so that the data providers are propelry connected */
         $enableNotify = [];
-        foreach ($pluginsToEnable as $plugin) {
-            $enableNotify[] = $this->enablePlugin($plugin, $title, $mode, $script, $map);
+        foreach ($pluginsToEnable as $pluginId => $plugin) {
+            $enableNotify[$pluginId] = $this->enablePlugin($plugin, $title, $mode, $script, $map);
         }
 
         $disableNotify = [];
-        foreach ($pluginsToProcess as $plugin) {
-            $disableNotify[] = $this->disablePlugin($plugin);
+        foreach ($pluginsToProcess as $pluginId => $plugin) {
+            $disableNotify[$pluginId] = $this->disablePlugin($plugin);
         }
 
         /* Once all is connected send status update */
-        foreach ($enableNotify as $plugin) {
+        foreach ($enableNotify as $pluginId => $plugin) {
             if (!is_null($plugin)) {
-                $plugin->setStatus(true);
+                $this->console->getConsoleOutput()->writeln("<info>Enabling plugin : $pluginId</info>");
+                if ($plugin instanceof StatusAwarePluginInterface) {
+                    $plugin->setStatus(true);
+                }
             }
         }
-        foreach ($disableNotify as $plugin) {
+        foreach ($disableNotify as $pluginId => $plugin) {
             if (!is_null($plugin)) {
-                $plugin->setStatus(false);
+                $this->console->writeln("<info>Disabling plugin : $pluginId</info>");
+                if ($plugin instanceof StatusAwarePluginInterface) {
+                    $plugin->setStatus(false);
+                }
             }
         }
     }
@@ -199,7 +205,7 @@ class PluginManager
      * @param $script
      * @param Map $map
      *
-     * @return StatusAwarePluginInterface|null
+     * @return mixed
      *
      * @throws \eXpansion\Framework\Core\Exceptions\DataProvider\UncompatibleException
      */
@@ -209,12 +215,10 @@ class PluginManager
         $plugin->setIsEnabled(true);
         $pluginService = $this->container->get($plugin->getPluginId());
 
-        if ($pluginService instanceof StatusAwarePluginInterface && !isset($this->enabledPlugins[$plugin->getPluginId()])) {
+        if (!isset($this->enabledPlugins[$plugin->getPluginId()])) {
             $notify = true;
         }
 
-        $this->console->getConsoleOutput()
-            ->writeln("<info>Plugin <comment>'{$plugin->getPluginId()}'</comment> is enabled with providers :</info>");
         foreach ($plugin->getDataProviders() as $provider) {
             $this->dataProviderManager->registerPlugin($provider, $plugin->getPluginId(), $title, $mode, $script, $map);
         }
@@ -229,7 +233,7 @@ class PluginManager
      *
      * @param PluginDescription $plugin
      *
-     * @return StatusAwarePluginInterface|null
+     * @return mixed
      */
     protected function disablePlugin(PluginDescription $plugin)
     {
@@ -244,9 +248,7 @@ class PluginManager
         if (isset($this->enabledPlugins[$plugin->getPluginId()])) {
             unset($this->enabledPlugins[$plugin->getPluginId()]);
 
-            if ($pluginService instanceof StatusAwarePluginInterface) {
-                $notify = true;
-            }
+            $notify = true;
         }
 
         return $notify ? $pluginService : null;

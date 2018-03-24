@@ -9,12 +9,11 @@ use eXpansion\Framework\Core\Model\ProviderListener;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use Maniaplanet\DedicatedServer\Structures\Map;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class DataProviderManager handles all the data providers.
- *
- * @TODO handle game mode change.
  *
  * @package eXpansion\Framework\Core\Services
  */
@@ -47,6 +46,9 @@ class DataProviderManager
     /** @var Console */
     protected $console;
 
+    /** @var LoggerInterface */
+    protected $logger;
+
     /**
      * DataProviderManager constructor.
      *
@@ -54,11 +56,16 @@ class DataProviderManager
      * @param GameDataStorage $gameDataStorage
      * @param Console $console
      */
-    public function __construct(ContainerInterface $container, GameDataStorage $gameDataStorage, Console $console)
-    {
+    public function __construct(
+        ContainerInterface $container,
+        GameDataStorage $gameDataStorage,
+        Console $console,
+        LoggerInterface $logger
+    ) {
         $this->container = $container;
         $this->gameDataStorage = $gameDataStorage;
         $this->console = $console;
+        $this->logger = $logger;
     }
 
     /**
@@ -209,7 +216,7 @@ class DataProviderManager
             throw new UncompatibleException("Plugin $pluginId isn't compatible with $provider. Should be instance of $interface");
         }
 
-        $this->console->getConsoleOutput()->writeln("\t<info>- $provider : $providerId</info>");
+        $this->logger->info("Plugin '$pluginId' will use data provider '$provider' : '$providerId'");
     }
 
     /**
