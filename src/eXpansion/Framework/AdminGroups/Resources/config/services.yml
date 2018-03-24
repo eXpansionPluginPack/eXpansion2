@@ -7,4 +7,4 @@ services:
     eXpansion\Framework\AdminGroups\Services\AdminGroupConfiguration:
         class: eXpansion\Framework\AdminGroups\Services\AdminGroupConfiguration
         arguments:
-            $config: '%expansion.framework.admin_groups.groups%'
+            $path: '%expansion.admin_groups.config.path%'

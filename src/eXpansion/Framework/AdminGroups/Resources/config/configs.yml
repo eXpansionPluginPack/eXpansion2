@@ -1,0 +1,34 @@
+parameters:
+    expansion.admin_groups.config.path: 'eXpansion/admin_groups'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    expansion.admin_groups.config.label.abstract:
+        class: eXpansion\Framework\Config\Model\TextConfig
+        arguments:
+            $path: 'abstract'
+            $scope: "key"
+            $name: "expansion_admin_groups.config.label"
+            $description: ""
+            $defaultValue: ''
+
+    expansion.admin_groups.config.logins.abstract:
+        class: eXpansion\Framework\Config\Model\PlayerListConfig
+        arguments:
+            $path: 'abstract'
+            $scope: "key"
+            $name: "expansion_admin_groups.config.logins"
+            $description: ""
+            $defaultValue: ''
+
+    expansion.admin_groups.config.permissions.abstract:
+        class: eXpansion\Framework\Config\Model\BooleanConfig
+        arguments:
+            $path: 'abstract'
+            $scope: "key"
+            $name: "expansion_admin_groups.config.permissions"
+            $description: ""
+            $defaultValue: ''

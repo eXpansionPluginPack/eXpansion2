@@ -112,7 +112,12 @@ abstract class AbstractConfig implements ConfigInterface
      */
     public function getRawValue()
     {
-        return $this->configManager->get($this->path);
+        $value = $this->configManager->get($this->path);
+        if (is_null($value)) {
+            return $this->defaultValue;
+        }
+
+        return $value;
     }
 
 
