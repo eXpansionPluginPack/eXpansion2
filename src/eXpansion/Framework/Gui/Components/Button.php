@@ -21,6 +21,7 @@ class Button extends AbstractUiElement implements ScriptFeatureable, Container
     const COLOR_WARNING = "d00";
     const COLOR_PRIMARY = "3af";
     const COLOR_SECONDARY = "000";
+
     /** @var  Label */
     protected $buttonLabel;
     protected $type;
@@ -95,6 +96,9 @@ class Button extends AbstractUiElement implements ScriptFeatureable, Container
             ->setTextColor($this->textColor)
             ->setAlign("center", "center2");
 
+        if ($this->type != self::TYPE_DECORATED) {
+            $this->buttonLabel->setAreaFocusColor($this->focusColor);
+        }
 
         $this->buttonLabel->setDataAttributes($this->_dataAttributes);
         $this->buttonLabel->addClasses($this->_classes);
@@ -148,14 +152,27 @@ class Button extends AbstractUiElement implements ScriptFeatureable, Container
      */
     public function prepare(Script $script)
     {
-        $script->addCustomScriptLabel(ScriptLabel::MouseClick, $this->getScriptMouseClick());
         $script->addScriptFunction("", $this->getScriptFunction());
+        $script->addCustomScriptLabel(ScriptLabel::MouseClick, $this->getScriptMouseClick());
+        $script->addCustomScriptLabel(ScriptLabel::MouseOver, <<<EOL
+               if (Event.Control.Parent.HasClass("uiButton")) {                 
+                  (Event.Control.Parent as CMlFrame).RelativeScale=1.1;
+               }
+EOL
+        );
+
+        $script->addCustomScriptLabel(ScriptLabel::MouseOut, <<<EOL
+               if (Event.Control.Parent.HasClass("uiButton")) {                  
+                  (Event.Control.Parent as CMlFrame).RelativeScale= 1.; 
+               }
+EOL
+        );
     }
 
     protected function getScriptMouseClick()
     {
         return /** @lang textmate */
-            <<<'EOD'
+            <<<EOD
             if (Event.Control.HasClass("uiButtonElement") ) {            
                 TriggerButtonClick(Event.Control);                             
             }
@@ -166,7 +183,7 @@ EOD;
     {
         return
             /** @lang textmate */
-            <<<'EOD'
+            <<<EOD
        
             Void TriggerButtonClick(CMlControl Control) {                
                  if (Control.Parent.HasClass("uiButton")) {
