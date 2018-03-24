@@ -11,6 +11,7 @@ namespace Tests\eXpansion\Bundle\VoteManager\Plugins\Votes;
 use eXpansion\Bundle\VoteManager\Plugins\Votes\NextMapVote;
 use eXpansion\Bundle\VoteManager\Structures\Vote;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
+use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Tests\eXpansion\Framework\Core\TestCore;
@@ -43,6 +44,7 @@ class NextMapVoteTest extends TestCore
             ->getMock();
 
         $this->nextMapVote = new NextMapVote(
+            $this->getMockBuilder(DispatcherInterface::class)->getMock(),
             $this->mockPlayerStorage,
             $this->mockConnectionFactory,
             $this->mockChatNotification,
