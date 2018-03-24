@@ -1,7 +1,8 @@
 # 2.0.0.x 
 
 ## Fixes
-* #119 : Fixed all symfony commands requiring connection to the dedicated server. 
+* Fixed #119 : Fixed all symfony commands requiring connection to the dedicated server. 
+* Fixed : Typo in addEventProcessor method of the application dispatcher.
 
 ## Features
 * Added ingame configuration system. 
