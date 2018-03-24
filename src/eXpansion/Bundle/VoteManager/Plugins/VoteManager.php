@@ -77,7 +77,6 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
         if ($cmdValue instanceof Vote) {
             $this->updateVoteWidgetFactory->create($this->players);
             $this->voteWidgetFactory->create($this->players);
-            $this->voteWidgetFactory->setMessage($this->voteService->getCurrentVote()->getQuestion());
         } else {
             $this->voteService->startVote($player, $cmdName, ['value' => $cmdValue]);
         }
@@ -139,7 +138,32 @@ class VoteManager implements ListenerInterfaceMpLegacyVote, ListenerInterfaceExp
     {
         if ($this->voteService->getCurrentVote() instanceof AbstractVotePlugin) {
             $this->voteService->update();
-            $this->updateVoteWidgetFactory->update($this->players);
+        }
+    }
+
+    /**
+     * When vote Fails
+     * @param Player $player
+     * @param Vote   $vote
+     * @return void
+     */
+    public function onVoteYes(Player $player, $vote)
+    {
+        if ($this->voteService->getCurrentVote() instanceof AbstractVotePlugin) {
+            $this->updateVoteWidgetFactory->updateVote($vote);
+        }
+    }
+
+    /**
+     * When vote Fails
+     * @param Player $player
+     * @param Vote   $vote
+     * @return void
+     */
+    public function onVoteNo(Player $player, $vote)
+    {
+        if ($this->voteService->getCurrentVote() instanceof AbstractVotePlugin) {
+            $this->updateVoteWidgetFactory->updateVote($vote);
         }
     }
 
