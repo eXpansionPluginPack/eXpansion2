@@ -51,9 +51,9 @@ class ConfigPass implements CompilerPassInterface
 
             if ($groupCode != "master_admin") {
                 foreach ($permissions as $permission) {
-                    $id = 'expansion.admin_groups.config.permissions.' . $groupCode . '.permission';
-                    $container->setDefinition($id, new ChildDefinition('expansion.admin_groups.config.logins.abstract'))
-                        ->setArgument('$path', "$pathPrefix/perm_perm")
+                    $id = 'expansion.admin_groups.config.permissions.' . $groupCode . ".$permission";
+                    $container->setDefinition($id, new ChildDefinition('expansion.admin_groups.config.permissions.abstract'))
+                        ->setArgument('$path', "$pathPrefix/perm_$permission")
                         ->setArgument('$defaultValue', $group['logins'])
                         ->setArgument('$name', "expansion_admingroups.permission.$permission.label")
                         ->setArgument('$description', "expansion_admingroups.permission.$permission.description");

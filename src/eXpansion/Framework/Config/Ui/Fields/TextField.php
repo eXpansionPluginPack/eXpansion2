@@ -5,6 +5,7 @@ namespace eXpansion\Framework\Config\Ui\Fields;
 use eXpansion\Framework\Config\Model\AbstractConfig;
 use eXpansion\Framework\Config\Model\ConfigInterface;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
+use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
 use eXpansion\Framework\Gui\Ui\Factory;
 use FML\Types\Renderable;
 
@@ -33,7 +34,7 @@ class TextField implements UiInterface
     /**
      * @inheritdoc
      */
-    public function build(ConfigInterface $config, $width, ManialinkInterface $manialink): Renderable
+    public function build(ConfigInterface $config, $width, ManialinkInterface $manialink, ManialinkFactory $manialinkFactory): Renderable
     {
         return $this
             ->uiFactory
@@ -47,5 +48,18 @@ class TextField implements UiInterface
     public function isCompatible(ConfigInterface $config): bool
     {
         return ($config instanceof AbstractConfig);
+    }
+
+    /**
+     * Get raw value to set from gui entry data.
+     *
+     * @param ConfigInterface $config
+     * @param                 $entry
+     *
+     * @return mixed
+     */
+    public function getRawValueFromEntry(ConfigInterface $config, $entry)
+    {
+        return $entry;
     }
 }

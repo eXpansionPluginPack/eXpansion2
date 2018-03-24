@@ -90,7 +90,6 @@ class ConfigManager implements ConfigManagerInterface
 
         // Fetch old value for event.
         $oldValue = $this->get($path);
-
         // Put new value.
         $configs = $this->getAllConfigs($configDefinition->getScope());
 
@@ -126,6 +125,8 @@ class ConfigManager implements ConfigManagerInterface
                 'oldValue' => $oldValue
             ]
         );
+
+        var_dump($this->get($path));
 
         return true;
     }
