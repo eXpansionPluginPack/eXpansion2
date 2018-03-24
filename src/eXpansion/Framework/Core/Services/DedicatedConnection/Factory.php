@@ -12,6 +12,8 @@ use eXpansion\Framework\Core\Services\Console;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Xmlrpc\TransportException;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
  * Service factory to create connection to the dedicated server.
@@ -20,6 +22,8 @@ use Psr\Log\LoggerInterface;
  */
 class Factory
 {
+    const EVENT_CONNECTED = 'expansion.dedicated.connected';
+
     /** @var Connection */
     protected $connection;
 
@@ -44,15 +48,20 @@ class Factory
     /** @var Console */
     protected $console;
 
+    /** @var EventDispatcherInterface */
+    protected $eventDispatcher;
+
     /**
      * Factory constructor.
      *
-     * @param string $host
-     * @param int $port
-     * @param int $timeout
-     * @param string $user
-     * @param string $password
-     * @param LoggerInterface $logger
+     * @param                          $host
+     * @param                          $port
+     * @param                          $timeout
+     * @param                          $user
+     * @param                          $password
+     * @param LoggerInterface          $logger
+     * @param Console                  $console
+     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         $host,
@@ -61,7 +70,8 @@ class Factory
         $user,
         $password,
         LoggerInterface $logger,
-        Console $console
+        Console $console,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->host = $host;
         $this->port = $port;
@@ -70,6 +80,7 @@ class Factory
         $this->password = $password;
         $this->logger = $logger;
         $this->console = $console;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -97,6 +108,10 @@ class Factory
 
                 throw $lastExcelption;
             }
+
+            // Dispatch connected event.
+            $event = new GenericEvent($this->connection);
+            $this->eventDispatcher->dispatch(self::EVENT_CONNECTED, $event);
         }
 
         return $this->connection;

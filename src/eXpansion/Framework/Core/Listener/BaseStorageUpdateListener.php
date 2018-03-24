@@ -7,6 +7,7 @@ use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
 use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\Core\Storage\MapStorage;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Class BaseStorageUpdateListener
@@ -15,7 +16,7 @@ use eXpansion\Framework\Core\Storage\MapStorage;
  * @copyright 2017 eXpansion
  * @package eXpansion\Framework\Core\Listner
  */
-class BaseStorageUpdateListener
+class BaseStorageUpdateListener implements EventSubscriberInterface
 {
     /** @var Factory */
     protected $factory;
@@ -50,9 +51,20 @@ class BaseStorageUpdateListener
     }
 
     /**
+     * @inheritdoc
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            'maniaplanet.game.BeginMap' => 'onManiaplanetGameBeginMap' ,
+            Factory::EVENT_CONNECTED => 'onConnectionToDedicated'
+        ];
+    }
+
+    /**
      *
      */
-    public function onManiaplanetGameExpansionAfterInit()
+    public function onConnectionToDedicated()
     {
         $gameInfos = $this->factory->getConnection()->getCurrentGameInfo();
         $serverOptions = $this->factory->getConnection()->getServerOptions();
@@ -88,4 +100,5 @@ class BaseStorageUpdateListener
             // TODO dispatch custom event to let it know?
         }
     }
+
 }
