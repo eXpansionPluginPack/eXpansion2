@@ -12,5 +12,9 @@ e_xpansion_admin_groups:
               - next
               - restart
     permissions:
+        - admin
         - next
         - restart
+        - jukebox
+        - maps.add
+        - maps.remove
