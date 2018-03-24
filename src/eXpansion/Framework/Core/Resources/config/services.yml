@@ -32,7 +32,7 @@ services:
     eXpansion\Framework\Core\Services\Application\Dispatcher:
         class: eXpansion\Framework\Core\Services\Application\Dispatcher
         calls:
-            - [addEventProcesseor, ['@eXpansion\Framework\Core\Services\SymfonyEventAdapter']]
+            - [addEventProcessor, ['@eXpansion\Framework\Core\Services\SymfonyEventAdapter']]
 
     eXpansion\Framework\Core\Services\Application\DispatcherInterface: '@eXpansion\Framework\Core\Services\Application\Dispatcher'
 

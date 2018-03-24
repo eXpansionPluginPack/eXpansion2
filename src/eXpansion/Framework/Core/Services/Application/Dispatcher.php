@@ -75,7 +75,7 @@ class Dispatcher implements DispatcherInterface
      *
      * @param EventProcessorInterface $eventProcessor
      */
-    public function addEventProcesseor(EventProcessorInterface $eventProcessor)
+    public function addEventProcessor(EventProcessorInterface $eventProcessor)
     {
         $this->eventProcessors[] = $eventProcessor;
     }
