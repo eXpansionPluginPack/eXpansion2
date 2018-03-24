@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Config\Model;
 
+use eXpansion\Framework\Config\Services\ConfigManagerInterface;
 use eXpansion\Framework\PlayersBundle\Model\Player;
 use eXpansion\Framework\PlayersBundle\Storage\PlayerDb;
 
@@ -15,6 +16,21 @@ class PlayerListConfig extends TextListConfig
 {
     /** @var PlayerDb */
     protected $playerDb;
+
+    public function __construct(
+        $path,
+        $scope,
+        $name,
+        $description,
+        $defaultValue,
+        ConfigManagerInterface $configManager,
+        PlayerDb $playerDb
+    )
+    {
+        parent::__construct($path, $scope, $name, $description, $defaultValue, $configManager);
+        $this->playerDb = $playerDb;
+    }
+
 
     /**
      * @inheritdoc
@@ -48,6 +64,7 @@ class PlayerListConfig extends TextListConfig
     public function get()
     {
         $players = [];
+
         foreach (parent::get() as $login) {
             $player = $this->playerDb->get($login);
             if (is_null($player)) {

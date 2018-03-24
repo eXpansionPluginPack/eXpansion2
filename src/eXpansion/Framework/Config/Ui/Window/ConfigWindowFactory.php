@@ -167,7 +167,7 @@ class ConfigWindowFactory extends WindowFactory
         }
 
         $rowLayout->addChild(
-            $this->configUiManager->getUiHandler($config)->build($config, $sizeX * 0.37, $manialink)
+            $this->configUiManager->getUiHandler($config)->build($config, $sizeX * 0.37, $manialink, $this)
         );
 
 
@@ -215,7 +215,9 @@ class ConfigWindowFactory extends WindowFactory
             $config = $configs->get($configPath);
 
             if ($config instanceof ConfigInterface) {
-                $config->setRawValue($configValue);
+                $config->setRawValue(
+                    $this->configUiManager->getUiHandler($config)->getRawValueFromEntry($config, $configValue)
+                );
             }
         }
 

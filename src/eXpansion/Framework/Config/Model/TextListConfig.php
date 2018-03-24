@@ -12,6 +12,20 @@ namespace eXpansion\Framework\Config\Model;
  */
 class TextListConfig extends TextConfig
 {
+    /**
+     * @inheritdoc
+     */
+    public function getRawValue()
+    {
+        $raw = parent::getRawValue();
+
+        if (empty($raw)) {
+            return [];
+        }
+
+        return $raw;
+    }
+
 
     /**
      * Add a new value to the list.
