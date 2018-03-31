@@ -1,17 +1,12 @@
 <?php
 
 namespace eXpansion\Framework\Core\Plugins\Gui;
-use eXpansion\Framework\Core\Helpers\Translations;
+use eXpansion\Framework\Core\DataProviders\Listener\ListenerExpWidgetPosition;
 use eXpansion\Framework\Core\Model\Gui\Factory\WidgetFrameFactoryInterface;
-use eXpansion\Framework\Core\Model\Gui\Manialink;
-use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
-use eXpansion\Framework\Core\Model\Gui\Widget;
+use eXpansion\Framework\Core\Model\Gui\FmlManialink;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
-use eXpansion\Framework\Core\Plugins\GuiHandler;
-use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
-use FML\Controls\Control;
 
 /**
  * Class ManialiveFactory allow the creation of manialinks.
@@ -19,10 +14,16 @@ use FML\Controls\Control;
  * @package eXpansion\Framework\Core\Plugins\Gui
  * @author Oliver de Cramer
  */
-class WidgetFactory extends FmlManialinkFactory
+class WidgetFactory extends FmlManialinkFactory implements ListenerExpWidgetPosition
 {
     /** @var WidgetFrameFactoryInterface */
     protected $widgetFrameFactory;
+
+    /** @var float */
+    protected $defaultPositionX;
+
+    /** @var float */
+    protected $defaultPositionY;
 
     /**
      * WidgetFactory constructor.
@@ -54,6 +55,9 @@ class WidgetFactory extends FmlManialinkFactory
         $this->translationsHelper = $context->getTranslationsHelper();
         $this->uiFactory = $context->getUiFactory();
         $this->widgetFrameFactory = $context->getWidgetFrameFactory();
+
+        $this->defaultPositionX = $posX;
+        $this->defaultPositionY = $posY;
     }
 
     /**
@@ -79,5 +83,32 @@ class WidgetFactory extends FmlManialinkFactory
         );
 
         return $manialink;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function updateOptions($posX, $posY, $options)
+    {
+        $posX = !is_null($posX) ? $posX : $this->defaultPositionX;
+        $posY = !is_null($posY) ? $posY : $this->defaultPositionY;
+
+        // Check if changed.
+        if ($this->posX == $posX && $this->posY == $posY) {
+            return;
+        }
+
+        // Update position for future widgets.
+        $this->posX = $posX;
+        $this->posY = $posY;
+
+        // Update current widgets.
+       foreach ($this->guiHandler->getFactoryManialinks($this) as $manialink) {
+           if ($manialink instanceof FmlManialink) {
+               $manialink->setPosition($this->posX, $this->posY);
+           }
+
+           $this->update($manialink->getUserGroup());
+       }
     }
 }

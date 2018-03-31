@@ -82,6 +82,20 @@ class Manialink implements ManialinkInterface
     }
 
     /**
+     * Change the position of the manialink.
+     *
+     * @param float $posX
+     * @param float $posY
+     *
+     * @return void
+     */
+    public function setPosition($posX, $posY)
+    {
+        $this->posY = $posY;
+        $this->posX = $posX;
+    }
+
+    /**
      * @inheritdoc
      */
     public function getManialinkFactory(): ManialinkFactoryInterface
