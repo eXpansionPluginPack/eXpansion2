@@ -9,12 +9,33 @@
 namespace eXpansion\Framework\Core\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\Yaml\Yaml;
 
-class eXpansionCoreExtension extends Extension
+class eXpansionCoreExtension extends Extension implements PrependExtensionInterface
 {
+
+    public function prepend(ContainerBuilder $container)
+    {
+        $bundles = $container->getParameter('kernel.bundles');
+
+        foreach ($bundles as $bundle) {
+            $reflection = new \ReflectionClass($bundle);
+
+            if (is_file($file = dirname($reflection->getFilename()) . '/Resources/config/expansion_defaults/core_config.yml')) {
+                $config = Yaml::parse(file_get_contents(realpath($file)));
+                $container->prependExtensionConfig('e_xpansion_core', $config['e_xpansion_core']);
+            }
+        }
+
+        if (is_file($file = $container->getParameter('kernel.root_dir') . '/config/expansion.yml')) {
+            $config = Yaml::parse(file_get_contents(realpath($file)));
+            $container->prependExtensionConfig('e_xpansion_core', $config['e_xpansion_core']);
+        }
+    }
 
     /**
      * Loads a specific configuration.
