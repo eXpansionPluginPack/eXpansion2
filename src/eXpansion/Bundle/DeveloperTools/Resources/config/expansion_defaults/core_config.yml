@@ -6,15 +6,7 @@ e_xpansion_core:
       eXpansion\Bundle\DeveloperTools\Plugins\Gui\MemoryWidget: # Id of the widget service
         TM: # Game/Title it's compatible with (ALL to use it on all gamemodes)
           ALL: # The game mode to apply he config for.
-            TOTO: # The script mode to apply the config for.
-              posX: 80
-              posY: -85
-              options: # Additional values, check the widgets documentation.
-                test: "test value"
-      eXpansion\Bundle\DeveloperTools\Plugins\Gui\MemoryWidget2: # Id of the widget service
-        TM: # Game/Title it's compatible with (ALL to use it on all gamemodes)
-          ALL: # The game mode to apply he config for.
-            TOTO: # The script mode to apply the config for.
+            ALL: # The script mode to apply the config for.
               posX: 80
               posY: -85
               options: # Additional values, check the widgets documentation.
