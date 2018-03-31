@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Core\Plugins;
 
+use eXpansion\Framework\Core\Model\Gui\Manialink;
 use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryInterface;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
@@ -43,4 +44,13 @@ interface GuiHandlerInterface
      * @return null|ManialinkInterface
      */
     public function getManialink(Group $group, ManialinkFactoryInterface $manialinkFactory);
+
+    /**
+     * Get all manialinks created by a manialink factory.
+     *
+     * @param ManialinkFactory $manialinkFactory
+     *
+     * @return Manialink[]
+     */
+    public function getFactoryManialinks(ManialinkFactory $manialinkFactory);
 }

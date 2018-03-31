@@ -69,6 +69,16 @@ interface ManialinkInterface
     public function getContentFrame();
 
     /**
+     * Change the position of the manialink.
+     *
+     * @param float $posX
+     * @param float $posY
+     *
+     * @return void
+     */
+    public function setPosition($posX, $posY);
+
+    /**
      * Removes a child.
      *
      * @param Renderable $child

@@ -96,6 +96,20 @@ class FmlManialink extends Manialink implements FmlManialinkInterface
         return $this->manialink;
     }
 
+
+    /**
+     * Change the position of the manialink.
+     *
+     * @param float $posX
+     * @param float $posY
+     *
+     * @return void
+     */
+    public function setPosition($posX, $posY)
+    {
+        $this->windowFrame->setPosition($posX, $posY);
+    }
+
     /**
      * @inheritdoc
      */
