@@ -26,11 +26,11 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $treeBuilder->root('e_xpansion_core')
             ->children()
-                ->arrayNode('widget_positions')
-                    ->prototype('array') // Id of the widget.
-                        ->prototype('array') // Title
-                            ->prototype('array') // Game mode
-                                ->prototype('array')->children() // Script
+                ->arrayNode('widget_positions')->useAttributeAsKey("widget_id")
+                    ->prototype('array')->useAttributeAsKey("title_id")
+                        ->prototype('array')->useAttributeAsKey('game_mode')
+                            ->prototype('array') ->useAttributeAsKey("script")
+                                ->prototype('array')->children()
                                     ->floatNode('posX')->end()
                                     ->floatNode('posY')->end()
                                     ->variableNode('options')->end()
