@@ -60,6 +60,7 @@ services:
             -
               - '@eXpansion\Framework\Core\ChatCommand\Help'
               - '@eXpansion\Framework\Core\ChatCommand\StopExpansion'
+              - '@eXpansion\Framework\Core\ChatCommand\RestartExpansion'
         tags:
             - {name: expansion.plugin, data_provider: expansion.chat_command_data}
 
@@ -73,6 +74,13 @@ services:
         class: eXpansion\Framework\Core\ChatCommand\StopExpansion
         arguments:
             $command: 'expansion stop'
+            $aliases: []
+            $permission: "admin"
+
+    eXpansion\Framework\Core\ChatCommand\RestartExpansion:
+        class: eXpansion\Framework\Core\ChatCommand\RestartExpansion
+        arguments:
+            $command: 'expansion restart'
             $aliases: []
             $permission: "admin"
 

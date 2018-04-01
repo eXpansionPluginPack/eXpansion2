@@ -12,6 +12,10 @@ expansion_core:
     stop:
       help: "Stop expansion"
       message: "|admin| %nickname% {admin_info}is shutting down eXpansion."
+    restart:
+      help: "Restart expansion in production mode, empty caches and check for database updates before."
+      message: "|admin| %nickname% {admin_info}is restarting eXpansion."
+
 
   windows:
     chat_commands:
