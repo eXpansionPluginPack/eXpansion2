@@ -8,6 +8,7 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryInterface;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
+use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\Data\Player;
@@ -146,6 +147,27 @@ class GuiHandler implements
         }
 
         return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getFactoryManialinks(ManialinkFactory $manialinkFactory)
+    {
+        $varsToCheck = ['displayeds', 'hideQueu', 'displayQueu'];
+
+        $factoryManialinks = [];
+        foreach ($varsToCheck as $var) {
+            foreach ($this->$var as $groupName => $manialinks) {
+                foreach ($manialinks as $manialinkFactoryId => $manialink) {
+                    if ($manialinkFactoryId == $manialinkFactory->getId()) {
+                        $factoryManialinks[] = $manialink;
+                    }
+                }
+            }
+        }
+
+        return $factoryManialinks;
     }
 
     /**
