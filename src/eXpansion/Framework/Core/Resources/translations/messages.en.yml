@@ -9,6 +9,10 @@ expansion_core:
     no_description: "{info}Sorry, this command has no description."
     no_help: "{info}Sorry, this command has no help message."
 
+    stop:
+      help: "Stop expansion"
+      message: "|admin| %nickname% {admin_info}is shutting down eXpansion."
+
   windows:
     chat_commands:
       title: Chat Commands
