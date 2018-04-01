@@ -25,7 +25,7 @@ e_xpansion_core:
     # You can configure custom positions for widgets here.
     #
     widget_positions:
-      Acme\Bundle\AcmeBundle\Plugins\Gui\WidgetFactory:# Id of the widget service
+      Acme\Bundle\AcmeBundle\Plugins\Gui\WidgetFactory: # Id of the widget service
        TM: # Game/Title it's compatible with (ALL to use it on all gamemodes)
          ALL: # The game mode to apply he config for.
            ALL: # The script mode to apply the config for.
