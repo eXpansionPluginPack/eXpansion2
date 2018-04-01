@@ -115,5 +115,13 @@ abstract class AbstractChatCommand implements ChatCommandInterface
         $this->execute($login, $input);
     }
 
+    /**
+     * Method called to execute the chat command.
+     *
+     * @param string         $login
+     * @param InputInterface $input
+     *
+     * @return mixed
+     */
     abstract public function execute($login, InputInterface $input);
 }
