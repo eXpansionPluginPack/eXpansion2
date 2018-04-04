@@ -3,7 +3,6 @@
 namespace eXpansion\Framework\Core\Plugins\Gui;
 
 use eXpansion\Framework\AdminGroups\Model\AbstractAdminChatCommand;
-use eXpansion\Framework\GameManiaplanet\DataProviders\ChatCommandDataProvider;
 use eXpansion\Framework\Core\Model\ChatCommand\AbstractChatCommand;
 use eXpansion\Framework\Core\Model\Gui\Grid\DataCollectionFactory;
 use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilder;
@@ -11,6 +10,7 @@ use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Services\ChatCommands;
+use eXpansion\Framework\GameManiaplanet\DataProviders\ChatCommandDataProvider;
 use FML\Controls\Frame;
 use FML\Controls\Label;
 
@@ -33,7 +33,7 @@ class WindowHelpFactory extends WindowFactory
     protected $chatCommands;
 
     /** @var ChatCommandDataProvider */
-    protected $chatCommandDataPovider;
+    protected $chatCommandDataProvider;
 
     /** @var WindowHelpDetailsFactory */
     protected $windowHelpDetailsFactory;
@@ -56,7 +56,7 @@ class WindowHelpFactory extends WindowFactory
         $this->gridBuilderFactory = $gridBuilderFactory;
         $this->dataCollectionFactory = $dataCollectionFactory;
         $this->chatCommands = $chatCommands;
-        $this->chatCommandDataPovider = $chatCommandDataProvider;
+        $this->chatCommandDataProvider = $chatCommandDataProvider;
         $this->windowHelpDetailsFactory = $windowHelpDetailsFactory;
     }
 
@@ -70,16 +70,16 @@ class WindowHelpFactory extends WindowFactory
         $collection->setPageSize(2);
 
         $helpButton = new Label();
-        $helpButton->setText('')
+        $helpButton->setText('►')
             ->setSize(4, 4)
             ->setAreaColor("0000")
-            ->setAreaFocusColor("0000");
+            ->setAreaFocusColor("000a");
 
-        $desctiptionButton = new Label();
-        $desctiptionButton->setText('')
+        $descriptionButton = new Label();
+        $descriptionButton->setText('')
             ->setSize(4, 4)
             ->setAreaColor("0000")
-            ->setAreaFocusColor("0000");
+            ->setAreaFocusColor("000a");
 
         $gridBuilder = $this->gridBuilderFactory->create();
         $gridBuilder->setManialink($manialink)
@@ -88,7 +88,9 @@ class WindowHelpFactory extends WindowFactory
             ->addTextColumn(
                 'command',
                 "expansion_core.windows.chat_commands.column_command",
-                25
+                25,
+                true,
+                false
             )
             ->addTextColumn(
                 'description',
@@ -97,13 +99,13 @@ class WindowHelpFactory extends WindowFactory
                 false,
                 true
             )
-            ->addActionColumn('help', '', 5, array($this, 'callbackHelp'), $helpButton)
+            ->addActionColumn('help', '', 5, [$this, 'callbackCallCommand'], $helpButton)
             ->addActionColumn(
                 'description',
                 '',
                 5,
-                array($this, 'callbackDescription'),
-                $desctiptionButton
+                [$this, 'callbackDescription'],
+                $descriptionButton
             );
 
         $manialink->setData('grid', $gridBuilder);
@@ -138,7 +140,7 @@ class WindowHelpFactory extends WindowFactory
         $login = $manialink->getUserGroup()->getLogins()[0];
 
         return array_map(
-            function($command) {
+            function ($command) {
                 /** @var AbstractChatCommand $command */
                 return [
                     'command' => $command->getCommand(),
@@ -149,10 +151,11 @@ class WindowHelpFactory extends WindowFactory
             },
             array_filter(
                 $this->chatCommands->getChatCommands(),
-                function($command) use ($login) {
+                function ($command) use ($login) {
                     if ($command instanceof AbstractAdminChatCommand) {
                         return $command->hasPermission($login);
                     }
+
                     return true;
                 }
 
@@ -164,22 +167,22 @@ class WindowHelpFactory extends WindowFactory
      * Callback called when help button is pressed.
      *
      * @param ManialinkInterface $manialink
-     * @param $login
-     * @param $params
-     * @param $arguments
+     * @param                    $login
+     * @param                    $params
+     * @param                    $arguments
      */
-    public function callbackHelp(ManialinkInterface $manialink, $login, $params, $arguments)
+    public function callbackCallCommand(ManialinkInterface $manialink, $login, $params, $arguments)
     {
-        $this->chatCommandDataPovider->onPlayerChat(0, $login, '/'.$arguments['command'].' -h', true);
+        $this->chatCommandDataProvider->onPlayerChat(-1, $login, '/'.$arguments['command'], true);
     }
 
     /**
      * Callbacked called when description button is pressed.
      *
      * @param ManialinkInterface $manialink
-     * @param $login
-     * @param $params
-     * @param $arguments
+     * @param                    $login
+     * @param                    $params
+     * @param                    $arguments
      */
     public function callbackDescription(ManialinkInterface $manialink, $login, $params, $arguments)
     {
