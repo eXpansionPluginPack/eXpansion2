@@ -99,18 +99,28 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
                 $matchLogin = [];
 
                 //match urls and shorten them to fit in chat.
-                if (preg_match_all('/(\$l\[?){0,1}(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6})\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)(\]?)/',
+                if (preg_match_all('/(\$[l,h]\[?){0,1}(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6})\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)(\]?)/',
                     $text, $urls)) {
                     foreach ($urls[0] as $k => $url) {
-                        if ($urls[1][$k] != '$l[') {
-                            $url = str_replace('$l', '', $url);
-                            $text = str_replace('$l', '', $text);
+                        if ($urls[1][$k] == '$l' || $urls[1][$k] == '$L') {
+                            $url = str_replace(['$l', '$L'], '', $url);
+                            $text = str_replace(['$l', '$L'], '', $text);
 
                             if (strlen($url) >= 33) {
                                 $short = substr($url, 0, 30)."...";
                                 $text = str_replace($url, '$l['.$url.']'.$short.'$l', $text);
                             } else {
                                 $text = str_replace($url, '$l'.$url.'$l', $text);
+                            }
+                        } elseif ($urls[1][$k] == '$h' || $urls[1][$k] == '$H') {
+                            $url = str_replace(['$h', '$H'], '', $url);
+                            $text = str_replace(['$h', '$H'], '', $text);
+
+                            if (strlen($url) >= 33) {
+                                $short = substr($url, 0, 30)."...";
+                                $text = str_replace($url, '$h['.$url.']'.$short.'$h', $text);
+                            } else {
+                                $text = str_replace($url, '$h'.$url.'$h', $text);
                             }
                         }
 
