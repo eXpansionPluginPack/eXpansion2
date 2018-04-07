@@ -41,6 +41,7 @@ class RecordHandler
     const COL_POS = 'position';
     const COL_OLD_POS = 'old_position';
     const COL_RECORDS = 'records';
+    const COL_PLUGIN = 'plugin';
 
     /** @var ConfigInterface */
     protected $nbRecords;
