@@ -145,6 +145,8 @@ abstract class AbstractApplication implements RunInterface
                 usleep($delay);
             }
         } while ($this->isRunning);
+
+        $this->factory->getConnection()->sendHideManialinkPage(null);
     }
 
     /**

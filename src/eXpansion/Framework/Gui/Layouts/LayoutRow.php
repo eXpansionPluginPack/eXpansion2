@@ -133,7 +133,7 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
         $frame->setAlign($this->hAlign, $this->vAlign);
         $frame->setPosition($this->startX, $this->startY);
         $frame->addClasses($this->frameClasses);
-        $frame->setSize($this->getWidth(), $this->getHeight());
+       // $frame->setSize($this->getWidth(), $this->getHeight());
 
         $startY = 0;
 
