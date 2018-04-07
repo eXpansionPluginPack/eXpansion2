@@ -26,7 +26,6 @@
     declare Real posX = 0.;
     foreach (control in Page.GetClassChildren_Result) {
         declare CMlLabel label <=> (control as CMlLabel);
-        log(label.ComputeWidth(label.Value, True));
         label.RelativePosition_V3.X = posX;
         label.Size.X = label.ComputeWidth(label.Value, True);
         posX +=label.ComputeWidth(label.Value, True)+3.;
