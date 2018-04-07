@@ -42,7 +42,8 @@ expansion_local_records:
         title: 'Local Records'
         column:
           position: '#'
-          score: 'Time'
+          score: 'Lap Time'
+          score_race: 'Race Time'
           nickname: 'NickName'
           login: 'Login'
 

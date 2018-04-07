@@ -204,6 +204,11 @@ class DataProviderManager
     {
         $providerId = $this->getCompatibleProviderId($provider, $title, $mode, $script, $map);
 
+        if (empty($providerId)) {
+            var_dump($provider);
+            return;
+        }
+
         /** @var AbstractDataProvider $providerService */
         $providerService = $this->container->get($providerId);
         $pluginService = $this->container->get($pluginId);
