@@ -3,6 +3,7 @@
 ## Fixes
 * Fixed #119 : Fixed all symfony commands requiring connection to the dedicated server. 
 * Fixed : Typo in addEventProcessor method of the application dispatcher.
+* Fixed #322 : Issue with lost events during eXpansion start. This caused at startup not to have local records for exemple.
 
 ## Features
 * Feature Added ingame configuration system. 
@@ -14,6 +15,8 @@
 * Feature : Improved performance of Vote Gui using script update.
 * Feature : Console output for enabled/disabled plugins is lighter and easier to read. Additional info is in logs.
 * Feature : Added chat command for donation.
+* Feature #321 : Plugins can now have multiple data provider dependency with a OR logic. So if one of the providers is enabled it will enable the plugin
+* Feature #177 : Local records window display race & lap records. 
 
 # 2.0.0.0-alpha3 (2018-02-24)
 ## Bug Fixes
