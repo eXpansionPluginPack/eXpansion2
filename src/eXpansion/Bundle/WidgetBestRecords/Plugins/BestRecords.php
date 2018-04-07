@@ -4,6 +4,7 @@ namespace eXpansion\Bundle\WidgetBestRecords\Plugins;
 
 use eXpansion\Bundle\LocalRecords\DataProviders\Listener\RecordsDataListener;
 use eXpansion\Bundle\LocalRecords\Model\Record;
+use eXpansion\Bundle\LocalRecords\Plugins\BaseRecords;
 use eXpansion\Bundle\WidgetBestRecords\Plugins\Gui\BestRecordsWidgetFactory;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
@@ -79,11 +80,9 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, Li
     }
 
     /**
-     * Called when local records are loaded.
-     *
-     * @param Record[] $records
+     * @inheritdoc
      */
-    public function onLocalRecordsLoaded($records)
+    public function onLocalRecordsLoaded($records, BaseRecords $baseRecords)
     {
         if (count($records) > 0) {
             $this->widget->setLocalRecord($records[0]);
@@ -94,40 +93,26 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, Li
     }
 
     /**
-     * Called when a player finishes map for the very first time (basically first record).
-     *
-     * @param Record   $record
-     * @param Record[] $records
-     * @param          $position
+     * @inheritdoc
      */
-    public function onLocalRecordsFirstRecord(Record $record, $records, $position)
+    public function onLocalRecordsFirstRecord(Record $record, $records, $position, BaseRecords $baseRecords)
     {
         $this->widget->setLocalRecord($record);
         $this->widget->update($this->allPlayers);
     }
 
     /**
-     * Called when a player finishes map and does same time as before.
-     *
-     * @param Record   $record
-     * @param Record   $oldRecord
-     * @param Record[] $records
+     * @inheritdoc
      */
-    public function onLocalRecordsSameScore(Record $record, Record $oldRecord, $records)
+    public function onLocalRecordsSameScore(Record $record, Record $oldRecord, $records, BaseRecords $baseRecords)
     {
 
     }
 
     /**
-     * Called when a player finishes map with better time and has better position.
-     *
-     * @param Record   $record
-     * @param Record   $oldRecord
-     * @param Record[] $records
-     * @param int      $position
-     * @param int      $oldPosition
+     * @inheritdoc
      */
-    public function onLocalRecordsBetterPosition(Record $record, Record $oldRecord, $records, $position, $oldPosition)
+    public function onLocalRecordsBetterPosition(Record $record, Record $oldRecord, $records, $position, $oldPosition, BaseRecords $baseRecords)
     {
         if ($position == 1) {
             $this->widget->setLocalRecord($record);
@@ -136,14 +121,9 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, Li
     }
 
     /**
-     * Called when a player finishes map with better time but keeps same position.
-     *
-     * @param Record   $record
-     * @param Record   $oldRecord
-     * @param Record[] $records
-     * @param          $position
+     * @inheritdoc
      */
-    public function onLocalRecordsSamePosition(Record $record, Record $oldRecord, $records, $position)
+    public function onLocalRecordsSamePosition(Record $record, Record $oldRecord, $records, $position, BaseRecords $baseRecords)
     {
         if ($position == 1) {
             $this->widget->setLocalRecord($record);
