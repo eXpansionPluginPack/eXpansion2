@@ -172,9 +172,9 @@ class PluginManager
             $dataProviders = explode("|", $dataProvider);
             $foundOne = false;
 
-            foreach ($dataProviders as $dataProvider) {
-                $providerId = $this->dataProviderManager->getCompatibleProviderId($dataProvider, $title, $mode, $script, $map);
-                if (is_null($providerId) || !isset($enabledPlugins[$providerId])) {
+            foreach ($dataProviders as $provider) {
+                $providerId = $this->dataProviderManager->getCompatibleProviderId($provider, $title, $mode, $script, $map);
+                if (!is_null($providerId) && isset($enabledPlugins[$providerId])) {
                     // Either there are no data providers compatible or the only one compatible
                     $foundOne = true;
                     break;
@@ -256,7 +256,7 @@ class PluginManager
         foreach ($plugin->getDataProviders() as $provider) {
             $dataProviders = explode("|", $provider);
             foreach ($dataProviders as $dataProvider) {
-                $this->dataProviderManager->deletePlugin($provider, $plugin->getPluginId());
+                $this->dataProviderManager->deletePlugin($dataProvider, $plugin->getPluginId());
             }
         }
 

@@ -88,7 +88,13 @@ class RecordsWindowFactory extends WindowFactory
             )->addTextColumn(
                 'score',
                 'expansion_local_records.gui.race.window.column.score',
-                '3',
+                '2',
+                true,
+                true
+            )->addTextColumn(
+                'score_race',
+                'expansion_local_records.gui.race.window.column.score_race',
+                '2',
                 true,
                 true
             )->addTextColumn(
@@ -129,19 +135,19 @@ class RecordsWindowFactory extends WindowFactory
      */
     protected function getRecordsData()
     {
-        /** @var Record[] $recordsData */
         $recordsData = [];
-        /**
-         * @var  $i
-         * @var Record $record
-         */
         foreach ($this->recordsData as $i => $record) {
             $recordsData[] = [
-                'position' => $i + 1,
-                'nickname' => $record->getPlayer()->getNickname(),
-                'login' => $record->getPlayer()->getLogin(),
-                'score' => $this->timeFormatter->timeToText($record->getScore(), true),
+                'position' => $record['position'],
+                'nickname' => $record['player']->getNickname(),
+                'login' => $record['player']->getLogin(),
+                'score' => $this->timeFormatter->timeToText($record['record']["1"]->getScore(), true),
+                'score_race' => "<Not compatible>",
             ];
+
+            if (isset($record['record']["other"])) {
+                $record["score_race"] = $this->timeFormatter->timeToText($record['record']["other"]->getScore(), true);
+            }
         }
 
         return $recordsData;
