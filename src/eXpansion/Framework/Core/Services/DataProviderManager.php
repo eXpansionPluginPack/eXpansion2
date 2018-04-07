@@ -69,17 +69,6 @@ class DataProviderManager
     }
 
     /**
-     * Initialize all the providers properly.
-     *
-     * @param PluginManager $pluginManager
-     * @param Map           $map
-     */
-    public function init(PluginManager $pluginManager, Map $map)
-    {
-        $this->reset($pluginManager, $map);
-    }
-
-    /**
      * Reset
      *
      * @param PluginManager $pluginManager
@@ -98,8 +87,8 @@ class DataProviderManager
 
             if ($providerId) {
                 $providerService = $this->container->get($providerId);
-
                 if ($pluginManager->isPluginEnabled($providerId)) {
+
                     foreach ($this->providerListeners[$providerId] as $listener) {
                         $this->enabledProviderListeners[$listener->getEventName()][] = [
                             $providerService,
