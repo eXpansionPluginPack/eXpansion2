@@ -84,6 +84,10 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, Li
      */
     public function onLocalRecordsLoaded($records, BaseRecords $baseRecords)
     {
+        if (!$this->checkRecordPlugin($baseRecords)) {
+            return;
+        }
+
         if (count($records) > 0) {
             $this->widget->setLocalRecord($records[0]);
         } else {
@@ -97,6 +101,10 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, Li
      */
     public function onLocalRecordsFirstRecord(Record $record, $records, $position, BaseRecords $baseRecords)
     {
+        if (!$this->checkRecordPlugin($baseRecords)) {
+            return;
+        }
+
         $this->widget->setLocalRecord($record);
         $this->widget->update($this->allPlayers);
     }
@@ -114,6 +122,10 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, Li
      */
     public function onLocalRecordsBetterPosition(Record $record, Record $oldRecord, $records, $position, $oldPosition, BaseRecords $baseRecords)
     {
+        if (!$this->checkRecordPlugin($baseRecords)) {
+            return;
+        }
+
         if ($position == 1) {
             $this->widget->setLocalRecord($record);
             $this->widget->update($this->allPlayers);
@@ -125,6 +137,10 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, Li
      */
     public function onLocalRecordsSamePosition(Record $record, Record $oldRecord, $records, $position, BaseRecords $baseRecords)
     {
+        if (!$this->checkRecordPlugin($baseRecords)) {
+            return;
+        }
+
         if ($position == 1) {
             $this->widget->setLocalRecord($record);
             $this->widget->update($this->allPlayers);
@@ -150,5 +166,17 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, Li
     public function onEndMap(Map $map)
     {
 
+    }
+
+    /**
+     * Check if we can use the data for this plugin.
+     *
+     * @param BaseRecords $baseRecords
+     *
+     * @return bool
+     */
+    protected function checkRecordPlugin(BaseRecords $baseRecords)
+    {
+        return $baseRecords->getRecordsHandler()->getCurrentNbLaps() == 1;
     }
 }

@@ -6,7 +6,7 @@ services:
                 $players: '@expansion.framework.core.user_groups.players'
                 $allPlayers: '@expansion.framework.core.user_groups.all_players'
         tags:
-          - {name: 'expansion.plugin', data_provider: 'expansion.local_records.race'}
+          - {name: 'expansion.plugin', data_provider: 'expansion.local_records.race|expansion.local_records.lap'}
           - {name: 'expansion.plugin', data_provider: 'mp.legacy.map'}
 
     eXpansion\Bundle\WidgetBestRecords\Plugins\Gui\BestRecordsWidgetFactory:
