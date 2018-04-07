@@ -91,6 +91,14 @@ class RecordHandler
     }
 
     /**
+     * @return int
+     */
+    public function getCurrentNbLaps(): int
+    {
+        return $this->currentNbLaps;
+    }
+
+    /**
      * @return Record[]
      */
     public function getRecords()
