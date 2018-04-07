@@ -28,6 +28,7 @@ class DataProviderManagerTest extends TestCore
 
     protected $mockGameDataStorage;
 
+    /** @var DataProviderManager */
     protected $dataProviderManager;
 
     protected function setUp()
@@ -176,7 +177,7 @@ class DataProviderManagerTest extends TestCore
         $dataProviderMock2 = $this->container->get('dp1-2');
         $dataProviderMock2->expects($this->never())->method('onPlayerChat');
 
-        $dataProviderManager->init($pManagerMock, new Map());
+        $dataProviderManager->reset($pManagerMock, new Map());
         $dataProviderManager->dispatch('onPlayerChat', ['test', 'test2', false]);
     }
 
