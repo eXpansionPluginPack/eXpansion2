@@ -58,12 +58,9 @@ class ChatNotification implements RecordsDataListener
     }
 
     /**
-     * Called when local records are loaded.
-     *
-     * @param Record[] $records
-     * @throws \Propel\Runtime\Exception\PropelException
+     * @inheritdoc
      */
-    public function onLocalRecordsLoaded($records)
+    public function onLocalRecordsLoaded($records, BaseRecords $baseRecords)
     {
         if (!empty($records)) {
             $firstRecord = $records[0];
@@ -88,45 +85,25 @@ class ChatNotification implements RecordsDataListener
     }
 
     /**
-     * Called when a player finishes map for the very first time (basically first record).
-     *
-     * @param Record   $record
-     * @param Record[] $records
-     * @param int      $position
-     * @throws \Propel\Runtime\Exception\PropelException
+     * @inheritdoc
      */
-    public function onLocalRecordsFirstRecord(Record $record, $records, $position)
+    public function onLocalRecordsFirstRecord(Record $record, $records, $position, BaseRecords $baseRecords)
     {
         $this->messageFirstPlaceNew($record);
     }
 
     /**
-     * Called when a player finishes map and does same time as before.
-     *
-     * @param Record   $record
-     * @param Record   $oldRecord
-     * @param Record[] $records
-     *
-     * @return void
+     * @inheritdoc
      */
-    public function onLocalRecordsSameScore(Record $record, Record $oldRecord, $records)
+    public function onLocalRecordsSameScore(Record $record, Record $oldRecord, $records, BaseRecords $baseRecords)
     {
         // Nothing.
     }
 
     /**
-     * Called when a player finishes map with better time and has better position.
-     *
-     * @param Record   $record
-     * @param Record   $oldRecord
-     * @param Record[] $records
-     * @param int      $position
-     * @param int      $oldPosition
-     *
-     * @return void
-     * @throws \Propel\Runtime\Exception\PropelException
+     * @inheritdoc
      */
-    public function onLocalRecordsBetterPosition(Record $record, Record $oldRecord, $records, $position, $oldPosition)
+    public function onLocalRecordsBetterPosition(Record $record, Record $oldRecord, $records, $position, $oldPosition, BaseRecords $baseRecords)
     {
         if ($position == 1 && $oldPosition == null) {
             $this->messageFirstPlaceNew($record);
@@ -172,17 +149,9 @@ class ChatNotification implements RecordsDataListener
     }
 
     /**
-     * Called when a player finishes map with better time but keeps same position.
-     *
-     * @param Record   $record
-     * @param Record   $oldRecord
-     * @param Record[] $records
-     * @param          $position
-     *
-     * @return void
-     * @throws \Propel\Runtime\Exception\PropelException
+     * @inheritdoc
      */
-    public function onLocalRecordsSamePosition(Record $record, Record $oldRecord, $records, $position)
+    public function onLocalRecordsSamePosition(Record $record, Record $oldRecord, $records, $position, BaseRecords $baseRecords)
     {
         // Check to who to send.
         $to = null;

@@ -3,6 +3,7 @@
 namespace Tests\eXpansion\Bundle\LocalRecords\Plugins;
 
 use eXpansion\Bundle\LocalRecords\Model\Record;
+use eXpansion\Bundle\LocalRecords\Plugins\BaseRecords;
 use eXpansion\Bundle\LocalRecords\Plugins\ChatNotification;
 use eXpansion\Framework\Config\Model\ConfigInterface;
 use eXpansion\Framework\Config\Model\IntegerConfig;
@@ -26,6 +27,9 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $timeFormatter;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockBasePlugin;
+
     protected function setUp()
     {
         parent::setUp();
@@ -47,6 +51,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
 
         $this->timeFormatter = $this->getMockBuilder(Time::class)->getMock();
+        $this->mockBasePlugin = $this->getMockBuilder(BaseRecords::class)->disableOriginalConstructor()->getMock();
     }
 
     /**
@@ -95,7 +100,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             $this->getRecord('toto-4', 40),
         ];
 
-        $cnotificaiton->onLocalRecordsLoaded($records);
+        $cnotificaiton->onLocalRecordsLoaded($records, $this->mockBasePlugin);
     }
 
     public function testFirstRecord() {
@@ -110,7 +115,7 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
                 ['%nickname%' => 'toto - nick', '%score%' => null, '%position%' => 1]
             );
 
-        $cnotificaiton->onLocalRecordsFirstRecord($this->getRecord('toto', 10), [], 1);
+        $cnotificaiton->onLocalRecordsFirstRecord($this->getRecord('toto', 10), [], 1, $this->mockBasePlugin);
     }
 
     public function testBestFirstRecord() {
@@ -130,7 +135,9 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             $this->getRecord('toto', 10),
             [],
             1,
-            null);
+            null,
+            $this->mockBasePlugin
+        );
     }
 
     public function testBetterTop1() {
@@ -150,7 +157,9 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             $this->getRecord('toto', 8),
             [],
             1,
-            2);
+            2,
+            $this->mockBasePlugin
+        );
     }
 
     public function testBetterTop5() {
@@ -170,7 +179,9 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             $this->getRecord('toto', 8),
             [],
             4,
-            7);
+            7,
+            $this->mockBasePlugin
+        );
     }
     public function testBetterAny() {
         $cnotificaiton = $this->getChatNotification();
@@ -189,7 +200,9 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             $this->getRecord('toto', 8),
             [],
             8,
-            10);
+            10,
+            $this->mockBasePlugin
+        );
     }
     public function testBetterAnyNew() {
         $cnotificaiton = $this->getChatNotification();
@@ -208,7 +221,9 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             $this->getRecord('toto', 8),
             [],
             8,
-            null);
+            null,
+            $this->mockBasePlugin
+        );
     }
 
     public function testBetterAnyBad() {
@@ -228,7 +243,9 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             $this->getRecord('toto', 8),
             [],
             12,
-            30);
+            30,
+            $this->mockBasePlugin
+        );
     }
 
     public function testSamePositionFirst()
@@ -248,7 +265,9 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             $this->getRecord('toto', 10),
             $this->getRecord('toto', 8),
             [],
-            1);
+            1,
+            $this->mockBasePlugin
+        );
     }
 
     public function testSamePositionTop5()
@@ -268,7 +287,9 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             $this->getRecord('toto', 10),
             $this->getRecord('toto', 8),
             [],
-            5);
+            5,
+            $this->mockBasePlugin
+        );
     }
 
 
@@ -289,7 +310,9 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             $this->getRecord('toto', 10),
             $this->getRecord('toto', 8),
             [],
-            8);
+            8,
+            $this->mockBasePlugin
+        );
     }
 
 
@@ -310,7 +333,8 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             $this->getRecord('toto', 10),
             $this->getRecord('toto', 8),
             [],
-            30
+            30,
+            $this->mockBasePlugin
         );
     }
 
@@ -332,7 +356,9 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             $this->getRecord('toto', 10),
             $this->getRecord('toto', 8),
             [],
-            30);
+            30,
+            $this->mockBasePlugin
+        );
     }
 
     public function testByShort()
@@ -353,15 +379,22 @@ class ChatNotificationTest extends \PHPUnit_Framework_TestCase
             $this->getRecord('toto', 10),
             $this->getRecord('toto', 8),
             [],
-            30);
+            30,
+            $this->mockBasePlugin
+        );
     }
 
     public function testEmptyMethods()
     {
         $cnotificaiton = $this->getChatNotification();
 
-        $cnotificaiton->onLocalRecordsLoaded([]);
-        $cnotificaiton->onLocalRecordsSameScore($this->getRecord('toto', 10), $this->getRecord('toto', 8), []);
+        $cnotificaiton->onLocalRecordsLoaded([], $this->mockBasePlugin);
+        $cnotificaiton->onLocalRecordsSameScore(
+            $this->getRecord('toto', 10),
+            $this->getRecord('toto', 8),
+            [],
+            $this->mockBasePlugin
+        );
     }
 
     /**

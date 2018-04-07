@@ -243,6 +243,7 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
         $event = $this->eventPrefix.'.'.$eventData['event'];
         unset($eventData['event']);
 
+        $eventData[RecordHandler::COL_PLUGIN] = $this;
         $this->dispatcher->dispatch($event, [$eventData]);
     }
 

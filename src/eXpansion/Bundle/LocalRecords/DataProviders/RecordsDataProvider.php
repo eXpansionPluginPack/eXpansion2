@@ -4,6 +4,8 @@ namespace eXpansion\Bundle\LocalRecords\DataProviders;
 
 use eXpansion\Bundle\LocalRecords\Services\RecordHandler;
 use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
+use eXpansion\Framework\Core\Plugins\StatusStoredPluginInterface;
+use eXpansion\Framework\Core\Plugins\StatusStoredPluginTrait;
 
 /**
  * Class RecordsDataProvider
@@ -11,11 +13,19 @@ use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
  * @package eXpansion\Bundle\LocalRecords\DataProviders;
  * @author  oliver de Cramer <oliverde8@gmail.com>
  */
-class RecordsDataProvider extends AbstractDataProvider
+class RecordsDataProvider extends AbstractDataProvider implements StatusStoredPluginInterface
 {
+    use StatusStoredPluginTrait;
+
     public function onRecordsLoaded($params)
     {
-        $this->dispatch('onLocalRecordsLoaded', [$params[RecordHandler::COL_RECORDS]]);
+        $this->dispatch(
+            'onLocalRecordsLoaded',
+            [
+                $params[RecordHandler::COL_RECORDS],
+                $params[RecordHandler::COL_PLUGIN],
+            ]
+        );
     }
 
     public function onFirstRecord($params)
@@ -26,6 +36,7 @@ class RecordsDataProvider extends AbstractDataProvider
                 $params[RecordHandler::COL_RECORD],
                 $params[RecordHandler::COL_RECORDS],
                 $params[RecordHandler::COL_POS],
+                $params[RecordHandler::COL_PLUGIN],
             ]
         );
     }
@@ -38,6 +49,7 @@ class RecordsDataProvider extends AbstractDataProvider
                 $params[RecordHandler::COL_RECORD],
                 $params[RecordHandler::COL_OLD_RECORD],
                 $params[RecordHandler::COL_RECORDS],
+                $params[RecordHandler::COL_PLUGIN],
             ]
         );
     }
@@ -52,6 +64,7 @@ class RecordsDataProvider extends AbstractDataProvider
                 $params[RecordHandler::COL_RECORDS],
                 $params[RecordHandler::COL_POS],
                 $params[RecordHandler::COL_OLD_POS],
+                $params[RecordHandler::COL_PLUGIN],
             ]
         );
     }
@@ -65,8 +78,8 @@ class RecordsDataProvider extends AbstractDataProvider
                 $params[RecordHandler::COL_OLD_RECORD],
                 $params[RecordHandler::COL_RECORDS],
                 $params[RecordHandler::COL_POS],
+                $params[RecordHandler::COL_PLUGIN],
             ]
         );
     }
-
 }

@@ -4,6 +4,7 @@ namespace eXpansion\Bundle\WidgetBestCheckpoints\Plugins;
 
 use eXpansion\Bundle\LocalRecords\DataProviders\Listener\RecordsDataListener;
 use eXpansion\Bundle\LocalRecords\Model\Record;
+use eXpansion\Bundle\LocalRecords\Plugins\BaseRecords;
 use eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\BestCheckpointsWidgetFactory;
 use eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\UpdaterWidgetFactory;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
@@ -86,7 +87,7 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
      *
      * @param Record[] $records
      */
-    public function onLocalRecordsLoaded($records)
+    public function onLocalRecordsLoaded($records, BaseRecords $recordHandler)
     {
         if (count($records) > 0) {
             $this->updater->setLocalRecord($records[0]->getCheckpoints());
@@ -102,7 +103,7 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
      * @param Record[] $records
      * @param          $position
      */
-    public function onLocalRecordsFirstRecord(Record $record, $records, $position)
+    public function onLocalRecordsFirstRecord(Record $record, $records, $position, BaseRecords $recordHandler)
     {
         $this->updater->setLocalRecord($record->getCheckpoints());
     }
@@ -114,7 +115,7 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
      * @param Record   $oldRecord
      * @param Record[] $records
      */
-    public function onLocalRecordsSameScore(Record $record, Record $oldRecord, $records)
+    public function onLocalRecordsSameScore(Record $record, Record $oldRecord, $records, BaseRecords $recordHandler)
     {
 
     }
@@ -128,7 +129,7 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
      * @param int      $position
      * @param int      $oldPosition
      */
-    public function onLocalRecordsBetterPosition(Record $record, Record $oldRecord, $records, $position, $oldPosition)
+    public function onLocalRecordsBetterPosition(Record $record, Record $oldRecord, $records, $position, $oldPosition, BaseRecords $recordHandler)
     {
         if ($position == 1) {
             $this->updater->setLocalRecord($record->getCheckpoints());
@@ -143,7 +144,7 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
      * @param Record[] $records
      * @param          $position
      */
-    public function onLocalRecordsSamePosition(Record $record, Record $oldRecord, $records, $position)
+    public function onLocalRecordsSamePosition(Record $record, Record $oldRecord, $records, $position, BaseRecords $recordHandler)
     {
         if ($position == 1) {
             $this->updater->setLocalRecord($record->getCheckpoints());
