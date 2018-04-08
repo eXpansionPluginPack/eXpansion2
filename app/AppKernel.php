@@ -40,7 +40,6 @@ class AppKernel extends Kernel
         $bundles[] = new \eXpansion\Bundle\LocalMapRatings\LocalMapRatingsBundle();
 
         $bundles[] = new \eXpansion\Bundle\WidgetCurrentMap\WidgetCurrentMapBundle();
-        $bundles[] = new \eXpansion\Bundle\WidgetBestRecords\WidgetBestRecordsBundle();
         $bundles[] = new \eXpansion\Bundle\WidgetBestCheckpoints\WidgetBestCheckpointsBundle();
 
 
@@ -53,6 +52,7 @@ class AppKernel extends Kernel
 
         /* Register experimental bundles */
         $bundles[] = new \eXpansionExperimantal\Bundle\Dedimania\DedimaniaBundle();
+        $bundles[] = new \eXpansionExperimantal\Bundle\WidgetBestRecords\WidgetBestRecordsBundle();
 
         /* Register test bundles. */
         $bundles[] = new \eXpansion\Bundle\Acme\AcmeBundle();

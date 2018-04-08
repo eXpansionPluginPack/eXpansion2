@@ -1,6 +1,6 @@
 <?php
 
-namespace eXpansion\Bundle\WidgetBestRecords\DependencyInjection;
+namespace eXpansionExperimantal\Bundle\WidgetBestRecords\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
