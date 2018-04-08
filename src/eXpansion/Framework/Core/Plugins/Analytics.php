@@ -200,7 +200,7 @@ class Analytics implements ListenerInterfaceExpTimer, StatusAwarePluginInterface
             'build' => '',
             'title' => str_replace('@','_by_', $this->gameData->getVersion()->titleId),
             'game' => $this->gameData->getTitle(),
-            'mode' => $this->gameData->getGameInfos()->scriptName,
+            'mode' => strtolower($this->gameData->getGameInfos()->scriptName),
             'serverOs' => $this->gameData->getServerOs(),
         ];
     }

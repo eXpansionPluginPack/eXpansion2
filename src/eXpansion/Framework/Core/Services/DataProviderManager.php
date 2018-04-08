@@ -86,7 +86,7 @@ class DataProviderManager
     {
         $title = $this->gameDataStorage->getTitle();
         $mode = $this->gameDataStorage->getGameModeCode();
-        $script = $this->gameDataStorage->getGameInfos()->scriptName;
+        $script = strtolower($this->gameDataStorage->getGameInfos()->scriptName);
         $this->enabledProviderListeners = [];
 
         foreach ($this->providersByCompatibility as $provider => $data) {

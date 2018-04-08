@@ -90,7 +90,7 @@ class BaseStorageUpdateListener implements EventSubscriberInterface
         $this->gameDataStorage->setSystemInfo($this->factory->getConnection()->getSystemInfo());
 
         $newGameInfos = $this->factory->getConnection()->getCurrentGameInfo();
-        $prevousGameInfos = $this->gameDataStorage->getGameInfos();
+        $prevousGameInfos = strtolower($this->gameDataStorage->getGameInfos());
 
         // TODO move this logic somewhere else.
         $this->dispatcher->reset($this->mapStorage->getMap($event->getParameters()[0]['UId']));

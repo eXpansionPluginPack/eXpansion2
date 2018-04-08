@@ -41,7 +41,7 @@ class DataProviderManagerTest extends TestCore
         parent::setUp();
 
         $gameInfos = new GameInfos();
-        $gameInfos->scriptName = 'TimeAttack.script.txt';
+        $gameInfos->scriptName = 'timeattack.script.txt';
 
         $this->mockGameDataStorage = $this->getMockBuilder(GameDataStorage::class)->disableOriginalConstructor()->getMock();
         $this->mockGameDataStorage->method('getTitle')->willReturn('TM');

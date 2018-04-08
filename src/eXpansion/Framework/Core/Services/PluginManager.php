@@ -81,7 +81,7 @@ class PluginManager
     {
         $title = $this->gameDataStorage->getTitle();
         $mode = $this->gameDataStorage->getGameModeCode();
-        $script = $this->gameDataStorage->getGameInfos()->scriptName;
+        $script = strtolower($this->gameDataStorage->getGameInfos()->scriptName);
 
         $this->enableDisablePlugins($title, $mode, $script, $map);
     }

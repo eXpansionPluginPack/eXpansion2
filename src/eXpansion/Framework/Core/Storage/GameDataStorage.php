@@ -87,6 +87,7 @@ class GameDataStorage
      */
     public function setGameInfos($gameInfos)
     {
+        $gameInfos->scriptName = strtolower($gameInfos->scriptName);
         $this->gameInfos = $gameInfos;
     }
 
