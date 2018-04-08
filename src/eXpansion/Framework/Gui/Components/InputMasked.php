@@ -74,7 +74,8 @@ class InputMasked extends AbstractUiElement implements Renderable, ScriptFeature
             ->setName($this->name)
             ->setTextSize(1.5);
 
-        $button = new Button("", Button::TYPE_DECORATED);
+        $button = new Button("", Button::TYPE_DEFAULT);
+        $button->setTranslate(false)->setText("");
         $button->setSize(4, 4)
             ->addClass("uiMaskedToggle")
             ->setPosition($input->getWidth(), 0);
