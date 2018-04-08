@@ -291,7 +291,8 @@ class MenuContentFactory extends WidgetFactory
     public function createBreadcrumb($items) {
         $items = array_reverse($items);
 
-        $frame = $this->uiFactory->createLayoutLine(-60, -16, [], 2);
+        $frame = $this->uiFactory->createLayoutLine(0, -16, [], 2);
+        $frame->setHorizontalAlign("center");
         $frame->setId("breadcrumb");
 
         foreach ($items as $i => $item) {
