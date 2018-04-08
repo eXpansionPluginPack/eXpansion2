@@ -4,6 +4,7 @@ namespace eXpansion\Bundle\WidgetBestCheckpoints\Plugins;
 
 use eXpansion\Bundle\LocalRecords\DataProviders\Listener\RecordsDataListener;
 use eXpansion\Bundle\LocalRecords\Model\Record;
+use eXpansion\Bundle\LocalRecords\Plugins\BaseRecords;
 use eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\BestCheckpointsWidgetFactory;
 use eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\UpdaterWidgetFactory;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
@@ -11,7 +12,6 @@ use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
-use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
 
@@ -86,8 +86,12 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
      *
      * @param Record[] $records
      */
-    public function onLocalRecordsLoaded($records)
+    public function onLocalRecordsLoaded($records, BaseRecords $baseRecords)
     {
+        if (!$this->checkRecordPlugin($baseRecords)) {
+            return;
+        }
+
         if (count($records) > 0) {
             $this->updater->setLocalRecord($records[0]->getCheckpoints());
         } else {
@@ -102,8 +106,12 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
      * @param Record[] $records
      * @param          $position
      */
-    public function onLocalRecordsFirstRecord(Record $record, $records, $position)
+    public function onLocalRecordsFirstRecord(Record $record, $records, $position, BaseRecords $baseRecords)
     {
+        if (!$this->checkRecordPlugin($baseRecords)) {
+            return;
+        }
+
         $this->updater->setLocalRecord($record->getCheckpoints());
     }
 
@@ -114,7 +122,7 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
      * @param Record   $oldRecord
      * @param Record[] $records
      */
-    public function onLocalRecordsSameScore(Record $record, Record $oldRecord, $records)
+    public function onLocalRecordsSameScore(Record $record, Record $oldRecord, $records, BaseRecords $baseRecords)
     {
 
     }
@@ -128,8 +136,12 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
      * @param int      $position
      * @param int      $oldPosition
      */
-    public function onLocalRecordsBetterPosition(Record $record, Record $oldRecord, $records, $position, $oldPosition)
+    public function onLocalRecordsBetterPosition(Record $record, Record $oldRecord, $records, $position, $oldPosition, BaseRecords $baseRecords)
     {
+        if (!$this->checkRecordPlugin($baseRecords)) {
+            return;
+        }
+
         if ($position == 1) {
             $this->updater->setLocalRecord($record->getCheckpoints());
         }
@@ -143,13 +155,28 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
      * @param Record[] $records
      * @param          $position
      */
-    public function onLocalRecordsSamePosition(Record $record, Record $oldRecord, $records, $position)
+    public function onLocalRecordsSamePosition(Record $record, Record $oldRecord, $records, $position, BaseRecords $baseRecords)
     {
+        if (!$this->checkRecordPlugin($baseRecords)) {
+            return;
+        }
+
         if ($position == 1) {
             $this->updater->setLocalRecord($record->getCheckpoints());
         }
     }
 
+    /**
+     * Check if we can use the data for this plugin.
+     *
+     * @param BaseRecords $baseRecords
+     *
+     * @return bool
+     */
+    protected function checkRecordPlugin(BaseRecords $baseRecords)
+    {
+        return $baseRecords->getRecordsHandler()->getCurrentNbLaps() == 1;
+    }
 
     /**
      * @param Map $map

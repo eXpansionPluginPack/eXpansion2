@@ -169,10 +169,19 @@ class PluginManager
 
         // Now check for data providers.
         foreach ($plugin->getDataProviders() as $dataProvider) {
-            $providerId = $this->dataProviderManager->getCompatibleProviderId($dataProvider, $title, $mode, $script, $map);
+            $dataProviders = explode("|", $dataProvider);
+            $foundOne = false;
 
-            if (is_null($providerId) || !isset($enabledPlugins[$providerId])) {
-                // Either there are no data providers compatible or the only one compatible
+            foreach ($dataProviders as $provider) {
+                $providerId = $this->dataProviderManager->getCompatibleProviderId($provider, $title, $mode, $script, $map);
+                if (!is_null($providerId) && isset($enabledPlugins[$providerId])) {
+                    // Either there are no data providers compatible or the only one compatible
+                    $foundOne = true;
+                    break;
+                }
+            }
+
+            if (!$foundOne) {
                 return false;
             }
         }
@@ -220,7 +229,10 @@ class PluginManager
         }
 
         foreach ($plugin->getDataProviders() as $provider) {
-            $this->dataProviderManager->registerPlugin($provider, $plugin->getPluginId(), $title, $mode, $script, $map);
+            $dataProviders = explode("|", $provider);
+            foreach ($dataProviders as $dataProvider) {
+                $this->dataProviderManager->registerPlugin($dataProvider, $plugin->getPluginId(), $title, $mode, $script, $map);
+            }
         }
 
         $this->enabledPlugins[$plugin->getPluginId()] = $plugin;
@@ -242,7 +254,10 @@ class PluginManager
         $pluginService = $this->container->get($plugin->getPluginId());
 
         foreach ($plugin->getDataProviders() as $provider) {
-            $this->dataProviderManager->deletePlugin($provider, $plugin->getPluginId());
+            $dataProviders = explode("|", $provider);
+            foreach ($dataProviders as $dataProvider) {
+                $this->dataProviderManager->deletePlugin($dataProvider, $plugin->getPluginId());
+            }
         }
 
         if (isset($this->enabledPlugins[$plugin->getPluginId()])) {
