@@ -1,0 +1,18 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    eXpansionExperimantal\Bundle\Dedimania\Services\DedimaniaService:
+        class: eXpansionExperimantal\Bundle\Dedimania\Services\DedimaniaService
+
+    expansion.dedimania.data_providers.dedimania:
+        class: eXpansionExperimantal\Bundle\Dedimania\DataProviders\DedimaniaDataProvider
+        tags:
+          - {name: 'expansion.dataprovider', provider: "expansion.dedimania", interface: eXpansionExperimantal\Bundle\Dedimania\DataProviders\Listener\DedimaniaDataListener}
+          - {name: 'expansion.dataprovider.compatibility', title: 'TM'}
+          - {name: 'expansion.dataprovider.listener', event_name: 'expansion.dedimania.records.load', method: 'onDedimaniaRecordsLoaded'}
+          - {name: 'expansion.dataprovider.listener', event_name: 'expansion.dedimania.records.update', method: 'onDedimaniaRecordsUpdate'}
+          - {name: 'expansion.dataprovider.listener', event_name: 'expansion.dedimania.player.connect', method: 'onDedimaniaPlayerConnect'}
+          - {name: 'expansion.dataprovider.listener', event_name: 'expansion.dedimania.player.disconnect', method: 'onDedimaniaPlayerDisconnect'}

@@ -19,7 +19,6 @@ class AppKernel extends Kernel
         }
     }
 
-
     public function registerBundles()
     {
         /* Register symfony bundles & eXpansion core bundles */
@@ -27,7 +26,6 @@ class AppKernel extends Kernel
 
         /* Register eXpansion Base Bundles */
         $bundles[] = new \eXpansion\Bundle\CustomChat\CustomChatBundle();
-//        $bundles[] = new \eXpansion\Bundle\ImmersiveWindows\ImmersiveWindowsBundle();
         $bundles[] = new \eXpansion\Bundle\CustomUi\CustomUiBundle();
         $bundles[] = new \eXpansion\Bundle\AdminChat\AdminChatBundle();
 
@@ -50,8 +48,15 @@ class AppKernel extends Kernel
         $bundles[] = new \eXpansion\Bundle\MxKarma\MxKarmaBundle();
 
 
+//        $bundles[] = new \eXpansion\Bundle\ImmersiveWindows\ImmersiveWindowsBundle();
+
+
+        /* Register experimental bundles */
+        $bundles[] = new \eXpansionExperimantal\Bundle\Dedimania\DedimaniaBundle();
+
         /* Register test bundles. */
         $bundles[] = new \eXpansion\Bundle\Acme\AcmeBundle();
+
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
             $bundles[] = new \eXpansion\Bundle\DeveloperTools\DeveloperToolsBundle();
