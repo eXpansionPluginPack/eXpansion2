@@ -1,0 +1,27 @@
+expansion_dedimania:
+    gui:
+        window:
+            title: 'Dedimania records'
+            column:
+                index: '#'
+                name: 'Nickname'
+                login: 'Login'
+                time: 'Time'
+
+    config:
+        enabled:
+            name: 'Enabled'
+            desc: 'Sets if the plugin should be used or not'
+        apikey:
+            name: 'Api key'
+            desc: 'Get dedimania api key here: $lhttp://dedimania.net/tm2stats/?do=register/$l'
+        serverlogin:
+            name: 'Server Login'
+            desc: 'Server login for the api key'
+
+
+expansion_config:
+  menu:
+    eXpansion:
+      Dedimania:
+        label: "Dedimania"

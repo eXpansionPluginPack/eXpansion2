@@ -1,14 +1,17 @@
 <?php
 
-namespace eXpansion\Bundle\WidgetBestRecords\Plugins\Gui;
+namespace eXpansionExperimantal\Bundle\WidgetBestRecords\Plugins\Gui;
 
 use eXpansion\Bundle\LocalRecords\Model\Record;
 use eXpansion\Framework\Core\Helpers\Time;
+use eXpansion\Framework\Core\Helpers\TMString;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
+use eXpansion\Framework\GameManiaplanet\DataProviders\ChatCommandDataProvider;
 use eXpansion\Framework\Gui\Components\Label;
+use eXpansionExperimantal\Bundle\Dedimania\Structures\DedimaniaRecord;
 
 class BestRecordsWidgetFactory extends WidgetFactory
 {
@@ -36,6 +39,8 @@ class BestRecordsWidgetFactory extends WidgetFactory
      */
     private $time;
 
+    protected $chatCommandDataProvider;
+
 
     /***
      * MenuFactory constructor.
@@ -55,11 +60,13 @@ class BestRecordsWidgetFactory extends WidgetFactory
         $posX,
         $posY,
         WidgetFactoryContext $context,
-        Time $time
+        Time $time,
+        ChatCommandDataProvider $chatCommandDataProvider
 
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
         $this->time = $time;
+        $this->chatCommandDataProvider = $chatCommandDataProvider;
     }
 
     /**
@@ -93,6 +100,7 @@ class BestRecordsWidgetFactory extends WidgetFactory
         $line2 = $this->uiFactory->createLayoutLine(0, -4.45, [], 0.5);
 
         $lbl = $this->createLabel("Record", "0017")->setSize(15, 4);
+        $lbl->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackShowLocalRecords"], [], true));
         $line2->addChild($lbl);
 
         $this->lblLocalNick = $this->createLabel("n/a", "0023")->setSize(33, 4);
@@ -105,6 +113,7 @@ class BestRecordsWidgetFactory extends WidgetFactory
         $line3 = $this->uiFactory->createLayoutLine(0, -9.0, [], 0.5);
 
         $lbl = $this->createLabel("Dedimania", "0017")->setSize(15, 4);
+        $lbl->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackShowDedimaniaRecords"], [], true));
         $line3->addChild($lbl);
 
         $this->lblDediNick = $this->createLabel("n/a", "0023")->setSize(33, 4);
@@ -145,11 +154,38 @@ class BestRecordsWidgetFactory extends WidgetFactory
         }
     }
 
+    /**
+     * @param DedimaniaRecord|null $record
+     */
+    public function setDedimaniaRecord($record)
+    {
+        if ($record instanceof DedimaniaRecord) {
+            try {
+                $this->lblDediNick->setText(TMString::trimStyles($record->nickName));
+                $this->lblDediTime->setText($this->time->timeToText($record->best, true));
+            } catch (\Exception $e) {
+                $this->lblDediNick->setText("");
+                $this->lblDediTime->setText("-:--.---");
+            }
+        } else {
+            $this->lblDediNick->setText("");
+            $this->lblDediTime->setText("-:--.---");
+        }
+    }
+
     protected function updateContent(ManialinkInterface $manialink)
     {
         $this->lblAuthorTime->setText($this->time->timeToText($this->authorTime, true));
         $this->lblAuthorNick->setText($this->authorName);
     }
 
+    public function callbackShowLocalRecords(ManialinkInterface $manialink, $login, $entries, $args)
+    {
+        $this->chatCommandDataProvider->onPlayerChat($login, $login, "/recs", true);
+    }
 
+    public function callbackShowDedimaniaRecords(ManialinkInterface $manialink, $login, $entries, $args)
+    {
+        $this->chatCommandDataProvider->onPlayerChat($login, $login, "/dedirecs", true);
+    }
 }

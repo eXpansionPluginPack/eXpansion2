@@ -1,16 +1,16 @@
 services:
-    eXpansion\Bundle\WidgetBestRecords\Plugins\BestRecords:
-        class:  eXpansion\Bundle\WidgetBestRecords\Plugins\BestRecords
+    eXpansionExperimantal\Bundle\WidgetBestRecords\Plugins\BestRecords:
+        class:  eXpansionExperimantal\Bundle\WidgetBestRecords\Plugins\BestRecords
         autowire: true
         arguments:
                 $players: '@expansion.framework.core.user_groups.players'
                 $allPlayers: '@expansion.framework.core.user_groups.all_players'
         tags:
-          - {name: 'expansion.plugin', data_provider: 'expansion.local_records.race|expansion.local_records.lap'}
+          - {name: 'expansion.plugin', data_provider: 'expansion.local_records.race|expansion.local_records.lap|expansion.dedimania'}
           - {name: 'expansion.plugin', data_provider: 'mp.legacy.map'}
 
-    eXpansion\Bundle\WidgetBestRecords\Plugins\Gui\BestRecordsWidgetFactory:
-            class: eXpansion\Bundle\WidgetBestRecords\Plugins\Gui\BestRecordsWidgetFactory
+    eXpansionExperimantal\Bundle\WidgetBestRecords\Plugins\Gui\BestRecordsWidgetFactory:
+            class: eXpansionExperimantal\Bundle\WidgetBestRecords\Plugins\Gui\BestRecordsWidgetFactory
             autowire: true
             arguments:
                 $name:  "BestRecords"

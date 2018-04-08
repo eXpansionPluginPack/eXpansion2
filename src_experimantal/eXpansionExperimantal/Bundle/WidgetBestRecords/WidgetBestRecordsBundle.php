@@ -1,6 +1,6 @@
 <?php
 
-namespace eXpansion\Bundle\WidgetBestRecords;
+namespace eXpansionExperimantal\Bundle\WidgetBestRecords;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
