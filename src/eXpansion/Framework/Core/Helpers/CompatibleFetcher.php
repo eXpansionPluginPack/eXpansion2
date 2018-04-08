@@ -18,6 +18,25 @@ class CompatibleFetcher
     const COMPATIBLE_ALL = "ALL";
 
     /**
+     * Constant used for unknown titles.
+     */
+    const GAME_UNKNOWN = 'unknown';
+
+    /** @var AssociativeArray  */
+    protected $titles;
+
+    /**
+     * TitleGameConversion constructor.
+     *
+     * @param $titles
+     */
+    public function __construct($titles)
+    {
+        $this->titles = new AssociativeArray($titles);
+        // TODO call expansion api to complete the mapping.
+    }
+
+    /**
      * Get a compatible data.
      *
      * @param $haystack
@@ -30,16 +49,7 @@ class CompatibleFetcher
     public function getCompatibleData($haystack, $title, $mode, $script)
     {
         // List of choices order by importance.
-        $choices = [
-            [$title, $mode, $script],
-            [$title, $mode, self::COMPATIBLE_ALL],
-            [$title, self::COMPATIBLE_ALL, self::COMPATIBLE_ALL],
-            [self::COMPATIBLE_ALL, self::COMPATIBLE_ALL, self::COMPATIBLE_ALL],
-            // that are common to all titles.
-            [self::COMPATIBLE_ALL, $mode, $script],
-            [self::COMPATIBLE_ALL, $mode, self::COMPATIBLE_ALL],
-            [self::COMPATIBLE_ALL, self::COMPATIBLE_ALL, self::COMPATIBLE_ALL],
-        ];
+        $choices = $this->getChoicesByPriority($title, $mode, $script);
 
         foreach ($choices as $choice) {
             $data = AssociativeArray::getFromKey($haystack, $choice);
@@ -50,5 +60,49 @@ class CompatibleFetcher
         }
 
         return null;
+    }
+
+    /**
+     * Get list of choices to test by priority.
+     *
+     * @param string $titleId
+     * @param string $mode
+     * @param string $script
+     *
+     * @return array
+     */
+    public function getChoicesByPriority($titleId, $mode, $script)
+    {
+        $game = $this->getTitleGame($titleId);
+        return [
+            [$titleId, $mode, $script],
+            [$titleId, $mode, self::COMPATIBLE_ALL],
+            [$titleId, self::COMPATIBLE_ALL, self::COMPATIBLE_ALL],
+
+            // If perfect title is not found then fallback on game.
+            [$game, $mode, $script],
+            [$game, $mode, self::COMPATIBLE_ALL],
+            [$game, self::COMPATIBLE_ALL, self::COMPATIBLE_ALL],
+
+            // For modes that are common to all titles.
+            [self::COMPATIBLE_ALL, $mode, $script],
+            [self::COMPATIBLE_ALL, $mode, self::COMPATIBLE_ALL],
+
+            // For data providers compatible with every title/gamemode/script.
+            [self::COMPATIBLE_ALL, self::COMPATIBLE_ALL, self::COMPATIBLE_ALL],
+        ];
+    }
+
+    /**
+     * Get the game of the title.
+     *
+     * @param string $titleId
+     *
+     * @return string
+     */
+    public function getTitleGame($titleId)
+    {
+        $game = $this->titles->get($titleId, self::GAME_UNKNOWN);
+        return $game;
     }
 }

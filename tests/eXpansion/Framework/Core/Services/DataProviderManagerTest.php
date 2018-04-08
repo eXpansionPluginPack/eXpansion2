@@ -4,6 +4,7 @@
 namespace Tests\eXpansion\Framework\Core\Services;
 
 use eXpansion\Framework\Core\Exceptions\DataProvider\UncompatibleException;
+use eXpansion\Framework\Core\Helpers\CompatibleFetcher;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Services\DataProviderManager;
 use eXpansion\Framework\Core\Services\PluginManager;
@@ -26,7 +27,11 @@ class DataProviderManagerTest extends TestCore
 {
     use PlayerDataTrait;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $mockGameDataStorage;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $compatibleFetcher;
 
     /** @var DataProviderManager */
     protected $dataProviderManager;
@@ -44,11 +49,14 @@ class DataProviderManagerTest extends TestCore
         $this->mockGameDataStorage->method('getGameInfos')->willReturn($gameInfos);
         $this->mockGameDataStorage->method('getVersion')->willReturn(new Version());
 
+        $this->compatibleFetcher = new CompatibleFetcher($this->container->getParameter('expansion.storage.gamedata.titles'));
+
         $this->dataProviderManager = new DataProviderManager(
             $this->container,
             $this->mockGameDataStorage,
             $this->container->get(Console::class),
-            $this->getMockBuilder(LoggerInterface::class)->getMock()
+            $this->getMockBuilder(LoggerInterface::class)->getMock(),
+            $this->compatibleFetcher
         );
     }
 

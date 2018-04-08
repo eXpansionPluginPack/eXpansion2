@@ -23,11 +23,6 @@ class GameDataStorage
      */
     const GAME_MODE_CODE_UNKNOWN = 'unknown';
 
-    /**
-     * Constant used for unknown titles.
-     */
-    const TITLE_UNKNOWN = 'unknown';
-
     /** @var Countries */
     protected $countriesHelper;
 
@@ -54,11 +49,6 @@ class GameDataStorage
     /** @var string */
     protected $mapFolder;
 
-    /**
-     * @var AssociativeArray
-     */
-    protected $titles;
-
     /** @var string */
     protected $serverCleanPhpVersion;
 
@@ -70,12 +60,10 @@ class GameDataStorage
      *
      * @param Countries $countries
      * @param array $gameModeCodes
-     * @param array $titles
      */
-    public function __construct(Countries $countries, array $gameModeCodes, array $titles)
+    public function __construct(Countries $countries, array $gameModeCodes)
     {
         $this->gameModeCodes = new AssociativeArray($gameModeCodes);
-        $this->titles = new AssociativeArray($titles);
 
         $version = explode('-', phpversion());
         $this->serverCleanPhpVersion = $version[0];
@@ -135,18 +123,7 @@ class GameDataStorage
      */
     public function getTitle()
     {
-
-        $title = $this->titles->get($this->getVersion()->titleId, self::TITLE_UNKNOWN);
-        if ($title == self::TITLE_UNKNOWN) {
-            if (substr($this->getVersion()->titleId, 0, 2) == "TM") {
-                return "TM";
-            }
-            if (substr($this->getVersion()->titleId, 0, 2) == "SM") {
-                return "SM";
-            }
-        }
-
-        return $title;
+        return $this->getVersion()->titleId;
     }
 
     /**
