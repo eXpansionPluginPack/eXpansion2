@@ -1,0 +1,68 @@
+parameters:
+     expansion.dedimania.titles:
+            stadium:
+                - "TMStadium@nadeo"
+                - 'BaF1@mcrobert'
+                - 'Dirt_World_TM2@bernatf'
+                - 'Dirt_@mr.dvd'
+                - 'edenia@nexxusdrako'
+                - 'ESLTitlePack@nilakite2'
+                - 'Nations_Forever@citiroller'
+                - 'Nations_ESWC@tm-jinzo'
+                - 'Minimalize@mvv0105'
+                - 'only_stadium_car@adamkooo'
+                - 'RPG@tmrpg'
+                - 'SRE@tm-nascar'
+                - 'StadiumPlatform@darkpuddle_'
+                - 'Ultimate_Challenge_2@mr.dvd'
+                - 'esl_comp@lt_forever'
+            canyon:
+                -  "TMCanyon"
+                -  "TMCanyon@nadeo"
+                -  "Acrobatic@mr.dvd"
+                -  "_f00Canyon_00fStar@mcmart1"
+                -  'CanyonCity@darkpuddle_'
+                -  'Canyon_Inverted_edk@edk'
+                -  'DD_RailwaySystem@divingduck'
+                -  'Glide@darmaya'
+                -  'LEGO_Racing@macio6'
+                -  'POLSO@darmaya'
+                -  'Raid@meuh21'
+                -  'TM2_Canyon_Sparkstedition@sparkster'
+                -  'Mr.DvDCanyon_dvd@mr.dvd'
+                -  'Wastelands@mpmandark'
+                -  'wtc@woutre'
+            valley:
+                -  "TMValley"
+                -  "TMValley@nadeo"
+                -  'adrenalin@flighthigh'
+                -  'endless_Valley@flighthigh'
+                -  'F1_Abu_Dhabi@darkpuddle_'
+                -  'miniahoy3@kaeptniglu'
+                -  'RaidValley@meuh21'
+                -  'ValleyCity@darkpuddle_'
+                -  'Valley_Extensions@dag_bert'
+            lagoon:
+                - "TMLagoon"
+                - "TMLagoon@nadeo"
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    eXpansionExperimantal\Bundle\Dedimania\Plugins\Dedimania:
+      class: eXpansionExperimantal\Bundle\Dedimania\Plugins\Dedimania
+      arguments:
+          $titles: "%expansion.dedimania.titles%"
+          $enabled: "@expansion.dedimania.config.enable"
+          $apikey: "@expansion.dedimania.config.apikey"
+          $serverLogin: "@expansion.dedimania.config.serverlogin"
+      tags:
+          - {name: 'expansion.plugin', data_provider: 'exp.tm'}
+          - {name: 'expansion.plugin', data_provider: 'exp.timer'}
+          - {name: 'expansion.plugin', data_provider: 'mp.script.match'}
+          - {name: 'expansion.plugin', data_provider: 'mp.script.map'}
+          - {name: 'expansion.plugin', data_provider: 'mp.legacy.player'}
+          - {name: 'expansion.plugin', data_provider: 'tm.script.race'}
