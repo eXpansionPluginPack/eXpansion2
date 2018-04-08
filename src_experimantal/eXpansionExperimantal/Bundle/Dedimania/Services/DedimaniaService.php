@@ -30,10 +30,10 @@ class DedimaniaService
     private $dispatcher;
 
     /** @var DedimaniaRecord[] */
-    private $recordsByLogin;
+    private $recordsByLogin = [];
 
     /** @var int[] */
-    private $ranksByLogin;
+    private $ranksByLogin = [];
 
 
     private $VReplay = "";
