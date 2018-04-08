@@ -194,7 +194,6 @@ class DataProviderManager
         $providerId = $this->getCompatibleProviderId($provider, $title, $mode, $script, $map);
 
         if (empty($providerId)) {
-            var_dump($provider);
             return;
         }
 
