@@ -2,14 +2,12 @@
 
 namespace eXpansion\Bundle\Menu\Gui;
 
-use eXpansion\Bundle\Menu\Model\Menu\ItemInterface;
+use eXpansion\Bundle\Menu\Gui\Elements\MenuTabItem;
 use eXpansion\Bundle\Menu\Model\Menu\ParentItem;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Gui\Ui\Factory;
-use FML\Controls\Label;
 use FML\Types\Container;
-use FML\Types\Renderable;
 
 /**
  * Class MenuTabsFactory
@@ -29,7 +27,7 @@ class MenuTabsFactory
     /**
      * MenuTabsFactory constructor.
      *
-     * @param Factory $uiFactory
+     * @param Factory       $uiFactory
      * @param ActionFactory $actionFactory
      */
     public function __construct(Factory $uiFactory, ActionFactory $actionFactory)
@@ -40,11 +38,11 @@ class MenuTabsFactory
 
     /**
      * @param ManialinkInterface $manialink
-     * @param Container $tabsFrame
-     * @param ParentItem $rootItem
-     * @param $openId
+     * @param Container          $tabsFrame
+     * @param ParentItem         $rootItem
+     * @param                    $openId
      *
-     * @return Renderable
+     * @return Container
      */
     public function createTabsMenu(
         ManialinkInterface $manialink,
@@ -54,44 +52,27 @@ class MenuTabsFactory
         $openId
     ) {
 
-        $label = $this->uiFactory->createLabel("expansion_menu.menu");
-        $label->setPosition(0, 0);
-        $label->setSize(30, 5);
-        $label->setTextSize(4);
-        $label->setTextColor('FFFFFF');
-        $label->setHorizontalAlign("center");
-        $label->setTranslate(true);
-        $tabsFrame->addChild($label);
-
-        $posX = 28;
         foreach ($rootItem->getChilds() as $item) {
             if ($item->isVisibleFor($manialink->getUserGroup())) {
+
                 $action = $this->actionFactory->createManialinkAction(
                     $manialink,
                     $actionCallback,
                     ['item' => $item, 'ml' => $manialink]
                 );
-                $label = $this->uiFactory->createLabel($item->getLabelId());
 
-                $label->setPosition($posX, 0);
-                $label->setSize(24, 5);
-                $label->setAction($action);
-                $label->setTextSize(3);
-                $label->setTextColor('FFFFFF');
-                $label->setHorizontalAlign(Label::CENTER);
-                $label->setTranslate(true);
+                $tabItem = new MenuTabItem($item->getLabelId(), $action);
+                $tabItem->setSize(24, 6);
 
                 if ($item->getId() == $openId) {
-                    $underline = $this->uiFactory->createLine($posX - 13, -5);
-                    $underline->to($posX + 13, -5);
-                    $underline->setColor('FFFFFF');
-                    $tabsFrame->addChild($underline);
+                    $tabItem->setActive(true);
                 }
 
-                $tabsFrame->addChild($label);
-                $posX += 26;
+                $tabsFrame->addChild($tabItem);
             }
         }
+
+        $tabsFrame->setX(-1 * $tabsFrame->getWidth() / 2);
 
         return $tabsFrame;
     }
