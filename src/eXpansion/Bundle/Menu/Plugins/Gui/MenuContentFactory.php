@@ -250,13 +250,11 @@ class MenuContentFactory extends WidgetFactory
         // generate back button
         $path = explode("/", $parentItem->getPath());
         array_shift($path);
-        print_r($path);
+
         $path = array_reverse($path);
         array_shift($path);
         $path = array_reverse($path);
-
-        print_r($path);
-
+        
         if ($path && count($path) >= 0) {
             $rootItem = $this->menuItemProvider->getRootItem();
             $backItem = $rootItem->getChild(implode("/", $path));
