@@ -90,5 +90,6 @@ services:
             $uiProperties: "%expansion.custom_ui.ui_properties%"
             $setPropertiesScriptEvent: 'Shootmania.UI.SetProperties'
             $customWidgets:
+              -
         tags:
             - {name: 'expansion.plugin', data_provider: 'exp.custom_ui.compatibility.sm'}
