@@ -14,7 +14,9 @@ services:
             autowire: true
             arguments:
                 $name:  "BestRecords"
-                $posX: -159
-                $posY: 87
+                $posX: 0
+                $posY: 0
                 $sizeX: null
                 $sizeY: null
+            tags:
+              - {name: expansion.plugin, data_provider: exp.widget}
