@@ -19,28 +19,28 @@ parameters:
         chat: {visible: true, offset: "0. 0.", linecount: 7}
 
         # Time of the players at the current checkpoint displayed at the bottom of the screen
-        checkpoint_list: {visible: true, pos: "48. -52. 5."}
+        checkpoint_list: {visible: false, pos: "38. -57. 10."}
 
         # Small scores table displayed at the end of race of the round based modes (Rounds, Cup, ...) on the right of the screen
         round_scores: {visible: true, pos: "-158.5 40. 5."}
 
         # Race time left displayed at the bottom right of the screen
-        countdown: {visible: false, pos: "81. -63. 5."}
+        countdown: {visible: true, pos: "134. -73. 10."}
 
         # 3, 2, 1, Go! message displayed on the middle of the screen when spawning
         go: {visible: true}
 
         # Current race chrono displayed at the bottom center of the screen
-        chrono: {visible: true, pos: "0. -80. -5."}
+        chrono: {visible: true, pos: "0. -84. -5."}
 
         # Speed and distance raced displayed in the bottom right of the screen
-        speed_and_distance: {visible: false, pos: "137. -69. 5."}
+        speed_and_distance: {visible: true, pos: "137. -69. 10."}
 
         # Previous and best times displayed at the bottom right of the screen
         personal_best_and_rank: {visible: false, pos: "157. -24. 5."}
 
         # Current position in the map ranking displayed at the bottom right of the screen
-        position: {visible: false, pos: "150.5 -28. 5."}
+        position: {visible: true, pos: "0. -70. -5."}
 
         # Checkpoint time information displayed in the middle of the screen when crossing a checkpoint
         checkpoint_time: {visible: false, pos: "0. 3. -10."}
@@ -79,9 +79,8 @@ services:
             $uiProperties: "%expansion.custom_ui.ui_properties%"
             $setPropertiesScriptEvent: 'Trackmania.UI.SetProperties'
             $customWidgets:
-                - '@eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSpeedWidget'
+#                - '@eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSpeedWidget'
                 - '@eXpansion\Bundle\CustomUi\Plugins\Gui\CustomCheckpointWidget'
-                # TODO : Custom scoreboard can't work until PR is merged in FML : https://github.com/steeffeen/FancyManiaLinks/pull/53
 #                - '@eXpansion\Bundle\CustomUi\Plugins\Gui\CustomScoreboardWidget'
         tags:
             - {name: 'expansion.plugin', data_provider: 'exp.custom_ui.compatibility.tm'}
