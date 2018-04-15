@@ -29,6 +29,8 @@ parameters:
     LayoutLine:  '%expansion.gui.layout.line.class%'
     LayoutRow:  '%expansion.gui.layout.row.class%'
     LayoutScrollable:  '%expansion.gui.layout.scroll.class%'
+    WidgetBackground: 'eXpansion\Framework\Gui\Builders\WidgetBackground'
+    WidgetLabel: 'eXpansion\Framework\Gui\Builders\WidgetBackground'
 
 services:
   expansion.gui.component.factory:
