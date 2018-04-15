@@ -44,10 +44,12 @@ services:
             autowire: true
             arguments:
                 $name:  "Vote"
-                $posX: -120
-                $posY: 65
+                $posX: 0
+                $posY: 0
                 $sizeX: null
                 $sizeY: null
+            tags:
+              - {name: expansion.plugin, data_provider: exp.widget }
 
     eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\UpdateVoteWidgetFactory:
             class: eXpansion\Bundle\VoteManager\Plugins\Gui\Widget\UpdateVoteWidgetFactory
