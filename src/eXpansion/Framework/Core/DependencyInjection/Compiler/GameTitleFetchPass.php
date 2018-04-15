@@ -27,7 +27,9 @@ class GameTitleFetchPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $fileSytem = new Filesystem(new Local(realpath($container->getParameter('kernel.root_dir') . "/../var/expansion/")));
+        $fileSytem = new Filesystem(new Local(realpath($container->getParameter('kernel.root_dir') . "/../var")));
+        $fileSytem->createDir('expansion');
+        $fileSytem = new Filesystem(new Local(realpath($container->getParameter('kernel.root_dir') . "/../var/expansion")));
 
         $this->fetchDataFromRemote($fileSytem, $container);
 
