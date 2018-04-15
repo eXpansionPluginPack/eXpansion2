@@ -4,6 +4,7 @@
 namespace Tests\eXpansion\Framework\Core\Services;
 
 use eXpansion\Framework\Core\Exceptions\DataProvider\UncompatibleException;
+use eXpansion\Framework\Core\Helpers\CompatibleFetcher;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Services\DataProviderManager;
 use eXpansion\Framework\Core\Services\PluginManager;
@@ -26,7 +27,11 @@ class DataProviderManagerTest extends TestCore
 {
     use PlayerDataTrait;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $mockGameDataStorage;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $compatibleFetcher;
 
     /** @var DataProviderManager */
     protected $dataProviderManager;
@@ -36,7 +41,7 @@ class DataProviderManagerTest extends TestCore
         parent::setUp();
 
         $gameInfos = new GameInfos();
-        $gameInfos->scriptName = 'TimeAttack.script.txt';
+        $gameInfos->scriptName = 'timeattack.script.txt';
 
         $this->mockGameDataStorage = $this->getMockBuilder(GameDataStorage::class)->disableOriginalConstructor()->getMock();
         $this->mockGameDataStorage->method('getTitle')->willReturn('TM');
@@ -44,11 +49,14 @@ class DataProviderManagerTest extends TestCore
         $this->mockGameDataStorage->method('getGameInfos')->willReturn($gameInfos);
         $this->mockGameDataStorage->method('getVersion')->willReturn(new Version());
 
+        $this->compatibleFetcher = new CompatibleFetcher($this->container->getParameter('expansion.storage.gamedata.titles'));
+
         $this->dataProviderManager = new DataProviderManager(
             $this->container,
             $this->mockGameDataStorage,
             $this->container->get(Console::class),
-            $this->getMockBuilder(LoggerInterface::class)->getMock()
+            $this->getMockBuilder(LoggerInterface::class)->getMock(),
+            $this->compatibleFetcher
         );
     }
 
@@ -69,7 +77,7 @@ class DataProviderManagerTest extends TestCore
         $listner = ['onPlayerChat' => 'onPlayerChat'];
 
         $compatibilities = [];
-        $compatibilities[] = $this->getCompatibility('TM', 'script', 'TimeAttack.script.txt');
+        $compatibilities[] = $this->getCompatibility('TM', 'script', 'timeattack.script.txt');
         $dataProviderManager
             ->registerDataProvider('dp1-1', 'dp1', ListenerInterfaceMpLegacyChat::class, $compatibilities, $listner);
 
@@ -92,25 +100,25 @@ class DataProviderManagerTest extends TestCore
 
         $this->assertEquals(
             'dp1-1',
-            $dataProviderManager->getCompatibleProviderId('dp1', 'TM', 'script', 'TimeAttack.script.txt', $map)
+            $dataProviderManager->getCompatibleProviderId('dp1', 'TM', 'script', 'timeattack.script.txt', $map)
         );
 
         $this->assertEquals(
             'dp1-2',
-            $dataProviderManager->getCompatibleProviderId('dp1', 'TM', 'script2', 'TimeAttack.script.txt', $map)
+            $dataProviderManager->getCompatibleProviderId('dp1', 'TM', 'script2', 'timeattack.script.txt', $map)
         );
 
         $this->assertEquals(
             'dp2-2',
-            $dataProviderManager->getCompatibleProviderId('dp2', 'TM2', 'script2', 'TimeAttack.script.txt', $map)
+            $dataProviderManager->getCompatibleProviderId('dp2', 'TM2', 'script2', 'timeattack.script.txt', $map)
         );
 
         $this->assertNull(
-            $dataProviderManager->getCompatibleProviderId('dp1', 'TM3', 'script2', 'TimeAttack.script.txt', $map)
+            $dataProviderManager->getCompatibleProviderId('dp1', 'TM3', 'script2', 'timeattack.script.txt', $map)
         );
 
         $this->assertTrue(
-            $dataProviderManager->isProviderCompatible('dp1', 'TM', 'script2', 'TimeAttack.script.txt', $map)
+            $dataProviderManager->isProviderCompatible('dp1', 'TM', 'script2', 'timeattack.script.txt', $map)
         );
     }
 
@@ -131,7 +139,7 @@ class DataProviderManagerTest extends TestCore
 
         $dataProviderMock->expects($this->once())->method('registerPlugin')->withConsecutive(['p1', $pluginMock]);
 
-        $dataProviderManager->registerPlugin('dp1', 'p1', 'TM', 'script', 'TimeAttack.script.txt', $map);
+        $dataProviderManager->registerPlugin('dp1', 'p1', 'TM', 'script', 'timeattack.script.txt', $map);
     }
 
     public function testRegisterWrongPlugin()
@@ -144,13 +152,17 @@ class DataProviderManagerTest extends TestCore
 
         $this->expectException(UncompatibleException::class);
 
-        $dataProviderManager->registerPlugin('dp1', 'p1', 'TM', 'script', 'TimeAttack.script.txt', new Map());
+        $dataProviderManager->registerPlugin('dp1', 'p1', 'TM', 'script', 'timeattack.script.txt', new Map());
     }
 
     public function testDispatch()
     {
         $this->prepareProviders();
         $dataProviderManager = $this->dataProviderManager;
+        $dataProviderManager->reset(
+            $this->getMockBuilder(PluginManager::class)->disableOriginalConstructor()->getMock(),
+            $this->getMockBuilder(Map::class)->getMock()
+        );
 
         $connectionMock = $this->mockConnection;
         /** @var \PHPUnit_Framework_MockObject_MockObject $connectionMock */

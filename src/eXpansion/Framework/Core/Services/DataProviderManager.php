@@ -4,6 +4,7 @@ namespace eXpansion\Framework\Core\Services;
 
 use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
 use eXpansion\Framework\Core\Exceptions\DataProvider\UncompatibleException;
+use eXpansion\Framework\Core\Helpers\CompatibleFetcher;
 use eXpansion\Framework\Core\Model\CompatibilityCheckDataProviderInterface;
 use eXpansion\Framework\Core\Model\ProviderListener;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
@@ -49,23 +50,30 @@ class DataProviderManager
     /** @var LoggerInterface */
     protected $logger;
 
+    /** @var CompatibleFetcher */
+    protected $compatibleFetcher;
+
     /**
      * DataProviderManager constructor.
      *
      * @param ContainerInterface $container
-     * @param GameDataStorage $gameDataStorage
-     * @param Console $console
+     * @param GameDataStorage    $gameDataStorage
+     * @param Console            $console
+     * @param LoggerInterface    $logger
+     * @param CompatibleFetcher  $compatibleFetcher
      */
     public function __construct(
         ContainerInterface $container,
         GameDataStorage $gameDataStorage,
         Console $console,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        CompatibleFetcher $compatibleFetcher
     ) {
         $this->container = $container;
         $this->gameDataStorage = $gameDataStorage;
         $this->console = $console;
         $this->logger = $logger;
+        $this->compatibleFetcher = $compatibleFetcher;
     }
 
     /**
@@ -78,7 +86,7 @@ class DataProviderManager
     {
         $title = $this->gameDataStorage->getTitle();
         $mode = $this->gameDataStorage->getGameModeCode();
-        $script = $this->gameDataStorage->getGameInfos()->scriptName;
+        $script = strtolower($this->gameDataStorage->getGameInfos()->scriptName);
         $this->enabledProviderListeners = [];
 
         foreach ($this->providersByCompatibility as $provider => $data) {
@@ -140,7 +148,7 @@ class DataProviderManager
     }
 
     /**
-     * @param string $provider
+     * @param string $providerName
      * @param string $title
      * @param string $mode
      * @param string $script
@@ -148,19 +156,12 @@ class DataProviderManager
      *
      * @return string|null
      */
-    public function getCompatibleProviderId($provider, $title, $mode, $script, Map $map)
+    public function getCompatibleProviderId($providerName, $title, $mode, $script, Map $map)
     {
-        $parameters = [
-            [$provider, $title, $mode, $script],
-            [$provider, $title, $mode, self::COMPATIBLE_ALL],
-            [$provider, $title, self::COMPATIBLE_ALL, self::COMPATIBLE_ALL],
-            [$provider, self::COMPATIBLE_ALL, self::COMPATIBLE_ALL, self::COMPATIBLE_ALL],
-            // For modes that are common to all titles.
-            [$provider, self::COMPATIBLE_ALL, $mode, self::COMPATIBLE_ALL],
-            [$provider, self::COMPATIBLE_ALL, $mode, $script],
-        ];
+        $parameters = $this->compatibleFetcher->getChoicesByPriority($title, $mode, $script);
 
         foreach ($parameters as $parameter) {
+            $parameter = array_merge([$providerName], $parameter);
             $id = AssociativeArray::getFromKey($this->providersByCompatibility, $parameter);
             if (!is_null($id)) {
                 $provider = $this->container->get($id);

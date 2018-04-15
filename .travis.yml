@@ -11,7 +11,9 @@ before_script:
     - cp app/config/expansion.yml.dist app/config/expansion.yml
 
 script:
-    - ./vendor/bin/phpunit  -c phpunit.xml.dist --coverage-clover=coverage.clover
+    # See if errors while building caches.
+    - ./bin/console --env=test && ./vendor/bin/phpunit  -c phpunit.xml.dist --coverage-clover=coverage.clover
+    -
 
 notifications:
     email: false

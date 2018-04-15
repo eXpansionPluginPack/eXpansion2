@@ -58,15 +58,15 @@ services:
         class: eXpansion\Framework\GameTrackmania\DataProviders\ScriptBaseRounds\MethodGetNumberLapsDataProvider
         tags:
           - {name: expansion.dataprovider, provider: 'mp.method.get_number_laps', interface: eXpansion\Framework\Core\ScriptMethods\AbstractScriptMethod}
-          - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'Rounds.Script.txt'}
-          - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'Cup.Script.txt'}
-          - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'Team.Script.txt'}
-          - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'Chase.Script.txt'}
-          - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'Laps.Script.txt'}
+          - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'rounds.script.txt'}
+          - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'cup.script.txt'}
+          - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'team.script.txt'}
+          - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'chase.script.txt'}
+          - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'laps.script.txt'}
 
     expansion.framework.game_trackmania.data_providers.script_time_attack.method_get_number_laps:
         class: eXpansion\Framework\GameTrackmania\DataProviders\ScriptTimeAttack\MethodGetNumberLapsDataProvider
         tags:
           - {name: expansion.dataprovider, provider: 'mp.method.get_number_laps', interface: eXpansion\Framework\Core\ScriptMethods\AbstractScriptMethod}
-          - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'TeamAttack.Script.txt'}
-          - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'TimeAttack.Script.txt'}
+          - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'teamattack.script.txt'}
+          - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'timeattack.script.txt'}

@@ -98,7 +98,6 @@ services:
     eXpansion\Framework\Core\Storage\GameDataStorage:
         arguments:
             $gameModeCodes: "%expansion.storage.gamedata.mode.codes%"
-            $titles: "%expansion.storage.gamedata.titles%"
 
     eXpansion\Framework\Core\Storage\Data\PlayerFactory:
         arguments:

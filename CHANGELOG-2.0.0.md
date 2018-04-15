@@ -4,6 +4,7 @@
 * Fixed #119 : Fixed all symfony commands requiring connection to the dedicated server. 
 * Fixed : Typo in addEventProcessor method of the application dispatcher.
 * Fixed #322 : Issue with lost events during eXpansion start. This caused at startup not to have local records for exemple.
+* Fixed : Issue on windows with script names can have capital letters.
 
 ## Features
 * Feature Added ingame configuration system. 
