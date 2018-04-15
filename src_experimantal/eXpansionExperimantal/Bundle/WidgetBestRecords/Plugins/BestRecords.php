@@ -1,21 +1,24 @@
 <?php
 
-namespace eXpansion\Bundle\WidgetBestRecords\Plugins;
+namespace eXpansionExperimantal\Bundle\WidgetBestRecords\Plugins;
 
 use eXpansion\Bundle\LocalRecords\DataProviders\Listener\RecordsDataListener;
 use eXpansion\Bundle\LocalRecords\Model\Record;
 use eXpansion\Bundle\LocalRecords\Plugins\BaseRecords;
-use eXpansion\Bundle\WidgetBestRecords\Plugins\Gui\BestRecordsWidgetFactory;
+use eXpansionExperimantal\Bundle\WidgetBestRecords\Plugins\Gui\BestRecordsWidgetFactory;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
+use eXpansionExperimantal\Bundle\Dedimania\DataProviders\Listener\DedimaniaDataListener;
+use eXpansionExperimantal\Bundle\Dedimania\Structures\DedimaniaPlayer;
+use eXpansionExperimantal\Bundle\Dedimania\Structures\DedimaniaRecord;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
 
-class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, ListenerInterfaceMpLegacyMap
+class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, ListenerInterfaceMpLegacyMap, DedimaniaDataListener
 {
     /** @var Factory */
     protected $factory;
@@ -149,6 +152,60 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, Li
 
 
     /**
+     * Called when dedimania records are loaded.
+     *
+     * @param DedimaniaRecord[] $records
+     */
+    public function onDedimaniaRecordsLoaded($records)
+    {
+        if (count($records) > 0) {
+            $this->widget->setDedimaniaRecord($records[0]);
+        } else {
+            $this->widget->setDedimaniaRecord(null);
+        }
+        $this->widget->update($this->allPlayers);
+    }
+
+    /**
+     * @param DedimaniaRecord   $record
+     * @param DedimaniaRecord   $oldRecord
+     * @param DedimaniaRecord[] $records
+     * @param  int              $position
+     * @param  int              $oldPosition
+     * @return void
+     */
+    public function onDedimaniaRecordsUpdate(
+        DedimaniaRecord $record,
+        DedimaniaRecord $oldRecord,
+        $records,
+        $position,
+        $oldPosition
+    ) {
+        if ($position == 1) {
+            $this->widget->setDedimaniaRecord($record);
+            $this->widget->update($this->allPlayers);
+        }
+    }
+
+    /**
+     * @param DedimaniaPlayer $player
+     * @return void
+     */
+    public function onDedimaniaPlayerConnect(DedimaniaPlayer $player)
+    {
+        //
+    }
+
+    /**
+     * @param DedimaniaPlayer $player
+     * @return void
+     */
+    public function onDedimaniaPlayerDisconnect(DedimaniaPlayer $player)
+    {
+        //
+    }
+
+    /**
      * @param Map $map
      *
      * @return void
@@ -156,6 +213,9 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, Li
     public function onBeginMap(Map $map)
     {
         $this->widget->setAuthorTime($map->author, $map->authorTime);
+        $this->widget->setDedimaniaRecord(null);
+        $this->widget->setLocalRecord(null);
+        $this->widget->update($this->allPlayers);
     }
 
     /**

@@ -358,6 +358,31 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $this->setGridSize($content->getWidth(), $content->getHeight() - 18);
         $manialink->setData('grid', $gridBuilder);
         $this->gridBuilder = $gridBuilder;
+        $params = [
+            "mode" => 0,
+            "order" => 0,
+            "operator" => 0,
+            "length" => -1,
+            "style" => -1,
+            "difficulties" => -1,
+            "tpack" => -1,
+        ];
+        $manialink->setData("params", (object)$params);
+
+    }
+
+    protected function updateContent(ManialinkInterface $manialink)
+    {
+        $params = $manialink->getData("params");
+        $this->modebox->setSelectedByValue($params->mode);
+        $this->orderbox->setSelectedByValue($params->order);
+        $this->opbox->setSelectedByValue($params->operator);
+        $this->lengthBox->setSelectedByValue($params->length);
+        $this->stylebox->setSelectedByValue($params->style);
+        $this->difficultiesBox->setSelectedByValue($params->difficulties);
+        $this->tpackBox->setSelectedByValue($params->tpack);
+
+        parent::updateContent($manialink);
     }
 
     /**
@@ -394,15 +419,9 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
      */
     public function callbackSearch(ManialinkInterface $manialink, $login, $params, $arguments)
     {
-        $params = (object) $params;
 
-        $this->modebox->setSelectedByValue($params->mode);
-        $this->orderbox->setSelectedByValue($params->order);
-        $this->opbox->setSelectedByValue($params->operator);
-        $this->lengthBox->setSelectedByValue($params->length);
-        $this->stylebox->setSelectedByValue($params->style);
-        $this->difficultiesBox->setSelectedByValue($params->difficulties);
-        $this->tpackBox->setSelectedByValue($params->tpack);
+        $params = (object)$params;
+        $manialink->setData('params', $params);
 
         $options = "";
 
@@ -430,7 +449,6 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
 
         $this->setBusy($manialink, "Searching, please wait...");
         $this->http->get($query, [$this, 'setMaps'], ['login' => $login, 'params' => $params, 'ml' => $manialink]);
-
 
     }
 

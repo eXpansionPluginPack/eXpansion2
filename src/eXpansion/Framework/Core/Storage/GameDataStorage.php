@@ -23,6 +23,14 @@ class GameDataStorage
      */
     const GAME_MODE_CODE_UNKNOWN = 'unknown';
 
+    /**
+     * Constants for the operating system.
+     */
+    const OS_LINUX = 'Linux';
+    const OS_WINDOWS = 'Windows';
+    const OS_MAC = 'Mac';
+
+
     /** @var Countries */
     protected $countriesHelper;
 
@@ -209,12 +217,12 @@ class GameDataStorage
     public function getServerOs()
     {
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            return "Windows";
+            return self::OS_WINDOWS;
         } else {
             if (strtoupper(substr(PHP_OS, 0, 3)) === 'MAC') {
-                return "Mac";
+                return self::OS_MAC;
             } else {
-                return "Linux";
+                return self::OS_LINUX;
             }
         }
     }

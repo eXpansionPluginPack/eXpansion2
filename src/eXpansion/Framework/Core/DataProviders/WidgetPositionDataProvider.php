@@ -53,7 +53,7 @@ class WidgetPositionDataProvider extends AbstractDataProvider implements StatusA
     {
         $title = $this->gameStorage->getTitle();
         $mode = $this->gameStorage->getGameModeCode();
-        $script = strtolower($this->gameStorage->getGameInfos()->scriptName);
+        $script = $this->gameStorage->getGameInfos()->scriptName;
 
         foreach ($this->plugins as $pluginId => $plugin) {
             if (isset($this->widgetPositions[$pluginId])) {

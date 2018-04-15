@@ -145,6 +145,10 @@ abstract class AbstractApplication implements RunInterface
                 usleep($delay);
             }
         } while ($this->isRunning);
+
+        $this->factory->getConnection()->sendHideManialinkPage(null);
+        $this->factory->getConnection()->triggerModeScriptEvent("Shootmania.UI.ResetProperties", []);
+        $this->factory->getConnection()->triggerModeScriptEvent("Trackmania.UI.ResetProperties", []);
     }
 
     /**

@@ -67,8 +67,8 @@ class LineFactory
             });
 
         $frame = new Frame();
-        //$frame->setHeight($height);
-        //$frame->setWidth($totalWidth);
+        $frame->setHeight($height);
+        $frame->setWidth($totalWidth);
 
         $postX = 1;
         foreach ($columns as $columnData) {

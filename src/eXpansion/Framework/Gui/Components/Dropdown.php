@@ -202,7 +202,7 @@ EOD;
         $entry->setPosition(900, 900)
             ->setName($this->name);
 
-        $frameOptions = new LayoutRow(0, -($this->height + ($this->height / 2)));
+        $frameOptions = new LayoutRow(0, -($this->height + ($this->height / 2)),[],0);
         $frameOptions->addClass('uiDropdownSelect');
 
         $idx = 0;

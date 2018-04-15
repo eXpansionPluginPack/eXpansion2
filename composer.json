@@ -11,7 +11,7 @@
         "bin/symfony_requirements"
     ],
     "autoload": {
-        "psr-4": { "": "src/" },
+        "psr-4": { "": ["src/", "src_experimantal/"] },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },
     "autoload-dev": {

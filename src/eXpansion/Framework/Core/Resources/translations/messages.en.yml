@@ -9,6 +9,14 @@ expansion_core:
     no_description: "{info}Sorry, this command has no description."
     no_help: "{info}Sorry, this command has no help message."
 
+    stop:
+      help: "Stop expansion"
+      message: "|admin| %nickname% {admin_info}is shutting down eXpansion."
+    restart:
+      help: "Restart expansion in production mode, empty caches and check for database updates before."
+      message: "|admin| %nickname% {admin_info}is restarting eXpansion."
+
+
   windows:
     chat_commands:
       title: Chat Commands
