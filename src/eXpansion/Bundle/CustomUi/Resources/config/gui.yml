@@ -4,48 +4,11 @@ services:
         autoconfigure: true
         public: true
 
-    eXpansion\Bundle\CustomUi\Plugins\Gui\CustomScoreboardWidget:
-        class: eXpansion\Bundle\CustomUi\Plugins\Gui\CustomScoreboardWidget
-        arguments:
-          $name:  "Scoreboard"
-          $posX: 0
-          $posY: 0
-          $sizeX: null
-          $sizeY: null
-
     eXpansion\Bundle\CustomUi\Plugins\Gui\CustomCheckpointWidget:
         class: eXpansion\Bundle\CustomUi\Plugins\Gui\CustomCheckpointWidget
         arguments:
           $name:  "Checkpoints"
           $posX: 0
           $posY: 0
-          $sizeX: null
-          $sizeY: null
-
-    eXpansion\Bundle\CustomUi\Plugins\Gui\MarkersWidget:
-        class: eXpansion\Bundle\CustomUi\Plugins\Gui\MarkersWidget
-        arguments:
-          $name:  "Markers"
-          $posX: 0
-          $posY: 0
-          $sizeX: null
-          $sizeY: null
-
-
-    eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSpeedWidget:
-        class: eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSpeedWidget
-        arguments:
-          $name:  "Speed"
-          $posX: 140
-          $posY: -70
-          $sizeX: null
-          $sizeY: null
-
-    eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSmSpeedWidget:
-        class: eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSmSpeedWidget
-        arguments:
-          $name:  "Speed"
-          $posX: 140
-          $posY: -70
           $sizeX: null
           $sizeY: null
