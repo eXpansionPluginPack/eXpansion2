@@ -142,7 +142,7 @@ class VoteWidgetFactory extends WidgetFactory
             Animation::Linear);
 
 
-        $bg = new WidgetBackground(90, 20);
+        $bg = $this->uiFactory->createWidgetBackground(90, 20);
         $frame->addChild($bg);
 
         $x = self::x;

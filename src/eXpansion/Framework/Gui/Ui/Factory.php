@@ -4,6 +4,8 @@ namespace eXpansion\Framework\Gui\Ui;
 
 use eXpansion\Framework\Core\Exceptions\UnknownMethodException;
 use eXpansion\Framework\Core\Model\Gui\Factory\BackGroundFactory;
+use eXpansion\Framework\Gui\Builders\WidgetBackground;
+use eXpansion\Framework\Gui\Builders\WidgetLabel;
 use eXpansion\Framework\Gui\Components\Animation;
 use eXpansion\Framework\Gui\Components\Button;
 use eXpansion\Framework\Gui\Components\Checkbox;
@@ -41,6 +43,9 @@ use eXpansion\Framework\Gui\Layouts\LayoutScrollable;
  * @method LayoutLine createLayoutLine($startX, $startY, $elements = [], $margin = 0.);
  * @method LayoutRow createLayoutRow($startX, $startY, $elements = [], $margin = 0.);
  * @method LayoutScrollable createLayoutScrollable($frame, $sizeX, $sizeY);
+ *
+ * @method WidgetBackground createWidgetBackground($width, $height);
+ * @method WidgetLabel createWidgetLabel($text = "", $type = Label::TYPE_NORMAL, $controlId = null);
  */
 class Factory
 {
