@@ -79,9 +79,7 @@ services:
             $uiProperties: "%expansion.custom_ui.ui_properties%"
             $setPropertiesScriptEvent: 'Trackmania.UI.SetProperties'
             $customWidgets:
-#                - '@eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSpeedWidget'
                 - '@eXpansion\Bundle\CustomUi\Plugins\Gui\CustomCheckpointWidget'
-#                - '@eXpansion\Bundle\CustomUi\Plugins\Gui\CustomScoreboardWidget'
         tags:
             - {name: 'expansion.plugin', data_provider: 'exp.custom_ui.compatibility.tm'}
 
@@ -92,6 +90,5 @@ services:
             $uiProperties: "%expansion.custom_ui.ui_properties%"
             $setPropertiesScriptEvent: 'Shootmania.UI.SetProperties'
             $customWidgets:
-                - '@eXpansion\Bundle\CustomUi\Plugins\Gui\CustomSmSpeedWidget'
         tags:
             - {name: 'expansion.plugin', data_provider: 'exp.custom_ui.compatibility.sm'}
