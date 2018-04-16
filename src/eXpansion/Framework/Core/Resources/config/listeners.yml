@@ -5,5 +5,4 @@ services:
         class: 'eXpansion\Framework\Core\Listener\BaseStorageUpdateListener'
         autowire: true
         tags:
-            - { name: kernel.event_listener, event: maniaplanet.game.BeginMap }
-            - { name: kernel.event_listener, event: maniaplanet.game.expansion.before_init }
+            - { name: kernel.event_subscriber }

@@ -41,10 +41,12 @@ class AbstractScriptMethod
             $this->dispatchData();
             return;
         }
-        
-        if (is_null($this->currentData) && !$this->callMade) {
-            $this->callMade = true;
-            $this->dataProvider->request();
+
+        if (is_null($this->currentData)) {
+            if (!$this->callMade) {
+                $this->callMade = true;
+                $this->dataProvider->request();
+            }
             return;
         }
 

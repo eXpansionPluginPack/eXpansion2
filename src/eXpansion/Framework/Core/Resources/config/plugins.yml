@@ -58,15 +58,31 @@ services:
         class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
         arguments:
             -
-              - '@expansion.framework.core.chat_command.help'
+              - '@eXpansion\Framework\Core\ChatCommand\Help'
+              - '@eXpansion\Framework\Core\ChatCommand\StopExpansion'
+              - '@eXpansion\Framework\Core\ChatCommand\RestartExpansion'
         tags:
             - {name: expansion.plugin, data_provider: expansion.chat_command_data}
 
-    expansion.framework.core.chat_command.help:
+    eXpansion\Framework\Core\ChatCommand\Help:
         class:  eXpansion\Framework\Core\ChatCommand\Help
         arguments:
             $command: 'help'
             $aliases: ['h']
+
+    eXpansion\Framework\Core\ChatCommand\StopExpansion:
+        class: eXpansion\Framework\Core\ChatCommand\StopExpansion
+        arguments:
+            $command: 'expansion stop'
+            $aliases: []
+            $permission: "admin"
+
+    eXpansion\Framework\Core\ChatCommand\RestartExpansion:
+        class: eXpansion\Framework\Core\ChatCommand\RestartExpansion
+        arguments:
+            $command: 'expansion restart'
+            $aliases: []
+            $permission: "admin"
 
     #
     # Plugin that displays information about expansion on start.

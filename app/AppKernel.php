@@ -1,7 +1,7 @@
 <?php
 
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 class AppKernel extends Kernel
 {
@@ -19,7 +19,6 @@ class AppKernel extends Kernel
         }
     }
 
-
     public function registerBundles()
     {
         /* Register symfony bundles & eXpansion core bundles */
@@ -27,8 +26,9 @@ class AppKernel extends Kernel
 
         /* Register eXpansion Base Bundles */
         $bundles[] = new \eXpansion\Bundle\CustomChat\CustomChatBundle();
-//        $bundles[] = new \eXpansion\Bundle\ImmersiveWindows\ImmersiveWindowsBundle();
         $bundles[] = new \eXpansion\Bundle\CustomUi\CustomUiBundle();
+//        $bundles[] = new \eXpansion\Bundle\ImmersiveWindows\ImmersiveWindowsBundle();
+
         $bundles[] = new \eXpansion\Bundle\AdminChat\AdminChatBundle();
 
         /* Register eXpansion Plugins */
@@ -42,18 +42,24 @@ class AppKernel extends Kernel
         $bundles[] = new \eXpansion\Bundle\LocalMapRatings\LocalMapRatingsBundle();
 
         $bundles[] = new \eXpansion\Bundle\WidgetCurrentMap\WidgetCurrentMapBundle();
-        $bundles[] = new \eXpansion\Bundle\WidgetBestRecords\WidgetBestRecordsBundle();
         $bundles[] = new \eXpansion\Bundle\WidgetBestCheckpoints\WidgetBestCheckpointsBundle();
 
 
         $bundles[] = new \eXpansion\Bundle\VoteManager\VoteManagerBundle();
 
+     //   $bundles[] = new \eXpansion\Bundle\MxKarma\MxKarmaBundle();
 
-//        $bundles[] = new \eXpansion\Bundle\MxKarma\MxKarmaBundle();
-
+        /* Register experimental bundles */
+    //    $bundles[] = new \eXpansionExperimantal\Bundle\Dedimania\DedimaniaBundle();4
+        $bundles[] = new \eXpansionExperimantal\Bundle\WidgetBestRecords\WidgetBestRecordsBundle();
 
         /* Register test bundles. */
         $bundles[] = new \eXpansion\Bundle\Acme\AcmeBundle();
+
+
+        if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
+            $bundles[] = new \eXpansion\Bundle\DeveloperTools\DeveloperToolsBundle();
+        }
 
         return $bundles;
     }
@@ -77,9 +83,12 @@ class AppKernel extends Kernel
             new \eXpansion\Framework\GameManiaplanet\eXpansionGameManiaplanetBundle(),
             new \eXpansion\Framework\GameTrackmania\eXpansionGameTrackmaniaBundle(),
             new \eXpansion\Framework\GameShootmania\eXpansionGameShootmaniaBundle(),
+            new \eXpansion\Framework\GameCurrencyBundle\eXpansionGameCurrencyBundle(),
             new \eXpansion\Framework\AdminGroups\eXpansionAdminGroupsBundle(),
             new \eXpansion\Framework\Gui\eXpansionGuiBundle(),
             new \eXpansion\Framework\PlayersBundle\eXpansionFrameworkPlayersBundle(),
+            new \eXpansion\Framework\Config\eXpansionConfig(),
+            new \eXpansion\Framework\Notifications\eXpansionNotificationsBundle(),
         ];
 
         // Also add debug help bundles.

@@ -14,8 +14,7 @@ class ApplicationDebug extends AbstractApplication
 
     protected function executeRun()
     {
-
-        $calls = $this->connection->executeCallbacks();
+        $calls = $this->factory->getConnection()->executeCallbacks();
         if (!empty($calls)) {
             foreach ($calls as $call) {
                 $method = preg_replace('/^[[:alpha:]]+\./', '', $call[0]); // remove trailing "Whatever."
@@ -24,6 +23,6 @@ class ApplicationDebug extends AbstractApplication
                 $this->dispatcher->dispatch($method, $params);
             }
         }
-        $this->connection->executeMulticall();
+        $this->factory->getConnection()->executeMulticall();
     }
 }

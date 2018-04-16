@@ -6,7 +6,6 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
-use eXpansion\Framework\Gui\Ui\Factory;
 use FML\Controls\Frame;
 use FML\Controls\Quad;
 use FML\Script\ScriptLabel;
@@ -50,7 +49,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
     protected function createContent(ManialinkInterface $manialink)
     {
         $elementCount = 0;
-        $rows = $this->uiFactory->createLayoutRow(0, 0, [], -0.5);
+        $rows = $this->uiFactory->createLayoutRow(0, 0, [], 0.5);
         $cpVariable = $this->updaterWidgetFactory->getVariable('LocalRecordCheckpoints')->getVariableName();
 
         for ($i = 0; $i < self::rowCount; $i++) {
@@ -59,12 +58,11 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                 if ($elementCount == 0) {
                     $dropdown = $this->uiFactory->createDropdown("select", [
                         "Live 1" => "1",
-                        "Local 1" =>
-                            "2",
+                        "Local 1" => "2",
                     ],
                         0,
                         false);
-                    $dropdown->setWidth(18)->setId("Dropdown");
+                    $dropdown->setWidth(18)->setId("uiDropdown");
                     $elements[] = $dropdown;
                 } else {
                     $elements[] = $this->createColumnBox($elementCount);
@@ -86,7 +84,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
             
             ***onSelectDropdown***
             ***
-              declare Integer BestCp_Mode for LocalUser = 0; 
+               declare Integer BestCp_Mode for LocalUser = 0; 
                BestCp_Mode = TextLib::ToInteger(uiDropdown.DataAttributeGet("selected"));
                Refresh();        
             ***
@@ -214,7 +212,7 @@ EOL
             <<<EOL
             declare Integer ElementCount for Page = $elementCount;
             declare Integer BestCp_Mode for LocalUser = 0; 
-            declare CMlFrame Dropdown = (Page.GetFirstChild("Dropdown") as CMlFrame);    
+            declare CMlFrame Dropdown = (Page.GetFirstChild("uiDropdown") as CMlFrame);    
             declare Integer[Integer] MyCheckpoints for Page = Integer[Integer];           
             declare Integer[Integer] MapBestCheckpoints for Page = Integer[Integer];              
             

@@ -2,11 +2,13 @@
 
 namespace eXpansion\Bundle\Acme\Plugins;
 
+use eXpansion\Bundle\Acme\Plugins\Gui\TotoWindowFactory;
 use eXpansion\Bundle\Acme\Plugins\Gui\WindowFactory;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Notifications\Services\Notifications;
 
 /**
  * TotoPlugin is a test plugin to be removed.
@@ -18,20 +20,33 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
     /** @var Console */
     protected $console;
 
-    /** @var WindowFactory */
+    /** @var TotoWindowFactory */
     protected $mlFactory;
 
     /** @var Group */
     protected $playersGroup;
+    /**
+     * @var Notifications
+     */
+    private $notifications;
 
+    /**
+     * TotoPlugin constructor.
+     * @param Group             $players
+     * @param Console           $console
+     * @param Notifications     $notifications
+     * @param TotoWindowFactory $mlFactory
+     */
     function __construct(
         Group $players,
         Console $console,
-        WindowFactory $mlFactory
+        Notifications $notifications,
+        TotoWindowFactory $mlFactory
     ) {
         $this->console = $console;
-        $this->mlFactory = $mlFactory;
         $this->playersGroup = $players;
+        $this->notifications = $notifications;
+        $this->mlFactory = $mlFactory;
     }
 
     /**
@@ -67,7 +82,7 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
      */
     public function onApplicationReady()
     {
-        // $this->mlFactory->create($this->playersGroup);
+
     }
 
     /**

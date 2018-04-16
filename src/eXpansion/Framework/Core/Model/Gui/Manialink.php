@@ -35,17 +35,19 @@ class Manialink implements ManialinkInterface
     /** @var float */
     protected $posY;
 
+    /** @var int */
+    protected $timeout = 0;
 
     /**
      * Manialink constructor
      *
      * @param ManialinkFactoryInterface $manialinkFactory
-     * @param Group $group
-     * @param string $name
-     * @param int $sizeX
-     * @param int $sizeY
-     * @param float|null $posX
-     * @param float|null $posY
+     * @param Group                     $group
+     * @param string                    $name
+     * @param int                       $sizeX
+     * @param int                       $sizeY
+     * @param float|null                $posX
+     * @param float|null                $posY
      */
     public function __construct(
         ManialinkFactoryInterface $manialinkFactory,
@@ -77,6 +79,20 @@ class Manialink implements ManialinkInterface
             .'<manialink version="3" id="'.$this->getId().'">'
             .'<label text="This is empty manialink!" />'
             .'</manialink>';
+    }
+
+    /**
+     * Change the position of the manialink.
+     *
+     * @param float $posX
+     * @param float $posY
+     *
+     * @return void
+     */
+    public function setPosition($posX, $posY)
+    {
+        $this->posY = $posY;
+        $this->posX = $posX;
     }
 
     /**
@@ -132,6 +148,17 @@ class Manialink implements ManialinkInterface
     }
 
     /**
+     * @param int $timeout
+     * @return $this
+     */
+    public function setTimeout(int $timeout)
+    {
+        $this->timeout = $timeout;
+
+        return $this;
+    }
+
+    /**
      * getter for manialink name
      *
      * @return string
@@ -159,5 +186,10 @@ class Manialink implements ManialinkInterface
         }
         $this->data = [];
         $this->manialinkFactory = null;
+    }
+
+    public function getTimeout(): int
+    {
+        return $this->timeout;
     }
 }

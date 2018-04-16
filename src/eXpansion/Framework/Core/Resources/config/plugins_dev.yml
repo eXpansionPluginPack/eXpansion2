@@ -1,0 +1,14 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    #
+    # Plugin to warn agains dev mode being enabled.
+    #
+    eXpansion\Framework\Core\Plugins\DevModeNotifier:
+        class: 'eXpansion\Framework\Core\Plugins\DevModeNotifier'
+        tags:
+            - {name: expansion.plugin, data_provider: exp.timer}
+

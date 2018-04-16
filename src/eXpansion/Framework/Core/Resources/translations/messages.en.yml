@@ -9,6 +9,14 @@ expansion_core:
     no_description: "{info}Sorry, this command has no description."
     no_help: "{info}Sorry, this command has no help message."
 
+    stop:
+      help: "Stop expansion"
+      message: "|admin| %nickname% {admin_info}is shutting down eXpansion."
+    restart:
+      help: "Restart expansion in production mode, empty caches and check for database updates before."
+      message: "|admin| %nickname% {admin_info}is restarting eXpansion."
+
+
   windows:
     chat_commands:
       title: Chat Commands
@@ -19,3 +27,37 @@ expansion_core:
       aliases: Aliases
       description: Description
       help: Help
+
+  config:
+    color_codes:
+      default: "Default Color code"
+      muted: "Muted text color"
+      info: "Information text color"
+      success: "Success text color"
+      warning: "Warning text color"
+      danger: "Danger text color"
+      variable: "Variable text color"
+      primary: "Primary UI Color"
+      secondary: "Secondary UI Color"
+      highlight: "Highlight UI Color"
+      admin_info: "Admin info text color"
+      separator: "Separator color"
+
+    glymp_icons:
+      success: "Success icon"
+      fail: "Fail icon"
+      info: "Server icon"
+      server: "Information icon"
+      warning: "Warning icon"
+      error: "Error icon"
+      admin: "Admin icon"
+
+expansion_config:
+  menu:
+    eXpansion:
+      look_feel:
+        label: "Look & Feel"
+        color_codes:
+          label: "Customize Color codes"
+        glymp_icons:
+          label: "Customize Icons"

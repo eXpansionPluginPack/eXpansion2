@@ -11,10 +11,9 @@ use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\GridWindowFactory;
 use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use FML\Controls\Frame;
-use FML\Script\Features\ScriptFeature;
 use FML\Script\Script;
-use FML\Script\ScriptLabel;
 use Maniaplanet\DedicatedServer\Connection;
 
 
@@ -29,8 +28,8 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
     /** @var Console */
     protected $console;
 
-    /** @var Connection */
-    protected $connection;
+    /** @var Factory */
+    protected $factory;
 
     /** @var DataCollectionFactory */
     protected $dataCollectionFactory;
@@ -44,17 +43,17 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
     /**
      * ScriptSettingsWindowFactory constructor.
      *
-     * @param                       $name
-     * @param                       $sizeX
-     * @param                       $sizeY
-     * @param null                  $posX
-     * @param null                  $posY
-     * @param WindowFactoryContext  $context
-     * @param GridBuilderFactory    $gridBuilderFactory
+     * @param $name
+     * @param $sizeX
+     * @param $sizeY
+     * @param $posX
+     * @param $posY
+     * @param WindowFactoryContext $context
+     * @param GridBuilderFactory $gridBuilderFactory
      * @param DataCollectionFactory $dataCollectionFactory
-     * @param AdminGroups           $adminGroupsHelper
-     * @param Connection            $connection
-     * @param Console               $console
+     * @param AdminGroups $adminGroupsHelper
+     * @param Factory $factory
+     * @param Console $console
      */
     public function __construct(
         $name,
@@ -66,7 +65,7 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
         GridBuilderFactory $gridBuilderFactory,
         DataCollectionFactory $dataCollectionFactory,
         AdminGroups $adminGroupsHelper,
-        Connection $connection,
+        Factory $factory,
         Console $console
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
@@ -74,7 +73,7 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
         $this->currentMenuView = Frame::create();
         $this->gridBuilderFactory = $gridBuilderFactory;
         $this->dataCollectionFactory = $dataCollectionFactory;
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->console = $console;
     }
 
@@ -144,11 +143,12 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
         }
 
         try {
-            $this->connection->setModeScriptSettings($settings);
+            $this->factory->getConnection()->setModeScriptSettings($settings);
             $this->closeManialink($manialink);
 
         } catch (\Exception $ex) {
-            $this->connection->chatSendServerMessage("error: ".$ex->getMessage());
+            // TODO this should use chat notification.
+            $this->factory->getConnection()->chatSendServerMessage("error: ".$ex->getMessage());
             $this->console->writeln('$f00Error: $fff'.$ex->getMessage());
         }
     }
@@ -160,7 +160,7 @@ class ScriptSettingsWindowFactory extends GridWindowFactory
     {
         $data = [];
 
-        $scriptSettings = $this->connection->getModeScriptSettings();
+        $scriptSettings = $this->factory->getConnection()->getModeScriptSettings();
 
         /**
          * @var string $i

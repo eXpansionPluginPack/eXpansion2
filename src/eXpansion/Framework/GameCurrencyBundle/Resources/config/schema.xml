@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="expansion" namespace="eXpansion\Framework\GameCurrencyBundle\Model" defaultIdMethod="native">
+
+    <table name="gamecurrency">
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+            <parameter name="Charset" value="utf8"/>
+        </vendor>
+
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+        <column name="senderLogin" type="varchar" primaryString="1" size="255" />
+        <column name="receiverLogin" type="varchar" size="255" />
+        <column name="transactionId" type="integer" />
+        <column name="billId" type="integer" />
+        <column name="amount" type="integer" />
+        <column name="message" type="varchar" size="255" />
+        <column name="status" type="integer" />
+        <column name="datetime" type="timestamp" />
+    </table>
+
+</database>

@@ -11,12 +11,10 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
-use eXpansion\Framework\Gui\Components\uiButton;
-use eXpansion\Framework\Gui\Components\uiLabel;
+use eXpansion\Framework\Gui\Components\Button;
+use eXpansion\Framework\Gui\Components\Label;
 use FML\Controls\Frame;
-use FML\Controls\Label;
 use FML\Controls\Quad;
-use FML\Script\ScriptLabel;
 
 
 /**
@@ -178,7 +176,7 @@ class MenuContentFactory extends WidgetFactory
      * Create tabs level menu.
      *
      * @param ManialinkInterface $manialink
-     * @param ParentItem $rootItem
+     * @param ItemInterface|null $rootItem
      * @param                    $openId
      */
     protected function createTabsMenu(ManialinkInterface $manialink, ParentItem $rootItem, $openId)
@@ -196,7 +194,7 @@ class MenuContentFactory extends WidgetFactory
      * @param Manialink $manialink
      * @param Frame $frame
      * @param ParentItem $parentItem
-     * @param            $displayLevel
+     * @param            integer $displayLevel
      */
     protected function createSubMenu(Manialink $manialink, Frame $frame, ParentItem $parentItem, $displayLevel)
     {
@@ -232,7 +230,7 @@ class MenuContentFactory extends WidgetFactory
         }
 
         /* TITLE */
-        $titleLabel = $this->uiFactory->createLabel($parentItem->getLabelId(), uiLabel::TYPE_TITLE);
+        $titleLabel = $this->uiFactory->createLabel($parentItem->getLabelId(), Label::TYPE_TITLE);
         $titleLabel->setTextSize(9)
             ->setSize(60, 12)
             ->setPosition(0, 0)
@@ -277,8 +275,8 @@ class MenuContentFactory extends WidgetFactory
 
         if ($displayLevel == 0) {
 
-            $button = $this->uiFactory->createButton('expansion_menu.menu_close', uiButton::TYPE_DECORATED);
-            $button->setBorderColor(uiButton::COLOR_WARNING)->setFocusColor(uiButton::COLOR_WARNING);
+            $button = $this->uiFactory->createButton('expansion_menu.menu_close', Button::TYPE_DECORATED);
+            $button->setBorderColor(Button::COLOR_WARNING)->setFocusColor(Button::COLOR_WARNING);
             $button->setPosition(-25, $posY - 12);
             $button->setSize(50, 8);
             $button->setTranslate(true);
@@ -293,11 +291,12 @@ class MenuContentFactory extends WidgetFactory
     public function createBreadcrumb($items) {
         $items = array_reverse($items);
 
-        $frame = $this->uiFactory->createLayoutLine(-60, -16, [], 2);
+        $frame = $this->uiFactory->createLayoutLine(0, -16, [], 2);
+        $frame->setHorizontalAlign("center");
         $frame->setId("breadcrumb");
 
         foreach ($items as $i => $item) {
-            $element = $this->uiFactory->createLabel($item['label'], uiLabel::TYPE_HEADER);
+            $element = $this->uiFactory->createLabel($item['label'], Label::TYPE_HEADER);
             $element->setTranslate(true);
             $element->setAlign("left", "center2");
             $element->setTextSize(4)
@@ -313,7 +312,7 @@ class MenuContentFactory extends WidgetFactory
             $frame->addChild($element);
 
             if ($i < sizeof($items) - 1) {
-                $element = $this->uiFactory->createLabel("", uiLabel::TYPE_HEADER);
+                $element = $this->uiFactory->createLabel("", Label::TYPE_HEADER);
                 $element->setAlign("left", "center2");
                 $element->setTextSize(4);
                 $element->setWidth(2)->addClass("item");

@@ -17,23 +17,23 @@ use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\GridWindowFactory;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
-use eXpansion\Framework\Gui\Components\uiButton;
-use eXpansion\Framework\Gui\Components\uiDropdown;
-use eXpansion\Framework\Gui\Components\uiLabel;
+use eXpansion\Framework\Gui\Components\Button;
+use eXpansion\Framework\Gui\Components\Dropdown;
+use eXpansion\Framework\Gui\Components\Label;
 use FML\Controls\Quad;
 use Psr\Log\LoggerInterface;
 
 class ManiaExchangeWindowFactory extends GridWindowFactory
 {
-    /** @var  uiDropdown */
+    /** @var  Dropdown */
     public $lengthBox;
-    /** @var  uiDropdown */
+    /** @var  Dropdown */
     public $stylebox;
-    /** @var  uiDropdown */
+    /** @var  Dropdown */
     public $sitebox;
-    /** @var  uiDropdown */
+    /** @var  Dropdown */
     public $difficultiesBox;
-    /** @var  uiDropdown */
+    /** @var  Dropdown */
     public $tpackBox;
 
     public $tpack = [
@@ -41,11 +41,11 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         "All" => "",
     ];
 
-    /** @var  uiDropdown */
+    /** @var  Dropdown */
     private $orderbox;
-    /** @var  uiDropdown */
+    /** @var  Dropdown */
     private $opbox;
-    /** @var  uiDropdown */
+    /** @var  Dropdown */
     private $modebox;
 
     /** @var  array */
@@ -190,7 +190,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $this->modebox->setPosition($x, -4, 2);
         $manialink->addChild($this->modebox);
 
-        $label = $this->uiFactory->createLabel("Sort by", uiLabel::TYPE_HEADER);
+        $label = $this->uiFactory->createLabel("Sort by", Label::TYPE_HEADER);
         $label->setPosition($x, 0);
         $manialink->addChild($label);
 
@@ -199,7 +199,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $this->orderbox->setPosition($x, -4, 2);
         $manialink->addChild($this->orderbox);
 
-        $label = $this->uiFactory->createLabel("Order", uiLabel::TYPE_HEADER);
+        $label = $this->uiFactory->createLabel("Order", Label::TYPE_HEADER);
         $label->setPosition($x, 0);
         $manialink->addChild($label);
 
@@ -208,7 +208,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $this->opbox->setPosition($x, -4, 2);
         $manialink->addChild($this->opbox);
 
-        $label = $this->uiFactory->createLabel("Operator", uiLabel::TYPE_HEADER);
+        $label = $this->uiFactory->createLabel("Operator", Label::TYPE_HEADER);
         $label->setPosition($x, 0);
         $manialink->addChild($label);
 
@@ -217,7 +217,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $this->lengthBox->setPosition($x, -4, 2);
         $manialink->addChild($this->lengthBox);
 
-        $label = $this->uiFactory->createLabel("Length", uiLabel::TYPE_HEADER);
+        $label = $this->uiFactory->createLabel("Length", Label::TYPE_HEADER);
         $label->setPosition($x, 0);
         $manialink->addChild($label);
 
@@ -226,7 +226,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $this->stylebox->setPosition($x, -4, 2);
         $manialink->addChild($this->stylebox);
 
-        $label = $this->uiFactory->createLabel("Style", uiLabel::TYPE_HEADER);
+        $label = $this->uiFactory->createLabel("Style", Label::TYPE_HEADER);
         $label->setPosition($x, 0);
         $manialink->addChild($label);
 
@@ -235,7 +235,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $this->difficultiesBox->setPosition($x, -4, 2);
         $manialink->addChild($this->difficultiesBox);
 
-        $label = $this->uiFactory->createLabel("Difficulty", uiLabel::TYPE_HEADER);
+        $label = $this->uiFactory->createLabel("Difficulty", Label::TYPE_HEADER);
         $label->setPosition($x, 0);
         $manialink->addChild($label);
 
@@ -257,11 +257,11 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $author = $this->uiFactory->createInput("author");
 
 
-        $search = $this->uiFactory->createButton('🔍 Search', uiButton::TYPE_DECORATED);
+        $search = $this->uiFactory->createButton('🔍 Search', Button::TYPE_DECORATED);
         $search->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackSearch'],
             null, true));
 
-        $all = $this->uiFactory->createConfirmButton('Install view', uiButton::TYPE_DEFAULT);
+        $all = $this->uiFactory->createConfirmButton('Install view', Button::TYPE_DEFAULT);
         $tooltip->addTooltip($all, "Install all maps from the view");
         $all->setBackgroundColor("f00");
         $all->setAction($this->actionFactory->createManialinkAction($manialink, [$this, 'callbackInstallAll'], null,
@@ -273,7 +273,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $line = $this->uiFactory->createLayoutLine(62, -10, [$mapname, $author, $search, $spacer, $all], 1);
         $manialink->addChild($line);
 
-        $addButton = $this->uiFactory->createConfirmButton('Install', uiButton::TYPE_DEFAULT);
+        $addButton = $this->uiFactory->createConfirmButton('Install', Button::TYPE_DEFAULT);
         $addButton->setSize(20, 4);
 
         $gridBuilder = $this->gridBuilderFactory->create();
@@ -358,6 +358,31 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $this->setGridSize($content->getWidth(), $content->getHeight() - 18);
         $manialink->setData('grid', $gridBuilder);
         $this->gridBuilder = $gridBuilder;
+        $params = [
+            "mode" => 0,
+            "order" => 0,
+            "operator" => 0,
+            "length" => -1,
+            "style" => -1,
+            "difficulties" => -1,
+            "tpack" => -1,
+        ];
+        $manialink->setData("params", (object)$params);
+
+    }
+
+    protected function updateContent(ManialinkInterface $manialink)
+    {
+        $params = $manialink->getData("params");
+        $this->modebox->setSelectedByValue($params->mode);
+        $this->orderbox->setSelectedByValue($params->order);
+        $this->opbox->setSelectedByValue($params->operator);
+        $this->lengthBox->setSelectedByValue($params->length);
+        $this->stylebox->setSelectedByValue($params->style);
+        $this->difficultiesBox->setSelectedByValue($params->difficulties);
+        $this->tpackBox->setSelectedByValue($params->tpack);
+
+        parent::updateContent($manialink);
     }
 
     /**
@@ -394,15 +419,9 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
      */
     public function callbackSearch(ManialinkInterface $manialink, $login, $params, $arguments)
     {
-        $params = (object)$params;
 
-        $this->modebox->setSelectedByValue($params->mode);
-        $this->orderbox->setSelectedByValue($params->order);
-        $this->opbox->setSelectedByValue($params->operator);
-        $this->lengthBox->setSelectedByValue($params->length);
-        $this->stylebox->setSelectedByValue($params->style);
-        $this->difficultiesBox->setSelectedByValue($params->difficulties);
-        $this->tpackBox->setSelectedByValue($params->tpack);
+        $params = (object)$params;
+        $manialink->setData('params', $params);
 
         $options = "";
 
@@ -430,7 +449,6 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
 
         $this->setBusy($manialink, "Searching, please wait...");
         $this->http->get($query, [$this, 'setMaps'], ['login' => $login, 'params' => $params, 'ml' => $manialink]);
-
 
     }
 

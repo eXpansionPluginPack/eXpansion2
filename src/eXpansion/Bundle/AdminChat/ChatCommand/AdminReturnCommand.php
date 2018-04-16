@@ -23,7 +23,7 @@ class AdminReturnCommand extends AdminCommand
         $nickName = $this->playerStorage->getPlayerInfo($login)->getNickName();
         $group = $this->getGroupLabel($login);
         try {
-            $return = $this->connection->{$this->functionName}();
+            $return = $this->factory->getConnection()->{$this->functionName}();
 
             $this->chatNotification->sendMessage(
                 $this->chatMessage,
@@ -32,7 +32,7 @@ class AdminReturnCommand extends AdminCommand
             );
             $logMessage = $this->chatNotification->getMessage($this->chatMessage,
                 ['%adminLevel%' => $group, '%admin%' => $nickName, '%return%' => $return], "en");
-            $this->logger->info("[". $login. "] " . TMString::trimStyles($logMessage));
+            $this->logger->info("[".$login."] ".TMString::trimStyles($logMessage));
 
         } catch (DedicatedException $e) {
             $this->logger->error("Error on admin command", ["exception" => $e]);

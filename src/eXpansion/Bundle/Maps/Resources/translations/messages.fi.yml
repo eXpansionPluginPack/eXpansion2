@@ -34,6 +34,7 @@ expansion_mx:
     fail: "|error| {error}Kartta ei ole yhteensopiva palvelimen nykyiseen titlepackkiin tai asetuksiin! Karttaa ei ole lisätty!"
     dedicatedexception: "|error| {error}Pelipalvelimen virhe:{highlight}%message%"
     exception: "|error| {error}Virhe: {highlight}%message%"
+    searching: "|info| {info}Searching... please wait."
   gui:
     mxsearch:
       title: "Mania-Exchange: Haku"

@@ -3,7 +3,7 @@
 namespace eXpansion\Framework\Core\Helpers;
 
 use eXpansion\Framework\Core\Model\Helpers\ChatNotificationInterface;
-use Maniaplanet\DedicatedServer\Connection;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use Symfony\Component\Console\Formatter\OutputFormatterInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -16,8 +16,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ChatOutput implements OutputInterface
 {
-    /** @var Connection */
-    protected $connection;
+    /** @var Factory */
+    protected $factory;
 
     /** @var ChatNotificationInterface */
     protected $chatNotification;
@@ -27,12 +27,12 @@ class ChatOutput implements OutputInterface
     /**
      * ChatOutput constructor.
      *
-     * @param Connection $connection
+     * @param Factory $factory
      * @param ChatNotificationInterface $chatNotification
      */
-    public function __construct(Connection $connection, ChatNotificationInterface $chatNotification)
+    public function __construct(Factory $factory, ChatNotificationInterface $chatNotification)
     {
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->chatNotification = $chatNotification;
     }
 
@@ -67,7 +67,7 @@ class ChatOutput implements OutputInterface
      */
     public function writeln($messages, $options = 0)
     {
-        $this->connection->chatSendServerMessage(strip_tags($messages), $this->login);
+        $this->factory->getConnection()->chatSendServerMessage(strip_tags($messages), $this->login);
     }
 
     /**

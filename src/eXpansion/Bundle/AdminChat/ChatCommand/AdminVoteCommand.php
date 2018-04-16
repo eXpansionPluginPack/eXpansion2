@@ -7,6 +7,7 @@ use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Helpers\TMString;
 use eXpansion\Framework\Core\Services\Application\Dispatcher;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Psr\Log\LoggerInterface;
@@ -27,14 +28,14 @@ class AdminVoteCommand extends AdminCommand
     private $dispatcher;
 
     /**
-     * AdminCommand constructor.
+     * AdminVoteCommand constructor.
      *
      * @param $command
-     * @param string $permission
+     * @param $permission
      * @param array $aliases
-     * @param ChatNotification $functionName
+     * @param $functionName
      * @param AdminGroups $adminGroupsHelper
-     * @param Connection $connection
+     * @param Factory $factory
      * @param ChatNotification $chatNotification
      * @param PlayerStorage $playerStorage
      * @param LoggerInterface $logger
@@ -47,7 +48,7 @@ class AdminVoteCommand extends AdminCommand
         array $aliases = [],
         $functionName,
         AdminGroups $adminGroupsHelper,
-        Connection $connection,
+        Factory $factory,
         ChatNotification $chatNotification,
         PlayerStorage $playerStorage,
         LoggerInterface $logger,
@@ -60,7 +61,7 @@ class AdminVoteCommand extends AdminCommand
             $aliases = [],
             $functionName,
             $adminGroupsHelper,
-            $connection,
+            $factory,
             $chatNotification,
             $playerStorage,
             $logger,
@@ -84,6 +85,6 @@ class AdminVoteCommand extends AdminCommand
 
         $logMessage = $this->chatNotification->getMessage('%adminLevel% %admin% cancels current vote.',
             ["%adminLevel%" => $level, "%admin%" => $admin]);
-        $this->logger->info("[". $login. "] " . TMString::trimStyles($logMessage));
+        $this->logger->info("[".$login."] ".TMString::trimStyles($logMessage));
     }
 }

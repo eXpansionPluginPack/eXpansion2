@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Core\Storage;
 
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
@@ -14,8 +15,8 @@ use oliverde8\AssociativeArraySimplified\AssociativeArray;
  */
 class MapStorage
 {
-    /** @var Connection */
-    protected $connection;
+    /** @var Factory */
+    protected $factory;
 
     /** @var Map[] List of all current maps on the server. */
     protected $maps = [];
@@ -29,11 +30,11 @@ class MapStorage
     /**
      * MapStorage constructor.
      *
-     * @param Connection $connection
+     * @param Factory $factory
      */
-    public function __construct(Connection $connection)
+    public function __construct(Factory $factory)
     {
-        $this->connection = $connection;
+        $this->factory = $factory;
     }
 
 
@@ -68,10 +69,10 @@ class MapStorage
     public function getMap($uid)
     {
         /** @var Map $map */
-        $map = AssociativeArray::getFromKey($this->maps, $uid,  new Map());
+        $map = AssociativeArray::getFromKey($this->maps, $uid, new Map());
 
         if ($map->fileName && $map->lapRace === null) {
-            $map = $this->connection->getMapInfo($map->fileName);
+            $map = $this->factory->getConnection()->getMapInfo($map->fileName);
             $this->maps[$map->uId] = $map;
         }
 
@@ -87,7 +88,7 @@ class MapStorage
      */
     public function getMapByIndex($index)
     {
-        $map = array_slice($this->maps, (int)$index, 1, false);
+        $map = array_slice($this->maps, (int) $index, 1, false);
 
         return end($map);
     }

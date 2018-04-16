@@ -14,7 +14,7 @@ use eXpansion\Framework\Core\Model\Gui\Grid\GridBuilderFactory;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\GridWindowFactory;
-use eXpansion\Framework\Gui\Components\uiButton;
+use eXpansion\Framework\Gui\Components\Button;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
 
@@ -128,11 +128,11 @@ class MapsWindowFactory extends GridWindowFactory
         $tooltip = $this->uiFactory->createTooltip();
         $manialink->addChild($tooltip);
 
-        $queueButton = $this->uiFactory->createButton('+', uiButton::TYPE_DECORATED);
+        $queueButton = $this->uiFactory->createButton('+', Button::TYPE_DECORATED);
         $queueButton->setTextColor("fff")->setSize(5, 5);
         $tooltip->addTooltip($queueButton, 'Adds map to jukebox');
 
-        $removeButton = $this->uiFactory->createButton('x', uiButton::TYPE_DECORATED);
+        $removeButton = $this->uiFactory->createButton('x', Button::TYPE_DECORATED);
         $removeButton->setBorderColor("f00")->setTextColor("fff")->setSize(5, 5);
         $tooltip->addTooltip($removeButton, 'Removes map from playlist');
 

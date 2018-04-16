@@ -6,6 +6,7 @@ use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Helpers\TMString;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Xmlrpc\Exception as DedicatedException;
@@ -60,14 +61,14 @@ class ReasonUserCommand extends AbstractConnectionCommand
     /**
      * ReasonUserCommand constructor.
      *
-     * @param                  $command
-     * @param string $permission
+     * @param $command
+     * @param $permission
      * @param array $aliases
-     * @param string $functionName
-     * @param string $parameterLoginDescription
-     * @param string $parameterReasonDescription
+     * @param $functionName
+     * @param $parameterLoginDescription
+     * @param $parameterReasonDescription
      * @param AdminGroups $adminGroupsHelper
-     * @param Connection $connection
+     * @param Factory $factory
      * @param ChatNotification $chatNotification
      * @param PlayerStorage $playerStorage
      * @param LoggerInterface $logger
@@ -81,7 +82,7 @@ class ReasonUserCommand extends AbstractConnectionCommand
         $parameterLoginDescription,
         $parameterReasonDescription,
         AdminGroups $adminGroupsHelper,
-        Connection $connection,
+        Factory $factory,
         ChatNotification $chatNotification,
         PlayerStorage $playerStorage,
         LoggerInterface $logger,
@@ -92,15 +93,15 @@ class ReasonUserCommand extends AbstractConnectionCommand
             $permission,
             $aliases,
             $adminGroupsHelper,
-            $connection,
+            $factory,
             $chatNotification,
             $playerStorage,
             $logger,
             $timeHelper
         );
 
-        $this->description = 'expansion_admin_chat.' . strtolower($functionName) . '.description';
-        $this->chatMessage = 'expansion_admin_chat.' . strtolower($functionName) . '.msg';
+        $this->description = 'expansion_admin_chat.'.strtolower($functionName).'.description';
+        $this->chatMessage = 'expansion_admin_chat.'.strtolower($functionName).'.msg';
         $this->functionName = $functionName;
         $this->parameterLoginDescription = $parameterLoginDescription;
         $this->parameterReasonDescription = $parameterReasonDescription;
@@ -135,7 +136,7 @@ class ReasonUserCommand extends AbstractConnectionCommand
 
         $playerNickName = $this->playerStorage->getPlayerInfo($playerLogin)->getNickName();
         try {
-            $this->connection->{$this->functionName}($playerLogin, $reason);
+            $this->factory->getConnection()->{$this->functionName}($playerLogin, $reason);
             $this->chatNotification->sendMessage(
                 $this->chatMessage,
                 $this->isPublic ? null : $login,
@@ -149,7 +150,7 @@ class ReasonUserCommand extends AbstractConnectionCommand
                     '%player%' => $playerNickName,
                     "%reason%" => $reason
                 ], "en");
-            $this->logger->info("[". $login. "] " . TMString::trimStyles($logMessage));
+            $this->logger->info("[".$login."] ".TMString::trimStyles($logMessage));
 
 
         } catch (DedicatedException $e) {
@@ -157,6 +158,5 @@ class ReasonUserCommand extends AbstractConnectionCommand
             $this->chatNotification->sendMessage("expansion_admin_chat.dedicatedexception", $login,
                 ["%message%" => $e->getMessage()]);
         }
-
     }
 }

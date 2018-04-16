@@ -1,39 +1,3 @@
-e_xpansion_core:
-    parameters:
-        core_chat_color_codes:
-            # default set of colors
-            default: '$dee'
-            muted: '$999'
-            info: '$add'
-            success: 'ada'
-            warning: '$dda'
-            danger: '$daa'
-            error: '$d77'
-            variable: '$fff'
-            # ui defaults
-            primary: '$3af'
-            secondary: '$fff'
-            highlight: '$fff'
-            # admin set of colors
-            admin_info: '$aff'
-            # special colors
-            separator: '$3af'
-            record: '$0f3'
-            record_top: '$0d3'
-            record_rank: '$afa'
-            # for unit test, dont change
-            test: '$f00'
-        core_chat_glyph_icons:
-            test: '✔'
-            success: '$0d0✔'
-            fail: '$b32✘'
-            server: '$afd'
-            info: '$fff'
-            warning: ''
-            error: '$d77'
-            admin: '$fff'
-            time: ''
-            record: ''
 e_xpansion_admin_groups:
     groups:
         master_admin:
@@ -47,3 +11,25 @@ e_xpansion_admin_groups:
             permissions:
               - next
               - restart
+    permissions:
+        - admin
+        - next
+        - restart
+        - jukebox
+        - maps.add
+        - maps.remove
+
+e_xpansion_core:
+
+    #
+    # You can configure custom positions for widgets here.
+    #
+    widget_positions:
+      Acme\Bundle\AcmeBundle\Plugins\Gui\WidgetFactory: # Id of the widget service
+       TM: # Game/Title it's compatible with (ALL to use it on all gamemodes)
+         ALL: # The game mode to apply he config for.
+           ALL: # The script mode to apply the config for.
+             posX: 80
+             posY: -85
+             options: # Additional values, check the widgets documentation.
+               test: "test value"

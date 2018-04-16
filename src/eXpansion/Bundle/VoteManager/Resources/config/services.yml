@@ -19,3 +19,5 @@ services:
             - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.votecancelled', method: onVoteCancelled}
             - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.votepassed', method: onVotePassed}
             - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.votefailed', method: onVoteFailed}
+            - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.voteyes', method: onVoteYes}
+            - {name: 'expansion.dataprovider.listener', event_name: 'votemanager.voteno', method: onVoteNo}

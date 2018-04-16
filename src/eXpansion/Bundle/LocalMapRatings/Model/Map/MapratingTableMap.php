@@ -152,9 +152,10 @@ class MapratingTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('login', 'Login', 'VARCHAR', false, 255, null);
-        $this->addColumn('mapUid', 'Mapuid', 'VARCHAR', false, 32, null);
-        $this->addColumn('score', 'Score', 'INTEGER', false, null, null);
+        $this->addColumn('login', 'Login', 'VARCHAR', true, 255, null);
+        $this->getColumn('login')->setPrimaryString(true);
+        $this->addColumn('mapUid', 'Mapuid', 'VARCHAR', true, 50, null);
+        $this->addColumn('score', 'Score', 'INTEGER', true, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     } // initialize()

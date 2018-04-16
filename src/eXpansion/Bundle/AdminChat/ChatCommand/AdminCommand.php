@@ -6,6 +6,7 @@ use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Helpers\TMString;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Xmlrpc\Exception as DedicatedException;
@@ -47,12 +48,12 @@ class AdminCommand extends AbstractConnectionCommand
     /**
      * AdminCommand constructor.
      *
-     * @param                  $command
-     * @param string $permission
+     * @param $command
+     * @param $permission
      * @param array $aliases
-     * @param string $functionName
+     * @param $functionName
      * @param AdminGroups $adminGroupsHelper
-     * @param Connection $connection
+     * @param Factory $factory
      * @param ChatNotification $chatNotification
      * @param PlayerStorage $playerStorage
      * @param LoggerInterface $logger
@@ -64,7 +65,7 @@ class AdminCommand extends AbstractConnectionCommand
         array $aliases = [],
         $functionName,
         AdminGroups $adminGroupsHelper,
-        Connection $connection,
+        Factory $factory,
         ChatNotification $chatNotification,
         PlayerStorage $playerStorage,
         LoggerInterface $logger,
@@ -75,15 +76,15 @@ class AdminCommand extends AbstractConnectionCommand
             $permission,
             $aliases,
             $adminGroupsHelper,
-            $connection,
+            $factory,
             $chatNotification,
             $playerStorage,
             $logger,
             $timeHelper
         );
 
-        $this->description = 'expansion_admin_chat.' . strtolower($functionName) . '.description';
-        $this->chatMessage = 'expansion_admin_chat.' . strtolower($functionName) . '.msg';
+        $this->description = 'expansion_admin_chat.'.strtolower($functionName).'.description';
+        $this->chatMessage = 'expansion_admin_chat.'.strtolower($functionName).'.msg';
         $this->functionName = $functionName;
     }
 
@@ -95,7 +96,7 @@ class AdminCommand extends AbstractConnectionCommand
         $nickName = $this->playerStorage->getPlayerInfo($login)->getNickName();
         $group = $this->getGroupLabel($login);
         try {
-            $this->connection->{$this->functionName}();
+            $this->factory->getConnection()->{$this->functionName}();
             $this->chatNotification->sendMessage(
                 $this->chatMessage,
                 $this->isPublic ? null : $login,
@@ -104,7 +105,7 @@ class AdminCommand extends AbstractConnectionCommand
 
             $logMessage = $this->chatNotification->getMessage($this->chatMessage,
                 ['%adminLevel%' => $group, '%admin%' => $nickName], "en");
-            $this->logger->info("[". $login. "] " . TMString::trimStyles($logMessage));
+            $this->logger->info("[".$login."] ".TMString::trimStyles($logMessage));
 
         } catch (DedicatedException $e) {
             $this->logger->error("Error on admin command", ["exception" => $e]);

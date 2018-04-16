@@ -1,0 +1,25 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    eXpansion\Framework\Notifications\Plugins\Gui\NotificationWidget:
+        class: eXpansion\Framework\Notifications\Plugins\Gui\NotificationWidget
+        arguments:
+          $name:  "Notifications"
+          $posX: 0
+          $posY: 0
+          $sizeX: null
+          $sizeY: null
+
+    eXpansion\Framework\Notifications\Plugins\Gui\NotificationUpdater:
+        class: eXpansion\Framework\Notifications\Plugins\Gui\NotificationUpdater
+        arguments:
+          $name:  "Notification Updater"
+          $variables:
+            - {name: "notification", type: "Text[Text][Text]", default: "Text[Text][Text]"}
+        tags:
+            - {name: expansion.plugin, data_provider: exp.timer}
+            - {name: expansion.plugin, data_provider: expansion.user_group}
+

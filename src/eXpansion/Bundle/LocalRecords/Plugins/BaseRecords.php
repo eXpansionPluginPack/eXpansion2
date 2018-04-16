@@ -79,7 +79,7 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
     /**
      * Get the current record handler.
      *
-     * @return RecordHandler|mixed
+     * @return RecordHandler
      */
     public function getRecordsHandler()
     {
@@ -114,7 +114,7 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
     {
         $plugin = $this;
 
-        $this->getNumberOfLaps->get(function ($laps) use ($map, $plugin) {
+        $this->getNumberOfLaps->get(function($laps) use ($map, $plugin) {
             $plugin->startMap($map, $laps);
         });
     }
@@ -243,6 +243,7 @@ class BaseRecords implements ListenerInterfaceMpScriptMap, ListenerInterfaceMpSc
         $event = $this->eventPrefix.'.'.$eventData['event'];
         unset($eventData['event']);
 
+        $eventData[RecordHandler::COL_PLUGIN] = $this;
         $this->dispatcher->dispatch($event, [$eventData]);
     }
 

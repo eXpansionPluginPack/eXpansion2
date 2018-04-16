@@ -1,7 +1,6 @@
 <?php
 
 namespace eXpansion\Bundle\Players\Plugins\Gui;
-use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 
 /**
  * Class IgnoreListWindow
@@ -17,7 +16,7 @@ class BlackListWindow extends AbstractListWindow
      */
     function getDataSet(): array
     {
-        return $this->connection->getBlackList();
+        return $this->factory->getConnection()->getBlackList();
     }
 
     /**
@@ -25,6 +24,6 @@ class BlackListWindow extends AbstractListWindow
      */
     function executeForPlayer($login)
     {
-        $this->connection->unBlackList($login);
+        $this->factory->getConnection()->unBlackList($login);
     }
 }

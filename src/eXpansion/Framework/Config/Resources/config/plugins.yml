@@ -1,0 +1,13 @@
+parameters:
+
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    eXpansion\Framework\Config\Plugins\MenuItems:
+        class: 'eXpansion\Framework\Config\Plugins\MenuItems'
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'exp.menu.items'}

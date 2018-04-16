@@ -1,0 +1,5 @@
+expansion_acme:
+  notification:
+    start: "|admin| eXpansion2 started successfully."
+    join: "|info| %player% joins."
+    leave: "|info| %player% leaves."

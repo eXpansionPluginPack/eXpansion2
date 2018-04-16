@@ -22,6 +22,19 @@ interface ManialinkInterface
     public function getManialinkFactory(): ManialinkFactoryInterface;
 
     /**
+     * Get timeout of the manialink
+     * @return int
+     */
+    public function getTimeout(): int;
+
+    /** Set timeout for manialink
+     *
+     * @param int $timeout
+     * @return ManialinkInterface
+     */
+    public function setTimeout(int $timeout);
+
+    /**
      *
      * @return Group
      */
@@ -54,6 +67,16 @@ interface ManialinkInterface
      * @return Frame
      */
     public function getContentFrame();
+
+    /**
+     * Change the position of the manialink.
+     *
+     * @param float $posX
+     * @param float $posY
+     *
+     * @return void
+     */
+    public function setPosition($posX, $posY);
 
     /**
      * Removes a child.

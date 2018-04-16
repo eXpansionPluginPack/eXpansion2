@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Core\Storage;
 
+use eXpansion\Framework\Core\Helpers\Countries;
 use Maniaplanet\DedicatedServer\Structures\GameInfos;
 use Maniaplanet\DedicatedServer\Structures\ServerOptions;
 use Maniaplanet\DedicatedServer\Structures\SystemInfos;
@@ -23,9 +24,15 @@ class GameDataStorage
     const GAME_MODE_CODE_UNKNOWN = 'unknown';
 
     /**
-     * Constant used for unknown titles.
+     * Constants for the operating system.
      */
-    const TITLE_UNKNOWN = 'unknown';
+    const OS_LINUX = 'Linux';
+    const OS_WINDOWS = 'Windows';
+    const OS_MAC = 'Mac';
+
+
+    /** @var Countries */
+    protected $countriesHelper;
 
     /** @var  SystemInfos */
     protected $systemInfo;
@@ -50,20 +57,28 @@ class GameDataStorage
     /** @var string */
     protected $mapFolder;
 
-    /**
-     * @var AssociativeArray
-     */
-    protected $titles;
+    /** @var string */
+    protected $serverCleanPhpVersion;
+
+    /** @var string */
+    protected $serverMajorPhpVersion;
 
     /**
      * GameDataStorage constructor.
      *
+     * @param Countries $countries
      * @param array $gameModeCodes
      */
-    public function __construct(array $gameModeCodes, array $titles)
+    public function __construct(Countries $countries, array $gameModeCodes)
     {
         $this->gameModeCodes = new AssociativeArray($gameModeCodes);
-        $this->titles = new AssociativeArray($titles);
+
+        $version = explode('-', phpversion());
+        $this->serverCleanPhpVersion = $version[0];
+        $this->serverMajorPhpVersion = implode(
+            '.',
+            array_slice(explode('.', $this->serverCleanPhpVersion),0,2)
+        );
     }
 
 
@@ -80,6 +95,7 @@ class GameDataStorage
      */
     public function setGameInfos($gameInfos)
     {
+        $gameInfos->scriptName = strtolower($gameInfos->scriptName);
         $this->gameInfos = $gameInfos;
     }
 
@@ -116,18 +132,7 @@ class GameDataStorage
      */
     public function getTitle()
     {
-
-        $title = $this->titles->get($this->getVersion()->titleId, self::TITLE_UNKNOWN);
-        if ($title == self::TITLE_UNKNOWN) {
-            if (substr($this->getVersion()->titleId, 0, 2) == "TM") {
-                return "TM";
-            }
-            if (substr($this->getVersion()->titleId, 0, 2) == "SM") {
-                return "SM";
-            }
-        }
-
-        return $title;
+        return $this->getVersion()->titleId;
     }
 
     /**
@@ -167,7 +172,6 @@ class GameDataStorage
      */
     public function setSystemInfo(Systeminfos $systemInfo)
     {
-
         $this->systemInfo = $systemInfo;
     }
 
@@ -193,5 +197,49 @@ class GameDataStorage
     public function setMapFolder(string $mapFolder)
     {
         $this->mapFolder = $mapFolder;
+    }
+
+    /**
+     * Get the country the server is on.
+     *
+     * @return string
+     */
+    public function getServerCountry()
+    {
+        return 'Other';
+    }
+
+    /**
+     * Get Operating system.
+     *
+     * @return string
+     */
+    public function getServerOs()
+    {
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            return self::OS_WINDOWS;
+        } else {
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'MAC') {
+                return self::OS_MAC;
+            } else {
+                return self::OS_LINUX;
+            }
+        }
+    }
+
+    /**
+     * Get clean php version without build information.
+     */
+    public function getServerCleanPhpVersion()
+    {
+        return $this->serverCleanPhpVersion;
+    }
+
+    /**
+     * Get the major php version numbers. 7.0 for exemple.
+     */
+    public function getServerMajorPhpVersion()
+    {
+        return $this->serverMajorPhpVersion;
     }
 }

@@ -7,17 +7,19 @@ use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyChat;
+use eXpansion\Framework\Notifications\Services\Notifications;
 use Maniaplanet\DedicatedServer\Connection;
 use Psr\Log\LoggerInterface;
 
 
 class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMpLegacyChat
 {
-    /** @var Connection */
-    protected $connection;
+    /** @var Factory */
+    protected $factory;
 
     /** @var Console */
     protected $console;
@@ -39,30 +41,37 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
      * @var LoggerInterface
      */
     private $logger;
+    /**
+     * @var Notifications
+     */
+    private $notifications;
 
     /**
      * CustomChat constructor.
-     * @param Connection $connection
-     * @param Console $console
-     * @param AdminGroups $adminGroups
+     * @param Factory       $factory
+     * @param Console          $console
+     * @param AdminGroups      $adminGroups
      * @param ChatNotification $chatNotification
-     * @param PlayerStorage $playerStorage
-     * @param LoggerInterface $logger
+     * @param PlayerStorage    $playerStorage
+     * @param Notifications    $notifications
+     * @param LoggerInterface  $logger
      */
     function __construct(
-        Connection $connection,
+        Factory $factory,
         Console $console,
         AdminGroups $adminGroups,
         ChatNotification $chatNotification,
         PlayerStorage $playerStorage,
+        Notifications $notifications,
         LoggerInterface $logger
     ) {
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->console = $console;
         $this->adminGroups = $adminGroups;
         $this->chatNotification = $chatNotification;
         $this->playerStorage = $playerStorage;
         $this->logger = $logger;
+        $this->notifications = $notifications;
     }
 
     /**
@@ -89,6 +98,36 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
                 $matchFound = false;
                 $matchLogin = [];
 
+                //match urls and shorten them to fit in chat.
+                if (preg_match_all('/(\$[l,h]\[?){0,1}(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6})\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)(\]?)/',
+                    $text, $urls)) {
+                    foreach ($urls[0] as $k => $url) {
+                        if ($urls[1][$k] == '$l' || $urls[1][$k] == '$L') {
+                            $url = str_replace(['$l', '$L'], '', $url);
+                            $text = str_replace(['$l', '$L'], '', $text);
+
+                            if (strlen($url) >= 33) {
+                                $short = substr($url, 0, 30)."...";
+                                $text = str_replace($url, '$l['.$url.']'.$short.'$l', $text);
+                            } else {
+                                $text = str_replace($url, '$l'.$url.'$l', $text);
+                            }
+                        } elseif ($urls[1][$k] == '$h' || $urls[1][$k] == '$H') {
+                            $url = str_replace(['$h', '$H'], '', $url);
+                            $text = str_replace(['$h', '$H'], '', $text);
+
+                            if (strlen($url) >= 33) {
+                                $short = substr($url, 0, 30)."...";
+                                $text = str_replace($url, '$h['.$url.']'.$short.'$h', $text);
+                            } else {
+                                $text = str_replace($url, '$h'.$url.'$h', $text);
+                            }
+                        }
+
+                    }
+
+                }
+
                 if (preg_match_all("/(\s|\G)(\@(?P<login>[\w-\._]+)[\s]{0,1})/", $text, $matches)) {
                     $group = [];
 
@@ -108,26 +147,26 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
                     $diff = array_diff($group, $matchLogin);
 
                     if ($matchFound) {
-                        $this->sendChat($player, $text, '$ff0$o', $matchLogin);
-
+                        $this->sendChat($player, $text, '$f90', $matchLogin);
+                        $this->notifications->notice($text, [], "Chat Notification", 0, $matchLogin);
                         if (count($diff) > 0) {
                             $this->sendChat($player, $text, '$ff0', $group);
                         }
-                        $this->console->writeln('$ff0[' . $nick . '$ff0] ' . $text);
+                        $this->console->writeln('$ff0['.$nick.'$ff0] '.$text);
 
                         return;
                     } else {
                         $this->sendChat($player, $text, '$ff0', null);
-                        $this->console->writeln('$ff0[' . $nick . '$ff0] ' . $text);
+                        $this->console->writeln('$ff0['.$nick.'$ff0] '.$text);
 
                         return;
                     }
                 } else {
                     $this->sendChat($player, $text, '$ff0', null);
-                    $this->console->writeln('$ff0[' . $nick . '$ff0] ' . $text);
+                    $this->console->writeln('$ff0['.$nick.'$ff0] '.$text);
                 }
             } else {
-                $this->console->writeln('$333[' . $nick . '$333] ' . $text);
+                $this->console->writeln('$333['.$nick.'$333] '.$text);
                 $this->chatNotification->sendMessage('expansion_customchat.chat.disabledstate',
                     $player->getLogin());
             }
@@ -136,10 +175,10 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
     }
 
     /**
-     * @param Player $player
-     * @param        $text
-     * @param        $color
-     * @param null $group
+     * @param Player        $player
+     * @param        string $text
+     * @param        string $color
+     * @param null          $group
      */
     private function sendChat(Player $player, $text, $color, $group = null)
     {
@@ -174,11 +213,11 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
         }
 
         try {
-            $this->connection->chatSendServerMessage(
-                $prefix . '$fff$<' . $nick . '$>$z$s' . $postfix . $separator . ' ' . $color . $text, $group
+            $this->factory->getConnection()->chatSendServerMessage(
+                $prefix.'$fff$<'.$nick.'$>$z$s'.$postfix.$separator.' '.$color.$text, $group
             );
         } catch (\Exception $e) {
-            $this->console->writeln('$ff0 error while sending chat: $fff' . $e->getMessage());
+            $this->console->writeln('$ff0 error while sending chat: $fff'.$e->getMessage());
             $this->logger->error("Error while sending custom chat", ['exception' => $e]);
         }
     }
@@ -213,9 +252,9 @@ class CustomChat implements ListenerInterfaceExpApplication, ListenerInterfaceMp
     public function onApplicationReady()
     {
         try {
-            $this->connection->chatEnableManualRouting();
+            $this->factory->getConnection()->chatEnableManualRouting();
         } catch (\Exception $e) {
-            $this->console->writeln('Error while enabling custom chat: $f00' . $e->getMessage());
+            $this->console->writeln('Error while enabling custom chat: $f00'.$e->getMessage());
             $this->logger->error("Error enabling custom chat", ['exception' => $e]);
         }
     }

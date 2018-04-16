@@ -34,6 +34,7 @@ expansion_mx:
     fail: "|error| {error}Map is not compatible with current server title pack or settings! Map is not added!"
     dedicatedexception: "|error| {error}Erreur du serveur dédié : {highlight}%message%"
     exception: "|error| {error}Error: {highlight}%message%"
+    searching: "|info| {info}Searching... please wait."
   gui:
     mxsearch:
       title: "Mania-Exchange: Search"

@@ -5,9 +5,9 @@ namespace eXpansion\Framework\Core\Model\Gui;
 
 use eXpansion\Framework\Core\Helpers\Translations;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
-use eXpansion\Framework\Gui\Components\uiLabel;
+use eXpansion\Framework\Gui\Components\Label;
 use FML\Controls\Frame;
-use FML\Controls\Label;
+use FML\Controls\Label as FMLlabel;
 use FML\Elements\Dico;
 use FML\Elements\Format;
 use FML\Types\Container;
@@ -96,6 +96,20 @@ class FmlManialink extends Manialink implements FmlManialinkInterface
         return $this->manialink;
     }
 
+
+    /**
+     * Change the position of the manialink.
+     *
+     * @param float $posX
+     * @param float $posY
+     *
+     * @return void
+     */
+    public function setPosition($posX, $posY)
+    {
+        $this->windowFrame->setPosition($posX, $posY);
+    }
+
     /**
      * @inheritdoc
      */
@@ -130,7 +144,7 @@ class FmlManialink extends Manialink implements FmlManialinkInterface
     protected function getDictionaryInformation($control, &$translations)
     {
         foreach ($control->getChildren() as $child) {
-            if (($child instanceof Label || $child instanceof uiLabel) && $child->getTranslate()) {
+            if (($child instanceof Label || $child instanceof FmlLabel) && $child->getTranslate()) {
                 $id = $child->getTextId();
 
                 if (!isset($this->cachedMessages[$id])) {

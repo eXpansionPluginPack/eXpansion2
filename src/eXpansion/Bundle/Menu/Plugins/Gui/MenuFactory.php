@@ -2,15 +2,9 @@
 
 namespace eXpansion\Bundle\Menu\Plugins\Gui;
 
-use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
-use eXpansion\Framework\Core\Model\Gui\ManiaScriptFactory;
-use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
-use FML\Controls\Frame;
-use FML\Controls\Label;
-use FML\Controls\Quad;
 
 
 /**
@@ -43,7 +37,7 @@ class MenuFactory extends WidgetFactory
         $posY,
         WidgetFactoryContext $context,
         MenuContentFactory $menuContentFactory
-    ){
+    ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
 
         $this->menuContentFactory = $menuContentFactory;

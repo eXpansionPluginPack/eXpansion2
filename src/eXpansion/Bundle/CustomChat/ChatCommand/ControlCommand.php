@@ -95,14 +95,14 @@ class ControlCommand extends AbstractAdminChatCommand
             case "on":
                 $this->chatNotification->sendMessage("expansion_customchat.chat.enabled", null,
                     ['%admin%' => $groupName, '%nickname%' => $nickName]);
-                $this->logger->info("[" . $login . "] Public chat is now enabled!");
+                $this->logger->info("[".$login."] Public chat is now enabled!");
                 $this->customChat->setStatus(true);
                 break;
             case "disable":
             case "off":
                 $this->chatNotification->sendMessage("expansion_customchat.chat.disabled", null,
                     ['%admin%' => $groupName, '%nickname%' => $nickName]);
-                $this->logger->info("[" . $login . "] Public chat is now disabled!");
+                $this->logger->info("[".$login."] Public chat is now disabled!");
                 $this->customChat->setStatus(false);
                 break;
             default:

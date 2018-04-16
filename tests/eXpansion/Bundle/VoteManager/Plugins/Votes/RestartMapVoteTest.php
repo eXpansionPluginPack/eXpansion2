@@ -11,6 +11,7 @@ namespace Tests\eXpansion\Bundle\VoteManager\Plugins\Votes;
 use eXpansion\Bundle\Maps\Services\JukeboxService;
 use eXpansion\Bundle\VoteManager\Plugins\Votes\RestartMapVote;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
+use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
 use eXpansion\Framework\Core\Storage\MapStorage;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Structures\Map;
@@ -51,6 +52,7 @@ class RestartMapVoteTest extends \PHPUnit_Framework_TestCase
         $this->mockJukebox = $this->getMockBuilder(JukeboxService::class)
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->mockMapStorage = $this->getMockBuilder(MapStorage::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -60,6 +62,7 @@ class RestartMapVoteTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->restartMapVote = new RestartMapVote(
+            $this->getMockBuilder(DispatcherInterface::class)->getMock(),
             $this->mockPlayerStorage,
             $this->mockJukebox,
             $this->mockMapStorage,

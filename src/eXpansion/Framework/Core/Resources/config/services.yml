@@ -23,11 +23,6 @@ services:
             - "%dedicated_user%"
             - "%dedicated_password%"
 
-    expansion.service.dedicated_connection:
-        class: "%expansion.service.dedicated_connection.class%"
-        factory: "expansion.service.dedicated_connection.factory:createConnection"
-    Maniaplanet\DedicatedServer\Connection: "@expansion.service.dedicated_connection"
-
     eXpansion\Framework\Core\Services\Application:
         class: "%expansion.service.application.class%"
 
@@ -37,7 +32,7 @@ services:
     eXpansion\Framework\Core\Services\Application\Dispatcher:
         class: eXpansion\Framework\Core\Services\Application\Dispatcher
         calls:
-            - [addEventProcesseor, ['@eXpansion\Framework\Core\Services\SymfonyEventAdapter']]
+            - [addEventProcessor, ['@eXpansion\Framework\Core\Services\SymfonyEventAdapter']]
 
     eXpansion\Framework\Core\Services\Application\DispatcherInterface: '@eXpansion\Framework\Core\Services\Application\Dispatcher'
 

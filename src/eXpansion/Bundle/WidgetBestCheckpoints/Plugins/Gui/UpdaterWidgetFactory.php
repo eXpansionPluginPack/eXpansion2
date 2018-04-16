@@ -2,11 +2,26 @@
 
 namespace eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui;
 
+use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
+use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\Gui\ScriptVariableUpdateFactory;
 use FML\Script\Builder;
 
 class UpdaterWidgetFactory extends ScriptVariableUpdateFactory
 {
+    protected $playerGroup;
+
+    public function __construct(
+        $name,
+        array $variables,
+        float $maxUpdateFrequency = 0.5,
+        WidgetFactoryContext $context,
+        Group $playerGroup
+    ) {
+        parent::__construct($name, $variables, $maxUpdateFrequency, $context);
+        $this->playerGroup = $playerGroup;
+    }
+
     /**
      * Update with new local record.
      *
@@ -15,9 +30,9 @@ class UpdaterWidgetFactory extends ScriptVariableUpdateFactory
     public function setLocalRecord($checkpoints)
     {
         if (count($checkpoints) > 0) {
-            $this->updateValue('LocalRecordCheckpoints', Builder::getArray($checkpoints, true));
+            $this->updateValue($this->playerGroup, 'LocalRecordCheckpoints', Builder::getArray($checkpoints, true));
         } else {
-            $this->updateValue('LocalRecordCheckpoints', "Integer[Integer]");
+            $this->updateValue($this->playerGroup, 'LocalRecordCheckpoints', "Integer[Integer]");
         }
     }
 }

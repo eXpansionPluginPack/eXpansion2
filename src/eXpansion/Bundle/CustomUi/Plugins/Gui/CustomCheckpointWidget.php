@@ -7,7 +7,7 @@ use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
-use eXpansion\Framework\Gui\Components\uiLabel;
+use eXpansion\Framework\Gui\Components\Label;
 use FML\Controls\Frame;
 use FML\Controls\Quad;
 use FML\Script\ScriptLabel;
@@ -44,7 +44,7 @@ class CustomCheckpointWidget extends WidgetFactory
         $frame = Frame::create("Frame_Main");
         $manialink->addChild($frame);
 
-        $lbl = $this->uiFactory->createLabel("0  \$bcc-:--.---", uiLabel::TYPE_TITLE, "CurrentTime");
+        $lbl = $this->uiFactory->createLabel("0  \$bcc-:--.---", Label::TYPE_TITLE, "CurrentTime");
         $lbl->setPosition(0, -70)->setAlign("center", "center2")->setTextSize(3);
         $frame->addChild($lbl);
 

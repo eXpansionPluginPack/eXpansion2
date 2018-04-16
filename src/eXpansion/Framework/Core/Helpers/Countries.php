@@ -75,7 +75,7 @@ class Countries
     public function parseCountryFromPath($path)
     {
         $parts = explode("|", $path);
-        if (count($parts)>= 2) {
+        if (count($parts) >= 2) {
             return $parts[2];
         }
 

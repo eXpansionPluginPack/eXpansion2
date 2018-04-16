@@ -1,6 +1,3 @@
-parameters:
-    eXpansion.local_records.nb_records: 100
-
 services:
     _defaults:
         autowire: true
@@ -8,6 +5,13 @@ services:
 
     eXpansion\Bundle\LocalRecords\Model\RecordQueryBuilder:
         class: eXpansion\Bundle\LocalRecords\Model\RecordQueryBuilder
+
+    eXpansion\Bundle\LocalRecords\Plugins\AllRecords:
+        class: eXpansion\Bundle\LocalRecords\Plugins\AllRecords
+        tags:
+          - {name: 'expansion.plugin', data_provider: 'expansion.local_records.race|expansion.local_records.lap'}
+          - {name: 'expansion.plugin', data_provider: 'mp.legacy.map'}
+
 
     eXpansion\Bundle\LocalRecords\Plugins\MenuItems:
         class: eXpansion\Bundle\LocalRecords\Plugins\MenuItems

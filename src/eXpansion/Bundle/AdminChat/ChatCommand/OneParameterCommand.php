@@ -6,6 +6,7 @@ use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Helpers\TMString;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Xmlrpc\Exception as DedicatedException;
@@ -71,7 +72,7 @@ class OneParameterCommand extends AbstractConnectionCommand
         $functionName,
         $parameterDescription,
         AdminGroups $adminGroupsHelper,
-        Connection $connection,
+        Factory $factory,
         ChatNotification $chatNotification,
         PlayerStorage $playerStorage,
         LoggerInterface $logger,
@@ -82,7 +83,7 @@ class OneParameterCommand extends AbstractConnectionCommand
             $permission,
             $aliases,
             $adminGroupsHelper,
-            $connection,
+            $factory,
             $chatNotification,
             $playerStorage,
             $logger,
@@ -91,8 +92,8 @@ class OneParameterCommand extends AbstractConnectionCommand
 
         $this->description = 'expansion_admin_chat.'.strtolower($functionName).'.description';
         $this->chatMessage = 'expansion_admin_chat.'.strtolower($functionName).'.msg';
-        $this->functionName = (string)$functionName;
-        $this->parameterDescription = (string)$parameterDescription;
+        $this->functionName = (string) $functionName;
+        $this->parameterDescription = (string) $parameterDescription;
     }
 
 
@@ -117,7 +118,7 @@ class OneParameterCommand extends AbstractConnectionCommand
         $parameter = $input->getArgument('parameter');
         $group = $this->getGroupLabel($login);
         try {
-            $this->connection->{$this->functionName}($parameter);
+            $this->factory->getConnection()->{$this->functionName}($parameter);
             $this->chatNotification->sendMessage(
                 $this->chatMessage,
                 $this->isPublic ? null : $login,
@@ -126,7 +127,7 @@ class OneParameterCommand extends AbstractConnectionCommand
 
             $logMessage = $this->chatNotification->getMessage($this->chatMessage,
                 ['%adminLevel%' => $group, '%admin%' => $nickName, "%parameter%" => $parameter], "en");
-            $this->logger->info("[". $login. "] " . TMString::trimStyles($logMessage));
+            $this->logger->info("[".$login."] ".TMString::trimStyles($logMessage));
 
         } catch (DedicatedException $e) {
             $this->logger->error("Error on admin command", ["exception" => $e]);

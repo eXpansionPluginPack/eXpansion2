@@ -8,8 +8,9 @@ use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
 use eXpansion\Framework\Gui\Builders\WidgetBackground;
-use eXpansion\Framework\Gui\Components\uiButton;
-use eXpansion\Framework\Gui\Components\uiLabel;
+use eXpansion\Framework\Gui\Components\Animation;
+use eXpansion\Framework\Gui\Components\Button;
+use eXpansion\Framework\Gui\Components\Label;
 use eXpansion\Framework\Gui\Ui\Factory;
 use FML\Controls\Frame;
 use FML\Controls\Quad;
@@ -20,25 +21,32 @@ class VoteWidgetFactory extends WidgetFactory
 
     const x = 90;
     const y = 20;
-    /** @var uiLabel */
+
+    /** @var Label */
     protected $label;
     /**
      * @var VoteService
      */
     private $voteService;
 
+    /**
+     * @var UpdateVoteWidgetFactory
+     */
+    private $updateVoteWidgetFactory;
+
 
     /***
      * MenuFactory constructor.
      *
-     * @param                      $name
-     * @param                      $sizeX
-     * @param                      $sizeY
-     * @param null                 $posX
-     * @param null                 $posY
-     * @param WidgetFactoryContext $context
-     * @param Factory              $uiFactory
-     * @param VoteService          $voteService
+     * @param                         $name
+     * @param                         $sizeX
+     * @param                         $sizeY
+     * @param null                    $posX
+     * @param null                    $posY
+     * @param WidgetFactoryContext    $context
+     * @param Factory                 $uiFactory
+     * @param VoteService             $voteService
+     * @param UpdateVoteWidgetFactory $updateVoteWidgetFactory
      */
     public function __construct(
         $name,
@@ -48,12 +56,15 @@ class VoteWidgetFactory extends WidgetFactory
         $posY,
         WidgetFactoryContext $context,
         Factory $uiFactory,
-        VoteService $voteService
+        VoteService $voteService,
+        UpdateVoteWidgetFactory $updateVoteWidgetFactory
+
     ) {
         parent::__construct($name, $sizeX, $sizeY, $posX, $posY, $context);
 
         $this->uiFactory = $uiFactory;
         $this->voteService = $voteService;
+        $this->updateVoteWidgetFactory = $updateVoteWidgetFactory;
     }
 
     /**
@@ -65,7 +76,7 @@ class VoteWidgetFactory extends WidgetFactory
         $frame->setScale(0.8);
         $manialink->addChild($frame);
 
-        $label = $this->uiFactory->createLabel("", UiLabel::TYPE_HEADER);
+        $label = $this->uiFactory->createLabel($this->voteService->getCurrentVote()->getQuestion(), Label::TYPE_HEADER);
         $label->setTextColor("fff")
             ->setPosition(self::x / 2, -1)
             ->setTextSize(4)
@@ -75,7 +86,7 @@ class VoteWidgetFactory extends WidgetFactory
         $frame->addChild($this->label);
 
         $btnPosition = -9;
-        $btn = $this->uiFactory->createButton(" F1", UiButton::TYPE_DEFAULT);
+        $btn = $this->uiFactory->createButton(" F1", Button::TYPE_DEFAULT);
         $btn->setSize(18, 6)->setPosition(1, $btnPosition)
             ->setId("ButtonYes")
             ->setBackgroundColor("0f09");
@@ -84,10 +95,10 @@ class VoteWidgetFactory extends WidgetFactory
         );
         $frame->addChild($btn);
 
-        $btn = $this->uiFactory->createButton(" F2", UiButton::TYPE_DEFAULT);
+        $btn = $this->uiFactory->createButton(" F2", Button::TYPE_DEFAULT);
         $btn->setSize(18, 6)->setPosition(self::x - 19, $btnPosition)
-            ->setBackgroundColor("f009")
-            ->setId("ButtonNo");
+            ->setId("ButtonNo")
+            ->setBackgroundColor("f009");
         $btn->setAction(
             $this->actionFactory->createManialinkAction($manialink, [$this, "callbackNo"], null)
         );
@@ -111,8 +122,11 @@ class VoteWidgetFactory extends WidgetFactory
         $quad->setAlign("right", "top");
         $quad->setSize((self::x - 20 * 2) / 2, 6);
         $quad->setPosition(self::x - 20, $btnPosition)
-            ->setBackgroundColor("f009");
+            ->setBackgroundColor("0000");
         $frame->addChild($quad);
+
+        $animation = $this->uiFactory->createAnimation();
+        $manialink->addChild($animation);
 
         $quad = Quad::create("timer");
         $quad->setSize(self::x - 4, 1);
@@ -121,7 +135,14 @@ class VoteWidgetFactory extends WidgetFactory
             ->setBackgroundColor("fffa");
         $frame->addChild($quad);
 
-        $bg = new WidgetBackground(90, 20);
+        $animation->addAnimation($quad,
+            "size='0 1'",
+            $this->voteService->getCurrentVote()->getDuration() * 1000,
+            0,
+            Animation::Linear);
+
+
+        $bg = $this->uiFactory->createWidgetBackground(90, 20);
         $frame->addChild($bg);
 
         $x = self::x;
@@ -139,48 +160,33 @@ EOL
         );
 
         $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::OnInit,
+
             <<<EOL
             declare Real SizeX = 1. * ($x - 40) ;
             declare CMlQuad BgYes = (Page.GetFirstChild("yes") as CMlQuad);
             declare CMlQuad BgNo = (Page.GetFirstChild("no") as CMlQuad);
-            declare CMlQuad Timer = (Page.GetFirstChild("timer") as CMlQuad);
-            declare Real Exp_Vote_Yes for This = 1.;
-            declare Real Exp_Vote_No for This = 0.;
-            declare Real Exp_Vote_TimeElapsed for This = 1.;
-            declare Real Exp_Vote_TimeTotal for This = 30.;
-            declare Text Exp_Vote_check for This = "";
-            declare Text Exp_Vote_oldCheck = "";                                                                                                       
+            {$this->updateVoteWidgetFactory->getScriptInitialization()}                                                                       
 EOL
         );
 
-        $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::Loop,
+        $variable = $this->updateVoteWidgetFactory->getVariable('VoteUpdater')->getVariableName();
+        $onChange = $this->updateVoteWidgetFactory->getScriptOnChange(/** @lang text */
             <<<EOL
-            if (Exp_Vote_check != Exp_Vote_oldCheck) {  
-               Exp_Vote_oldCheck = Exp_Vote_check;          
-               declare Real Total = (Exp_Vote_Yes + Exp_Vote_No);
+            
+               declare Integer Yes = {$variable}["yes"];
+               declare Integer No = {$variable}["no"];
+               declare Real Total = 1. * (Yes + No);
                
                if (Total > 0) {
-                    declare Real Ratio = 1. * (Exp_Vote_Yes / Total);
-                    BgYes.Size.X = SizeX  * Ratio ;
-                    BgNo.Size.X = SizeX  * (1. - Ratio);
+                    declare Real Ratio = 1. * (Yes / Total);
+                    AnimMgr.Add(BgYes, "<elem size=\""^( SizeX * Ratio )^" 6\" />", 250, CAnimManager::EAnimManagerEasing::QuadInOut);               
+                    AnimMgr.Add(BgNo, "<elem size=\""^( SizeX  * (1. - Ratio) )^" 6\" />", 250, CAnimManager::EAnimManagerEasing::QuadInOut);                                         
                }
                
-               Timer.Size.X = 86. *((Exp_Vote_TimeTotal - Exp_Vote_TimeElapsed) / Exp_Vote_TimeTotal);
-            }                                                                            
 EOL
         );
 
-    }
-
-    public function setMessage($message)
-    {
-        $this->label->setTextId($message);
-    }
-
-
-    protected function updateContent(ManialinkInterface $manialink)
-    {
-        parent::updateContent($manialink);
+        $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::Loop, $onChange);
     }
 
     public function callbackYes($manialink, $login, $entries, $args)

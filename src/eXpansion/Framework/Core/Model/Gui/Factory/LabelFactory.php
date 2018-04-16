@@ -2,7 +2,7 @@
 
 namespace eXpansion\Framework\Core\Model\Gui\Factory;
 
-use eXpansion\Framework\Gui\Components\uiLabel;
+use eXpansion\Framework\Gui\Components\Label;
 
 /**
  * Class LineBuilder
@@ -17,7 +17,7 @@ class LabelFactory
 
     public function create($text, $translate = false, $type = self::TYPE_NORMAL)
     {
-        $label = new uiLabel($text, $type);
+        $label = new Label($text, $type);
         $label->setAlign("left", "center2");
 
         if ($translate) {

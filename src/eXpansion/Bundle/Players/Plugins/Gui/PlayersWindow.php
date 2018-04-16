@@ -11,11 +11,12 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Window;
 use eXpansion\Framework\Core\Model\Gui\WindowFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\GridWindowFactory;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\ChatCommandDataProvider;
-use eXpansion\Framework\Gui\Components\uiButton;
-use eXpansion\Framework\Gui\Components\uiLabel;
-use eXpansion\Framework\Gui\Layouts\layoutRow;
+use eXpansion\Framework\Gui\Components\Button;
+use eXpansion\Framework\Gui\Components\Label;
+use eXpansion\Framework\Gui\Layouts\LayoutRow;
 use FML\Controls\Frame;
 use Maniaplanet\DedicatedServer\Connection;
 
@@ -30,9 +31,9 @@ class PlayersWindow extends GridWindowFactory
      */
     private $chatCommandDataProvider;
     /**
-     * @var Connection
+     * @var Factory
      */
-    private $connection;
+    private $factory;
     /**
      * @var AdminGroups
      */
@@ -70,7 +71,7 @@ class PlayersWindow extends GridWindowFactory
         DataCollectionFactory $dataCollectionFactory,
         GridBuilderFactory $gridBuilderFactory,
         ChatCommandDataProvider $chatCommandDataProvider,
-        Connection $connection,
+        Factory $factory,
         AdminGroups $adminGroups,
         Countries $countries
     ) {
@@ -80,7 +81,7 @@ class PlayersWindow extends GridWindowFactory
         $this->dataCollectionFactory = $dataCollectionFactory;
         $this->gridBuilderFactory = $gridBuilderFactory;
         $this->chatCommandDataProvider = $chatCommandDataProvider;
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->adminGroups = $adminGroups;
         $this->countries = $countries;
     }
@@ -140,7 +141,7 @@ class PlayersWindow extends GridWindowFactory
                     )
                 );
 
-            $row = $this->uiFactory->createLayoutLine(125, 0,
+            $row = $this->uiFactory->createLayoutLine(100, 0,
                 [$guestList, $ignoreList, $banList, $blackList], 2);
             $manialink->addChild($row);
 
@@ -148,7 +149,7 @@ class PlayersWindow extends GridWindowFactory
         }
 
 
-        $frame = Frame::create();;
+        $frame = Frame::create(); ;
         $frame->setPosition(120, -16);
 
         $manialink->setData("playerFrame", $frame);
@@ -175,10 +176,10 @@ class PlayersWindow extends GridWindowFactory
         $frame = $manialink->getData('playerFrame');
         $frame->removeAllChildren();
 
-        $row = $this->uiFactory->createLayoutRow(0, 0, [], -2);
+        $row = $this->uiFactory->createLayoutRow(0, 0, [], 2);
 
 
-        $element = $this->uiFactory->createLabel($player->getNickName(), uiLabel::TYPE_HEADER);
+        $element = $this->uiFactory->createLabel($player->getNickName(), Label::TYPE_HEADER);
         $element->setTextSize(5)->setSize($width, 10)->setAlign("center", "top")
             ->setPosition($width / 2, 0);
         $row->addChild($element);
@@ -228,7 +229,7 @@ class PlayersWindow extends GridWindowFactory
 
     /**
      * @param ManialinkInterface $manialink
-     * @param layoutRow          $row
+     * @param LayoutRow          $row
      */
     private function createAdminControls($manialink, $row)
     {
@@ -237,19 +238,19 @@ class PlayersWindow extends GridWindowFactory
 
         if ($this->getIgnoredStatus($login)) {
             $muteText = "expansion_players.gui.players.window.allow";
-            $color = uiButton::COLOR_SUCCESS;
+            $color = Button::COLOR_SUCCESS;
         } else {
             $muteText = "expansion_players.gui.players.window.mute";
-            $color = uiButton::COLOR_WARNING;
+            $color = Button::COLOR_WARNING;
         }
 
         $elem = [
-            $this->uiFactory->createConfirmButton($muteText, uiButton::TYPE_DEFAULT)
+            $this->uiFactory->createConfirmButton($muteText, Button::TYPE_DEFAULT)
                 ->setAction($actions['mute'])
                 ->setBackgroundColor($color),
-            $this->uiFactory->createConfirmButton("expansion_players.gui.players.window.guest", uiButton::TYPE_DEFAULT)
+            $this->uiFactory->createConfirmButton("expansion_players.gui.players.window.guest", Button::TYPE_DEFAULT)
                 ->setAction($actions['guest'])
-                ->setBackgroundColor(UiButton::COLOR_DEFAULT),
+                ->setBackgroundColor(Button::COLOR_DEFAULT),
         ];
         $line = $this->uiFactory->createLayoutLine(0, 0, $elem, 2);
         $row->addChild($line);
@@ -267,15 +268,15 @@ class PlayersWindow extends GridWindowFactory
 
 
         $elem = [
-            $this->uiFactory->createConfirmButton("expansion_players.gui.players.window.kick", uiButton::TYPE_DEFAULT)
+            $this->uiFactory->createConfirmButton("expansion_players.gui.players.window.kick", Button::TYPE_DEFAULT)
                 ->setAction($actions['kick'])
-                ->setBackgroundColor(UiButton::COLOR_DEFAULT),
-            $this->uiFactory->createConfirmButton("expansion_players.gui.players.window.ban", uiButton::TYPE_DEFAULT)
+                ->setBackgroundColor(Button::COLOR_DEFAULT),
+            $this->uiFactory->createConfirmButton("expansion_players.gui.players.window.ban", Button::TYPE_DEFAULT)
                 ->setAction($actions['ban'])
-                ->setBackgroundColor(UiButton::COLOR_DEFAULT),
-            $this->uiFactory->createConfirmButton("expansion_players.gui.players.window.black", uiButton::TYPE_DEFAULT)
+                ->setBackgroundColor(Button::COLOR_DEFAULT),
+            $this->uiFactory->createConfirmButton("expansion_players.gui.players.window.black", Button::TYPE_DEFAULT)
                 ->setAction($actions['black'])
-                ->setBackgroundColor(UiButton::COLOR_SECONDARY),
+                ->setBackgroundColor(Button::COLOR_SECONDARY),
 
 
         ];
@@ -292,7 +293,7 @@ class PlayersWindow extends GridWindowFactory
         $this->updateData($manialink);
 
         $selectButton = $this->uiFactory->createButton('expansion_players.gui.players.window.column.select',
-            uiButton::TYPE_DEFAULT)->setSize(10, 5)->setTranslate(true);
+            Button::TYPE_DEFAULT)->setSize(10, 5)->setTranslate(true);
 
         $gridBuilder = $this->gridBuilderFactory->create();
         $gridBuilder->setManialink($manialink)
@@ -358,23 +359,23 @@ class PlayersWindow extends GridWindowFactory
     {
 
         $actions = [
-            "mute" => (string)$this->actionFactory->createManialinkAction($manialink, [$this, 'callbackIgnore'],
+            "mute" => (string) $this->actionFactory->createManialinkAction($manialink, [$this, 'callbackIgnore'],
                 [
                     "login" => $login,
                 ]),
-            "kick" => (string)$this->actionFactory->createManialinkAction($manialink, [$this, 'callbackKick'],
+            "kick" => (string) $this->actionFactory->createManialinkAction($manialink, [$this, 'callbackKick'],
                 [
                     "login" => $login,
                 ]),
-            "ban" => (string)$this->actionFactory->createManialinkAction($manialink, [$this, 'callbackBan'],
+            "ban" => (string) $this->actionFactory->createManialinkAction($manialink, [$this, 'callbackBan'],
                 [
                     "login" => $login,
                 ]),
-            "black" => (string)$this->actionFactory->createManialinkAction($manialink, [$this, 'callbackBlack'],
+            "black" => (string) $this->actionFactory->createManialinkAction($manialink, [$this, 'callbackBlack'],
                 [
                     "login" => $login,
                 ]),
-            "guest" => (string)$this->actionFactory->createManialinkAction($manialink, [$this, 'callbackGuest'],
+            "guest" => (string) $this->actionFactory->createManialinkAction($manialink, [$this, 'callbackGuest'],
                 [
                     "login" => $login,
                 ]),
@@ -465,7 +466,7 @@ class PlayersWindow extends GridWindowFactory
     private function getIgnoredStatus($login)
     {
         try {
-            $ignoreList = $this->connection->getIgnoreList();
+            $ignoreList = $this->factory->getConnection()->getIgnoreList();
             foreach ($ignoreList as $player) {
                 if ($player->login === $login) {
                     return true;

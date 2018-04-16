@@ -31,6 +31,6 @@ class HttpRequest extends CallbackCurl
      */
     public function __toString()
     {
-        return (string)$this->response['response'];
+        return (string) $this->response['response'];
     }
 }

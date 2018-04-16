@@ -27,6 +27,8 @@ class Dispatcher implements DispatcherInterface
     /** @var bool  */
     protected $isInitialized = false;
 
+    protected $temporizedEvents = [];
+
     /**
      * Dispatcher constructor.
      *
@@ -47,9 +49,13 @@ class Dispatcher implements DispatcherInterface
         $map = $connection->getCurrentMapInfo();
 
         $this->pluginManager->init($map);
-        $this->dataProviderManager->init($this->pluginManager, $map);
-
+        $this->dataProviderManager->reset($this->pluginManager, $map);
         $this->isInitialized = true;
+
+        foreach ($this->temporizedEvents as $temporizedEvent) {
+            $this->dispatch($temporizedEvent['event'], $temporizedEvent['params']);
+        }
+        $this->temporizedEvents = [];
     }
 
     /**
@@ -75,7 +81,7 @@ class Dispatcher implements DispatcherInterface
      *
      * @param EventProcessorInterface $eventProcessor
      */
-    public function addEventProcesseor(EventProcessorInterface $eventProcessor)
+    public function addEventProcessor(EventProcessorInterface $eventProcessor)
     {
         $this->eventProcessors[] = $eventProcessor;
     }
@@ -91,6 +97,8 @@ class Dispatcher implements DispatcherInterface
 
         if ($this->isInitialized) {
             $this->dataProviderManager->dispatch($event, $params);
+        } else {
+            $this->temporizedEvents[] = ['event' => $event, 'params' => $params];
         }
     }
 }

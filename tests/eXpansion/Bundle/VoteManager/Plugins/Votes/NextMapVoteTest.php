@@ -11,19 +11,18 @@ namespace Tests\eXpansion\Bundle\VoteManager\Plugins\Votes;
 use eXpansion\Bundle\VoteManager\Plugins\Votes\NextMapVote;
 use eXpansion\Bundle\VoteManager\Structures\Vote;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
+use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use Maniaplanet\DedicatedServer\Connection;
+use Tests\eXpansion\Framework\Core\TestCore;
 use Tests\eXpansion\Framework\Core\TestHelpers\PlayerDataTrait;
 
-class NextMapVoteTest extends \PHPUnit_Framework_TestCase
+class NextMapVoteTest extends TestCore
 {
     use PlayerDataTrait;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $mockPlayerStorage;
-
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $mockConnection;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $mockChatNotification;
@@ -40,17 +39,14 @@ class NextMapVoteTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->mockConnection = $this->getMockBuilder(Connection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->mockChatNotification = $this->getMockBuilder(ChatNotification::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->nextMapVote = new NextMapVote(
+            $this->getMockBuilder(DispatcherInterface::class)->getMock(),
             $this->mockPlayerStorage,
-            $this->mockConnection,
+            $this->mockConnectionFactory,
             $this->mockChatNotification,
             30,
             0.57

@@ -22,6 +22,5 @@ class AcmeExtension extends Extension
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('plugins.yml');
-        $loader->load('chat_commands.yml');
     }
 }

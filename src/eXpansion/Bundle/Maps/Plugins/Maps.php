@@ -3,6 +3,7 @@
 namespace eXpansion\Bundle\Maps\Plugins;
 
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMaplist;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
@@ -17,8 +18,8 @@ use Maniaplanet\DedicatedServer\Structures\Map;
 
 class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMaplist, StatusAwarePluginInterface
 {
-    /** @var Connection */
-    protected $connection;
+    /** @var Factory */
+    protected $factory;
 
     /** @var Console */
     protected $console;
@@ -41,7 +42,8 @@ class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMap
 
     /**
      * Maps constructor.
-     * @param Connection $connection
+     *
+     * @param Factory $factory
      * @param Console $console
      * @param AdminGroups $adminGroups
      * @param MapStorage $mapStorage
@@ -49,14 +51,14 @@ class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMap
      * @param PlayerStorage $playerStorage
      */
     function __construct(
-        Connection $connection,
+        Factory $factory,
         Console $console,
         AdminGroups $adminGroups,
         MapStorage $mapStorage,
         ChatNotification $chatNotification,
         PlayerStorage $playerStorage
     ) {
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->console = $console;
         $this->adminGroups = $adminGroups;
         $this->mapStorage = $mapStorage;
@@ -105,7 +107,7 @@ class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMap
         $level = $this->adminGroups->getGroupLabel($group->getName());
         $nickname = $this->playerStorage->getPlayerInfo($login)->getNickName();
         try {
-            $this->connection->removeMap($map->fileName);
+            $this->factory->getConnection()->removeMap($map->fileName);
             $this->chatNotification->sendMessage('expansion_maps.chat.removemap', null,
                 ["%level%" => $level, "%admin%" => $nickname, "%map%" => TMString::trimControls($map->name)]);
         } catch (\Exception $e) {
@@ -141,7 +143,7 @@ class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMap
      */
     public function onExpansionNextMapChange($nextMap, $previousNextMap)
     {
-       // do nothing
+        // do nothing
     }
 
     /**
@@ -161,7 +163,7 @@ class Maps implements ListenerInterfaceMpLegacyMap, ListenerInterfaceMpLegacyMap
      */
     public function onEndMap(Map $map)
     {
-      // do nothing
+        // do nothing
     }
 
 }

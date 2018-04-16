@@ -3,6 +3,7 @@
 namespace eXpansion\Framework\GameManiaplanet\DataProviders\Listener;
 
 use eXpansion\Framework\GameManiaplanet\DataProviders\BillDataProvider;
+use Maniaplanet\DedicatedServer\Structures\Bill;
 
 /**
  * Interface for plugins using the BillDataProvider.
@@ -14,10 +15,9 @@ interface ListenerInterfaceMpLegacyBill
 {
 
     /**
-     * @param int $billId
-     * @param int $state
-     * @param string $stateName
-     * @param int $transactionId
+     * @param int  $billId
+     * @param Bill $bill
+     * @return void
      */
-    public function onBillUpdated($billId, $state, $stateName, $transactionId);
+    public function onBillUpdated($billId, Bill $bill);
 }

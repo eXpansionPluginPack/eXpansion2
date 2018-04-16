@@ -10,7 +10,15 @@ namespace Tests\eXpansion\Framework\AdminGroups;
 
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\AdminGroups\Services\AdminGroupConfiguration;
+use eXpansion\Framework\Config\Model\BooleanConfig;
+use eXpansion\Framework\Config\Model\TextConfig;
+use eXpansion\Framework\Config\Model\TextListConfig;
+use eXpansion\Framework\Config\Services\ConfigManagerInterface;
+use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\UserGroups\Factory;
+use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
+use oliverde8\AssociativeArraySimplified\AssociativeArray;
+use PHPUnit\Framework\TestCase;
 use Tests\eXpansion\Framework\Core\TestCore;
 
 
@@ -20,40 +28,62 @@ use Tests\eXpansion\Framework\Core\TestCore;
  * @package Tests\eXpansion\Framework\AdminGroups;
  * @author oliver de Cramer <oliverde8@gmail.com>
  */
-class TestAdminGroups extends TestCore
+class TestAdminGroups extends TestCase
 {
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockConfigManager;
+
+    /** @var Factory */
+    protected $userGroupFactory;
+
+    /** @var AdminGroupConfiguration */
+    protected $adminGroupConfiguration;
+
+    /** @var AdminGroups */
+    protected $adminGroupsHelper;
+
     protected function setUp()
     {
         parent::setUp();
 
-        $this->container->set(
-            'expansion.framework.admin_groups.services.admin_group_configuration',
-            $this->getAdminGroupConfigurationService()
-        );
+        $this->mockConfigManager = $this->getMockBuilder(ConfigManagerInterface::class)->getMock();
+        $this->mockConfigManager
+            ->method('getConfigDefinitionTree')
+            ->willReturn(new AssociativeArray(['path' => $this->getAdminGroupConfiguration()]));
+        $this->userGroupFactory = new Factory(Group::class, $this->getMockBuilder(DispatcherInterface::class)->getMock());
+
+        $this->adminGroupConfiguration = new AdminGroupConfiguration($this->mockConfigManager, 'path');
+        $this->adminGroupsHelper = new AdminGroups($this->adminGroupConfiguration, $this->userGroupFactory);
     }
 
     public function getAdminGroupConfigurationService()
     {
-        return new AdminGroupConfiguration($this->getAdminGroupConfiguration());
+        return $this->adminGroupConfiguration;
     }
 
     public function getAdminGroupConfiguration()
     {
         return [
             'master_admin' => [
-                'logins' => ['toto1', 'toto2']
+                'logins' => new TextListConfig('', '', '', '', ['toto1', 'toto2'], $this->mockConfigManager),
+                'label' => new TextConfig('', '', '', '','Master Admin', $this->mockConfigManager)
             ],
             'admin' => [
-                'logins' => ['toto10', 'toto11'],
-                'permissions' => ['p10', 'p11']
+                'logins' => new TextListConfig('', '', '', '', ['toto10', 'toto11'], $this->mockConfigManager),
+                'label' => new TextConfig('', '', '', '', 'Admin', $this->mockConfigManager),
+                'perm_p10' => new BooleanConfig('', '', '', '', 1, $this->mockConfigManager),
+                'perm_p11' => new BooleanConfig('', '', '', '', 1, $this->mockConfigManager),
             ],
             'operator' => [
-                'logins' => ['toto20', 'toto21'],
-                'permissions' => ['p20', 'p21']
+                'logins' => new TextListConfig('', '', '', '', ['toto20', 'toto21'], $this->mockConfigManager),
+                'label' => new TextConfig('', '', '', '', 'Operator', $this->mockConfigManager),
+                'perm_p20' => new BooleanConfig('', '', '', '', 1, $this->mockConfigManager),
+                'perm_p21' => new BooleanConfig('', '', '', '', 1, $this->mockConfigManager),
             ],
             'empty' => [
-                'logins' => [],
-                'permissions' => ['p20']
+                'logins' => new TextListConfig('', '', '', '', [], $this->mockConfigManager),
+                'label' => 'Empty',
+                'perm_p20' => new BooleanConfig('', '', '', '', 1, $this->mockConfigManager),
             ]
         ];
     }
@@ -64,8 +94,6 @@ class TestAdminGroups extends TestCore
      */
     protected function getAdminGroupHelper()
     {
-        return new AdminGroups(
-            $this->getAdminGroupConfigurationService(), $this->container->get(Factory::class)
-        );
+        return $this->adminGroupsHelper;
     }
 }

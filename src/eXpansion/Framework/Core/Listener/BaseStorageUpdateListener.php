@@ -4,9 +4,10 @@ namespace eXpansion\Framework\Core\Listener;
 
 use eXpansion\Framework\Core\Model\Event\DedicatedEvent;
 use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\Core\Storage\MapStorage;
-use Maniaplanet\DedicatedServer\Connection;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Class BaseStorageUpdateListener
@@ -15,10 +16,10 @@ use Maniaplanet\DedicatedServer\Connection;
  * @copyright 2017 eXpansion
  * @package eXpansion\Framework\Core\Listner
  */
-class BaseStorageUpdateListener
+class BaseStorageUpdateListener implements EventSubscriberInterface
 {
-    /** @var Connection */
-    protected $connection;
+    /** @var Factory */
+    protected $factory;
 
     /** @var GameDataStorage */
     protected $gameDataStorage;
@@ -32,37 +33,48 @@ class BaseStorageUpdateListener
     /**
      * BaseStorageUpdateListener constructor.
      *
+     * @param Factory $factory
      * @param GameDataStorage $gameDataStorage
+     * @param MapStorage $mapStorage
      * @param DispatcherInterface $dispatcher
      */
     public function __construct(
-        Connection $connection,
+        Factory $factory,
         GameDataStorage $gameDataStorage,
         MapStorage $mapStorage,
         DispatcherInterface $dispatcher
     ) {
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->gameDataStorage = $gameDataStorage;
         $this->mapStorage = $mapStorage;
         $this->dispatcher = $dispatcher;
+    }
 
-        $gameInfos = $this->connection->getCurrentGameInfo();
-        $serverOptions = $this->connection->getServerOptions();
-
-        $this->gameDataStorage->setServerOptions($serverOptions);
-        $this->gameDataStorage->setScriptOptions($this->connection->getModeScriptSettings());
-        $this->gameDataStorage->setSystemInfo($this->connection->getSystemInfo());
-        $this->gameDataStorage->setGameInfos(clone $gameInfos);
-        $this->gameDataStorage->setVersion($this->connection->getVersion());
-        $this->gameDataStorage->setMapFolder($this->connection->getMapsDirectory());
+    /**
+     * @inheritdoc
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            'maniaplanet.game.BeginMap' => 'onManiaplanetGameBeginMap' ,
+            Factory::EVENT_CONNECTED => 'onConnectionToDedicated'
+        ];
     }
 
     /**
      *
      */
-    public function onManiaplanetGameExpansionBeforeInit()
+    public function onConnectionToDedicated()
     {
-        // Nothing to do.
+        $gameInfos = $this->factory->getConnection()->getCurrentGameInfo();
+        $serverOptions = $this->factory->getConnection()->getServerOptions();
+
+        $this->gameDataStorage->setServerOptions($serverOptions);
+        $this->gameDataStorage->setScriptOptions($this->factory->getConnection()->getModeScriptSettings());
+        $this->gameDataStorage->setSystemInfo($this->factory->getConnection()->getSystemInfo());
+        $this->gameDataStorage->setGameInfos(clone $gameInfos);
+        $this->gameDataStorage->setVersion($this->factory->getConnection()->getVersion());
+        $this->gameDataStorage->setMapFolder($this->factory->getConnection()->getMapsDirectory());
     }
 
     /**
@@ -72,12 +84,12 @@ class BaseStorageUpdateListener
      */
     public function onManiaplanetGameBeginMap(DedicatedEvent $event)
     {
-        $serverOptions = $this->connection->getServerOptions();
-        $this->gameDataStorage->setScriptOptions($this->connection->getModeScriptSettings());
+        $serverOptions = $this->factory->getConnection()->getServerOptions();
+        $this->gameDataStorage->setScriptOptions($this->factory->getConnection()->getModeScriptSettings());
         $this->gameDataStorage->setServerOptions($serverOptions);
-        $this->gameDataStorage->setSystemInfo($this->connection->getSystemInfo());
+        $this->gameDataStorage->setSystemInfo($this->factory->getConnection()->getSystemInfo());
 
-        $newGameInfos = $this->connection->getCurrentGameInfo();
+        $newGameInfos = $this->factory->getConnection()->getCurrentGameInfo();
         $prevousGameInfos = $this->gameDataStorage->getGameInfos();
 
         // TODO move this logic somewhere else.
@@ -88,4 +100,5 @@ class BaseStorageUpdateListener
             // TODO dispatch custom event to let it know?
         }
     }
+
 }

@@ -3,6 +3,7 @@
 namespace eXpansion\Bundle\VoteManager\Plugins\Votes;
 
 use eXpansion\Bundle\VoteManager\Structures\Vote;
+use eXpansion\Framework\Core\Services\Application\DispatcherInterface;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 
@@ -15,6 +16,9 @@ use eXpansion\Framework\Core\Storage\PlayerStorage;
  */
 abstract class AbstractVotePlugin
 {
+    /** @var DispatcherInterface */
+    protected $dispatcher;
+
     /** @var PlayerStorage */
     protected $playerStorage;
 
@@ -30,12 +34,18 @@ abstract class AbstractVotePlugin
     /**
      * AbstractVotePlugin constructor.
      *
+     * @param DispatcherInterface $dispatcher
      * @param PlayerStorage $playerStorage
      * @param int $duration
      * @param float $ratio
      */
-    public function __construct(PlayerStorage $playerStorage, int $duration, float $ratio)
-    {
+    public function __construct(
+        DispatcherInterface $dispatcher,
+        PlayerStorage $playerStorage,
+        int $duration,
+        float $ratio
+    ) {
+        $this->dispatcher = $dispatcher;
         $this->playerStorage = $playerStorage;
         $this->duration = $duration;
         $this->ratio = $ratio;
@@ -71,6 +81,9 @@ abstract class AbstractVotePlugin
     {
         if ($this->currentVote) {
             $this->currentVote->castYes($login);
+
+            $player = $this->playerStorage->getPlayerInfo($login);
+            $this->dispatcher->dispatch("votemanager.voteyes", [$player, $this->currentVote]);
         }
     }
 
@@ -83,6 +96,9 @@ abstract class AbstractVotePlugin
     {
         if ($this->currentVote) {
             $this->currentVote->castNo($login);
+
+            $player = $this->playerStorage->getPlayerInfo($login);
+            $this->dispatcher->dispatch("votemanager.voteno", [$player, $this->currentVote]);
         }
     }
 
@@ -125,7 +141,7 @@ abstract class AbstractVotePlugin
         if (($time - $this->currentVote->getStartTime()) > $this->duration) {
             $totalVotes = $this->currentVote->getYes() + $this->currentVote->getNo() * 1.0;
 
-            if ($totalVotes >= 1 && ($this->currentVote->getYes()/$totalVotes) > $this->ratio) {
+            if ($totalVotes >= 1 && ($this->currentVote->getYes() / $totalVotes) > $this->ratio) {
                 $this->votePassed();
             } else {
                 $this->voteFailed();

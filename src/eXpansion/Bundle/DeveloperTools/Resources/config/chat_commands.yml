@@ -1,0 +1,35 @@
+services:
+    _defaults:
+        autowire: true
+
+    expansion.bundle.acme.plugins.chat_commands:
+          class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
+          arguments:
+              -
+                - '@eXpansion\Bundle\DeveloperTools\ChatCommand\Connect'
+                - '@eXpansion\Bundle\DeveloperTools\ChatCommand\Disconnect'
+                - '@eXpansion\Bundle\DeveloperTools\ChatCommand\DumpMemory'
+          tags:
+              - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}
+
+    eXpansion\Bundle\DeveloperTools\ChatCommand\Connect:
+        class:  eXpansion\Bundle\DeveloperTools\ChatCommand\Connect
+        arguments:
+            $command: "connect"
+            $permission: 'server'
+            $aliases: []
+
+    eXpansion\Bundle\DeveloperTools\ChatCommand\Disconnect:
+        class: eXpansion\Bundle\DeveloperTools\ChatCommand\Disconnect
+        arguments:
+            $command: "disconnect"
+            $permission: 'server'
+            $aliases: []
+
+
+    eXpansion\Bundle\DeveloperTools\ChatCommand\DumpMemory:
+        class: eXpansion\Bundle\DeveloperTools\ChatCommand\DumpMemory
+        arguments:
+            $command: "dumpmem"
+            $permission: 'server'
+            $aliases: []

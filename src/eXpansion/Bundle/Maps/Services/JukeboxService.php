@@ -149,8 +149,6 @@ class JukeboxService
             $check = $this->getMap($login);
             if ($check && $check->getMap() === $map) {
                 return $this->remove($map);
-
-
             }
         }
 
@@ -230,7 +228,7 @@ class JukeboxService
      *
      * @return bool
      */
-    private function checkMap(Map $map)
+    public function checkMap(Map $map)
     {
         foreach ($this->mapQueue as $jukeboxMap) {
             if ($jukeboxMap->getMap() === $map) {

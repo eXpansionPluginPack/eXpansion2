@@ -137,6 +137,9 @@ class AdminGroups
         }
     }
 
+    /**
+     * @param string $permission
+     */
     protected function hasLoginPermission($login, $permission)
     {
         if ($login instanceof Player) {
@@ -158,15 +161,18 @@ class AdminGroups
      */
     public function hasGroupPermission($groupName, $permission)
     {
-
         if (strpos($groupName, 'admin:') === 0) {
             $groupName = str_replace("admin:", '', $groupName);
         }
-
         $logins = $this->adminGroupConfiguration->getGroupLogins($groupName);
 
         if (!empty($logins)) {
             return $this->hasPermission($logins[0], $permission);
+        }
+        
+        // If guest group is unknow it has no permissions.
+        if ($groupName == 'guest' && is_null($logins)) {
+            return false;
         }
 
         if (is_null($logins)) {

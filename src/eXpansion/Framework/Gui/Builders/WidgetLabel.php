@@ -2,13 +2,13 @@
 
 namespace eXpansion\Framework\Gui\Builders;
 
-use eXpansion\Framework\Gui\Components\uiLabel;
+use eXpansion\Framework\Gui\Components\Label;
 
 /**
  * Class WidgetLabel
  * @package eXpansion\Framework\Gui\Builders
  */
-class WidgetLabel extends uiLabel
+class WidgetLabel extends Label
 {
 
     public function __construct(string $text = "", string $type = self::TYPE_NORMAL, string $controlId = null)

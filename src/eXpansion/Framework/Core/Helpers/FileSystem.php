@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Core\Helpers;
 
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\FilesystemInterface;
 use Maniaplanet\DedicatedServer\Connection;
@@ -17,8 +18,8 @@ class FileSystem
     const CONNECTION_TYPE_LOCAL = 'local';
     const CONNECTION_TYPE_REMOTE = 'remote';
 
-    /** @var Connection */
-    protected $connection;
+    /** @var Factory */
+    protected $factory;
 
     /** @var string */
     protected $connectionType;
@@ -35,13 +36,13 @@ class FileSystem
     /**
      * FileSystem constructor.
      *
-     * @param Connection          $connection
+     * @param Factory          $factory
      * @param string              $connectionType
      * @param FilesystemInterface $remoteAdapter
      */
-    public function __construct(Connection $connection, string $connectionType, FilesystemInterface $remoteAdapter)
+    public function __construct(Factory $factory, string $connectionType, FilesystemInterface $remoteAdapter)
     {
-        $this->connection = $connection;
+        $this->factory = $factory;
         $this->connectionType = $connectionType;
         $this->remoteAdapter = $remoteAdapter;
     }
@@ -68,8 +69,8 @@ class FileSystem
     protected function getLocalAdapter() : FilesystemInterface
     {
         if (is_null($this->localAdapter)) {
-            $dir = $this->connection->getMapsDirectory();
-            $this->localAdapter = new \League\Flysystem\Filesystem(new Local($dir . '/../'));
+            $dir = $this->factory->getConnection()->getMapsDirectory();
+            $this->localAdapter = new \League\Flysystem\Filesystem(new Local($dir.'/../'));
         }
 
         return $this->localAdapter;

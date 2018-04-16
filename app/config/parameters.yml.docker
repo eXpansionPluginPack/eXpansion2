@@ -24,6 +24,11 @@ oneup_flysystem:
         dedicated_user_data:
             local:
                 directory: "/var/maniaplanet/UserData/"
+        expansion_config:
+            local:
+                directory: "%kernel.root_dir%/../var/expansion/config"
     filesystems:
         dedicated_user_data:
             adapter: dedicated_user_data
+        expansion_config:
+            adapter: expansion_config

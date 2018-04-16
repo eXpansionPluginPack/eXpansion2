@@ -1,0 +1,14 @@
+services:
+    _defaults:
+        autowire: true
+        public: true
+
+    expansion.bundle.dedimania.gui.window.recswindow:
+        class: eXpansionExperimantal\Bundle\Dedimania\Plugins\Gui\DedirecsWindow
+        arguments:
+            $name:  'expansion_dedimania.gui.window.title'
+            $sizeX: 160
+            $sizeY: 90
+            $posX:  null
+            $posY:  null
+            $dataCollectionFactory: '@expansion.gui.gridbuilder.datacollection.array'

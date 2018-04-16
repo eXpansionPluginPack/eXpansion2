@@ -4,6 +4,7 @@ namespace eXpansion\Bundle\LocalRecords\Plugins;
 
 use eXpansion\Bundle\LocalRecords\DataProviders\Listener\RecordsDataListener;
 use eXpansion\Bundle\LocalRecords\Model\Record;
+use eXpansion\Framework\Config\Model\ConfigInterface;
 use eXpansion\Framework\Core\Helpers\ChatNotification as ChatNotificationHelper;
 use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Helpers\TMString;
@@ -30,7 +31,7 @@ class ChatNotification implements RecordsDataListener
     /** @var string */
     protected $translationPrefix;
 
-    /** @var int */
+    /** @var ConfigInterface */
     protected $positionForPublicMessage;
 
     /**
@@ -40,14 +41,14 @@ class ChatNotification implements RecordsDataListener
      * @param Time                   $timeFormater
      * @param PlayerStorage          $playerStorage
      * @param string                 $translationPrefix
-     * @param int                    $positionForPublicMessage
+     * @param ConfigInterface        $positionForPublicMessage
      */
     public function __construct(
         ChatNotificationHelper $chatNotification,
         Time $timeFormater,
         PlayerStorage $playerStorage,
         $translationPrefix,
-        $positionForPublicMessage
+        ConfigInterface $positionForPublicMessage
     ) {
         $this->chatNotification = $chatNotification;
         $this->timeFormater = $timeFormater;
@@ -57,12 +58,9 @@ class ChatNotification implements RecordsDataListener
     }
 
     /**
-     * Called when local records are loaded.
-     *
-     * @param Record[] $records
-     * @throws \Propel\Runtime\Exception\PropelException
+     * @inheritdoc
      */
-    public function onLocalRecordsLoaded($records)
+    public function onLocalRecordsLoaded($records, BaseRecords $baseRecords)
     {
         if (!empty($records)) {
             $firstRecord = $records[0];
@@ -87,43 +85,25 @@ class ChatNotification implements RecordsDataListener
     }
 
     /**
-     * Called when a player finishes map for the very first time (basically first record).
-     *
-     * @param Record   $record
-     * @param Record[] $records
-     * @param int      $position
+     * @inheritdoc
      */
-    public function onLocalRecordsFirstRecord(Record $record, $records, $position)
+    public function onLocalRecordsFirstRecord(Record $record, $records, $position, BaseRecords $baseRecords)
     {
         $this->messageFirstPlaceNew($record);
     }
 
     /**
-     * Called when a player finishes map and does same time as before.
-     *
-     * @param Record   $record
-     * @param Record   $oldRecord
-     * @param Record[] $records
-     *
-     * @return void
+     * @inheritdoc
      */
-    public function onLocalRecordsSameScore(Record $record, Record $oldRecord, $records)
+    public function onLocalRecordsSameScore(Record $record, Record $oldRecord, $records, BaseRecords $baseRecords)
     {
         // Nothing.
     }
 
     /**
-     * Called when a player finishes map with better time and has better position.
-     *
-     * @param Record   $record
-     * @param Record   $oldRecord
-     * @param Record[] $records
-     * @param int      $position
-     * @param int      $oldPosition
-     *
-     * @return void
+     * @inheritdoc
      */
-    public function onLocalRecordsBetterPosition(Record $record, Record $oldRecord, $records, $position, $oldPosition)
+    public function onLocalRecordsBetterPosition(Record $record, Record $oldRecord, $records, $position, $oldPosition, BaseRecords $baseRecords)
     {
         if ($position == 1 && $oldPosition == null) {
             $this->messageFirstPlaceNew($record);
@@ -133,7 +113,7 @@ class ChatNotification implements RecordsDataListener
 
         // Check to who to send.
         $to = null;
-        if ($position > $this->positionForPublicMessage) {
+        if ($position > $this->positionForPublicMessage->get()) {
             $to = $record->getPlayer()->getLogin();
         }
 
@@ -169,20 +149,13 @@ class ChatNotification implements RecordsDataListener
     }
 
     /**
-     * Called when a player finishes map with better time but keeps same position.
-     *
-     * @param Record   $record
-     * @param Record   $oldRecord
-     * @param Record[] $records
-     * @param          $position
-     *
-     * @return void
+     * @inheritdoc
      */
-    public function onLocalRecordsSamePosition(Record $record, Record $oldRecord, $records, $position)
+    public function onLocalRecordsSamePosition(Record $record, Record $oldRecord, $records, $position, BaseRecords $baseRecords)
     {
         // Check to who to send.
         $to = null;
-        if ($position > $this->positionForPublicMessage) {
+        if ($position > $this->positionForPublicMessage->get()) {
             $to = $record->getPlayer()->getLogin();
         }
 
@@ -211,6 +184,11 @@ class ChatNotification implements RecordsDataListener
         );
     }
 
+    /**
+     * @param Record $record
+     * @param Record $oldRecord
+     * @return string
+     */
     protected function getSecuredBy(Record $record, Record $oldRecord)
     {
         if ($oldRecord->getScore()) {
@@ -230,6 +208,10 @@ class ChatNotification implements RecordsDataListener
         return $this->timeFormater->timeToText(0);
     }
 
+    /**
+     * @param Record $record
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
     protected function messageFirstPlaceNew(Record $record)
     {
         $this->sendMessage(
@@ -245,13 +227,14 @@ class ChatNotification implements RecordsDataListener
 
     /**
      * @param string      $message
-     * @param null|string $recipe
+     * @param null|string $recipient
+     * @param             $params
      */
-    protected function sendMessage($message, $recipe, $params)
+    protected function sendMessage($message, $recipient, $params)
     {
         $this->chatNotification->sendMessage(
             $this->translationPrefix.'.'.$message,
-            $recipe,
+            $recipient,
             $params
         );
     }

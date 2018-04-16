@@ -7,7 +7,6 @@ use eXpansion\Bundle\Menu\Model\Menu\ParentItem;
 use eXpansion\Bundle\Menu\Services\ItemBuilder;
 use eXpansion\Bundle\Menu\Services\ItemFactoryInterface;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
-use FML\Controls\Quad;
 
 /**
  * Class ItemParentFactory
@@ -44,7 +43,7 @@ class ItemParentFactory implements ItemFactoryInterface
      */
     public function supports($class)
     {
-       return $class == ParentItem::class;
+        return $class == ParentItem::class;
     }
 
     /**

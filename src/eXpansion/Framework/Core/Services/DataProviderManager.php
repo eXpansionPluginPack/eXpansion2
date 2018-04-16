@@ -4,20 +4,17 @@ namespace eXpansion\Framework\Core\Services;
 
 use eXpansion\Framework\Core\DataProviders\AbstractDataProvider;
 use eXpansion\Framework\Core\Exceptions\DataProvider\UncompatibleException;
+use eXpansion\Framework\Core\Helpers\CompatibleFetcher;
 use eXpansion\Framework\Core\Model\CompatibilityCheckDataProviderInterface;
 use eXpansion\Framework\Core\Model\ProviderListener;
-use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use Maniaplanet\DedicatedServer\Structures\Map;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class DataProviderManager handles all the data providers.
- *
- * @TODO handle game mode change.
  *
  * @package eXpansion\Framework\Core\Services
  */
@@ -50,29 +47,33 @@ class DataProviderManager
     /** @var Console */
     protected $console;
 
+    /** @var LoggerInterface */
+    protected $logger;
+
+    /** @var CompatibleFetcher */
+    protected $compatibleFetcher;
+
     /**
      * DataProviderManager constructor.
      *
      * @param ContainerInterface $container
-     * @param GameDataStorage $gameDataStorage
-     * @param Console $console
+     * @param GameDataStorage    $gameDataStorage
+     * @param Console            $console
+     * @param LoggerInterface    $logger
+     * @param CompatibleFetcher  $compatibleFetcher
      */
-    public function __construct(ContainerInterface $container, GameDataStorage $gameDataStorage, Console $console)
-    {
+    public function __construct(
+        ContainerInterface $container,
+        GameDataStorage $gameDataStorage,
+        Console $console,
+        LoggerInterface $logger,
+        CompatibleFetcher $compatibleFetcher
+    ) {
         $this->container = $container;
         $this->gameDataStorage = $gameDataStorage;
         $this->console = $console;
-    }
-
-    /**
-     * Initialize all the providers properly.
-     *
-     * @param PluginManager $pluginManager
-     * @param Map           $map
-     */
-    public function init(PluginManager $pluginManager, Map $map)
-    {
-        $this->reset($pluginManager, $map);
+        $this->logger = $logger;
+        $this->compatibleFetcher = $compatibleFetcher;
     }
 
     /**
@@ -85,7 +86,7 @@ class DataProviderManager
     {
         $title = $this->gameDataStorage->getTitle();
         $mode = $this->gameDataStorage->getGameModeCode();
-        $script = $this->gameDataStorage->getGameInfos()->scriptName;
+        $script = strtolower($this->gameDataStorage->getGameInfos()->scriptName);
         $this->enabledProviderListeners = [];
 
         foreach ($this->providersByCompatibility as $provider => $data) {
@@ -94,8 +95,8 @@ class DataProviderManager
 
             if ($providerId) {
                 $providerService = $this->container->get($providerId);
-
                 if ($pluginManager->isPluginEnabled($providerId)) {
+
                     foreach ($this->providerListeners[$providerId] as $listener) {
                         $this->enabledProviderListeners[$listener->getEventName()][] = [
                             $providerService,
@@ -147,7 +148,7 @@ class DataProviderManager
     }
 
     /**
-     * @param string $provider
+     * @param string $providerName
      * @param string $title
      * @param string $mode
      * @param string $script
@@ -155,19 +156,12 @@ class DataProviderManager
      *
      * @return string|null
      */
-    public function getCompatibleProviderId($provider, $title, $mode, $script, Map $map)
+    public function getCompatibleProviderId($providerName, $title, $mode, $script, Map $map)
     {
-        $parameters = [
-            [$provider, $title, $mode, $script],
-            [$provider, $title, $mode, self::COMPATIBLE_ALL],
-            [$provider, $title, self::COMPATIBLE_ALL, self::COMPATIBLE_ALL],
-            [$provider, self::COMPATIBLE_ALL, self::COMPATIBLE_ALL, self::COMPATIBLE_ALL],
-            // For modes that are common to all titles.
-            [$provider, self::COMPATIBLE_ALL, $mode, self::COMPATIBLE_ALL],
-            [$provider, self::COMPATIBLE_ALL, $mode, $script],
-        ];
+        $parameters = $this->compatibleFetcher->getChoicesByPriority($title, $mode, $script);
 
         foreach ($parameters as $parameter) {
+            $parameter = array_merge([$providerName], $parameter);
             $id = AssociativeArray::getFromKey($this->providersByCompatibility, $parameter);
             if (!is_null($id)) {
                 $provider = $this->container->get($id);
@@ -200,6 +194,10 @@ class DataProviderManager
     {
         $providerId = $this->getCompatibleProviderId($provider, $title, $mode, $script, $map);
 
+        if (empty($providerId)) {
+            return;
+        }
+
         /** @var AbstractDataProvider $providerService */
         $providerService = $this->container->get($providerId);
         $pluginService = $this->container->get($pluginId);
@@ -212,7 +210,7 @@ class DataProviderManager
             throw new UncompatibleException("Plugin $pluginId isn't compatible with $provider. Should be instance of $interface");
         }
 
-        $this->console->getConsoleOutput()->writeln("\t<info>- $provider : $providerId</info>");
+        $this->logger->info("Plugin '$pluginId' will use data provider '$provider' : '$providerId'");
     }
 
     /**

@@ -1,7 +1,6 @@
 <?php
 
 namespace eXpansion\Bundle\Players\Plugins\Gui;
-use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 
 /**
  * Class IgnoreListWindow
@@ -17,7 +16,7 @@ class IgnoreListWindow extends AbstractListWindow
      */
     function getDataSet(): array
     {
-        return $this->connection->getIgnoreList();
+        return $this->factory->getConnection()->getIgnoreList();
     }
 
     /**
@@ -25,6 +24,6 @@ class IgnoreListWindow extends AbstractListWindow
      */
     function executeForPlayer($login)
     {
-        $this->connection->unIgnore($login);
+        $this->factory->getConnection()->unIgnore($login);
     }
 }

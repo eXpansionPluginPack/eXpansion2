@@ -17,6 +17,9 @@ class PlayerException extends ApplicationException
     /** @var string|null */
     protected $translatableMessage = null;
 
+    /** @var string[] */
+    protected $translationParameters;
+
     /**
      * PlayerException constructor.
      *
@@ -24,11 +27,19 @@ class PlayerException extends ApplicationException
      * @param int $code
      * @param Throwable|null $previous
      * @param null $translatableMessage
+     * @param string[] $translationParameters
      */
-    public function __construct($message = "", $code = 0, Throwable $previous = null, $translatableMessage = null)
-    {
+    public function __construct(
+        $message = "",
+        $code = 0,
+        Throwable $previous = null,
+        $translatableMessage = null,
+        $translationParameters = []
+    ) {
         parent::__construct($message, $code, $previous);
+
         $this->translatableMessage = $translatableMessage;
+        $this->translationParameters = $translationParameters;
     }
 
     /**
@@ -40,4 +51,16 @@ class PlayerException extends ApplicationException
     {
         return is_null($this->translatableMessage) ? $this->message : $this->translatableMessage;
     }
+
+    /**
+     * Get paramters
+     *
+     * @return string[]
+     */
+    public function getTranslationParameters(): array
+    {
+        return $this->translationParameters;
+    }
+
+
 }

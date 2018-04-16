@@ -4,14 +4,15 @@ namespace eXpansion\Framework\Core\Plugins;
 
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpUserGroup;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryInterface;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Core\Plugins\Gui\ManialinkFactory;
 use eXpansion\Framework\Core\Services\Console;
+use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\Data\Player;
+use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use Maniaplanet\DedicatedServer\Connection;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
 use Psr\Log\LoggerInterface;
@@ -26,10 +27,11 @@ class GuiHandler implements
     ListenerInterfaceExpTimer,
     ListenerInterfaceExpUserGroup,
     ListenerInterfaceMpLegacyPlayer,
+    StatusAwarePluginInterface,
     GuiHandlerInterface
 {
-    /** @var Connection */
-    protected $connection;
+    /** @var Factory */
+    protected $factory;
 
     /** @var LoggerInterface */
     protected $logger;
@@ -64,23 +66,34 @@ class GuiHandler implements
     /**
      * GuiHandler constructor.
      *
-     * @param Connection $connection
+     * @param Factory $factory
+     * @param LoggerInterface $logger
+     * @param Console $console
+     * @param ActionFactory $actionFactory
+     * @param int $charLimit
      */
     public function __construct(
-        Connection $connection,
+        Factory $factory,
         LoggerInterface $logger,
         Console $console,
         ActionFactory $actionFactory,
         $charLimit = 262144
     ) {
-        $this->connection = $connection;
-
-        $this->connection->sendHideManialinkPage(null);
-
+        $this->factory = $factory;
         $this->logger = $logger;
         $this->console = $console;
         $this->actionFactory = $actionFactory;
         $this->charLimit = $charLimit;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setStatus($status)
+    {
+        if ($status) {
+            $this->factory->getConnection()->sendHideManialinkPage(null);
+        }
     }
 
 
@@ -137,7 +150,29 @@ class GuiHandler implements
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getFactoryManialinks(ManialinkFactory $manialinkFactory)
+    {
+        $varsToCheck = ['displayeds', 'hideQueu', 'displayQueu'];
+
+        $factoryManialinks = [];
+        foreach ($varsToCheck as $var) {
+            foreach ($this->$var as $groupName => $manialinks) {
+                foreach ($manialinks as $manialinkFactoryId => $manialink) {
+                    if ($manialinkFactoryId == $manialinkFactory->getId()) {
+                        $factoryManialinks[] = $manialink;
+                    }
+                }
+            }
+        }
+
+        return $factoryManialinks;
+    }
+
+    /**
      * Display & hide all manialinks.
+     * @throws \Maniaplanet\DedicatedServer\InvalidArgumentException
      */
     protected function displayManialinks()
     {
@@ -151,13 +186,19 @@ class GuiHandler implements
                 $size = strlen($mlData['ml']);
             }
 
-            $this->connection->sendDisplayManialinkPage(
-                $mlData['logins'],
-                $mlData['ml'],
-                0,
-                false,
-                true
-            );
+            $logins = array_filter($mlData['logins'], function ($value) {
+                return $value != '';
+            });
+
+            if (!empty($logins)) {
+                $this->factory->getConnection()->sendDisplayManialinkPage(
+                    $mlData['logins'],
+                    $mlData['ml'],
+                    $mlData['timeout'],
+                    false,
+                    true
+                );
+            }
         }
 
         if ($size > 0) {
@@ -178,7 +219,7 @@ class GuiHandler implements
     protected function executeMultiCall()
     {
         try {
-            $this->connection->executeMulticall();
+            $this->factory->getConnection()->executeMulticall();
         } catch (\Exception $e) {
             $this->logger->error("Couldn't deliver all manialinks : ".$e->getMessage(), ['exception' => $e]);
             $this->console->writeln('$F00ERROR - Couldn\'t deliver all manialinks : '.$e->getMessage());
@@ -198,7 +239,7 @@ class GuiHandler implements
 
                 $this->displayeds[$groupName][$factoryId] = $manialink;
                 if (!empty($logins)) {
-                    yield ['logins' => $logins, 'ml' => $manialink->getXml()];
+                    yield ['logins' => $logins, 'ml' => $manialink->getXml(), "timeout" => $manialink->getTimeout()];
                 }
             }
         }
@@ -214,7 +255,7 @@ class GuiHandler implements
 
             if ($lastManialink) {
                 $xml = $manialink->getXml();
-                yield ['logins' => $logins, 'ml' => $xml];
+                yield ['logins' => $logins, 'ml' => $xml, "timeout" => $manialink->getTimeout()];
             }
         }
 
@@ -227,7 +268,7 @@ class GuiHandler implements
                 $logins = array_diff($logins, $this->disconnectedLogins);
 
                 if (!empty($logins)) {
-                    yield ['logins' => $logins, 'ml' => '<manialink id="'.$id.'" />'];
+                    yield ['logins' => $logins, 'ml' => '<manialink id="'.$id.'" />', "timeout" => 0];
                 }
             }
         }
@@ -245,7 +286,7 @@ class GuiHandler implements
 
             if ($lastManialink) {
                 // Manialink is not destroyed just not shown at a particular user that left the group.
-                yield ['logins' => $logins, 'ml' => '<manialink id="'.$lastManialink->getId().'" />'];
+                yield ['logins' => $logins, 'ml' => '<manialink id="'.$lastManialink->getId().'" />', "timeout" => 0];
             }
         }
     }
