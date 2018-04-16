@@ -14,7 +14,8 @@
     declare Real Exp_zIndex = 0.;
 
     declare Ident Exp_activeWindow for LocalUser = Exp_Window.Id;
-    declare Vec2[Text] Exp_PositionCache for LocalUser = Vec2[Text];
+    declare Vec2[Text] Exp_PositionCache for This = Vec2[Text];
+    declare Boolean[Text] Exp_OpenedWindows for This = Boolean[Text];
 
     declare Boolean Exp_MoveWindow = False;
     declare Integer Exp_lastAction = Now;
@@ -28,6 +29,17 @@
     } else {
         Exp_Window.RelativePosition_V3 = Exp_PositionCache[Exp_Title.Value];
     }
+     if (! Exp_OpenedWindows.existskey(Exp_Title.Value) ) {
+            Exp_OpenedWindows[Exp_Title.Value] = False;
+     }
+
+
+      if (! Exp_OpenedWindows[Exp_Title.Value] ) {
+            Exp_OpenedWindows[Exp_Title.Value] = True;
+            Exp_Window.Scale = 1.2;
+            AnimMgr.Add(Exp_Window, "<frame scale=\"1.\" />", 150, CAnimManager::EAnimManagerEasing::ExpOut);
+      }
+
 ***
 
 ***FML_MouseClick***
@@ -62,17 +74,19 @@ if (Event.ControlId == "WindowBg")  {
     if (Exp_CloseWindow) {
         if (Exp_CloseWindowToggle) {
             Exp_CloseWindowToggle = False;
-       //     AnimMgr.Add(Exp_Window, "<frame scale=\"0.\" />", 250, CAnimManager::EAnimManagerEasing::BackIn);
-            Exp_Window.Hide();
+            Exp_OpenedWindows[Exp_Title.Value] = False;
+            AnimMgr.Add(Exp_Window, "<frame scale=\"0.8\" />", 150, CAnimManager::EAnimManagerEasing::ExpIn);
+
         }
     }
 
-    if (Exp_OpenWindow && Exp_lastAction + 200 <= Now ) {
+    if (Exp_OpenWindow && Exp_lastAction + 150 <= Now ) {
         Exp_OpenWindow = False;
         Exp_lastAction = 0;
     }
 
-    if (Exp_CloseWindow && Exp_lastAction + 250 <= Now ) {
+    if (Exp_CloseWindow && Exp_lastAction + 150 <= Now ) {
+        Exp_Window.Hide();
         TriggerPageAction(Exp_CloseButton.DataAttributeGet("action"));
         Exp_CloseWindow = False;
         continue;

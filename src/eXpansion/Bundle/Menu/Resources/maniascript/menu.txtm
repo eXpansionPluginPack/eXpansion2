@@ -21,6 +21,7 @@
 ***FML_OnInit***
 ***
     Exp_Window.ZIndex = 1000.;
+  /*
     declare BreadCrumb = (Page.GetFirstChild("breadcrumb") as CMlFrame);
     Page.GetClassChildren("item", BreadCrumb, True);
     declare Real posX = 0.;
@@ -31,7 +32,7 @@
         posX +=label.ComputeWidth(label.Value, True)+3.;
     }
     BreadCrumb.RelativePosition_V3.X = -1. * posX/2;
-
+*/
 
 ***
 

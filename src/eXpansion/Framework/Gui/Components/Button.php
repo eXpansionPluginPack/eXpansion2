@@ -69,7 +69,7 @@ class Button extends AbstractUiElement implements ScriptFeatureable, Container
         $buttonFrame = new Frame();
         $buttonFrame->setAlign("center", "center")
             ->setPosition($this->posX + ($this->width / 2), $this->posY - ($this->height / 2), $this->posZ)
-            ->addClasses(['uiContainer', 'uiButton'])
+            ->addClasses(['uiContainer', 'uiButton']+$this->_classes)
             ->addDataAttribute("action", $this->action)
             ->setScale($this->scale);
 
@@ -152,7 +152,7 @@ class Button extends AbstractUiElement implements ScriptFeatureable, Container
      */
     public function prepare(Script $script)
     {
-        $script->addScriptFunction("", $this->getScriptFunction());
+        $script->addScriptFunction("buttonscript", $this->getScriptFunction());
         $script->addCustomScriptLabel(ScriptLabel::MouseClick, $this->getScriptMouseClick());
         $script->addCustomScriptLabel(ScriptLabel::MouseOver, <<<EOL
                if (Event.Control.Parent.HasClass("uiButton")) {                 
