@@ -29,8 +29,11 @@ class PluginPass implements CompilerPassInterface
         // Find all Plugin services.
         $plugins = $container->findTaggedServiceIds('expansion.plugin');
         foreach ($plugins as $id => $tags) {
+            $pluginsData[$id]['dataProviders'] = [];
             foreach ($tags as $attributes) {
-                $pluginsData[$id]['dataProviders'][] = $attributes['data_provider'];
+                if (isset($attributes['data_provider'])) {
+                    $pluginsData[$id]['dataProviders'][] = $attributes['data_provider'];
+                }
             }
         }
 
