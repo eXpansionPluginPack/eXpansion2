@@ -19,6 +19,7 @@
 * Feature #321 : Plugins can now have multiple data provider dependency with a OR logic. So if one of the providers is enabled it will enable the plugin
 * Feature #177 : Local records window display race & lap records. 
 * Feature #66 : Added experimental Dedimania support
+* Feature #211 : Added possibility to create plugins witohut data providers.
 
 # 2.0.0.0-alpha3 (2018-02-24)
 ## Bug Fixes
