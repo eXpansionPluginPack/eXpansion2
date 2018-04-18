@@ -3,8 +3,8 @@
 namespace eXpansion\Bundle\Acme\Plugins;
 
 use eXpansion\Bundle\Acme\Plugins\Gui\TotoWindowFactory;
-use eXpansion\Bundle\Acme\Plugins\Gui\WindowFactory;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
+use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Console;
@@ -29,6 +29,10 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
      * @var Notifications
      */
     private $notifications;
+    /**
+     * @var Time
+     */
+    private $time;
 
     /**
      * TotoPlugin constructor.
@@ -36,17 +40,20 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
      * @param Console           $console
      * @param Notifications     $notifications
      * @param TotoWindowFactory $mlFactory
+     * @param Time              $time
      */
     function __construct(
         Group $players,
         Console $console,
         Notifications $notifications,
-        TotoWindowFactory $mlFactory
+        TotoWindowFactory $mlFactory,
+        Time $time
     ) {
         $this->console = $console;
         $this->playersGroup = $players;
         $this->notifications = $notifications;
         $this->mlFactory = $mlFactory;
+        $this->time = $time;
     }
 
     /**

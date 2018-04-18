@@ -75,8 +75,8 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
         foreach ($this->elements as $idx => $element) {
             $sizeY += $element->getHeight() + $this->margin;
 
-            if (abs($element->getX()) + $element->getWidth() > $sizeX) {
-                $sizeX = abs($element->getX()) + $element->getWidth();
+            if ($element->getWidth() > $sizeX) {
+                $sizeX = $element->getWidth();
             }
         }
 

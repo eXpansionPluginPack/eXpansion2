@@ -58,7 +58,7 @@ class AppKernel extends Kernel
 
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
-            $bundles[] = new \eXpansion\Bundle\DeveloperTools\DeveloperToolsBundle();
+      //      $bundles[] = new \eXpansion\Bundle\DeveloperTools\DeveloperToolsBundle();
         }
 
         return $bundles;

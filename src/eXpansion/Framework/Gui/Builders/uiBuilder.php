@@ -134,6 +134,12 @@ class uiBuilder
     private function parseAttributes(&$result, $attr, \DOMNode $node)
     {
         switch ($attr->name) {
+            case "align":
+                list($x, $y) = explode(" ", $attr->value);
+                $result->setAlign($x, $y);
+
+                return;
+
             case "size":
                 list($x, $y) = explode(" ", $attr->value);
                 $result->setSize($x, $y);

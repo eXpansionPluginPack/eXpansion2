@@ -24,5 +24,13 @@ services:
     eXpansion\Bundle\Acme\Plugins\Gui\TotoWindowFactory:
             arguments:
                 $name:  "test window"
-                $sizeX:  180
+                $sizeX:  200
+                $sizeY:  90
+                $dataCollectionFactory: '@expansion.gui.gridbuilder.datacollection.array'
+
+
+    eXpansion\Bundle\Acme\Plugins\Gui\TotoWindowFactory_old:
+            arguments:
+                $name:  "test window"
+                $sizeX:  200
                 $sizeY:  90
