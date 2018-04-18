@@ -53,7 +53,7 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
      * @param int      $margin
      * @throws \Exception
      */
-    public function __construct($startX, $startY, $elements = [], $margin = 1)
+    public function __construct($startX = 0., $startY = 0., $elements = [], $margin = 1)
     {
         if (!is_array($elements)) {
             throw new \Exception('not an array');
@@ -75,8 +75,8 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
         foreach ($this->elements as $idx => $element) {
             $sizeY += $element->getHeight() + $this->margin;
 
-            if (abs($element->getX()) + $element->getWidth() > $sizeX) {
-                $sizeX = abs($element->getX()) + $element->getWidth();
+            if ($element->getWidth() > $sizeX) {
+                $sizeX = $element->getWidth();
             }
         }
 
@@ -120,6 +120,22 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
         return $this;
     }
 
+    /**
+     * @return float
+     */
+    public function getMargin(): float
+    {
+        return $this->margin;
+    }
+
+    /**
+     * @param float $margin
+     */
+    public function setMargin($margin)
+    {
+        $this->margin = (float)$margin;
+    }
+
 
     /**
      * Render the XML element
@@ -133,7 +149,7 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
         $frame->setAlign($this->hAlign, $this->vAlign);
         $frame->setPosition($this->startX, $this->startY);
         $frame->addClasses($this->frameClasses);
-       // $frame->setSize($this->getWidth(), $this->getHeight());
+        // $frame->setSize($this->getWidth(), $this->getHeight());
 
         $startY = 0;
 

@@ -50,7 +50,7 @@ class LayoutLine implements Renderable, ScriptFeatureable, Container
      * @param float    $margin
      * @throws \Exception
      */
-    public function __construct($startX, $startY, $elements = [], $margin = 0.)
+    public function __construct($startX = 0., $startY = 0., $elements = [], $margin = 0.)
     {
         if (!is_array($elements)) {
             throw new \Exception('not an array');
@@ -153,6 +153,22 @@ class LayoutLine implements Renderable, ScriptFeatureable, Container
             default:
                 return 0;
         }
+    }
+
+    /**
+     * @return float
+     */
+    public function getMargin(): float
+    {
+        return $this->margin;
+    }
+
+    /**
+     * @param float $margin
+     */
+    public function setMargin($margin)
+    {
+        $this->margin = (float)$margin;
     }
 
     /**

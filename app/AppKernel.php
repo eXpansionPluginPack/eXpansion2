@@ -27,6 +27,8 @@ class AppKernel extends Kernel
         /* Register eXpansion Base Bundles */
         $bundles[] = new \eXpansion\Bundle\CustomChat\CustomChatBundle();
         $bundles[] = new \eXpansion\Bundle\CustomUi\CustomUiBundle();
+//        $bundles[] = new \eXpansion\Bundle\ImmersiveWindows\ImmersiveWindowsBundle();
+
         $bundles[] = new \eXpansion\Bundle\AdminChat\AdminChatBundle();
 
         /* Register eXpansion Plugins */
@@ -44,14 +46,11 @@ class AppKernel extends Kernel
 
 
         $bundles[] = new \eXpansion\Bundle\VoteManager\VoteManagerBundle();
-        $bundles[] = new \eXpansion\Bundle\MxKarma\MxKarmaBundle();
 
-
-//        $bundles[] = new \eXpansion\Bundle\ImmersiveWindows\ImmersiveWindowsBundle();
-
+     //   $bundles[] = new \eXpansion\Bundle\MxKarma\MxKarmaBundle();
 
         /* Register experimental bundles */
-        $bundles[] = new \eXpansionExperimantal\Bundle\Dedimania\DedimaniaBundle();
+    //    $bundles[] = new \eXpansionExperimantal\Bundle\Dedimania\DedimaniaBundle();4
         $bundles[] = new \eXpansionExperimantal\Bundle\WidgetBestRecords\WidgetBestRecordsBundle();
 
         /* Register test bundles. */
@@ -59,7 +58,7 @@ class AppKernel extends Kernel
 
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
-            $bundles[] = new \eXpansion\Bundle\DeveloperTools\DeveloperToolsBundle();
+      //      $bundles[] = new \eXpansion\Bundle\DeveloperTools\DeveloperToolsBundle();
         }
 
         return $bundles;

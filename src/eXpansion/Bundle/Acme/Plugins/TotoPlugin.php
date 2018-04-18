@@ -2,13 +2,12 @@
 
 namespace eXpansion\Bundle\Acme\Plugins;
 
-use eXpansion\Bundle\Acme\Plugins\Gui\WindowFactory;
+use eXpansion\Bundle\Acme\Plugins\Gui\TotoWindowFactory;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
+use eXpansion\Framework\Core\Helpers\Time;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\Console;
-use eXpansion\Framework\Core\Storage\Data\Player;
-use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Notifications\Services\Notifications;
 
 /**
@@ -16,12 +15,12 @@ use eXpansion\Framework\Notifications\Services\Notifications;
  *
  * @package eXpansion\Framework\Core\Plugins
  */
-class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginInterface, ListenerInterfaceMpLegacyPlayer
+class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginInterface
 {
     /** @var Console */
     protected $console;
 
-    /** @var WindowFactory */
+    /** @var TotoWindowFactory */
     protected $mlFactory;
 
     /** @var Group */
@@ -30,21 +29,31 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
      * @var Notifications
      */
     private $notifications;
+    /**
+     * @var Time
+     */
+    private $time;
 
     /**
      * TotoPlugin constructor.
-     * @param Group         $players
-     * @param Console       $console
-     * @param Notifications $notifications
+     * @param Group             $players
+     * @param Console           $console
+     * @param Notifications     $notifications
+     * @param TotoWindowFactory $mlFactory
+     * @param Time              $time
      */
     function __construct(
         Group $players,
         Console $console,
-        Notifications $notifications
+        Notifications $notifications,
+        TotoWindowFactory $mlFactory,
+        Time $time
     ) {
         $this->console = $console;
         $this->playersGroup = $players;
         $this->notifications = $notifications;
+        $this->mlFactory = $mlFactory;
+        $this->time = $time;
     }
 
     /**
@@ -56,7 +65,11 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
      */
     public function setStatus($status)
     {
-
+        if ($status) {
+            $this->mlFactory->create($this->playersGroup);
+        } else {
+            $this->mlFactory->destroy($this->playersGroup);
+        }
     }
 
     /**
@@ -76,7 +89,7 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
      */
     public function onApplicationReady()
     {
-        $this->notifications->info("expansion_acme.notification.start");
+
     }
 
     /**
@@ -87,44 +100,5 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
     public function onApplicationStop()
     {
         // do nothing
-    }
-
-    /**
-     * @param Player $player
-     * @return void
-     */
-    public function onPlayerConnect(Player $player)
-    {
-        $this->notifications->info("expansion_acme.notification.join", ["%player%" => $player->getNickName()]);
-    }
-
-    /**
-     * @param Player $player
-     * @param string $disconnectionReason
-     * @return void
-     */
-    public function onPlayerDisconnect(Player $player, $disconnectionReason)
-    {
-        $this->notifications->info("expansion_acme.notification.leave", ["%player%" => $player->getNickName()]);
-    }
-
-    /**
-     * @param Player $oldPlayer
-     * @param Player $player
-     * @return void
-     */
-    public function onPlayerInfoChanged(Player $oldPlayer, Player $player)
-    {
-        // TODO: Implement onPlayerInfoChanged() method.
-    }
-
-    /**
-     * @param Player $oldPlayer
-     * @param Player $player
-     * @return void
-     */
-    public function onPlayerAlliesChanged(Player $oldPlayer, Player $player)
-    {
-        // TODO: Implement onPlayerAlliesChanged() method.
     }
 }

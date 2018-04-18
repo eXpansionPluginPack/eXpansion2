@@ -122,14 +122,6 @@ abstract class GridWindowFactory extends WindowFactory
         return $manialink->getData('dataCollection')->getAll();
     }
 
-    /**
-     * @param Time $time
-     */
-    public function setTimerFormatter(Time $time)
-    {
-        $this->timeFormatter = $time;
-    }
-
 
     public function setGridSize($x, $y)
     {
