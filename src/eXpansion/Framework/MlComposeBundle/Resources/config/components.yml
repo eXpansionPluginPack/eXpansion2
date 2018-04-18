@@ -1,0 +1,25 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  expansion.ml_compose.component.frame:
+    class: eXpansion\Framework\MlComposeBundle\UiComponents\FmlComponent
+    arguments:
+      $fmlClass: FML\Controls\Frame
+    tags:
+      - {name: exp.ui.component, type: Frame}
+
+  expansion.ml_compose.component.quad:
+    class: eXpansion\Framework\MlComposeBundle\UiComponents\FmlComponent
+    arguments:
+      $fmlClass: FML\Controls\Quad
+    tags:
+      - {name: exp.ui.component, type: Quad}
+
+  expansion.ml_compose.component.label:
+    class: eXpansion\Framework\MlComposeBundle\UiComponents\FmlComponent
+    arguments:
+      $fmlClass: FML\Controls\Label
+    tags:
+      - {name: exp.ui.component, type: Label}

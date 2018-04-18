@@ -1,0 +1,50 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+
+    <xs:element name="block" type="blockType" ></xs:element>
+    <xs:element name="argument" type="argumentType" ></xs:element>
+
+    <!-- List of types available -->
+    <xs:complexType name="argumentType" mixed="true">
+        <xs:attribute name="name" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="args" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="argumentType">
+                <xs:sequence>
+                    <xs:element name="arg" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="action" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="argumentType">
+                <xs:sequence>
+                    <xs:element name="method" minOccurs="1" maxOccurs="1" type="xs:string"/>
+                    <xs:element name="service" minOccurs="0" maxOccurs="1" type="xs:string"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="expr">
+        <xs:complexContent>
+            <xs:extension base="argumentType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="blockType">
+        <xs:sequence>
+            <xs:element ref="argument" maxOccurs="unbounded" minOccurs="0" />
+            <xs:element ref="block" maxOccurs="unbounded" minOccurs="0" />
+        </xs:sequence>
+
+        <xs:attribute type="xs:string" name="id" use="required"/>
+        <xs:attribute type="xs:string" name="component" use="optional"/>
+        <xs:attribute type="xs:string" name="extends" use="optional"/>
+        <xs:attribute type="xs:string" name="alias" use="optional"/>
+    </xs:complexType>
+</xs:schema>

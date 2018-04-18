@@ -1,0 +1,17 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  Oliverde8\PageCompose\Service\UiComponents:
+      class: Oliverde8\PageCompose\Service\UiComponents
+
+  Oliverde8\PageCompose\Service\BlockDefinitions:
+      class: Oliverde8\PageCompose\Service\BlockDefinitions
+      arguments:
+        $cache: "@expansion.ml_compose.cache"
+        $cacheSuffix: "ml_pages"
+        $buildFactories: []
+
+  expansion.ml_compose.cache:
+      class: Symfony\Component\Cache\Simple\ArrayCache
