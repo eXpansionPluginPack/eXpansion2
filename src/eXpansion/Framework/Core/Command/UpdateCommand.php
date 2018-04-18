@@ -5,7 +5,6 @@ namespace eXpansion\Framework\Core\Command;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
-use eXpansion\Framework\Notifications\Services\Notifications;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -26,9 +25,6 @@ class UpdateCommand extends ContainerAwareCommand
     /** @var Factory */
     protected $factory;
 
-    /** @var Notifications */
-    protected $notification;
-
     /** @var ChatNotification */
     protected $chatNotification;
 
@@ -38,11 +34,13 @@ class UpdateCommand extends ContainerAwareCommand
     /**
      * RunCommand constructor.
      */
-    public function __construct(Factory $factory)
+    public function __construct(Factory $factory, ChatNotification $chatNotification, Console $console)
     {
         parent::__construct();
 
         $this->factory = $factory;
+        $this->chatNotification = $chatNotification;
+        $this->console = $console;
     }
 
 
@@ -60,25 +58,48 @@ class UpdateCommand extends ContainerAwareCommand
         $this->console->init(new NullOutput(), null);
 
         $sfs = new SymfonyStyle($input, $output);
-        $playerLogin = $this->getPlayerLogin();
+        $playerLogin = $this->getPlayerLogin($input, $sfs);
 
         $sfs->title("Updating Composer!");
-        $this->notifyPlayer("", "Updating Composer!", $playerLogin);
-        $this->runCommand("composer self-update", $playerLogin);
+        $this->notifyPlayer("", "Updating Composer!", $playerLogin, $sfs);
+        $process = $this->runCommand("composer self-update", $playerLogin, $sfs);
+
+        if ($process->isSuccessful()) {
+            $this->notifyPlayer("", "Composer has been updated", $playerLogin);
+            $sfs->success('Composer has been updated');
+        } else {
+            $this->notifyPlayer("", "Composer update has failed", $playerLogin);
+            $sfs->success('Composer update has failed');
+
+            return 1;
+        }
 
         $sfs->title("Updating eXpansion!");
-        $this->notifyPlayer("", "Updating eXpansion!", $playerLogin);
-        $this->runCommand("composer update --prefer-dist --prefer-stable --no-suggest --no-dev -o", $playerLogin);
+        $this->notifyPlayer("", "Updating eXpansion!", $playerLogin, $sfs);
+        $this->runCommand("composer update --prefer-dist --prefer-stable --no-suggest -o", $playerLogin, $sfs);
+
+        if ($process->isSuccessful()) {
+            $this->notifyPlayer("", "eXpansion has been updated. Please restart eXpansion", $playerLogin);
+            $sfs->success('eXpansion has been updated');
+        } else {
+            $this->notifyPlayer("", "eXpansion update has failed", $playerLogin);
+            $sfs->success('eXpansion update has failed');
+
+            return 1;
+        }
     }
 
-    protected function runCommand($command, $playerLogin)
+    protected function runCommand($command, $playerLogin, SymfonyStyle $sfs)
     {
         $process = new Process($command);
-        $process->setWorkingDirectory($this->getContainer()->getParameter('kernel.root_dir'));
+        $process->setWorkingDirectory($this->getContainer()->getParameter('kernel.root_dir') . '/..');
 
-        $process->run(function ($type, $buffer) use ($playerLogin) {
+        $process->run(function ($type, $buffer) use ($playerLogin, $sfs) {
             $this->notifyPlayer($type, $buffer, $playerLogin);
+            $sfs->writeln($buffer);
         });
+
+        return $process;
     }
 
     protected function notifyPlayer($type, $message, $playerLogin)
@@ -90,11 +111,7 @@ class UpdateCommand extends ContainerAwareCommand
         try {
             // TODO on long term replace this with a nice window.
             foreach (explode("/n", $message) as $messageLine) {
-                if ($type == Process::ERR) {
-                    $this->chatNotification->sendMessage($messageLine, $playerLogin);
-                } else {
-                    $this->chatNotification->sendMessage($messageLine, $playerLogin);
-                }
+                $this->chatNotification->sendMessage($messageLine, $playerLogin);
             }
         } catch (\Exception $e) {
             // Ignore this is not main concern of the command. Probably connection was lost.
