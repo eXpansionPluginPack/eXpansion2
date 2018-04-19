@@ -36,6 +36,8 @@ expansion_mx:
       dedicatedexception: "|error| {error}Dedicated Server error: {highlight}%message%"
       exception: "|error| {error}Error: {highlight}%message%"
       searching: "|info| {info}Searching... please wait."
+      queue: "Processing queue. Maps in queue: %length%"
+      downloadstart: "Starting download. Maps in queue: %length%"
 
   gui:
       mxsearch:

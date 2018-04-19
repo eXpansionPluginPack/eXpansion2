@@ -115,7 +115,7 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
      */
     public function onPlayerInfoChanged(Player $oldPlayer, Player $player)
     {
-        // TODO: Implement onPlayerInfoChanged() method.
+        //
     }
 
     /**
@@ -125,6 +125,6 @@ class TotoPlugin implements ListenerInterfaceExpApplication, StatusAwarePluginIn
      */
     public function onPlayerAlliesChanged(Player $oldPlayer, Player $player)
     {
-        // TODO: Implement onPlayerAlliesChanged() method.
+        //
     }
 }

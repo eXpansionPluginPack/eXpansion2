@@ -18,7 +18,6 @@ use eXpansion\Framework\Core\Helpers\TMString;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
-use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map as DedicatedMap;
 use Propel\Runtime\Map\TableMap;
 use Psr\Log\LoggerInterface;
@@ -81,15 +80,15 @@ class ManiaExchange implements ListenerInterfaceExpApplication
     /**
      * ManiaExchange constructor.
      *
-     * @param Factory $factory
+     * @param Factory          $factory
      * @param ChatNotification $chatNotification
-     * @param Http $http
-     * @param AdminGroups $adminGroups
-     * @param GameDataStorage $gameDataStorage
-     * @param Console $console
-     * @param LoggerInterface $logger
-     * @param JukeboxService $jukebox
-     * @param FileSystem $fileSystem
+     * @param Http             $http
+     * @param AdminGroups      $adminGroups
+     * @param GameDataStorage  $gameDataStorage
+     * @param Console          $console
+     * @param LoggerInterface  $logger
+     * @param JukeboxService   $jukebox
+     * @param FileSystem       $fileSystem
      */
     public function __construct(
         Factory $factory,
@@ -122,8 +121,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
         }
 
         $this->addQueue = $maps;
-        // TODO replace with chat notification.
-        $this->factory->getConnection()->chatSendServerMessage("Starting download. Maps in queue: ".count($this->addQueue));
+        $this->chatNotification->sendMessage("expansion_mx.chat.downloadstart", null, ["%lenght%" => count($this->addQueue)]);
         $map = array_shift($this->addQueue);
         $this->addMap($login, $map['mxid'], $map['mxsite']);
     }
@@ -171,7 +169,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
         ];
 
         if (!$mxsite) {
-            $mxsite = $this->gameDataStorage->getTitle();
+            $mxsite = $this->gameDataStorage->getTitleGame();
         }
 
         $group = $this->adminGroups->getLoginUserGroups($login);
@@ -293,7 +291,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
             $file = $dir.DIRECTORY_SEPARATOR.$filename;
 
             if (!$fileSystem->createDir($dir)) {
-                $this->console->writeln('<error>Error while adding map!</error>');
+                $this->console->writeln('<error>Error while adding map, can\'t create folder!</error>');
 
                 return;
             }
@@ -302,11 +300,11 @@ class ManiaExchange implements ListenerInterfaceExpApplication
                 $fileSystem->write($file, $result->getResponse());
             }
 
-                if (!$this->factory->getConnection()->checkMapForCurrentServerParams($titlepack.DIRECTORY_SEPARATOR.$filename)) {
-                    $this->chatNotification->sendMessage("expansion_mx.chat.fail");
+            if (!$this->factory->getConnection()->checkMapForCurrentServerParams($titlepack.DIRECTORY_SEPARATOR.$filename)) {
+                $this->chatNotification->sendMessage("expansion_mx.chat.fail");
 
-                    return;
-                }
+                return;
+            }
 
             $map = $this->factory->getConnection()->getMapInfo($titlepack.DIRECTORY_SEPARATOR.$filename);
             $this->factory->getConnection()->addMap($map->fileName);
@@ -335,8 +333,8 @@ class ManiaExchange implements ListenerInterfaceExpApplication
 
         if (count($this->addQueue) > 0) {
             $map = array_shift($this->addQueue);
-            // TODO use chat notification.
-            $this->factory->getConnection()->chatSendServerMessage("Processing queue. Maps in queue: ".count($this->addQueue));
+            $this->chatNotification->sendMessage("expansion_mx.chat.queue", null,
+                ["%length%" => count($this->addQueue)]);
             $this->addMap($data['login'], $map['mxid'], $map['mxsite']);
         }
     }
@@ -379,7 +377,7 @@ class ManiaExchange implements ListenerInterfaceExpApplication
      */
     private function convertMap($map)
     {
-        $outMap = (array) $map;
+        $outMap = (array)$map;
         $outMap["mapUid"] = $map->uId;
 
         return $outMap;
