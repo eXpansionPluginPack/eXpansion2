@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\Core\Storage;
 
+use eXpansion\Framework\Core\Helpers\CompatibleFetcher;
 use eXpansion\Framework\Core\Helpers\Countries;
 use Maniaplanet\DedicatedServer\Structures\GameInfos;
 use Maniaplanet\DedicatedServer\Structures\ServerOptions;
@@ -62,14 +63,19 @@ class GameDataStorage
 
     /** @var string */
     protected $serverMajorPhpVersion;
+    /**
+     * @var CompatibleFetcher
+     */
+    private $compatibleFetcher;
 
     /**
      * GameDataStorage constructor.
      *
-     * @param Countries $countries
-     * @param array $gameModeCodes
+     * @param CompatibleFetcher $compatibleFetcher
+     * @param Countries         $countries
+     * @param array             $gameModeCodes
      */
-    public function __construct(Countries $countries, array $gameModeCodes)
+    public function __construct(CompatibleFetcher $compatibleFetcher, Countries $countries, array $gameModeCodes)
     {
         $this->gameModeCodes = new AssociativeArray($gameModeCodes);
 
@@ -77,8 +83,10 @@ class GameDataStorage
         $this->serverCleanPhpVersion = $version[0];
         $this->serverMajorPhpVersion = implode(
             '.',
-            array_slice(explode('.', $this->serverCleanPhpVersion),0,2)
+            array_slice(explode('.', $this->serverCleanPhpVersion), 0, 2)
         );
+
+        $this->compatibleFetcher = $compatibleFetcher;
     }
 
 
@@ -115,6 +123,7 @@ class GameDataStorage
         $this->version = $version;
     }
 
+
     /**
      * Get code of the game mode.
      *
@@ -126,8 +135,17 @@ class GameDataStorage
     }
 
     /**
-     * Get the title name, this returns a simplified title name such as TM
      *
+     * Get the title name, this returns a simplified title name such as TM
+     * @return string
+     */
+    public function getTitleGame()
+    {
+        return $this->compatibleFetcher->getTitleGame($this->getTitle());
+    }
+
+    /**
+     * Get titlepack name such as TMStadium@nadeo
      * @return mixed
      */
     public function getTitle()

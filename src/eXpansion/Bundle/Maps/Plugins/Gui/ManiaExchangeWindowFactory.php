@@ -241,7 +241,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
 
         /// second line
         $idx = 0;
-        if ($this->gameDataStorage->getTitle() == "SM") {
+        if ($this->gameDataStorage->getTitleGame() == "SM") {
             $idx = 1;
         }
         $this->sitebox = $this->uiFactory->createDropdown("site", ["Trackmania" => "tm", "Storm" => "sm"], $idx);
@@ -299,8 +299,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
                 true
             );
 
-
-        if ($this->gameDataStorage->getTitle() == "TM") {
+        if ($this->gameDataStorage->getTitleGame() == "TM") {
             $gridBuilder
                 ->addTextColumn(
                     'envir',
@@ -328,7 +327,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
                     false
                 );
         }
-        if ($this->gameDataStorage->getTitle() == "SM") {
+        if ($this->gameDataStorage->getTitleGame() == "SM") {
             $gridBuilder->addTextColumn(
                 'maptype',
                 'expansion_mx.gui.mxsearch.column.maptype',
@@ -359,13 +358,13 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
         $manialink->setData('grid', $gridBuilder);
         $this->gridBuilder = $gridBuilder;
         $params = [
-            "mode" => 0,
-            "order" => 0,
-            "operator" => 0,
-            "length" => -1,
-            "style" => -1,
-            "difficulties" => -1,
-            "tpack" => -1,
+            "mode" => $this->modebox->getSelectedValue(),
+            "order" => $this->orderbox->getSelectedValue(),
+            "operator" => $this->opbox->getSelectedValue(),
+            "length" => $this->lengthBox->getSelectedValue(),
+            "style" => $this->stylebox->getSelectedValue(),
+            "difficulties" => $this->difficultiesBox->getSelectedValue(),
+            "tpack" => $this->tpackBox->getSelectedValue(),
         ];
         $manialink->setData("params", (object)$params);
 
@@ -394,7 +393,7 @@ class ManiaExchangeWindowFactory extends GridWindowFactory
     public function callbackAdd(ManialinkInterface $manialink, $login, $params, $args)
     {
         if ($params['site'] == "") {
-            $params['site'] = strtolower($this->gameDataStorage->getTitle());
+            $params['site'] = strtolower($this->gameDataStorage->getTitleGame());
         }
         $this->mxPlugin->addMapToQueue($login, $args['mxid'], $params['site']);
     }

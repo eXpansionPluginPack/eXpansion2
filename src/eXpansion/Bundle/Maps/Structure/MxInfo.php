@@ -2,7 +2,7 @@
 
 namespace eXpansion\Bundle\Maps\Structure;
 
-class MxInfo extends \ArrayObject
+class MxInfo
 {
     /** @var integer */
     public $trackID;

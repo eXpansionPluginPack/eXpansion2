@@ -5,6 +5,7 @@
 * Fixed : Typo in addEventProcessor method of the application dispatcher.
 * Fixed #322 : Issue with lost events during eXpansion start. This caused at startup not to have local records for exemple.
 * Fixed : Issue on windows with script names can have capital letters.
+* Fixed #339 mx info being null at database
 
 ## Features
 * Feature Added ingame configuration system. 
