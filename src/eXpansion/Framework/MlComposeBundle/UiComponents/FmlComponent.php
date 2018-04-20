@@ -2,6 +2,7 @@
 
 namespace eXpansion\Framework\MlComposeBundle\UiComponents;
 
+use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use FML\Controls\Control;
 use FML\Controls\Frame;
@@ -65,7 +66,7 @@ class  FmlComponent extends AbstractUiComponent
 
         foreach ($configuration->get('expr', []) as $key => $value) {
             $function = ucwords("set$key");
-//            $component->$function($expressionLanguage->evaluate($value, $arguments));
+            $component->$function($expressionLanguage->evaluate($value, $arguments));
         }
 
         foreach ($configuration->get('args', []) as $key => $value) {
@@ -78,9 +79,13 @@ class  FmlComponent extends AbstractUiComponent
             $component->$function($value);
         }
 
-        if ($configuration->get('action')) {
-            $callback = [$configuration->get('action/0/service', $args[0]), $configuration->get('action/0/method')];
-            $this->actionFactory->createManialinkAction($args[1], $callback, [], false);
+        if ($args[1] instanceof ManialinkInterface) {
+            if ($configuration->get('action')) {
+                $callback = [$configuration->get('action/0/service', $args[0]), $configuration->get('action/0/method')];
+                $this->actionFactory->createManialinkAction($args[1], $callback, [], false);
+            }
+        } else {
+            // Log warning!
         }
 
         return $component;

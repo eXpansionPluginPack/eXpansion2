@@ -208,9 +208,17 @@ class ManialinkFactory implements ManialinkFactoryInterface
     }
 
     /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
      * @return float|int
      */
-    public function getSizeX()
+    public function getWidth()
     {
         return $this->sizeX;
     }
@@ -218,7 +226,7 @@ class ManialinkFactory implements ManialinkFactoryInterface
     /**
      * @return float|int
      */
-    public function getSizeY()
+    public function getHeight()
     {
         return $this->sizeY;
     }
@@ -238,4 +246,6 @@ class ManialinkFactory implements ManialinkFactoryInterface
     {
         return $this->posY;
     }
+
+
 }

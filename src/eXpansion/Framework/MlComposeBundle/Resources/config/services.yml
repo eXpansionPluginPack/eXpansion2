@@ -15,3 +15,6 @@ services:
 
   expansion.ml_compose.cache:
       class: Symfony\Component\Cache\Simple\ArrayCache
+
+  eXpansion\Framework\MlComposeBundle\Command\TestUiCommand:
+      class: eXpansion\Framework\MlComposeBundle\Command\TestUiCommand
