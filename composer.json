@@ -10,6 +10,12 @@
         "bin/console",
         "bin/symfony_requirements"
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/oliverde8/PageComposer"
+        }
+    ],
     "autoload": {
         "psr-4": { "": ["src/", "src_experimantal/"] },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
@@ -37,7 +43,9 @@
         "symfony/monolog-bundle": "^3.1.0",
         "symfony/polyfill-apcu": "^1.0",
         "symfony/swiftmailer-bundle": "^2.3.10",
-        "symfony/symfony": "3.3.*"
+        "symfony/symfony": "3.3.*",
+
+        "oliverde8/page-compose": "dev-master"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

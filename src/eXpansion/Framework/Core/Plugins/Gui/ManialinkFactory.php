@@ -206,4 +206,46 @@ class ManialinkFactory implements ManialinkFactoryInterface
 
         return new $className($this, $group, $this->name, $this->sizeX, $this->sizeY, $this->posX, $this->posY);
     }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return float|int
+     */
+    public function getWidth()
+    {
+        return $this->sizeX;
+    }
+
+    /**
+     * @return float|int
+     */
+    public function getHeight()
+    {
+        return $this->sizeY;
+    }
+
+    /**
+     * @return float|int
+     */
+    public function getPosX()
+    {
+        return $this->posX;
+    }
+
+    /**
+     * @return float|int
+     */
+    public function getPosY()
+    {
+        return $this->posY;
+    }
+
+
 }

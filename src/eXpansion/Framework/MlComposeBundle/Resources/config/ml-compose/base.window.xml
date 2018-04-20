@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<block component="Window" id="base.window" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../page-compose.xsd">
+    <argument name="x">-2</argument>
+    <argument name="y">7.5</argument>
+    <argument name="width" xsi:type="expr">factory.getWidth()+4</argument>
+    <argument name="height" xsi:type="expr">factory.getHeight()+7.5</argument>
+
+    <!-- Definint the title bar -->
+    <block component="Label" id="base.window.title_label">
+        <argument name="x">3</argument>
+        <argument name="y">1</argument>
+        <argument name="width" xsi:type="expr">factory.getWidth()-20</argument>
+        <argument name="vAlign">CENTER2</argument>
+        <argument name="hAlign">LEFT</argument>
+        <argument name="id">TitleText</argument>
+        <argument name="textFont">RajdhaniMono</argument>
+        <argument name="textSize">2</argument>
+        <argument name="textId" xsi:type="expr">factory.getName()</argument>
+    </block>
+
+    <block component="Quad" id="base.window.separator">
+        <argument name="x">0</argument>
+        <argument name="y">-5.5</argument>
+        <argument name="width" xsi:type="expr">factory.getWidth()-20</argument>
+        <argument name="height">0.33</argument>
+        <argument name="backgroundColor">fff</argument>
+    </block>
+    <block component="Quad" id="base.window.separator_bis">
+        <argument name="x">0</argument>
+        <argument name="y">-5.5</argument>
+        <argument name="width" xsi:type="expr">factory.getWidth()/4</argument>
+        <argument name="height">0.5</argument>
+        <argument name="backgroundColor">fff</argument>
+    </block>
+
+    <block component="Quad" id="base.window.title_bar">
+        <argument name="width" xsi:type="expr">factory.getWidth()-9.5</argument>
+        <argument name="height">5.5</argument>
+        <argument name="backgroundColor">000e</argument>
+        <argument name="scriptEvents">1</argument>
+    </block>
+
+    <block component="Label" id="base.window.close_label">
+        <argument name="x" xsi:type="expr">factory.getWidth()-5</argument>
+        <argument name="y" xsi:type="expr">3</argument>
+        <argument name="width">9.5</argument>
+        <argument name="height">5.5</argument>
+        <argument name="text">✖</argument>
+        <argument name="textColor">fff</argument>
+        <argument name="textSize">2</argument>
+        <argument name="textFont">OswaldMono</argument>
+        <argument name="scriptEvents">1</argument>
+        <argument name="areaColor">000e</argument>
+        <argument name="areaFocusColor">f22</argument>
+        <argument name="action" xsi:type="action">
+            <method>closeCallback</method>
+        </argument>
+    </block>
+
+    <!-- Body -->
+    <block component="Quad" id="base.window.bg1">
+        <argument name="y">-5.5</argument>
+        <argument name="width" xsi:type="expr">factory.getWidth()</argument>
+        <argument name="height" xsi:type="expr">factory.getHeight()-5.5</argument>
+        <argument name="backgroundColor">222</argument>
+        <argument name="opacity">0.8</argument>
+    </block>
+    <block component="Quad" id="base.window.bg2">
+        <argument name="id">WindowBg</argument>
+        <argument name="y">-5.5</argument>
+        <argument name="width" xsi:type="expr">factory.getWidth()</argument>
+        <argument name="height" xsi:type="expr">factory.getHeight()-5.5</argument>
+        <argument name="style" xsi:type="args"><arg>Bgs1</arg><arg>BgDialogBlur</arg></argument>
+        <argument name="opacity">0.8</argument>
+    </block>
+    <block component="Quad" id="base.window.bg3">
+        <argument name="x">-5.5</argument>
+        <argument name="y">5.5</argument>
+        <argument name="width" xsi:type="expr">factory.getWidth()+10</argument>
+        <argument name="height" xsi:type="expr">factory.getHeight()-10</argument>
+        <argument name="style" xsi:type="args"><arg>Bgs1InRace</arg><arg>BgButtonShadow</arg></argument>
+        <argument name="opacity">0.8</argument>
+    </block>
+</block>

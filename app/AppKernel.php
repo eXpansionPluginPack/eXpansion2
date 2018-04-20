@@ -46,9 +46,7 @@ class AppKernel extends Kernel
         $bundles[] = new \eXpansion\Bundle\VoteManager\VoteManagerBundle();
         $bundles[] = new \eXpansion\Bundle\MxKarma\MxKarmaBundle();
 
-
 //        $bundles[] = new \eXpansion\Bundle\ImmersiveWindows\ImmersiveWindowsBundle();
-
 
         /* Register experimental bundles */
         $bundles[] = new \eXpansionExperimantal\Bundle\Dedimania\DedimaniaBundle();
@@ -90,6 +88,7 @@ class AppKernel extends Kernel
             new \eXpansion\Framework\PlayersBundle\eXpansionFrameworkPlayersBundle(),
             new \eXpansion\Framework\Config\eXpansionConfig(),
             new \eXpansion\Framework\Notifications\eXpansionNotificationsBundle(),
+            new \eXpansion\Framework\MlComposeBundle\eXpansionMlComposeBundle(),
         ];
 
         // Also add debug help bundles.
