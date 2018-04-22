@@ -126,8 +126,6 @@ class ConfigManager implements ConfigManagerInterface
             ]
         );
 
-        var_dump($this->get($path));
-
         return true;
     }
 
@@ -181,6 +179,7 @@ class ConfigManager implements ConfigManagerInterface
         $this->configurationDefinitions[spl_object_hash($config)] = $config;
         $this->configurationIds[spl_object_hash($config)] = $id;
         $this->configTree->set($config->getPath(), $config);
+        $config->setConfigManager($this);
     }
 
     /**

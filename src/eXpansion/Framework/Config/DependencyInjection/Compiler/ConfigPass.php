@@ -33,12 +33,10 @@ class ConfigPass implements CompilerPassInterface
         // Find all config's
         $configs = $container->findTaggedServiceIds('expansion.config');
         foreach ($configs as $id => $tags) {
-            foreach ($tags as $attributes) {
-                $definition->addMethodCall(
-                    'registerConfig',
-                    [new Reference($id), $id]
-                );
-            }
+            $definition->addMethodCall(
+                'registerConfig',
+                [new Reference($id), $id]
+            );
         }
 
         // Find all services to display configs.

@@ -29,7 +29,7 @@ abstract class AbstractConfig implements ConfigInterface
     /** @var mixed */
     protected $defaultValue;
 
-    /** @var ConfigManager */
+    /** @var ConfigManagerInterface */
     protected $configManager;
 
     /**
@@ -47,14 +47,21 @@ abstract class AbstractConfig implements ConfigInterface
         string $scope,
         string $name,
         string $description,
-        $defaultValue,
-        ConfigManagerInterface $configManager
+        $defaultValue
     ) {
         $this->path = $path;
         $this->name = $name;
         $this->scope = $scope;
         $this->description = $description;
         $this->defaultValue = $defaultValue;
+    }
+
+    /**
+     * @internal
+     * @param ConfigManager $configManager
+     */
+    public function setConfigManager(ConfigManagerInterface $configManager)
+    {
         $this->configManager = $configManager;
     }
 

@@ -7,6 +7,7 @@
 * Fixed : Issue on windows with script names can have capital letters.
 * Fixed #339 mx info being null at database
 * Fixed #277 : sorting numeric values
+* Fixed #343 : Hopefully fixed once and for all RowLayout size issues.
 
 ## Features
 * Feature Added ingame configuration system. 

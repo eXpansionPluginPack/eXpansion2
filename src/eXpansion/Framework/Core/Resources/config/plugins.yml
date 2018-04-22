@@ -61,6 +61,7 @@ services:
               - '@eXpansion\Framework\Core\ChatCommand\Help'
               - '@eXpansion\Framework\Core\ChatCommand\StopExpansion'
               - '@eXpansion\Framework\Core\ChatCommand\RestartExpansion'
+              - '@eXpansion\Framework\Core\ChatCommand\UpdateExpansion'
         tags:
             - {name: expansion.plugin, data_provider: expansion.chat_command_data}
 
@@ -81,6 +82,14 @@ services:
         class: eXpansion\Framework\Core\ChatCommand\RestartExpansion
         arguments:
             $command: 'expansion restart'
+            $aliases: []
+            $permission: "admin"
+
+
+    eXpansion\Framework\Core\ChatCommand\UpdateExpansion:
+        class: eXpansion\Framework\Core\ChatCommand\RestartExpansion
+        arguments:
+            $command: 'expansion update'
             $aliases: []
             $permission: "admin"
 

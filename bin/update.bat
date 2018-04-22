@@ -9,4 +9,4 @@ ECHO Updating composer
 composer self-update
 
 ECHO Updating eXpansion.
-composer update --prefer-dist --prefer-stable --no-suggest --no-dev -o
+composer update --prefer-dist --prefer-stable --no-suggest -o

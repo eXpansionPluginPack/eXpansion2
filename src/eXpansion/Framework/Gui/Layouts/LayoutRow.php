@@ -34,12 +34,20 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
     /**
      * @var float|int
      */
-    protected $startX;
+    protected $posX;
 
     /**
      * @var float|int
      */
-    protected $startY;
+    protected $posy;
+
+    /**
+     * @var float|int
+     */
+    protected $startY = 0;
+
+    /** @var float */
+    protected $additionalHeight;
 
     protected $hAlign = "left";
     protected $vAlign = "top";
@@ -47,13 +55,15 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
 
     /**
      * layoutLine constructor.
-     * @param float    $startX
-     * @param float    $startY
+     *
+     * @param float    $posX
+     * @param float    $posY
      * @param object[] $elements
      * @param int      $margin
+     *
      * @throws \Exception
      */
-    public function __construct($startX, $startY, $elements = [], $margin = 1)
+    public function __construct($posX, $posY, $elements = [], $margin = 1, $additionalHeight = 0)
     {
         if (!is_array($elements)) {
             throw new \Exception('not an array');
@@ -61,7 +71,8 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
 
         $this->margin = $margin;
         $this->elements = $elements;
-        $this->setPosition($startX, $startY);
+        $this->additionalHeight = $additionalHeight;
+        $this->setPosition($posX, $posY);
         $this->updateSize();
     }
 
@@ -70,8 +81,8 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
      */
     protected function updateSize()
     {
+        $sizeY = abs($this->startY);
         $sizeX = 0;
-        $sizeY = 0;
         foreach ($this->elements as $idx => $element) {
             $sizeY += $element->getHeight() + $this->margin;
 
@@ -92,34 +103,43 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
      */
     public function setPosition($x, $y)
     {
-        $this->startX = $x;
-        $this->startY = $y;
+        $this->posX = $x;
+        $this->posy = $y;
 
         return $this;
     }
 
     /**
-     * @param mixed $startX
+     * @param mixed $posX
+     *
      * @return LayoutRow
      */
-    public function setX($startX)
+    public function setX($posX)
     {
-        $this->startX = $startX;
+        $this->posX = $posX;
 
         return $this;
     }
 
     /**
-     * @param mixed $startY
+     * @param mixed $posY
+     *
      * @return LayoutRow
      */
-    public function setY($startY)
+    public function setY($posY)
+    {
+        $this->posy = $posY;
+
+        return $this;
+    }
+
+    /**
+     * @param float|int $startY
+     */
+    public function setStartY($startY)
     {
         $this->startY = $startY;
-
-        return $this;
     }
-
 
     /**
      * Render the XML element
@@ -131,11 +151,11 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
     {
         $frame = new Frame();
         $frame->setAlign($this->hAlign, $this->vAlign);
-        $frame->setPosition($this->startX, $this->startY);
+        $frame->setPosition($this->posX, $this->posy);
         $frame->addClasses($this->frameClasses);
-       // $frame->setSize($this->getWidth(), $this->getHeight());
-
-        $startY = 0;
+        $frame->setSize($this->getWidth(), $this->getHeight()+4);
+        
+        $startY = $this->startY;
 
         foreach ($this->elements as $idx => $element) {
             $element->setY($startY);
@@ -168,7 +188,7 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
      */
     public function getX()
     {
-        return $this->startX;
+        return $this->posX;
     }
 
     /**
@@ -176,7 +196,7 @@ class LayoutRow implements Renderable, ScriptFeatureable, Container
      */
     public function getY()
     {
-        return $this->startY;
+        return $this->posy;
     }
 
     /**
