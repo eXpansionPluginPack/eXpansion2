@@ -2,10 +2,7 @@
 
 namespace eXpansion\Framework\AdminGroups\DependencyInjection;
 
-use eXpansion\Framework\Config\Services\ConfigManagerInterface;
-use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader;

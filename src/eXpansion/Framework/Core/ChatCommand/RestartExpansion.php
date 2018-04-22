@@ -61,8 +61,6 @@ class RestartExpansion extends AbstractAdminChatCommand
      */
     public function execute($login, InputInterface $input)
     {
-        $player = $this->playerStorage->getPlayerInfo($login);
-
         $scriptToExecute = 'run.sh';
         if ($this->gameData->getServerOs() == GameDataStorage::OS_WINDOWS) {
             $scriptToExecute = 'run.bat';

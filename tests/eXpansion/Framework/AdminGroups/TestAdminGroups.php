@@ -63,29 +63,39 @@ class TestAdminGroups extends TestCase
 
     public function getAdminGroupConfiguration()
     {
-        return [
+        $configs = [
             'master_admin' => [
-                'logins' => new TextListConfig('', '', '', '', ['toto1', 'toto2'], $this->mockConfigManager),
-                'label' => new TextConfig('', '', '', '','Master Admin', $this->mockConfigManager)
+                'logins' => new TextListConfig('', '', '', '', ['toto1', 'toto2']),
+                'label' => new TextConfig('', '', '', '','Master Admin')
             ],
             'admin' => [
-                'logins' => new TextListConfig('', '', '', '', ['toto10', 'toto11'], $this->mockConfigManager),
-                'label' => new TextConfig('', '', '', '', 'Admin', $this->mockConfigManager),
-                'perm_p10' => new BooleanConfig('', '', '', '', 1, $this->mockConfigManager),
-                'perm_p11' => new BooleanConfig('', '', '', '', 1, $this->mockConfigManager),
+                'logins' => new TextListConfig('', '', '', '', ['toto10', 'toto11']),
+                'label' => new TextConfig('', '', '', '', 'Admin'),
+                'perm_p10' => new BooleanConfig('', '', '', '', 1),
+                'perm_p11' => new BooleanConfig('', '', '', '', 1),
             ],
             'operator' => [
-                'logins' => new TextListConfig('', '', '', '', ['toto20', 'toto21'], $this->mockConfigManager),
-                'label' => new TextConfig('', '', '', '', 'Operator', $this->mockConfigManager),
-                'perm_p20' => new BooleanConfig('', '', '', '', 1, $this->mockConfigManager),
-                'perm_p21' => new BooleanConfig('', '', '', '', 1, $this->mockConfigManager),
+                'logins' => new TextListConfig('', '', '', '', ['toto20', 'toto21']),
+                'label' => new TextConfig('', '', '', '', 'Operator'),
+                'perm_p20' => new BooleanConfig('', '', '', '', 1),
+                'perm_p21' => new BooleanConfig('', '', '', '', 1),
             ],
             'empty' => [
-                'logins' => new TextListConfig('', '', '', '', [], $this->mockConfigManager),
+                'logins' => new TextListConfig('', '', '', '', []),
                 'label' => 'Empty',
-                'perm_p20' => new BooleanConfig('', '', '', '', 1, $this->mockConfigManager),
+                'perm_p20' => new BooleanConfig('', '', '', '', 1),
             ]
         ];
+
+        foreach ($configs as $config) {
+            foreach ($config as $conf) {
+                if (!is_string($conf)) {
+                    $conf->setConfigManager($this->mockConfigManager);
+                }
+            }
+        }
+
+        return $configs;
     }
 
 
