@@ -111,7 +111,9 @@ class UpdateCommand extends ContainerAwareCommand
         try {
             // TODO on long term replace this with a nice window.
             foreach (explode("/n", $message) as $messageLine) {
-                $this->chatNotification->sendMessage($messageLine, $playerLogin);
+                if (!empty($messageLine)) {
+                    $this->chatNotification->sendMessage($messageLine, $playerLogin);
+                }
             }
         } catch (\Exception $e) {
             // Ignore this is not main concern of the command. Probably connection was lost.

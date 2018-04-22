@@ -4,6 +4,7 @@ namespace eXpansion\Framework\Config\Model;
 
 use eXpansion\Framework\Config\Exception\InvalidConfigException;
 use eXpansion\Framework\Config\Services\ConfigManager;
+use eXpansion\Framework\Config\Services\ConfigManagerInterface;
 
 /**
  * Class ConfigInterface
@@ -17,6 +18,12 @@ interface ConfigInterface
     const SCOPE_GLOBAL = 'global';
     const SCOPE_KEY = 'key';
     const SCOPE_SERVER = 'server';
+
+    /**
+     * @internal
+     * @param ConfigManager $configManager
+     */
+    public function setConfigManager(ConfigManagerInterface $configManager);
 
     /**
      * Get path to the config. 'exemple : expansion/localrecors/race_nb'
