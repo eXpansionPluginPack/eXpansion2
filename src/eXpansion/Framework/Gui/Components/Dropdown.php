@@ -106,17 +106,17 @@ EOD;
             Void uiRenderDropdown(CMlFrame frame) {
                 declare selected = TextLib::ToInteger(frame.DataAttributeGet("selected"));
                 declare index = 0;
-                                             
+                
                 declare options = (frame.Controls[3] as CMlFrame);
                 
                     if (frame.DataAttributeGet("open") == "1") {		   
                         frame.Controls[3].Show();
                     } else {
                          frame.Controls[3].Hide();
-                    }                                
-                                                      
-                    foreach (option in options.Controls) {                        
-                        if (selected == index) {                                                                          
+                    }
+                
+                    foreach (option in options.Controls) {
+                        if (selected == index) {
                             (frame.Controls[1] as CMlLabel).Value = (option as CMlLabel).Value;
                             (frame.Controls[2] as CMlEntry).Value = option.DataAttributeGet("value");
                         }										
@@ -136,7 +136,8 @@ EOD;
             Void uiSelectDropdown (CMlLabel label) {
                 declare uiDropdown = label.Parent.Parent;
                 uiDropdown.DataAttributeSet("selected", label.DataAttributeGet("index"));
-                uiDropdown.DataAttributeSet("value", label.DataAttributeGet("value"));           
+                uiDropdown.DataAttributeSet("value", label.DataAttributeGet("value"));
+                uiRenderDropdown(uiDropdown);
                 uiToggleDropdown(uiDropdown);
                 +++onSelectDropdown+++
             }
@@ -201,7 +202,8 @@ EOD;
         $entry->setPosition(900, 900)
             ->setName($this->name);
 
-        $frameOptions = new LayoutRow(0, -($this->height + ($this->height / 2)), [], 0);
+        $frameOptions = new LayoutRow(0, -$this->height,[],0, $this->height);
+        $frameOptions->setStartY($this->height * -0.5);
         $frameOptions->addClass('uiDropdownSelect');
 
         $idx = 0;
