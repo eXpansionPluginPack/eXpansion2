@@ -6,11 +6,11 @@
 * Fixed #322 : Issue with lost events during eXpansion start. This caused at startup not to have local records for exemple.
 * Fixed : Issue on windows with script names can have capital letters.
 * Fixed #339 mx info being null at database
+* Fixed #277 : sorting numeric values
 
 ## Features
 * Feature Added ingame configuration system. 
 * Feature Added DeveloperTools bundle
-* Feature Fixed issue #277 - sorting numeric values
 * Feature Add configs for various types, booleans, textfields, password
 * Feature Add MxKarma 
 * Feature #118 : eXpansion will attempt multiple connections to dedicated before crashing. 
@@ -21,6 +21,7 @@
 * Feature #177 : Local records window display race & lap records. 
 * Feature #66 : Added experimental Dedimania support
 * Feature #211 : Added possibility to create plugins witohut data providers.
+* Feature #345 : Moved list of loaded bundles in a configuration file.
 
 # 2.0.0.0-alpha3 (2018-02-24)
 ## Bug Fixes
