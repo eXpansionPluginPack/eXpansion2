@@ -24,41 +24,14 @@ class AppKernel extends Kernel
         /* Register symfony bundles & eXpansion core bundles */
         $bundles = $this->registerCoreBundles();
 
-        /* Register eXpansion Base Bundles */
-        $bundles[] = new \eXpansion\Bundle\CustomChat\CustomChatBundle();
-        $bundles[] = new \eXpansion\Bundle\CustomUi\CustomUiBundle();
-        $bundles[] = new \eXpansion\Bundle\AdminChat\AdminChatBundle();
-
-        /* Register eXpansion Plugins */
-        $bundles[] = new \eXpansion\Bundle\LocalRecords\LocalRecordsBundle();
-        $bundles[] = new \eXpansion\Bundle\Maps\MapsBundle();
-        $bundles[] = new \eXpansion\Bundle\Players\PlayersBundle();
-        $bundles[] = new \eXpansion\Bundle\JoinLeaveMessages\JoinLeaveMessagesBundle();
-        $bundles[] = new \eXpansion\Bundle\Emotes\EmotesBundle();
-        $bundles[] = new \eXpansion\Bundle\Menu\MenuBundle();
-        $bundles[] = new \eXpansion\Bundle\Admin\AdminBundle();
-        $bundles[] = new \eXpansion\Bundle\LocalMapRatings\LocalMapRatingsBundle();
-
-        $bundles[] = new \eXpansion\Bundle\WidgetCurrentMap\WidgetCurrentMapBundle();
-        $bundles[] = new \eXpansion\Bundle\WidgetBestCheckpoints\WidgetBestCheckpointsBundle();
-
-
-        $bundles[] = new \eXpansion\Bundle\VoteManager\VoteManagerBundle();
-        $bundles[] = new \eXpansion\Bundle\MxKarma\MxKarmaBundle();
-
-
-//        $bundles[] = new \eXpansion\Bundle\ImmersiveWindows\ImmersiveWindowsBundle();
-
-
-        /* Register experimental bundles */
-        $bundles[] = new \eXpansionExperimantal\Bundle\Dedimania\DedimaniaBundle();
-        $bundles[] = new \eXpansionExperimantal\Bundle\WidgetBestRecords\WidgetBestRecordsBundle();
+        $configBundles = \Symfony\Component\Yaml\Yaml::parse(file_get_contents(__DIR__ . '/config/bundles.yml'));
+        foreach ($configBundles['bundles'] as $bundle) {
+            $bundles[] = new $bundle();
+        }
 
         /* Register test bundles. */
-        $bundles[] = new \eXpansion\Bundle\Acme\AcmeBundle();
-
-
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
+            $bundles[] = new \eXpansion\Bundle\Acme\AcmeBundle();
             $bundles[] = new \eXpansion\Bundle\DeveloperTools\DeveloperToolsBundle();
         }
 

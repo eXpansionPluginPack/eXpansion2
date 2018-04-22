@@ -1,0 +1,27 @@
+bundles:
+  # eXpansion Base Bundles
+  - \eXpansion\Bundle\AdminChat\AdminChatBundle
+  - \eXpansion\Bundle\Admin\AdminBundle
+  - \eXpansion\Bundle\Maps\MapsBundle
+  - \eXpansion\Bundle\Players\PlayersBundle
+  - \eXpansion\Bundle\VoteManager\VoteManagerBundle
+  - \eXpansion\Bundle\CustomChat\CustomChatBundle
+  - \eXpansion\Bundle\Menu\MenuBundle
+
+  # Feature bundles
+  - \eXpansion\Bundle\Emotes\EmotesBundle
+  - \eXpansion\Bundle\JoinLeaveMessages\JoinLeaveMessagesBundle
+
+  # Records
+  - \eXpansion\Bundle\LocalRecords\LocalRecordsBundle
+  - \eXpansionExperimantal\Bundle\Dedimania\DedimaniaBundle
+
+  # Karma Bundles
+  - \eXpansion\Bundle\LocalMapRatings\LocalMapRatingsBundle
+  - \eXpansion\Bundle\MxKarma\MxKarmaBundle
+
+    # eXpansion Widgets & Ui improvements.
+  - \eXpansion\Bundle\CustomUi\CustomUiBundle
+  - \eXpansion\Bundle\WidgetCurrentMap\WidgetCurrentMapBundle
+  - \eXpansion\Bundle\WidgetBestCheckpoints\WidgetBestCheckpointsBundle
+  - \eXpansionExperimantal\Bundle\WidgetBestRecords\WidgetBestRecordsBundle

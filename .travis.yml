@@ -9,6 +9,7 @@ before_script:
     - composer self-update
     - composer install
     - cp app/config/expansion.yml.dist app/config/expansion.yml
+    - cp app/config/bundles.yml.dist app/config/bundles.yml
 
 script:
     # See if errors while building caches.
