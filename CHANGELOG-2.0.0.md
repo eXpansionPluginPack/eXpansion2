@@ -6,6 +6,7 @@
 * Fixed #322 : Issue with lost events during eXpansion start. This caused at startup not to have local records for exemple.
 * Fixed : Issue on windows with script names can have capital letters.
 * Fixed #339 mx info being null at database
+* Fixed #343 : Hopefully fixed once and for all RowLayout size issues.
 
 ## Features
 * Feature Added ingame configuration system. 
