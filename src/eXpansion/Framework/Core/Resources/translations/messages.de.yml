@@ -7,6 +7,12 @@ expansion_core:
     wrong_chat: "{error}Dieser Chat-Befehl existiert nicht. {info}Bitte verwende /help um alle verfügbaren Chat-Befehle zu sehen."
     no_description: "{info}Sorry, für diesen Befehl existiert keine Beschreibung."
     no_help: "{info}Sorry, dieser Befehl hat keinen Hilfe-Text."
+    stop:
+      help: "Stop expansion"
+      message: "|admin| %nickname% {admin_info}is shutting down eXpansion."
+    restart:
+      help: "Restart expansion in production mode, empty caches and check for database updates before."
+      message: "|admin| %nickname% {admin_info}is restarting eXpansion."
   windows:
     chat_commands:
       title: Chat-Befehle
@@ -19,32 +25,32 @@ expansion_core:
       help: Hilfe
   config:
     color_codes:
-      default: "Default Color code"
-      muted: "Muted text color"
-      info: "Information text color"
-      success: "Success text color"
-      warning: "Warning text color"
-      danger: "Danger text color"
-      variable: "Variable text color"
-      primary: "Primary UI Color"
-      secondary: "Secondary UI Color"
-      highlight: "Highlight UI Color"
-      admin_info: "Admin info text color"
-      separator: "Separator color"
+      default: "Standardfarbe"
+      muted: "Stummfarbe"
+      info: "Informationstext"
+      success: "Erfolg-Textfarbe"
+      warning: "Warnung-Textfarbe"
+      danger: "Gefahr-Textfarbe"
+      variable: "Variable Textfarbe"
+      primary: "Primäre Farbe der Oberfläche"
+      secondary: "Sekundäre Farbe der Oberfläche"
+      highlight: "Hinweis-Farben"
+      admin_info: "Administrator Info Farbe"
+      separator: "Separator Farbe"
     glymp_icons:
-      success: "Success icon"
-      fail: "Fail icon"
-      info: "Server icon"
-      server: "Information icon"
-      warning: "Warning icon"
-      error: "Error icon"
-      admin: "Admin icon"
+      success: "Erfolgreich Symbol"
+      fail: "Scheitern Icon"
+      info: "Server Symbol"
+      server: "Informations Symbol"
+      warning: "Warungs Symbol"
+      error: "Fehler Symbol"
+      admin: "Administrator Symbol"
 expansion_config:
   menu:
     eXpansion:
       look_feel:
-        label: "Look & Feel"
+        label: "Aussehen"
         color_codes:
-          label: "Customize Color codes"
+          label: "Anpassen Farbcode"
         glymp_icons:
-          label: "Customize Icons"
+          label: "Anpassen Symbol"

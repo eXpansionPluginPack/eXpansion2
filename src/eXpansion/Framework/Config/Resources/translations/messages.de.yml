@@ -1,14 +1,14 @@
 expansion_config:
   menu:
-    label: "Controller configuration"
+    label: "Controller-Konfiguration"
   ui:
-    save: "Save settings"
+    save: "Einstellungen speichern"
   error:
     decimal:
-      not_decimal: '{error}Value "%value%" is not a decimal value; Config "%path%" requires a decimal value.'
-      max: '{error}Max value for config %path% is %max%. You tried and set %value%.'
-      min: '{error}Min value for config %path% is %min%. You tried and set %value%.'
+      not_decimal: '{error}Wert"%value%" ist kein Dezimalwert; Config "%path%" benötigt einen Dezimalwert.'
+      max: '{error}Maximal-Wert für Config %path% ist %max%. Dein Wert: %value%.'
+      min: '{error}Minimal-Wert für Config %path% ist %min%. Dein Wert: %value%.'
     int:
-      not_int: '{error}Value "%value%" is not an integer value; Config "%path%" requires an integer value.'
+      not_int: '{error}Wert"%value%" ist kein Integer-Wert (Ganzzahl); Config "%path%" verlangt die Eingabe einer Ganzzahl.'
     bool:
-      not_bool: '{error}Value "%value%" is not an boolean value; Config "%path%" requires a boolean value.'
+      not_bool: '{error}Wert"%value%" ist kein Boolscher Wert; Config "%path%" verlangt einen Boolschen Wert.'

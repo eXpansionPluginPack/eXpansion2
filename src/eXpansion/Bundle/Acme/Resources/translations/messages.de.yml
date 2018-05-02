@@ -1,5 +1,5 @@
 expansion_acme:
   notification:
-    start: "|admin| eXpansion2 started successfully."
-    join: "|info| %player% joins."
-    leave: "|info| %player% leaves."
+    start: "|admin| eXpansion2 erfolgreich gestartet."
+    join: "|info| %player% tritt bei."
+    leave: "|info| %player% verlässt den Server."

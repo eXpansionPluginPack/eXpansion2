@@ -38,7 +38,8 @@ expansion_local_records:
         title: 'Paikalliset ennätykset'
         column:
           position: '#'
-          score: 'Aika'
+          score: 'Lap Time'
+          score_race: 'Race Time'
           nickname: 'Nimimerkki'
           login: 'Käyttäjänimi'
   menu:

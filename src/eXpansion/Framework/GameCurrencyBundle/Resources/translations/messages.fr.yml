@@ -1,0 +1,4 @@
+expansion_game_currency:
+  donate:
+    success: "|info|{info}Server received {variable}'%amount%p {info}donation from {variable}%nickname%"
+    error: "|error|{info}Error while processing your donation: {error}%error%"

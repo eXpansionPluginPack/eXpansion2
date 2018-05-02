@@ -1,19 +1,19 @@
 expansion_mxkarma:
   chat:
     votechanged: '|info| {info}Vote aktualisiert.'
-    votesloaded: '|info| {info}MxKarma for the map is {variable}%total%{info}, with {variable}%positive% {info}positive and {variable}%negative% {info}negative votes.'
+    votesloaded: '|info| {info}MxKarma für diese Map ist {variable}%total%{info}, mit {variable}%positive% {info}positiven und {variable}%negative% {info}negativen Votes.'
   config:
     enabled:
-      name: 'Enabled'
-      desc: 'Sets if the plugin should be used or not'
+      name: 'Aktiviert'
+      desc: 'Legt fest, ob das Plugin verwendet werden soll oder nicht'
     apikey:
-      name: 'Api key'
-      desc: 'Get MX api key here: $lhttps://karma.mania-exchange.com/$l'
+      name: 'Api Key'
+      desc: 'Erhalte den MX Api Key hier: $lhttps://karma.mania-exchange.com/$l'
     server_login:
       name: 'Server Login'
-      desc: 'Server login for the api key'
+      desc: 'Server Login für den Api Key'
 expansion_config:
   menu:
     eXpansion:
       MxKarma:
-        label: "Mania-exchange Karma"
+        label: "Mania-Exchange Karma"

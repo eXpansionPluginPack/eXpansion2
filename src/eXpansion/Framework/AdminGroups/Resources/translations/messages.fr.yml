@@ -1,3 +1,36 @@
 expansion_admingroups:
   chat_commands:
     no_permission: "{error}Vous n’avez pas les permissions pour utiliser cette commande."
+expansion_admin_groups:
+  config:
+    label: "Admin groups name"
+    logins: "Players in the group"
+  permission:
+    admin:
+      label: "Generic admin permissions"
+      description: "Can edit configs and administrate the server parameters."
+    next:
+      label: "Next map"
+      description: "Can skip current map"
+    restart:
+      label: "Restart map"
+      description: "Can restart current map"
+    jukebox:
+      label: "Jukebox"
+      description: "Administrate the Jukebox"
+    maps:
+      add:
+        label: "Add maps"
+        description: ""
+      remove:
+        label: "Remove maps"
+        description: ""
+expansion_config:
+  menu:
+    eXpansion:
+      admin_groups:
+        label: "Admin Groups"
+        master_admin:
+          label: "Master Admin"
+        admin:
+          label: "Admin"

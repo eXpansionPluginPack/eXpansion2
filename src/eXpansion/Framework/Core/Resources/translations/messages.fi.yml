@@ -7,6 +7,12 @@ expansion_core:
     wrong_chat: "{error}Chat-komentoa ei löydy. {info}Kirjoita /help nähdäksesi kaikki komennot."
     no_description: "{info}Komennolla ei ole kuvausta."
     no_help: "{info}Komennolla ei ole ohjetta."
+    stop:
+      help: "Stop expansion"
+      message: "|admin| %nickname% {admin_info}is shutting down eXpansion."
+    restart:
+      help: "Restart expansion in production mode, empty caches and check for database updates before."
+      message: "|admin| %nickname% {admin_info}is restarting eXpansion."
   windows:
     chat_commands:
       title: Chatin komennot
