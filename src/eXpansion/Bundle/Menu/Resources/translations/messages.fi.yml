@@ -1,7 +1,7 @@
 expansion_menu:
-  menu: "Valikko:"
+  menu: "Menu :"
   menu_open: "Valikko"
-  menu_close: "Sulje"
+  menu_close: "Close menu"
   admin:
     label: Ylläpito
   general:

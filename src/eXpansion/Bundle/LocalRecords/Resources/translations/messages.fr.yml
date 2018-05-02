@@ -38,7 +38,7 @@ expansion_local_records:
         title: 'Local Records'
         column:
           position: '#'
-          score: 'Time'
+          score: 'Temps'
           nickname: 'NickName'
           login: 'Login'
   menu:
