@@ -32,7 +32,10 @@ class Analytics implements ListenerInterfaceExpTimer, StatusAwarePluginInterface
     protected $logger;
 
     /** @var string  */
-    protected $url;
+    protected $handshakeUrl;
+
+    /** @var string  */
+    protected $pingUrl;
 
     /** @var int */
     protected $pingInterval;
@@ -65,7 +68,8 @@ class Analytics implements ListenerInterfaceExpTimer, StatusAwarePluginInterface
         GameDataStorage $gameData,
         PlayerStorage $playerStorage,
         LoggerInterface $logger,
-        string $url,
+        string $handshakeUrl,
+        string $pingUrl,
         int $pingInterval,
         int $retryInterval
     ) {
@@ -73,7 +77,8 @@ class Analytics implements ListenerInterfaceExpTimer, StatusAwarePluginInterface
         $this->gameData = $gameData;
         $this->playerStorage = $playerStorage;
         $this->logger = $logger;
-        $this->url = $url;
+        $this->handshakeUrl = $handshakeUrl;
+        $this->pingUrl = $pingUrl;
         $this->pingInterval = $pingInterval;
         $this->retryInterval = $retryInterval;
     }
@@ -104,19 +109,19 @@ class Analytics implements ListenerInterfaceExpTimer, StatusAwarePluginInterface
         $logger = $this->logger;
 
         $query = http_build_query(
-            ['page' => 'handshake', 'server-login' => $this->gameData->getSystemInfo()->serverLogin]
+            ['login' => $this->gameData->getSystemInfo()->serverLogin]
         );
-        $url = $this->url . '?' . $query;
+        $url = $this->handshakeUrl . '?' . $query;
 
         $lastPing = time();
         $this->logger->debug("[eXpansion analytics]Starting handshake");
 
 
-        $this->http->get(
+        $this->http->put(
             $url,
+            [],
             function (HttpResult $result) use (&$key, &$lastPing, $logger, $that) {
                 $key = null;
-
                 if ($result->getHttpCode() != '200') {
                     $logger->debug('[eXpansion analytics]Handshake failed', ['http_code' => $result->getHttpCode()]);
                     return;
@@ -152,12 +157,10 @@ class Analytics implements ListenerInterfaceExpTimer, StatusAwarePluginInterface
         }
 
         $data = $this->getBasePingData();
-        $data['page'] = 'ping';
-
         $query = http_build_query(
             $data
         );
-        $url = $this->url . '?' . $query;
+        $url = $this->pingUrl . '?' . $query;
 
         $this->operationInProgress = true;
         $this->lastPing = time();
@@ -166,8 +169,9 @@ class Analytics implements ListenerInterfaceExpTimer, StatusAwarePluginInterface
         $logger = $this->logger;
 
         $logger->debug('[eXpansion analytics]Starting ping');
-        $this->http->get(
+        $this->http->put(
             $url,
+            [],
             function (HttpResult $result) use (&$operationInProgress, &$key, $logger) {
                 if ($result->getHttpCode() == '200') {
                     $operationInProgress = false;
