@@ -33,7 +33,6 @@ class MenuItemProvider extends AbstractDataProvider
         $this->itemBuilder = $itemBuilder;
     }
 
-
     public function registerPlugin($pluginId, $pluginService)
     {
         $this->rootItem = null;

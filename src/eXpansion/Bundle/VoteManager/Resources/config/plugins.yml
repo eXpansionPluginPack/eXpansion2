@@ -63,8 +63,8 @@ services:
                 - {name: expansion.plugin, data_provider: exp.timer}
                 - {name: expansion.plugin, data_provider: expansion.user_group}
 
-
     eXpansion\Bundle\VoteManager\Plugins\MenuItems:
             class: eXpansion\Bundle\VoteManager\Plugins\MenuItems
             tags:
                - {name: 'expansion.plugin', data_provider: 'exp.menu.items'}
+               - {name: 'expansion.plugin.parent', parent: 'eXpansion\Bundle\Menu\Plugins\MenuItems'}
