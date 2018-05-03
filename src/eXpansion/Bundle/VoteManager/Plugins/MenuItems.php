@@ -41,8 +41,5 @@ class MenuItems implements ListenerMenuItemProviderInterface
             null,
             ['cmd' => '/skip']
         );
-
-
-
     }
 }
