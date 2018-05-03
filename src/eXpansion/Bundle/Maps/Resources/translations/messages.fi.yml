@@ -35,6 +35,8 @@ expansion_mx:
     dedicatedexception: "|error| {error}Pelipalvelimen virhe:{highlight}%message%"
     exception: "|error| {error}Virhe: {highlight}%message%"
     searching: "|info| {info}Searching... please wait."
+    queue: "Processing queue. Maps in queue: %length%"
+    downloadstart: "Starting download. Maps in queue: %length%"
   gui:
     mxsearch:
       title: "Mania-Exchange: Haku"

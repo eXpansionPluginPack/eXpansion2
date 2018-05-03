@@ -38,7 +38,8 @@ expansion_local_records:
         title: 'Lokale Bestzeiten'
         column:
           position: '#'
-          score: 'Zeit'
+          score: 'Lap Time'
+          score_race: 'Race Time'
           nickname: 'Nickname'
           login: 'Login'
   menu:
@@ -50,21 +51,21 @@ expansion_local_records:
       laps_recs: "Vorherige Rundenbestzeiten"
   config:
     nb_records:
-      name: "Number of Local Records"
-      dsc: "Number of records that's saved in the database for each map."
+      name: "Anzahl der lokalen Rekorde"
+      dsc: "Anzahl der für jede Map in der Datenbank gespeicherten Rekorde."
     notification_public_threshold:
-      name: "Public notificaiton threshold"
-      dsc: "Records better then this threshold will be announced to all players."
+      name: "Öffentliche Notiz"
+      dsc: "Rekorde die besser sind als dieser Schwellenwert werden allen Spielern angezeigt."
     color_codes:
-      record: "Record default color"
-      record_top: "Record TOP color"
-      record_rank: "Record rank information color"
+      record: "Default-Farbe für Rekorde"
+      record_top: "Rekord oben Farbe"
+      record_rank: "Rekordrang Informations Farbe"
     glymp_icons:
-      time: "Time icon"
-      record: "Record icon"
+      time: "Zeit symbol"
+      record: "Rekord Symbol"
 expansion_config:
   menu:
     eXpansion:
-      label: "eXpansion Configs"
+      label: "eXpansion Konfiguration"
       LocalRecords:
         label: "Lokale Bestzeiten"

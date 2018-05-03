@@ -21,7 +21,7 @@ expansion_players:
         mute: "Stumm schalten"
         kick: "Rauswerfen"
         ban: "Sperren"
-        black: "Black"
+        black: "Scharz"
         column:
           flag: '#'
           from: 'Von'

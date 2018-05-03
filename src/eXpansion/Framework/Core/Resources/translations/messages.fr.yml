@@ -7,6 +7,12 @@ expansion_core:
     wrong_chat: "{error}Cette commande n’existe pas. {info}Utilisez /help pour afficher toutes les commandes disponibles."
     no_description: "{info}Désolé, cette commande n’a pas de description."
     no_help: "{info}Désolé, cette commande n’a pas de message d'aide."
+    stop:
+      help: "Stop expansion"
+      message: "|admin| %nickname% {admin_info}is shutting down eXpansion."
+    restart:
+      help: "Restart expansion in production mode, empty caches and check for database updates before."
+      message: "|admin| %nickname% {admin_info}is restarting eXpansion."
   windows:
     chat_commands:
       title: Commandes de chat

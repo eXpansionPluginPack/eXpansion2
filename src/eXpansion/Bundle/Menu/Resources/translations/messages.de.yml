@@ -1,7 +1,8 @@
 expansion_menu:
   menu: "Menü"
   menu_open: "Menü"
-  menu_close: "Menü schließen"
+  menu_close: "Close"
+  menu_back: "Back"
   admin:
     label: Admin
   general:
