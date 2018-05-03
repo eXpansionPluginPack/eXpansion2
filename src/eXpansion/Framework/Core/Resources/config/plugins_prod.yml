@@ -11,7 +11,8 @@ services:
     eXpansion\Framework\Core\Plugins\Analytics:
         class: 'eXpansion\Framework\Core\Plugins\Analytics'
         arguments:
-            $url: 'http://server1.oliver-decramer.com/exp/input.php'
+            $handshakeUrl: 'https://mp-expansion.com/api/expansion/analytics/handshake'
+            $pingUrl: 'https://mp-expansion.com/api/expansion/analytics/ping'
             $pingInterval: 600
             $retryInterval: 14400
         tags:

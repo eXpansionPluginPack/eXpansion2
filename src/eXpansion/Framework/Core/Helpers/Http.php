@@ -74,37 +74,46 @@ class Http
      * Make a post http query.
      *
      * @param string $url address
-     * @param string|array $postFields
+     * @param string|array $fields
      * @param callable $callback callback with returning datas
      * @param null|mixed $additionalData If you need to pass additional metadata.
      *                                   You will get this back in the callback.
      * @param array $options Single dimensional array of curl_setopt key->values
      */
-    public function post($url, $postFields, callable $callback, $additionalData = null, $options = [])
+    public function post($url, $fields, callable $callback, $additionalData = null, $options = [])
     {
-        $defaultOptions = [
-            CURLOPT_POST => true,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_USERAGENT => "eXpansionPluginPack v ".AbstractApplication::EXPANSION_VERSION,
-        ];
+        $this->doCall("POST", $url, $fields, $callback, $additionalData, $options);
+    }
 
-        $options = $options + $defaultOptions;
+    /**
+     * Make a put http query.
+     *
+     * @param string $url address
+     * @param string|array $fields
+     * @param callable $callback callback with returning datas
+     * @param null|mixed $additionalData If you need to pass additional metadata.
+     *                                   You will get this back in the callback.
+     * @param array $options Single dimensional array of curl_setopt key->values
+     */
+    public function put($url, $fields, callable $callback, $additionalData = null, $options = [])
+    {
+        $this->doCall("PUT", $url, $fields, $callback, $additionalData, $options);
+    }
 
-        if (is_array($postFields)) {
-            $query = http_build_query($postFields, '', '&');
-        } else {
-            $query = $postFields;
-        }
 
-        $options[CURLOPT_URL] = $url;
-        $options[CURLOPT_POSTFIELDS] = $query;
-
-        $additionalData['callback'] = $callback;
-
-        $curlJob = $this->factory->createCurlJob($url, [$this, 'process'], $additionalData, $options);
-
-        // Start job execution.
-        $this->factory->startJob($curlJob);
+    /**
+     * Make a delete http query.
+     *
+     * @param string $url address
+     * @param string|array $fields
+     * @param callable $callback callback with returning datas
+     * @param null|mixed $additionalData If you need to pass additional metadata.
+     *                                   You will get this back in the callback.
+     * @param array $options Single dimensional array of curl_setopt key->values
+     */
+    public function delete($url, $fields, callable $callback, $additionalData = null, $options = [])
+    {
+        $this->doCall("DELETE", $url, $fields, $callback, $additionalData, $options);
     }
 
     /**
@@ -122,6 +131,41 @@ class Http
         call_user_func($callback, $obj);
     }
 
+    protected function doCall($method, $url, $fields, callable $callback, $additionalData = null, $options = [])
+    {
+        $defaultOptions = [
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_USERAGENT => "eXpansionPluginPack v ".AbstractApplication::EXPANSION_VERSION,
+        ];
 
+        switch ($method) {
+            case "POST" :
+                $defaultOptions[CURLOPT_POST] = true;
+                break;
+            case "PUT" :
+                $defaultOptions[CURLOPT_PUT] = true;
+                break;
+            default :
+                $defaultOptions[CURLOPT_CUSTOMREQUEST] = "DELETE";
+        }
+
+        $options = $options + $defaultOptions;
+
+        if (is_array($fields)) {
+            $query = http_build_query($fields, '', '&');
+        } else {
+            $query = $fields;
+        }
+
+        $options[CURLOPT_URL] = $url;
+        $options[CURLOPT_POSTFIELDS] = $query;
+
+        $additionalData['callback'] = $callback;
+
+        $curlJob = $this->factory->createCurlJob($url, [$this, 'process'], $additionalData, $options);
+
+        // Start job execution.
+        $this->factory->startJob($curlJob);
+    }
 }
 
