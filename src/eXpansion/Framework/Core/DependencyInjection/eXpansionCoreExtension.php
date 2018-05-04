@@ -67,11 +67,11 @@ class eXpansionCoreExtension extends Extension implements PrependExtensionInterf
 
         // Temporary for the prototype.
         $loader->load('plugins.yml');
+        $loader->load('plugins_prod.yml');
 
         if ($container->getParameter('kernel.environment') == 'dev') {
             $loader->load('plugins_dev.yml');
         } elseif ($container->getParameter('kernel.environment') == 'prod') {
-            $loader->load('plugins_prod.yml');
         }
     }
 }

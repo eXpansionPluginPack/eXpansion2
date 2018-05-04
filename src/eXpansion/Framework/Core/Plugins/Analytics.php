@@ -3,11 +3,13 @@
 namespace eXpansion\Framework\Core\Plugins;
 
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
+use eXpansion\Framework\Core\Helpers\Countries;
 use eXpansion\Framework\Core\Helpers\Http;
 use eXpansion\Framework\Core\Helpers\Structures\HttpResult;
 use eXpansion\Framework\Core\Services\Application;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
+use League\ISO3166\ISO3166;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -27,6 +29,9 @@ class Analytics implements ListenerInterfaceExpTimer, StatusAwarePluginInterface
 
     /** @var PlayerStorage */
     protected $playerStorage;
+
+    /** @var Countries */
+    protected $countries;
 
     /** @var LoggerInterface */
     protected $logger;
@@ -67,6 +72,7 @@ class Analytics implements ListenerInterfaceExpTimer, StatusAwarePluginInterface
         Http $http,
         GameDataStorage $gameData,
         PlayerStorage $playerStorage,
+        Countries $countries,
         LoggerInterface $logger,
         string $handshakeUrl,
         string $pingUrl,
@@ -76,6 +82,7 @@ class Analytics implements ListenerInterfaceExpTimer, StatusAwarePluginInterface
         $this->http = $http;
         $this->gameData = $gameData;
         $this->playerStorage = $playerStorage;
+        $this->countries = $countries;
         $this->logger = $logger;
         $this->handshakeUrl = $handshakeUrl;
         $this->pingUrl = $pingUrl;
@@ -191,19 +198,21 @@ class Analytics implements ListenerInterfaceExpTimer, StatusAwarePluginInterface
      */
     protected function getBasePingData()
     {
+        $alpha3 = $this->countries->getCodeFromCountry($this->countries->parseCountryFromPath($this->gameData->getServerPath()));
+        $data = (new ISO3166())->alpha3($alpha3);
+
         return [
             'key' => $this->key,
             'nbPlayers' => count($this->playerStorage->getOnline()),
-            'country' => $this->gameData->getServerCountry(),
+            'country' => $data['alpha2'],
             'version' => Application::EXPANSION_VERSION,
             'php_version' => $this->gameData->getServerCleanPhpVersion(),
             'php_version_short' => $this->gameData->getServerMajorPhpVersion(),
             'mysql_version' => 'unknown',
             'memory' => memory_get_usage(),
             'memory_peak' => memory_get_peak_usage(),
-            'build' => '',
             'title' => str_replace('@','_by_', $this->gameData->getVersion()->titleId),
-            'game' => $this->gameData->getTitle(),
+            'game' => $this->gameData->getTitleGame(),
             'mode' => strtolower($this->gameData->getGameInfos()->scriptName),
             'serverOs' => $this->gameData->getServerOs(),
         ];

@@ -75,6 +75,10 @@ class BaseStorageUpdateListener implements EventSubscriberInterface
         $this->gameDataStorage->setGameInfos(clone $gameInfos);
         $this->gameDataStorage->setVersion($this->factory->getConnection()->getVersion());
         $this->gameDataStorage->setMapFolder($this->factory->getConnection()->getMapsDirectory());
+
+        $this->gameDataStorage->setServerPlayer(
+            $this->factory->getConnection()->getDetailedPlayerInfo($this->gameDataStorage->getSystemInfo()->serverLogin)
+        );
     }
 
     /**
