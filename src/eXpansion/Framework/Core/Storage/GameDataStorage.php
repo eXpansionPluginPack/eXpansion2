@@ -5,6 +5,7 @@ namespace eXpansion\Framework\Core\Storage;
 use eXpansion\Framework\Core\Helpers\CompatibleFetcher;
 use eXpansion\Framework\Core\Helpers\Countries;
 use Maniaplanet\DedicatedServer\Structures\GameInfos;
+use Maniaplanet\DedicatedServer\Structures\PlayerDetailedInfo;
 use Maniaplanet\DedicatedServer\Structures\ServerOptions;
 use Maniaplanet\DedicatedServer\Structures\SystemInfos;
 use Maniaplanet\DedicatedServer\Structures\Version;
@@ -67,6 +68,9 @@ class GameDataStorage
      * @var CompatibleFetcher
      */
     private $compatibleFetcher;
+
+    /** @var PlayerDetailedInfo */
+    private $serverPlayer;
 
     /**
      * GameDataStorage constructor.
@@ -194,6 +198,22 @@ class GameDataStorage
     }
 
     /**
+     * @return PlayerDetailedInfo
+     */
+    public function getServerPlayer(): PlayerDetailedInfo
+    {
+        return $this->serverPlayer;
+    }
+
+    /**
+     * @param PlayerDetailedInfo $serverPlayer
+     */
+    public function setServerPlayer(PlayerDetailedInfo $serverPlayer)
+    {
+        $this->serverPlayer = $serverPlayer;
+    }
+
+    /**
      * @return SystemInfos
      */
     public function getSystemInfo()
@@ -222,9 +242,9 @@ class GameDataStorage
      *
      * @return string
      */
-    public function getServerCountry()
+    public function getServerPath()
     {
-        return 'Other';
+        return $this->getServerPlayer()->path;
     }
 
     /**

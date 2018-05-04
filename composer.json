@@ -24,6 +24,7 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "league/flysystem": "^1.0",
         "league/flysystem-sftp": "^1.0",
+        "league/iso3166": "^2.1",
         "maniaplanet/dedicated-server-api": "^5.0",
         "oliverde8/associative-array-simplified": "^1.0.0",
         "oliverde8/asynchronous-jobs": "^1.0",
