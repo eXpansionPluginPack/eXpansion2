@@ -18,7 +18,8 @@ expansion_dedimania:
         serverlogin:
             name: 'Server Login'
             desc: 'Server login for the api key'
-
+    menu:
+        dedi_recs: "Dedimania Records"
 
 expansion_config:
   menu:

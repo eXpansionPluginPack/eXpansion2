@@ -9,11 +9,12 @@
 namespace eXpansionExperimantal\Bundle\Dedimania\Services;
 
 
+use eXpansion\Framework\Config\Model\ConfigInterface;
+use eXpansion\Framework\Core\Services\Application\Dispatcher;
+use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansionExperimantal\Bundle\Dedimania\Classes\IXR_Base64;
 use eXpansionExperimantal\Bundle\Dedimania\Structures\DedimaniaPlayer;
 use eXpansionExperimantal\Bundle\Dedimania\Structures\DedimaniaRecord;
-use eXpansion\Framework\Core\Services\Application\Dispatcher;
-use eXpansion\Framework\Core\Storage\PlayerStorage;
 
 class DedimaniaService
 {
@@ -46,18 +47,25 @@ class DedimaniaService
     private $GReplayOwner;
 
     private $disabled = false;
+    /**
+     * @var ConfigInterface
+     */
+    private $enabled;
 
     /**
      * DedimaniaService constructor.
-     * @param Dispatcher    $dispatcher
-     * @param PlayerStorage $playerStorage
+     * @param ConfigInterface $enabled
+     * @param Dispatcher      $dispatcher
+     * @param PlayerStorage   $playerStorage
      */
     public function __construct(
+        ConfigInterface $enabled,
         Dispatcher $dispatcher,
         PlayerStorage $playerStorage
     ) {
         $this->dispatcher = $dispatcher;
         $this->playerStorage = $playerStorage;
+        $this->enabled = $enabled;
     }
 
     /**
@@ -73,6 +81,10 @@ class DedimaniaService
      */
     public function setDedimaniaRecords($dedimaniaRecords)
     {
+        if ($this->enabled->get() == false) {
+            return;
+        }
+
         $this->setDisabled(false);
         $this->recordsByLogin = [];
         $this->ranksByLogin = [];
@@ -107,9 +119,11 @@ class DedimaniaService
      */
     public function processRecord($login, $score, $checkpoints)
     {
-        if ($this->isDisabled()) {
-            echo "disabled state.\n";
+        if ($this->enabled->get() == false) {
+            return false;
+        }
 
+        if ($this->isDisabled()) {
             return false;
         }
 

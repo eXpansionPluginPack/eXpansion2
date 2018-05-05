@@ -1,6 +1,6 @@
 <?php
 
-namespace eXpansion\Bundle\LocalRecords\Plugins;
+namespace eXpansionExperimantal\Bundle\Dedimania\Plugins;
 
 use eXpansion\Bundle\Menu\DataProviders\Listener\ListenerMenuItemProviderInterface;
 use eXpansion\Bundle\Menu\Model\Menu\ChatCommandItem;
@@ -11,7 +11,7 @@ use eXpansion\Bundle\Menu\Model\Menu\ParentItem;
  * Class MenuItems
  *
  * @package eXpansion\Bundle\LocalRecords\Plugins;
- * @author  oliver de Cramer <oliverde8@gmail.com>
+ * @author  reaby
  */
 class MenuItems implements ListenerMenuItemProviderInterface
 {
@@ -26,17 +26,11 @@ class MenuItems implements ListenerMenuItemProviderInterface
     public function registerMenuItems(ParentItem $root)
     {
         $root->addChild(
-            ParentItem::class,
-            'records',
-            'expansion_local_records.menu.label',
-            null // Permission are handled by sub elements.
-        );
-        $root->addChild(
             ChatCommandItem::class,
-            'records/list',
-            'expansion_local_records.menu.race_recs',
+            'records/dedimania',
+            'expansion_dedimania.menu.dedi_recs',
             null,
-            ['cmd' => '/recs']
+            ['cmd' => '/dedirecs']
         );
     }
 }
