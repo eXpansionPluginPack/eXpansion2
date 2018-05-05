@@ -8,6 +8,7 @@
 * Fixed #339 mx info being null at database
 * Fixed #277 : sorting numeric values
 * Fixed #343 : Hopefully fixed once and for all RowLayout size issues.
+* Fixed #354 : Fixed `bin/console` being a symlink.
 
 ## Features
 * Feature Added ingame configuration system. 

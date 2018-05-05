@@ -6,9 +6,7 @@
     "bin": [
         "bin/run.bat",
         "bin/run.sh",
-        "bin/update.bat",
-        "bin/console",
-        "bin/symfony_requirements"
+        "bin/update.bat"
     ],
     "autoload": {
         "psr-4": { "": ["src/", "src_experimantal/"] },
