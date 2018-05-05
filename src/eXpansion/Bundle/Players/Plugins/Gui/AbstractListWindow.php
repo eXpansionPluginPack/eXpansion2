@@ -13,7 +13,6 @@ use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\ChatCommandDataProvider;
 use eXpansion\Framework\Gui\Components\Button;
-use Maniaplanet\DedicatedServer\Connection;
 
 abstract class AbstractListWindow extends GridWindowFactory
 {
@@ -51,7 +50,7 @@ abstract class AbstractListWindow extends GridWindowFactory
      * @param DataCollectionFactory   $dataCollectionFactory
      * @param GridBuilderFactory      $gridBuilderFactory
      * @param ChatCommandDataProvider $chatCommandDataProvider
-     * @param Connection              $connection
+     * @param Factory                 $factory
      * @param AdminGroups             $adminGroups
      * @param ChatNotification        $chatNotification
      */
@@ -136,7 +135,7 @@ abstract class AbstractListWindow extends GridWindowFactory
      *
      * @return array
      */
-    abstract function getDataSet() : array;
+    abstract function getDataSet(): array;
 
     /**
      * Execute action for player.
@@ -166,9 +165,9 @@ abstract class AbstractListWindow extends GridWindowFactory
 
     /**
      * @param ManialinkInterface $manialink
-     * @param $login
-     * @param $entries
-     * @param $args
+     * @param                    $login
+     * @param                    $entries
+     * @param                    $args
      */
     public function callbackRemovePlayer(
         $manialink,
