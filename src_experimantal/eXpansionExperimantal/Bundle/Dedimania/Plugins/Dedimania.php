@@ -491,12 +491,10 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
         $params = [
             $this->sessionId,
             $player->getLogin(),
-            $player->getNickName(),
-            $player->getPath(),
-            $player->isSpectator(),
+            ""
         ];
 
-        $request = new Request('dedimania.PlayerConnect', $params);
+        $request = new Request('dedimania.PlayerDisconnect', $params);
         $this->sendRequest($request, function ($response) use ($player) {
             $this->dedimaniaService->disconnectPlayer($player->getLogin());
         });

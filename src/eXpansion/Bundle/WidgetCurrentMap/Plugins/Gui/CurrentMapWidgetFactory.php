@@ -96,7 +96,6 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $lbl->setAreaColor("0017")->setAreaFocusColor("0013")->setScriptEvents(true);
         $lbl->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackShowPlayers"], [],
             true));
-        $tooltip->addTooltip($lbl, "Players on server");
         $line->addChild($lbl);
 
         $lbl = $this->uiFactory->createLabel("0 / 0", Label::TYPE_NORMAL, "Spectators");
@@ -104,17 +103,15 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $lbl->setAlign("center", "center2");
         $lbl->setTextSize(1)->setSize($div, 4);
         $lbl->setAreaColor("0017")->setAreaFocusColor("0017")->setScriptEvents(true);
-        $tooltip->addTooltip($lbl, "Spectators on server");
         $line->addChild($lbl);
 
         $ladderMin = $this->gameDataStorage->getServerOptions()->ladderServerLimitMin / 1000;
         $ladderMax = $this->gameDataStorage->getServerOptions()->ladderServerLimitMax / 1000;
 
-        $lbl = $this->uiFactory->createLabel($ladderMin." - ".$ladderMax."k", Label::TYPE_NORMAL);
+        $lbl = $this->uiFactory->createLabel("", Label::TYPE_NORMAL, "LocalTime");
         $lbl->setAlign("center", "center2");
         $lbl->setTextSize(1)->setSize($div, 4);
         $lbl->setAreaColor("0017")->setAreaFocusColor("0017")->setScriptEvents(true);
-        $tooltip->addTooltip($lbl, "Ladder limits");
         $line->addChild($lbl);
 
         /* third row */
@@ -129,7 +126,7 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $lbl->setAction($this->actionFactory->createManialinkAction(
             $manialink, [$this, "callbackShowRecs"], [], true)
         );
-        $tooltip->addTooltip($lbl, "Show Local Records");
+
         $line2->addChild($lbl);
 
         $lbl = $this->uiFactory->createLabel("Maps", Label::TYPE_NORMAL);
@@ -139,7 +136,7 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $lbl->setAction($this->actionFactory->createManialinkAction(
             $manialink, [$this, "callbackShowMapList"], [], true)
         );
-        $tooltip->addTooltip($lbl, "Show Map List");
+
         $line2->addChild($lbl);
 
         $lbl = $this->uiFactory->createLabel("", Label::TYPE_NORMAL);
@@ -148,7 +145,6 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $lbl->setTextSize(1)->setSize($div, 4);
         $lbl->setAreaColor("0017")->setAreaFocusColor("0707")->setScriptEvents(true);
         $lbl->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackVoteYes"], [], true));
-        $tooltip->addTooltip($lbl, "Vote up the map");
         $this->lblYes = $lbl;
         $line2->addChild($this->lblYes);
 
@@ -158,7 +154,6 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $lbl->setTextSize(1)->setSize($div, 4);
         $lbl->setAreaColor("0017")->setAreaFocusColor("7007")->setScriptEvents(true);
         $lbl->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackVoteNo"], [], true));
-        $tooltip->addTooltip($lbl, "Vote down the map");
         $this->lblNo = $lbl;
         $line2->addChild($this->lblNo);
 
@@ -192,15 +187,36 @@ EOL
            if (AllPlayerCount != Players.count) {
                AllPlayerCount = Players.count;
                updatePlayers();
-           }   
+           }
+           
+           if (OldDateText != CurrentLocalDateText) {
+                OldDateText = CurrentLocalDateText;
+                declare Text Seconds = TextLib::SubString(CurrentLocalDateText,17,2);
+                declare Text delim = ":";          
+                Counter = (Counter+1)%2;
+                if (Counter == 1) {
+                    delim = ".";
+                }
+
+                declare Hours = TextLib::SubString(CurrentLocalDateText,10,3);
+                declare Minutes = TextLib::SubString(CurrentLocalDateText,14,2);
+                LocalTime.Value = "🕑 "^Hours^delim^Minutes;                                                
+           } 
+           
+           
+           
+           
     
 EOL
         );
 
         $manialink->getFmlManialink()->getScript()->addCustomScriptLabel(ScriptLabel::OnInit,
             <<<EOL
-            declare Integer AllPlayerCount = -1;                                               
+            declare Integer AllPlayerCount = -1;
+            declare Text OldDateText = "";
+            declare Counter = 0;                                         
             (Page.GetFirstChild("MapName") as CMlLabel).Value = Map.AuthorNickName ^ "\$z\$s - " ^ Map.MapName;                                         
+            declare LocalTime = (Page.GetFirstChild("LocalTime") as CMlLabel);         
             updatePlayers();                                                                                     
 EOL
         );
