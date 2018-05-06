@@ -31,8 +31,8 @@ class AppKernel extends Kernel
 
         /* Register test bundles. */
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
-            $bundles[] = new \eXpansion\Bundle\Acme\AcmeBundle();
-            $bundles[] = new \eXpansion\Bundle\DeveloperTools\DeveloperToolsBundle();
+         //   $bundles[] = new \eXpansion\Bundle\Acme\AcmeBundle();
+    //     $bundles[] = new \eXpansion\Bundle\DeveloperTools\DeveloperToolsBundle();
         }
 
         return $bundles;

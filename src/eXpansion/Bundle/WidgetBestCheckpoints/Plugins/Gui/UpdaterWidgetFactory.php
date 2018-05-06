@@ -27,12 +27,26 @@ class UpdaterWidgetFactory extends ScriptVariableUpdateFactory
      *
      * @param array $checkpoints
      */
-    public function setLocalRecord($checkpoints)
+    public function setLocalRecord($nick, $checkpoints)
     {
         if (count($checkpoints) > 0) {
             $this->updateValue($this->playerGroup, 'LocalRecordCheckpoints', Builder::getArray($checkpoints, true));
+            $this->updateValue($this->playerGroup, 'LocalRecordHolder', Builder::escapeText($nick));
         } else {
             $this->updateValue($this->playerGroup, 'LocalRecordCheckpoints', "Integer[Integer]");
+            $this->updateValue($this->playerGroup, 'LocalRecordHolder', Builder::escapeText("-"));
         }
     }
+
+    public function setDedimaniaRecord($nick, $checkpoints)
+    {
+        if (count($checkpoints) > 0) {
+            $this->updateValue($this->playerGroup, 'DedimaniaCheckpoints', Builder::getArray($checkpoints, true));
+            $this->updateValue($this->playerGroup, 'DedimaniaHolder', Builder::escapeText($nick));
+        } else {
+            $this->updateValue($this->playerGroup, 'DedimaniaCheckpoints', "Integer[Integer]");
+            $this->updateValue($this->playerGroup, 'DedimaniaHolder', Builder::escapeText($nick));
+        }
+    }
+
 }

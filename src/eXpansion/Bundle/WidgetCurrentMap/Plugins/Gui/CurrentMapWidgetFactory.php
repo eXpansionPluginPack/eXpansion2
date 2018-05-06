@@ -81,7 +81,7 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $lbl->setAlign("center", "center2")->setPosition(30, 0);
         $lbl->setTextSize(1)->setSize(60, 4);
         $lbl->setAreaColor("0017")->setAreaFocusColor("0017")->setScriptEvents(true);
-        $manialink->addChild($lbl);
+        // $manialink->addChild($lbl);
 
         /* second row */
         $line = $this->uiFactory->createLayoutLine(0, -4.45, [], 0.5);
@@ -104,9 +104,6 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $lbl->setTextSize(1)->setSize($div, 4);
         $lbl->setAreaColor("0017")->setAreaFocusColor("0017")->setScriptEvents(true);
         $line->addChild($lbl);
-
-        $ladderMin = $this->gameDataStorage->getServerOptions()->ladderServerLimitMin / 1000;
-        $ladderMax = $this->gameDataStorage->getServerOptions()->ladderServerLimitMax / 1000;
 
         $lbl = $this->uiFactory->createLabel("", Label::TYPE_NORMAL, "LocalTime");
         $lbl->setAlign("center", "center2");
@@ -215,7 +212,7 @@ EOL
             declare Integer AllPlayerCount = -1;
             declare Text OldDateText = "";
             declare Counter = 0;                                         
-            (Page.GetFirstChild("MapName") as CMlLabel).Value = Map.AuthorNickName ^ "\$z\$s - " ^ Map.MapName;                                         
+           // (Page.GetFirstChild("MapName") as CMlLabel).Value = Map.AuthorNickName ^ "\$z\$s - " ^ Map.MapName;                                         
             declare LocalTime = (Page.GetFirstChild("LocalTime") as CMlLabel);         
             updatePlayers();                                                                                     
 EOL

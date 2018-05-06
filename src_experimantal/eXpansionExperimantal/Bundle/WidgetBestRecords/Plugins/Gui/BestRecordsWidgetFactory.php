@@ -4,7 +4,6 @@ namespace eXpansionExperimantal\Bundle\WidgetBestRecords\Plugins\Gui;
 
 use eXpansion\Bundle\LocalRecords\Model\Record;
 use eXpansion\Framework\Core\Helpers\Time;
-use eXpansion\Framework\Core\Helpers\TMString;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
@@ -85,48 +84,42 @@ class BestRecordsWidgetFactory extends WidgetFactory
     {
         parent::createContent($manialink);
 
-        $line = $this->uiFactory->createLayoutLine(0, 0, [], 0.5);
-        $lbl = $this->createLabel("Author", "0017")->setSize(15, 4);
-        $line->addChild($lbl);
+        $row = $this->uiFactory->createLayoutLine(0, 0, [], 0.5);
+        $manialink->addChild($row);
 
-        $this->lblAuthorNick = $this->createLabel("n/a", "0023")->setSize(33, 4);
-        $line->addChild($this->lblAuthorNick);
 
-        $this->lblAuthorTime = $this->createLabel("-:--:---", "0015")->setSize(12, 4);
-
-        $line->addChild($this->lblAuthorTime);
-        $manialink->addChild($line);
-
-        $line2 = $this->uiFactory->createLayoutLine(0, -4.45, [], 0.5);
-
-        $lbl = $this->createLabel("Record", "0017")->setSize(15, 4);
-        $lbl->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackShowLocalRecords"], [], true));
+        $line2 = $this->uiFactory->createLayoutLine(0, 0, [], 0.5);
+        $lbl = $this->createLabel("Record", "0017")->setSize(14.5, 4);
+        $lbl->setHorizontalAlign("center");
+        $lbl->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackShowLocalRecords"], [],
+            true));
         $line2->addChild($lbl);
 
-        $this->lblLocalNick = $this->createLabel("n/a", "0023")->setSize(33, 4);
-        $line2->addChild($this->lblLocalNick);
 
-        $this->lblLocalTime = $this->createLabel("-:--:---", "0015")->setSize(12, 4);
+        $this->lblLocalTime = $this->createLabel("-:--:---", "0015")->setSize(14.5, 4);
+        $this->lblLocalTime->setHorizontalAlign("center");
         $line2->addChild($this->lblLocalTime);
-        $manialink->addChild($line2);
+        $row->addChild($line2);
 
-        $line3 = $this->uiFactory->createLayoutLine(0, -9.0, [], 0.5);
+        $line3 = $this->uiFactory->createLayoutLine(0, 0, [], 0.5);
 
-        $lbl = $this->createLabel("Dedimania", "0017")->setSize(15, 4);
-        $lbl->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackShowDedimaniaRecords"], [], true));
+        $lbl = $this->createLabel("Dedimania", "0017")->setSize(14.5, 4);
+        $lbl->setHorizontalAlign("center");
+        $lbl->setAction($this->actionFactory->createManialinkAction($manialink, [$this, "callbackShowDedimaniaRecords"],
+            [], true));
         $line3->addChild($lbl);
 
-        $this->lblDediNick = $this->createLabel("n/a", "0023")->setSize(33, 4);
-        $line3->addChild($this->lblDediNick);
 
-        $this->lblDediTime = $this->createLabel("-:--:---", "0015")->setSize(12, 4);
+        $this->lblDediTime = $this->createLabel("-:--:---", "0015")->setSize(14.5, 4);
+        $this->lblDediTime->setHorizontalAlign("center");
         $line3->addChild($this->lblDediTime);
-        $manialink->addChild($line3);
+        $row->addChild($line3);
     }
 
     /**
      * @param string $text
      * @param string $color
+     * @return Label
      */
     private function createLabel($text, $color)
     {
@@ -143,13 +136,11 @@ class BestRecordsWidgetFactory extends WidgetFactory
     {
         if ($record instanceof Record) {
             try {
-                $this->lblLocalNick->setText($record->getPlayer()->getNicknameStripped());
                 $this->lblLocalTime->setText($this->time->timeToText($record->getScore(), true));
             } catch (\Exception $e) {
 
             }
         } else {
-            $this->lblLocalNick->setText("");
             $this->lblLocalTime->setText("-:--.---");
         }
     }
@@ -161,22 +152,13 @@ class BestRecordsWidgetFactory extends WidgetFactory
     {
         if ($record instanceof DedimaniaRecord) {
             try {
-                $this->lblDediNick->setText(TMString::trimStyles($record->nickName));
                 $this->lblDediTime->setText($this->time->timeToText($record->best, true));
             } catch (\Exception $e) {
-                $this->lblDediNick->setText("");
                 $this->lblDediTime->setText("-:--.---");
             }
         } else {
-            $this->lblDediNick->setText("");
             $this->lblDediTime->setText("-:--.---");
         }
-    }
-
-    protected function updateContent(ManialinkInterface $manialink)
-    {
-        $this->lblAuthorTime->setText($this->time->timeToText($this->authorTime, true));
-        $this->lblAuthorNick->setText($this->authorName);
     }
 
     public function callbackShowLocalRecords(ManialinkInterface $manialink, $login, $entries, $args)

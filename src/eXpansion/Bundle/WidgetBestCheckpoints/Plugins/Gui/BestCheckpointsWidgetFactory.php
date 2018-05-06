@@ -6,6 +6,7 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Model\Gui\Widget;
 use eXpansion\Framework\Core\Model\Gui\WidgetFactoryContext;
 use eXpansion\Framework\Core\Plugins\Gui\WidgetFactory;
+use eXpansion\Framework\Gui\Components\Label;
 use FML\Controls\Frame;
 use FML\Controls\Quad;
 use FML\Script\ScriptLabel;
@@ -50,7 +51,10 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
     {
         $elementCount = 0;
         $rows = $this->uiFactory->createLayoutRow(0, 0, [], 0.5);
-        $cpVariable = $this->updaterWidgetFactory->getVariable('LocalRecordCheckpoints')->getVariableName();
+        $localVariable = $this->updaterWidgetFactory->getVariable('LocalRecordCheckpoints')->getVariableName();
+        $dediVariable = $this->updaterWidgetFactory->getVariable('DedimaniaCheckpoints')->getVariableName();
+        $localHolder = $this->updaterWidgetFactory->getVariable('LocalRecordHolder')->getVariableName();
+        $dediHolder = $this->updaterWidgetFactory->getVariable('DedimaniaHolder')->getVariableName();
 
         for ($i = 0; $i < self::rowCount; $i++) {
             $elements = [];
@@ -59,17 +63,19 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                     $dropdown = $this->uiFactory->createDropdown("select", [
                         "Live 1" => "1",
                         "Local 1" => "2",
+                        "Dedi 1" => "3",
                     ],
                         0,
                         false);
                     $dropdown->setWidth(18)->setId("uiDropdown");
                     $elements[] = $dropdown;
+                    $elements[] = $this->createNickBox();
                 } else {
                     $elements[] = $this->createColumnBox($elementCount);
                 }
                 $elementCount++;
             }
-            $line = $this->uiFactory->createLayoutLine(0, 0, $elements, 0.5);
+            $line = $this->uiFactory->createLayoutRow(0, 0, $elements, 0.5);
 
             $rows->addChild($line);
         }
@@ -129,15 +135,15 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
 
 
             Void UpdateCp(Integer _Index, Integer _Score, Boolean _Animate) {
-                 declare Integer ElementCount for Page = $elementCount;
+                declare Integer ElementCount for Page = $elementCount;
                 if (_Index > ElementCount) {
                     return;
                 }
                 {$this->updaterWidgetFactory->getScriptInitialization()}
                 declare Integer[Integer] MapBestCheckpoints for Page = Integer[Integer];                                
                 declare CMlLabel Label <=> (Page.GetFirstChild("Cp_"^ (_Index+1)) as CMlLabel);
-                declare CMlQuad Bg <=> (Page.GetFirstChild("Bg_"^ (_Index+1)) as CMlQuad);          
-                                                                              
+                declare CMlQuad Bg <=> (Page.GetFirstChild("Bg_"^ (_Index+1)) as CMlQuad);                                                                                           
+                declare CMlLabel HolderLabel <=> (Page.GetFirstChild("RecordHolder") as CMlLabel);        
                 declare Integer BestCp_Mode for LocalUser = 0;                
                 declare Text Color = "\$fff";
                 Bg.BgColor = TextLib::ToColor("000");                           
@@ -145,16 +151,31 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                 declare Integer Compare = 99999999;            
                 
                 switch (BestCp_Mode) {
-                    case 0: {
-                        if (MapBestCheckpoints.existskey(_Index)) {
+                    case 0: {                                             
+                        if (Scores[0].BestLap.Time > -1) {
+                            HolderLabel.Value = Scores[0].User.Name;
+                        } else {
+                            HolderLabel.Value = "-";
+                        }
+                        
+                        if (MapBestCheckpoints.existskey(_Index)) {                       
                             Compare = MapBestCheckpoints[_Index];                            
                         } else {
                             Compare = 99999999;
                         }                 
                     }
                     case 1: {                      
-                        if ($cpVariable.existskey(_Index)) {
-                            Compare = {$cpVariable}[_Index];                            
+                        HolderLabel.Value = $localHolder;
+                        if ($localVariable.existskey(_Index)) {
+                            Compare = {$localVariable}[_Index];                            
+                        } else {
+                            Compare = 99999999;
+                        }                       
+                    } 
+                    case 2: {                      
+                        HolderLabel.Value = $dediHolder;
+                        if ($dediVariable.existskey(_Index)) {
+                            Compare = {$dediVariable}[_Index];                            
                         } else {
                             Compare = 99999999;
                         }                       
@@ -181,11 +202,12 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
             }
             
             Void Refresh() {
+               {$this->updaterWidgetFactory->getScriptInitialization()}
+               
                 declare Integer ElementCount for Page = $elementCount;  
                 declare Integer[Integer] MyCheckpoints for Page = Integer[Integer];       
                 declare Integer[Integer] MapBestCheckpoints for Page = Integer[Integer];                                                
-                declare Integer BestCp_Mode for LocalUser = 0; 
-                                                                                      
+                declare Integer BestCp_Mode for LocalUser = 0;                                                                                                                   
                 
                 for (k, 0, (ElementCount-1)) {                                                       
                     if (MyCheckpoints.existskey(k)) {
@@ -291,7 +313,7 @@ EOL
                                                                                                                                                                                                                                                                                                                                                                
                                                     
                         } else {                          
-                            if (GUIPlayer == RaceEvent.Player && $cpVariable.count > 0 && 
+                            if (GUIPlayer == RaceEvent.Player && $localVariable.count > 0 && 
                             MapBestTime != 99999999) {                                                                                          
                                 if (RaceEvent.IsEndLap && RaceEvent.IsEndRace == False) {                                        
                                     MyCheckpoints = Integer[Integer]; 
@@ -307,12 +329,18 @@ EOL
                             
                             switch (BestCp_Mode) {
                                 case 0:  {
+                                    
                                     if (MapBestTime != 99999999) {                                         
                                         UpdateCp(RaceEvent.CheckpointInLap, RaceEvent.LapTime, True);
                                     }
                                 }
                                 case 1: {
-                                   if ($cpVariable.count > 0) {
+                                   if ($localVariable.count > 0) {
+                                        UpdateCp(RaceEvent.CheckpointInLap, RaceEvent.LapTime, True);
+                                   }                                
+                                }
+                                case 2: {
+                                   if ($dediVariable.count > 0) {
                                         UpdateCp(RaceEvent.CheckpointInLap, RaceEvent.LapTime, True);
                                    }                                
                                 }                            
@@ -346,6 +374,34 @@ EOL
         $frame->addChild($label);
 
         $background = Quad::create("Bg_".$index);
+        $background->setSize($width, $height)
+            ->setBackgroundColor("001")->setOpacity(0.3);
+        $frame->addChild($background);
+
+        $frame->setSize($width, $height);
+
+        return $frame;
+    }
+
+    /**
+     * @param int $index
+     * @return Frame
+     */
+    private function createNickBox()
+    {
+        $width = 18;
+        $height = 4;
+
+        $frame = Frame::create();
+
+        $label = $this->uiFactory->createLabel();
+        $label->setAlign("left", "center2");
+        $label->setTextSize(1)->setPosition(1, -($height / 2));
+        $label->setSize($width, $height)
+            ->setId("RecordHolder");
+        $frame->addChild($label);
+
+        $background = Quad::create();
         $background->setSize($width, $height)
             ->setBackgroundColor("001")->setOpacity(0.3);
         $frame->addChild($background);
