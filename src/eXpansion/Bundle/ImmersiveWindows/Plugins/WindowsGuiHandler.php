@@ -2,6 +2,7 @@
 
 namespace eXpansion\Bundle\ImmersiveWindows\Plugins;
 
+use eXpansion\Framework\Core\Model\Gui\Manialink;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
 use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryInterface;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
@@ -96,6 +97,14 @@ class WindowsGuiHandler implements GuiHandlerInterface, ListenerInterfaceMpLegac
     /**
      * @inheritdoc
      */
+    public function getFactoryManialinks(ManialinkFactory $manialinkFactory)
+    {
+        return $this->guiHandler->getFactoryManialinks($manialinkFactory);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function onPlayerConnect(Player $player)
     {
         // Nothing
@@ -126,4 +135,6 @@ class WindowsGuiHandler implements GuiHandlerInterface, ListenerInterfaceMpLegac
     {
         // Nothing
     }
+
+
 }
