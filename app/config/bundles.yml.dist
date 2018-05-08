@@ -25,3 +25,4 @@ bundles:
   - \eXpansion\Bundle\WidgetCurrentMap\WidgetCurrentMapBundle
   - \eXpansion\Bundle\WidgetBestCheckpoints\WidgetBestCheckpointsBundle
   - \eXpansionExperimantal\Bundle\WidgetBestRecords\WidgetBestRecordsBundle
+  - \eXpansionExperimantal\Bundle\WidgetLiveRankings\LiveRankingsBundle

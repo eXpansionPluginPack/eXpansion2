@@ -9,6 +9,7 @@
 * Fixed #277 : sorting numeric values
 * Fixed #343 : Hopefully fixed once and for all RowLayout size issues.
 * Fixed #354 : Fixed `bin/console` being a symlink.
+* Fixed : Dedimania player disconnect handler 
 
 ## Features
 * Feature Added ingame configuration system. 
@@ -24,6 +25,7 @@
 * Feature #66 : Added experimental Dedimania support
 * Feature #211 : Added possibility to create plugins witohut data providers.
 * Feature #345 : Moved list of loaded bundles in a configuration file.
+* Feature : Added Live rankings
 
 # 2.0.0.0-alpha3 (2018-02-24)
 ## Bug Fixes

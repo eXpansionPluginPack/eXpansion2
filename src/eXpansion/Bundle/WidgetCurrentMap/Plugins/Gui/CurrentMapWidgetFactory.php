@@ -76,13 +76,6 @@ class CurrentMapWidgetFactory extends WidgetFactory
         $tooltip = $this->uiFactory->createTooltip();
         $manialink->addChild($tooltip);
 
-        /* first row */
-        $lbl = $this->uiFactory->createLabel("unknown map", Label::TYPE_NORMAL, "MapName");
-        $lbl->setAlign("center", "center2")->setPosition(30, 0);
-        $lbl->setTextSize(1)->setSize(60, 4);
-        $lbl->setAreaColor("0017")->setAreaFocusColor("0017")->setScriptEvents(true);
-        // $manialink->addChild($lbl);
-
         /* second row */
         $line = $this->uiFactory->createLayoutLine(0, -4.45, [], 0.5);
         $line->setAlign("left", "top");
@@ -211,8 +204,7 @@ EOL
             <<<EOL
             declare Integer AllPlayerCount = -1;
             declare Text OldDateText = "";
-            declare Counter = 0;                                         
-           // (Page.GetFirstChild("MapName") as CMlLabel).Value = Map.AuthorNickName ^ "\$z\$s - " ^ Map.MapName;                                         
+            declare Counter = 0;                                                                                           
             declare LocalTime = (Page.GetFirstChild("LocalTime") as CMlLabel);         
             updatePlayers();                                                                                     
 EOL
