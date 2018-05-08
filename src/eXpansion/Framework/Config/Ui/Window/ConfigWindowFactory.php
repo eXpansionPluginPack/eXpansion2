@@ -225,7 +225,7 @@ class ConfigWindowFactory extends WindowFactory
         $this->update($manialink->getUserGroup());
 
 
-        $this->chatNotification->sendMessage('eXpansion.config.action.saved', $manialink->getUserGroup());
+        $this->chatNotification->sendMessage('expansion_config.ui.saved', $manialink->getUserGroup());
     }
 
     /**

@@ -487,11 +487,10 @@ class WebaccessUrl
         global $_web_access_retry_timeout;
         $this->console->writeln($this->_webaccess_str.'$f00'.$errstr);
 
-        $this->infos();
-
         if ($this->_socket) {
             @fclose($this->_socket);
         }
+
         $this->_socket = null;
 
         if ($isbad) {

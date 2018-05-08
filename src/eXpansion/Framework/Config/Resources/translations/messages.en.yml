@@ -3,6 +3,7 @@ expansion_config:
     label: "Controller configuration"
   ui:
     save: "Save settings"
+    saved: "Settings saved"
 
   error:
     decimal:

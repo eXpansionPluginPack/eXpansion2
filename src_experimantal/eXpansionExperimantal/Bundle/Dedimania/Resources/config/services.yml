@@ -6,6 +6,8 @@ services:
 
     eXpansionExperimantal\Bundle\Dedimania\Services\DedimaniaService:
         class: eXpansionExperimantal\Bundle\Dedimania\Services\DedimaniaService
+        arguments:
+          $enabled: "@expansion.dedimania.config.enable"
 
     expansion.dedimania.data_providers.dedimania:
         class: eXpansionExperimantal\Bundle\Dedimania\DataProviders\DedimaniaDataProvider
@@ -16,3 +18,8 @@ services:
           - {name: 'expansion.dataprovider.listener', event_name: 'expansion.dedimania.records.update', method: 'onDedimaniaRecordsUpdate'}
           - {name: 'expansion.dataprovider.listener', event_name: 'expansion.dedimania.player.connect', method: 'onDedimaniaPlayerConnect'}
           - {name: 'expansion.dataprovider.listener', event_name: 'expansion.dedimania.player.disconnect', method: 'onDedimaniaPlayerDisconnect'}
+
+    eXpansionExperimantal\Bundle\Dedimania\Plugins\MenuItems:
+        class: eXpansionExperimantal\Bundle\Dedimania\Plugins\MenuItems
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'exp.menu.items'}

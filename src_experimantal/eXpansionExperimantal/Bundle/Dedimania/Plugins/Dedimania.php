@@ -8,11 +8,6 @@
 
 namespace eXpansionExperimantal\Bundle\Dedimania\Plugins;
 
-use eXpansionExperimantal\Bundle\Dedimania\Classes\IXR_Base64;
-use eXpansionExperimantal\Bundle\Dedimania\Classes\Request;
-use eXpansionExperimantal\Bundle\Dedimania\Services\DedimaniaService;
-use eXpansionExperimantal\Bundle\Dedimania\Structures\DedimaniaPlayer;
-use eXpansionExperimantal\Bundle\Dedimania\Structures\DedimaniaRecord;
 use eXpansion\Framework\Config\Model\ConfigInterface;
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
@@ -33,6 +28,11 @@ use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterface
 use eXpansion\Framework\GameManiaplanet\ScriptMethods\GetScores;
 use eXpansion\Framework\GameTrackmania\DataProviders\Listener\ListenerInterfaceRaceData;
 use eXpansion\Framework\Notifications\Services\Notifications;
+use eXpansionExperimantal\Bundle\Dedimania\Classes\IXR_Base64;
+use eXpansionExperimantal\Bundle\Dedimania\Classes\Request;
+use eXpansionExperimantal\Bundle\Dedimania\Services\DedimaniaService;
+use eXpansionExperimantal\Bundle\Dedimania\Structures\DedimaniaPlayer;
+use eXpansionExperimantal\Bundle\Dedimania\Structures\DedimaniaRecord;
 use Maniaplanet\DedicatedServer\Connection;
 use Maniaplanet\DedicatedServer\Structures\Map;
 use Maniaplanet\DedicatedServer\Structures\Player;
@@ -221,6 +221,10 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
     /** @api */
     public function onEverySecond()
     {
+        if ($this->enabled->get() == false) {
+            return;
+        }
+
         try {
             if ($this->sessionId !== null && (time() - $this->lastUpdate) > 3 * 60) {
                 $this->lastUpdate = time();
@@ -241,6 +245,10 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
      */
     final public function sendRequest(Request $request, $callback)
     {
+        if ($this->enabled->get() == false) {
+            return;
+        }
+
         $this->webaccess->request(
             self::dedimaniaUrl,
             [[$this, "process"], $callback],
@@ -256,6 +264,9 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
 
     final public function process($response, $callback)
     {
+        if ($this->enabled->get() == false) {
+            return;
+        }
 
         try {
 
@@ -337,6 +348,10 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
      */
     public function openSession($serverlogin, $apikey)
     {
+        if ($this->enabled->get() == false) {
+            return;
+        }
+
         $this->sessionId = null;
         $server = new Player();
         $server->login = $this->gameDataStorage->getSystemInfo()->serverLogin;
@@ -371,6 +386,10 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
 
     public function getRecords()
     {
+        if ($this->enabled->get() == false) {
+            return;
+        }
+
         if ($this->sessionId == null) {
             return;
         }
@@ -436,6 +455,10 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
 
     public function updateServerPlayers()
     {
+        if ($this->enabled->get() == false) {
+            return;
+        }
+
         if ($this->sessionId == null) {
             return;
         }
@@ -459,6 +482,10 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
      */
     public function connectPlayer(DedicatedPlayer $player)
     {
+        if ($this->enabled->get() == false) {
+            return;
+        }
+
         $params = [
             $this->sessionId,
             $player->getLogin(),
@@ -488,22 +515,28 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
      */
     public function disconnectPlayer(DedicatedPlayer $player)
     {
+        if ($this->enabled->get() == false) {
+            return;
+        }
+
         $params = [
             $this->sessionId,
             $player->getLogin(),
-            $player->getNickName(),
-            $player->getPath(),
-            $player->isSpectator(),
+            "",
         ];
 
-        $request = new Request('dedimania.PlayerConnect', $params);
-        $this->sendRequest($request, function ($response) use ($player) {
+        $request = new Request('dedimania.PlayerDisconnect', $params);
+        $this->sendRequest($request, function () use ($player) {
             $this->dedimaniaService->disconnectPlayer($player->getLogin());
         });
     }
 
     public function connectAllPlayers()
     {
+        if ($this->enabled->get() == false) {
+            return;
+        }
+
         $players = $this->playerStorage->getOnline();
 
         /** @var Request $request */
@@ -542,8 +575,11 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
 
     public function setRecords()
     {
-        if ($this->dedimaniaService->isDisabled()) {
+        if ($this->enabled->get() == false) {
+            return;
+        }
 
+        if ($this->dedimaniaService->isDisabled()) {
             return;
         }
 
@@ -601,6 +637,10 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
      */
     protected function getReplays($top1Login, $bestCheckpoints)
     {
+        if ($this->enabled->get() == false) {
+            return;
+        }
+
         list($login, $GReplay) = $this->dedimaniaService->getGReplay();
 
         if ($GReplay != "") {
@@ -626,6 +666,10 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
      */
     protected function setGReplay($login)
     {
+        if ($this->enabled->get() == false) {
+            return;
+        }
+
         $tempReplay = new IXR_Base64("");
         $this->dedimaniaService->setGReplay("", $tempReplay);
 
@@ -737,6 +781,10 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
      */
     public function onStartMapStart($count, $time, $restarted, Map $map)
     {
+        if ($this->enabled->get() == false) {
+            return;
+        }
+
         if (!$restarted) {
             $this->lastUpdate = time();
             $this->getRecords();
@@ -755,6 +803,10 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
      */
     public function onEndMapStart($count, $time, $restarted, Map $map)
     {
+        if ($this->enabled->get() == false) {
+            return;
+        }
+
         if (!$restarted) {
             $this->setRecords();
         }
@@ -782,6 +834,10 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
         $speed,
         $distance
     ) {
+
+        if ($this->enabled->get() == false) {
+            return;
+        }
 
         $record = $this->dedimaniaService->processRecord($login, $raceTime, $curCps);
         if ($record instanceof DedimaniaRecord) {
@@ -992,6 +1048,10 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
      */
     public function onPlayerConnect(DedicatedPlayer $player)
     {
+        if ($this->enabled->get() == false) {
+            return;
+        }
+
         $this->connectPlayer($player);
     }
 
@@ -1002,6 +1062,10 @@ class Dedimania implements StatusAwarePluginInterface, ListenerInterfaceExpTimer
      */
     public function onPlayerDisconnect(DedicatedPlayer $player, $disconnectionReason)
     {
+        if ($this->enabled->get() == false) {
+            return;
+        }
+
         $this->disconnectPlayer($player);
     }
 
