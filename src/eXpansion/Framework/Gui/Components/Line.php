@@ -51,6 +51,8 @@ class Line extends AbstractUiElement
         $this->tx = $tx + 180.;
         $this->ty = $ty + 90.;
         $this->to = true;
+
+        return $this;
     }
 
     /**
