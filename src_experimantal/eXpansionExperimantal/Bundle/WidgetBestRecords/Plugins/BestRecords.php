@@ -5,7 +5,6 @@ namespace eXpansionExperimantal\Bundle\WidgetBestRecords\Plugins;
 use eXpansion\Bundle\LocalRecords\DataProviders\Listener\RecordsDataListener;
 use eXpansion\Bundle\LocalRecords\Model\Record;
 use eXpansion\Bundle\LocalRecords\Plugins\BaseRecords;
-use eXpansionExperimantal\Bundle\WidgetBestRecords\Plugins\Gui\BestRecordsWidgetFactory;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
 use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
@@ -14,7 +13,8 @@ use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterface
 use eXpansionExperimantal\Bundle\Dedimania\DataProviders\Listener\DedimaniaDataListener;
 use eXpansionExperimantal\Bundle\Dedimania\Structures\DedimaniaPlayer;
 use eXpansionExperimantal\Bundle\Dedimania\Structures\DedimaniaRecord;
-use Maniaplanet\DedicatedServer\Connection;
+use eXpansionExperimantal\Bundle\WidgetBestRecords\Plugins\Gui\BestRecordsWidgetFactory;
+use eXpansionExperimantal\Bundle\WidgetBestRecords\Plugins\Gui\LiveRankingsWidgetFactory;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
 
@@ -44,7 +44,7 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, Li
     /**
      * Debug constructor.
      *
-     * @param Connection               $connection
+     * @param Factory                  $factory
      * @param PlayerStorage            $playerStorage
      * @param BestRecordsWidgetFactory $widget
      * @param Group                    $players
@@ -123,8 +123,14 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, Li
     /**
      * @inheritdoc
      */
-    public function onLocalRecordsBetterPosition(Record $record, Record $oldRecord, $records, $position, $oldPosition, BaseRecords $baseRecords)
-    {
+    public function onLocalRecordsBetterPosition(
+        Record $record,
+        Record $oldRecord,
+        $records,
+        $position,
+        $oldPosition,
+        BaseRecords $baseRecords
+    ) {
         if (!$this->checkRecordPlugin($baseRecords)) {
             return;
         }
@@ -138,8 +144,13 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, Li
     /**
      * @inheritdoc
      */
-    public function onLocalRecordsSamePosition(Record $record, Record $oldRecord, $records, $position, BaseRecords $baseRecords)
-    {
+    public function onLocalRecordsSamePosition(
+        Record $record,
+        Record $oldRecord,
+        $records,
+        $position,
+        BaseRecords $baseRecords
+    ) {
         if (!$this->checkRecordPlugin($baseRecords)) {
             return;
         }
@@ -212,7 +223,6 @@ class BestRecords implements StatusAwarePluginInterface, RecordsDataListener, Li
      */
     public function onBeginMap(Map $map)
     {
-        $this->widget->setAuthorTime($map->author, $map->authorTime);
         $this->widget->setDedimaniaRecord(null);
         $this->widget->setLocalRecord(null);
         $this->widget->update($this->allPlayers);

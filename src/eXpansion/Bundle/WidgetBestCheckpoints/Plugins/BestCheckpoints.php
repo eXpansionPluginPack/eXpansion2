@@ -9,13 +9,15 @@ use eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\BestCheckpointsWidgetFact
 use eXpansion\Bundle\WidgetBestCheckpoints\Plugins\Gui\UpdaterWidgetFactory;
 use eXpansion\Framework\Core\Model\UserGroups\Group;
 use eXpansion\Framework\Core\Plugins\StatusAwarePluginInterface;
-use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyMap;
+use eXpansionExperimantal\Bundle\Dedimania\DataProviders\Listener\DedimaniaDataListener;
+use eXpansionExperimantal\Bundle\Dedimania\Structures\DedimaniaPlayer;
+use eXpansionExperimantal\Bundle\Dedimania\Structures\DedimaniaRecord;
 use Maniaplanet\DedicatedServer\Structures\Map;
 
 
-class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener, ListenerInterfaceMpLegacyMap
+class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener, DedimaniaDataListener, ListenerInterfaceMpLegacyMap
 {
     /**
      * @var PlayerStorage
@@ -42,12 +44,11 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
     /**
      * BestCheckpoints constructor.
      *
-     * @param Factory $factory
-     * @param PlayerStorage $playerStorage
+     * @param PlayerStorage                $playerStorage
      * @param BestCheckpointsWidgetFactory $widget
-     * @param UpdaterWidgetFactory $updater
-     * @param Group $players
-     * @param Group $allPlayers
+     * @param UpdaterWidgetFactory         $updater
+     * @param Group                        $players
+     * @param Group                        $allPlayers
      */
     public function __construct(
         PlayerStorage $playerStorage,
@@ -93,9 +94,9 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
         }
 
         if (count($records) > 0) {
-            $this->updater->setLocalRecord($records[0]->getCheckpoints());
+            $this->updater->setLocalRecord($records[0]->getPlayer()->getNickname(), $records[0]->getCheckpoints());
         } else {
-            $this->updater->setLocalRecord([]);
+            $this->updater->setLocalRecord("-", []);
         }
     }
 
@@ -112,7 +113,7 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
             return;
         }
 
-        $this->updater->setLocalRecord($record->getCheckpoints());
+        $this->updater->setLocalRecord($record->getPlayer()->getNickname(), $record->getCheckpoints());
     }
 
     /**
@@ -136,14 +137,20 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
      * @param int      $position
      * @param int      $oldPosition
      */
-    public function onLocalRecordsBetterPosition(Record $record, Record $oldRecord, $records, $position, $oldPosition, BaseRecords $baseRecords)
-    {
+    public function onLocalRecordsBetterPosition(
+        Record $record,
+        Record $oldRecord,
+        $records,
+        $position,
+        $oldPosition,
+        BaseRecords $baseRecords
+    ) {
         if (!$this->checkRecordPlugin($baseRecords)) {
             return;
         }
 
         if ($position == 1) {
-            $this->updater->setLocalRecord($record->getCheckpoints());
+            $this->updater->setLocalRecord($record->getPlayer()->getNickname(), $record->getCheckpoints());
         }
     }
 
@@ -155,14 +162,19 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
      * @param Record[] $records
      * @param          $position
      */
-    public function onLocalRecordsSamePosition(Record $record, Record $oldRecord, $records, $position, BaseRecords $baseRecords)
-    {
+    public function onLocalRecordsSamePosition(
+        Record $record,
+        Record $oldRecord,
+        $records,
+        $position,
+        BaseRecords $baseRecords
+    ) {
         if (!$this->checkRecordPlugin($baseRecords)) {
             return;
         }
 
         if ($position == 1) {
-            $this->updater->setLocalRecord($record->getCheckpoints());
+            $this->updater->setLocalRecord($record->getPlayer()->getNickname(), $record->getCheckpoints());
         }
     }
 
@@ -195,6 +207,60 @@ class BestCheckpoints implements StatusAwarePluginInterface, RecordsDataListener
      */
     public function onEndMap(Map $map)
     {
-        $this->updater->setLocalRecord([]);
+        $this->updater->setLocalRecord("-", []);
     }
+
+    /**
+     * Called when dedimania records are loaded.
+     *
+     * @param DedimaniaRecord[] $records
+     */
+    public function onDedimaniaRecordsLoaded($records)
+    {
+        if (count($records) > 1) {
+            $this->updater->setDedimaniaRecord($records[0]->nickName, $records[0]->getCheckpoints());
+        } else {
+            $this->updater->setDedimaniaRecord("-", []);
+        }
+    }
+
+    /**
+     * @param DedimaniaRecord   $record
+     * @param DedimaniaRecord   $oldRecord
+     * @param DedimaniaRecord[] $records
+     * @param  int              $position
+     * @param  int              $oldPosition
+     * @return void
+     */
+    public function onDedimaniaRecordsUpdate(
+        DedimaniaRecord $record,
+        DedimaniaRecord $oldRecord,
+        $records,
+        $position,
+        $oldPosition
+    ) {
+        if ($position == 1) {
+            $this->updater->setDedimaniaRecord($record->nickName, $record->getCheckpoints());
+        }
+    }
+
+    /**
+     * @param DedimaniaPlayer $player
+     * @return void
+     */
+    public function onDedimaniaPlayerConnect(DedimaniaPlayer $player)
+    {
+        // do nothing
+    }
+
+    /**
+     * @param DedimaniaPlayer $player
+     * @return void
+     */
+    public function onDedimaniaPlayerDisconnect(DedimaniaPlayer $player)
+    {
+        // do nothing
+    }
+
+
 }
