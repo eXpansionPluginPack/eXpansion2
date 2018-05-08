@@ -1253,7 +1253,7 @@ class WebaccessUrl
             return null;
         }
 
-        echo 'mess_size1='.strlen($message)."\n";
+        // echo 'mess_size1='.strlen($message)."\n";
 
         // if Content-Encoding: gzip  or  Content-Encoding: deflate
         if (isset($headers['content-encoding'][0])) {
