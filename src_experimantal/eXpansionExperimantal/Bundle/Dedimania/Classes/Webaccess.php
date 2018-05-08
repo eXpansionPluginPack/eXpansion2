@@ -310,8 +310,7 @@ class Webaccess
             if (isset($wau->_spool[0]['State']) &&
                 ($wau->_spool[0]['State'] == 'OPEN' ||
                     $wau->_spool[0]['State'] == 'BAD' ||
-                    $wau->_spool[0]['State'] == 'SEND')
-            ) {
+                    $wau->_spool[0]['State'] == 'SEND')) {
 
                 if (($wau->_state == 'CLOSED' || $wau->_state == 'BAD') && !$wau->_socket) {
                     $wau->_open();
@@ -436,7 +435,7 @@ class WebaccessUrl
         $this->wa = &$wa;
         $this->_host = $host;
         $this->_port = $port;
-        $this->_webaccess_str = 'Webaccess('.$this->_host.':'.$this->_port.'): ';
+        $this->_webaccess_str = 'Webaccess ('.$this->_host.':'.$this->_port.'): ';
         $this->_agent = $agent;
         $this->_mimeType = $mimeType;
 
@@ -476,9 +475,6 @@ class WebaccessUrl
         $this->_bad_timeout = 0;
         $this->_read_time = 0;
         $this->console = $console;
-
-        $this->console->writeln("at request");
-
     }
 
     // put connection in BAD state
@@ -519,7 +515,7 @@ class WebaccessUrl
         global $_web_access_retry_timeout;
         if ($this->_state == 'BAD') {
             $this->_bad_time = time();
-            $this->_bad_timeout = $_web_access_retry_timeout;
+            $this->_bad_timeout = 0;
         }
     }
 
@@ -779,6 +775,7 @@ class WebaccessUrl
                         $this->_open_socket($opentimeout);
                     }
 
+						$query_state = $this->_spool[0]['State'];
                     if ($this->_spool[0]['State'] == 'OPEN') {
                         $time = microtime(true);
                         $this->_spool[0]['Times']['send'][0] = $time;
@@ -790,11 +787,11 @@ class WebaccessUrl
                     }
 
                     // if timeout then error
-                    if (($difftime = round(microtime(true) - $this->_read_time)) > $waittimeout) {
+                    if ($query_state != 'RECEIVE' && ($difftime = microtime(true) - $this->_read_time) > $waittimeout) {
                         $this->_bad("Request timeout, in _open ({$difftime} > {$waittimeout}s) state=".$this->_spool[0]['State']
                         );
 
-                        return false;
+                        return;
                     }
                 }
                 if ($this->_socket) {
@@ -905,12 +902,11 @@ class WebaccessUrl
 
                     $this->_spool[0]['State'] = 'RECEIVE';
                     $this->_spool[0]['Times']['receive'][0] = $time;
-                } elseif (($difftime = round(microtime(true) - $this->_read_time)) > $waittimeout) {
+                } elseif (($difftime = microtime(true) - $this->_read_time) > $waittimeout) {
                     // if timeout then error
                     $this->_bad(
                         "Request timeout, in _send ({$difftime} > {$waittimeout}s) state=".$this->_spool[0]['State']
                     );
-                    break;
                 }
             }
 
@@ -961,7 +957,7 @@ class WebaccessUrl
                 }
 
                 // if timeout then error
-                if (($difftime = round(microtime(true) - $this->_read_time)) > $waittimeout) {
+                if (($difftime = microtime(true) - $this->_read_time) > $waittimeout) {
                     $this->_bad("Request timeout, in _receive ({$difftime} > {$waittimeout}s)");
                     break;
                 }
@@ -1031,7 +1027,7 @@ class WebaccessUrl
         // reply is complete :)
         if ($state === true) {
             $this->_bad_timeout = 0; // reset error timeout
-            $time = microtime(true);  // @todo see if this is needed ?
+
             $this->_spool[0]['Times']['receive'][1] = $time - $this->_spool[0]['Times']['receive'][0];
             $this->_spool[0]['State'] = 'DONE';
 
@@ -1050,7 +1046,7 @@ class WebaccessUrl
                 $this->_socket = null;
             }
 
-            $this->infos();
+            // $this->infos();
 
             // request completed, remove it from spool!
             array_shift($this->_spool);
@@ -1185,6 +1181,7 @@ class WebaccessUrl
 
                 $chunk = explode(';', substr($datas[1], $chunkPos, $datapos - $chunkPos));
                 $size = hexdec($chunk[0]);
+				//debugPrint("Webaccess->Response - chunk - $chunkpos, $datapos, $size (" . strlen($datas[1]) . ")", $chunk);
                 while ($size > 0) {
                     // incomplete message
                     if ($datapos + 2 + $size > $datasize) {
