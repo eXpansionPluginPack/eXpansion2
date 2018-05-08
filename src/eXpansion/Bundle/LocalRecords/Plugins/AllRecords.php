@@ -24,6 +24,10 @@ class AllRecords implements RecordsDataListener, ListenerInterfaceMpLegacyMap
     {
         $mergedRecords = [];
 
+        if (!isset($this->recordHandlers[1])) {
+            return $mergedRecords;
+        }
+
         foreach ($this->recordHandlers[1]->getRecords() as $i => $record) {
             $recordData = [
                 'position' => $i + 1,
@@ -87,14 +91,25 @@ class AllRecords implements RecordsDataListener, ListenerInterfaceMpLegacyMap
     /**
      * @inheritdoc
      */
-    public function onLocalRecordsBetterPosition(Record $record, Record $oldRecord, $records, $position, $oldPosition, BaseRecords $baseRecords)
-    {
+    public function onLocalRecordsBetterPosition(
+        Record $record,
+        Record $oldRecord,
+        $records,
+        $position,
+        $oldPosition,
+        BaseRecords $baseRecords
+    ) {
     }
 
     /**
      * @inheritdoc
      */
-    public function onLocalRecordsSamePosition(Record $record, Record $oldRecord, $records, $position, BaseRecords $baseRecords)
-    {
+    public function onLocalRecordsSamePosition(
+        Record $record,
+        Record $oldRecord,
+        $records,
+        $position,
+        BaseRecords $baseRecords
+    ) {
     }
 }

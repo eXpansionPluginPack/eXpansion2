@@ -1,13 +1,13 @@
 parameters:
     expansion.custom_ui.ui_properties:
         # The map name and author displayed in the top right of the screen when viewing the scores table
-        map_info:  {visible: false, pos: "-160. 80. 150."}
+        map_info:  {visible: true, pos: "-160. 80. 150."}
 
         # Information about live envent displayed in the top right of the screen.
         live_info: {visible: false, pos: "-159. 84. 5."}
 
         # Information about the spectated player displayed in the bottom of the screen
-        spectator_info: {visible: true, pos: "-159. 84. 5."}
+        spectator_info: {visible: true, pos: "-147. 84. 5."}
 
         # Only visible in solo modes, it hides the medal/ghost selection UI
         opponents_info: {visible: true}

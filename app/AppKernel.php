@@ -24,15 +24,15 @@ class AppKernel extends Kernel
         /* Register symfony bundles & eXpansion core bundles */
         $bundles = $this->registerCoreBundles();
 
-        $configBundles = \Symfony\Component\Yaml\Yaml::parse(file_get_contents(__DIR__ . '/config/bundles.yml'));
+        $configBundles = \Symfony\Component\Yaml\Yaml::parse(file_get_contents(__DIR__.'/config/bundles.yml'));
         foreach ($configBundles['bundles'] as $bundle) {
             $bundles[] = new $bundle();
         }
 
         /* Register test bundles. */
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
-         //   $bundles[] = new \eXpansion\Bundle\Acme\AcmeBundle();
-    //     $bundles[] = new \eXpansion\Bundle\DeveloperTools\DeveloperToolsBundle();
+            $bundles[] = new \eXpansion\Bundle\Acme\AcmeBundle();
+            $bundles[] = new \eXpansion\Bundle\DeveloperTools\DeveloperToolsBundle();
         }
 
         return $bundles;
