@@ -95,7 +95,7 @@ class Donate extends AbstractChatCommand
             $this->chatNotification->sendMessage(
                 'expansion_game_currency.donate.error',
                 $login,
-                ['error' => "Bill could't be created"]
+                ['%error%' => "Bill could't be created"]
             );
             return;
         }
@@ -108,14 +108,14 @@ class Donate extends AbstractChatCommand
                 $this->chatNotification->sendMessage(
                     'expansion_game_currency.donate.success',
                     null,
-                    ['amount' => $amount, 'nickname' => $player->getNickName()]
+                    ['%amount%' => $amount, '%nickname%' => $player->getNickName()]
                 );
             },
             function ($error) use ($login) {
                 $this->chatNotification->sendMessage(
                     'expansion_game_currency.donate.error',
                     $login,
-                    ['error' => $error]
+                    ['%error%' => $error]
                 );
             }
         );
