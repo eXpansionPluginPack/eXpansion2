@@ -151,13 +151,14 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                 declare Integer Compare = 99999999;            
                 
                 switch (BestCp_Mode) {
-                    case 0: {                                             
-                        if (Scores[0].BestLap.Time > -1) {
-                            HolderLabel.Value = Scores[0].User.Name;
-                        } else {
-                            HolderLabel.Value = "-";
+                    case 0: { 
+                        if (Scores.existskey(0)) {                                            
+                            if (Scores[0].BestLap.Time > -1) {
+                                HolderLabel.Value = Scores[0].User.Name;
+                            } else {
+                                HolderLabel.Value = "-";
+                            }
                         }
-                        
                         if (MapBestCheckpoints.existskey(_Index)) {                       
                             Compare = MapBestCheckpoints[_Index];                            
                         } else {
@@ -259,8 +260,8 @@ EOL
                 }
             }
             
-            if (Scores.count > 0) {                                           
-                if (Scores[0].BestLap.Time != -1) {
+              if (Scores.existskey(0)) {                                        
+                if (Scores[0].BestLap.Time > -1) {
                     MapBestTime = Scores[0].BestLap.Time;             
                     foreach (k => i in Scores[0].BestLap.Checkpoints) {
                         MapBestCheckpoints[k] = i;

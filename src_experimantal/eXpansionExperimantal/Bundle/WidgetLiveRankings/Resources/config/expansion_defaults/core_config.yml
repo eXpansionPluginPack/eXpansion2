@@ -7,6 +7,6 @@ e_xpansion_core:
         TM: # Game/Title it's compatible with (ALL to use it on all gamemodes)
           ALL: # The game mode to apply he config for.
             ALL: # The script mode to apply the config for.
-              posX: -159
-              posY: 87
+              posX: 110
+              posY: 86
               options: # Additional values, check the widgets documentation.
