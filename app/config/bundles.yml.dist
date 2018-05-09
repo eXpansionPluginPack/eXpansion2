@@ -26,3 +26,8 @@ bundles:
   - \eXpansion\Bundle\WidgetBestCheckpoints\WidgetBestCheckpointsBundle
   - \eXpansionExperimantal\Bundle\WidgetBestRecords\WidgetBestRecordsBundle
   - \eXpansionExperimantal\Bundle\WidgetLiveRankings\LiveRankingsBundle
+
+  # Immersive windows changes the way eXpansion windows is displayed. It's a "skin" bundle. Remove the "#" to enable
+  #- \eXpansion\Bundle\ImmersiveWindows\ImmersiveWindowsBundle
+
+  # Add other Custom bundles here
