@@ -31,7 +31,8 @@ class RecordsWidgetFactory extends WidgetFactory
         $this->time = $time;
     }
 
-    /** @param Widget $manialink */
+    /** @param ManialinkInterface|Widget $manialink
+     */
     protected function createContent(ManialinkInterface $manialink)
     {
         parent::createContent($manialink);
@@ -61,11 +62,9 @@ EOL
         parent::updateContent($manialink);
         $manialink->getContentFrame()->removeAllChildren();
 
-        $row = $this->uiFactory->createLayoutRow(-130, -2, [], 0.5);
+        $row = $this->uiFactory->createLayoutRow(-160, 0, [], 0.5);
         $manialink->addChild($row);
-        $row->addChild($this->uiFactory->createLabel("Local Records", Label::TYPE_HEADER)->setTextSize(2)->setSize(
-            30, 4
-        ));
+        $row->addChild($this->uiFactory->createWidgetTitle("Local Records", 65, 4));
         $first = 0;
         $x = 0;
         $out = "";
@@ -86,15 +85,26 @@ EOL
             $line = $this->uiFactory->createLayoutLine(0, 0, [], 0.5);
             $line->addChildren(
                 [
-                    $this->uiFactory->createLabel(($x + 1).".", Label::TYPE_TITLE)
-                        ->setSize(5, 3)->setHorizontalAlign("right"),
-                    $this->uiFactory->createLabel($out,
-                        Label::TYPE_HEADER)
-                        ->setSize(10, 3)->setHorizontalAlign("right"),
+                    $this->uiFactory->createLabel(($x + 1).".", Label::TYPE_NORMAL)
+                        ->setSize(5, 3)
+                        ->setHorizontalAlign("right")
+                        ->setTextSize(1)
+                        ->setAreaColor("0007"),
 
-                    $this->uiFactory->createLabel(TMString::trimLinks($record->getPlayer()->getNickname()),
-                        Label::TYPE_HEADER)
-                        ->setSize(35, 3)->setHorizontalAlign("left"),
+
+                    $this->uiFactory->createLabel(
+                        TMString::trimLinks($record->getPlayer()->getNickname()), Label::TYPE_NORMAL)
+                        ->setSize(30, 3)
+                        ->setTextPrefix(" ")
+                        ->setHorizontalAlign("left")
+                        ->setTextSize(1)
+                        ->setAreaColor("0007"),
+
+                    $this->uiFactory->createLabel($out." ", Label::TYPE_NORMAL)
+                        ->setSize(15, 3)
+                        ->setHorizontalAlign("right")
+                        ->setTextSize(1)
+                        ->setAreaColor("0007"),
                 ]);
 
             $row->addChild($line);
@@ -102,12 +112,11 @@ EOL
             $x++;
         }
 
-        $row = $this->uiFactory->createLayoutRow(110, -2, [], 0.5);
+        $row = $this->uiFactory->createLayoutRow(-160, -70, [], 0.5);
         $manialink->addChild($row);
 
-        $row->addChild($this->uiFactory->createLabel("Dedimania", Label::TYPE_HEADER)->setTextSize(2)->setSize(
-            30, 4
-        ));
+        $row->addChild($this->uiFactory->createWidgetTitle("Dedimania", 65, 4));
+
         $first = 0;
         $x = 0;
         $out = "";
@@ -128,26 +137,30 @@ EOL
             $line = $this->uiFactory->createLayoutLine(0, 0, [], 0.5);
             $line->addChildren(
                 [
-                    $this->uiFactory->createLabel(($x + 1).".", Label::TYPE_TITLE)
-                        ->setSize(5, 3)->setHorizontalAlign("right"),
-                    $this->uiFactory->createLabel($out,
-                        Label::TYPE_HEADER)
-                        ->setSize(10, 3)->setHorizontalAlign("right"),
+                    $this->uiFactory->createLabel(($x + 1).".", Label::TYPE_NORMAL)
+                        ->setSize(5, 3)
+                        ->setHorizontalAlign("right")
+                        ->setTextSize(1)
+                        ->setAreaColor("0007"),
 
-                    $this->uiFactory->createLabel(TMString::trimLinks($record->nickName), Label::TYPE_HEADER)
-                        ->setSize(35, 3)->setHorizontalAlign("left"),
+                    $this->uiFactory->createLabel(
+                        TMString::trimLinks($record->nickName, Label::TYPE_NORMAL))
+                        ->setSize(30, 3)
+                        ->setTextPrefix(" ")
+                        ->setHorizontalAlign("left")
+                        ->setTextSize(1)
+                        ->setAreaColor("0007"),
+
+                    $this->uiFactory->createLabel($out." ", Label::TYPE_NORMAL)
+                        ->setSize(15, 3)
+                        ->setHorizontalAlign("right")
+                        ->setTextSize(1)
+                        ->setAreaColor("0007"),
                 ]);
 
             $row->addChild($line);
             $x++;
         }
-
-        $manialink->addChild(
-            $this->uiFactory->createWidgetBackground(50, 60)->setPosX(-130)
-        );
-        $manialink->addChild(
-            $this->uiFactory->createWidgetBackground(50, 60)->setPosX(110)
-        );
 
     }
 

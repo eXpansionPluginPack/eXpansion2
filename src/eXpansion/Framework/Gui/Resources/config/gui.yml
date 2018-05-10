@@ -31,6 +31,7 @@ parameters:
     LayoutScrollable:  '%expansion.gui.layout.scroll.class%'
     WidgetBackground: 'eXpansion\Framework\Gui\Builders\WidgetBackground'
     WidgetLabel: 'eXpansion\Framework\Gui\Builders\WidgetBackground'
+    WidgetTitle: 'eXpansion\Framework\Gui\Builders\WidgetTitle'
 
 services:
   expansion.gui.component.factory:

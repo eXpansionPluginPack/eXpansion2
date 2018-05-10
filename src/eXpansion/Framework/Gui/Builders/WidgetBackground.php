@@ -83,6 +83,25 @@ class WidgetBackground implements Renderable
     /**
      * @return int
      */
+    public function getX(): int
+    {
+        return $this->posX;
+    }
+
+    /**
+     * @param int $posX
+     * @return WidgetBackground
+     */
+    public function setX(int $posX)
+    {
+        $this->posX = $posX;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
     public function getPosX(): int
     {
         return $this->posX;
@@ -115,10 +134,48 @@ class WidgetBackground implements Renderable
     /**
      * @return int
      */
+    public function getY(): int
+    {
+        return $this->posY;
+    }
+
+    /**
+     * @param int $posY
+     * @return WidgetBackground
+     */
+    public function setY(int $posY)
+    {
+        $this->posY = $posY;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getZ(): int
+    {
+        return $this->posZ;
+    }
+
+    /**
+     * @param int $posZ
+     * @return WidgetBackground
+     */
+    public function setZ(int $posZ)
+    {
+        $this->posZ = $posZ;
+
+        return $this;
+    }
+    /**
+     * @return int
+     */
     public function getPosY(): int
     {
         return $this->posY;
     }
+
 
     /**
      * @param int $posY
