@@ -64,7 +64,7 @@ EOL
 
         $row = $this->uiFactory->createLayoutRow(-160, 0, [], 0.5);
         $manialink->addChild($row);
-        $row->addChild($this->uiFactory->createWidgetTitle("Local Records", 65, 4));
+        $row->addChild($this->uiFactory->createWidgetTitle("Local Records", 55, 3.5));
         $first = 0;
         $x = 0;
         $out = "";
@@ -115,7 +115,7 @@ EOL
         $row = $this->uiFactory->createLayoutRow(-160, -70, [], 0.5);
         $manialink->addChild($row);
 
-        $row->addChild($this->uiFactory->createWidgetTitle("Dedimania", 65, 4));
+        $row->addChild($this->uiFactory->createWidgetTitle("Dedimania", 55, 3.5));
 
         $first = 0;
         $x = 0;

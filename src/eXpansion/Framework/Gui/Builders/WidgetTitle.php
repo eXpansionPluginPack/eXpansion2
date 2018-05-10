@@ -87,7 +87,7 @@ class WidgetTitle implements Renderable, Container
         $opacity = 0.6;
 
         $this->label->setSize($this->getWidth() - 22, $this->getHeight())->setAlign("left", "center2")
-            ->setPosition(1, -($h / 2))->setTextSize(2)->setTextColor("fff")->setTextFont("BiryaniDemiBold")
+            ->setPosition(1, -($h / 2))->setTextSize(1)->setTextColor("fff")->setTextFont("BiryaniDemiBold")
             ->setOpacity($opacity);
 
         $bg1 = Quad::create()
