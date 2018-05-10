@@ -13,7 +13,7 @@ use FML\Script\ScriptLabel;
 
 class BestCheckpointsWidgetFactory extends WidgetFactory
 {
-    const rowCount = 2;
+    const rowCount = 3;
     const columnCount = 10;
 
     /** @var UpdaterWidgetFactory */
@@ -75,7 +75,7 @@ class BestCheckpointsWidgetFactory extends WidgetFactory
                 }
                 $elementCount++;
             }
-            $line = $this->uiFactory->createLayoutRow(0, 0, $elements, 0.5);
+            $line = $this->uiFactory->createLayoutLine(0, 0, $elements, 0.5);
 
             $rows->addChild($line);
         }
