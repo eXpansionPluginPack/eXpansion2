@@ -28,7 +28,7 @@ parameters:
         countdown: {visible: true, pos: "134. -73. 10."}
 
         # 3, 2, 1, Go! message displayed on the middle of the screen when spawning
-        go: {visible: true}
+        go: {visible: false}
 
         # Current race chrono displayed at the bottom center of the screen
         chrono: {visible: true, pos: "0. -84. -5."}

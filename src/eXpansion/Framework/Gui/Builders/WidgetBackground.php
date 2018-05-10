@@ -39,6 +39,9 @@ class WidgetBackground implements Renderable
      * @var string
      */
     protected $action;
+    /** @var bool
+     */
+    private $blur;
 
     /**
      * WidgetBackground constructor.
@@ -68,6 +71,10 @@ class WidgetBackground implements Renderable
         }
         if ($this->action) {
             $quad->setAction($this->action)->setFocusBackgroundColor("999");
+        }
+
+        if ($this->blur) {
+            $quad->setStyles("Bgs1", "BgDialogBlur");
         }
 
         return $quad->render($domDocument);
@@ -219,5 +226,12 @@ class WidgetBackground implements Renderable
         return $this;
     }
 
+    public function setBlur($blur = true)
+    {
+        $this->blur = $blur;
+
+        return $this;
+
+    }
 
 }

@@ -1,0 +1,12 @@
+e_xpansion_core:
+    #
+    # You can configure custom positions for widgets here.
+    #
+    widget_positions:
+      eXpansionExperimantal\Bundle\WidgetRecords\Plugins\Gui\RecordsWidgetFactory:
+        TM: # Game/Title it's compatible with (ALL to use it on all gamemodes)
+          ALL: # The game mode to apply he config for.
+            ALL: # The script mode to apply the config for.
+              posX: 0
+              posY: 87
+              options: # Additional values, check the widgets documentation.

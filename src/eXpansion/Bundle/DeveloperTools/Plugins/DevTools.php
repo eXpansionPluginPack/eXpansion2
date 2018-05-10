@@ -100,7 +100,7 @@ class DevTools implements ListenerInterfaceExpApplication, ListenerInterfaceExpT
             }
 
             $this->memoryWidget->setMemoryMessage($msg);
-            $this->memoryWidget->update($this->allPlayersGroup);
+        //    $this->memoryWidget->update($this->allPlayersGroup);
             $this->console->writeln($msg);
         }
 

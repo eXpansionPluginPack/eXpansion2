@@ -178,7 +178,7 @@ class DedimaniaService
 
             if ($newRecord) {
                 $this->recordsByLogin = $tempRecords;
-                $outRecords = usort($tempRecords, [$this, 'compare']);
+                $outRecords = uasort($tempRecords, [$this, 'compare']);
 
                 $this->ranksByLogin = $tempPositions;
                 $params = [

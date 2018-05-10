@@ -84,19 +84,19 @@ class RecordsWindowFactory extends WindowFactory
                 'expansion_local_records.gui.race.window.column.position',
                 '1',
                 true,
-                true
+                false
             )->addTextColumn(
                 'score',
                 'expansion_local_records.gui.race.window.column.score',
                 '2',
                 true,
-                true
+                false
             )->addTextColumn(
                 'score_race',
                 'expansion_local_records.gui.race.window.column.score_race',
                 '2',
                 true,
-                true
+                false
             )->addTextColumn(
                 'nickname',
                 'expansion_local_records.gui.race.window.column.nickname',
@@ -106,7 +106,7 @@ class RecordsWindowFactory extends WindowFactory
                 'expansion_local_records.gui.race.window.column.login',
                 '4',
                 true,
-                true
+                false
             );
 
         $manialink->setData('grid', $gridBuilder);
