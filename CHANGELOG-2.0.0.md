@@ -1,5 +1,4 @@
-# 2.0.0.x 
-
+# 2.0.0.0-beta1 (2018-05-10)
 ## Fixes
 * Fixed #119 : Fixed all symfony commands requiring connection to the dedicated server. 
 * Fixed : Typo in addEventProcessor method of the application dispatcher.
