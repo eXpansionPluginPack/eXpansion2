@@ -57,12 +57,12 @@ class GameTitleFetchPass implements CompilerPassInterface
     protected function fetchDataFromRemote(Filesystem $fileSytem, ContainerBuilder $container)
     {
         $curl = new Curl();
-        $curl->setUrl("https://mp-expansion.com/api/maniaplanet/games");
+        $curl->setUrl("https://mp-expansion.com/api/maniaplanet/toZto");
         $curl->run();
         if ($curl->getCurlInfo()['http_code'] == 200) {
             $fileSytem->put(self::MAPPINGS_FILE, $curl->getResponse());
         } else {
-            $container->get("logger")->warning("Can't fetch title mappings from expansion website.");
+            echo "Can't fetch title mappings from expansion website!\n";
         }
     }
 }
