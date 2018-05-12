@@ -1,3 +1,11 @@
+# 2.0.0.0
+## Fixes
+* Fix #365 - Fixed exp not starting if can't fetch title/game mappings for expansion api's.
+
+# 2.0.0.0-beta2 (2018-05-10)
+## Fixes
+* Fixed #360 : Live ranking widgets crashing.
+
 # 2.0.0.0-beta1 (2018-05-10)
 ## Fixes
 * Fixed #119 : Fixed all symfony commands requiring connection to the dedicated server. 
