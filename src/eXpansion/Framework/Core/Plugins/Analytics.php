@@ -9,7 +9,6 @@ use eXpansion\Framework\Core\Helpers\Structures\HttpResult;
 use eXpansion\Framework\Core\Services\Application;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
-use League\ISO3166\ISO3166;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -198,13 +197,10 @@ class Analytics implements ListenerInterfaceExpTimer, StatusAwarePluginInterface
      */
     protected function getBasePingData()
     {
-        $alpha3 = $this->countries->getCodeFromCountry($this->countries->parseCountryFromPath($this->gameData->getServerPath()));
-        $data = (new ISO3166())->alpha3($alpha3);
-
         return [
             'key' => $this->key,
             'nbPlayers' => count($this->playerStorage->getOnline()),
-            'country' => $data['alpha2'],
+            'country' => $this->countries->getIsoAlpha2FromName($this->countries->parseCountryFromPath($this->gameData->getServerPath())),
             'version' => Application::EXPANSION_VERSION,
             'php_version' => $this->gameData->getServerCleanPhpVersion(),
             'php_version_short' => $this->gameData->getServerMajorPhpVersion(),
