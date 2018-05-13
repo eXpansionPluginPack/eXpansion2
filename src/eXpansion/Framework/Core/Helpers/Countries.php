@@ -2,8 +2,17 @@
 
 namespace eXpansion\Framework\Core\Helpers;
 
+use League\ISO3166\Exception\OutOfBoundsException;
+use League\ISO3166\ISO3166;
+use Psr\Log\LoggerInterface;
+
 class Countries
 {
+    /** @var LoggerInterface */
+    protected $logger;
+
+    protected $iso;
+
     /** @var array  */
     protected $countriesMapping = [];
 
@@ -16,15 +25,31 @@ class Countries
     /**
      * Countries constructor.
      *
-     * @param array $countriesMapping
-     * @param string $otherCountryCode
-     * @param string $otherCountryLabel
+     * @param LoggerInterface $logger
+     * @param array           $countriesMapping
+     * @param string          $otherCountryCode
+     * @param string          $otherCountryLabel
      */
-    public function __construct(array $countriesMapping, string $otherCountryCode, string $otherCountryLabel)
-    {
+    public function __construct(
+        LoggerInterface $logger,
+        array $countriesMapping,
+        string $otherCountryCode,
+        string $otherCountryLabel
+    ) {
+        $this->logger = $logger;
         $this->countriesMapping = $countriesMapping;
         $this->otherCountryCode = $otherCountryCode;
         $this->otherCountryLabel = $otherCountryLabel;
+
+        $this->iso = new ISO3166();
+        $contries = $this->iso->all();
+        $contries[] = [
+            'name' => 'Chinese Taipei',
+            'alpha2' => 'CT',
+            'alpha3' => 'TPE',
+        ];
+
+        $this->iso = new ISO3166($contries);
     }
 
 
@@ -80,5 +105,31 @@ class Countries
         }
 
         return "Other";
+    }
+
+    /**
+     * Get iso2 code from Maniaplanet Country name
+     *
+     * @param $name
+     *
+     * @return string
+     */
+    public function getIsoAlpha2FromName($name)
+    {
+        // First try and fetch from alpha3 code.
+        try {
+            return $this->iso->alpha3($this->getCodeFromCountry($name))['alpha2'];
+        } catch (OutOfBoundsException $e) {
+            // Nothing code continues.
+        }
+
+        // Couldn't getch alpha3 from code try from country name.
+        try {
+            return $this->iso->name($name)['alpha2'];
+        } catch (OutOfBoundsException $e) {
+            $this->logger->warning("Can't get valid alpha2 code for country '$name'");
+        }
+
+        return "OT";
     }
 }
