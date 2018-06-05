@@ -201,3 +201,15 @@ services:
             $name: "expansion_core.config.glymp_icons.admin"
             $description: ""
             $defaultValue: '$fff'
+
+    #
+    # eXpansion base settings
+    #
+    expansion.core.config.base.server_settings_file:
+        class: eXpansion\Framework\Config\Model\TextConfig
+        arguments:
+            $path: "%expansion.core.config.path.glymp_icons%/admin"
+            $scope: "server"
+            $name: "expansion_core.config.base.server_settings_file"
+            $description: "Name of the file to save server settings into."
+            $defaultValue: 'default.config.xml'
