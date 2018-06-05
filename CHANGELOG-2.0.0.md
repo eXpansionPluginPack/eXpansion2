@@ -4,6 +4,7 @@
 
 ## Features
 * Feature #369 : Automatically saving server settings.
+* Feature #370 : Automatically saving match settings
 
 # 2.0.0.0-beta2 (2018-05-10)
 ## Fixes

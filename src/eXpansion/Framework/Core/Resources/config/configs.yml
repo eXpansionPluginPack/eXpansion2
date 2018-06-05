@@ -1,6 +1,7 @@
 parameters:
   expansion.core.config.path.color_codes: 'eXpansion/look_feel/color_codes'
   expansion.core.config.path.glymp_icons: 'eXpansion/look_feel/glymp_icons'
+  expansion.core.config.path.base: 'eXpansion/base'
 
 services:
     _defaults:
@@ -208,8 +209,17 @@ services:
     expansion.core.config.base.server_settings_file:
         class: eXpansion\Framework\Config\Model\TextConfig
         arguments:
-            $path: "%expansion.core.config.path.glymp_icons%/admin"
+            $path: "%expansion.core.config.path.base%/server_settings_file"
             $scope: "server"
             $name: "expansion_core.config.base.server_settings_file"
             $description: "Name of the file to save server settings into."
             $defaultValue: 'default.config.xml'
+
+    expansion.core.config.base.match_settings_file:
+        class: eXpansion\Framework\Config\Model\TextConfig
+        arguments:
+            $path: "%expansion.core.config.path.base%/match_settings_file"
+            $scope: "server"
+            $name: "expansion_core.config.base.match_settings_file"
+            $description: "Name of the file to save match settings into."
+            $defaultValue: 'eXpansion.xml'
