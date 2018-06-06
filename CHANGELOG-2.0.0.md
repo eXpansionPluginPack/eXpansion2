@@ -1,6 +1,7 @@
 # 2.0.0.0
 ## Fixes
-* Fix #365 - Fixed exp not starting if can't fetch title/game mappings for expansion api's.
+* Fix #365 - Not starting if can't fetch title/game mappings for expansion api's.
+* Fix #374 - Permissions configured in the config file is ignored at first start.
 
 ## Features
 * Feature #372 : Admin Permissions's are now handled using services. This will allow in the feature to improve the permissions page & adds more flexibility.
