@@ -29,5 +29,6 @@ class eXpansionAdminGroupsExtension extends Extension
         $loader->load('services.yml');
         $loader->load('plugins.yml');
         $loader->load('configs.yml');
+        $loader->load('admin_permissions.yml');
     }
 }

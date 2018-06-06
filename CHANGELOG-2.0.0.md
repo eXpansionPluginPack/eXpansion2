@@ -6,6 +6,9 @@
 * Feature #369 : Automatically saving server settings.
 * Feature #370 : Automatically saving match settings
 
+## Features
+* Feature #372 : Admin Permissions's are now handled using services. This will allow in the feature to improve the permissions page & adds more flexibility.
+
 # 2.0.0.0-beta2 (2018-05-10)
 ## Fixes
 * Fixed #360 : Live ranking widgets crashing.

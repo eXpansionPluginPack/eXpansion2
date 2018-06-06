@@ -1,0 +1,14 @@
+services:
+    .expansion.bundle.admin.permission.next:
+        class: eXpansion\Framework\AdminGroups\Model\AdminPermission
+        arguments:
+            $description: "Allow to skip current map"
+        tags:
+            - {name: exp.permission, permission: "next"}
+
+    .expansion.bundle.admin.permission.restart:
+        class: eXpansion\Framework\AdminGroups\Model\AdminPermission
+        arguments:
+            $description: "Allow to restart current map"
+        tags:
+            - {name: exp.permission, permission: "restart"}
