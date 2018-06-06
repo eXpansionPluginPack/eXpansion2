@@ -1,0 +1,21 @@
+services:
+    .expansion.bundle.maps.permission.jukebox:
+        class: eXpansion\Framework\AdminGroups\Model\AdminPermission
+        arguments:
+            $description: "Allow to see and administrate the jukebox content."
+        tags:
+            - {name: exp.permission, permission: "jukebox"}
+
+    .expansion.bundle.maps.permission.map_add:
+        class: eXpansion\Framework\AdminGroups\Model\AdminPermission
+        arguments:
+            $description: "Allow to add a map to the server"
+        tags:
+            - {name: exp.permission, permission: "map.add"}
+
+    .expansion.bundle.maps.permission.map_remove:
+        class: eXpansion\Framework\AdminGroups\Model\AdminPermission
+        arguments:
+            $description: "Allow to remove a map to the server"
+        tags:
+            - {name: exp.permission, permission: "map.remove"}
