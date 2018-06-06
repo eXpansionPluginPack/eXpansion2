@@ -25,6 +25,7 @@ class MapsExtension extends Extension
         $loader->load('gui.yml');
         $loader->load('chat_commands.yml');
         $loader->load('plugins.yml');
+        $loader->load('admin_permissions.yml');
 
     }
 }
