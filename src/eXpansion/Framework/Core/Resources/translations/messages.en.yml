@@ -52,6 +52,10 @@ expansion_core:
       error: "Error icon"
       admin: "Admin icon"
 
+    base:
+      server_settings_file: "Server Settings file name"
+      match_settings_file: "Server Settings file name"
+
 expansion_config:
   menu:
     eXpansion:
@@ -61,3 +65,5 @@ expansion_config:
           label: "Customize Color codes"
         glymp_icons:
           label: "Customize Icons"
+      base:
+        label: "Base Configuration"
