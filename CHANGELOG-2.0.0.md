@@ -1,4 +1,4 @@
-# 2.0.0.*
+# 2.0.0.0-beta3 (2018-06-09)
 ## Fixes
 
 * Fix #365 - Not starting if can't fetch title/game mappings for expansion api's.
