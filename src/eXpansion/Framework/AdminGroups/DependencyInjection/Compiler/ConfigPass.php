@@ -79,9 +79,9 @@ class ConfigPass implements CompilerPassInterface
                     $id = 'expansion.admin_groups.config.permissions.' . $groupCode . ".$permission";
                     $container->setDefinition($id, new ChildDefinition('expansion.admin_groups.config.permissions.abstract'))
                         ->setArgument('$path', "$pathPrefix/perm_$permission")
-                        ->setArgument('$defaultValue', $group['logins'])
-                        ->setArgument('$name', "expansion_admingroups.permission.$permission.label")
-                        ->setArgument('$description', "expansion_admingroups.permission.$permission.description");
+                        ->setArgument('$defaultValue', in_array($permission, $group['permissions']))
+                        ->setArgument('$name', "expansion_admin_groups.permission.$permission.label")
+                        ->setArgument('$description', "expansion_admin_groups.permission.$permission.description");
                     $configManager->addMethodCall('registerConfig', [new Reference($id), $id]);
                 }
             }
