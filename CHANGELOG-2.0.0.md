@@ -1,4 +1,4 @@
-# 2.0.0.x
+# 2.0.0.*
 ## Fixes
 
 * Fix #365 - Not starting if can't fetch title/game mappings for expansion api's.
