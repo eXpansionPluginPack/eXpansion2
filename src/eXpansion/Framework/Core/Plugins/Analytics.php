@@ -88,6 +88,7 @@ class Analytics implements ListenerInterfaceExpTimer, StatusAwarePluginInterface
         $this->playerStorage = $playerStorage;
         $this->countries = $countries;
         $this->logger = $logger;
+        $this->version   = $version;
         $this->handshakeUrl = $handshakeUrl;
         $this->pingUrl = $pingUrl;
         $this->pingInterval = $pingInterval;
