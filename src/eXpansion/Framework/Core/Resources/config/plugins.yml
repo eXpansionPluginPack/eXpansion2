@@ -112,6 +112,16 @@ services:
             - {name: expansion.plugin, data_provider: exp.timer}
 
     #
+    # Plugin to check for updates & notify admins
+    #
+    eXpansion\Framework\Core\Plugins\VersionChecker:
+        class: 'eXpansion\Framework\Core\Plugins\VersionChecker'
+        arguments:
+            $versionUrl: 'https://mp-expansion.com/api/expansion/version/available' #Ping database every 5 minutes.
+        tags:
+            - {name: expansion.plugin, data_provider: exp.timer}
+
+    #
     # Plugin to save server settings.
     #
     eXpansion\Framework\Core\Plugins\AutomaticServerSettingsSave:
