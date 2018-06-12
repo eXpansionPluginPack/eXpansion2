@@ -1,3 +1,8 @@
+# 2.0.0.x
+
+## Features
+* Feature #377 : Added more detailed expansion version information.
+
 # 2.0.0.0-beta3 (2018-06-09)
 ## Fixes
 

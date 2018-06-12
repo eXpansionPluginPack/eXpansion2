@@ -3,6 +3,7 @@
 
 namespace eXpansion\Framework\Core\Services\Application;
 
+use eXpansion\Framework\Core\Helpers\Version;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use Maniaplanet\DedicatedServer\Connection;
@@ -30,12 +31,15 @@ abstract class AbstractApplication implements RunInterface
     /** @var Console */
     protected $console;
 
+    /** @var LoggerInterface */
+    protected $logger;
+
+    /** @var Version */
+    protected $version;
+
     /** @var bool */
     protected $isRunning = true;
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+
 
     /**
      * AbstractApplication constructor.
@@ -44,17 +48,20 @@ abstract class AbstractApplication implements RunInterface
      * @param Factory $factory
      * @param Console $output
      * @param LoggerInterface $logger
+     * @param Version $version
      */
     public function __construct(
         DispatcherInterface $dispatcher,
         Factory $factory,
         Console $output,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        Version $version
     ) {
         $this->factory = $factory;
         $this->dispatcher = $dispatcher;
         $this->console = $output;
         $this->logger = $logger;
+        $this->version = $version;
     }
 
     /**

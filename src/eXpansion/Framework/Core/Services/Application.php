@@ -37,7 +37,8 @@ class Application extends AbstractApplication {
         $this->console->writeln('$fff"8b,   ,aa   d8\'    `8b$fff   88b,   ,a8" $0d0  d8"         ');
         $this->console->writeln('$fff `"Ybbd8"\'  8P        Y8$fff  88`YbbdP"\'  $0d0  88888888888');
         $this->console->writeln('$fff                        $fff  88          $0d0                ');
-        $this->console->writeln('$777  eXpansion v.2.0.0.0   $fff  88          $0d0               ');
+        $this->console->writeln('$777                        $fff  88          $0d0               ');
+        $this->console->writeln('$777  eXpansion v' . $this->version->getExpansionVersion());
 
         return parent::init($console);
     }

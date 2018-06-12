@@ -38,7 +38,7 @@ class Version
         if ($process->isSuccessful()) {
             $branch = $this->getBranch();
             $sha = $this->getSha();
-            $this->expansionVersion = "2.0.0.x-$branch@$sha";
+            $this->expansionVersion = "2.0-$branch@$sha";
         } else {
             $this->expansionVersion = Versions::getVersion('expansion-mp/expansion');
         }
