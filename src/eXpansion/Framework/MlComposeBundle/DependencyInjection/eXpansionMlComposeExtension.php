@@ -80,7 +80,7 @@ class eXpansionMlComposeExtension extends Extension
         if (isset($element->attributes()['component'])) {
             $blockDefinition['component'] = (string) $element->attributes()['component'];
         } else {
-            $blockDefinition['extends'] = (string) $element['@attributes']['extends'];
+            $blockDefinition['extends'] = (string) $element->attributes()['extends'];
         }
 
         if (isset($element->attributes()['alias'])) {

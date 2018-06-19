@@ -36,6 +36,9 @@ class MlBuilderFactory extends FmlManialinkFactory
         $this->uiComponents = $uiComponents;
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function createContent(ManialinkInterface $manialink)
     {
         parent::createContent($manialink);
@@ -43,14 +46,29 @@ class MlBuilderFactory extends FmlManialinkFactory
         $manialink->setData('guiBlocks', $this->blockDefinitions->getPageBlocks($this->guiBuilderId, []));
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function updateContent(ManialinkInterface $manialink)
     {
         parent::updateContent($manialink);
-
         $manialink->getContentFrame()->removeAllChildren();
+        $pageBlocks = $manialink->getData("guiBlocks");
 
-        foreach ($manialink->getData("guiBlocks") as $block) {
-            $manialink->getContentFrame()->addChild($this->uiComponents->display($block, $this, $manialink));
+        // Prepare all blocks and wiat for them to be ready.
+        $promises = [];
+        foreach ($pageBlocks as $blockDefinition) {
+            $promises[] = $this->uiComponents->prepare($blockDefinition, []);
+        }
+
+
+        $promise = \GuzzleHttp\Promise\all($promises);
+        var_dump($promise->getState());
+        $promise->resolve("");
+
+        // Display the content.
+        foreach ($pageBlocks as $blockDefinition) {
+            $manialink->getContentFrame()->addChild($this->uiComponents->display($blockDefinition, $this, $manialink));
         }
     }
 }

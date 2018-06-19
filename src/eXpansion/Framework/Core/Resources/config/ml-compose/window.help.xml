@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<block id="window.exp.core.help" extends="base.window" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="/src/eXpansion/Framework/MlComposeBundle/Resources/config/page-compose.xsd">
+
+     <block component="Frame" id="window.exp.core.help.content" alias="content">
+
+         <!-- TODO this won't work as we don't yet have the base grid element. But an idea on how to define one !!-->
+        <block extends="base.exp.grid" id="window.exp.core.help.grid">
+            <argument name="width" xsi:type="expr">factory.getWidth()-2</argument>
+            <argument name="height" xsi:type="expr">factory.getHeight()-2</argument>
+            <argument name="x">1</argument>
+            <argument name="y">-1</argument>
+
+
+            <argument name="data-source" xsi:type="service">@MySuperService</argument>
+            <argument name="layout">table</argument>
+
+            <!-- List the columns, this is not necessary for layout "grid" -->
+            <argument name="columns" xsi:type="args">
+                <arg name="command">expansion_core.windows.chat_commands.column_command</arg>
+                <arg name="description">expansion_core.windows.chat_commands.column_description</arg>
+                <arg name="help">expansion_core.windows.chat_commands.help</arg>
+            </argument>
+            <argument name="comumn-widths" xsi:type="args">
+                <arg name="command">25</arg>
+                <arg name="description">70</arg>
+                <arg name="help">10</arg>
+            </argument>
+
+            <!-- How will the columns be displayed -->
+            <block extends="base.exp.grid.text" id="window.exp.core.help.grid.command" alias="column-command"/>
+            <block extends="base.exp.grid.text" id="window.exp.core.help.grid.description" alias="column-description"/>
+            <block extends="base.exp.grid.action" id="window.exp.core.help.grid.help" alias="column-help">
+                <argument name="service" xsi:type="service">@MySuperService</argument>
+                <argument name="method" xsi:type="service">showExtendedHelp</argument>
+            </block>
+        </block>
+    </block>
+</block>
+
