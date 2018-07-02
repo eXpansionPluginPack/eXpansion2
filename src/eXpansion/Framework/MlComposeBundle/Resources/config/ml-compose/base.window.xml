@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<block component="Window" id="base.window" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../page-compose.xsd">
+<block component="Frame" id="base.window" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../page-compose.xsd">
     <argument name="x">-2</argument>
     <argument name="y">7.5</argument>
     <argument name="width" xsi:type="expr">factory.getWidth()+4</argument>

@@ -1002,12 +1002,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/oliverde8/PageComposer.git",
-                "reference": "9f3f809d471445c117a536ffe90377dc4ca43fbb"
+                "reference": "c9c5cdff8af428cd7a4da414c168b3804d664320"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oliverde8/PageComposer/zipball/9f3f809d471445c117a536ffe90377dc4ca43fbb",
-                "reference": "9f3f809d471445c117a536ffe90377dc4ca43fbb",
+                "url": "https://api.github.com/repos/oliverde8/PageComposer/zipball/c9c5cdff8af428cd7a4da414c168b3804d664320",
+                "reference": "c9c5cdff8af428cd7a4da414c168b3804d664320",
                 "shasum": ""
             },
             "require": {
@@ -1048,7 +1048,7 @@
                 "source": "https://github.com/oliverde8/PageComposer/tree/master",
                 "issues": "https://github.com/oliverde8/PageComposer/issues"
             },
-            "time": "2018-06-14T14:05:19+00:00"
+            "time": "2018-06-20T14:55:25+00:00"
         },
         {
             "name": "oneup/flysystem-bundle",
@@ -3978,16 +3978,16 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v4.1.0",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "b3451fc442baaf9169e50491a059ef17582c4424"
+                "reference": "c7f28cbf2df4e9deed7fc376ca4f146eaa5afc8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/b3451fc442baaf9169e50491a059ef17582c4424",
-                "reference": "b3451fc442baaf9169e50491a059ef17582c4424",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/c7f28cbf2df4e9deed7fc376ca4f146eaa5afc8a",
+                "reference": "c7f28cbf2df4e9deed7fc376ca4f146eaa5afc8a",
                 "shasum": ""
             },
             "require": {
@@ -4040,7 +4040,7 @@
             ],
             "description": "Symfony PHPUnit Bridge",
             "homepage": "https://symfony.com",
-            "time": "2018-05-25T14:55:38+00:00"
+            "time": "2018-06-11T12:56:28+00:00"
         },
         {
             "name": "webmozart/assert",
