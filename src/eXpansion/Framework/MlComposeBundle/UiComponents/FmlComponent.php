@@ -40,20 +40,21 @@ class  FmlComponent extends AbstractUiComponent
      * Display the component.
      *
      * @param BlockDefinitionInterface $blockDefinition
+     * @param AssociativeArray $context
      * @param array ...$args
      *
      * @return string
      */
-    public function display(BlockDefinitionInterface $blockDefinition, ...$args)
+    public function display(BlockDefinitionInterface $blockDefinition, $context, ...$args)
     {
         $expressionLanguage = new ExpressionLanguage();
         $configuration = new AssociativeArray($blockDefinition->getConfiguration());
         $class = $this->fmlClass;
 
         $arguments = [
-            'factory' => $args[0],
-            'manialink' => $args[1],
-            'args' => $args,
+            'factory' => $context->get("ml_factory"),
+            'manialink' => $context->get('ml'),
+            'args' => $context->getArray(),
         ];
 
         /** @var Control  $component */

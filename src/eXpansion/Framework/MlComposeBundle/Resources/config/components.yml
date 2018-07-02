@@ -23,3 +23,8 @@ services:
       $fmlClass: FML\Controls\Label
     tags:
       - {name: exp.ui.component, type: Label}
+
+  expansion.ml_compose.component.grid:
+    class: eXpansion\Framework\MlComposeBundle\UiComponents\FmlComponent
+    tags:
+      - {name: exp.ui.component, type: Grid}

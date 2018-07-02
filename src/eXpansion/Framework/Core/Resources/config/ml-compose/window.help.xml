@@ -14,7 +14,6 @@
             <argument name="x">1</argument>
             <argument name="y">-1</argument>
 
-
             <argument name="data-source" xsi:type="service">@MySuperService</argument>
             <argument name="layout">table</argument>
 

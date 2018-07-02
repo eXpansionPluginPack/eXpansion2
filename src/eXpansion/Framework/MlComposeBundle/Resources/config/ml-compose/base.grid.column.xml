@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<block component="Frame" id="abstract.base.grid.columns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="/src/eXpansion/Framework/MlComposeBundle/Resources/config/page-compose.xsd">
+
+    <block component="Grid/Column" id="base.grid.column.text">
+        <block component="Label">
+            <!-- TODO Configure properly -->
+        </block>
+    </block>
+
+</block>

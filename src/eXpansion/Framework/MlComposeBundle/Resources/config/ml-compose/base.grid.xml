@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<block component="Grid" id="base.grid" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="/src/eXpansion/Framework/MlComposeBundle/Resources/config/page-compose.xsd">
+
+    <block component="Label" id="base.grid.title" alias="title">
+        <argument name="height">5</argument>
+        <!-- TODO : Configure properly, text will automatic -->
+    </block>
+
+    <!--<block component="Grid/Pager" id="base.grid.pager" alias="pager">-->
+        <!-- TODO -->
+    <!--</block>-->
+</block>

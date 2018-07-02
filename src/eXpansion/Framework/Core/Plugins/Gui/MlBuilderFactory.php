@@ -3,6 +3,7 @@
 namespace eXpansion\Framework\Core\Plugins\Gui;
 use eXpansion\Framework\Core\Model\Gui\ManialinkFactoryContext;
 use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
+use oliverde8\AssociativeArraySimplified\AssociativeArray;
 use Oliverde8\PageCompose\Service\BlockDefinitions;
 use Oliverde8\PageCompose\Service\UiComponents;
 
@@ -55,11 +56,13 @@ class MlBuilderFactory extends FmlManialinkFactory
         $manialink->getContentFrame()->removeAllChildren();
         $pageBlock = $manialink->getData("guiBlock");
 
+        $context = new AssociativeArray(['ml_factory' => $this, 'ml' => $manialink]);
+
         // Prepare all blocks and wait for them to be ready.
-        $promise = $this->uiComponents->prepare($pageBlock, []);
+        $promise = $this->uiComponents->prepare($pageBlock, $context);
         $promise->resolve("");
 
         // Display the content.
-        $manialink->getContentFrame()->addChild($this->uiComponents->display($pageBlock, $this, $manialink));
+        $manialink->getContentFrame()->addChild($this->uiComponents->display($pageBlock, $context));
     }
 }
