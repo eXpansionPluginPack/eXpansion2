@@ -29,6 +29,7 @@ class eXpansionMlComposeExtension extends Extension
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('components.yml');
+        $loader->load('helpers.yml');
 
         $bundles = $container->getParameter('kernel.bundles');
         $finder = new Finder();

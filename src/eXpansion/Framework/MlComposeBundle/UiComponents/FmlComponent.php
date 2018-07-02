@@ -62,7 +62,7 @@ class  FmlComponent extends AbstractUiComponent
 
         foreach ($blockDefinition->getSubBlocks() as $block) {
             /** @var Frame  $component */
-            $component->addChild($this->uiComponents->display($block, ...$args));
+            $component->addChild($this->uiComponents->display($block, $context, ...$args));
         }
 
         foreach ($configuration->get('expr', []) as $key => $value) {
@@ -80,13 +80,13 @@ class  FmlComponent extends AbstractUiComponent
             $component->$function($value);
         }
 
-        if ($args[1] instanceof ManialinkInterface) {
+        if ($context['ml'] instanceof ManialinkInterface) {
             if ($configuration->get('action')) {
-                $callback = [$configuration->get('action/0/service', $args[0]), $configuration->get('action/0/method')];
-                $this->actionFactory->createManialinkAction($args[1], $callback, [], false);
+                $callback = [$configuration->get('action/0/service', $context->get("ml_factory")), $configuration->get('action/0/method')];
+                $this->actionFactory->createManialinkAction($context['ml'], $callback, [], false);
             }
         } else {
-            // Log warning!
+            // TODO Log warning!
         }
 
         return $component;

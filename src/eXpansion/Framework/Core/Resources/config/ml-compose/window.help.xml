@@ -18,29 +18,31 @@
             <argument name="layout">table</argument>
 
             <!-- List the columns, columns blocks needs aliases prefixed by "column_" this is not necessary for layout "grid" -->
-            <block extends="base.grid.column.text" id="window.exp.core.help.grid.column_command" alias="column_command">
+            <block extends="base.grid.column" id="window.exp.core.help.grid.column_command" alias="column_command">
                 <argument name="key">command</argument>
                 <argument name="title">expansion_core.windows.chat_commands.column_command</argument>
                 <argument name="width">25</argument>
             </block>
-            <block extends="base.grid.column.text" id="window.exp.core.help.grid.column_description" alias="column_description">
+            <block extends="base.grid.column" id="window.exp.core.help.grid.column_description" alias="column_description">
                 <argument name="key">description</argument>
                 <argument name="title">expansion_core.windows.chat_commands.column_description</argument>
                 <argument name="width">70</argument>
             </block>
-            <block extends="base.grid.column.action" id="window.exp.core.help.grid.column_help" alias="column_help">
+            <block extends="base.grid.column" id="window.exp.core.help.grid.column_help" alias="column_help">
                 <argument name="title"></argument>
                 <argument name="width">10</argument>
 
-                <argument name="service" xsi:type="service">@MySuperService</argument>
-                <argument name="method" xsi:type="service">showExtendedHelp</argument>
-
-                <block extends="Label" id="window.exp.core.help.grid.column_help.label">
+                <block id="window.exp.core.help.grid.column_help.label" alias="label">
                     <argument name="text"></argument>
                     <argument name="width">4</argument>
                     <argument name="height">4</argument>
                     <argument name="areaColor">0000</argument>
                     <argument name="areaFocusColor">000a</argument>
+
+                    <argument name="action" xsi:type="action">
+                        <service>MySuperService</service>
+                        <method>showExtendedHelp</method>
+                    </argument>
                 </block>
             </block>
         </block>

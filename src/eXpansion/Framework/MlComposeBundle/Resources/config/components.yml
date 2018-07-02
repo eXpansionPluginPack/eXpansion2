@@ -25,6 +25,11 @@ services:
       - {name: exp.ui.component, type: Label}
 
   expansion.ml_compose.component.grid:
-    class: eXpansion\Framework\MlComposeBundle\UiComponents\FmlComponent
+    class: eXpansion\Framework\MlComposeBundle\UiComponents\Grid
     tags:
       - {name: exp.ui.component, type: Grid}
+
+  expansion.ml_compose.component.grid.column:
+    class: eXpansion\Framework\MlComposeBundle\UiComponents\Grid\Column
+    tags:
+      - {name: exp.ui.component, type: Grid/Column}

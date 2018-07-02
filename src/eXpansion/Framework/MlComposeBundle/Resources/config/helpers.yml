@@ -1,0 +1,7 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  Oliverde8\PageCompose\Helpers\:
+    resource: "../../Helpers/*"

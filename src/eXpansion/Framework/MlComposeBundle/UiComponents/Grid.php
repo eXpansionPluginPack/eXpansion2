@@ -7,6 +7,8 @@ use eXpansion\Framework\Core\Model\Gui\ManialinkInterface;
 use eXpansion\Framework\Core\Plugins\Gui\ActionFactory;
 use eXpansion\Framework\Gui\Layouts\LayoutLine;
 use eXpansion\Framework\Gui\Layouts\LayoutRow;
+use eXpansion\Framework\MlComposeBundle\Helpers\BlockDefinitionHelper;
+use eXpansion\Framework\MlComposeBundle\Helpers\GridHelper;
 use oliverde8\AssociativeArraySimplified\AssociativeArray;
 use Oliverde8\PageCompose\Block\BlockDefinition;
 use Oliverde8\PageCompose\Block\BlockDefinitionInterface;
@@ -21,9 +23,29 @@ use Oliverde8\PageCompose\Service\UiComponents;
  */
 class Grid extends FmlComponent
 {
-    public function __construct(UiComponents $uiComponents, ActionFactory $actionFactory)
-    {
+    /** @var GridHelper  */
+    protected $gridHelper;
+
+    /** @var BlockDefinitionHelper */
+    protected $blockDefinitionHelper;
+
+    /**
+     * Grid constructor.
+     *
+     * @param UiComponents $uiComponents
+     * @param ActionFactory $actionFactory
+     * @param GridHelper $gridHelper
+     * @param BlockDefinitionHelper $blockDefinitionHelper
+     */
+    public function __construct(
+        UiComponents $uiComponents,
+        ActionFactory $actionFactory,
+        GridHelper $gridHelper,
+        BlockDefinitionHelper $blockDefinitionHelper
+    ){
         parent::__construct($uiComponents, $actionFactory, LayoutRow::class);
+        $this->gridHelper = $gridHelper;
+        $this->blockDefinitionHelper = $blockDefinitionHelper;
     }
 
     /**
@@ -64,7 +86,7 @@ class Grid extends FmlComponent
     public function display(BlockDefinitionInterface $blockDefinition, $context, ...$args)
     {
         /** @var LayoutRow $frame */
-        $frame = parent::display($blockDefinition, ...$args);
+        $frame = parent::display($blockDefinition, ...$args); // TODO this also display the columns all wrong. Needs fixing.
         $configuration = new AssociativeArray($blockDefinition->getConfiguration());
 
         /** @var DataCollectionInterface $dataSource */
@@ -95,18 +117,25 @@ class Grid extends FmlComponent
             foreach ($dataSource->getData($page) as $data) {
                 $line = new LayoutLine(0, 0);
                 foreach ($this->getColumnBlocks($blockDefinition) as $alias => $block) {
+                    $subConf = $block->getConfiguration();
                     $line->addChild(
-                        $this->uiComponents->display($blockDefinition, $columnWidths[$alias], $data)
+                        $this->uiComponents->display(
+                            $blockDefinition,
+                            $context,
+                            $columnWidths[$alias],
+                            !empty($subConf['key']) ? $dataSource->getLineData($data, $subConf['key']) : $data,
+                            $args
+                        )
                     );
                 }
             }
         }
+
+        return $frame;
     }
 
     /**
      * Get width for each column.
-     *
-     * @TODO Separate in dedicated helper service the logic.
      *
      * @param $totalWidth
      * @param BlockDefinitionInterface[] $blocDefinitions
@@ -115,18 +144,14 @@ class Grid extends FmlComponent
      */
     protected function getColumnWidths($totalWidth, $blocDefinitions)
     {
-        $columnWidths = [];
-        $totalCoefs = 0;
-        foreach ($blocDefinitions as $column) {
-            $totalCoefs += AssociativeArray::getFromKey($column->getConfiguration(), 'width');
-        }
+        array_walk(
+            $blocDefinitions,
+            function(&$value, $key) {
+                $value = AssociativeArray::getFromKey($value->getConfiguration(), 'width');
+            }
+        );
 
-        $multiplier = $totalWidth / $totalCoefs;
-        foreach ($blocDefinitions as $column) {
-            $columnWidths[$column->getUniqueKey()] = AssociativeArray::getFromKey($column->getConfiguration(), 'width') * $multiplier;
-        }
-
-        return $columnWidths;
+        return $this->gridHelper->getNormalizedWidths($totalWidth, $blocDefinitions);
     }
 
     /**
@@ -145,10 +170,10 @@ class Grid extends FmlComponent
     }
 
     /**
-     * @TODO move this to dedicated bloc definition factory service.
+     * Create a new bloc definition with new width and possibly new text.
      *
      * @param BlockDefinitionInterface $oldDefinition
-     * @param $width
+     * @param float $width
      * @param null $text
      *
      * @return BlockDefinition
@@ -161,13 +186,6 @@ class Grid extends FmlComponent
             $configuration['text'] = $text;
         }
 
-        return new BlockDefinition(
-            $oldDefinition->getUniqueKey(),
-            $oldDefinition->getUiComponentName(),
-            $oldDefinition->getParentKey(),
-            $oldDefinition->getSubBlocks(),
-            $configuration,
-            $oldDefinition->getGlobalConfiguration()
-        );
+        return $this->blockDefinitionHelper->createNewDefinition($oldDefinition, $configuration);
     }
 }
