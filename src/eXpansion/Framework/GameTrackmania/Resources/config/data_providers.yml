@@ -63,6 +63,7 @@ services:
           - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'team.script.txt'}
           - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'chase.script.txt'}
           - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'laps.script.txt'}
+          - {name: expansion.dataprovider.compatibility, title: TM, gamemode: script, script: 'chase\chase.script.txt'}
 
     expansion.framework.game_trackmania.data_providers.script_time_attack.method_get_number_laps:
         class: eXpansion\Framework\GameTrackmania\DataProviders\ScriptTimeAttack\MethodGetNumberLapsDataProvider
