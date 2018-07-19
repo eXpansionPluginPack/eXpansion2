@@ -67,6 +67,8 @@ abstract class AbstractApplication implements RunInterface
      */
     public function init(OutputInterface $console)
     {
+        $this->checkPhpExtensions($console);
+
         $this->console->init($console, $this->dispatcher);
         $this->dispatcher->dispatch(self::EVENT_BEFORE_INIT, []);
 
@@ -75,6 +77,47 @@ abstract class AbstractApplication implements RunInterface
 
         $this->dispatcher->dispatch(self::EVENT_AFTER_INIT, []);
         return $this;
+    }
+
+    protected function checkPhpExtensions(OutputInterface $console)
+    {
+        $extensions = array(
+            'openssl' => 'extension=php_openssl.dll',
+            'curl' => 'extension=curl.dll',
+        );
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            $extensions['com_dotnet'] = 'extension=php_com_dotnet.dll';
+        }
+
+        $status = true;
+        $showIni = false;
+        foreach ($extensions as $extension => $description) {
+            if (!extension_loaded($extension)) {
+                $console->writeln(
+                    "<error>eXpansion needs PHP extension $extension to run. Enable it to run eXpansion => " . $description . "</error>"
+                );
+                $status = false;
+                $showIni = true;
+            }
+        }
+
+        $recommend = array(
+            'xmlrpc' => "It will have better performances !",
+        );
+        foreach ($recommend as $extension => $reason) {
+            if (!extension_loaded($extension)) {
+                $console->writeln(
+                    "<error>eXpansion works better with PHP extension</error> <info>$extension</info>: " . $reason . ""
+                );
+                $showIni = true;
+            }
+        }
+
+        if ($showIni) {
+            $console->writeln('<info>[PHP] PHP is using fallowing ini file :</info> "'. php_ini_loaded_file() .'"');
+            sleep(5);
+        }
+        return $status;
     }
 
     /**
