@@ -3,6 +3,9 @@
 ## Features
 * Feature #377 : Added more detailed expansion version information.
 
+## Fixes
+* Fixed #379 : When expansion crashes in windows the command prompt wont close and hide the message.
+
 # 2.0.0.0-beta3 (2018-06-09)
 ## Fixes
 
