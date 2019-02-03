@@ -6,6 +6,7 @@ use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpTimer;
 use eXpansion\Framework\Core\Helpers\Countries;
 use eXpansion\Framework\Core\Helpers\Http;
 use eXpansion\Framework\Core\Helpers\Structures\HttpResult;
+use eXpansion\Framework\Core\Helpers\Version;
 use eXpansion\Framework\Core\Services\Application;
 use eXpansion\Framework\Core\Storage\GameDataStorage;
 use eXpansion\Framework\Core\Storage\PlayerStorage;
@@ -34,6 +35,9 @@ class Analytics implements ListenerInterfaceExpTimer, StatusAwarePluginInterface
 
     /** @var LoggerInterface */
     protected $logger;
+
+    /** @var Version */
+    protected $version;
 
     /** @var string  */
     protected $handshakeUrl;
@@ -73,6 +77,7 @@ class Analytics implements ListenerInterfaceExpTimer, StatusAwarePluginInterface
         PlayerStorage $playerStorage,
         Countries $countries,
         LoggerInterface $logger,
+        Version $version,
         string $handshakeUrl,
         string $pingUrl,
         int $pingInterval,
@@ -83,6 +88,7 @@ class Analytics implements ListenerInterfaceExpTimer, StatusAwarePluginInterface
         $this->playerStorage = $playerStorage;
         $this->countries = $countries;
         $this->logger = $logger;
+        $this->version   = $version;
         $this->handshakeUrl = $handshakeUrl;
         $this->pingUrl = $pingUrl;
         $this->pingInterval = $pingInterval;
@@ -201,7 +207,7 @@ class Analytics implements ListenerInterfaceExpTimer, StatusAwarePluginInterface
             'key' => $this->key,
             'nbPlayers' => count($this->playerStorage->getOnline()),
             'country' => $this->countries->getIsoAlpha2FromName($this->countries->parseCountryFromPath($this->gameData->getServerPath())),
-            'version' => Application::EXPANSION_VERSION,
+            'version' => $this->version->getExpansionVersion(),
             'php_version' => $this->gameData->getServerCleanPhpVersion(),
             'php_version_short' => $this->gameData->getServerMajorPhpVersion(),
             'mysql_version' => 'unknown',
