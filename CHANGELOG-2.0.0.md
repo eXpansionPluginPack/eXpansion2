@@ -5,6 +5,7 @@
 
 ## Fixes
 * Fix #384 - Usage of config values of type TextList won't crash expansion anymore.
+* Fixed #379 : When expansion crashes in windows the command prompt wont close and hide the message.
 
 # 2.0.0.0-beta3 (2018-06-09)
 ## Fixes
