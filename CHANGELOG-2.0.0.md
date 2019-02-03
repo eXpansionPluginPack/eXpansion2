@@ -3,6 +3,9 @@
 ## Features
 * Feature #377 : Added more detailed expansion version information.
 
+## Fixes
+* Fix #384 - Usage of config values of type TextList won't crash expansion anymore. 
+
 # 2.0.0.0-beta3 (2018-06-09)
 ## Fixes
 

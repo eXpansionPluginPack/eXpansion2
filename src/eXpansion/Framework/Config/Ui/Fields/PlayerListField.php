@@ -1,6 +1,8 @@
 <?php
 
 namespace eXpansion\Framework\Config\Ui\Fields;
+use eXpansion\Framework\Config\Model\ConfigInterface;
+use eXpansion\Framework\Config\Model\PlayerListConfig;
 
 /**
  * Class PlayerListField
@@ -21,5 +23,13 @@ class PlayerListField extends TextListField
         }
 
         return $element->getLogin();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isCompatible(ConfigInterface $config): bool
+    {
+        return parent::isCompatible($config) && $config instanceof PlayerListConfig;
     }
 }
