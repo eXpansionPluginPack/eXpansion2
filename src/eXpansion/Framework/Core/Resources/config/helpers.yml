@@ -1,4 +1,6 @@
 parameters: 
+  expansion.core.supported_locales: ['fr', 'de', 'fi', 'nl', 'en']
+
   expansion.core.helper.countries.other_code: OTH
   expansion.core.helper.countries.other_label: Other
 
@@ -210,7 +212,7 @@ services:
     eXpansion\Framework\Core\Helpers\Translations:
         class: eXpansion\Framework\Core\Helpers\Translations
         arguments:
-            $supportedLocales: ['fr', 'de', 'fi', 'nl', 'en']
+            $supportedLocales: '%expansion.core.supported_locales%'
             $colorCodesConfigPath: '%expansion.core.config.path.color_codes%'
             $glympIconsConfigPath: '%expansion.core.config.path.glymp_icons%'
 
