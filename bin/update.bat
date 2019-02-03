@@ -10,3 +10,5 @@ composer self-update
 
 ECHO Updating eXpansion.
 composer update --prefer-dist --prefer-stable --no-suggest -o
+
+pause
