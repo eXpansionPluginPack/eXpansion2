@@ -12,6 +12,8 @@ class InfoMessagesExtension extends Extension
 {
     const ABSTRACT_SERVICE_DEFINITION_ID = 'eXpansion.info_messages.config.messages.abstract';
 
+    const CONFIG_PATH_PREFIX = 'eXpansion/Messages/InfoMessages/';
+
     /**
      * Loads a specific configuration.
      *
@@ -24,16 +26,22 @@ class InfoMessagesExtension extends Extension
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('configs.yml');
+        $loader->load('plugins.yml');
 
         $locales = $container->getParameter('expansion.core.supported_locales');
+        $defaultMessages = $container->getParameter('eXpansion_info_messages_default');
 
         foreach ($locales as $locale) {
             $id = "eXpansion.info_messages.config.messages.$locale";
 
-            $container->setDefinition($id, new ChildDefinition(self::ABSTRACT_SERVICE_DEFINITION_ID))
-                ->replaceArgument('$path', "eXpansion/Messages/InfoMessages/$locale")
+            $service = $container->setDefinition($id, new ChildDefinition(self::ABSTRACT_SERVICE_DEFINITION_ID))
+                ->replaceArgument('$path', self::CONFIG_PATH_PREFIX . "$locale")
                 ->replaceArgument('$name', "expansion_info_messages.config.messages.$locale.name")
                 ->addTag("expansion.config");
+
+            if (isset($defaultMessages[$locale])) {
+                $service->replaceArgument('$defaultValue', $defaultMessages[$locale]);
+            }
         }
     }
 }
