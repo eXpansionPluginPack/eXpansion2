@@ -2,6 +2,7 @@
 
 ## Features
 * Feature #377 : Added more detailed expansion version information.
+* Feature #380 : Added bundle to create random information messages.
 
 ## Fixes
 * Fix #384 - Usage of config values of type TextList won't crash expansion anymore.
