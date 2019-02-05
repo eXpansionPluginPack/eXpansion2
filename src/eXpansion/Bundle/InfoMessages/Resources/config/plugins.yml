@@ -1,0 +1,9 @@
+services:
+    eXpansion\Bundle\InfoMessages\Plugins\InfoMessagesPlugin:
+        autowire: true
+        class: eXpansion\Bundle\InfoMessages\Plugins\InfoMessagesPlugin
+        arguments:
+            $frequencyConfig: '@eXpansion.info_messages.config.frequency'
+            $supportedLocales: '%expansion.core.supported_locales%'
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'exp.timer'}

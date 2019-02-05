@@ -1,7 +1,8 @@
 parameters:
   eXpansion_info_messages_default:
     'en':
-      - 'This server uses eXpansion as a server controller.'
+      - '{info}|info|This server uses eXpansion² as a server controller.'
+      - '{info}|info|Maniaplanet is an awesome game!'
 
 services:
     _defaults:
