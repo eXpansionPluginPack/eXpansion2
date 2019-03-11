@@ -1,0 +1,28 @@
+services:
+    _defaults:
+        autowire: true
+        public: false
+
+    eXpansion\Bundle\ServerInformation\Services\:
+        resource: "../../Services/*"
+
+    eXpansion\Bundle\ServerInformation\Ui\Factory\ServerInformationLineFactory:
+        class: eXpansion\Bundle\ServerInformation\Ui\Factory\ServerInformationLineFactory
+        arguments:
+            $titleWidth: 28
+            $dataWidth: 58
+
+    eXpansion\Bundle\ServerInformation\Plugins\Gui\ServerInfoWindow:
+        class: eXpansion\Bundle\ServerInformation\Plugins\Gui\ServerInfoWindow
+        arguments:
+            $name: 'expansion_server_information.windows.info'
+            $sizeX: 90
+            $sizeY: 90
+            $serverInfos: !tagged exp.bundle.server_information.info
+
+    eXpansion\Bundle\ServerInformation\Plugins\MenuItems:
+        class: eXpansion\Bundle\ServerInformation\Plugins\MenuItems
+        public: true
+        tags:
+            - {name: 'expansion.plugin', data_provider: 'exp.menu.items'}
+            - {name: 'expansion.plugin.parent', parent: 'eXpansion\Bundle\Menu\Plugins\MenuItems'}

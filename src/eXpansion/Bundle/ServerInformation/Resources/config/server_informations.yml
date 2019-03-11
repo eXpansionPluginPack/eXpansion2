@@ -1,0 +1,49 @@
+services:
+  _defaults:
+    autowire: true
+    public: false
+
+  eXpansion\Bundle\ServerInformation\Services\ServerInformation\:
+    resource: "../../Services/ServerInformation/*"
+
+  eXpansion\Bundle\ServerInformation\Services\ServerInformation\ServerName:
+    tags:
+      - {name: "exp.bundle.server_information.info", priority: 990}
+
+  eXpansion\Bundle\ServerInformation\Services\ServerInformation\ServerDescription:
+    tags:
+      - {name: "exp.bundle.server_information.info", priority: 980}
+
+  eXpansion\Bundle\ServerInformation\Services\ServerInformation\NbPlayers:
+    tags:
+      - {name: "exp.bundle.server_information.info", priority: 890}
+
+  eXpansion\Bundle\ServerInformation\Services\ServerInformation\NbSpectators:
+    tags:
+      - {name: "exp.bundle.server_information.info", priority: 880}
+
+  eXpansion\Bundle\ServerInformation\Services\ServerInformation\ExpansionVersion:
+    tags:
+      - {name: "exp.bundle.server_information.info", priority: 790}
+
+  eXpansion\Bundle\ServerInformation\Services\ServerInformation\ServerVersion:
+    arguments:
+      $requiredPermission: admin
+    tags:
+      - {name: "exp.bundle.server_information.info", priority: 780}
+
+  eXpansion\Bundle\ServerInformation\Services\ServerInformation\ServerTitlePack:
+    tags:
+      - {name: "exp.bundle.server_information.info", priority: 770}
+
+  eXpansion\Bundle\ServerInformation\Services\ServerInformation\ServerBuild:
+    arguments:
+      $requiredPermission: admin
+    tags:
+      - {name: "exp.bundle.server_information.info", priority: 760}
+
+  eXpansion\Bundle\ServerInformation\Services\ServerInformation\ServerApiVersion:
+    arguments:
+      $requiredPermission: admin
+    tags:
+      - {name: "exp.bundle.server_information.info", priority: 750}
