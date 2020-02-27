@@ -16,6 +16,12 @@
         "psr-4": { "Tests\\": "tests/" },
         "files": [ "vendor/symfony/symfony/src/Symfony/Component/VarDumper/Resources/functions/dump.php" ]
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/eXpansionPluginPack/PropelBundle.git"
+        }
+    ],
     "require": {
         "php": ">=7.0",
         "bluepsyduck/maniascript": "^1.1",

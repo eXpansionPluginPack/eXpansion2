@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a76efc1619f1c448f2ec752b87881a38",
+    "content-hash": "6f3d540005923b5a735e3b01ede913cc",
     "packages": [
         {
             "name": "bluepsyduck/maniascript",
@@ -1316,13 +1316,13 @@
             "version": "4.0.x-dev",
             "source": {
                 "type": "git",
-                "url": "https://github.com/propelorm/PropelBundle.git",
-                "reference": "d671fbeb4a45ed182edf2fe1900e0baa1636926a"
+                "url": "https://github.com/eXpansionPluginPack/PropelBundle.git",
+                "reference": "7b620dbaa8a03b76d86a7587cfdc64b36684c49a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/propelorm/PropelBundle/zipball/d671fbeb4a45ed182edf2fe1900e0baa1636926a",
-                "reference": "d671fbeb4a45ed182edf2fe1900e0baa1636926a",
+                "url": "https://api.github.com/repos/eXpansionPluginPack/PropelBundle/zipball/7b620dbaa8a03b76d86a7587cfdc64b36684c49a",
+                "reference": "7b620dbaa8a03b76d86a7587cfdc64b36684c49a",
                 "shasum": ""
             },
             "require": {
@@ -1348,13 +1348,12 @@
                     "Tests/"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
                 {
-                    "name": "William DURAND",
+                    "name": "William Durand",
                     "email": "william.durand1@gmail.com"
                 }
             ],
@@ -1364,7 +1363,10 @@
                 "persistence",
                 "propel"
             ],
-            "time": "2018-02-12T15:17:43+00:00"
+            "support": {
+                "source": "https://github.com/eXpansionPluginPack/PropelBundle/tree/4.0"
+            },
+            "time": "2020-02-27T14:34:08+00:00"
         },
         {
             "name": "psr/cache",
