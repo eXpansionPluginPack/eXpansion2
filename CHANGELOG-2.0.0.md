@@ -1,6 +1,10 @@
 # 2.0.0.0
 ## Fixes
 * Fix #365 - Fixed exp not starting if can't fetch title/game mappings for expansion api's.
+* Fix #393 - Updated propel and symfony to support php7.2 & php7.3 & php7.4. 
+
+## Features 
+* Feature #394 - Added additional information when connection to the dedicated fails.
 
 # 2.0.0.0-beta2 (2018-05-10)
 ## Fixes
