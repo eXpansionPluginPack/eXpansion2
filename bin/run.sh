@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# Verbose
+#set -x
+# Exit on error
+set -e
+
+
 # Move into proper directory.
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 cd ..

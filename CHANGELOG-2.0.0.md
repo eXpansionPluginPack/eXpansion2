@@ -3,10 +3,14 @@
 ## Features
 * Feature #377 : Added more detailed expansion version information.
 * Feature #380 : Added bundle to create random information messages.
+* Feature #394 - Added additional information when connection to the dedicated fails.
 
 ## Fixes
 * Fix #384 - Usage of config values of type TextList won't crash expansion anymore.
 * Fixed #379 : When expansion crashes in windows the command prompt wont close and hide the message.
+* Fix #365 - Fixed exp not starting if can't fetch title/game mappings for expansion api's.
+* Fix #393 - Updated propel and symfony to support php7.2 & php7.3 & php7.4. 
+* Fix #395 - Fixed run.sh script not stopping when database update didn't work.
 
 # 2.0.0.0-beta3 (2018-06-09)
 ## Fixes
