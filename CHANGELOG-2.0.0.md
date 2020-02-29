@@ -2,6 +2,7 @@
 ## Fixes
 * Fix #365 - Fixed exp not starting if can't fetch title/game mappings for expansion api's.
 * Fix #393 - Updated propel and symfony to support php7.2 & php7.3 & php7.4. 
+* Fix #395 - Fixed run.sh script not stopping when database update didn't work.
 
 ## Features 
 * Feature #394 - Added additional information when connection to the dedicated fails.
