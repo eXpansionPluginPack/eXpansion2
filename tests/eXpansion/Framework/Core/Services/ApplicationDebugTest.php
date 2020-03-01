@@ -4,25 +4,35 @@
 namespace Tests\eXpansion\Framework\Core\Services;
 
 
+use eXpansion\Framework\Core\Helpers\Version;
 use eXpansion\Framework\Core\Services\Application;
 use eXpansion\Framework\Core\Services\ApplicationDebug;
-use eXpansion\Framework\Core\Services\Console;
 use Psr\Log\NullLogger;
 use Tests\eXpansion\Framework\Core\TestCore;
 
-
 class ApplicationDebugTest extends TestCore
 {
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $mockDataProvider;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockVersionHelper;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         parent::setUp();
 
         $this->mockDataProvider = $this->createMock(Application\Dispatcher::class);
+        $this->mockVersionHelper = $this->createMock(Version::class);
     }
 
-
+    /**
+     * Test that on startup the "ready" event is properly dispatched and that any other callback sent by the dedicated
+     * is executed as well.
+     */
     public function testRun()
     {
         /** @var Application $application */
@@ -30,7 +40,8 @@ class ApplicationDebugTest extends TestCore
             $this->mockDataProvider,
             $this->mockConnectionFactory,
             $this->mockConsole,
-            new NullLogger()
+            new NullLogger(),
+            $this->mockVersionHelper
         );
         // We need to stop the application so that it doesen't run indefinitively.
         $application->stopApplication();

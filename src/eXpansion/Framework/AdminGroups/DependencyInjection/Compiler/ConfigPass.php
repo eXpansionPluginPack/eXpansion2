@@ -20,10 +20,35 @@ class ConfigPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $config = $container->getParameter('expansion.admin_groups.raw.configs');
+
+        // Replace permissions read in config with those coming for service declarations
+        $permissions = $this->loadPermissions($container);
+        $config['permissions'] = $permissions;
+        $container->setParameter('expansion.admin_groups.raw.configs', $config);
+
         $this->createConfigs($config['groups'], $config['permissions'], $container);
     }
 
     /**
+     * @param ContainerBuilder $container
+     *
+     * @return array
+     */
+    protected function loadPermissions(ContainerBuilder $container)
+    {
+        $permissions = [];
+
+        $permissionServices = $container->findTaggedServiceIds("exp.permission");
+        foreach ($permissionServices as $tags) {
+            foreach ($tags as $attributes) {
+                $permissions[] = $attributes['permission'];
+            }
+        }
+
+        return $permissions;
+    }
+
+        /**
      * Create the config services.
      *
      * @param $groups
@@ -54,9 +79,9 @@ class ConfigPass implements CompilerPassInterface
                     $id = 'expansion.admin_groups.config.permissions.' . $groupCode . ".$permission";
                     $container->setDefinition($id, new ChildDefinition('expansion.admin_groups.config.permissions.abstract'))
                         ->setArgument('$path', "$pathPrefix/perm_$permission")
-                        ->setArgument('$defaultValue', $group['logins'])
-                        ->setArgument('$name', "expansion_admingroups.permission.$permission.label")
-                        ->setArgument('$description', "expansion_admingroups.permission.$permission.description");
+                        ->setArgument('$defaultValue', in_array($permission, $group['permissions']))
+                        ->setArgument('$name', "expansion_admin_groups.permission.$permission.label")
+                        ->setArgument('$description', "expansion_admin_groups.permission.$permission.description");
                     $configManager->addMethodCall('registerConfig', [new Reference($id), $id]);
                 }
             }

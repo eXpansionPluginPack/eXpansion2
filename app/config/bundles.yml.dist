@@ -11,6 +11,7 @@ bundles:
   # Feature bundles
   - \eXpansion\Bundle\Emotes\EmotesBundle
   - \eXpansion\Bundle\JoinLeaveMessages\JoinLeaveMessagesBundle
+  - \eXpansion\Bundle\InfoMessages\InfoMessagesBundle
 
   # Records
   - \eXpansion\Bundle\LocalRecords\LocalRecordsBundle

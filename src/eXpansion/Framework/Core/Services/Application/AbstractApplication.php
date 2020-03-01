@@ -3,6 +3,7 @@
 
 namespace eXpansion\Framework\Core\Services\Application;
 
+use eXpansion\Framework\Core\Helpers\Version;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Services\DedicatedConnection\Factory;
 use Maniaplanet\DedicatedServer\Connection;
@@ -15,6 +16,7 @@ abstract class AbstractApplication implements RunInterface
 {
     /** Base eXpansion callbacks. */
     const EVENT_BEFORE_INIT = "expansion.before_init";
+    const EVENT_SWITCH_TO_SCRIPT = "expansion.switched_to_script";
     const EVENT_AFTER_INIT = "expansion.after_init";
     const EVENT_READY = "expansion.ready";
     const EVENT_STOP = "expansion.stop";
@@ -30,12 +32,15 @@ abstract class AbstractApplication implements RunInterface
     /** @var Console */
     protected $console;
 
+    /** @var LoggerInterface */
+    protected $logger;
+
+    /** @var Version */
+    protected $version;
+
     /** @var bool */
     protected $isRunning = true;
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+
 
     /**
      * AbstractApplication constructor.
@@ -44,17 +49,20 @@ abstract class AbstractApplication implements RunInterface
      * @param Factory $factory
      * @param Console $output
      * @param LoggerInterface $logger
+     * @param Version $version
      */
     public function __construct(
         DispatcherInterface $dispatcher,
         Factory $factory,
         Console $output,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        Version $version
     ) {
         $this->factory = $factory;
         $this->dispatcher = $dispatcher;
         $this->console = $output;
         $this->logger = $logger;
+        $this->version = $version;
     }
 
     /**
@@ -73,6 +81,27 @@ abstract class AbstractApplication implements RunInterface
         $this->dispatcher->dispatch(self::EVENT_BEFORE_INIT, []);
 
         $this->factory->createConnection();
+
+        $this->console->writeln("Running preflight checks...");
+        $this->factory->getConnection()->enableCallbacks(true);
+
+        // need to send this for scripts to start callback handling
+        try {
+            $this->factory->getConnection()->triggerModeScriptEvent("XmlRpc.EnableCallbacks", ["True"]);
+            $this->dispatcher->dispatch(self::EVENT_SWITCH_TO_SCRIPT, []);
+        } catch (\Exception $exception) {
+            $this->factory->getConnection()->saveMatchSettings('MatchSettings/eXpansion-mode-fail-'.date(DATE_ISO8601).'.txt');
+
+            $console->writeln("");
+            $msg = "<error>Failed to start eXpansion. This is probably due to the server not being in script mode.";
+            $msg .= " Please switch <info>game_mode</info> to <info>0</info> and configure the proper <info>script_name</info> in your match setting file";
+            $msg .= "</error>";
+            $console->writeln("$msg");
+            $console->writeln("");
+
+            throw $exception;
+        }
+
         $this->dispatcher->init($this->factory->getConnection());
 
         $this->dispatcher->dispatch(self::EVENT_AFTER_INIT, []);
@@ -138,17 +167,6 @@ abstract class AbstractApplication implements RunInterface
 
         // Last time garbage collector ran. Assume that at start it ran.
         $lastGcTime = time();
-
-        $this->console->writeln("Running preflight checks...");
-        $this->factory->getConnection()->enableCallbacks(true);
-
-        // need to send this for scripts to start callback handling
-        try {
-            $this->factory->getConnection()->triggerModeScriptEvent("XmlRpc.EnableCallbacks", ["True"]);
-        } catch (\Exception $exception) {
-            $this->factory->getConnection()->saveMatchSettings('MatchSettings/eXpansion-mode-fail-'.date(DATE_ISO8601).'.txt');
-            throw $exception;
-        }
 
         $this->console->writeln("preflight checks OK.");
 

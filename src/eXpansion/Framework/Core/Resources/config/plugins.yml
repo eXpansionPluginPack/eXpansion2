@@ -110,3 +110,23 @@ services:
             $pingInterval: 300 #Ping database every 5 minutes.
         tags:
             - {name: expansion.plugin, data_provider: exp.timer}
+
+    #
+    # Plugin to save server settings.
+    #
+    eXpansion\Framework\Core\Plugins\AutomaticServerSettingsSave:
+        class: eXpansion\Framework\Core\Plugins\AutomaticServerSettingsSave
+        arguments:
+            $fileName: '@expansion.core.config.base.server_settings_file'
+        tags:
+            - {name: expansion.plugin, data_provider: mp.legacy.map}
+
+    #
+    # Plugin to save match settings.
+    #
+    eXpansion\Framework\Core\Plugins\AutomaticMatchSettingsSave:
+        class: eXpansion\Framework\Core\Plugins\AutomaticMatchSettingsSave
+        arguments:
+            $fileName: '@expansion.core.config.base.match_settings_file'
+        tags:
+            - {name: expansion.plugin, data_provider: mp.legacy.map}

@@ -4,6 +4,7 @@ namespace eXpansion\Framework\Core\Plugins;
 
 use eXpansion\Framework\Core\DataProviders\Listener\ListenerInterfaceExpApplication;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
+use eXpansion\Framework\Core\Helpers\Version;
 use eXpansion\Framework\Core\Services\Application\AbstractApplication;
 
 class StartGreeter implements ListenerInterfaceExpApplication
@@ -13,13 +14,17 @@ class StartGreeter implements ListenerInterfaceExpApplication
      */
     private $chatNotification;
 
+    /** @var Version */
+    protected $version;
+
     /**
      * StartGreeter constructor.
      * @param ChatNotification $chatNotification
      */
-    public function __construct(ChatNotification $chatNotification)
+    public function __construct(ChatNotification $chatNotification, Version $version)
     {
         $this->chatNotification = $chatNotification;
+        $this->version = $version;
     }
 
     /**
@@ -44,7 +49,7 @@ class StartGreeter implements ListenerInterfaceExpApplication
         $this->chatNotification->sendMessage('$z$fff$s       -  -   –    –     —     —    –    –   -   -');
         $this->chatNotification->sendMessage('$z$s$w$i$fff       e X p a n s i o n ²', null, []);
         $this->chatNotification->sendMessage(
-            '$z$o$000                version$o '.AbstractApplication::EXPANSION_VERSION, null, []);
+            '$z$o$000                version$o '. $this->version->getExpansionVersion(), null, []);
 
         $this->chatNotification->sendMessage('$z$s$fff                 —————————— ');
         $this->chatNotification->sendMessage("");

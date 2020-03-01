@@ -2,8 +2,11 @@ language: php
 php:
   - '7.0'
   - '7.1'
+  - '7.2'
+  - '7.3'
+  - '7.4' 
 env:
-  - SYMFONY_DEPRECATIONS_HELPER=disabled
+  - SYMFONY_DEPRECATIONS_HELPER=weak
 
 before_script:
     - composer self-update

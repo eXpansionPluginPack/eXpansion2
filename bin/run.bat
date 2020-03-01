@@ -14,3 +14,5 @@ php bin/console propel:migration:migrate --env=prod
 
 ECHO Launching eXpansion
 php bin\console eXpansion:run -vvv --env=prod
+
+pause

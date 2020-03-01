@@ -132,6 +132,8 @@ class NextMapVoteTest extends TestCore
 
     public function testCancelVote()
     {
+        $this->mockPlayerStorage->method("getOnline")->willReturn([]);
+
         $this->nextMapVote->cancel();
 
         $player = $this->getPlayer('test', false);

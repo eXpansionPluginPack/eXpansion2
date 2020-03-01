@@ -104,7 +104,16 @@ class Factory
                         "Error message: " . $lastExcelption->getMessage()
                     ]
                 );
-                $this->logger->error("Unable to open connection for Dedicated server", ["exception" => $lastExcelption]);
+                $this->logger->error(
+                    "Unable to open connection for Dedicated server",
+                    [
+                        "exception" => $lastExcelption,
+                        "host" => $this->host,
+                        "port" => $this->port,
+                        "timeout" => $this->timeout,
+                        "user" => $this->user,
+                    ]
+                );
 
                 throw $lastExcelption;
             }
@@ -141,7 +150,6 @@ class Factory
 
             try {
                 $this->console->writeln('Attempting to connect to the dedicated server!');
-
                 $this->connection = Connection::factory(
                     $this->host,
                     $this->port,
@@ -157,11 +165,18 @@ class Factory
 
                 $this->console->getSfStyleOutput()->error(
                     [
-                        "Cound't connect to the dedicated server !",
-                        "Attempt : $attempts, Remaining attemps : $remainingAttemps ",
+                        "Couldn't connect to the dedicated server !",
+                        "Attempt : $attempts, Remaining attempts : $remainingAttemps ",
                         $e->getMessage(),
                     ]
                 );
+                $this->console->getSfStyleOutput()->block([
+                    "Host : " . $this->host,
+                    "Port : " . $this->port,
+                    "Timeout : " . $this->timeout,
+                    "User : " . $this->user,
+                    "Password : ****",
+                ]);
             }
         } while($attempts < $maxAttempts && !is_null($lastExcelption));
 

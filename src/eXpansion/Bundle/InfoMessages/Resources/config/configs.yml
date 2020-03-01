@@ -1,0 +1,36 @@
+parameters:
+  eXpansion_info_messages_default:
+    'en':
+      - '{info}|info|This server uses eXpansion² as a server controller.'
+      - '{info}|info|Maniaplanet is an awesome game!'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    eXpansion.info_messages.config.frequency:
+        class: eXpansion\Framework\Config\Model\IntegerConfig
+        arguments:
+            $path: "eXpansion/Messages/InfoMessages/frequency"
+            $name: "expansion_info_messages.config.frequency.name"
+            $scope: "global"
+            $description: "expansion_info_messages.config.frequency.description"
+            $defaultValue: 120
+            $minValue: 10
+            $maxValue: 10000
+        tags:
+            - {name: expansion.config}
+
+    #
+    # Abstract service used during Compiler Pass to build a text list for each locale.
+    #
+    eXpansion.info_messages.config.messages.abstract:
+        abstract: true
+        class: eXpansion\Framework\Config\Model\TextListConfig
+        arguments:
+            $path: ""
+            $name: ""
+            $description: ""
+            $scope: "global"
+            $defaultValue: []

@@ -1,0 +1,7 @@
+services:
+    .expansion.admin_groups.permission.admin:
+        class: eXpansion\Framework\AdminGroups\Model\AdminPermission
+        arguments:
+            $description: "Access to generic admin actions"
+        tags:
+            - {name: exp.permission, permission: "admin"}

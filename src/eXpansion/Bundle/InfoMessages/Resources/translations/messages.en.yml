@@ -1,0 +1,17 @@
+expansion_config:
+  menu:
+    eXpansion:
+      Messages:
+        label: "Messaging"
+        InfoMessages:
+          label: "Information Messages"
+
+expansion_info_messages.config:
+  frequency:
+    name: "Frequency"
+    description: "Number of seconds between each message."
+
+  messages.fr.name: "French messages"
+  messages.de.name: "Germa messages"
+  messages.fi.name: "Finish messages"
+  messages.nl.name: "Dutch messages"

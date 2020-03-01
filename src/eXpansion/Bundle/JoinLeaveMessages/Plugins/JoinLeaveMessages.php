@@ -5,11 +5,10 @@ namespace eXpansion\Bundle\JoinLeaveMessages\Plugins;
 use eXpansion\Framework\AdminGroups\Helpers\AdminGroups;
 use eXpansion\Framework\Core\Helpers\ChatNotification;
 use eXpansion\Framework\Core\Helpers\Countries;
-use eXpansion\Framework\Core\Services\Application\AbstractApplication;
+use eXpansion\Framework\Core\Helpers\Version;
 use eXpansion\Framework\Core\Services\Console;
 use eXpansion\Framework\Core\Storage\Data\Player;
 use eXpansion\Framework\GameManiaplanet\DataProviders\Listener\ListenerInterfaceMpLegacyPlayer;
-use Maniaplanet\DedicatedServer\Connection;
 
 class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
 {
@@ -25,23 +24,30 @@ class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
     /** @var Countries */
     protected $countries;
 
+    /** @var Version */
+    protected $version;
+
     /**
      * JoinLeaveMessages constructor.
      *
-     * @param Console          $console
+     * @param Console $console
      * @param ChatNotification $chatNotification
-     * @param AdminGroups      $adminGroups
+     * @param AdminGroups $adminGroups
+     * @param Countries $countries
+     * @param Version $version
      */
     public function __construct(
         Console $console,
         ChatNotification $chatNotification,
         AdminGroups $adminGroups,
-        Countries $countries
+        Countries $countries,
+        Version $version
     ) {
         $this->console = $console;
         $this->chatNotification = $chatNotification;
         $this->adminGroups = $adminGroups;
         $this->countries = $countries;
+        $this->version = $version;
     }
 
     /**
@@ -52,7 +58,7 @@ class JoinLeaveMessages implements ListenerInterfaceMpLegacyPlayer
         $this->chatNotification->sendMessage(
             'expansion_join_leave_messages.applicationGreeter',
             $player->getLogin(),
-            ["%version%" => AbstractApplication::EXPANSION_VERSION]);
+            ["%version%" => $this->version->getExpansionVersion()]);
 
         $groupName = $this->adminGroups->getLoginUserGroups($player->getLogin())->getName();
         $this->chatNotification->sendMessage(
