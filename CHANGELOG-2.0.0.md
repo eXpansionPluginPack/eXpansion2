@@ -1,3 +1,9 @@
+# 2.0.0.x
+
+## Fixes 
+
+* Fixed #401 - Memory leak.
+
 # 2.0.0.0-beta4 (2020-02-29)
 
 ## Features
@@ -11,16 +17,11 @@
 
 
 ## Fixes
-
-* Fix #384 - Usage of config values of type TextList won't crash expansion anymore.
-
+* Fixed #384 - Usage of config values of type TextList won't crash expansion anymore.
 * Fixed #379 : When expansion crashes in windows the command prompt wont close and hide the message.
-
-* Fix #365 - Fixed exp not starting if can't fetch title/game mappings for expansion api's.
-
-* Fix #393 - Updated propel and symfony to support php7.2 & php7.3 & php7.4. 
-
-* Fix #395 - Fixed run.sh script not stopping when database update didn't work.
+* Fixed #365 - Fixed exp not starting if can't fetch title/game mappings for expansion api's.
+* Fixed #393 - Updated propel and symfony to support php7.2 & php7.3 & php7.4. 
+* Fixed #395 - Fixed run.sh script not stopping when database update didn't work.
 
 
 
@@ -28,11 +29,8 @@
 
 ## Fixes
 
-
-
-* Fix #365 - Not starting if can't fetch title/game mappings for expansion api's.
-
-* Fix #374 - Permissions configured in the config file is ignored at first start.
+* Fixed #365 - Not starting if can't fetch title/game mappings for expansion api's.
+* Fixed #374 - Permissions configured in the config file is ignored at first start.
 
 
 
