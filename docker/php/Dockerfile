@@ -1,4 +1,4 @@
-FROM php:7.4-cli
+FROM php:7.3-cli
 
 RUN apt-get update \
      && apt-get install -y \
@@ -21,19 +21,19 @@ RUN pecl install -o -f xdebug
 RUN docker-php-ext-enable xdebug
 
 # Install meminfo
-#RUN git clone https://github.com/BitOne/php-meminfo.git /tmp/meminfo \
-#    && mkdir -p usr/src/php/ext/ \
-#    && mkdir -p usr/src/php/meminfo \
-#    && mv /tmp/meminfo/extension/php7 /usr/src/php/ext/meminfo \
-#    && mv /tmp/meminfo/analyzer /usr/src/php/meminfo/analyzer
-#RUN cd /usr/src/php/ext/meminfo \
-#    && pwd \
-#    && ls \
-#    && phpize \
-#    && docker-php-ext-install meminfo
-#RUN cd /usr/src/php/meminfo/analyzer \
-#    && composer update \
-#    && echo 'alias mema="php /usr/src/php/meminfo/analyzer/bin/analyzer"' >> ~/.bashrc
+RUN git clone https://github.com/BitOne/php-meminfo.git /tmp/meminfo \
+    && mkdir -p usr/src/php/ext/ \
+    && mkdir -p usr/src/php/meminfo \
+    && mv /tmp/meminfo/extension/php7 /usr/src/php/ext/meminfo \
+    && mv /tmp/meminfo/analyzer /usr/src/php/meminfo/analyzer
+RUN cd /usr/src/php/ext/meminfo \
+    && pwd \
+    && ls \
+    && phpize \
+    && docker-php-ext-install meminfo
+RUN cd /usr/src/php/meminfo/analyzer \
+    && composer update \
+    && echo 'alias mema="php /usr/src/php/meminfo/analyzer/bin/analyzer"' >> ~/.bashrc
 
 # Add a alias to lake it easier to use sf commands
 RUN echo 'alias sf="php bin/console"' >> ~/.bashrc
