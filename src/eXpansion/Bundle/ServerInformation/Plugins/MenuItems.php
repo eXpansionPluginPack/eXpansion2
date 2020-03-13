@@ -34,7 +34,7 @@ class MenuItems implements ListenerMenuItemProviderInterface
             'general/about',
             'expansion_server_information.menu.label',
             null,
-            ['cmd' => '/info']
+            ['cmd' => '/server']
         );
     }
 }

@@ -7,7 +7,7 @@ services:
         class: eXpansion\Bundle\ServerInformation\ChatCommand\ServerInfo
         arguments:
           $command: info
-          $aliases: []
+          $aliases: [server]
 
 
     eXpansion.serve_information.plugins.chat_commands:

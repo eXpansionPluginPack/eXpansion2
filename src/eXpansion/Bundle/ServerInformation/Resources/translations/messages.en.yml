@@ -12,3 +12,5 @@ expansion_server_information:
   nb_players: "Number of Players"
   nb_spectators: "Number of Spectators"
   exp_version: "eXpansion Version"
+  php_version: "Php Version"
+  server_os: "Server Os"

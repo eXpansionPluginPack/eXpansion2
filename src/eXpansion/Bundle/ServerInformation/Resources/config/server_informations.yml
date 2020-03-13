@@ -47,3 +47,15 @@ services:
       $requiredPermission: admin
     tags:
       - {name: "exp.bundle.server_information.info", priority: 750}
+
+  eXpansion\Bundle\ServerInformation\Services\ServerInformation\PhpVersion:
+    arguments:
+      $requiredPermission: admin
+    tags:
+      - {name: "exp.bundle.server_information.info", priority: 690}
+
+  eXpansion\Bundle\ServerInformation\Services\ServerInformation\ServerOs:
+    arguments:
+      $requiredPermission: admin
+    tags:
+      - {name: "exp.bundle.server_information.info", priority: 680}
