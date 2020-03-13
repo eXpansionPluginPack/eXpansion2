@@ -1,0 +1,16 @@
+expansion_server_information:
+  windows:
+    info: "About the server"
+  menu:
+    label: About the Server
+  server_name: "Server Name"
+  server_description: "Server Comment"
+  server_version: "Server Version"
+  server_build: "Server Build"
+  server_api_version: "Server Api Version"
+  server_title_pack: "Server Title Pack"
+  nb_players: "Number of Players"
+  nb_spectators: "Number of Spectators"
+  exp_version: "eXpansion Version"
+  php_version: "Php Version"
+  server_os: "Server Os"

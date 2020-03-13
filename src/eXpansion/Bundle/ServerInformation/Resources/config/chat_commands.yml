@@ -1,0 +1,19 @@
+services:
+    _defaults:
+        autowire: true
+        public: true
+
+    eXpansion\Bundle\ServerInformation\ChatCommand\ServerInfo:
+        class: eXpansion\Bundle\ServerInformation\ChatCommand\ServerInfo
+        arguments:
+          $command: info
+          $aliases: [server]
+
+
+    eXpansion.serve_information.plugins.chat_commands:
+      class: eXpansion\Framework\Core\Model\ChatCommand\ChatCommandPlugin
+      arguments:
+        -
+          - '@eXpansion\Bundle\ServerInformation\ChatCommand\ServerInfo'
+      tags:
+        - {name: 'expansion.plugin', data_provider: 'expansion.chat_command_data'}

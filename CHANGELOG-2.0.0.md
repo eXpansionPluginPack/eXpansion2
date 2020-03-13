@@ -1,5 +1,9 @@
 # 2.0.0.x
 
+## Features
+
+* Feature #389 : Added new bundle to display server information with `/about` command.
+
 ## Fixes 
 
 * Fixed #401 - Memory leak.
